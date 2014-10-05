@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="CustomImagePicker" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OGu-gW-mrF"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ep9-5q-bMs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eSV-dl-hfC">
+                                <rect key="frame" x="16" y="518" width="105" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="105" id="McA-Rr-P33"/>
+                                </constraints>
+                                <state key="normal" title="选择照片或视频">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="showImagePicker" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Kj9-K5-9es"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="INg-Mt-qVk">
+                                <rect key="frame" x="10" y="134" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="bhy-rY-8ur"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ho1-eN-9Dt">
+                                <rect key="frame" x="244" y="518" width="60" height="30"/>
+                                <state key="normal" title="播放视频">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="playVideo" destination="vXZ-lx-hvc" eventType="touchUpInside" id="YYa-ob-1mb"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="INg-Mt-qVk" secondAttribute="trailing" constant="10" id="18n-mh-S3D"/>
+                            <constraint firstItem="eSV-dl-hfC" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="2sZ-dz-wcv"/>
+                            <constraint firstAttribute="trailing" secondItem="ho1-eN-9Dt" secondAttribute="trailing" constant="16" id="Alc-u7-FBm"/>
+                            <constraint firstAttribute="centerY" secondItem="INg-Mt-qVk" secondAttribute="centerY" id="Es7-M2-ope"/>
+                            <constraint firstAttribute="bottom" secondItem="eSV-dl-hfC" secondAttribute="bottom" constant="20" id="U2N-ds-Mmo"/>
+                            <constraint firstItem="INg-Mt-qVk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="WB0-Yr-6vx"/>
+                            <constraint firstAttribute="bottom" secondItem="ho1-eN-9Dt" secondAttribute="bottom" constant="20" id="ZgS-DV-ZtN"/>
+                            <constraint firstAttribute="centerX" secondItem="INg-Mt-qVk" secondAttribute="centerX" id="na7-Eq-ihf"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="INg-Mt-qVk" id="JkN-N6-F2R"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="352" y="403"/>
+        </scene>
+    </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
