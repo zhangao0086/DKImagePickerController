@@ -11,7 +11,7 @@ import MobileCoreServices
 import MediaPlayer
 
 class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePickerControllerDelegate, DKImagePickerControllerDelegate {
-    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var imageScrollView: UIScrollView!
     var player: MPMoviePlayerController?
     var videoURL: NSURL?
     
@@ -84,7 +84,11 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
         println(mediaType)
         if mediaType.isEqualToString(kUTTypeImage.__conversion()) {
             let selectedImage = info[UIImagePickerControllerOriginalImage] as UIImage!
-            imageView.image = selectedImage
+            imageScrollView.subviews.map(){$0.removeFromSuperview()}
+            let imageView = UIImageView(image: selectedImage)
+            imageView.contentMode = UIViewContentMode.ScaleAspectFit
+            imageView.frame = imageScrollView.bounds
+            imageScrollView.addSubview(imageView)
         } else {
             self.videoURL = info[UIImagePickerControllerMediaURL] as NSURL!
             let alert = UIAlertView(title: "选择的视频URL", message: videoURL!.absoluteString, delegate: nil, cancelButtonTitle: "确定")
@@ -96,6 +100,23 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     
     // MARK: - DKImagePickerControllerDelegate methods
     func imagePickerControllerCancelled() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerControllerDidSelectedAssets(assets: NSArray!) {
+        imageScrollView.subviews.map(){$0.removeFromSuperview}
+        
+        for (index, asset) in enumerate(assets) {
+            let imageHeight: CGFloat = imageScrollView.bounds.height / 2
+            
+            let imageView = UIImageView(image: (asset as DKAsset).thumbnailImage)
+            imageView.contentMode = UIViewContentMode.ScaleAspectFit
+            imageView.frame = CGRect(x: 0, y: CGFloat(index) * imageHeight, width: imageScrollView.bounds.width, height: imageHeight)
+            imageScrollView.addSubview(imageView)
+            
+        }
+        imageScrollView.contentSize.height = CGRectGetMaxY((imageScrollView.subviews.last as UIView).frame)
+        
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

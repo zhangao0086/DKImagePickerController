@@ -3,6 +3,7 @@
     <dependencies>
         <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -29,12 +30,6 @@
                                     <action selector="showImagePicker" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Kj9-K5-9es"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="INg-Mt-qVk">
-                                <rect key="frame" x="10" y="134" width="300" height="300"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="300" id="bhy-rY-8ur"/>
-                                </constraints>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ho1-eN-9Dt">
                                 <rect key="frame" x="244" y="518" width="60" height="30"/>
                                 <state key="normal" title="播放视频">
@@ -44,21 +39,24 @@
                                     <action selector="playVideo" destination="vXZ-lx-hvc" eventType="touchUpInside" id="YYa-ob-1mb"/>
                                 </connections>
                             </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W1N-F8-tkY">
+                                <rect key="frame" x="10" y="10" width="300" height="500"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="INg-Mt-qVk" secondAttribute="trailing" constant="10" id="18n-mh-S3D"/>
                             <constraint firstItem="eSV-dl-hfC" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="2sZ-dz-wcv"/>
+                            <constraint firstAttribute="trailing" secondItem="W1N-F8-tkY" secondAttribute="trailing" constant="10" id="A0q-d7-tUt"/>
                             <constraint firstAttribute="trailing" secondItem="ho1-eN-9Dt" secondAttribute="trailing" constant="16" id="Alc-u7-FBm"/>
-                            <constraint firstAttribute="centerY" secondItem="INg-Mt-qVk" secondAttribute="centerY" id="Es7-M2-ope"/>
+                            <constraint firstItem="W1N-F8-tkY" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="Egc-vZ-RNh"/>
                             <constraint firstAttribute="bottom" secondItem="eSV-dl-hfC" secondAttribute="bottom" constant="20" id="U2N-ds-Mmo"/>
-                            <constraint firstItem="INg-Mt-qVk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="WB0-Yr-6vx"/>
                             <constraint firstAttribute="bottom" secondItem="ho1-eN-9Dt" secondAttribute="bottom" constant="20" id="ZgS-DV-ZtN"/>
-                            <constraint firstAttribute="centerX" secondItem="INg-Mt-qVk" secondAttribute="centerX" id="na7-Eq-ihf"/>
+                            <constraint firstItem="W1N-F8-tkY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="10" id="b2d-Do-QPx"/>
+                            <constraint firstItem="eSV-dl-hfC" firstAttribute="bottom" secondItem="W1N-F8-tkY" secondAttribute="bottom" constant="38" id="bMT-SX-dDh"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="INg-Mt-qVk" id="JkN-N6-F2R"/>
+                        <outlet property="imageScrollView" destination="W1N-F8-tkY" id="480-Gh-CcY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
