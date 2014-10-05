@@ -24,7 +24,20 @@ class DKAssetGroup : NSObject {
     var group: ALAssetsGroup!
 }
 
+// Asset Model
+class DKAsset: NSObject {
+    var thumbnailImage: UIImage?
+    var originalImage: UIImage?
+    var url: NSURL?
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        let other = object as DKAsset!
+        return self.url!.isEqual(other.url!)
+    }
+}
+
 protocol DKImagePickerControllerDelegate : NSObjectProtocol {
+    func imagePickerControllerDidSelectedAssets(images: NSArray!)
     func imagePickerControllerCancelled()
 }
 
@@ -85,7 +98,7 @@ class DKImageGroupViewController: UICollectionViewController {
     }
     
     var assetGroup: DKAssetGroup!
-    private lazy var images: NSMutableArray = {
+    private lazy var imageAssets: NSMutableArray = {
         return NSMutableArray()
     }()
     
@@ -110,7 +123,7 @@ class DKImageGroupViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         assert(assetGroup != nil, "assetGroup is nil")
-        
+
         self.title = assetGroup.groupName
         
         self.collectionView?.backgroundColor = UIColor.whiteColor()
@@ -119,11 +132,14 @@ class DKImageGroupViewController: UICollectionViewController {
         
         assetGroup.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
-                self.images.addObject(UIImage(CGImage:result.thumbnail().takeUnretainedValue()))
+                let asset = DKAsset()
+                asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
+                asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
+                self.imageAssets.addObject(asset)
             } else {
                 self.collectionView!.reloadData()
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forRow: self.images.count-1, inSection: 0),
+                    self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forRow: self.imageAssets.count-1, inSection: 0),
                         atScrollPosition: UICollectionViewScrollPosition.Bottom,
                         animated: false)
                 }
@@ -137,15 +153,16 @@ class DKImageGroupViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return imageAssets.count
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ImageCellIdentifier, forIndexPath: indexPath) as DKImageCollectionCell
         
-        cell.thumbnail = images[indexPath.row] as UIImage
+        let asset = imageAssets[indexPath.row] as DKAsset
+        cell.thumbnail = asset.thumbnailImage
         
-        if self.imagePickerController?.selectedImages?.containsObject(cell.thumbnail) == true {
+        if self.imagePickerController?.selectedAssets?.containsObject(asset) == true {
             cell.selected = true
         } else {
             cell.selected = false
@@ -155,18 +172,15 @@ class DKImageGroupViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as DKImageCollectionCell
-        NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: cell.thumbnail)
+        NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[indexPath.row])
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as DKImageCollectionCell
-        NSNotificationCenter.defaultCenter().postNotificationName(DKImageUnselectedNotification, object: cell.thumbnail)
+        NSNotificationCenter.defaultCenter().postNotificationName(DKImageUnselectedNotification, object: imageAssets[indexPath.row])
     }
 }
 
 class DKAssetsLibraryController: UITableViewController {
-    weak var delegate: DKImagePickerControllerDelegate?
     
     lazy var groups: NSMutableArray = {
         return NSMutableArray()
@@ -181,9 +195,6 @@ class DKAssetsLibraryController: UITableViewController {
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: GroupCellIdentifier)
         self.view.backgroundColor = UIColor.whiteColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel,
-            target: self,
-            action: "onCancelClicked")
         
         library.enumerateGroupsWithTypes(0xFFFFFFFF, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
             if group != nil {
@@ -202,13 +213,6 @@ class DKAssetsLibraryController: UITableViewController {
         }, failureBlock: {(error: NSError!) in
                 println(error.localizedDescription)
         })
-    }
-    
-    // MARK: - Delegate methods
-    func onCancelClicked() {
-        if let delegate = self.delegate {
-            delegate.imagePickerControllerCancelled()
-        }
     }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource methods
@@ -241,6 +245,8 @@ class DKAssetsLibraryController: UITableViewController {
 }
 
 class DKImagePickerController: UINavigationController {
+    
+    let previewHeight: CGFloat = 80
     
     class DKPreviewView: UIScrollView {
         let interval: CGFloat = 5
@@ -291,24 +297,70 @@ class DKImagePickerController: UINavigationController {
         }
     }
     
-    private var libraryController: DKAssetsLibraryController!
-    private var selectedImages: NSArray!
-    
-    let previewHeight: CGFloat = 80
-    private var imagesPreviewView = DKPreviewView()
-    
-    weak var pickerDelegate: DKImagePickerControllerDelegate? {
-        didSet {
-            self.libraryController.delegate = pickerDelegate
+    class DKContentWrapperViewController: UIViewController {
+        var contentViewController: UIViewController
+        var bottomBarHeight: CGFloat = 0
+        var showBottomBar: Bool = false {
+            didSet {
+                if self.showBottomBar {
+                    self.contentViewController.view.frame.size.height = self.view.bounds.size.height - self.bottomBarHeight
+                } else {
+                    self.contentViewController.view.frame.size.height = self.view.bounds.size.height
+                }
+            }
+        }
+        
+        init(_ viewController: UIViewController) {
+            contentViewController = viewController
+
+            super.init(nibName: nil, bundle: nil)
+            self.addChildViewController(viewController)
+            
+            contentViewController.addObserver(self, forKeyPath: "title", options: NSKeyValueObservingOptions.New, context: nil)
+        }
+        
+        deinit {
+            contentViewController.removeObserver(self, forKeyPath: "title")
+        }
+
+        required init(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func observeValueForKeyPath(keyPath: String!, ofObject object: AnyObject!, change: [NSObject : AnyObject]!, context: UnsafeMutablePointer<Void>) {
+            if keyPath == "title" {
+                self.title = contentViewController.title
+            }
+        }
+        
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            
+            self.view.backgroundColor = UIColor.whiteColor()
+            self.view.addSubview(contentViewController.view)
+            contentViewController.view.frame = view.bounds
         }
     }
     
+    var selectedAssets: NSArray!
+    private var imagesPreviewView = DKPreviewView()
+    weak var pickerDelegate: DKImagePickerControllerDelegate?
+    lazy private var doneButton: UIButton =  {
+        let button = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        button.setTitle("", forState: UIControlState.Normal)
+        button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
+        button.reversesTitleShadowWhenHighlighted = true
+        button.addTarget(self, action: "onDoneClicked", forControlEvents: UIControlEvents.TouchUpInside)
+        return button
+    }()
+    
     convenience override init() {
         var libraryController = DKAssetsLibraryController()
-        self.init(rootViewController: libraryController)
-        self.libraryController = libraryController
-        
-        selectedImages = NSMutableArray()
+        var wrapperVC = DKContentWrapperViewController(libraryController)
+        self.init(rootViewController: wrapperVC)
+        wrapperVC.bottomBarHeight = previewHeight
+
+        selectedAssets = NSMutableArray()
     }
     
     deinit {
@@ -319,7 +371,7 @@ class DKImagePickerController: UINavigationController {
         super.viewDidLoad()
 
         imagesPreviewView.hidden = true
-        imagesPreviewView.backgroundColor = UIColor(white: 0.667, alpha: 0.8)
+        imagesPreviewView.backgroundColor = UIColor.lightGrayColor()
         
         imagesPreviewView.frame = CGRect(x: 0, y: view.bounds.height - previewHeight, width: view.bounds.width, height: previewHeight)
         imagesPreviewView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
@@ -328,31 +380,62 @@ class DKImagePickerController: UINavigationController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedImage:", name: DKImageSelectedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "unselectedImage:", name: DKImageUnselectedNotification, object: nil)
     }
+
+    override func pushViewController(viewController: UIViewController, animated: Bool) {
+        var wrapperVC = DKContentWrapperViewController(viewController)
+        wrapperVC.bottomBarHeight = previewHeight
+        wrapperVC.showBottomBar = !imagesPreviewView.hidden
+
+        super.pushViewController(wrapperVC, animated: animated)
+
+        self.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+        
+        if self.viewControllers.count == 1 && self.topViewController?.navigationItem.leftBarButtonItem == nil {
+            self.topViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel,
+                target: self,
+                action: "onCancelClicked")
+        }
+    }
+    
+    // MARK: - Delegate methods
+    
+    func onCancelClicked() {
+        if let delegate = self.pickerDelegate {
+            delegate.imagePickerControllerCancelled()
+        }
+    }
+    
+    func onDoneClicked() {
+        if let delegate = self.pickerDelegate {
+            delegate.imagePickerControllerDidSelectedAssets(self.selectedAssets)
+        }
+    }
     
     // MARK: - Notifications
     func selectedImage(noti: NSNotification) {
-        if let image = noti.object as? UIImage {
-            (selectedImages as NSMutableArray).addObject(image)
-            imagesPreviewView.insertImage(image)
+        if let asset = noti.object as? DKAsset {
+            (selectedAssets as NSMutableArray).addObject(asset)
+            imagesPreviewView.insertImage(asset.thumbnailImage!)
             imagesPreviewView.hidden = false
             
-            for vc: UIViewController in self.viewControllers as [UIViewController]! {
-                vc.view.frame.size.height -= previewHeight
-            }
+            (self.viewControllers as [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
+            self.doneButton.setTitle("确定(\(selectedAssets.count))", forState: UIControlState.Normal)
+            self.doneButton.sizeToFit()
         }
     }
     
     func unselectedImage(noti: NSNotification) {
-        if let image = noti.object as? UIImage {
-            (selectedImages as NSMutableArray).removeObject(image)
-            imagesPreviewView.removeImage(image)
+        if let asset = noti.object as? DKAsset {
+            (selectedAssets as NSMutableArray).removeObject(asset)
+            imagesPreviewView.removeImage(asset.thumbnailImage!)
             
-            if selectedImages.count <= 0 {
+            self.doneButton.setTitle("确定(\(selectedAssets.count))", forState: UIControlState.Normal)
+            self.doneButton.sizeToFit()
+            if selectedAssets.count <= 0 {
                 imagesPreviewView.hidden = true
                 
-                for vc: UIViewController in self.viewControllers as [UIViewController]! {
-                    vc.view.frame.size.height += previewHeight
-                }
+                (self.viewControllers as [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
+                self.doneButton.setTitle("", forState: UIControlState.Normal)
             }
         }
     }
