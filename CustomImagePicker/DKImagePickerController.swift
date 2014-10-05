@@ -37,7 +37,7 @@ class DKAsset: NSObject {
 }
 
 protocol DKImagePickerControllerDelegate : NSObjectProtocol {
-    func imagePickerControllerDidSelectedAssets(images: NSArray!)
+    func imagePickerControllerDidSelectedAssets(images: [DKAsset]!)
     func imagePickerControllerCancelled()
 }
 
@@ -162,7 +162,7 @@ class DKImageGroupViewController: UICollectionViewController {
         let asset = imageAssets[indexPath.row] as DKAsset
         cell.thumbnail = asset.thumbnailImage
         
-        if self.imagePickerController?.selectedAssets?.containsObject(asset) == true {
+        if find(self.imagePickerController!.selectedAssets, asset) != nil {
             cell.selected = true
         } else {
             cell.selected = false
@@ -342,7 +342,7 @@ class DKImagePickerController: UINavigationController {
         }
     }
     
-    var selectedAssets: NSArray!
+    var selectedAssets: [DKAsset]!
     private var imagesPreviewView = DKPreviewView()
     weak var pickerDelegate: DKImagePickerControllerDelegate?
     lazy private var doneButton: UIButton =  {
@@ -360,7 +360,7 @@ class DKImagePickerController: UINavigationController {
         self.init(rootViewController: wrapperVC)
         wrapperVC.bottomBarHeight = previewHeight
 
-        selectedAssets = NSMutableArray()
+        selectedAssets = [DKAsset]()
     }
     
     deinit {
@@ -414,7 +414,7 @@ class DKImagePickerController: UINavigationController {
     // MARK: - Notifications
     func selectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
-            (selectedAssets as NSMutableArray).addObject(asset)
+            selectedAssets.append(asset)
             imagesPreviewView.insertImage(asset.thumbnailImage!)
             imagesPreviewView.hidden = false
             
@@ -426,7 +426,7 @@ class DKImagePickerController: UINavigationController {
     
     func unselectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
-            (selectedAssets as NSMutableArray).removeObject(asset)
+            selectedAssets.removeAtIndex(find(selectedAssets, asset)!)
             imagesPreviewView.removeImage(asset.thumbnailImage!)
             
             self.doneButton.setTitle("确定(\(selectedAssets.count))", forState: UIControlState.Normal)

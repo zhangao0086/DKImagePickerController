@@ -103,13 +103,13 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func imagePickerControllerDidSelectedAssets(assets: NSArray!) {
+    func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
         imageScrollView.subviews.map(){$0.removeFromSuperview}
         
         for (index, asset) in enumerate(assets) {
             let imageHeight: CGFloat = imageScrollView.bounds.height / 2
             
-            let imageView = UIImageView(image: (asset as DKAsset).thumbnailImage)
+            let imageView = UIImageView(image: asset.thumbnailImage)
             imageView.contentMode = UIViewContentMode.ScaleAspectFit
             imageView.frame = CGRect(x: 0, y: CGFloat(index) * imageHeight, width: imageScrollView.bounds.width, height: imageHeight)
             imageScrollView.addSubview(imageView)
