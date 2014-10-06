@@ -74,15 +74,12 @@ class DKImageGroupViewController: UICollectionViewController {
         }
         
         private var imageView = UIImageView()
-        private var checkView = UIView()
+        private var checkView = UIImageView(image: UIImage(named: "photo_checked"))
         
         override init(frame: CGRect) {
             super.init(frame: frame)
             imageView.frame = self.bounds
             self.contentView.addSubview(imageView)
-            
-            checkView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-            checkView.backgroundColor = UIColor.redColor()
             self.contentView.addSubview(checkView)
         }
         
@@ -94,6 +91,8 @@ class DKImageGroupViewController: UICollectionViewController {
             super.layoutSubviews()
             
             imageView.frame = self.bounds
+            checkView.frame.origin = CGPoint(x: self.contentView.bounds.width - checkView.bounds.width,
+                y: 0)
         }
     }
     
@@ -343,8 +342,13 @@ class DKImagePickerController: UINavigationController {
     }
     
     var selectedAssets: [DKAsset]!
-    private var imagesPreviewView = DKPreviewView()
     weak var pickerDelegate: DKImagePickerControllerDelegate?
+    lazy private var imagesPreviewView: DKPreviewView = {
+        let preview = DKPreviewView()
+        preview.hidden = true
+        preview.backgroundColor = UIColor.lightGrayColor()
+        return preview
+    }()
     lazy private var doneButton: UIButton =  {
         let button = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
         button.setTitle("", forState: UIControlState.Normal)
@@ -369,12 +373,10 @@ class DKImagePickerController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        imagesPreviewView.hidden = true
-        imagesPreviewView.backgroundColor = UIColor.lightGrayColor()
         
         imagesPreviewView.frame = CGRect(x: 0, y: view.bounds.height - previewHeight, width: view.bounds.width, height: previewHeight)
         imagesPreviewView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
+        
         view.addSubview(imagesPreviewView)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedImage:", name: DKImageSelectedNotification, object: nil)
