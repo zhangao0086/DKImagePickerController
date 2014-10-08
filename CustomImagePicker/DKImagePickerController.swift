@@ -40,8 +40,15 @@ class DKAssetGroup : NSObject {
 // Asset Model
 class DKAsset: NSObject {
     var thumbnailImage: UIImage?
-    var originalImage: UIImage?
+    lazy var fullScreenImage: UIImage? = {
+        return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
+    }()
+    lazy var fullResolutionImage: UIImage? = {
+        return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
+    }()
     var url: NSURL?
+    
+    private var originalAsset: ALAsset!
     
     // Compare two assets
     override func isEqual(object: AnyObject?) -> Bool {
@@ -144,6 +151,7 @@ class DKImageGroupViewController: UICollectionViewController {
                 let asset = DKAsset()
                 asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
                 asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
+                asset.originalAsset = result
                 self.imageAssets.addObject(asset)
             } else {
                 self.collectionView!.reloadData()
@@ -197,13 +205,15 @@ class DKImageGroupViewController: UICollectionViewController {
 
 class DKAssetsLibraryController: UITableViewController {
     
-    lazy var groups: NSMutableArray = {
+    lazy private var groups: NSMutableArray = {
         return NSMutableArray()
     }()
     
-    lazy var library: ALAssetsLibrary = {
+    lazy private var library: ALAssetsLibrary = {
         return ALAssetsLibrary()
     }()
+    
+    private var noAccessView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,7 +236,10 @@ class DKAssetsLibraryController: UITableViewController {
                 self.tableView.reloadData()
             }
         }, failureBlock: {(error: NSError!) in
-                println(error.localizedDescription)
+            self.noAccessView.frame = self.view.bounds
+            self.tableView.scrollEnabled = false
+            self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            self.view.addSubview(self.noAccessView)
         })
     }
     
@@ -267,8 +280,15 @@ class DKImagePickerController: UINavigationController {
     
     /// The height of the bottom of the preview
     var previewHeight: CGFloat = 80
-    
     var rightButtonTitle: String = "确定"
+    /// Displayed when denied access
+    var noAccessView: UIView = {
+        let label = UILabel()
+        label.text = "用户拒绝访问"
+        label.textAlignment = NSTextAlignment.Center
+        label.textColor = UIColor.lightGrayColor()
+        return label
+    }()
     
     class DKPreviewView: UIScrollView {
         let interval: CGFloat = 5
@@ -308,7 +328,6 @@ class DKImagePickerController: UINavigationController {
         }
         
         private func setupContent(isInsert: Bool) {
-            println(self.subviews)
             if isInsert == false {
                 for (index,asset) in enumerate(assets) {
                     let imageView = imagesDict[asset]!
@@ -386,6 +405,7 @@ class DKImagePickerController: UINavigationController {
         var libraryController = DKAssetsLibraryController()
         var wrapperVC = DKContentWrapperViewController(libraryController)
         self.init(rootViewController: wrapperVC)
+        libraryController.noAccessView = noAccessView
         wrapperVC.bottomBarHeight = previewHeight
 
         selectedAssets = [DKAsset]()
