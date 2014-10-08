@@ -3,7 +3,6 @@
     <dependencies>
         <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -51,8 +50,8 @@
                             <constraint firstItem="W1N-F8-tkY" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="Egc-vZ-RNh"/>
                             <constraint firstAttribute="bottom" secondItem="eSV-dl-hfC" secondAttribute="bottom" constant="20" id="U2N-ds-Mmo"/>
                             <constraint firstAttribute="bottom" secondItem="ho1-eN-9Dt" secondAttribute="bottom" constant="20" id="ZgS-DV-ZtN"/>
-                            <constraint firstItem="W1N-F8-tkY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" constant="10" id="b2d-Do-QPx"/>
                             <constraint firstItem="eSV-dl-hfC" firstAttribute="bottom" secondItem="W1N-F8-tkY" secondAttribute="bottom" constant="38" id="bMT-SX-dDh"/>
+                            <constraint firstItem="W1N-F8-tkY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="10" id="leN-Wu-XIt"/>
                         </constraints>
                     </view>
                     <connections>

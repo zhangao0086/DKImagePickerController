@@ -64,11 +64,7 @@ class DKImageGroupViewController: UICollectionViewController {
         }
         
         override var selected: Bool {
-            get {
-                return super.selected
-            }
-            set {
-                super.selected = newValue
+            didSet {
                 checkView.hidden = !super.selected
             }
         }
@@ -163,8 +159,10 @@ class DKImageGroupViewController: UICollectionViewController {
         
         if find(self.imagePickerController!.selectedAssets, asset) != nil {
             cell.selected = true
+            collectionView.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition.None)
         } else {
             cell.selected = false
+            collectionView.deselectItemAtIndexPath(indexPath, animated: false)
         }
         
         return cell
@@ -250,7 +248,8 @@ class DKImagePickerController: UINavigationController {
     class DKPreviewView: UIScrollView {
         let interval: CGFloat = 5
         private var imageLengthOfSide: CGFloat!
-        private var imageViews = [UIImageView]()
+        private var assets = [DKAsset]()
+        private var imagesDict: [DKAsset : UIImageView] = [:]
         
         override func layoutSubviews() {
             super.layoutSubviews()
@@ -264,30 +263,30 @@ class DKImagePickerController: UINavigationController {
                 width: imageLengthOfSide, height: imageLengthOfSide)
         }
         
-        func insertImage(image: UIImage) {
-            let imageView = UIImageView(image: image)
-            imageView.frame = imageFrameForIndex(imageViews.count)
+        func insertAsset(asset: DKAsset) {
+            let imageView = UIImageView(image: asset.thumbnailImage)
+            imageView.frame = imageFrameForIndex(assets.count)
             
             self.addSubview(imageView)
-            imageViews.append(imageView)
+            assets.append(asset)
+            imagesDict.updateValue(imageView, forKey: asset)
             setupContent(true)
         }
         
-        func removeImage(image: UIImage) {
-            for (index,imageView) in enumerate(imageViews) {
-                if image == imageView.image {
-                    imageView.removeFromSuperview()
-                    imageViews.removeAtIndex(index)
-                    
-                    setupContent(false)
-                    break;
-                }
+        func removeAsset(asset: DKAsset) {
+            imagesDict.removeValueForKey(asset)
+            let index = find(assets, asset)
+            if let toRemovedIndex = index {
+                assets.removeAtIndex(toRemovedIndex)
+                setupContent(false)
             }
         }
         
         private func setupContent(isInsert: Bool) {
+            println(self.subviews)
             if isInsert == false {
-                for (index,imageView) in enumerate(imageViews) {
+                for (index,asset) in enumerate(assets) {
+                    let imageView = imagesDict[asset]!
                     imageView.frame = imageFrameForIndex(index)
                 }
             }
@@ -417,7 +416,7 @@ class DKImagePickerController: UINavigationController {
     func selectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
             selectedAssets.append(asset)
-            imagesPreviewView.insertImage(asset.thumbnailImage!)
+            imagesPreviewView.insertAsset(asset)
             imagesPreviewView.hidden = false
             
             (self.viewControllers as [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
@@ -429,7 +428,7 @@ class DKImagePickerController: UINavigationController {
     func unselectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
             selectedAssets.removeAtIndex(find(selectedAssets, asset)!)
-            imagesPreviewView.removeImage(asset.thumbnailImage!)
+            imagesPreviewView.removeAsset(asset)
             
             self.doneButton.setTitle("确定(\(selectedAssets.count))", forState: UIControlState.Normal)
             self.doneButton.sizeToFit()
