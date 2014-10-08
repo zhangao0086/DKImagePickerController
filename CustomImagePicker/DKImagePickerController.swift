@@ -9,6 +9,19 @@
 import UIKit
 import AssetsLibrary
 
+
+// Delegate
+protocol DKImagePickerControllerDelegate : NSObjectProtocol {
+    /// Called when right button is clicked.
+    ///
+    /// :param: images Images of selected
+    func imagePickerControllerDidSelectedAssets(images: [DKAsset]!)
+    /// Called when cancel button is clicked.
+    func imagePickerControllerCancelled()
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
 // Cell Identifier
 let GroupCellIdentifier = "GroupCellIdentifier"
 let ImageCellIdentifier = "ImageCellIdentifier"
@@ -30,17 +43,14 @@ class DKAsset: NSObject {
     var originalImage: UIImage?
     var url: NSURL?
     
+    // Compare two assets
     override func isEqual(object: AnyObject?) -> Bool {
         let other = object as DKAsset!
         return self.url!.isEqual(other.url!)
     }
 }
 
-protocol DKImagePickerControllerDelegate : NSObjectProtocol {
-    func imagePickerControllerDidSelectedAssets(images: [DKAsset]!)
-    func imagePickerControllerCancelled()
-}
-
+// Internal
 extension UIViewController {
     var imagePickerController: DKImagePickerController? {
         get {
@@ -53,6 +63,10 @@ extension UIViewController {
         }
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - Show All Iamges In Group
+//////////////////////////////////////////////////////////////////////////////////////////
 
 class DKImageGroupViewController: UICollectionViewController {
     
@@ -177,6 +191,10 @@ class DKImageGroupViewController: UICollectionViewController {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - Show All Group
+//////////////////////////////////////////////////////////////////////////////////////////
+
 class DKAssetsLibraryController: UITableViewController {
     
     lazy var groups: NSMutableArray = {
@@ -241,9 +259,16 @@ class DKAssetsLibraryController: UITableViewController {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - Main Controller
+//////////////////////////////////////////////////////////////////////////////////////////
+
 class DKImagePickerController: UINavigationController {
     
-    let previewHeight: CGFloat = 80
+    /// The height of the bottom of the preview
+    var previewHeight: CGFloat = 80
+    
+    var rightButtonTitle: String = "确定"
     
     class DKPreviewView: UIScrollView {
         let interval: CGFloat = 5
@@ -340,15 +365,15 @@ class DKImagePickerController: UINavigationController {
         }
     }
     
-    var selectedAssets: [DKAsset]!
-    weak var pickerDelegate: DKImagePickerControllerDelegate?
-    lazy private var imagesPreviewView: DKPreviewView = {
+    internal var selectedAssets: [DKAsset]!
+    internal  weak var pickerDelegate: DKImagePickerControllerDelegate?
+    lazy internal  var imagesPreviewView: DKPreviewView = {
         let preview = DKPreviewView()
         preview.hidden = true
         preview.backgroundColor = UIColor.lightGrayColor()
         return preview
     }()
-    lazy private var doneButton: UIButton =  {
+    lazy internal var doneButton: UIButton =  {
         let button = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
         button.setTitle("", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
@@ -373,13 +398,18 @@ class DKImagePickerController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imagesPreviewView.frame = CGRect(x: 0, y: view.bounds.height - previewHeight, width: view.bounds.width, height: previewHeight)
+        imagesPreviewView.frame = CGRect(x: 0, y: view.bounds.height - previewHeight,
+                                     width: view.bounds.width, height: previewHeight)
         imagesPreviewView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
         
         view.addSubview(imagesPreviewView)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedImage:", name: DKImageSelectedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "unselectedImage:", name: DKImageUnselectedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedImage:",
+                                                                   name: DKImageSelectedNotification,
+                                                                 object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "unselectedImage:",
+                                                                   name: DKImageUnselectedNotification,
+                                                                 object: nil)
     }
 
     override func pushViewController(viewController: UIViewController, animated: Bool) {
@@ -399,7 +429,6 @@ class DKImagePickerController: UINavigationController {
     }
     
     // MARK: - Delegate methods
-    
     func onCancelClicked() {
         if let delegate = self.pickerDelegate {
             delegate.imagePickerControllerCancelled()
@@ -420,7 +449,7 @@ class DKImagePickerController: UINavigationController {
             imagesPreviewView.hidden = false
             
             (self.viewControllers as [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
-            self.doneButton.setTitle("确定(\(selectedAssets.count))", forState: UIControlState.Normal)
+            self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
             self.doneButton.sizeToFit()
         }
     }
@@ -430,7 +459,7 @@ class DKImagePickerController: UINavigationController {
             selectedAssets.removeAtIndex(find(selectedAssets, asset)!)
             imagesPreviewView.removeAsset(asset)
             
-            self.doneButton.setTitle("确定(\(selectedAssets.count))", forState: UIControlState.Normal)
+            self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
             self.doneButton.sizeToFit()
             if selectedAssets.count <= 0 {
                 imagesPreviewView.hidden = true

@@ -99,10 +99,12 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     }
     
     // MARK: - DKImagePickerControllerDelegate methods
+    // 取消时的回调
     func imagePickerControllerCancelled() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // 选择图片并确定后的回调
     func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
         imageScrollView.subviews.map(){$0.removeFromSuperview}
         
