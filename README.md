@@ -20,8 +20,6 @@ func imagePickerControllerCancelled() {
 }
 
 func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
-    imageScrollView.subviews.map(){$0.removeFromSuperview}
-    
     for (index, asset) in enumerate(assets) {
         
     }
@@ -29,6 +27,16 @@ func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
     self.dismissViewControllerAnimated(true, completion: nil)
 }
 
+````
+#### Setup
+````
+/// The height of the bottom of the preview
+var previewHeight: CGFloat = 80
+
+var rightButtonTitle: String = "确定"
+
+/// Displayed when denied access
+var noAccessView: UIView = {
 ````
 
 ## Screenshots
