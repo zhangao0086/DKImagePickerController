@@ -29,7 +29,7 @@ func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
 
 ````
 #### Setup
-````
+```swift
 /// The height of the bottom of the preview
 var previewHeight: CGFloat = 80
 
