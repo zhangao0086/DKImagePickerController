@@ -28,7 +28,7 @@ func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
 }
 
 ````
-#### Setup
+#### Configurable properties
 ```swift
 /// The height of the bottom of the preview
 var previewHeight: CGFloat = 80
@@ -36,7 +36,7 @@ var previewHeight: CGFloat = 80
 var rightButtonTitle: String = "确定"
 
 /// Displayed when denied access
-var noAccessView: UIView = {
+var noAccessView: UIView
 ````
 
 ## Screenshots
