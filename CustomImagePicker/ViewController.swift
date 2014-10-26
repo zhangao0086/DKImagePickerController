@@ -71,7 +71,7 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     // 退出播放器
     func exitPlayer(notification: NSNotification) {
         let reason = (notification.userInfo!)[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] as NSNumber!
-        if reason.integerValue == MPMovieFinishReason.UserExited.toRaw() {
+        if reason.integerValue == MPMovieFinishReason.UserExited.rawValue {
             NSNotificationCenter.defaultCenter().removeObserver(self)
             self.player?.view.removeFromSuperview()
             self.player = nil
@@ -82,7 +82,7 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let mediaType = info[UIImagePickerControllerMediaType] as NSString!
         println(mediaType)
-        if mediaType.isEqualToString(kUTTypeImage.__conversion()) {
+        if mediaType.isEqualToString(kUTTypeImage) {
             let selectedImage = info[UIImagePickerControllerOriginalImage] as UIImage!
             imageScrollView.subviews.map(){$0.removeFromSuperview()}
             let imageView = UIImageView(image: selectedImage)
