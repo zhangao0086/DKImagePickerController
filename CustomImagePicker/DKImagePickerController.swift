@@ -95,6 +95,7 @@ class DKImageGroupViewController: UICollectionViewController {
         
         override init(frame: CGRect) {
             super.init(frame: frame)
+            
             imageView.frame = self.bounds
             self.contentView.addSubview(imageView)
             self.contentView.addSubview(checkView)
@@ -142,9 +143,9 @@ class DKImageGroupViewController: UICollectionViewController {
 
         self.title = assetGroup.groupName
         
-        self.collectionView.backgroundColor = UIColor.whiteColor()
-        self.collectionView.allowsMultipleSelection = true
-        self.collectionView.registerClass(DKImageCollectionCell.self, forCellWithReuseIdentifier: ImageCellIdentifier)
+        self.collectionView!.backgroundColor = UIColor.whiteColor()
+        self.collectionView!.allowsMultipleSelection = true
+        self.collectionView!.registerClass(DKImageCollectionCell.self, forCellWithReuseIdentifier: ImageCellIdentifier)
         
         assetGroup.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
@@ -154,9 +155,9 @@ class DKImageGroupViewController: UICollectionViewController {
                 asset.originalAsset = result
                 self.imageAssets.addObject(asset)
             } else {
-                self.collectionView.reloadData()
+                self.collectionView!.reloadData()
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: self.imageAssets.count-1, inSection: 0),
+                    self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forRow: self.imageAssets.count-1, inSection: 0),
                         atScrollPosition: UICollectionViewScrollPosition.Bottom,
                         animated: false)
                 }
@@ -256,8 +257,8 @@ class DKAssetsLibraryController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(GroupCellIdentifier, forIndexPath: indexPath) as UITableViewCell
         
         let assetGroup = groups[indexPath.row] as DKAssetGroup
-        cell.textLabel.text = assetGroup.groupName
-        cell.imageView.image = assetGroup.thumbnail
+        cell.textLabel!.text = assetGroup.groupName
+        cell.imageView!.image = assetGroup.thumbnail
         
         return cell
     }
