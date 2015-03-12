@@ -16,6 +16,7 @@ protocol DKImagePickerControllerDelegate : NSObjectProtocol {
     ///
     /// :param: images Images of selected
     func imagePickerControllerDidSelectedAssets(images: [DKAsset]!)
+    
     /// Called when cancel button is clicked.
     func imagePickerControllerCancelled()
 }
@@ -281,11 +282,11 @@ class DKImagePickerController: UINavigationController {
     
     /// The height of the bottom of the preview
     var previewHeight: CGFloat = 80
-    var rightButtonTitle: String = "确定"
+    var rightButtonTitle: String = "Select"
     /// Displayed when denied access
     var noAccessView: UIView = {
         let label = UILabel()
-        label.text = "用户拒绝访问"
+        label.text = "User has denied access"
         label.textAlignment = NSTextAlignment.Center
         label.textColor = UIColor.lightGrayColor()
         return label

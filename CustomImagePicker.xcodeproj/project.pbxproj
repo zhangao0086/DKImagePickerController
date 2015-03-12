@@ -14,18 +14,7 @@
 		9C35CC0A19DBB00700557269 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C35CC0819DBB00700557269 /* Main.storyboard */; };
 		9C35CC0C19DBB00700557269 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C35CC0B19DBB00700557269 /* Images.xcassets */; };
 		9C35CC0F19DBB00700557269 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C35CC0D19DBB00700557269 /* LaunchScreen.xib */; };
-		9C35CC1B19DBB00700557269 /* CustomImagePickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C35CC1A19DBB00700557269 /* CustomImagePickerTests.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9C35CC1519DBB00700557269 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9C35CBF719DBB00700557269 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9C35CBFE19DBB00700557269;
-			remoteInfo = CustomImagePicker;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9C02642219E26F1600E3C5EA /* photo_checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_checked@2x.png"; sourceTree = "<group>"; };
@@ -40,20 +29,12 @@
 		9C35CC0919DBB00700557269 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9C35CC0B19DBB00700557269 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9C35CC0E19DBB00700557269 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		9C35CC1419DBB00700557269 /* CustomImagePickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CustomImagePickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C35CC1919DBB00700557269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C35CC1A19DBB00700557269 /* CustomImagePickerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImagePickerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		9C35CBFC19DBB00700557269 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9C35CC1119DBB00700557269 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -77,7 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				9C35CBFF19DBB00700557269 /* CustomImagePicker.app */,
-				9C35CC1419DBB00700557269 /* CustomImagePickerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,24 +122,6 @@
 			productReference = 9C35CBFF19DBB00700557269 /* CustomImagePicker.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9C35CC1319DBB00700557269 /* CustomImagePickerTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9C35CC2119DBB00700557269 /* Build configuration list for PBXNativeTarget "CustomImagePickerTests" */;
-			buildPhases = (
-				9C35CC1019DBB00700557269 /* Sources */,
-				9C35CC1119DBB00700557269 /* Frameworks */,
-				9C35CC1219DBB00700557269 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9C35CC1619DBB00700557269 /* PBXTargetDependency */,
-			);
-			name = CustomImagePickerTests;
-			productName = CustomImagePickerTests;
-			productReference = 9C35CC1419DBB00700557269 /* CustomImagePickerTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -171,10 +133,6 @@
 				TargetAttributes = {
 					9C35CBFE19DBB00700557269 = {
 						CreatedOnToolsVersion = 6.0;
-					};
-					9C35CC1319DBB00700557269 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 9C35CBFE19DBB00700557269;
 					};
 				};
 			};
@@ -192,7 +150,6 @@
 			projectRoot = "";
 			targets = (
 				9C35CBFE19DBB00700557269 /* CustomImagePicker */,
-				9C35CC1319DBB00700557269 /* CustomImagePickerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -209,13 +166,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9C35CC1219DBB00700557269 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -229,23 +179,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9C35CC1019DBB00700557269 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9C35CC1B19DBB00700557269 /* CustomImagePickerTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9C35CC1619DBB00700557269 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9C35CBFE19DBB00700557269 /* CustomImagePicker */;
-			targetProxy = 9C35CC1519DBB00700557269 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9C35CC0819DBB00700557269 /* Main.storyboard */ = {
@@ -374,40 +308,6 @@
 			};
 			name = Release;
 		};
-		9C35CC2219DBB00700557269 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = CustomImagePickerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CustomImagePicker.app/CustomImagePicker";
-			};
-			name = Debug;
-		};
-		9C35CC2319DBB00700557269 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = CustomImagePickerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CustomImagePicker.app/CustomImagePicker";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -425,15 +325,6 @@
 			buildConfigurations = (
 				9C35CC1F19DBB00700557269 /* Debug */,
 				9C35CC2019DBB00700557269 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9C35CC2119DBB00700557269 /* Build configuration list for PBXNativeTarget "CustomImagePickerTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9C35CC2219DBB00700557269 /* Debug */,
-				9C35CC2319DBB00700557269 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
