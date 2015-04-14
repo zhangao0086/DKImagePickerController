@@ -1,7 +1,7 @@
 DKImagePickerController
 =======================
 
-Update for Xcode 6.1
+Update for Xcode 6.3 with Swift 1.2
 ---
 ## Description
 This is a very simple Image Picker Controller by Swift.  

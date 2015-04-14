@@ -17,7 +17,6 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,7 +69,7 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     
     // 退出播放器
     func exitPlayer(notification: NSNotification) {
-        let reason = (notification.userInfo!)[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] as NSNumber!
+        let reason = (notification.userInfo!)[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] as! NSNumber!
         if reason.integerValue == MPMovieFinishReason.UserExited.rawValue {
             NSNotificationCenter.defaultCenter().removeObserver(self)
             self.player?.view.removeFromSuperview()
@@ -80,17 +79,17 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     
     // MARK: - UIImagePickerControllerDelegate methods
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        let mediaType = info[UIImagePickerControllerMediaType] as NSString!
+        let mediaType = info[UIImagePickerControllerMediaType] as! NSString
         println(mediaType)
-        if mediaType.isEqualToString(kUTTypeImage) {
-            let selectedImage = info[UIImagePickerControllerOriginalImage] as UIImage!
+        if mediaType.isEqualToString(kUTTypeImage as String) {
+            let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
             imageScrollView.subviews.map(){$0.removeFromSuperview()}
             let imageView = UIImageView(image: selectedImage)
             imageView.contentMode = UIViewContentMode.ScaleAspectFit
             imageView.frame = imageScrollView.bounds
             imageScrollView.addSubview(imageView)
         } else {
-            self.videoURL = info[UIImagePickerControllerMediaURL] as NSURL!
+            self.videoURL = info[UIImagePickerControllerMediaURL] as? NSURL
             let alert = UIAlertView(title: "选择的视频URL", message: videoURL!.absoluteString, delegate: nil, cancelButtonTitle: "确定")
             alert.show()
         }
@@ -117,7 +116,7 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
             imageScrollView.addSubview(imageView)
             
         }
-        imageScrollView.contentSize.height = CGRectGetMaxY((imageScrollView.subviews.last as UIView).frame)
+        imageScrollView.contentSize.height = CGRectGetMaxY((imageScrollView.subviews.last as! UIView).frame)
         
         self.dismissViewControllerAnimated(true, completion: nil)
     }

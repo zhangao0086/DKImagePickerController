@@ -33,7 +33,7 @@ let DKImageUnselectedNotification = "DKImageUnselectedNotification"
 
 // Group Model
 class DKAssetGroup : NSObject {
-    var groupName: NSString!
+    var groupName: String!
     var thumbnail: UIImage!
     var group: ALAssetsGroup!
 }
@@ -53,7 +53,7 @@ class DKAsset: NSObject {
     
     // Compare two assets
     override func isEqual(object: AnyObject?) -> Bool {
-        let other = object as DKAsset!
+        let other = object as! DKAsset!
         return self.url!.isEqual(other.url!)
     }
 }
@@ -120,7 +120,11 @@ class DKImageGroupViewController: UICollectionViewController {
         return NSMutableArray()
     }()
     
-    override init() {
+    override init(collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(collectionViewLayout: layout)
+    }
+    
+    convenience init() {
         let layout = UICollectionViewFlowLayout()
         
         let interval: CGFloat = 3
@@ -131,7 +135,8 @@ class DKImageGroupViewController: UICollectionViewController {
         let itemWidth = (screenWidth - interval * 3) / 4
         
         layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-        super.init(collectionViewLayout: layout)
+
+        self.init(collectionViewLayout: layout)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -176,9 +181,9 @@ class DKImageGroupViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ImageCellIdentifier, forIndexPath: indexPath) as DKImageCollectionCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ImageCellIdentifier, forIndexPath: indexPath) as! DKImageCollectionCell
         
-        let asset = imageAssets[indexPath.row] as DKAsset
+        let asset = imageAssets[indexPath.row] as! DKAsset
         cell.thumbnail = asset.thumbnailImage
         
         if find(self.imagePickerController!.selectedAssets, asset) != nil {
@@ -226,7 +231,7 @@ class DKAssetsLibraryController: UITableViewController {
         library.enumerateGroupsWithTypes(0xFFFFFFFF, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
             if group != nil {
                 if group.numberOfAssets() != 0 {
-                    let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as NSString
+                    let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
                     
                     let assetGroup = DKAssetGroup()
                     assetGroup.groupName = groupName
@@ -255,9 +260,9 @@ class DKAssetsLibraryController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(GroupCellIdentifier, forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(GroupCellIdentifier, forIndexPath: indexPath) as! UITableViewCell
         
-        let assetGroup = groups[indexPath.row] as DKAssetGroup
+        let assetGroup = groups[indexPath.row] as! DKAssetGroup
         cell.textLabel!.text = assetGroup.groupName
         cell.imageView!.image = assetGroup.thumbnail
         
@@ -267,7 +272,7 @@ class DKAssetsLibraryController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        let assetGroup = groups[indexPath.row] as DKAssetGroup
+        let assetGroup = groups[indexPath.row] as! DKAssetGroup
         let imageGroupController = DKImageGroupViewController()
         imageGroupController.assetGroup = assetGroup
         self.navigationController?.pushViewController(imageGroupController, animated: true)
@@ -336,7 +341,7 @@ class DKImagePickerController: UINavigationController {
                     imageView.frame = imageFrameForIndex(index)
                 }
             }
-            self.contentSize = CGSize(width: CGRectGetMaxX((self.subviews.last as UIView).frame) + interval,
+            self.contentSize = CGSize(width: CGRectGetMaxX((self.subviews.last as! UIView).frame) + interval,
                 height: self.bounds.height)
         }
     }
@@ -395,7 +400,7 @@ class DKImagePickerController: UINavigationController {
         return preview
     }()
     lazy internal var doneButton: UIButton =  {
-        let button = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         button.setTitle("", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
         button.reversesTitleShadowWhenHighlighted = true
@@ -403,14 +408,28 @@ class DKImagePickerController: UINavigationController {
         return button
     }()
     
-    convenience override init() {
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    convenience init() {
         var libraryController = DKAssetsLibraryController()
         var wrapperVC = DKContentWrapperViewController(libraryController)
+        
         self.init(rootViewController: wrapperVC)
+        
         libraryController.noAccessView = noAccessView
         wrapperVC.bottomBarHeight = previewHeight
-
+        
         selectedAssets = [DKAsset]()
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     deinit {
@@ -470,7 +489,7 @@ class DKImagePickerController: UINavigationController {
             imagesPreviewView.insertAsset(asset)
             imagesPreviewView.hidden = false
             
-            (self.viewControllers as [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
+            (self.viewControllers as! [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
             self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
             self.doneButton.sizeToFit()
         }
@@ -486,7 +505,7 @@ class DKImagePickerController: UINavigationController {
             if selectedAssets.count <= 0 {
                 imagesPreviewView.hidden = true
                 
-                (self.viewControllers as [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
+                (self.viewControllers as! [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
                 self.doneButton.setTitle("", forState: UIControlState.Normal)
             }
         }
