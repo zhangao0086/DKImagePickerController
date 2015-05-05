@@ -228,7 +228,7 @@ class DKAssetsLibraryController: UITableViewController {
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: GroupCellIdentifier)
         self.view.backgroundColor = UIColor.whiteColor()
         
-        library.enumerateGroupsWithTypes(0xFFFFFFFF, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
+        library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
             if group != nil {
                 if group.numberOfAssets() != 0 {
                     let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
