@@ -6,9 +6,11 @@
 //  Copyright (c) 2014年 ZhangAo. All rights reserved.
 //
 
+//  Changes by Oskari Rauta.
+//  Popup mod inspired by Tabasoft's simple iOS 8 popDatePicker from URL: http://coding.tabasoft.it/ios/a-simple-ios8-popdatepicker/
+
 import UIKit
 import AssetsLibrary
-
 
 // Delegate
 protocol DKImagePickerControllerDelegate : NSObjectProtocol {
@@ -30,6 +32,7 @@ let ImageCellIdentifier = "ImageCellIdentifier"
 // Nofifications
 let DKImageSelectedNotification = "DKImageSelectedNotification"
 let DKImageUnselectedNotification = "DKImageUnselectedNotification"
+let DKGroupClicked = "DKGroupClicked"
 
 // Group Model
 class DKAssetGroup : NSObject {
@@ -78,7 +81,108 @@ extension UIViewController {
 
 class DKImageGroupViewController: UICollectionViewController {
     
+    class DKCheckView : UIView {
+
+        var num : Int = 0 {
+            didSet {
+                self.text = NSString(format: "%d", num)
+                if !self.hidden {
+                    self.setNeedsDisplay()
+                }
+            }
+        }
+
+        var textColor : UIColor = UIColor.whiteColor() {
+            didSet {
+                
+                self.updateAttrs()
+                
+                if !self.hidden {
+                    self.setNeedsDisplay()
+                }
+            }
+        }
+        
+        var selectedColor : UIColor = UIColor(red: 0, green: 132 / 255, blue: 245 / 255, alpha: 1.0) {
+            didSet {
+
+                self.updateColors()
+                
+                if !self.hidden {
+                    self.setNeedsDisplay()
+                }
+            }
+        }
+        
+        override var hidden : Bool {
+            didSet {
+                self.setNeedsDisplay()
+            }
+        }
+
+        private var text : NSString = NSString()
+        private var attrs : NSDictionary = NSDictionary()
+        private var selectedRed : CGFloat = 0
+        private var selectedGreen : CGFloat = 0
+        private var selectedBlue : CGFloat = 0
+        private var selectedAlpha : CGFloat = 0
+        
+        required init(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        private func updateColors() {
+            self.selectedColor.getRed(&self.selectedRed, green: &self.selectedGreen, blue: &self.selectedBlue, alpha: &self.selectedAlpha)
+        }
+        
+        private func updateAttrs() {
+            var paragraph : NSMutableParagraphStyle = NSMutableParagraphStyle()
+            paragraph.alignment = NSTextAlignment.Center
+            
+            self.attrs = NSDictionary(objectsAndKeys:
+                UIFont.boldSystemFontOfSize(12.0), NSFontAttributeName,
+                self.textColor, NSForegroundColorAttributeName,
+                paragraph, NSParagraphStyleAttributeName
+            )
+        }
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            self.updateAttrs()
+            self.updateColors()
+            self.backgroundColor = UIColor.clearColor()
+        }
+        
+        override func drawRect(rect: CGRect) {
+            super.drawRect(rect)
+
+            var ctx : CGContextRef = UIGraphicsGetCurrentContext()
+            let width: CGFloat = 21.0
+            let height: CGFloat = 21.0
+            let textRect : CGRect = CGRectMake(rect.width - width, 0, width, height)
+            
+            CGContextSetRGBFillColor(ctx, self.selectedRed, self.selectedGreen, self.selectedBlue, self.selectedAlpha)
+            CGContextSetRGBStrokeColor(ctx, self.selectedRed, self.selectedGreen, self.selectedBlue, self.selectedAlpha)
+
+            CGContextStrokeRectWithWidth(ctx, CGRectInset(rect, 1.0, 1.0), 1.5)
+            CGContextFillRect(ctx, textRect)
+
+            if num > 0 {
+                let textHeight: CGFloat = text.sizeWithAttributes(self.attrs as [NSObject : AnyObject]).height
+                text.drawInRect(CGRectInset(textRect, 0, (height - textHeight) / 2), withAttributes: self.attrs as [NSObject : AnyObject])
+            }
+        }
+        
+    }
+    
     class DKImageCollectionCell: UICollectionViewCell {
+        
+        var num : Int = 0 {
+            didSet {
+                self.checkView.num = self.num
+            }
+        }
+        
         var thumbnail: UIImage! {
             didSet {
                 self.imageView.image = thumbnail
@@ -87,17 +191,22 @@ class DKImageGroupViewController: UICollectionViewController {
         
         override var selected: Bool {
             didSet {
+                if super.selected {
+                    
+                }
                 checkView.hidden = !super.selected
             }
         }
         
         private var imageView = UIImageView()
-        private var checkView = UIImageView(image: UIImage(named: "photo_checked"))
+        private var checkView = DKCheckView()
         
         override init(frame: CGRect) {
             super.init(frame: frame)
+
+            imageView.frame = CGRectInset(self.bounds, 1, 1)
+            self.checkView.frame = self.imageView.frame
             
-            imageView.frame = self.bounds
             self.contentView.addSubview(imageView)
             self.contentView.addSubview(checkView)
         }
@@ -109,12 +218,13 @@ class DKImageGroupViewController: UICollectionViewController {
         override func layoutSubviews() {
             super.layoutSubviews()
             
-            imageView.frame = self.bounds
-            checkView.frame.origin = CGPoint(x: self.contentView.bounds.width - checkView.bounds.width,
-                y: 0)
+            imageView.frame = CGRectInset(self.bounds, 1, 1)
+            checkView.frame = imageView.frame
         }
     }
     
+
+    var groups : NSArray = NSArray()
     var assetGroup: DKAssetGroup!
     private lazy var imageAssets: NSMutableArray = {
         return NSMutableArray()
@@ -142,16 +252,23 @@ class DKImageGroupViewController: UICollectionViewController {
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        assert(assetGroup != nil, "assetGroup is nil")
-
-        self.title = assetGroup.groupName
         
         self.collectionView!.backgroundColor = UIColor.whiteColor()
+        self.collectionView!.layer.borderColor = self.collectionView!.backgroundColor!.CGColor
+        self.collectionView!.layer.borderWidth = 2.0
         self.collectionView!.allowsMultipleSelection = true
         self.collectionView!.registerClass(DKImageCollectionCell.self, forCellWithReuseIdentifier: ImageCellIdentifier)
+        
+    }
+
+    func updateTitle() {
+        self.title = assetGroup.groupName + ( (self.navigationController! as! DKImagePickerController).groups.count > 1 ? "  \u{25be}" : "" )
+    }
+    
+    func updateCollectionView() {
         
         assetGroup.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
@@ -171,6 +288,15 @@ class DKImageGroupViewController: UICollectionViewController {
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        assert(assetGroup != nil, "assetGroup is nil")
+        
+        self.updateTitle()
+        self.updateCollectionView()
+    }
+    
     //Mark: - UICollectionViewDelegate, UICollectionViewDataSource methods
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -187,6 +313,7 @@ class DKImageGroupViewController: UICollectionViewController {
         cell.thumbnail = asset.thumbnailImage
         
         if find(self.imagePickerController!.selectedAssets, asset) != nil {
+            cell.num = ( self.imagePickerController!.selectedAssets as NSArray).indexOfObject(asset) + 1
             cell.selected = true
             collectionView.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition.None)
         } else {
@@ -198,86 +325,101 @@ class DKImageGroupViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+
         NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[indexPath.row])
+        
+        let asset = imageAssets[indexPath.row] as! DKAsset
+        
+        if find(self.imagePickerController!.selectedAssets, asset) != nil {
+            (self.collectionView!.cellForItemAtIndexPath(indexPath) as! DKImageCollectionCell).num = (self.imagePickerController!.selectedAssets as NSArray).indexOfObject(asset) + 1
+        }
+        
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
         NSNotificationCenter.defaultCenter().postNotificationName(DKImageUnselectedNotification, object: imageAssets[indexPath.row])
+        
+        for var i = 0; i < self.collectionView!.numberOfItemsInSection(indexPath.section); i++ {
+
+            let asset = imageAssets[i] as! DKAsset
+            
+            if find(self.imagePickerController!.selectedAssets, asset) != nil {
+                (self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: i, inSection: indexPath.section)) as! DKImageCollectionCell).num = (self.imagePickerController!.selectedAssets as NSArray).indexOfObject(asset) + 1
+            }
+            
+        }
+        
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// MARK: - Show All Group
+// MARK: - Group selector
 //////////////////////////////////////////////////////////////////////////////////////////
 
-class DKAssetsLibraryController: UITableViewController {
+class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+    @IBOutlet weak var tableView: UITableView!
     
-    lazy private var groups: NSMutableArray = {
-        return NSMutableArray()
-    }()
+    var groups : NSArray = NSArray()
     
-    lazy private var library: ALAssetsLibrary = {
-        return ALAssetsLibrary()
-    }()
-    
-    private var noAccessView: UIView!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    convenience init() {
         
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: GroupCellIdentifier)
-        self.view.backgroundColor = UIColor.whiteColor()
-        
-        library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
-            if group != nil {
-                if group.numberOfAssets() != 0 {
-                    let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
-                    
-                    let assetGroup = DKAssetGroup()
-                    assetGroup.groupName = groupName
-                    assetGroup.thumbnail = UIImage(CGImage: group.posterImage().takeUnretainedValue())
-                    assetGroup.group = group
-                    self.groups.insertObject(assetGroup, atIndex: 0)
-                }
-            } else {
-                self.tableView.reloadData()
-            }
-        }, failureBlock: {(error: NSError!) in
-            self.noAccessView.frame = self.view.bounds
-            self.tableView.scrollEnabled = false
-            self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-            self.view.addSubview(self.noAccessView)
-        })
+        self.init(nibName: "DKGroupSelectController", bundle: nil)
     }
     
-    // MARK: - UITableViewDelegate, UITableViewDataSource methods
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func updateMenu() {
+        self.tableView.reloadData()
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups.count
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.groups.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(GroupCellIdentifier, forIndexPath: indexPath) as! UITableViewCell
-        
-        let assetGroup = groups[indexPath.row] as! DKAssetGroup
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0.1
+    }
+
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.1
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 32.0
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        let assetGroup : DKAssetGroup = self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup
         cell.textLabel!.text = assetGroup.groupName
-        cell.imageView!.image = assetGroup.thumbnail
-        
         return cell
     }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        let assetGroup = groups[indexPath.row] as! DKAssetGroup
-        let imageGroupController = DKImageGroupViewController()
-        imageGroupController.assetGroup = assetGroup
-        self.navigationController?.pushViewController(imageGroupController, animated: true)
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        self.dismissViewControllerAnimated(true, completion: nil)
+        let assetGroup : DKAssetGroup = self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup
+        NSNotificationCenter.defaultCenter().postNotificationName(DKGroupClicked, object: self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup)
     }
+    
+    override func viewDidLoad() {
+
+        super.viewDidLoad()
+        
+        updateMenu()
+        
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
+    }
+    
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // MARK: - Main Controller
@@ -285,9 +427,6 @@ class DKAssetsLibraryController: UITableViewController {
 
 class DKImagePickerController: UINavigationController {
     
-    /// The height of the bottom of the preview
-    var previewHeight: CGFloat = 80
-    var rightButtonTitle: String = "Select"
     /// Displayed when denied access
     var noAccessView: UIView = {
         let label = UILabel()
@@ -297,67 +436,15 @@ class DKImagePickerController: UINavigationController {
         return label
     }()
     
-    class DKPreviewView: UIScrollView {
-        let interval: CGFloat = 5
-        private var imageLengthOfSide: CGFloat!
-        private var assets = [DKAsset]()
-        private var imagesDict: [DKAsset : UIImageView] = [:]
-        
-        override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            imageLengthOfSide = self.bounds.height - interval * 2
-        }
-        
-        func imageFrameForIndex(index: Int) -> CGRect {
-            return CGRect(x: CGFloat(index) * imageLengthOfSide + CGFloat(index + 1) * interval,
-                y: (self.bounds.height - imageLengthOfSide)/2,
-                width: imageLengthOfSide, height: imageLengthOfSide)
-        }
-        
-        func insertAsset(asset: DKAsset) {
-            let imageView = UIImageView(image: asset.thumbnailImage)
-            imageView.frame = imageFrameForIndex(assets.count)
-            
-            self.addSubview(imageView)
-            assets.append(asset)
-            imagesDict.updateValue(imageView, forKey: asset)
-            setupContent(true)
-        }
-        
-        func removeAsset(asset: DKAsset) {
-            imagesDict.removeValueForKey(asset)
-            let index = find(assets, asset)
-            if let toRemovedIndex = index {
-                assets.removeAtIndex(toRemovedIndex)
-                setupContent(false)
-            }
-        }
-        
-        private func setupContent(isInsert: Bool) {
-            if isInsert == false {
-                for (index,asset) in enumerate(assets) {
-                    let imageView = imagesDict[asset]!
-                    imageView.frame = imageFrameForIndex(index)
-                }
-            }
-            self.contentSize = CGSize(width: CGRectGetMaxX((self.subviews.last as! UIView).frame) + interval,
-                height: self.bounds.height)
-        }
-    }
-    
-    class DKContentWrapperViewController: UIViewController {
+    class DKContentWrapperViewController: UIViewController, UIPopoverPresentationControllerDelegate {
         var contentViewController: UIViewController
-        var bottomBarHeight: CGFloat = 0
-        var showBottomBar: Bool = false {
-            didSet {
-                if self.showBottomBar {
-                    self.contentViewController.view.frame.size.height = self.view.bounds.size.height - self.bottomBarHeight
-                } else {
-                    self.contentViewController.view.frame.size.height = self.view.bounds.size.height
-                }
-            }
-        }
+        var offset : CGFloat = 8.0
+        var titlebtn: UIButton = UIButton()
+        var popover : UIPopoverPresentationController?
+        
+        lazy private var groupSelectController : DKGroupSelectController = {
+            return DKGroupSelectController()
+            }()
         
         init(_ viewController: UIViewController) {
             contentViewController = viewController
@@ -366,6 +453,8 @@ class DKImagePickerController: UINavigationController {
             self.addChildViewController(viewController)
             
             contentViewController.addObserver(self, forKeyPath: "title", options: NSKeyValueObservingOptions.New, context: nil)
+            
+            self.titlebtn.addTarget(self, action: "onGroupClicked", forControlEvents: .TouchUpInside)
         }
         
         deinit {
@@ -378,7 +467,11 @@ class DKImagePickerController: UINavigationController {
         
         override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
             if keyPath == "title" {
-                self.title = contentViewController.title
+                self.titlebtn.setTitle(contentViewController.title, forState: .Normal)
+                self.titlebtn.titleLabel!.font = UIFont.boldSystemFontOfSize(16.0)
+                self.titlebtn.setTitleColor(UIColor.blackColor(), forState: .Normal)
+                self.titlebtn.sizeToFit()
+                self.navigationItem.titleView = self.titlebtn
             }
         }
         
@@ -389,23 +482,48 @@ class DKImagePickerController: UINavigationController {
             self.view.addSubview(contentViewController.view)
             contentViewController.view.frame = view.bounds
         }
+        
+        private func pickGroup(inViewController : UIViewController) {
+            groupSelectController.modalPresentationStyle = .Popover
+            groupSelectController.preferredContentSize = CGSizeMake(500, 168)
+            popover = groupSelectController.popoverPresentationController
+            if let _popover = popover {
+                
+                _popover.sourceView = self.titlebtn
+                _popover.sourceRect = CGRectMake(self.offset, self.titlebtn.bounds.size.height, self.titlebtn.bounds.size.width, 0)
+                _popover.delegate = self
+                
+                groupSelectController.groups = NSArray(array: ( self.navigationController! as! DKImagePickerController ).groups)
+                
+                inViewController.presentViewController(groupSelectController, animated: true, completion: nil)
+            }
+        }
+
+        func adaptivePresentationStyleForPresentationController(PC: UIPresentationController) -> UIModalPresentationStyle {
+            
+            return .None
+        }
+        
+        func onGroupClicked() {
+            self.pickGroup(self)
+        }
     }
+    
+    var selectedGroupIndex : Int = 0
     
     internal var selectedAssets: [DKAsset]!
     internal  weak var pickerDelegate: DKImagePickerControllerDelegate?
-    lazy internal  var imagesPreviewView: DKPreviewView = {
-        let preview = DKPreviewView()
-        preview.hidden = true
-        preview.backgroundColor = UIColor.lightGrayColor()
-        return preview
-    }()
-    lazy internal var doneButton: UIButton =  {
-        let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
-        button.setTitle("", forState: UIControlState.Normal)
-        button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
-        button.reversesTitleShadowWhenHighlighted = true
-        button.addTarget(self, action: "onDoneClicked", forControlEvents: UIControlEvents.TouchUpInside)
-        return button
+    
+    lazy private var groups: NSMutableArray = {
+        return NSMutableArray()
+        }()
+    
+    lazy private var library: ALAssetsLibrary = {
+        return ALAssetsLibrary()
+        }()
+    
+    lazy private var imageGroupController: DKImageGroupViewController = {
+        return DKImageGroupViewController()
     }()
     
     override init(rootViewController: UIViewController) {
@@ -417,15 +535,17 @@ class DKImagePickerController: UINavigationController {
     }
     
     convenience init() {
-        var libraryController = DKAssetsLibraryController()
-        var wrapperVC = DKContentWrapperViewController(libraryController)
+        var initialView =  UIViewController() // This is a bit dirty hack that propably could be done better..
+        var wrapperVC = DKContentWrapperViewController(initialView)
         
         self.init(rootViewController: wrapperVC)
         
-        libraryController.noAccessView = noAccessView
-        wrapperVC.bottomBarHeight = previewHeight
-        
         selectedAssets = [DKAsset]()
+        
+        self.updateAssetGroups()
+        
+        var wrapperVC2 = DKContentWrapperViewController(self.imageGroupController)
+        self.setViewControllers([wrapperVC2], animated: false)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -439,34 +559,54 @@ class DKImagePickerController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imagesPreviewView.frame = CGRect(x: 0, y: view.bounds.height - previewHeight,
-                                     width: view.bounds.width, height: previewHeight)
-        imagesPreviewView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin
-        
-        view.addSubview(imagesPreviewView)
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedImage:",
                                                                    name: DKImageSelectedNotification,
                                                                  object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "unselectedImage:",
                                                                    name: DKImageUnselectedNotification,
                                                                  object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedGroup:",
+                                                                   name: DKGroupClicked,
+                                                                 object: nil)
+
     }
 
-    override func pushViewController(viewController: UIViewController, animated: Bool) {
-        var wrapperVC = DKContentWrapperViewController(viewController)
-        wrapperVC.bottomBarHeight = previewHeight
-        wrapperVC.showBottomBar = !imagesPreviewView.hidden
-
-        super.pushViewController(wrapperVC, animated: animated)
-
-        self.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+    func updateAssetGroups() {
         
-        if self.viewControllers.count == 1 && self.topViewController?.navigationItem.leftBarButtonItem == nil {
-            self.topViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel,
-                target: self,
-                action: "onCancelClicked")
-        }
+        self.groups.removeAllObjects()
+        
+        library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
+            if group != nil {
+                if group.numberOfAssets() != 0 {
+                    let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
+                    
+                    let assetGroup = DKAssetGroup()
+                    assetGroup.groupName = groupName
+                    assetGroup.thumbnail = UIImage(CGImage: group.posterImage().takeUnretainedValue())
+                    assetGroup.group = group
+                    self.groups.insertObject(assetGroup, atIndex: 0)
+                    self.imageGroupController.assetGroup = assetGroup
+                }
+            } else {
+                
+                if self.groups.count > self.selectedGroupIndex {
+                    self.imageGroupController.assetGroup = self.groups[self.selectedGroupIndex] as! DKAssetGroup
+                }
+
+                self.imageGroupController.updateTitle()
+            }
+            }, failureBlock: {(error: NSError!) in
+        })
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.updateAssetGroups()
+        
+        self.topViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "onCancelClicked")
+        self.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "onDoneClicked")
+        self.topViewController.navigationItem.rightBarButtonItem!.enabled = false
     }
     
     // MARK: - Delegate methods
@@ -481,33 +621,37 @@ class DKImagePickerController: UINavigationController {
             delegate.imagePickerControllerDidSelectedAssets(self.selectedAssets)
         }
     }
-    
+
     // MARK: - Notifications
+
+    func selectedGroup(noti: NSNotification) {
+
+        if let asset = noti.object as? DKAssetGroup {
+            
+            self.selectedAssets.removeAll(keepCapacity: true)
+            self.imageGroupController.imageAssets.removeAllObjects()
+
+            self.imageGroupController.assetGroup = asset
+            self.imageGroupController.updateTitle()
+            self.imageGroupController.updateCollectionView()
+            
+            self.selectedGroupIndex = self.groups.indexOfObject(asset)
+            
+        }
+        
+    }
+    
     func selectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
             selectedAssets.append(asset)
-            imagesPreviewView.insertAsset(asset)
-            imagesPreviewView.hidden = false
-            
-            (self.viewControllers as! [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
-            self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
-            self.doneButton.sizeToFit()
+            self.topViewController.navigationItem.rightBarButtonItem!.enabled = true
         }
     }
     
     func unselectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
             selectedAssets.removeAtIndex(find(selectedAssets, asset)!)
-            imagesPreviewView.removeAsset(asset)
-            
-            self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
-            self.doneButton.sizeToFit()
-            if selectedAssets.count <= 0 {
-                imagesPreviewView.hidden = true
-                
-                (self.viewControllers as! [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
-                self.doneButton.setTitle("", forState: UIControlState.Normal)
-            }
+            self.topViewController.navigationItem.rightBarButtonItem!.enabled = self.selectedAssets.count > 0 ? true : false
         }
     }
 }
