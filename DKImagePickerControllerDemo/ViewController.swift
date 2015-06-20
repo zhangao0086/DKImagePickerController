@@ -39,6 +39,9 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
         let pickerController = DKImagePickerController()
         pickerController.pickerDelegate = self
         self.presentViewController(pickerController, animated: true) {}
+        for subview in self.imageScrollView.subviews {
+            subview.removeFromSuperview()
+        }
     }
     
     @IBAction func showImagePicker() {

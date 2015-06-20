@@ -358,13 +358,131 @@ class DKImageGroupViewController: UICollectionViewController {
 
 class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    @IBOutlet weak var tableView: UITableView!
-    
-    var groups : NSArray = NSArray()
-    
-    convenience init() {
+    class DKGroupCell : UITableViewCell {
         
-        self.init(nibName: "DKGroupSelectController", bundle: nil)
+        var name : String = "" {
+            didSet {
+                self.nameLabel.text = self.name
+            }
+        }
+        
+        var count : Int = 0 {
+            didSet {
+                self.countLabel.text = String(format: "%d", self.count)
+            }
+        }
+        
+        var thumbnail: UIImageView = UIImageView()
+        var nameLabel: UILabel = UILabel()
+        var countLabel: UILabel = UILabel()
+
+        private var didSetConstraints : Bool = false
+        
+        override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+            super.init(style: style, reuseIdentifier: reuseIdentifier)
+            
+            self.thumbnail.setTranslatesAutoresizingMaskIntoConstraints(false)
+            self.nameLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+            self.countLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+            
+            self.contentView.addSubview(self.thumbnail)
+            self.contentView.addSubview(self.nameLabel)
+            self.contentView.addSubview(self.countLabel)
+
+            self.nameLabel.textAlignment = .Left
+            self.countLabel.textAlignment = .Right
+            
+        }
+        
+        required init(coder aDecoder: NSCoder) {
+            super.init(coder: aDecoder)
+        }
+        
+        override func awakeFromNib() {
+            super.awakeFromNib()
+        }
+        
+        override func updateConstraints() {
+
+            if ( !didSetConstraints ) {
+                
+                didSetConstraints = true
+                
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnail, attribute: .Leading, relatedBy: .Equal, toItem: self.contentView, attribute: .Leading, multiplier: 1.0, constant: 2.0))
+
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnail, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1.0, constant: 2.0))
+
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnail, attribute: .Bottom, relatedBy: .Equal, toItem: self.contentView, attribute: .Bottom, multiplier: 1.0, constant: -2.0))
+                
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.thumbnail, attribute: .Width, relatedBy: .Equal, toItem: self.thumbnail, attribute: .Height, multiplier: 1.0, constant: 0.0))
+                
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.nameLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.thumbnail, attribute: .Trailing, multiplier: 1.0, constant: 5.0))
+                
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.nameLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: self.thumbnail, attribute: .CenterY, multiplier: 1.0, constant: 0.0))
+                
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.countLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: .Equal, toItem: self.nameLabel, attribute: .CenterY, multiplier: 1.0, constant: 0.0))
+
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.countLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: -5.0))
+                
+                self.contentView.addConstraint(NSLayoutConstraint(item: self.nameLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.countLabel, attribute: .Leading, multiplier: 1.0, constant: -5.0))
+            }
+            
+            super.updateConstraints()
+            
+            
+        }
+
+        override func intrinsicContentSize() -> CGSize {
+            return CGSizeMake(UIViewNoIntrinsicMetric, 32.0)
+        }
+        
+    }
+    
+    var tableView: UITableView = UITableView()
+    var groups : NSArray = NSArray()
+    private var didSetConstraints : Bool = false
+
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        updateMenu()
+        
+        self.view.backgroundColor = UIColor.whiteColor()
+        
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        
+        self.tableView.registerClass(DKGroupCell.self, forCellReuseIdentifier: "groupCell")
+        
+        self.tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.view.addSubview(self.tableView)
+        
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.updateViewConstraints()
+    }
+    
+    override func updateViewConstraints() {
+        
+        if !self.didSetConstraints {
+            
+            self.didSetConstraints = true
+            
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 8.0))
+
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: -8.0))
+
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 8.0))
+            
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -8.0))
+            
+        }
+        
+        super.updateViewConstraints()
+        
     }
     
     func updateMenu() {
@@ -392,9 +510,16 @@ class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+
+        var cell:DKGroupCell = self.tableView.dequeueReusableCellWithIdentifier("groupCell") as! DKGroupCell
         let assetGroup : DKAssetGroup = self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup
-        cell.textLabel!.text = assetGroup.groupName
+        
+        cell.name = assetGroup.groupName
+        cell.count = assetGroup.group.numberOfAssets()
+        cell.thumbnail.image = assetGroup.thumbnail
+        
+        cell.setNeedsUpdateConstraints()
+        
         return cell
     }
 
@@ -403,19 +528,6 @@ class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
         self.dismissViewControllerAnimated(true, completion: nil)
         let assetGroup : DKAssetGroup = self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup
         NSNotificationCenter.defaultCenter().postNotificationName(DKGroupClicked, object: self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup)
-    }
-    
-    override func viewDidLoad() {
-
-        super.viewDidLoad()
-        
-        updateMenu()
-        
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        
     }
     
 }
@@ -484,16 +596,17 @@ class DKImagePickerController: UINavigationController {
         }
         
         private func pickGroup(inViewController : UIViewController) {
+            groupSelectController.groups = NSArray(array: ( self.navigationController! as! DKImagePickerController ).groups)
             groupSelectController.modalPresentationStyle = .Popover
-            groupSelectController.preferredContentSize = CGSizeMake(500, 168)
+            groupSelectController.preferredContentSize = CGSizeMake((self.view.bounds.size.width * 0.80), 16.0 + (groupSelectController.groups.count > 5 ? 160.0 : (CGFloat(groupSelectController.groups.count) * 32.0)))
             popover = groupSelectController.popoverPresentationController
             if let _popover = popover {
                 
+                _popover.backgroundColor = UIColor.whiteColor()
                 _popover.sourceView = self.titlebtn
                 _popover.sourceRect = CGRectMake(self.offset, self.titlebtn.bounds.size.height, self.titlebtn.bounds.size.width, 0)
                 _popover.delegate = self
                 
-                groupSelectController.groups = NSArray(array: ( self.navigationController! as! DKImagePickerController ).groups)
                 
                 inViewController.presentViewController(groupSelectController, animated: true, completion: nil)
             }
@@ -642,9 +755,11 @@ class DKImagePickerController: UINavigationController {
     }
     
     func selectedImage(noti: NSNotification) {
-        if let asset = noti.object as? DKAsset {
-            selectedAssets.append(asset)
-            self.topViewController.navigationItem.rightBarButtonItem!.enabled = true
+        if selectedAssets.count < 99 {
+            if let asset = noti.object as? DKAsset {
+                selectedAssets.append(asset)
+                self.topViewController.navigationItem.rightBarButtonItem!.enabled = true
+            }
         }
     }
     

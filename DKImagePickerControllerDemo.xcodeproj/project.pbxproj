@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6ED049BB1B345863005A2958 /* DKGroupSelectController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ED049BA1B345863005A2958 /* DKGroupSelectController.xib */; };
 		9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */; };
 		9CBF3F7D1AB15D210000F1D1 /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F711AB15D210000F1D1 /* DKImagePickerController.swift */; };
 		9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F721AB15D210000F1D1 /* Images.xcassets */; };
@@ -19,7 +18,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6ED049BA1B345863005A2958 /* DKGroupSelectController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DKGroupSelectController.xib; sourceTree = "<group>"; };
 		6ED049C31B34AF71005A2958 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		9C167BF719DF832B008FA4CA /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		9C35CBFF19DBB00700557269 /* DKImagePickerControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DKImagePickerControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,7 +80,6 @@
 			isa = PBXGroup;
 			children = (
 				9CBF3F711AB15D210000F1D1 /* DKImagePickerController.swift */,
-				6ED049BA1B345863005A2958 /* DKGroupSelectController.xib */,
 			);
 			name = DKImagePickerController;
 			path = DKImagePickerControllerDemo/DKImagePickerController;
@@ -147,7 +144,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CBF3F861AB15E040000F1D1 /* LaunchScreen.xib in Resources */,
-				6ED049BB1B345863005A2958 /* DKGroupSelectController.xib in Resources */,
 				9CBF3F871AB15E0D0000F1D1 /* LaunchScreen.strings in Resources */,
 				9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */,
 				9CBF3F881AB15E100000F1D1 /* Main.strings in Resources */,
