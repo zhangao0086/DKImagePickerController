@@ -241,7 +241,7 @@ class DKImageGroupViewController: UICollectionViewController {
         layout.minimumInteritemSpacing = interval
         layout.minimumLineSpacing = interval
         
-        let screenWidth = UIScreen.mainScreen().bounds.width
+        let screenWidth = UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height ? UIScreen.mainScreen().bounds.height : UIScreen.mainScreen().bounds.width
         let itemWidth = (screenWidth - interval * 3) / 4
         
         layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
@@ -550,7 +550,6 @@ class DKImagePickerController: UINavigationController {
     
     class DKContentWrapperViewController: UIViewController, UIPopoverPresentationControllerDelegate {
         var contentViewController: UIViewController
-        var offset : CGFloat = 8.0
         var titlebtn: UIButton = UIButton()
         var popover : UIPopoverPresentationController?
         
@@ -598,13 +597,15 @@ class DKImagePickerController: UINavigationController {
         private func pickGroup(inViewController : UIViewController) {
             groupSelectController.groups = NSArray(array: ( self.navigationController! as! DKImagePickerController ).groups)
             groupSelectController.modalPresentationStyle = .Popover
-            groupSelectController.preferredContentSize = CGSizeMake((self.view.bounds.size.width * 0.80), 16.0 + (groupSelectController.groups.count > 5 ? 160.0 : (CGFloat(groupSelectController.groups.count) * 32.0)))
+            groupSelectController.preferredContentSize = CGSizeMake(
+                (( UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height ? UIScreen.mainScreen().bounds.height : UIScreen.mainScreen().bounds.width) * 0.94),
+                16.0 + (groupSelectController.groups.count > 5 ? 160.0 : (CGFloat(groupSelectController.groups.count) * 32.0)))
             popover = groupSelectController.popoverPresentationController
             if let _popover = popover {
                 
                 _popover.backgroundColor = UIColor.whiteColor()
                 _popover.sourceView = self.titlebtn
-                _popover.sourceRect = CGRectMake(self.offset, self.titlebtn.bounds.size.height, self.titlebtn.bounds.size.width, 0)
+                _popover.sourceRect = CGRectMake(0, self.titlebtn.bounds.size.height, self.titlebtn.bounds.size.width, 0)
                 _popover.delegate = self
                 
                 
