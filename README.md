@@ -1,17 +1,18 @@
-DKImagePickerController
+FBImagePickerController
 =======================
 
-Update for Xcode 6.3 with Swift 1.2
----
 ## Description
-This is a very simple Image Picker Controller by Swift.  
+This is a very simple Image Picker Controller by Swift.
+It has been styled with similarity to image picker used by
+Facebook application. That's why name FBImagePickerController.
+It does not link to FB in any other way.
 **AssetsLibrary.framework is required.**
 
 ## Use
 #### Initialization and presentation
 ```swift
 
-let pickerController = DKImagePickerController()
+let pickerController = FBImagePickerController()
 pickerController.pickerDelegate = self
 self.presentViewController(pickerController, animated: true) {}
 ````
@@ -21,7 +22,7 @@ func imagePickerControllerCancelled() {
     self.dismissViewControllerAnimated(true, completion: nil)
 }
 
-func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
+func imagePickerControllerDidSelectedAssets(assets: [FBAsset]!) {
     for (index, asset) in enumerate(assets) {
         
     }
@@ -32,20 +33,13 @@ func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
 ````
 #### Configurable properties
 ```swift
-/// The height of the bottom of the preview
-var previewHeight: CGFloat = 80
-
-var rightButtonTitle: String = "确定"
-
 /// Displayed when denied access
 var noAccessView: UIView
 ````
 
 ## Screenshots
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/master/intro1.PNG" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/oskarirauta/FBImagePickerController/master/screenshot1.png" />
 ---
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/master/intro2.PNG" />  
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/oskarirauta/FBImagePickerController/master/screenshot2.png" />  
 ---
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/master/intro3.PNG" />
----
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/master/intro4.PNG" />  
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/oskarirauta/FBImagePickerController/master/screenshot3.png" />
