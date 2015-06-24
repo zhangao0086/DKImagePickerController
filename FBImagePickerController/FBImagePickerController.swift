@@ -1,23 +1,21 @@
 //
-//  DKImagePickerController.swift
-//  CustomImagePicker
+//  FBImagePickerController.swift
+//  Facebook Style ImagePicker
 //
 //  Created by ZhangAo on 14-10-2.
-//  Copyright (c) 2014年 ZhangAo. All rights reserved.
-//
-
-//  Changes by Oskari Rauta.
+//  Forked by Oskari Rauta.
+//  Copyright (c) 2015 ZhangAo & Oskari Rauta. All rights reserved.
 //  Popup mod inspired by Tabasoft's simple iOS 8 popDatePicker from URL: http://coding.tabasoft.it/ios/a-simple-ios8-popdatepicker/
 
 import UIKit
 import AssetsLibrary
 
 // Delegate
-protocol DKImagePickerControllerDelegate : NSObjectProtocol {
+protocol FBImagePickerControllerDelegate : NSObjectProtocol {
     /// Called when right button is clicked.
     ///
     /// :param: images Images of selected
-    func imagePickerControllerDidSelectedAssets(images: [DKAsset]!)
+    func imagePickerControllerDidSelectedAssets(images: [FBAsset]!)
     
     /// Called when cancel button is clicked.
     func imagePickerControllerCancelled()
@@ -30,19 +28,19 @@ let GroupCellIdentifier = "GroupCellIdentifier"
 let ImageCellIdentifier = "ImageCellIdentifier"
 
 // Nofifications
-let DKImageSelectedNotification = "DKImageSelectedNotification"
-let DKImageUnselectedNotification = "DKImageUnselectedNotification"
-let DKGroupClicked = "DKGroupClicked"
+let FBImageSelectedNotification = "FBImageSelectedNotification"
+let FBImageUnselectedNotification = "FBImageUnselectedNotification"
+let FBGroupClicked = "FBGroupClicked"
 
 // Group Model
-class DKAssetGroup : NSObject {
+class FBAssetGroup : NSObject {
     var groupName: String!
     var thumbnail: UIImage!
     var group: ALAssetsGroup!
 }
 
 // Asset Model
-class DKAsset: NSObject {
+class FBAsset: NSObject {
     var thumbnailImage: UIImage?
     lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
@@ -56,18 +54,18 @@ class DKAsset: NSObject {
     
     // Compare two assets
     override func isEqual(object: AnyObject?) -> Bool {
-        let other = object as! DKAsset!
+        let other = object as! FBAsset!
         return self.url!.isEqual(other.url!)
     }
 }
 
 // Internal
 extension UIViewController {
-    var imagePickerController: DKImagePickerController? {
+    var imagePickerController: FBImagePickerController? {
         get {
             let nav = self.navigationController
-            if nav is DKImagePickerController {
-                return nav as? DKImagePickerController
+            if nav is FBImagePickerController {
+                return nav as? FBImagePickerController
             } else {
                 return nil
             }
@@ -79,9 +77,9 @@ extension UIViewController {
 // MARK: - Show All Iamges In Group
 //////////////////////////////////////////////////////////////////////////////////////////
 
-class DKImageGroupViewController: UICollectionViewController {
+class FBImageGroupViewController: UICollectionViewController {
     
-    class DKCheckView : UIView {
+    class FBCheckView : UIView {
 
         var num : Int = 0 {
             didSet {
@@ -175,7 +173,7 @@ class DKImageGroupViewController: UICollectionViewController {
         
     }
     
-    class DKImageCollectionCell: UICollectionViewCell {
+    class FBImageCollectionCell: UICollectionViewCell {
         
         var num : Int = 0 {
             didSet {
@@ -199,7 +197,7 @@ class DKImageGroupViewController: UICollectionViewController {
         }
         
         private var imageView = UIImageView()
-        private var checkView = DKCheckView()
+        private var checkView = FBCheckView()
         
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -225,7 +223,7 @@ class DKImageGroupViewController: UICollectionViewController {
     
 
     var groups : NSArray = NSArray()
-    var assetGroup: DKAssetGroup!
+    var assetGroup: FBAssetGroup!
     private lazy var imageAssets: NSMutableArray = {
         return NSMutableArray()
     }()
@@ -260,19 +258,19 @@ class DKImageGroupViewController: UICollectionViewController {
         self.collectionView!.layer.borderColor = self.collectionView!.backgroundColor!.CGColor
         self.collectionView!.layer.borderWidth = 2.0
         self.collectionView!.allowsMultipleSelection = true
-        self.collectionView!.registerClass(DKImageCollectionCell.self, forCellWithReuseIdentifier: ImageCellIdentifier)
+        self.collectionView!.registerClass(FBImageCollectionCell.self, forCellWithReuseIdentifier: ImageCellIdentifier)
         
     }
 
     func updateTitle() {
-        self.title = assetGroup.groupName + ( (self.navigationController! as! DKImagePickerController).groups.count > 1 ? "  \u{25be}" : "" )
+        self.title = assetGroup.groupName + ( (self.navigationController! as! FBImagePickerController).groups.count > 1 ? "  \u{25be}" : "" )
     }
     
     func updateCollectionView() {
         
         assetGroup.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
-                let asset = DKAsset()
+                let asset = FBAsset()
                 asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
                 asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
                 asset.originalAsset = result
@@ -307,9 +305,9 @@ class DKImageGroupViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ImageCellIdentifier, forIndexPath: indexPath) as! DKImageCollectionCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ImageCellIdentifier, forIndexPath: indexPath) as! FBImageCollectionCell
         
-        let asset = imageAssets[indexPath.row] as! DKAsset
+        let asset = imageAssets[indexPath.row] as! FBAsset
         cell.thumbnail = asset.thumbnailImage
         
         if find(self.imagePickerController!.selectedAssets, asset) != nil {
@@ -326,25 +324,25 @@ class DKImageGroupViewController: UICollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 
-        NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[indexPath.row])
+        NSNotificationCenter.defaultCenter().postNotificationName(FBImageSelectedNotification, object: imageAssets[indexPath.row])
         
-        let asset = imageAssets[indexPath.row] as! DKAsset
+        let asset = imageAssets[indexPath.row] as! FBAsset
         
         if find(self.imagePickerController!.selectedAssets, asset) != nil {
-            (self.collectionView!.cellForItemAtIndexPath(indexPath) as! DKImageCollectionCell).num = (self.imagePickerController!.selectedAssets as NSArray).indexOfObject(asset) + 1
+            (self.collectionView!.cellForItemAtIndexPath(indexPath) as! FBImageCollectionCell).num = (self.imagePickerController!.selectedAssets as NSArray).indexOfObject(asset) + 1
         }
         
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        NSNotificationCenter.defaultCenter().postNotificationName(DKImageUnselectedNotification, object: imageAssets[indexPath.row])
+        NSNotificationCenter.defaultCenter().postNotificationName(FBImageUnselectedNotification, object: imageAssets[indexPath.row])
         
         for var i = 0; i < self.collectionView!.numberOfItemsInSection(indexPath.section); i++ {
 
-            let asset = imageAssets[i] as! DKAsset
+            let asset = imageAssets[i] as! FBAsset
             
             if find(self.imagePickerController!.selectedAssets, asset) != nil {
-                (self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: i, inSection: indexPath.section)) as! DKImageCollectionCell).num = (self.imagePickerController!.selectedAssets as NSArray).indexOfObject(asset) + 1
+                (self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: i, inSection: indexPath.section)) as! FBImageCollectionCell).num = (self.imagePickerController!.selectedAssets as NSArray).indexOfObject(asset) + 1
             }
             
         }
@@ -356,9 +354,9 @@ class DKImageGroupViewController: UICollectionViewController {
 // MARK: - Group selector
 //////////////////////////////////////////////////////////////////////////////////////////
 
-class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FBGroupSelectController : UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    class DKGroupCell : UITableViewCell {
+    class FBGroupCell : UITableViewCell {
         
         var name : String = "" {
             didSet {
@@ -453,7 +451,7 @@ class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-        self.tableView.registerClass(DKGroupCell.self, forCellReuseIdentifier: "groupCell")
+        self.tableView.registerClass(FBGroupCell.self, forCellReuseIdentifier: "groupCell")
         
         self.tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.view.addSubview(self.tableView)
@@ -511,8 +509,8 @@ class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
-        var cell:DKGroupCell = self.tableView.dequeueReusableCellWithIdentifier("groupCell") as! DKGroupCell
-        let assetGroup : DKAssetGroup = self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup
+        var cell:FBGroupCell = self.tableView.dequeueReusableCellWithIdentifier("groupCell") as! FBGroupCell
+        let assetGroup : FBAssetGroup = self.groups.objectAtIndex(indexPath.row) as! FBAssetGroup
         
         cell.name = assetGroup.groupName
         cell.count = assetGroup.group.numberOfAssets()
@@ -526,8 +524,8 @@ class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
         self.dismissViewControllerAnimated(true, completion: nil)
-        let assetGroup : DKAssetGroup = self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup
-        NSNotificationCenter.defaultCenter().postNotificationName(DKGroupClicked, object: self.groups.objectAtIndex(indexPath.row) as! DKAssetGroup)
+        let assetGroup : FBAssetGroup = self.groups.objectAtIndex(indexPath.row) as! FBAssetGroup
+        NSNotificationCenter.defaultCenter().postNotificationName(FBGroupClicked, object: self.groups.objectAtIndex(indexPath.row) as! FBAssetGroup)
     }
     
 }
@@ -537,7 +535,7 @@ class DKGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
 // MARK: - Main Controller
 //////////////////////////////////////////////////////////////////////////////////////////
 
-class DKImagePickerController: UINavigationController {
+class FBImagePickerController: UINavigationController {
     
     /// Displayed when denied access
     var noAccessView: UIView = {
@@ -548,13 +546,13 @@ class DKImagePickerController: UINavigationController {
         return label
     }()
     
-    class DKContentWrapperViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+    class FBContentWrapperViewController: UIViewController, UIPopoverPresentationControllerDelegate {
         var contentViewController: UIViewController
         var titlebtn: UIButton = UIButton()
         var popover : UIPopoverPresentationController?
         
-        lazy private var groupSelectController : DKGroupSelectController = {
-            return DKGroupSelectController()
+        lazy private var groupSelectController : FBGroupSelectController = {
+            return FBGroupSelectController()
             }()
         
         init(_ viewController: UIViewController) {
@@ -595,7 +593,7 @@ class DKImagePickerController: UINavigationController {
         }
         
         private func pickGroup(inViewController : UIViewController) {
-            groupSelectController.groups = NSArray(array: ( self.navigationController! as! DKImagePickerController ).groups)
+            groupSelectController.groups = NSArray(array: ( self.navigationController! as! FBImagePickerController ).groups)
             groupSelectController.modalPresentationStyle = .Popover
             groupSelectController.preferredContentSize = CGSizeMake(
                 (( UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height ? UIScreen.mainScreen().bounds.height : UIScreen.mainScreen().bounds.width) * 0.94),
@@ -625,8 +623,8 @@ class DKImagePickerController: UINavigationController {
     
     var selectedGroupIndex : Int = 0
     
-    internal var selectedAssets: [DKAsset]!
-    internal  weak var pickerDelegate: DKImagePickerControllerDelegate?
+    internal var selectedAssets: [FBAsset]!
+    internal  weak var pickerDelegate: FBImagePickerControllerDelegate?
     
     lazy private var groups: NSMutableArray = {
         return NSMutableArray()
@@ -636,8 +634,8 @@ class DKImagePickerController: UINavigationController {
         return ALAssetsLibrary()
         }()
     
-    lazy private var imageGroupController: DKImageGroupViewController = {
-        return DKImageGroupViewController()
+    lazy private var imageGroupController: FBImageGroupViewController = {
+        return FBImageGroupViewController()
     }()
     
     override init(rootViewController: UIViewController) {
@@ -650,15 +648,15 @@ class DKImagePickerController: UINavigationController {
     
     convenience init() {
         var initialView =  UIViewController() // This is a bit dirty hack that propably could be done better..
-        var wrapperVC = DKContentWrapperViewController(initialView)
+        var wrapperVC = FBContentWrapperViewController(initialView)
         
         self.init(rootViewController: wrapperVC)
         
-        selectedAssets = [DKAsset]()
+        selectedAssets = [FBAsset]()
         
         self.updateAssetGroups()
         
-        var wrapperVC2 = DKContentWrapperViewController(self.imageGroupController)
+        var wrapperVC2 = FBContentWrapperViewController(self.imageGroupController)
         self.setViewControllers([wrapperVC2], animated: false)
     }
 
@@ -674,13 +672,13 @@ class DKImagePickerController: UINavigationController {
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedImage:",
-                                                                   name: DKImageSelectedNotification,
+                                                                   name: FBImageSelectedNotification,
                                                                  object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "unselectedImage:",
-                                                                   name: DKImageUnselectedNotification,
+                                                                   name: FBImageUnselectedNotification,
                                                                  object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "selectedGroup:",
-                                                                   name: DKGroupClicked,
+                                                                   name: FBGroupClicked,
                                                                  object: nil)
 
     }
@@ -694,7 +692,7 @@ class DKImagePickerController: UINavigationController {
                 if group.numberOfAssets() != 0 {
                     let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
                     
-                    let assetGroup = DKAssetGroup()
+                    let assetGroup = FBAssetGroup()
                     assetGroup.groupName = groupName
                     assetGroup.thumbnail = UIImage(CGImage: group.posterImage().takeUnretainedValue())
                     assetGroup.group = group
@@ -704,7 +702,7 @@ class DKImagePickerController: UINavigationController {
             } else {
                 
                 if self.groups.count > self.selectedGroupIndex {
-                    self.imageGroupController.assetGroup = self.groups[self.selectedGroupIndex] as! DKAssetGroup
+                    self.imageGroupController.assetGroup = self.groups[self.selectedGroupIndex] as! FBAssetGroup
                 }
 
                 self.imageGroupController.updateTitle()
@@ -740,7 +738,7 @@ class DKImagePickerController: UINavigationController {
 
     func selectedGroup(noti: NSNotification) {
 
-        if let asset = noti.object as? DKAssetGroup {
+        if let asset = noti.object as? FBAssetGroup {
             
             self.selectedAssets.removeAll(keepCapacity: true)
             self.imageGroupController.imageAssets.removeAllObjects()
@@ -757,7 +755,7 @@ class DKImagePickerController: UINavigationController {
     
     func selectedImage(noti: NSNotification) {
         if selectedAssets.count < 99 {
-            if let asset = noti.object as? DKAsset {
+            if let asset = noti.object as? FBAsset {
                 selectedAssets.append(asset)
                 self.topViewController.navigationItem.rightBarButtonItem!.enabled = true
             }
@@ -765,7 +763,7 @@ class DKImagePickerController: UINavigationController {
     }
     
     func unselectedImage(noti: NSNotification) {
-        if let asset = noti.object as? DKAsset {
+        if let asset = noti.object as? FBAsset {
             selectedAssets.removeAtIndex(find(selectedAssets, asset)!)
             self.topViewController.navigationItem.rightBarButtonItem!.enabled = self.selectedAssets.count > 0 ? true : false
         }

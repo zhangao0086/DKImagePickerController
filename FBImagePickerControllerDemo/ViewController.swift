@@ -1,16 +1,17 @@
 //
 //  ViewController.swift
-//  CustomImagePicker
+//  Facebook Style ImagePicker
 //
 //  Created by ZhangAo on 14-10-1.
-//  Copyright (c) 2014年 ZhangAo. All rights reserved.
+//  Forked by Oskari Rauta.
+//  Copyright (c) 2015 ZhangAo & Oskari Rauta. All rights reserved.
 //
 
 import UIKit
 import MobileCoreServices
 import MediaPlayer
 
-class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePickerControllerDelegate, DKImagePickerControllerDelegate {
+class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, FBImagePickerControllerDelegate {
     @IBOutlet var imageScrollView: UIScrollView!
     var player: MPMoviePlayerController?
     var videoURL: NSURL?
@@ -36,7 +37,7 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     
     // 使用自定义的图片选取器
     func showCustomController() {
-        let pickerController = DKImagePickerController()
+        let pickerController = FBImagePickerController()
         pickerController.pickerDelegate = self
         self.presentViewController(pickerController, animated: true) {}
         for subview in self.imageScrollView.subviews {
@@ -107,7 +108,7 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     }
     
     // 选择图片并确定后的回调
-    func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
+    func imagePickerControllerDidSelectedAssets(assets: [FBAsset]!) {
         imageScrollView.subviews.map(){$0.removeFromSuperview}
         
         for (index, asset) in enumerate(assets) {
