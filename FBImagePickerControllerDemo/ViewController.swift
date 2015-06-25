@@ -101,7 +101,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    // MARK: - DKImagePickerControllerDelegate methods
+    // MARK: - FBImagePickerControllerDelegate methods
     // 取消时的回调
     func imagePickerControllerCancelled() {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -118,7 +118,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             imageView.contentMode = UIViewContentMode.ScaleAspectFit
             imageView.frame = CGRect(x: 0, y: CGFloat(index) * imageHeight, width: imageScrollView.bounds.width, height: imageHeight)
             imageScrollView.addSubview(imageView)
-            
         }
         imageScrollView.contentSize.height = CGRectGetMaxY((imageScrollView.subviews.last as! UIView).frame)
         

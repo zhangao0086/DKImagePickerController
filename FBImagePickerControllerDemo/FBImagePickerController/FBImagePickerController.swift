@@ -617,7 +617,9 @@ class FBImagePickerController: UINavigationController {
         }
         
         func onGroupClicked() {
-            self.pickGroup(self)
+            if self.groupSelectController.groups.count > 0 {
+                self.pickGroup(self)
+            }
         }
     }
     
