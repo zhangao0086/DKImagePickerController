@@ -10,11 +10,19 @@
 import UIKit
 import MobileCoreServices
 import MediaPlayer
+import Photos
 
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, FBImagePickerControllerDelegate {
     @IBOutlet var imageScrollView: UIScrollView!
     var player: MPMoviePlayerController?
     var videoURL: NSURL?
+    
+    var accessToPhotos : Bool {
+        get {
+            return PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatus.Authorized ? true : false
+        }
+        set {}
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +31,15 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if !self.accessToPhotos {
+            PHPhotoLibrary.requestAuthorization(nil)
+        }
+
     }
     
     // 使用系统的图片选取器
@@ -37,16 +54,22 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     // 使用自定义的图片选取器
     func showCustomController() {
-        let pickerController = FBImagePickerController()
-        pickerController.pickerDelegate = self
-        self.presentViewController(pickerController, animated: true) {}
-        for subview in self.imageScrollView.subviews {
-            subview.removeFromSuperview()
+        if self.accessToPhotos {
+            NSLog("Showing custom controller")
+            let pickerController = FBImagePickerController()
+            pickerController.pickerDelegate = self
+            
+            self.presentViewController(pickerController, animated: true) {}
+            for subview in self.imageScrollView.subviews {
+                subview.removeFromSuperview()
+            }
+            
+        } else {
+            NSLog("No permission to photos")
         }
     }
-    
+
     @IBAction func showImagePicker() {
-//        showSystemController()
         showCustomController()
     }
     

@@ -9,6 +9,7 @@
 
 import UIKit
 import AssetsLibrary
+import Photos
 
 // Delegate
 protocol FBImagePickerControllerDelegate : NSObjectProtocol {
@@ -288,11 +289,14 @@ class FBImageGroupViewController: UICollectionViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
+        if assetGroup != nil {
+            self.updateTitle()
+            self.updateCollectionView()
+        } else {
+            self.dismissViewControllerAnimated(true, completion: {})
+        }
         
-        assert(assetGroup != nil, "assetGroup is nil")
-        
-        self.updateTitle()
-        self.updateCollectionView()
     }
     
     //Mark: - UICollectionViewDelegate, UICollectionViewDataSource methods
@@ -537,15 +541,6 @@ class FBGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
 
 class FBImagePickerController: UINavigationController {
     
-    /// Displayed when denied access
-    var noAccessView: UIView = {
-        let label = UILabel()
-        label.text = "User has denied access"
-        label.textAlignment = NSTextAlignment.Center
-        label.textColor = UIColor.lightGrayColor()
-        return label
-    }()
-    
     class FBContentWrapperViewController: UIViewController, UIPopoverPresentationControllerDelegate {
         var contentViewController: UIViewController
         var titlebtn: UIButton = UIButton()
@@ -707,7 +702,9 @@ class FBImagePickerController: UINavigationController {
                     self.imageGroupController.assetGroup = self.groups[self.selectedGroupIndex] as! FBAssetGroup
                 }
 
-                self.imageGroupController.updateTitle()
+                if self.groups.count > 0 {
+                    self.imageGroupController.updateTitle()                    
+                }
             }
             }, failureBlock: {(error: NSError!) in
         })
