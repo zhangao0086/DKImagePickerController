@@ -268,11 +268,10 @@ class FBImageGroupViewController: UICollectionViewController {
     }
     
     func updateCollectionView() {
-        
         assetGroup.group.enumerateAssetsUsingBlock {[unowned self](result: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if result != nil {
                 let asset = FBAsset()
-                asset.thumbnailImage = UIImage(CGImage:result.thumbnail().takeUnretainedValue())
+                asset.thumbnailImage = UIImage(CGImage: UIDevice.currentDevice().model.rangeOfString("iPad") != nil ? result.defaultRepresentation().fullScreenImage().takeUnretainedValue() : result.thumbnail().takeUnretainedValue())
                 asset.url = result.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
                 asset.originalAsset = result
                 self.imageAssets.addObject(asset)
@@ -589,6 +588,11 @@ class FBImagePickerController: UINavigationController {
         
         private func pickGroup(inViewController : UIViewController) {
             groupSelectController.groups = NSArray(array: ( self.navigationController! as! FBImagePickerController ).groups)
+            
+            if self.groupSelectController.groups.count == 0 {
+                return
+            }
+            
             groupSelectController.modalPresentationStyle = .Popover
             groupSelectController.preferredContentSize = CGSizeMake(
                 (( UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height ? UIScreen.mainScreen().bounds.height : UIScreen.mainScreen().bounds.width) * 0.94),
@@ -612,9 +616,7 @@ class FBImagePickerController: UINavigationController {
         }
         
         func onGroupClicked() {
-            if self.groupSelectController.groups.count > 0 {
-                self.pickGroup(self)
-            }
+            self.pickGroup(self)
         }
     }
     
@@ -736,7 +738,6 @@ class FBImagePickerController: UINavigationController {
     // MARK: - Notifications
 
     func selectedGroup(noti: NSNotification) {
-
         if let asset = noti.object as? FBAssetGroup {
             
             self.selectedAssets.removeAll(keepCapacity: true)
