@@ -255,7 +255,7 @@ class FBImageGroupViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView!.backgroundColor = UIColor.whiteColor()
+        self.collectionView!.backgroundColor = UIColor.blackColor()
         self.collectionView!.layer.borderColor = self.collectionView!.backgroundColor!.CGColor
         self.collectionView!.layer.borderWidth = 2.0
         self.collectionView!.allowsMultipleSelection = true
@@ -453,6 +453,7 @@ class FBGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.tableView.rowHeight = 50
         
         self.tableView.registerClass(FBGroupCell.self, forCellReuseIdentifier: "groupCell")
         
@@ -476,9 +477,9 @@ class FBGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
 
             self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: -8.0))
 
-            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 8.0))
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0))
             
-            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: -8.0))
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
             
         }
         
@@ -506,10 +507,6 @@ class FBGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
         return 0.1
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 32.0
-    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
         var cell:FBGroupCell = self.tableView.dequeueReusableCellWithIdentifier("groupCell") as! FBGroupCell
@@ -526,7 +523,7 @@ class FBGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        FBPopoverViewController.dismissPopoverViewController()
         let assetGroup : FBAssetGroup = self.groups.objectAtIndex(indexPath.row) as! FBAssetGroup
         NSNotificationCenter.defaultCenter().postNotificationName(FBGroupClicked, object: self.groups.objectAtIndex(indexPath.row) as! FBAssetGroup)
     }
@@ -540,10 +537,9 @@ class FBGroupSelectController : UIViewController, UITableViewDelegate, UITableVi
 
 class FBImagePickerController: UINavigationController {
     
-    class FBContentWrapperViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+    class FBContentWrapperViewController: UIViewController {
         var contentViewController: UIViewController
         var titlebtn: UIButton = UIButton()
-        var popover : UIPopoverPresentationController?
         
         lazy private var groupSelectController : FBGroupSelectController = {
             return FBGroupSelectController()
@@ -593,26 +589,10 @@ class FBImagePickerController: UINavigationController {
                 return
             }
             
-            groupSelectController.modalPresentationStyle = .Popover
             groupSelectController.preferredContentSize = CGSizeMake(
-                (( UIScreen.mainScreen().bounds.width > UIScreen.mainScreen().bounds.height ? UIScreen.mainScreen().bounds.height : UIScreen.mainScreen().bounds.width) * 0.94),
-                16.0 + (groupSelectController.groups.count > 5 ? 160.0 : (CGFloat(groupSelectController.groups.count) * 32.0)))
-            popover = groupSelectController.popoverPresentationController
-            if let _popover = popover {
-                
-                _popover.backgroundColor = UIColor.whiteColor()
-                _popover.sourceView = self.titlebtn
-                _popover.sourceRect = CGRectMake(0, self.titlebtn.bounds.size.height, self.titlebtn.bounds.size.width, 0)
-                _popover.delegate = self
-                
-                
-                inViewController.presentViewController(groupSelectController, animated: true, completion: nil)
-            }
-        }
-
-        func adaptivePresentationStyleForPresentationController(PC: UIPresentationController) -> UIModalPresentationStyle {
+                UIViewNoIntrinsicMetric, CGFloat(groupSelectController.groups.count) * 50.0)
             
-            return .None
+            FBPopoverViewController.popoverViewController(groupSelectController, fromView: self.titlebtn)
         }
         
         func onGroupClicked() {

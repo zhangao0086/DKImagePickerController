@@ -12,6 +12,7 @@
 		9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F751AB15D210000F1D1 /* ViewController.swift */; };
 		9CBF3F851AB15DFF0000F1D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6E1AB15D210000F1D1 /* Main.storyboard */; };
 		9CBF3F861AB15E040000F1D1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6C1AB15D210000F1D1 /* LaunchScreen.xib */; };
+		9CED87AA1B3EA52400911DB7 /* FBPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED87A91B3EA52400911DB7 /* FBPopoverViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		9CBF3F711AB15D210000F1D1 /* FBImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBImagePickerController.swift; sourceTree = "<group>"; };
 		9CBF3F731AB15D210000F1D1 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CBF3F751AB15D210000F1D1 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9CED87A91B3EA52400911DB7 /* FBPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPopoverViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				9CBF3F711AB15D210000F1D1 /* FBImagePickerController.swift */,
+				9CED87A91B3EA52400911DB7 /* FBPopoverViewController.swift */,
 			);
 			name = FBImagePickerController;
 			path = FBImagePickerControllerDemo/FBImagePickerController;
@@ -150,6 +153,7 @@
 				9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */,
 				9CBF3F7D1AB15D210000F1D1 /* FBImagePickerController.swift in Sources */,
 				9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */,
+				9CED87AA1B3EA52400911DB7 /* FBPopoverViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
