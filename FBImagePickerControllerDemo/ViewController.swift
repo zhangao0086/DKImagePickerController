@@ -1,19 +1,28 @@
 //
 //  ViewController.swift
-//  CustomImagePicker
+//  Facebook Style ImagePicker
 //
 //  Created by ZhangAo on 14-10-1.
-//  Copyright (c) 2014年 ZhangAo. All rights reserved.
+//  Forked by Oskari Rauta.
+//  Copyright (c) 2015 ZhangAo & Oskari Rauta. All rights reserved.
 //
 
 import UIKit
 import MobileCoreServices
 import MediaPlayer
+import Photos
 
-class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePickerControllerDelegate, DKImagePickerControllerDelegate {
+class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, FBImagePickerControllerDelegate {
     @IBOutlet var imageScrollView: UIScrollView!
     var player: MPMoviePlayerController?
     var videoURL: NSURL?
+    
+    var accessToPhotos : Bool {
+        get {
+            return PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatus.Authorized ? true : false
+        }
+        set {}
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +31,15 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if !self.accessToPhotos {
+            PHPhotoLibrary.requestAuthorization(nil)
+        }
+
     }
     
     // 使用系统的图片选取器
@@ -36,13 +54,22 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
     
     // 使用自定义的图片选取器
     func showCustomController() {
-        let pickerController = DKImagePickerController()
-        pickerController.pickerDelegate = self
-        self.presentViewController(pickerController, animated: true) {}
+        if self.accessToPhotos {
+            NSLog("Showing custom controller")
+            let pickerController = FBImagePickerController()
+            pickerController.pickerDelegate = self
+            
+            self.presentViewController(pickerController, animated: true) {}
+            for subview in self.imageScrollView.subviews {
+                subview.removeFromSuperview()
+            }
+            
+        } else {
+            NSLog("No permission to photos")
+        }
     }
-    
+
     @IBAction func showImagePicker() {
-//        showSystemController()
         showCustomController()
     }
     
@@ -97,14 +124,14 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    // MARK: - DKImagePickerControllerDelegate methods
+    // MARK: - FBImagePickerControllerDelegate methods
     // 取消时的回调
     func imagePickerControllerCancelled() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // 选择图片并确定后的回调
-    func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
+    func imagePickerControllerDidSelectedAssets(assets: [FBAsset]!) {
         imageScrollView.subviews.map(){$0.removeFromSuperview}
         
         for (index, asset) in enumerate(assets) {
@@ -114,7 +141,6 @@ class ViewController: UIViewController,UINavigationControllerDelegate, UIImagePi
             imageView.contentMode = UIViewContentMode.ScaleAspectFit
             imageView.frame = CGRect(x: 0, y: CGFloat(index) * imageHeight, width: imageScrollView.bounds.width, height: imageHeight)
             imageScrollView.addSubview(imageView)
-            
         }
         imageScrollView.contentSize.height = CGRectGetMaxY((imageScrollView.subviews.last as! UIView).frame)
         

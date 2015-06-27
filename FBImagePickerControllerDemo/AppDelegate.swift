@@ -3,7 +3,8 @@
 //  CustomImagePicker
 //
 //  Created by ZhangAo on 14-10-1.
-//  Copyright (c) 2014年 ZhangAo. All rights reserved.
+//  Forked by Oskari Rauta.
+//  Copyright (c) 2015 ZhangAo & Oskari Rauta. All rights reserved.
 //
 
 import UIKit
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
         return true
     }
 
