@@ -197,6 +197,10 @@ class DKImageGroupViewController: UICollectionViewController {
         return cell
     }
     
+    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return self.imagePickerController!.selectedAssets.count < self.imagePickerController!.maxSelectableCount
+    }
+    
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[indexPath.row])
     }
@@ -288,6 +292,7 @@ class DKImagePickerController: UINavigationController {
     /// The height of the bottom of the preview
     var previewHeight: CGFloat = 80
     var rightButtonTitle: String = "Select"
+    var maxSelectableCount = 999
     /// Displayed when denied access
     var noAccessView: UIView = {
         let label = UILabel()
