@@ -92,7 +92,7 @@ class DKImageGroupViewController: UICollectionViewController {
         }
         
         private var imageView = UIImageView()
-        private var checkView = UIImageView(image: UIImage(named: "photo_checked"))
+        private var checkView = UIImageView(image: UIImage(named: "DKImagePickerController_PhotoChecked"))
         
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -287,7 +287,7 @@ class DKAssetsLibraryController: UITableViewController {
 // MARK: - Main Controller
 //////////////////////////////////////////////////////////////////////////////////////////
 
-class DKImagePickerController: UINavigationController {
+public class DKImagePickerController: UINavigationController {
     
     /// The height of the bottom of the preview
     var previewHeight: CGFloat = 80
@@ -433,7 +433,7 @@ class DKImagePickerController: UINavigationController {
         selectedAssets = [DKAsset]()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -441,7 +441,7 @@ class DKImagePickerController: UINavigationController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         imagesPreviewView.frame = CGRect(x: 0, y: view.bounds.height - previewHeight,
@@ -458,7 +458,7 @@ class DKImagePickerController: UINavigationController {
                                                                  object: nil)
     }
 
-    override func pushViewController(viewController: UIViewController, animated: Bool) {
+    override public func pushViewController(viewController: UIViewController, animated: Bool) {
         var wrapperVC = DKContentWrapperViewController(viewController)
         wrapperVC.bottomBarHeight = previewHeight
         wrapperVC.showBottomBar = !imagesPreviewView.hidden
