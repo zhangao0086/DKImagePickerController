@@ -40,8 +40,8 @@ class DKAssetGroup : NSObject {
 
 // Asset Model
 public class DKAsset: NSObject {
-    var thumbnailImage: UIImage?
-    lazy var fullScreenImage: UIImage? = {
+    public var thumbnailImage: UIImage?
+    public lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
     }()
     lazy var fullResolutionImage: UIImage? = {
@@ -292,17 +292,19 @@ class DKAssetsLibraryController: UITableViewController {
 public class DKImagePickerController: UINavigationController {
     
     /// The height of the bottom of the preview
-    var previewHeight: CGFloat = 80
-    var rightButtonTitle: String = "Select"
-    var maxSelectableCount = 999
+    public var previewHeight: CGFloat = 80
+    public var rightButtonTitle: String = "Select"
+    public var maxSelectableCount = 999
     /// Displayed when denied access
-    var noAccessView: UIView = {
+    public var noAccessView: UIView = {
         let label = UILabel()
         label.text = "User has denied access"
         label.textAlignment = NSTextAlignment.Center
         label.textColor = UIColor.lightGrayColor()
         return label
     }()
+    
+    public  weak var pickerDelegate: DKImagePickerControllerDelegate?
     
     class DKPreviewView: UIScrollView {
         let interval: CGFloat = 5
@@ -397,8 +399,6 @@ public class DKImagePickerController: UINavigationController {
             contentViewController.view.frame = view.bounds
         }
     }
-    
-    public  weak var pickerDelegate: DKImagePickerControllerDelegate?
     
     internal var selectedAssets: [DKAsset]!
     lazy internal  var imagesPreviewView: DKPreviewView = {
