@@ -11,7 +11,7 @@ import AssetsLibrary
 
 
 // Delegate
-protocol DKImagePickerControllerDelegate : NSObjectProtocol {
+@objc public protocol DKImagePickerControllerDelegate : NSObjectProtocol {
     /// Called when right button is clicked.
     ///
     /// :param: images Images of selected
@@ -39,7 +39,7 @@ class DKAssetGroup : NSObject {
 }
 
 // Asset Model
-class DKAsset: NSObject {
+public class DKAsset: NSObject {
     var thumbnailImage: UIImage?
     lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
@@ -52,7 +52,7 @@ class DKAsset: NSObject {
     private var originalAsset: ALAsset!
     
     // Compare two assets
-    override func isEqual(object: AnyObject?) -> Bool {
+    override public func isEqual(object: AnyObject?) -> Bool {
         let other = object as! DKAsset!
         return self.url!.isEqual(other.url!)
     }
@@ -398,8 +398,9 @@ public class DKImagePickerController: UINavigationController {
         }
     }
     
+    public  weak var pickerDelegate: DKImagePickerControllerDelegate?
+    
     internal var selectedAssets: [DKAsset]!
-    internal  weak var pickerDelegate: DKImagePickerControllerDelegate?
     lazy internal  var imagesPreviewView: DKPreviewView = {
         let preview = DKPreviewView()
         preview.hidden = true
