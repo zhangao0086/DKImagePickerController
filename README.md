@@ -5,7 +5,6 @@ Update for Xcode 6.3 with Swift 1.2
 ---
 ## Description
 This is a very simple Image Picker Controller by Swift.  
-**AssetsLibrary.framework is required.**
 
 ## Installation
 DKImagePickerController is available on Cocoapods. Simply add the following line to your podfile:
