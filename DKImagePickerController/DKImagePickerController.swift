@@ -92,7 +92,9 @@ class DKImageGroupViewController: UICollectionViewController {
         }
         
         private var imageView = UIImageView()
-        private var checkView = UIImageView(image: UIImage(named: "DKImagePickerController_PhotoChecked"))
+        private var checkView = UIImageView(image: UIImage(named: "DKImagePickerController_PhotoChecked",
+            inBundle: NSBundle(forClass: DKImagePickerController.self),
+            compatibleWithTraitCollection: nil))
         
         override init(frame: CGRect) {
             super.init(frame: frame)
