@@ -38,12 +38,24 @@ func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
 #### Configurable properties
 ```swift
 /// The height of the bottom of the preview
-var previewHeight: CGFloat = 80
+public var previewHeight: CGFloat = 80
 
-var rightButtonTitle: String = "确定"
+public var rightButtonTitle: String = "Select"
+
+public var maxSelectableCount = 999
 
 /// Displayed when denied access
-var noAccessView: UIView
+public var noAccessView: UIView = {
+    let label = UILabel()
+    label.text = "User has denied access"
+    label.textAlignment = NSTextAlignment.Center
+    label.textColor = UIColor.lightGrayColor()
+    return label
+}()
+
+public weak var pickerDelegate: DKImagePickerControllerDelegate?
+
+public var defaultSelectedAssets: [DKAsset]?
 ````
 
 ## Screenshots
