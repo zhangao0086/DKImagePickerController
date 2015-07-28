@@ -44,10 +44,10 @@ public class DKAsset: NSObject {
     public lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue())
     }()
-    lazy var fullResolutionImage: UIImage? = {
+    public lazy var fullResolutionImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
     }()
-    var url: NSURL?
+    public var url: NSURL?
     
     private var originalAsset: ALAsset!
     
@@ -304,21 +304,27 @@ public class DKImagePickerController: UINavigationController {
         return label
     }()
     
-    public  weak var pickerDelegate: DKImagePickerControllerDelegate?
+    public weak var pickerDelegate: DKImagePickerControllerDelegate?
+    public var defaultSelectedAssets: [DKAsset]? {
+        didSet {
+            if let defaultSelectedAssets = self.defaultSelectedAssets {
+                self.selectedAssets = defaultSelectedAssets
+                self.imagesPreviewView.replaceAssets(defaultSelectedAssets)
+                self.updateSelectionStatus()
+            }
+        }
+    }
+    
+    var selectedAssets = [DKAsset]()
     
     class DKPreviewView: UIScrollView {
         let interval: CGFloat = 5
-        private var imageLengthOfSide: CGFloat!
         private var assets = [DKAsset]()
         private var imagesDict: [DKAsset : UIImageView] = [:]
         
-        override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            imageLengthOfSide = self.bounds.height - interval * 2
-        }
-        
         func imageFrameForIndex(index: Int) -> CGRect {
+            let imageLengthOfSide = self.bounds.height - interval * 2
+            
             return CGRect(x: CGFloat(index) * imageLengthOfSide + CGFloat(index + 1) * interval,
                 y: (self.bounds.height - imageLengthOfSide)/2,
                 width: imageLengthOfSide, height: imageLengthOfSide)
@@ -335,11 +341,21 @@ public class DKImagePickerController: UINavigationController {
         }
         
         func removeAsset(asset: DKAsset) {
-            imagesDict.removeValueForKey(asset)
+            imagesDict.removeValueForKey(asset)?.removeFromSuperview()
             let index = find(assets, asset)
             if let toRemovedIndex = index {
                 assets.removeAtIndex(toRemovedIndex)
                 setupContent(false)
+            }
+        }
+        
+        func replaceAssets(assets: [DKAsset]) {
+            self.imagesDict = [:]
+            self.assets = []
+            self.subviews.map {$0.removeFromSuperview()}
+            
+            for asset in assets {
+                self.insertAsset(asset)
             }
         }
         
@@ -350,6 +366,7 @@ public class DKImagePickerController: UINavigationController {
                     imageView.frame = imageFrameForIndex(index)
                 }
             }
+            
             self.contentSize = CGSize(width: CGRectGetMaxX((self.subviews.last as! UIView).frame) + interval,
                 height: self.bounds.height)
         }
@@ -400,10 +417,10 @@ public class DKImagePickerController: UINavigationController {
         }
     }
     
-    internal var selectedAssets: [DKAsset]!
     lazy internal  var imagesPreviewView: DKPreviewView = {
         let preview = DKPreviewView()
         preview.hidden = true
+        preview.alwaysBounceHorizontal = true
         preview.backgroundColor = UIColor.lightGrayColor()
         return preview
     }()
@@ -432,8 +449,6 @@ public class DKImagePickerController: UINavigationController {
         
         libraryController.noAccessView = noAccessView
         wrapperVC.bottomBarHeight = previewHeight
-        
-        selectedAssets = [DKAsset]()
     }
 
     required public init(coder aDecoder: NSCoder) {
@@ -464,17 +479,30 @@ public class DKImagePickerController: UINavigationController {
     override public func pushViewController(viewController: UIViewController, animated: Bool) {
         var wrapperVC = DKContentWrapperViewController(viewController)
         wrapperVC.bottomBarHeight = previewHeight
-        wrapperVC.showBottomBar = !imagesPreviewView.hidden
-
+        
         super.pushViewController(wrapperVC, animated: animated)
 
         self.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+        self.updateSelectionStatus()
         
         if self.viewControllers.count == 1 && self.topViewController?.navigationItem.leftBarButtonItem == nil {
             self.topViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel,
                 target: self,
                 action: "onCancelClicked")
         }
+    }
+    
+    private func updateSelectionStatus() {
+        if self.selectedAssets.count > 0 {
+            self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
+        } else {
+            self.doneButton.setTitle("", forState: UIControlState.Normal)
+        }
+        self.doneButton.sizeToFit()
+        
+        self.imagesPreviewView.hidden = self.selectedAssets.count == 0
+        
+        (self.viewControllers as! [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
     }
     
     // MARK: - Delegate methods
@@ -495,11 +523,7 @@ public class DKImagePickerController: UINavigationController {
         if let asset = noti.object as? DKAsset {
             selectedAssets.append(asset)
             imagesPreviewView.insertAsset(asset)
-            imagesPreviewView.hidden = false
-            
-            (self.viewControllers as! [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
-            self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
-            self.doneButton.sizeToFit()
+            updateSelectionStatus()
         }
     }
     
@@ -507,15 +531,7 @@ public class DKImagePickerController: UINavigationController {
         if let asset = noti.object as? DKAsset {
             selectedAssets.removeAtIndex(find(selectedAssets, asset)!)
             imagesPreviewView.removeAsset(asset)
-            
-            self.doneButton.setTitle(rightButtonTitle + "(\(selectedAssets.count))", forState: UIControlState.Normal)
-            self.doneButton.sizeToFit()
-            if selectedAssets.count <= 0 {
-                imagesPreviewView.hidden = true
-                
-                (self.viewControllers as! [DKContentWrapperViewController]).map {$0.showBottomBar = !self.imagesPreviewView.hidden}
-                self.doneButton.setTitle("", forState: UIControlState.Normal)
-            }
+            updateSelectionStatus()
         }
     }
 }
