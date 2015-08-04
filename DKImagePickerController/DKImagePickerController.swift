@@ -296,7 +296,7 @@ public class DKImagePickerController: UINavigationController {
     public var rightButtonTitle: String = "Select"
     public var maxSelectableCount = 999
     /// Displayed when denied access
-    public var noAccessView: UIView = {
+    public lazy var noAccessView: UIView = {
         let label = UILabel()
         label.text = "User has denied access"
         label.textAlignment = NSTextAlignment.Center
@@ -417,14 +417,14 @@ public class DKImagePickerController: UINavigationController {
         }
     }
     
-    lazy internal  var imagesPreviewView: DKPreviewView = {
+    lazy internal var imagesPreviewView: DKPreviewView = {
         let preview = DKPreviewView()
         preview.hidden = true
         preview.alwaysBounceHorizontal = true
         preview.backgroundColor = UIColor.lightGrayColor()
         return preview
     }()
-    lazy internal var doneButton: UIButton =  {
+    lazy internal var doneButton: UIButton = {
         let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         button.setTitle("", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
