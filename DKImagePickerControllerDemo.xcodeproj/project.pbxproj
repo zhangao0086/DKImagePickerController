@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9C50E1FD1B66056D00073B56 /* DKImagePickerController_PhotoChecked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C50E1FC1B66056D00073B56 /* DKImagePickerController_PhotoChecked@2x.png */; };
 		9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */; };
 		9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F721AB15D210000F1D1 /* Images.xcassets */; };
 		9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F751AB15D210000F1D1 /* ViewController.swift */; };
@@ -23,7 +22,6 @@
 /* Begin PBXFileReference section */
 		9C167BF719DF832B008FA4CA /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		9C35CBFF19DBB00700557269 /* DKImagePickerControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DKImagePickerControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C50E1FC1B66056D00073B56 /* DKImagePickerController_PhotoChecked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DKImagePickerController_PhotoChecked@2x.png"; sourceTree = "<group>"; };
 		9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CBF3F6D1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9CBF3F6F1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -87,7 +85,6 @@
 				9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */,
 				9CE339141B760010003AD94E /* DKAssetGroupVC.swift */,
 				9CD9F1881B720CC20084B9DD /* FBPopoverViewController.swift */,
-				9C50E1FC1B66056D00073B56 /* DKImagePickerController_PhotoChecked@2x.png */,
 			);
 			path = DKImagePickerController;
 			sourceTree = SOURCE_ROOT;
@@ -156,7 +153,6 @@
 				9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */,
 				9CBF3F881AB15E100000F1D1 /* Main.strings in Resources */,
 				9CBF3F851AB15DFF0000F1D1 /* Main.storyboard in Resources */,
-				9C50E1FD1B66056D00073B56 /* DKImagePickerController_PhotoChecked@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
