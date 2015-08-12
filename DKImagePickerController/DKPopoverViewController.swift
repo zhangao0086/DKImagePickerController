@@ -1,5 +1,5 @@
 //
-//  FBPopoverViewController.swift
+//  DKPopoverViewController.swift
 //  DKImagePickerController
 //
 //  Created by ZhangAo on 15/6/27.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-class FBPopoverViewController: UIViewController {
+class DKPopoverViewController: UIViewController {
     
     class func popoverViewController(viewController: UIViewController, fromView: UIView) {
         let window = UIApplication.sharedApplication().keyWindow!
         
-        let popoverViewController = FBPopoverViewController()
+        let popoverViewController = DKPopoverViewController()
         
         popoverViewController.contentViewController = viewController
         popoverViewController.fromView = fromView
@@ -26,13 +26,13 @@ class FBPopoverViewController: UIViewController {
         let window = UIApplication.sharedApplication().keyWindow!
 
         for vc in window.rootViewController!.childViewControllers {
-            if vc is FBPopoverViewController {
-                (vc as! FBPopoverViewController).dismiss()
+            if vc is DKPopoverViewController {
+                (vc as! DKPopoverViewController).dismiss()
             }
         }
     }
     
-    class FBPopoverView: UIView {
+    class DKPopoverView: UIView {
         
         var contentView: UIView! {
             didSet {
@@ -98,7 +98,7 @@ class FBPopoverViewController: UIViewController {
     
     var contentViewController: UIViewController!
     var fromView: UIView!
-    private let popoverView = FBPopoverView()
+    private let popoverView = DKPopoverView()
     private var popoverViewHeight: CGFloat!
     
     override func loadView() {
@@ -143,7 +143,7 @@ class FBPopoverViewController: UIViewController {
         self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverViewHeight / 2)), 0.1, 0.1)
         UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .CurveEaseInOut, animations: { () -> Void in
             self.popoverView.transform = CGAffineTransformIdentity
-            self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.2)
+            self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
         }, completion: nil)
     }
     

@@ -15,7 +15,7 @@
 		9CBF3F861AB15E040000F1D1 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6C1AB15D210000F1D1 /* LaunchScreen.xib */; };
 		9CBF3F871AB15E0D0000F1D1 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F761AB15D210000F1D1 /* LaunchScreen.strings */; };
 		9CBF3F881AB15E100000F1D1 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F781AB15D210000F1D1 /* Main.strings */; };
-		9CD9F1891B720CC20084B9DD /* FBPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F1881B720CC20084B9DD /* FBPopoverViewController.swift */; };
+		9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */; };
 		9CDEF0F11B62279F003340FE /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */; };
 		9CDFC3271B7887A800376F6F /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDFC3261B7887A800376F6F /* DKAssetGroupDetailVC.swift */; };
 		9CE339151B760010003AD94E /* DKAssetGroupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE339141B760010003AD94E /* DKAssetGroupVC.swift */; };
@@ -33,7 +33,7 @@
 		9CBF3F751AB15D210000F1D1 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9CBF3F771AB15D210000F1D1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9CBF3F791AB15D210000F1D1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
-		9CD9F1881B720CC20084B9DD /* FBPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBPopoverViewController.swift; sourceTree = "<group>"; };
+		9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPopoverViewController.swift; sourceTree = "<group>"; };
 		9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerController.swift; sourceTree = "<group>"; };
 		9CDFC3261B7887A800376F6F /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
 		9CE339141B760010003AD94E /* DKAssetGroupVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupVC.swift; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 				9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */,
 				9CE339141B760010003AD94E /* DKAssetGroupVC.swift */,
 				9CDFC3261B7887A800376F6F /* DKAssetGroupDetailVC.swift */,
-				9CD9F1881B720CC20084B9DD /* FBPopoverViewController.swift */,
+				9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */,
 				9C456CCC1B7A223300DFD777 /* DKImageResource.swift */,
 			);
 			path = DKImagePickerController;
@@ -174,7 +174,7 @@
 				9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */,
 				9CDFC3271B7887A800376F6F /* DKAssetGroupDetailVC.swift in Sources */,
 				9CDEF0F11B62279F003340FE /* DKImagePickerController.swift in Sources */,
-				9CD9F1891B720CC20084B9DD /* FBPopoverViewController.swift in Sources */,
+				9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */,
 				9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
