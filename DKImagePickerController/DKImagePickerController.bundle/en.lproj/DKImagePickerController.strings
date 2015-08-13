@@ -9,3 +9,9 @@
 //
 
 "select" = "Select";
+
+"permissionCamera" = "Please Allow Camera Access";
+
+"permit" = "Allow Access";
+
+"gotoSettings" = "Go To 「Settings」 To Give Access";

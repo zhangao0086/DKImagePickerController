@@ -9,3 +9,9 @@
 //
 
 "select" = "选择";
+
+"permissionCamera" = "请授权使用相机";
+
+"permit" = "允许访问";
+
+"gotoSettings" = "进入「设置」打开访问权限";
