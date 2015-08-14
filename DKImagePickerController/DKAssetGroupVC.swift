@@ -8,6 +8,90 @@
 
 import UIKit
 
+let DKImageGroupCellIdentifier = "DKImageGroupCellIdentifier"
+
+class DKAssetGroupCell: UITableViewCell {
+    
+    class DKAssetGroupSeparator: UIView {
+
+        override var backgroundColor: UIColor? {
+            get {
+                return super.backgroundColor
+            }
+            set {
+                if newValue != UIColor.clearColor() {
+                    super.backgroundColor = newValue
+                }
+            }
+        }
+    }
+    
+    var thumbnailImageView = UIImageView()
+    var groupNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFontOfSize(13)
+        return label
+    }()
+    var totalCountLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFontOfSize(11)
+        label.textColor = UIColor.grayColor()
+        return label
+    }()
+    
+    var customSelectedBackgroundView: UIView = {
+        let selectedBackgroundView = UIView()
+        
+        let selectedFlag = UIImageView(image: DKImageResource.blueTickImage())
+        selectedFlag.frame = CGRect(x: selectedBackgroundView.bounds.width - selectedFlag.bounds.width - 20,
+            y: (selectedBackgroundView.bounds.width - selectedFlag.bounds.width) / 2,
+            width: selectedFlag.bounds.width, height: selectedFlag.bounds.height)
+        selectedFlag.autoresizingMask = .FlexibleLeftMargin | .FlexibleTopMargin | .FlexibleBottomMargin
+        selectedBackgroundView.addSubview(selectedFlag)
+        
+        return selectedBackgroundView
+    }()
+    
+    lazy var customSeparator: DKAssetGroupSeparator = {
+        let separator = DKAssetGroupSeparator(frame: CGRectMake(10, self.bounds.height - 1, self.bounds.width, 0.5))
+        
+        separator.backgroundColor = UIColor.lightGrayColor()
+        separator.autoresizingMask = .FlexibleWidth | .FlexibleTopMargin
+        return separator
+    }()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.selectedBackgroundView = self.customSelectedBackgroundView
+        
+        self.contentView.addSubview(thumbnailImageView)
+        self.contentView.addSubview(groupNameLabel)
+        self.contentView.addSubview(totalCountLabel)
+
+        self.addSubview(self.customSeparator)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let imageViewY = CGFloat(10)
+        let imageViewHeight = self.contentView.bounds.height - 2 * imageViewY
+        self.thumbnailImageView.frame = CGRect(x: imageViewY, y: imageViewY,
+            width: imageViewHeight, height: imageViewHeight)
+        
+        self.groupNameLabel.frame = CGRect(x: self.thumbnailImageView.frame.maxX + 10, y: self.thumbnailImageView.frame.minY + 5,
+            width: 200, height: 20)
+        
+        self.totalCountLabel.frame = CGRect(x: self.groupNameLabel.frame.minX, y: self.thumbnailImageView.frame.maxY - 20, width: 200, height: 20)
+    }
+    
+}
+
 class DKAssetGroupVC: UITableViewController {
     
     var groups: [DKAssetGroup]?
@@ -30,8 +114,11 @@ class DKAssetGroupVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: GroupCellIdentifier)
-        self.tableView.rowHeight = 50
+        self.tableView.registerClass(DKAssetGroupCell.self, forCellReuseIdentifier: DKImageGroupCellIdentifier)
+        self.tableView.rowHeight = 70
+        self.tableView.separatorStyle = .None
+        
+        self.clearsSelectionOnViewWillAppear = false
     }
     
     // MARK: - UITableViewDelegate, UITableViewDataSource methods
@@ -41,28 +128,27 @@ class DKAssetGroupVC: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(GroupCellIdentifier, forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(DKImageGroupCellIdentifier, forIndexPath: indexPath) as! DKAssetGroupCell
         
         let assetGroup = groups![indexPath.row] as DKAssetGroup
-        cell.textLabel!.text = assetGroup.groupName
-        cell.imageView!.image = assetGroup.thumbnail
+        cell.groupNameLabel.text = assetGroup.groupName
+        cell.thumbnailImageView.image = assetGroup.thumbnail
+        cell.totalCountLabel.text = "\(assetGroup.totalCount)"
         
-        let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = UIColor.redColor()
-        cell.selectedBackgroundView = selectedBackgroundView
+        if indexPath.row == 0 && tableView.indexPathForSelectedRow() == nil {
+            tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+        }
         
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        DKPopoverViewController.dismissPopoverViewController()
         
         let assetGroup = groups![indexPath.row] as DKAssetGroup
         if let selectedGroupBlock = self.selectedGroupBlock {
             selectedGroupBlock(assetGroup: assetGroup)
         }
-        
-        FBPopoverViewController.dismissPopoverViewController()
     }
     
 }
