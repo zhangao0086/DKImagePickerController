@@ -12,6 +12,8 @@
 
 "permissionCamera" = "请授权使用相机";
 
+"permissionPhoto" = "请授权使用照片";
+
 "permit" = "允许访问";
 
 "gotoSettings" = "进入「设置」打开访问权限";

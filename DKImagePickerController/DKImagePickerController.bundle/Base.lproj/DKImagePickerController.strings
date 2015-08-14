@@ -12,6 +12,8 @@
 
 "permissionCamera" = "Please Allow Camera Access";
 
+"permissionPhoto" = "Please Allow Photo Access";
+
 "permit" = "Allow Access";
 
 "gotoSettings" = "Go To 「Settings」 To Give Access";
