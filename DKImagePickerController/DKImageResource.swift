@@ -37,4 +37,24 @@ class DKImageResource {
     class func cameraImage() -> UIImage {
         return imageForResource(_cameraImage)
     }
+    
 }
+
+extension NSBundle {
+    
+    class func imagePickerControllerBundle() -> NSBundle {
+        let assetPath = NSBundle(forClass: DKImageResource.self).resourcePath!
+        return NSBundle(path: assetPath.stringByAppendingPathComponent("DKImagePickerController.bundle"))!
+    }
+    
+}
+
+class DKImageLocalizedString {
+    
+    class func localizedStringForKey(key: String) -> String {
+        return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:NSBundle.imagePickerControllerBundle(), value: "", comment: "")
+    }
+    
+}
+
+
