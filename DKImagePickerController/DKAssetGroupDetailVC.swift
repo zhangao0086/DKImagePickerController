@@ -122,19 +122,30 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
     } // DKImageCollectionCell
     
-    class DKNoPermissionView: UIView {
+    class DKPermissionView: UIView {
+        
+        enum DKPermissionViewStyle : Int {
+            
+            case Photo
+            case Camera
+        }
         
         let titleLabel = UILabel()
         let permitButton = UIButton()
         
-        class func permissionView() -> DKNoPermissionView {
+        class func permissionView(style: DKPermissionViewStyle) -> DKPermissionView {
             
-            let permissionView = DKNoPermissionView()
+            let permissionView = DKPermissionView()
             permissionView.addSubview(permissionView.titleLabel)
             permissionView.addSubview(permissionView.permitButton)
             
-            permissionView.titleLabel.text = DKImageLocalizedString.localizedStringForKey("permissionCamera")
-            permissionView.titleLabel.textColor = UIColor.whiteColor()
+            if style == .Photo {
+                permissionView.titleLabel.text = DKImageLocalizedString.localizedStringForKey("permissionPhoto")
+                permissionView.titleLabel.textColor = UIColor.grayColor()
+            } else {
+                permissionView.titleLabel.textColor = UIColor.whiteColor()
+                permissionView.titleLabel.text = DKImageLocalizedString.localizedStringForKey("permissionCamera")
+            }
             permissionView.titleLabel.sizeToFit()
             
             if DKImageSystemVersionLessThan8 {
@@ -144,6 +155,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
                 permissionView.permitButton.setTitleColor(UIColor(red: 0, green: 122.0 / 255, blue: 1, alpha: 1), forState: .Normal)
                 permissionView.permitButton.addTarget(permissionView, action: "gotoSettings", forControlEvents: .TouchUpInside)
             }
+            permissionView.permitButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
             permissionView.permitButton.sizeToFit()
             permissionView.permitButton.center = CGPoint(x: permissionView.titleLabel.center.x,
                 y: permissionView.titleLabel.bounds.height + 40)
@@ -221,6 +233,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = UIColor.whiteColor()
         
         self.collectionView!.backgroundColor = UIColor.whiteColor()
         self.collectionView!.allowsMultipleSelection = true
@@ -255,10 +268,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
                 self.selectGroupButton.enabled = self.groups.count > 1
             }
         }, failureBlock: {(error: NSError!) in
-                //                self.noAccessView.frame = self.view.bounds
-                //                self.tableView.scrollEnabled = false
-                //                self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-                //                self.view.addSubview(self.noAccessView)
+            self.collectionView?.hidden = true
+            self.view.addSubview(DKPermissionView.permissionView(.Photo))
         })
     }
     
@@ -309,7 +320,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
                 pickerController.delegate = self
                 
                 if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) != .Authorized {
-                    let permissionView = DKNoPermissionView.permissionView()
+                    let permissionView = DKPermissionView.permissionView(.Camera)
                     pickerController.cameraOverlayView = permissionView
                 }
                 
