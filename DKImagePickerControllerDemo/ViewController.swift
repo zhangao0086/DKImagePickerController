@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MobileCoreServices
 import MediaPlayer
 
 class ViewController: UIViewController {
@@ -34,6 +33,7 @@ class ViewController: UIViewController {
         
         pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
             println("didSelectedAssets")
+            
             self.imageScrollView.subviews.map(){$0.removeFromSuperview()}
 
             var y: CGFloat = 0
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
             
             player.prepareToPlay()
             player.play()
-            
+
             self.player = player
         }
     }
