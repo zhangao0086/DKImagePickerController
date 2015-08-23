@@ -28,6 +28,7 @@ public class DKAsset: NSObject {
     
     internal init(originalAsset: ALAsset) {
         super.init()
+        
         self.thumbnailImage = UIImage(CGImage:originalAsset.thumbnail().takeUnretainedValue())
         self.url = originalAsset.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
         self.originalAsset = originalAsset

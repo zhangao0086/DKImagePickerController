@@ -194,14 +194,14 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         return ALAssetsLibrary()
     }()
     
-    var selectedAssetGroup: DKAssetGroup!
+    var selectedAssetGroup: DKAssetGroup?
     private lazy var imageAssets: NSMutableArray = {
         return NSMutableArray()
     }()
     
     lazy var selectGroupVC: DKAssetGroupVC = {
         var groupVC = DKAssetGroupVC()
-        groupVC.selectedGroupBlock = {(assetGroup: DKAssetGroup) in
+        groupVC.selectedGroupBlock = {[unowned self] (assetGroup: DKAssetGroup) in
             self.selectAssetGroup(assetGroup)
         }
         return groupVC
@@ -274,8 +274,12 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     }
     
     func selectAssetGroup(assetGroup: DKAssetGroup) {
+        if self.selectedAssetGroup == assetGroup {
+            return
+        }
+        
         self.selectedAssetGroup = assetGroup
-        self.title = selectedAssetGroup.groupName
+        self.title = assetGroup.groupName
         
         self.imageAssets.removeAllObjects()
         
@@ -289,7 +293,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
             }
         }
         
-        self.selectGroupButton.setTitle(self.selectedAssetGroup.groupName + (self.groups.count > 1 ? "  \u{25be}" : "" ), forState: .Normal)
+        self.selectGroupButton.setTitle(assetGroup.groupName + (self.groups.count > 1 ? "  \u{25be}" : "" ), forState: .Normal)
         self.selectGroupButton.sizeToFit()
         self.navigationItem.titleView = self.selectGroupButton
     }
@@ -381,6 +385,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         let removedAsset = imageAssets[indexPath.row - 1] as! DKAsset
         let removedIndex = find(self.imagePickerController!.selectedAssets, removedAsset)!
     
+        /// Minimize the number of cycles.
         let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems() as! [NSIndexPath]
         let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems() as! [NSIndexPath]
         
