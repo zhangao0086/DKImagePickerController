@@ -141,7 +141,7 @@ class DKPopoverViewController: UIViewController {
         view.addSubview(self.view)
         
         self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverViewHeight / 2)), 0.1, 0.1)
-        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .CurveEaseInOut | .AllowUserInteraction, animations: { () -> Void in
             self.popoverView.transform = CGAffineTransformIdentity
             self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
         }, completion: nil)
