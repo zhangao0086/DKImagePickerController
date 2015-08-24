@@ -10,8 +10,9 @@ import UIKit
 import AssetsLibrary
 import AVFoundation
 
-private let DKImageAssetIdentifier = "DKImageAssetIdentifier"
 private let DKImageCameraIdentifier = "DKImageCameraIdentifier"
+private let DKImageAssetIdentifier = "DKImageAssetIdentifier"
+private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
 private let DKImageSystemVersionLessThan8 = UIDevice.currentDevice().systemVersion.compare("8.0.0", options: .NumericSearch) == .OrderedAscending
 
@@ -46,7 +47,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
     } // DKImageCameraCell
 
-    class DKImageAssetCell: UICollectionViewCell {
+    class DKAssetCell: UICollectionViewCell {
         
         class DKImageCheckView: UIView {
             
@@ -120,7 +121,68 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
             checkView.frame = imageView.frame
         }
         
-    } // DKImageCollectionCell
+    } // DKAssetCell
+    
+    class DKVideoAssetCell: DKAssetCell {
+        
+        var duration: Double = 0 {
+            didSet {
+                let videoDurationLabel = self.videoInfoView.viewWithTag(-1) as! UILabel
+                let minutes: Int = Int(duration) / 60
+                let seconds: Int = Int(duration) % 60
+                videoDurationLabel.text = "\(minutes):\(seconds)"
+            }
+        }
+        
+        override var selected: Bool {
+            didSet {
+                if super.selected {
+                    self.videoInfoView.backgroundColor = UIColor(red: 20 / 255, green: 129 / 255, blue: 252 / 255, alpha: 1)
+                } else {
+                    self.videoInfoView.backgroundColor = UIColor(white: 0.0, alpha: 0.7)
+                }
+            }
+        }
+        
+        private lazy var videoInfoView: UIView = {
+            let videoInfoView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 0))
+
+            let videoImageView = UIImageView(image: DKImageResource.videoCameraIcon())
+            videoInfoView.addSubview(videoImageView)
+            videoImageView.center = CGPoint(x: videoImageView.bounds.width / 2 + 7, y: videoInfoView.bounds.height / 2)
+            videoImageView.autoresizingMask = .FlexibleBottomMargin | .FlexibleTopMargin
+            
+            let videoDurationLabel = UILabel()
+            videoDurationLabel.tag = -1
+            videoDurationLabel.textAlignment = .Right
+            videoDurationLabel.font = UIFont.systemFontOfSize(12)
+            videoDurationLabel.textColor = UIColor.whiteColor()
+            videoInfoView.addSubview(videoDurationLabel)
+            videoDurationLabel.frame = CGRect(x: 0, y: 0, width: videoInfoView.bounds.width - 7, height: videoInfoView.bounds.height)
+            videoDurationLabel.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+            
+            return videoInfoView
+        }()
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            
+            self.contentView.addSubview(videoInfoView)
+        }
+
+        required init(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            let height: CGFloat = 30
+            self.videoInfoView.frame = CGRect(x: 0, y: self.contentView.bounds.height - height,
+                width: self.contentView.bounds.width, height: height)
+        }
+        
+    } // DKVideoAssetCell
     
     class DKPermissionView: UIView {
         
@@ -237,8 +299,9 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
         self.collectionView!.backgroundColor = UIColor.whiteColor()
         self.collectionView!.allowsMultipleSelection = true
-        self.collectionView!.registerClass(DKImageAssetCell.self, forCellWithReuseIdentifier: DKImageAssetIdentifier)
         self.collectionView!.registerClass(DKImageCameraCell.self, forCellWithReuseIdentifier: DKImageCameraIdentifier)
+        self.collectionView!.registerClass(DKAssetCell.self, forCellWithReuseIdentifier: DKImageAssetIdentifier)
+        self.collectionView!.registerClass(DKVideoAssetCell.self, forCellWithReuseIdentifier: DKVideoAssetIdentifier)
         
         self.library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
             if group != nil {
@@ -336,9 +399,20 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     }
 
     func assetCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageAssetIdentifier, forIndexPath: indexPath) as! DKImageAssetCell
-        
         let asset = imageAssets[indexPath.row - 1] as! DKAsset
+        
+        var identifier: String!
+        if asset.isVideo {
+            identifier = DKVideoAssetIdentifier
+        } else {
+            identifier = DKImageAssetIdentifier
+        }
+        
+        let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath) as! DKAssetCell
+        if let videoAssetCell = cell as? DKVideoAssetCell {
+            videoAssetCell.duration = asset.duration
+        }
+        
         cell.thumbnail = asset.thumbnailImage
         
         if let index = find(self.imagePickerController!.selectedAssets, asset) {
@@ -377,7 +451,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[indexPath.row - 1])
         
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKImageAssetCell
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
         cell.checkView.checkLabel.text = "\(self.imagePickerController!.selectedAssets.count)"
     }
     
@@ -396,7 +470,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
             let selectedIndex = find(self.imagePickerController!.selectedAssets, selectedAsset)!
             
             if selectedIndex > removedIndex {
-                let cell = collectionView.cellForItemAtIndexPath(selectedIndexPath) as! DKImageAssetCell
+                let cell = collectionView.cellForItemAtIndexPath(selectedIndexPath) as! DKAssetCell
                 cell.checkView.checkLabel.text = "\(cell.checkView.checkLabel.text!.toInt()! - 1)"
             }
         }

@@ -23,6 +23,9 @@ public class DKAsset: NSObject {
     
     public var thumbnailImage: UIImage?
     
+    public var isVideo: Bool = false
+    public var duration = 0.0
+    
     internal var isFromCamera: Bool = false
     internal var originalAsset: ALAsset?
     
@@ -32,6 +35,14 @@ public class DKAsset: NSObject {
         self.thumbnailImage = UIImage(CGImage:originalAsset.thumbnail().takeUnretainedValue())
         self.url = originalAsset.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
         self.originalAsset = originalAsset
+        
+        let assetType = originalAsset.valueForProperty(ALAssetPropertyType) as! NSString
+        if assetType == ALAssetTypeVideo {
+            let duration = originalAsset.valueForProperty(ALAssetPropertyDuration) as! NSNumber
+            
+            self.isVideo = true
+            self.duration = duration.doubleValue
+        }
     }
     
     internal init(image: UIImage) {
