@@ -14,6 +14,18 @@ private let DKImageCameraIdentifier = "DKImageCameraIdentifier"
 private let DKImageAssetIdentifier = "DKImageAssetIdentifier"
 private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
+// Nofifications
+internal let DKImageSelectedNotification = "DKImageSelectedNotification"
+internal let DKImageUnselectedNotification = "DKImageUnselectedNotification"
+
+// Group Model
+internal class DKAssetGroup : NSObject {
+    var groupName: String!
+    var thumbnail: UIImage!
+    var totalCount: Int!
+    var group: ALAssetsGroup!
+}
+
 private let DKImageSystemVersionLessThan8 = UIDevice.currentDevice().systemVersion.compare("8.0.0", options: .NumericSearch) == .OrderedAscending
 
 // Show all images in the asset group
@@ -45,7 +57,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
             }
         }
         
-    } // DKImageCameraCell
+    } /* DKImageCameraCell */
 
     class DKAssetCell: UICollectionViewCell {
         
@@ -84,7 +96,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
                 self.checkLabel.frame = CGRect(x: 0, y: 5, width: self.bounds.width - 5, height: 20)
             }
             
-        } // DKImageCheckView
+        } /* DKImageCheckView */
         
         private var imageView = UIImageView()
         
@@ -121,7 +133,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
             checkView.frame = imageView.frame
         }
         
-    } // DKAssetCell
+    } /* DKAssetCell */
     
     class DKVideoAssetCell: DKAssetCell {
         
@@ -182,7 +194,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
                 width: self.contentView.bounds.width, height: height)
         }
         
-    } // DKVideoAssetCell
+    } /* DKVideoAssetCell */
     
     class DKPermissionView: UIView {
         
@@ -240,11 +252,11 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
             }
         }
         
-    } // DKNoPermissionView
+    } /* DKNoPermissionView */
     
-    lazy private var groups = [DKAssetGroup]()
+    private lazy var groups = [DKAssetGroup]()
     
-    lazy var selectGroupButton: UIButton = {
+    private lazy var selectGroupButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: "showGroupSelector", forControlEvents: .TouchUpInside)
         button.setTitleColor(UIColor.blackColor(), forState: .Normal)
@@ -252,16 +264,16 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         return button
     }()
     
-    lazy private var library: ALAssetsLibrary = {
+    private lazy var library: ALAssetsLibrary = {
         return ALAssetsLibrary()
     }()
     
-    var selectedAssetGroup: DKAssetGroup?
+    internal var selectedAssetGroup: DKAssetGroup?
     private lazy var imageAssets: NSMutableArray = {
         return NSMutableArray()
     }()
     
-    lazy var selectGroupVC: DKAssetGroupVC = {
+    private lazy var selectGroupVC: DKAssetGroupVC = {
         var groupVC = DKAssetGroupVC()
         groupVC.selectedGroupBlock = {[unowned self] (assetGroup: DKAssetGroup) in
             self.selectAssetGroup(assetGroup)

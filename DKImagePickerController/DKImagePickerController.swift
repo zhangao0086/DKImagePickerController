@@ -13,17 +13,20 @@ import AssetsLibrary
 
 // Asset Model
 public class DKAsset: NSObject {
-    public lazy var fullScreenImage: UIImage? = {
+    
+    private(set) public lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullScreenImage().takeUnretainedValue())
     }()
-    public lazy var fullResolutionImage: UIImage? = {
+    private(set) public lazy var fullResolutionImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
     }()
-    public var url: NSURL?
+    private(set) public var url: NSURL?
     
-    public var thumbnailImage: UIImage?
+    private(set) public var thumbnailImage: UIImage?
     
-    public var isVideo: Bool = false
+    private(set) public var isVideo: Bool = false
+    
+    // play time duration(seconds) of a video.
     public var duration = 0.0
     
     internal var isFromCamera: Bool = false
@@ -79,18 +82,6 @@ internal extension UIViewController {
     }
 }
 
-// Nofifications
-internal let DKImageSelectedNotification = "DKImageSelectedNotification"
-internal let DKImageUnselectedNotification = "DKImageUnselectedNotification"
-
-// Group Model
-internal class DKAssetGroup : NSObject {
-    var groupName: String!
-    var thumbnail: UIImage!
-    var totalCount: Int!
-    var group: ALAssetsGroup!
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // MARK: - Main Controller
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +110,7 @@ public class DKImagePickerController: UINavigationController {
     
     internal var selectedAssets = [DKAsset]()
     
-    lazy private var doneButton: UIButton = {
+    private lazy var doneButton: UIButton = {
         let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         button.setTitle("", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
