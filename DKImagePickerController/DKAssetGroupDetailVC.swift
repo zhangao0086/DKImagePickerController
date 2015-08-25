@@ -26,6 +26,20 @@ internal class DKAssetGroup : NSObject {
     var group: ALAssetsGroup!
 }
 
+private extension DKImagePickerControllerAssetType {
+
+    func toALAssetsFilter() -> ALAssetsFilter {
+        switch self {
+        case .allPhotos:
+            return ALAssetsFilter.allPhotos()
+        case .allVideos:
+            return ALAssetsFilter.allVideos()
+        case .allAssets:
+            return ALAssetsFilter.allAssets()
+        }
+    }
+}
+
 private let DKImageSystemVersionLessThan8 = UIDevice.currentDevice().systemVersion.compare("8.0.0", options: .NumericSearch) == .OrderedAscending
 
 // Show all images in the asset group
@@ -254,6 +268,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
     } /* DKNoPermissionView */
     
+    internal var assetType: DKImagePickerControllerAssetType!
+    
     private lazy var groups = [DKAssetGroup]()
     
     private lazy var selectGroupButton: UIButton = {
@@ -317,6 +333,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
         self.library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
             if group != nil {
+                group.setAssetsFilter(self.assetType.toALAssetsFilter())
+                
                 if group.numberOfAssets() != 0 {
                     let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
                     

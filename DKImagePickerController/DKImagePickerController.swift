@@ -69,6 +69,11 @@ public class DKAsset: NSObject {
     }
 }
 
+public enum DKImagePickerControllerAssetType : Int {
+    
+    case allPhotos, allVideos, allAssets
+}
+
 internal extension UIViewController {
     var imagePickerController: DKImagePickerController? {
         get {
@@ -89,6 +94,12 @@ internal extension UIViewController {
 public class DKImagePickerController: UINavigationController {
     
     public var maxSelectableCount = 999
+    
+    public var assetType = DKImagePickerControllerAssetType.allAssets {
+        didSet {
+            (self.topViewController as! DKAssetGroupDetailVC).assetType = self.assetType
+        }
+    }
     
     public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
     public var didCancelled: (() -> Void)?
@@ -122,6 +133,7 @@ public class DKImagePickerController: UINavigationController {
     
     public convenience init() {
         let rootVC = DKAssetGroupDetailVC()
+        rootVC.assetType = .allAssets
         self.init(rootViewController: rootVC)
         
         rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
@@ -156,6 +168,7 @@ public class DKImagePickerController: UINavigationController {
     
     internal func dismiss() {
         self.dismissViewControllerAnimated(true, completion: nil)
+        
         if let didCancelled = self.didCancelled {
             didCancelled()
         }
@@ -170,7 +183,6 @@ public class DKImagePickerController: UINavigationController {
     }
     
     // MARK: - Notifications
-    /**/
     
     internal func selectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
