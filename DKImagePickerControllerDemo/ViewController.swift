@@ -9,10 +9,11 @@
 import UIKit
 import MediaPlayer
 
-class ViewController: UIViewController {
-    @IBOutlet var imageScrollView: UIScrollView!
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     var player: MPMoviePlayerController?
-    var videoURL: NSURL?
+    
+    @IBOutlet var previewView: UICollectionView?
+    var assets: [DKAsset]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +24,10 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func showImagePicker() {
+    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType) {
         
         let pickerController = DKImagePickerController()
+        pickerController.assetType = assetType
         
         pickerController.didCancelled = { () in
             println("didCancelled")
@@ -34,51 +36,30 @@ class ViewController: UIViewController {
         pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
             println("didSelectedAssets")
             
-            self.imageScrollView.subviews.map(){$0.removeFromSuperview()}
-
-            var y: CGFloat = 0
-            for (index, asset) in enumerate(assets) {
-                if let lastView = self.imageScrollView.subviews.last as? UIView {
-                    y += lastView.bounds.size.height
-                }
-                let image = asset.thumbnailImage!
-                
-                let imageView = UIImageView(image: image)
-                imageView.contentMode = UIViewContentMode.ScaleAspectFit
-                
-                let imageWidth = min(image.size.width, self.imageScrollView.bounds.width)
-                imageView.frame = CGRect(x: 0, y: y, width: imageWidth, height: imageWidth / image.size.width * image.size.height)
-                self.imageScrollView.addSubview(imageView)
-                
-            }
-            self.imageScrollView.contentSize.height = CGRectGetMaxY((self.imageScrollView.subviews.last as! UIView).frame)
+            self.assets = assets
+            self.previewView?.reloadData()
         }
         
         self.presentViewController(pickerController, animated: true) {}
     }
     
-    // 使用系统的播放器播放视频
-    @IBAction func playVideo() {
-        if let videoURL = self.videoURL {
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "exitPlayer:", name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
-            
-            let player = MPMoviePlayerController(contentURL: videoURL)
-            player.movieSourceType = MPMovieSourceType.File
-            player.controlStyle = MPMovieControlStyle.Fullscreen
-            player.fullscreen = true
-            player.scalingMode = MPMovieScalingMode.Fill
-            
-            player.view.frame = view.bounds
-            view.addSubview(player.view)
-            
-            player.prepareToPlay()
-            player.play()
-
-            self.player = player
-        }
+    func playVideo(videoURL: NSURL) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "exitPlayer:", name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
+        
+        let player = MPMoviePlayerController(contentURL: videoURL)
+        player.movieSourceType = .File
+        player.controlStyle = .Fullscreen
+        player.fullscreen = true
+        
+        player.view.frame = view.bounds
+        view.addSubview(player.view)
+        
+        player.prepareToPlay()
+        player.play()
+        
+        self.player = player
     }
     
-    // 退出播放器
     func exitPlayer(notification: NSNotification) {
         let reason = (notification.userInfo!)[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] as! NSNumber!
         if reason.integerValue == MPMovieFinishReason.UserExited.rawValue {
@@ -88,5 +69,68 @@ class ViewController: UIViewController {
         }
     }
     
+    // MARK: - UITableViewDataSource, UITableViewDelegate methods
+    
+    struct Demo {
+        static let titles = [
+            ["Pick All", "Pick photos only", "Pick videos only"],
+            ["Pick All (only photos or videos)"]
+        ]
+        static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos]
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return Demo.titles.count
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return Demo.titles[section].count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        
+        cell.textLabel?.text = Demo.titles[indexPath.section][indexPath.row]
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        showImagePickerWithAssetType(Demo.types[indexPath.row])
+    }
+    
+    // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.assets?.count ?? 0
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let asset = self.assets![indexPath.row]
+        
+        if asset.isVideo {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath) as! UICollectionViewCell
+            
+            let imageView = cell.contentView.viewWithTag(1) as! UIImageView
+            imageView.image = asset.thumbnailImage
+            
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath) as! UICollectionViewCell
+            
+            let imageView = cell.contentView.viewWithTag(1) as! UIImageView
+            imageView.image = asset.thumbnailImage
+            
+            return cell
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let asset = self.assets![indexPath.row]
+
+        playVideo(asset.url!)
+    }
 }
 
