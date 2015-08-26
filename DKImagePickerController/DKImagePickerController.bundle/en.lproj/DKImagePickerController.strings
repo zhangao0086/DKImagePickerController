@@ -17,3 +17,9 @@
 "permit" = "Allow Access";
 
 "gotoSettings" = "Go To 「Settings」 To Give Access";
+
+"ok" = "OK";
+
+"selectPhotosOrVideos" = "Select Photos or Videos";
+
+"selectPhotosOrVideosError" = "It is not possible to select photos and videos at the same time.";

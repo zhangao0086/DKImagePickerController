@@ -95,11 +95,9 @@ public class DKImagePickerController: UINavigationController {
     
     public var maxSelectableCount = 999
     
-    public var assetType = DKImagePickerControllerAssetType.allAssets {
-        didSet {
-            (self.topViewController as! DKAssetGroupDetailVC).assetType = self.assetType
-        }
-    }
+    public var assetType = DKImagePickerControllerAssetType.allAssets
+    
+    public var allowMultipleType = true
     
     public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
     public var didCancelled: (() -> Void)?
@@ -133,7 +131,6 @@ public class DKImagePickerController: UINavigationController {
     
     public convenience init() {
         let rootVC = DKAssetGroupDetailVC()
-        rootVC.assetType = .allAssets
         self.init(rootViewController: rootVC)
         
         rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)

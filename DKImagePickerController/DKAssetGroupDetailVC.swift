@@ -214,8 +214,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
         enum DKPermissionViewStyle : Int {
             
-            case Photo
-            case Camera
+            case Photo, Camera
         }
         
         let titleLabel = UILabel()
@@ -267,8 +266,6 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         }
         
     } /* DKNoPermissionView */
-    
-    internal var assetType: DKImagePickerControllerAssetType!
     
     private lazy var groups = [DKAssetGroup]()
     
@@ -333,7 +330,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
         self.library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
             if group != nil {
-                group.setAssetsFilter(self.assetType.toALAssetsFilter())
+                group.setAssetsFilter(self.imagePickerController!.assetType.toALAssetsFilter())
                 
                 if group.numberOfAssets() != 0 {
                     let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
@@ -458,10 +455,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     }
     
     //Mark: - UICollectionViewDelegate, UICollectionViewDataSource methods
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
+
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageAssets.count + 1
     }
@@ -475,6 +469,20 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     }
     
     override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if let firstSelectedAsset = self.imagePickerController?.selectedAssets.first
+            where self.imagePickerController?.allowMultipleType == false {
+                
+                let selectedAsset = imageAssets[indexPath.row - 1] as! DKAsset
+                if firstSelectedAsset.isVideo != selectedAsset.isVideo {
+                    UIAlertView(title: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideos"),
+                        message: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideosError"),
+                        delegate: nil,
+                        cancelButtonTitle: DKImageLocalizedString.localizedStringForKey("ok")).show()
+                    
+                    return false
+                }
+        }
+        
         return self.imagePickerController!.selectedAssets.count < self.imagePickerController!.maxSelectableCount
     }
     

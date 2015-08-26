@@ -24,10 +24,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
     
-    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType) {
+    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType, allowMultipleType: Bool = true) {
         
         let pickerController = DKImagePickerController()
         pickerController.assetType = assetType
+        pickerController.allowMultipleType = allowMultipleType
         
         pickerController.didCancelled = { () in
             println("didCancelled")
@@ -98,7 +99,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        showImagePickerWithAssetType(Demo.types[indexPath.row])
+        showImagePickerWithAssetType(Demo.types[indexPath.row], allowMultipleType: indexPath.section == 0)
     }
     
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
