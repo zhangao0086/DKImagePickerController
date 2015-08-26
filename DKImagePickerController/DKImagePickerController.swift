@@ -9,24 +9,33 @@
 import UIKit
 import AssetsLibrary
 
-//////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - Public DKAsset
 
-// Asset Model
+/**
+ * An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
+ */
 public class DKAsset: NSObject {
     
+    /// Returns a CGImage of the representation that is appropriate for displaying full screen.
     private(set) public lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullScreenImage().takeUnretainedValue())
     }()
+    
+    /// Returns a CGImage representation of the asset.
     private(set) public lazy var fullResolutionImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
     }()
+    
+    /// The url uniquely identifies an asset that is an image or a video.
     private(set) public var url: NSURL?
     
+    /// It's a square thumbnail of the asset.
     private(set) public var thumbnailImage: UIImage?
     
+    /// When the asset was an image, it's false. Otherwise true.
     private(set) public var isVideo: Bool = false
     
-    // play time duration(seconds) of a video.
+    /// play time duration(seconds) of a video.
     public var duration = 0.0
     
     internal var isFromCamera: Bool = false
@@ -69,8 +78,14 @@ public class DKAsset: NSObject {
     }
 }
 
+/**
+
+ * allPhotos: Get all photos assets in the assets group.
+ * allVideos: Get all video assets in the assets group.
+ * allAssets: Get all assets in the group.
+ */
 public enum DKImagePickerControllerAssetType : Int {
-    
+
     case allPhotos, allVideos, allAssets
 }
 
@@ -87,21 +102,29 @@ internal extension UIViewController {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// MARK: - Main Controller
-//////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - Public DKImagePickerController
 
+/**
+ * The `DKImagePickerController` class offers the all public APIs.
+ */
 public class DKImagePickerController: UINavigationController {
     
+    /// The maximum count of assets which the user will be able to select.
     public var maxSelectableCount = 999
     
+    /// The type of picker interface to be displayed by the controller.
     public var assetType = DKImagePickerControllerAssetType.allAssets
     
+    /// Whether allows to select photos and videos at the same time.
     public var allowMultipleType = true
     
+    /// The callback block is executed when user pressed the select button.
     public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
+    
+    /// The callback block is executed when user pressed the cancel button.
     public var didCancelled: (() -> Void)?
     
+    /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
             if let defaultSelectedAssets = self.defaultSelectedAssets {
