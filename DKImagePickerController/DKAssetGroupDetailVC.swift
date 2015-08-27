@@ -437,7 +437,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath) as! DKAssetCell
         if let videoAssetCell = cell as? DKVideoAssetCell {
-            videoAssetCell.duration = asset.duration
+            videoAssetCell.duration = asset.duration!
         }
         
         cell.thumbnail = asset.thumbnailImage
@@ -469,18 +469,16 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     }
     
     override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if let firstSelectedAsset = self.imagePickerController?.selectedAssets.first
-            where self.imagePickerController?.allowMultipleType == false {
+        if let firstSelectedAsset = self.imagePickerController?.selectedAssets.first,
+            selectedAsset = imageAssets[indexPath.row - 1] as? DKAsset
+            where self.imagePickerController?.allowMultipleType == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
                 
-                let selectedAsset = imageAssets[indexPath.row - 1] as! DKAsset
-                if firstSelectedAsset.isVideo != selectedAsset.isVideo {
-                    UIAlertView(title: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideos"),
-                        message: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideosError"),
-                        delegate: nil,
-                        cancelButtonTitle: DKImageLocalizedString.localizedStringForKey("ok")).show()
-                    
-                    return false
-                }
+                UIAlertView(title: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideos"),
+                    message: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideosError"),
+                    delegate: nil,
+                    cancelButtonTitle: DKImageLocalizedString.localizedStringForKey("ok")).show()
+                
+                return false
         }
         
         return self.imagePickerController!.selectedAssets.count < self.imagePickerController!.maxSelectableCount

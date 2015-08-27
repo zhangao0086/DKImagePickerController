@@ -17,26 +17,26 @@ import AssetsLibrary
 public class DKAsset: NSObject {
     
     /// Returns a CGImage of the representation that is appropriate for displaying full screen.
-    private(set) public lazy var fullScreenImage: UIImage? = {
+    public private(set) lazy var fullScreenImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullScreenImage().takeUnretainedValue())
     }()
     
     /// Returns a CGImage representation of the asset.
-    private(set) public lazy var fullResolutionImage: UIImage? = {
+    public private(set) lazy var fullResolutionImage: UIImage? = {
         return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
     }()
     
     /// The url uniquely identifies an asset that is an image or a video.
-    private(set) public var url: NSURL?
+    public private(set) var url: NSURL?
     
     /// It's a square thumbnail of the asset.
-    private(set) public var thumbnailImage: UIImage?
+    public private(set) var thumbnailImage: UIImage?
     
     /// When the asset was an image, it's false. Otherwise true.
-    private(set) public var isVideo: Bool = false
+    public private(set) var isVideo: Bool = false
     
     /// play time duration(seconds) of a video.
-    public var duration = 0.0
+    public private(set) var duration: Double?
     
     internal var isFromCamera: Bool = false
     internal var originalAsset: ALAsset?
@@ -105,7 +105,7 @@ internal extension UIViewController {
 // MARK: - Public DKImagePickerController
 
 /**
- * The `DKImagePickerController` class offers the all public APIs.
+ * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
 public class DKImagePickerController: UINavigationController {
     
