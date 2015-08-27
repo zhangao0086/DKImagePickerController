@@ -15,59 +15,78 @@ DKImagePickerController
 Update for Xcode 6.4 with Swift 1.2
 ---
 ## Description
-This is a very simple Image Picker Controller by Swift.  
+New version! It's A Facebook style Image Picker Controller by Swift.  
+
+## Requirements
+* iOS 8.0+
+* ARC
 
 ## Installation
 DKImagePickerController is available on Cocoapods. Simply add the following line to your podfile:
 ```
-pod 'DKImagePickerController', '~> 1.0.0'
+# For latest release in cocoapods
+pod 'DKImagePickerController'
 ```
 
-## Use
+## Getting Started
 #### Initialization and presentation
 ```swift
 
 let pickerController = DKImagePickerController()
-pickerController.pickerDelegate = self
+
+pickerController.didCancelled = { () in
+    println("didCancelled")
+}
+
+pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
+    println("didSelectedAssets")
+    println(assets)
+}
+
 self.presentViewController(pickerController, animated: true) {}
-````
-#### Delegate methods
-```swift
-func imagePickerControllerCancelled() {
-    self.dismissViewControllerAnimated(true, completion: nil)
-}
-
-func imagePickerControllerDidSelectedAssets(assets: [DKAsset]!) {
-    for (index, asset) in enumerate(assets) {
-        
-    }
-    
-    self.dismissViewControllerAnimated(true, completion: nil)
-}
 
 ````
-#### Configurable properties
+
+#### Customizing
+
 ```swift
-/// The height of the bottom of the preview
-public var previewHeight: CGFloat = 80
-
-public var rightButtonTitle: String = "Select"
-
+/// The maximum count of assets which the user will be able to select.
 public var maxSelectableCount = 999
 
-/// Displayed when denied access
-public var noAccessView: UIView = {
-    let label = UILabel()
-    label.text = "User has denied access"
-    label.textAlignment = NSTextAlignment.Center
-    label.textColor = UIColor.lightGrayColor()
-    return label
-}()
+/// The type of picker interface to be displayed by the controller.
+public var assetType = DKImagePickerControllerAssetType.allAssets
 
-public weak var pickerDelegate: DKImagePickerControllerDelegate?
+/// Whether allows to select photos and videos at the same time.
+public var allowMultipleType = true
 
-public var defaultSelectedAssets: [DKAsset]?
-````
+/// The callback block is executed when user pressed the select button.
+public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
+
+/// The callback block is executed when user pressed the cancel button.
+public var didCancelled: (() -> Void)?
+
+/// It will have selected the specific assets.
+public var defaultSelectedAssets: [DKAsset]? {
+    didSet {
+        if let defaultSelectedAssets = self.defaultSelectedAssets {
+            for (index, asset) in enumerate(defaultSelectedAssets) {
+                if asset.isFromCamera {
+                    self.defaultSelectedAssets!.removeAtIndex(index)
+                }
+            }
+            
+            self.selectedAssets = defaultSelectedAssets
+            self.updateDoneButtonTitle()
+        }
+    }
+}
+```
+
+## Localization
+It has been supported languages so far:
+
+* en.lproj
+* zh-Hans.lproj
 
 [docsLink]:http://cocoadocs.org/docsets/JSQMessagesViewController
 [mitLink]:http://opensource.org/licenses/MIT
