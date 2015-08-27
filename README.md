@@ -91,5 +91,14 @@ It has been supported languages so far:
 
 If you want to add new language, pull request or issue!
 
+## Soon to do
+
+* Simply to take a picture!
+* It can hide the camera.
+* Simple photo browser.
+
+---
+Any pull requests to be welcome!!!
+
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
