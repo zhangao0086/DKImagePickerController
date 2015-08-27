@@ -23,7 +23,8 @@ New version! It's A Facebook style Image Picker Controller by Swift.
 
 ## Installation
 DKImagePickerController is available on Cocoapods. Simply add the following line to your podfile:
-```
+
+```ruby
 # For latest release in cocoapods
 pod 'DKImagePickerController'
 ```
@@ -88,5 +89,7 @@ It has been supported languages so far:
 * en.lproj
 * zh-Hans.lproj
 
-[docsLink]:http://cocoadocs.org/docsets/JSQMessagesViewController
+If you want to add new language, pull request or issue!
+
+[docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
