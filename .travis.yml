@@ -1,7 +1,7 @@
 osx_image: xcode6.4
 
 language: swift
-sudo: true
+sudo: false
 
 before_install:
 - export LANG=en_US.UTF-8
