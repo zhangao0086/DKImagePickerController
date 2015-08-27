@@ -9,4 +9,4 @@ before_install:
 #- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 
 script:
-- xcodebuild clean build test -workspace DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator8.4 ONLY_ACTIVE_ARCH=NO
+- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator8.4 ONLY_ACTIVE_ARCH=NO
