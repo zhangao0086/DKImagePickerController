@@ -1,6 +1,6 @@
 osx_image: xcode6.4
 
-language: swift
+language: objective-c
 sudo: false
 
 before_install:
@@ -10,4 +10,4 @@ before_install:
 #- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 
 script:
-- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator8.4 ONLY_ACTIVE_ARCH=NO
+- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator8.4
