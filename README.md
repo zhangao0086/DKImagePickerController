@@ -22,12 +22,17 @@ New version! It's A Facebook style Image Picker Controller by Swift.
 * ARC
 
 ## Installation
+#### iOS 8 and newer
 DKImagePickerController is available on Cocoapods. Simply add the following line to your podfile:
 
 ```ruby
 # For latest release in cocoapods
 pod 'DKImagePickerController'
 ```
+
+#### iOS 7.x
+To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
+[iOS 7.x][https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d]
 
 ## Getting Started
 #### Initialization and presentation
