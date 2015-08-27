@@ -18,7 +18,7 @@ Update for Xcode 6.4 with Swift 1.2
 New version! It's A Facebook style Image Picker Controller by Swift.  
 
 ## Requirements
-* iOS 8.0+
+* iOS 7.1+
 * ARC
 
 ## Installation
