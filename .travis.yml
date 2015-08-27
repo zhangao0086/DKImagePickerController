@@ -8,4 +8,5 @@ language: objective-c
 #- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 
 script:
-- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -destination 'platform=iOS Simulator,name=iPhone 5s'
+- xcodebuild -list
+#- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -destination 'platform=iOS Simulator,name=iPhone 5s'
