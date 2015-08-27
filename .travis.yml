@@ -5,9 +5,8 @@ sudo: false
 
 before_install:
 - export LANG=en_US.UTF-8
-- gem install cocoapods
 #- brew update
 #- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 
 script:
-- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator8.4
+- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -target DKImagePickerControllerDemo -sdk iphonesimulator8.4
