@@ -75,7 +75,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     struct Demo {
         static let titles = [
             ["Pick All", "Pick photos only", "Pick videos only"],
-            ["Pick All (only photos or videos)"]
+            ["Pick All (only photos or videos)"],
+            ["Take a picture"]
         ]
         static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos]
     }
