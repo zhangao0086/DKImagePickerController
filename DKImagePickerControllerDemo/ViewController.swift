@@ -28,7 +28,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let pickerController = DKImagePickerController()
         pickerController.assetType = assetType
-        pickerController.allowMultipleType = allowMultipleType
+        pickerController.allowMultipleTypes = allowMultipleType
         
         pickerController.didCancelled = { () in
             println("didCancelled")
@@ -36,6 +36,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
             println("didSelectedAssets")
+            println(assets.map({ $0.url}))
             
             self.assets = assets
             self.previewView?.reloadData()

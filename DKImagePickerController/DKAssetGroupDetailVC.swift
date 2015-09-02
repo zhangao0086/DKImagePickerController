@@ -471,7 +471,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
         if let firstSelectedAsset = self.imagePickerController?.selectedAssets.first,
             selectedAsset = imageAssets[indexPath.row - 1] as? DKAsset
-            where self.imagePickerController?.allowMultipleType == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
+            where self.imagePickerController?.allowMultipleTypes == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
                 
                 UIAlertView(title: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideos"),
                     message: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideosError"),

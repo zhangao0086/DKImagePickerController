@@ -116,7 +116,7 @@ public class DKImagePickerController: UINavigationController {
     public var assetType = DKImagePickerControllerAssetType.allAssets
     
     /// Whether allows to select photos and videos at the same time.
-    public var allowMultipleType = true
+    public var allowMultipleTypes = true
     
     /// The callback block is executed when user pressed the select button.
     public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
