@@ -454,7 +454,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         return cell
     }
     
-    //Mark: - UICollectionViewDelegate, UICollectionViewDataSource methods
+    // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageAssets.count + 1
