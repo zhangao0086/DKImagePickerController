@@ -43,17 +43,17 @@ private extension DKImagePickerControllerAssetType {
 private let DKImageSystemVersionLessThan8 = UIDevice.currentDevice().systemVersion.compare("8.0.0", options: .NumericSearch) == .OrderedAscending
 
 // Show all images in the asset group
-internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+internal class DKAssetGroupDetailVC: UICollectionViewController {
     
     class DKImageCameraCell: UICollectionViewCell {
         
-        var cameraButtonClicked: (() -> Void)?
+        var didCameraButtonClicked: (() -> Void)?
         
         override init(frame: CGRect) {
             super.init(frame: frame)
             
             let cameraButton = UIButton(frame: frame)
-            cameraButton.addTarget(self, action: "takePicture", forControlEvents: .TouchUpInside)
+            cameraButton.addTarget(self, action: "cameraButtonClicked", forControlEvents: .TouchUpInside)
             cameraButton.setImage(DKImageResource.cameraImage(), forState: .Normal)
             cameraButton.autoresizingMask = .FlexibleWidth | .FlexibleHeight
             self.contentView.addSubview(cameraButton)
@@ -65,9 +65,9 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
             fatalError("init(coder:) has not been implemented")
         }
         
-        func takePicture() {
-            if let cameraButtonClicked = self.cameraButtonClicked {
-                cameraButtonClicked()
+        func cameraButtonClicked() {
+            if let didCameraButtonClicked = self.didCameraButtonClicked {
+                didCameraButtonClicked()
             }
         }
         
@@ -397,28 +397,26 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
     func cameraCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
         
-        cell.cameraButtonClicked = { [unowned self] () in
+        cell.didCameraButtonClicked = { [unowned self] () in
             if UIImagePickerController.isSourceTypeAvailable(.Camera) {
                 
-                /* 
-                    There is a bug in iOS 8 about:
-                        "Snapshotting a view that has not been rendered results in an empty snapshot.
-                        Ensure your view has been rendered at least once before snapshotting or snapshot after screen updates."
-                    I've tried all solutions suggested by this thread:
-                    http://stackoverflow.com/questions/25884801/ios-8-snapshotting-a-view-that-has-not-been-rendered-results-in-an-empty-snapsho
-                    But no luck.
-                */
-                let pickerController = UIImagePickerController()
-                pickerController.sourceType = .Camera
-                pickerController.allowsEditing = false
-                pickerController.delegate = self
+                let camera = DKCamera()
+                camera.didCancelled = {() in
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+                
+                camera.didFinishCapturingImage = {(image) in
+                    NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: DKAsset(image: image))
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
                 
                 if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) != .Authorized {
                     let permissionView = DKPermissionView.permissionView(.Camera)
-                    pickerController.cameraOverlayView = permissionView
+                    camera.cameraOverlayView = permissionView
                 }
                 
-                self.presentViewController(pickerController, animated: true, completion: nil)
+                self.presentViewController(camera, animated: true, completion: nil)
+                
             }
         }
 
@@ -514,11 +512,4 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, UINavigationCon
         NSNotificationCenter.defaultCenter().postNotificationName(DKImageUnselectedNotification, object: imageAssets[indexPath.row - 1])
     }
     
-    // MARK: - UIImagePickerControllerDelegate methods
-    
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: DKAsset(image: pickedImage))
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
 }
