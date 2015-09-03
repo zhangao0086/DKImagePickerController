@@ -75,35 +75,40 @@ public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
 public var didCancelled: (() -> Void)?
 
 /// It will have selected the specific assets.
-public var defaultSelectedAssets: [DKAsset]? {
-    didSet {
-        if let defaultSelectedAssets = self.defaultSelectedAssets {
-            for (index, asset) in enumerate(defaultSelectedAssets) {
-                if asset.isFromCamera {
-                    self.defaultSelectedAssets!.removeAtIndex(index)
-                }
-            }
-            
-            self.selectedAssets = defaultSelectedAssets
-            self.updateDoneButtonTitle()
-        }
-    }
-}
+public var defaultSelectedAssets: [DKAsset]?
 ```
 
-### Quickly take a picture
+#### Quickly take a picture
 
 ```swift
 pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit2.gif" />
 
-### Hides camera
+#### Hides camera
 
 ```swift
 pickerController.sourceType = .Photo
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.png" />
+
+## How to use in Objective-C
+
+#### If you use [CocoaPods](http://cocoapods.org/)
+
+#### If you use it directly in your project
+* Drag and Drop the [DKCamera](https://github.com/zhangao0086/DKCamera) and `DKImagePickerController` to your project
+* Importing Swift into Objective-C:`#import "YourProductModuleName-Swift.h"` (See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html))
+* then you can:
+
+```objective-c
+DKImagePickerController *imagePickerController = [DKImagePickerController new];
+[imagePickerController setDidSelectedAssets:^(NSArray * __nonnull assets) {
+    NSLog(@"didSelected");
+}];
+
+[self presentViewController:imagePickerController animated:YES completion:nil];
+```
 
 ## Localization
 It has been supported languages so far:
@@ -113,12 +118,8 @@ It has been supported languages so far:
 
 If you want to add new language, pull request or issue!
 
-## How to use in Objective-C
-
 ## Soon to do
 
-* Simply to take a picture!
-* It can hide the camera.
 * Simple photo browser.
 
 ---
