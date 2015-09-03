@@ -26,7 +26,7 @@ class DKAssetGroupCell: UITableViewCell {
         }
     }
     
-    var thumbnailImageView = UIImageView()
+    let thumbnailImageView = UIImageView()
     var groupNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFontOfSize(13)

@@ -212,15 +212,10 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     
     class DKPermissionView: UIView {
         
-        enum DKPermissionViewStyle : Int {
-            
-            case Photo, Camera
-        }
-        
         let titleLabel = UILabel()
         let permitButton = UIButton()
         
-        class func permissionView(style: DKPermissionViewStyle) -> DKPermissionView {
+        class func permissionView(style: DKImagePickerControllerSourceType) -> DKPermissionView {
             
             let permissionView = DKPermissionView()
             permissionView.addSubview(permissionView.titleLabel)
@@ -265,9 +260,9 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             }
         }
         
-    } /* DKNoPermissionView */
+    } /* DKPermissionView */
     
-    private lazy var groups = [DKAssetGroup]()
+    private var groups = [DKAssetGroup]()
     
     private lazy var selectGroupButton: UIButton = {
         let button = UIButton()
@@ -287,7 +282,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     }()
     
     private lazy var selectGroupVC: DKAssetGroupVC = {
-        var groupVC = DKAssetGroupVC()
+        let groupVC = DKAssetGroupVC()
         groupVC.selectedGroupBlock = {[unowned self] (assetGroup: DKAssetGroup) in
             self.selectAssetGroup(assetGroup)
         }
@@ -305,7 +300,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         layout.minimumInteritemSpacing = interval
         layout.minimumLineSpacing = interval
         
-        let screenWidth = UIScreen.mainScreen().bounds.width
+        let screenWidth = min(UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height)
         let itemWidth = (screenWidth - interval * 3) / 3
         
         layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
@@ -327,40 +322,55 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         self.collectionView!.registerClass(DKImageCameraCell.self, forCellWithReuseIdentifier: DKImageCameraIdentifier)
         self.collectionView!.registerClass(DKAssetCell.self, forCellWithReuseIdentifier: DKImageAssetIdentifier)
         self.collectionView!.registerClass(DKVideoAssetCell.self, forCellWithReuseIdentifier: DKVideoAssetIdentifier)
+    }
+    
+    var loadLibraryOnceToken: dispatch_once_t = 0
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         
-        self.library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
-            if group != nil {
-                group.setAssetsFilter(self.imagePickerController!.assetType.toALAssetsFilter())
-                
-                if group.numberOfAssets() != 0 {
-                    let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
-                    
-                    let assetGroup = DKAssetGroup()
-                    assetGroup.groupName = groupName
-                    
-                    group.enumerateAssetsAtIndexes(NSIndexSet(index: group.numberOfAssets() - 1),
-                                                options: .Reverse,
-                                                usingBlock: { (asset: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-                        if asset != nil {
-                            assetGroup.thumbnail = UIImage(CGImage:asset.thumbnail().takeUnretainedValue())
-                        }
-                    })
-                    
-                    assetGroup.group = group
-                    assetGroup.totalCount = group.numberOfAssets()
-                    self.groups.insert(assetGroup, atIndex: 0)
-                }
-            } else {
-                if let assetGroup = self.groups.first {
-                    self.selectAssetGroup(assetGroup)
-                }
-                
-                self.selectGroupButton.enabled = self.groups.count > 1
+        dispatch_once(&loadLibraryOnceToken) {
+            
+            if let imagePickerController = self.imagePickerController
+                where imagePickerController.sourceType.rawValue & DKImagePickerControllerSourceType.Photo.rawValue == 0 {
+                    imagePickerController.navigationBarHidden = true
+                    imagePickerController.setViewControllers([self.createCamera()], animated: false)
+                    return
             }
-        }, failureBlock: {(error: NSError!) in
-            self.collectionView?.hidden = true
-            self.view.addSubview(DKPermissionView.permissionView(.Photo))
-        })
+            
+            self.library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
+                if group != nil {
+                    group.setAssetsFilter(self.imagePickerController!.assetType.toALAssetsFilter())
+                    
+                    if group.numberOfAssets() != 0 {
+                        let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
+                        
+                        let assetGroup = DKAssetGroup()
+                        assetGroup.groupName = groupName
+                        
+                        group.enumerateAssetsAtIndexes(NSIndexSet(index: group.numberOfAssets() - 1),
+                            options: .Reverse,
+                            usingBlock: { (asset: ALAsset!, index: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                                if asset != nil {
+                                    assetGroup.thumbnail = UIImage(CGImage:asset.thumbnail().takeUnretainedValue())
+                                }
+                        })
+                        
+                        assetGroup.group = group
+                        assetGroup.totalCount = group.numberOfAssets()
+                        self.groups.insert(assetGroup, atIndex: 0)
+                    }
+                } else {
+                    if let assetGroup = self.groups.first {
+                        self.selectAssetGroup(assetGroup)
+                    }
+                    
+                    self.selectGroupButton.enabled = self.groups.count > 1
+                }
+                }, failureBlock: {(error: NSError!) in
+                    self.collectionView?.hidden = true
+                    self.view.addSubview(DKPermissionView.permissionView(.Photo))
+            })
+        }
     }
     
     func selectAssetGroup(assetGroup: DKAssetGroup) {
@@ -393,6 +403,27 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         
         DKPopoverViewController.popoverViewController(self.selectGroupVC, fromView: self.selectGroupButton)
     }
+    
+    func createCamera() -> DKCamera {
+        let camera = DKCamera()
+        camera.didCancelled = {[unowned camera] () -> Void in
+            camera.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        camera.didFinishCapturingImage = {(image) in
+            NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: DKAsset(image: image))
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) != .Authorized {
+            let permissionView = DKPermissionView.permissionView(.Camera)
+            camera.cameraOverlayView = permissionView
+        }
+
+        return camera
+    }
+    
+    // MARK: - Cells
 
     func cameraCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
@@ -400,22 +431,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         cell.didCameraButtonClicked = { [unowned self] () in
             if UIImagePickerController.isSourceTypeAvailable(.Camera) {
                 
-                let camera = DKCamera()
-                camera.didCancelled = {() in
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                }
-                
-                camera.didFinishCapturingImage = {(image) in
-                    NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: DKAsset(image: image))
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                }
-                
-                if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) != .Authorized {
-                    let permissionView = DKPermissionView.permissionView(.Camera)
-                    camera.cameraOverlayView = permissionView
-                }
-                
-                self.presentViewController(camera, animated: true, completion: nil)
+                self.presentViewController(self.createCamera(), animated: true, completion: nil)
                 
             }
         }

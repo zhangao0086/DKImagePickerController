@@ -89,17 +89,21 @@ public enum DKImagePickerControllerAssetType : Int {
     case allPhotos, allVideos, allAssets
 }
 
-internal extension UIViewController {
-    var imagePickerController: DKImagePickerController? {
-        get {
-            let nav = self.navigationController
-            if nav is DKImagePickerController {
-                return nav as? DKImagePickerController
-            } else {
-                return nil
-            }
-        }
-    }
+public struct DKImagePickerControllerSourceType : RawOptionSetType {
+    
+    private var value: UInt = 0
+    init(_ value: UInt) { self.value = value }
+    // MARK: _RawOptionSetType
+    public init(rawValue value: UInt) { self.value = value }
+    // MARK: NilLiteralConvertible
+    public init(nilLiteral: ()) { self.value = 0 }
+    // MARK: RawRepresentable
+    public var rawValue: UInt { return self.value }
+    // MARK: BitwiseOperationsType
+    public static var allZeros: DKImagePickerControllerSourceType { return self(0) }
+    
+    public static var Camera: DKImagePickerControllerSourceType { return self(1 << 0) }
+    public static var Photo: DKImagePickerControllerSourceType { return self(1 << 1) }
 }
 
 // MARK: - Public DKImagePickerController
@@ -114,6 +118,9 @@ public class DKImagePickerController: UINavigationController {
     
     /// The type of picker interface to be displayed by the controller.
     public var assetType = DKImagePickerControllerAssetType.allAssets
+    
+    /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
+    public var sourceType: DKImagePickerControllerSourceType = .Camera | .Photo
     
     /// Whether allows to select photos and videos at the same time.
     public var allowMultipleTypes = true
@@ -221,4 +228,32 @@ public class DKImagePickerController: UINavigationController {
             updateDoneButtonTitle()
         }
     }
+    
+    // MARK: - Handles Orientation
+
+    public override func shouldAutorotate() -> Bool {
+        return false
+    }
+    
+    public override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    }
+
+}
+
+// MARK: - Utilities
+
+internal extension UIViewController {
+    
+    var imagePickerController: DKImagePickerController? {
+        get {
+            let nav = self.navigationController
+            if nav is DKImagePickerController {
+                return nav as? DKImagePickerController
+            } else {
+                return nil
+            }
+        }
+    }
+    
 }
