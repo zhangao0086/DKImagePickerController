@@ -32,7 +32,7 @@ pod 'DKImagePickerController'
 
 #### iOS 7.x
 To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
-[iOS 7.x](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
+[CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
 
 ## Getting Started
 #### Initialization and presentation
@@ -62,8 +62,11 @@ public var maxSelectableCount = 999
 /// The type of picker interface to be displayed by the controller.
 public var assetType = DKImagePickerControllerAssetType.allAssets
 
+/// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
+public var sourceType: DKImagePickerControllerSourceType = .Camera | .Photo
+
 /// Whether allows to select photos and videos at the same time.
-public var allowMultipleType = true
+public var allowMultipleTypes = true
 
 /// The callback block is executed when user pressed the select button.
 public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
@@ -88,6 +91,20 @@ public var defaultSelectedAssets: [DKAsset]? {
 }
 ```
 
+### Quickly take a picture
+
+```swift
+pickerController.sourceType = .Camera
+```
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit2.gif" />
+
+### Hides camera
+
+```swift
+pickerController.sourceType = .Photo
+```
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.png" />
+
 ## Localization
 It has been supported languages so far:
 
@@ -95,6 +112,8 @@ It has been supported languages so far:
 * zh-Hans.lproj
 
 If you want to add new language, pull request or issue!
+
+## How to use in Objective-C
 
 ## Soon to do
 
@@ -104,6 +123,9 @@ If you want to add new language, pull request or issue!
 
 ---
 Any pull requests to be welcome!!!
+
+## License
+DKImagePickerController is released under the MIT license. See LICENSE for details.
 
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
