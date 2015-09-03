@@ -15,7 +15,7 @@ DKImagePickerController
 Update for Xcode 6.4 with Swift 1.2
 ---
 ## Description
-New version! It's A Facebook style Image Picker Controller by Swift.  
+New version! It's A Facebook style Image Picker Controller by Swift. It uses [DKCamera][mitLink] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and the latter will raise a warning "Snapshotting ... or snapshot after screen updates." in **iOS 8**.
 
 ## Requirements
 * iOS 7.1+
@@ -97,7 +97,7 @@ pickerController.sourceType = .Photo
 #### If you use [CocoaPods](http://cocoapods.org/)
 
 #### If you use it directly in your project
-* Drag and Drop the [DKCamera](https://github.com/zhangao0086/DKCamera) and `DKImagePickerController` to your project
+* Drag and drop the [DKCamera][mitLink] and `DKImagePickerController` to your project
 * Importing Swift into Objective-C:`#import "YourProductModuleName-Swift.h"` (See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html))
 * then you can:
 
@@ -130,3 +130,4 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
+[DKCamera]:(https://github.com/zhangao0086/DKCamera)
