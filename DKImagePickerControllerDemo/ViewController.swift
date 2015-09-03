@@ -24,24 +24,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
     
-    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType, allowMultipleType: Bool = true) {
-        
-        let pickerController = DKImagePickerController()
-        pickerController.assetType = assetType
-        pickerController.allowMultipleType = allowMultipleType
-        
-        pickerController.didCancelled = { () in
-            println("didCancelled")
-        }
-        
-        pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
-            println("didSelectedAssets")
+    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
+        allowMultipleType: Bool = true,
+        sourceType: DKImagePickerControllerSourceType = .Camera | .Photo) {
             
-            self.assets = assets
-            self.previewView?.reloadData()
-        }
-        
-        self.presentViewController(pickerController, animated: true) {}
+            let pickerController = DKImagePickerController()
+            pickerController.assetType = assetType
+            pickerController.allowMultipleTypes = allowMultipleType
+            pickerController.sourceType = sourceType
+            
+            pickerController.didCancelled = {
+                println("didCancelled")
+            }
+            
+            pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
+                println("didSelectedAssets")
+                println(assets.map({ $0.url}))
+                
+                self.assets = assets
+                self.previewView?.reloadData()
+            }
+            
+            self.presentViewController(pickerController, animated: true) {}
     }
     
     func playVideo(videoURL: NSURL) {
@@ -75,7 +79,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     struct Demo {
         static let titles = [
             ["Pick All", "Pick photos only", "Pick videos only"],
-            ["Pick All (only photos or videos)"]
+            ["Pick All (only photos or videos)"],
+            ["Take a picture"],
+            ["Hides camera"]
         ]
         static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos]
     }
@@ -98,8 +104,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    
+        let assetType = Demo.types[indexPath.row]
+        let allowMultipleType = indexPath.section == 0
+        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 2 ? .Camera :
+            (indexPath.section == 3 ? .Photo : .Camera | .Photo)
         
-        showImagePickerWithAssetType(Demo.types[indexPath.row], allowMultipleType: indexPath.section == 0)
+        showImagePickerWithAssetType(assetType,
+            allowMultipleType: allowMultipleType,
+            sourceType: sourceType)
     }
     
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods

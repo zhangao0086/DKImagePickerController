@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension NSBundle {
+private extension NSBundle {
     
     class func imagePickerControllerBundle() -> NSBundle {
         let assetPath = NSBundle(forClass: DKImageResource.self).resourcePath!
@@ -17,7 +17,7 @@ extension NSBundle {
     
 }
 
-class DKImageResource {
+internal class DKImageResource {
 
     private class func imageForResource(name: String) -> UIImage {
         let bundle = NSBundle.imagePickerControllerBundle()
@@ -48,7 +48,7 @@ class DKImageResource {
     
 }
 
-class DKImageLocalizedString {
+internal class DKImageLocalizedString {
     
     class func localizedStringForKey(key: String) -> String {
         return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:NSBundle.imagePickerControllerBundle(), value: "", comment: "")
