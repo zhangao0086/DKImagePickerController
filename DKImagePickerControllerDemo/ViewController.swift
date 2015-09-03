@@ -80,7 +80,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         static let titles = [
             ["Pick All", "Pick photos only", "Pick videos only"],
             ["Pick All (only photos or videos)"],
-            ["Take a picture"]
+            ["Take a picture"],
+            ["Hides camera"]
         ]
         static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos]
     }
@@ -103,10 +104,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    
+        let assetType = Demo.types[indexPath.row]
+        let allowMultipleType = indexPath.section == 0
+        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 2 ? .Camera :
+            (indexPath.section == 3 ? .Photo : .Camera | .Photo)
         
-        showImagePickerWithAssetType(Demo.types[indexPath.row],
-            allowMultipleType: indexPath.section == 0,
-            sourceType: indexPath.section == 2 ? .Camera : .Camera | .Photo)
+        showImagePickerWithAssetType(assetType,
+            allowMultipleType: allowMultipleType,
+            sourceType: sourceType)
     }
     
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
