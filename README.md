@@ -15,7 +15,7 @@ DKImagePickerController
 Update for Xcode 6.4 with Swift 1.2
 ---
 ## Description
-New version! It's A Facebook style Image Picker Controller by Swift. It uses [DKCamera][mitLink] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and the latter will raise a warning "Snapshotting ... or snapshot after screen updates." in **iOS 8**.
+New version! It's A Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
 
 ## Requirements
 * iOS 7.1+
@@ -97,8 +97,8 @@ pickerController.sourceType = .Photo
 #### If you use [CocoaPods](http://cocoapods.org/)
 
 #### If you use it directly in your project
-* Drag and drop the [DKCamera][mitLink] and `DKImagePickerController` to your project
-* Importing Swift into Objective-C:`#import "YourProductModuleName-Swift.h"` (See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html))
+* Drag and drop the [DKCamera][DKCamera] and `DKImagePickerController` to your project
+* Importing Swift into Objective-C:`#import "YourProductModuleName-Swift.h"`
 * then you can:
 
 ```objective-c
@@ -109,6 +109,8 @@ DKImagePickerController *imagePickerController = [DKImagePickerController new];
 
 [self presentViewController:imagePickerController animated:YES completion:nil];
 ```
+
+> See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
 
 ## Localization
 It has been supported languages so far:
