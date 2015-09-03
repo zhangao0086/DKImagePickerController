@@ -24,25 +24,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
     
-    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType, allowMultipleType: Bool = true) {
-        
-        let pickerController = DKImagePickerController()
-        pickerController.assetType = assetType
-        pickerController.allowMultipleTypes = allowMultipleType
-        
-        pickerController.didCancelled = { () in
-            println("didCancelled")
-        }
-        
-        pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
-            println("didSelectedAssets")
-            println(assets.map({ $0.url}))
+    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
+        allowMultipleType: Bool = true,
+        sourceType: DKImagePickerControllerSourceType = .Camera | .Photo) {
             
-            self.assets = assets
-            self.previewView?.reloadData()
-        }
-        
-        self.presentViewController(pickerController, animated: true) {}
+            let pickerController = DKImagePickerController()
+            pickerController.assetType = assetType
+            pickerController.allowMultipleTypes = allowMultipleType
+            pickerController.sourceType = sourceType
+            
+            pickerController.didCancelled = {
+                println("didCancelled")
+            }
+            
+            pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
+                println("didSelectedAssets")
+                println(assets.map({ $0.url}))
+                
+                self.assets = assets
+                self.previewView?.reloadData()
+            }
+            
+            self.presentViewController(pickerController, animated: true) {}
     }
     
     func playVideo(videoURL: NSURL) {
@@ -101,7 +104,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        showImagePickerWithAssetType(Demo.types[indexPath.row], allowMultipleType: indexPath.section == 0)
+        showImagePickerWithAssetType(Demo.types[indexPath.row],
+            allowMultipleType: indexPath.section == 0,
+            sourceType: indexPath.section == 2 ? .Camera : .Camera | .Photo)
     }
     
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
