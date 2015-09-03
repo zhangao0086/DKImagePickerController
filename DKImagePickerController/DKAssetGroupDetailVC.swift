@@ -289,6 +289,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         return groupVC
     }()
     
+    private var hidesCamera :Bool = false
+    
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
     }
@@ -361,12 +363,13 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
                     }
                 } else {
                     if let assetGroup = self.groups.first {
+                        self.hidesCamera = self.imagePickerController!.sourceType.rawValue & DKImagePickerControllerSourceType.Camera.rawValue == 0
                         self.selectAssetGroup(assetGroup)
                     }
                     
                     self.selectGroupButton.enabled = self.groups.count > 1
                 }
-                }, failureBlock: {(error: NSError!) in
+            }, failureBlock: {(error: NSError!) in
                     self.collectionView?.hidden = true
                     self.view.addSubview(DKPermissionView.permissionView(.Photo))
             })
@@ -423,6 +426,10 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         return camera
     }
     
+    func assetIndexForIndexPath(indexPath: NSIndexPath) -> Int {
+        return indexPath.row - (self.hidesCamera ? 0 : 1)
+    }
+    
     // MARK: - Cells
 
     func cameraCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -440,7 +447,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     }
 
     func assetCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
-        let asset = imageAssets[indexPath.row - 1] as! DKAsset
+        let asset = imageAssets[assetIndexForIndexPath(indexPath)] as! DKAsset
         
         var identifier: String!
         if asset.isVideo {
@@ -471,11 +478,11 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageAssets.count + 1
+        return imageAssets.count + (self.hidesCamera ? 0 : 1)
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0 {
+        if indexPath.row == 0 && !self.hidesCamera {
             return self.cameraCellForIndexPath(indexPath)
         } else {
             return self.assetCellForIndexPath(indexPath)
@@ -484,7 +491,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
         if let firstSelectedAsset = self.imagePickerController?.selectedAssets.first,
-            selectedAsset = imageAssets[indexPath.row - 1] as? DKAsset
+            selectedAsset = imageAssets[assetIndexForIndexPath(indexPath)] as? DKAsset
             where self.imagePickerController?.allowMultipleTypes == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
                 
                 UIAlertView(title: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideos"),
@@ -499,14 +506,14 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[indexPath.row - 1])
+        NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[assetIndexForIndexPath(indexPath)])
         
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
         cell.checkView.checkLabel.text = "\(self.imagePickerController!.selectedAssets.count)"
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        let removedAsset = imageAssets[indexPath.row - 1] as! DKAsset
+        let removedAsset = imageAssets[assetIndexForIndexPath(indexPath)] as! DKAsset
         let removedIndex = find(self.imagePickerController!.selectedAssets, removedAsset)!
     
         /// Minimize the number of cycles.
@@ -516,7 +523,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         let intersect = Set(indexPathsForVisibleItems).intersect(Set(indexPathsForSelectedItems))
 
         for selectedIndexPath in intersect {
-            let selectedAsset = imageAssets[selectedIndexPath.row - 1] as! DKAsset
+            let selectedAsset = imageAssets[assetIndexForIndexPath(selectedIndexPath)] as! DKAsset
             let selectedIndex = find(self.imagePickerController!.selectedAssets, selectedAsset)!
             
             if selectedIndex > removedIndex {
@@ -525,7 +532,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             }
         }
         
-        NSNotificationCenter.defaultCenter().postNotificationName(DKImageUnselectedNotification, object: imageAssets[indexPath.row - 1])
+        NSNotificationCenter.defaultCenter().postNotificationName(DKImageUnselectedNotification, object: imageAssets[assetIndexForIndexPath(indexPath)])
     }
     
 }
