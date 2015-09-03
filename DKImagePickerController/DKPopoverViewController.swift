@@ -123,7 +123,7 @@ class DKPopoverViewController: UIViewController {
         let popoverY = self.fromView.convertPoint(self.fromView.frame.origin, toView: self.view).y + self.fromView.bounds.height
         self.popoverViewHeight = min(self.contentViewController.preferredContentSize.height + self.popoverView.arrowHeight, self.view.bounds.height - popoverY - 40)
         
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
+        UIView.animateWithDuration(0.2, animations: {
             self.popoverView.frame = CGRect(x: 0, y: popoverY,
                 width: self.view.bounds.width, height: self.popoverViewHeight)
         })
@@ -141,14 +141,14 @@ class DKPopoverViewController: UIViewController {
         view.addSubview(self.view)
         
         self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverViewHeight / 2)), 0.1, 0.1)
-        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .CurveEaseInOut | .AllowUserInteraction, animations: { () -> Void in
+        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .CurveEaseInOut | .AllowUserInteraction, animations: {
             self.popoverView.transform = CGAffineTransformIdentity
             self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
         }, completion: nil)
     }
     
     func dismiss() {
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
+        UIView.animateWithDuration(0.2, animations: {
             self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverViewHeight / 2)), 0.01, 0.01)
             self.view.backgroundColor = UIColor.clearColor()
         }) { (result) -> Void in
