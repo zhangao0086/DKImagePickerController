@@ -96,9 +96,20 @@ pickerController.sourceType = .Photo
 
 #### If you use [CocoaPods](http://cocoapods.org/)
 
+* Adding the following two lines into your `Podfile`:
+
+    ```ruby
+    pod 'DKImagePickerController'
+    use_frameworks!
+    ```
+* Importing it into your Objective-C class: `#import <DKImagePickerController/DKImagePickerController-Swift.h>`
+
 #### If you use it directly in your project
+
+> See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
+
 * Drag and drop the [DKCamera][DKCamera] and `DKImagePickerController` to your project
-* Importing Swift into Objective-C:`#import "YourProductModuleName-Swift.h"`
+* Importing it into your Objective-C class: `#import "YourProductModuleName-Swift.h"`
 * then you can:
 
 ```objective-c
@@ -109,8 +120,6 @@ DKImagePickerController *imagePickerController = [DKImagePickerController new];
 
 [self presentViewController:imagePickerController animated:YES completion:nil];
 ```
-
-> See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
 
 ## Localization
 It has been supported languages so far:
@@ -132,4 +141,4 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
-[DKCamera]:(https://github.com/zhangao0086/DKCamera)
+[DKCamera]:https://github.com/zhangao0086/DKCamera
