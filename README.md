@@ -102,15 +102,25 @@ pickerController.sourceType = .Photo
     pod 'DKImagePickerController'
     use_frameworks!
     ```
-* Importing it into your Objective-C class: `#import <DKImagePickerController/DKImagePickerController-Swift.h>`
+* Importing it into your Objective-C file: 
+
+    ```objective-c
+    #import <DKImagePickerController/DKImagePickerController-Swift.h>
+    ```
 
 #### If you use it directly in your project
 
 > See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
 
 * Drag and drop the [DKCamera][DKCamera] and `DKImagePickerController` to your project
-* Importing it into your Objective-C class: `#import "YourProductModuleName-Swift.h"`
-* then you can:
+* Importing it into your Objective-C file: 
+
+    ```objective-c
+    #import "YourProductModuleName-Swift.h"
+    ```
+
+---
+then you can:
 
 ```objective-c
 DKImagePickerController *imagePickerController = [DKImagePickerController new];
