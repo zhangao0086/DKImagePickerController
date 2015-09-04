@@ -13,11 +13,6 @@ Pod::Spec.new do |s|
   s.frameworks    = "Foundation", "UIKit", "AssetsLibrary", "AVFoundation"
   s.requires_arc  = true
 
-  s.subspec 'Camera' do |ss|
-
-      ss.source_files = 'DKCamera/DKCamera.swift'
-      ss.resource = "DKCamera/DKCameraResource.bundle"
-      ss.public_header_files = 'DKCamera/DKCamera.swift'
-  end
+  s.dependency   'DKCamera'
 
 end
