@@ -77,7 +77,7 @@ class DKPopoverViewController: UIViewController {
             UIColor.clearColor().setFill()
             CGContextFillRect(context, CGRect(x: 0, y: 0, width: arrowWidth, height: arrowHeight))
             
-            var arrowPath = CGPathCreateMutable()
+            let arrowPath = CGPathCreateMutable()
             
             CGPathMoveToPoint(arrowPath, nil,  arrowWidth / 2, 0)
             CGPathAddLineToPoint(arrowPath, nil, arrowWidth, arrowHeight)
