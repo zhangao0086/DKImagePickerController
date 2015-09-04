@@ -9,7 +9,6 @@
 import UIKit
 import AssetsLibrary
 import AVFoundation
-import DKCamera
 
 private let DKImageCameraIdentifier = "DKImageCameraIdentifier"
 private let DKImageAssetIdentifier = "DKImageAssetIdentifier"
