@@ -37,7 +37,7 @@ class DKPopoverViewController: UIViewController {
         var contentView: UIView! {
             didSet {
                 contentView.layer.cornerRadius = 5
-                contentView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+                contentView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
                 self.addSubview(contentView)
             }
         }
@@ -52,7 +52,7 @@ class DKPopoverViewController: UIViewController {
             self.commonInit()
         }
 
-        required init(coder aDecoder: NSCoder) {
+        required init?(coder aDecoder: NSCoder) {
             super.init(coder: aDecoder)
             
             self.commonInit()
@@ -77,7 +77,7 @@ class DKPopoverViewController: UIViewController {
             UIColor.clearColor().setFill()
             CGContextFillRect(context, CGRect(x: 0, y: 0, width: arrowWidth, height: arrowHeight))
             
-            var arrowPath = CGPathCreateMutable()
+            let arrowPath = CGPathCreateMutable()
             
             CGPathMoveToPoint(arrowPath, nil,  arrowWidth / 2, 0)
             CGPathAddLineToPoint(arrowPath, nil, arrowWidth, arrowHeight)
@@ -87,7 +87,7 @@ class DKPopoverViewController: UIViewController {
             CGContextAddPath(context, arrowPath)
             
             CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
-            CGContextDrawPath(context, kCGPathFill)
+            CGContextDrawPath(context, CGPathDrawingMode.Fill)
 
             let arrowImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
@@ -141,7 +141,7 @@ class DKPopoverViewController: UIViewController {
         view.addSubview(self.view)
         
         self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverViewHeight / 2)), 0.1, 0.1)
-        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .CurveEaseInOut | .AllowUserInteraction, animations: {
+        UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: [.CurveEaseInOut, .AllowUserInteraction], animations: {
             self.popoverView.transform = CGAffineTransformIdentity
             self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
         }, completion: nil)

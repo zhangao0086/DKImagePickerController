@@ -12,7 +12,7 @@ private extension NSBundle {
     
     class func imagePickerControllerBundle() -> NSBundle {
         let assetPath = NSBundle(forClass: DKImageResource.self).resourcePath!
-        return NSBundle(path: assetPath.stringByAppendingPathComponent("DKImagePickerController.bundle"))!
+        return NSBundle(path: (assetPath as NSString).stringByAppendingPathComponent("DKImagePickerController.bundle"))!
     }
     
 }
