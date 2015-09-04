@@ -14,9 +14,9 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
 
   s.subspec 'Camera' do |ss|
-    ss.ios.source_files = 'DKCamera/DKCamera.swift'
+
+    ss.ios.source_files = "DKCamera/DKCamera.swift"
     ss.resource = "DKCamera/DKCameraResource.bundle"
-    ss.ios.public_header_files = 'DKCamera/DKCamera.swift'
   end
 
 end
