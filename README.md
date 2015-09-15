@@ -12,7 +12,7 @@ DKImagePickerController
 ---
 
 
-Update for Xcode 6.4 with Swift 1.2
+Update for Xcode 7 with Swift 2.0
 ---
 ## Description
 New version! It's A Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
