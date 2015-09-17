@@ -18,12 +18,12 @@ public class DKAsset: NSObject {
     
     /// Returns a CGImage of the representation that is appropriate for displaying full screen.
     public private(set) lazy var fullScreenImage: UIImage? = {
-        return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullScreenImage().takeUnretainedValue())
+        return UIImage(CGImage: (self.originalAsset?.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
     }()
     
     /// Returns a CGImage representation of the asset.
     public private(set) lazy var fullResolutionImage: UIImage? = {
-        return UIImage(CGImage: self.originalAsset?.defaultRepresentation().fullResolutionImage().takeUnretainedValue())
+        return UIImage(CGImage: (self.originalAsset?.defaultRepresentation().fullResolutionImage().takeUnretainedValue())!)
     }()
     
     /// The url uniquely identifies an asset that is an image or a video.
@@ -89,7 +89,7 @@ public enum DKImagePickerControllerAssetType : Int {
     case allPhotos, allVideos, allAssets
 }
 
-public struct DKImagePickerControllerSourceType : RawOptionSetType {
+public struct DKImagePickerControllerSourceType : OptionSetType {
     
     private var value: UInt = 0
     init(_ value: UInt) { self.value = value }
@@ -100,10 +100,10 @@ public struct DKImagePickerControllerSourceType : RawOptionSetType {
     // MARK: RawRepresentable
     public var rawValue: UInt { return self.value }
     // MARK: BitwiseOperationsType
-    public static var allZeros: DKImagePickerControllerSourceType { return self(0) }
+    public static var allZeros: DKImagePickerControllerSourceType { return self.init(0) }
     
-    public static var Camera: DKImagePickerControllerSourceType { return self(1 << 0) }
-    public static var Photo: DKImagePickerControllerSourceType { return self(1 << 1) }
+    public static var Camera: DKImagePickerControllerSourceType { return self.init(1 << 0) }
+    public static var Photo: DKImagePickerControllerSourceType { return self.init(1 << 1) }
 }
 
 // MARK: - Public DKImagePickerController
@@ -120,7 +120,7 @@ public class DKImagePickerController: UINavigationController {
     public var assetType = DKImagePickerControllerAssetType.allAssets
     
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-    public var sourceType: DKImagePickerControllerSourceType = .Camera | .Photo
+    public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
     
     /// Whether allows to select photos and videos at the same time.
     public var allowMultipleTypes = true
@@ -135,7 +135,7 @@ public class DKImagePickerController: UINavigationController {
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
             if let defaultSelectedAssets = self.defaultSelectedAssets {
-                for (index, asset) in enumerate(defaultSelectedAssets) {
+                for (index, asset) in defaultSelectedAssets.enumerate() {
                     if asset.isFromCamera {
                         self.defaultSelectedAssets!.removeAtIndex(index)
                     }
@@ -150,7 +150,7 @@ public class DKImagePickerController: UINavigationController {
     internal var selectedAssets = [DKAsset]()
     
     private lazy var doneButton: UIButton = {
-        let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        let button = UIButton(type: UIButtonType.Custom)
         button.setTitle("", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
         button.reversesTitleShadowWhenHighlighted = true
@@ -224,7 +224,7 @@ public class DKImagePickerController: UINavigationController {
     
     internal func unselectedImage(noti: NSNotification) {
         if let asset = noti.object as? DKAsset {
-            selectedAssets.removeAtIndex(find(selectedAssets, asset)!)
+            selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
             updateDoneButtonTitle()
         }
     }
@@ -235,8 +235,8 @@ public class DKImagePickerController: UINavigationController {
         return false
     }
     
-    public override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
 
 }

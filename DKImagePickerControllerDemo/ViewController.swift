@@ -26,7 +26,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
         allowMultipleType: Bool = true,
-        sourceType: DKImagePickerControllerSourceType = .Camera | .Photo) {
+        sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]) {
             
             let pickerController = DKImagePickerController()
             pickerController.assetType = assetType
@@ -34,12 +34,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             pickerController.sourceType = sourceType
             
             pickerController.didCancelled = {
-                println("didCancelled")
+                print("didCancelled")
             }
             
             pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
-                println("didSelectedAssets")
-                println(assets.map({ $0.url}))
+                print("didSelectedAssets")
+                print(assets.map({ $0.url}))
                 
                 self.assets = assets
                 self.previewView?.reloadData()
@@ -95,7 +95,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
         
         cell.textLabel?.text = Demo.titles[indexPath.section][indexPath.row]
         
@@ -108,7 +108,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let assetType = Demo.types[indexPath.row]
         let allowMultipleType = indexPath.section == 0
         let sourceType: DKImagePickerControllerSourceType = indexPath.section == 2 ? .Camera :
-            (indexPath.section == 3 ? .Photo : .Camera | .Photo)
+            (indexPath.section == 3 ? .Photo : [.Camera, .Photo])
         
         showImagePickerWithAssetType(assetType,
             allowMultipleType: allowMultipleType,
@@ -125,14 +125,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let asset = self.assets![indexPath.row]
         
         if asset.isVideo {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath) as! UICollectionViewCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath) 
             
             let imageView = cell.contentView.viewWithTag(1) as! UIImageView
             imageView.image = asset.thumbnailImage
             
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath) as! UICollectionViewCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath) 
             
             let imageView = cell.contentView.viewWithTag(1) as! UIImageView
             imageView.image = asset.thumbnailImage

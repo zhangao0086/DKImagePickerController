@@ -55,13 +55,13 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             let cameraButton = UIButton(frame: frame)
             cameraButton.addTarget(self, action: "cameraButtonClicked", forControlEvents: .TouchUpInside)
             cameraButton.setImage(DKImageResource.cameraImage(), forState: .Normal)
-            cameraButton.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+            cameraButton.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
             self.contentView.addSubview(cameraButton)
             
             self.contentView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
         }
 
-        required init(coder aDecoder: NSCoder) {
+        required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
@@ -99,7 +99,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
                 self.addSubview(checkLabel)
             }
 
-            required init(coder aDecoder: NSCoder) {
+            required init?(coder aDecoder: NSCoder) {
                 fatalError("init(coder:) has not been implemented")
             }
             
@@ -120,7 +120,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             }
         }
         
-        private lazy var checkView = DKImageCheckView()
+        private let checkView = DKImageCheckView()
         
         override var selected: Bool {
             didSet {
@@ -136,7 +136,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             self.contentView.addSubview(checkView)
         }
         
-        required init(coder aDecoder: NSCoder) {
+        required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
@@ -176,7 +176,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             let videoImageView = UIImageView(image: DKImageResource.videoCameraIcon())
             videoInfoView.addSubview(videoImageView)
             videoImageView.center = CGPoint(x: videoImageView.bounds.width / 2 + 7, y: videoInfoView.bounds.height / 2)
-            videoImageView.autoresizingMask = .FlexibleBottomMargin | .FlexibleTopMargin
+            videoImageView.autoresizingMask = [.FlexibleBottomMargin, .FlexibleTopMargin]
             
             let videoDurationLabel = UILabel()
             videoDurationLabel.tag = -1
@@ -185,7 +185,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             videoDurationLabel.textColor = UIColor.whiteColor()
             videoInfoView.addSubview(videoDurationLabel)
             videoDurationLabel.frame = CGRect(x: 0, y: 0, width: videoInfoView.bounds.width - 7, height: videoInfoView.bounds.height)
-            videoDurationLabel.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+            videoDurationLabel.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
             
             return videoInfoView
         }()
@@ -196,7 +196,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             self.contentView.addSubview(videoInfoView)
         }
 
-        required init(coder aDecoder: NSCoder) {
+        required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
@@ -310,7 +310,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         self.init(collectionViewLayout: layout)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -463,7 +463,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         
         cell.thumbnail = asset.thumbnailImage
         
-        if let index = find(self.imagePickerController!.selectedAssets, asset) {
+        if let index = self.imagePickerController!.selectedAssets.indexOf(asset) {
             cell.selected = true
             cell.checkView.checkLabel.text = "\(index + 1)"
             collectionView!.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition.None)
@@ -514,21 +514,21 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
         let removedAsset = imageAssets[assetIndexForIndexPath(indexPath)] as! DKAsset
-        let removedIndex = find(self.imagePickerController!.selectedAssets, removedAsset)!
+        let removedIndex = self.imagePickerController!.selectedAssets.indexOf(removedAsset)!
     
         /// Minimize the number of cycles.
-        let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems() as! [NSIndexPath]
-        let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems() as! [NSIndexPath]
+        let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems() as [NSIndexPath]!
+        let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems() 
         
         let intersect = Set(indexPathsForVisibleItems).intersect(Set(indexPathsForSelectedItems))
 
         for selectedIndexPath in intersect {
             let selectedAsset = imageAssets[assetIndexForIndexPath(selectedIndexPath)] as! DKAsset
-            let selectedIndex = find(self.imagePickerController!.selectedAssets, selectedAsset)!
+            let selectedIndex = self.imagePickerController!.selectedAssets.indexOf(selectedAsset)!
             
             if selectedIndex > removedIndex {
                 let cell = collectionView.cellForItemAtIndexPath(selectedIndexPath) as! DKAssetCell
-                cell.checkView.checkLabel.text = "\(cell.checkView.checkLabel.text!.toInt()! - 1)"
+                cell.checkView.checkLabel.text = "\(Int(cell.checkView.checkLabel.text!)! - 1)"
             }
         }
         

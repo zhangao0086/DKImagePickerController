@@ -46,7 +46,7 @@ class DKAssetGroupCell: UITableViewCell {
         selectedFlag.frame = CGRect(x: selectedBackgroundView.bounds.width - selectedFlag.bounds.width - 20,
             y: (selectedBackgroundView.bounds.width - selectedFlag.bounds.width) / 2,
             width: selectedFlag.bounds.width, height: selectedFlag.bounds.height)
-        selectedFlag.autoresizingMask = .FlexibleLeftMargin | .FlexibleTopMargin | .FlexibleBottomMargin
+        selectedFlag.autoresizingMask = [.FlexibleLeftMargin, .FlexibleTopMargin, .FlexibleBottomMargin]
         selectedBackgroundView.addSubview(selectedFlag)
         
         return selectedBackgroundView
@@ -56,7 +56,7 @@ class DKAssetGroupCell: UITableViewCell {
         let separator = DKAssetGroupSeparator(frame: CGRectMake(10, self.bounds.height - 1, self.bounds.width, 0.5))
         
         separator.backgroundColor = UIColor.lightGrayColor()
-        separator.autoresizingMask = .FlexibleWidth | .FlexibleTopMargin
+        separator.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
         return separator
     }()
     
@@ -72,7 +72,7 @@ class DKAssetGroupCell: UITableViewCell {
         self.addSubview(self.customSeparator)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -135,7 +135,7 @@ class DKAssetGroupVC: UITableViewController {
         cell.thumbnailImageView.image = assetGroup.thumbnail
         cell.totalCountLabel.text = "\(assetGroup.totalCount)"
         
-        if indexPath.row == 0 && tableView.indexPathForSelectedRow() == nil {
+        if indexPath.row == 0 && tableView.indexPathForSelectedRow == nil {
             tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
         }
         
