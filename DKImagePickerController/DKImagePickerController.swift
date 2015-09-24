@@ -149,7 +149,7 @@ public class DKImagePickerController: UINavigationController {
     
     internal var selectedAssets = [DKAsset]()
     
-    private lazy var doneButton: UIButton = {
+    public lazy var doneButton: UIButton = {
         let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         button.setTitle("", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
