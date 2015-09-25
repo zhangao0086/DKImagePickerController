@@ -267,7 +267,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     private lazy var selectGroupButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: "showGroupSelector", forControlEvents: .TouchUpInside)
-        button.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         button.titleLabel!.font = UIFont.boldSystemFontOfSize(18.0)
         return button
     }()
@@ -298,12 +298,12 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         
-        let interval: CGFloat = 3
+        let interval: CGFloat = 1.5
         layout.minimumInteritemSpacing = interval
         layout.minimumLineSpacing = interval
         
         let screenWidth = min(UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height)
-        let itemWidth = (screenWidth - interval * 3) / 3
+        let itemWidth = (screenWidth - interval * 4) / 4
         
         layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
         
