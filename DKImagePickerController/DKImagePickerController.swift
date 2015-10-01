@@ -126,10 +126,10 @@ public class DKImagePickerController: UINavigationController {
     public var allowMultipleTypes = true
     
     /// The callback block is executed when user pressed the select button.
-    public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
+    public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
     
     /// The callback block is executed when user pressed the cancel button.
-    public var didCancelled: (() -> Void)?
+    public var didCancel: (() -> Void)?
     
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
@@ -195,18 +195,12 @@ public class DKImagePickerController: UINavigationController {
     
     internal func dismiss() {
         self.dismissViewControllerAnimated(true, completion: nil)
-        
-        if let didCancelled = self.didCancelled {
-            didCancelled()
-        }
+        self.didCancel?()
     }
     
     internal func done() {
         self.dismissViewControllerAnimated(true, completion: nil)
-        
-        if let didSelectedAssets = self.didSelectedAssets {
-            didSelectedAssets(assets: self.selectedAssets)
-        }
+        self.didSelectAssets?(assets: self.selectedAssets)
     }
     
     // MARK: - Notifications
