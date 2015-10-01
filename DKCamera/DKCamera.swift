@@ -12,7 +12,7 @@ import CoreMotion
 
 public class DKCamera: UIViewController {
 
-    public var didCancelled: (() -> Void)?
+    public var didCancel: (() -> Void)?
     public var didFinishCapturingImage: ((image: UIImage) -> Void)?
     
     public var cameraOverlayView: UIView?
@@ -197,9 +197,7 @@ public class DKCamera: UIViewController {
     // MARK: - Callbacks
     
     internal func dismiss() {
-        if let didCancelled = self.didCancelled {
-            didCancelled()
-        }
+        self.didCancel?()
     }
     
     internal func takePicture() {

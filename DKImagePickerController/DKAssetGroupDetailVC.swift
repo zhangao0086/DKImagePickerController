@@ -409,7 +409,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     
     func createCamera() -> DKCamera {
         let camera = DKCamera()
-        camera.didCancelled = {[unowned camera] () -> Void in
+        camera.didCancel = {[unowned camera] () -> Void in
             camera.dismissViewControllerAnimated(true, completion: nil)
         }
         
