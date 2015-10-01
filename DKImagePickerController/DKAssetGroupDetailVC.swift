@@ -339,7 +339,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
                     return
             }
             
-            self.library.enumerateGroupsWithTypes(ALAssetsGroupAll, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
+            self.library.enumerateGroupsWithTypes(self.imagePickerController!.assetGroupTypes, usingBlock: {(group: ALAssetsGroup! , stop: UnsafeMutablePointer<ObjCBool>) in
                 if group != nil {
                     group.setAssetsFilter(self.imagePickerController!.assetType.toALAssetsFilter())
                     
