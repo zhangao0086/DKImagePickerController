@@ -508,8 +508,10 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[assetIndexForIndexPath(indexPath)])
         
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
-        cell.checkView.checkLabel.text = "\(self.imagePickerController!.selectedAssets.count)"
+        if !self.imagePickerController!.singleSelect {
+            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
+            cell.checkView.checkLabel.text = "\(self.imagePickerController!.selectedAssets.count)"
+        }
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
