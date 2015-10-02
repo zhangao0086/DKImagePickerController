@@ -113,6 +113,9 @@ public struct DKImagePickerControllerSourceType : OptionSetType {
  */
 public class DKImagePickerController: UINavigationController {
     
+    /// Forces selction of tapped image immediatly
+    public var singleSelect = false
+    
     /// The maximum count of assets which the user will be able to select.
     public var maxSelectableCount = 999
     
@@ -209,6 +212,8 @@ public class DKImagePickerController: UINavigationController {
         if let asset = noti.object as? DKAsset {
             selectedAssets.append(asset)
             if asset.isFromCamera {
+                self.done()
+            } else if self.singleSelect {
                 self.done()
             } else {
                 updateDoneButtonTitle()
