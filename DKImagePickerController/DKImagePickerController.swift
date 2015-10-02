@@ -119,6 +119,9 @@ public class DKImagePickerController: UINavigationController {
     /// The maximum count of assets which the user will be able to select.
     public var maxSelectableCount = 999
     
+    // The types of ALAssetsGroups to display in the picker
+    public var assetGroupTypes: UInt32 = ALAssetsGroupAll
+
     /// The type of picker interface to be displayed by the controller.
     public var assetType = DKImagePickerControllerAssetType.allAssets
     
