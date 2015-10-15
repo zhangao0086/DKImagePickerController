@@ -116,18 +116,19 @@ class DKPopoverViewController: UIViewController {
         
         self.view.addSubview(popoverView)
     }
-
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         
-        let popoverY = self.fromView.convertPoint(self.fromView.frame.origin, toView: self.view).y + self.fromView.bounds.height
-        self.popoverViewHeight = min(self.contentViewController.preferredContentSize.height + self.popoverView.arrowHeight, self.view.bounds.height - popoverY - 40)
-        
-        UIView.animateWithDuration(0.2, animations: {
-            self.popoverView.frame = CGRect(x: 0, y: popoverY,
-                width: self.view.bounds.width, height: self.popoverViewHeight)
+        coordinator.animateAlongsideTransition(nil, completion: { (context) -> Void in
+                let popoverY = self.fromView.convertPoint(self.fromView.frame.origin, toView: self.view).y + self.fromView.bounds.height
+                self.popoverViewHeight = min(self.contentViewController.preferredContentSize.height + self.popoverView.arrowHeight, self.view.bounds.height - popoverY - 40)
+                
+                UIView.animateWithDuration(0.2, animations: {
+                    self.popoverView.frame = CGRect(x: 0, y: popoverY,
+                        width: self.view.bounds.width, height: self.popoverViewHeight)
+                })
         })
-        
     }
     
     func showInView(view: UIView) {
