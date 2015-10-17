@@ -139,15 +139,11 @@ It has been supported languages so far:
 
 If you want to add new language, pull request or issue!
 
-## Soon to do
-
-* Simple photo browser.
-
 ---
 Any pull requests to be welcome!!!
 
 ## Special Thanks
-Thanks for @scottdelly's [contributors][scottdelly]
+Thanks for @scottdelly 's [contributors][scottdelly]
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
