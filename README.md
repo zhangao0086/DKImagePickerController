@@ -40,12 +40,12 @@ To use Swift libraries on apps that support iOS 7, you must manually copy the fi
 
 let pickerController = DKImagePickerController()
 
-pickerController.didCancelled = { () in
-    println("didCancelled")
+pickerController.didCancel = { () in
+    println("didCancel")
 }
 
-pickerController.didSelectedAssets = { [unowned self] (assets: [DKAsset]) in
-    println("didSelectedAssets")
+pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
+    println("didSelectAssets")
     println(assets)
 }
 
@@ -75,10 +75,10 @@ public var sourceType: DKImagePickerControllerSourceType = .Camera | .Photo
 public var allowMultipleTypes = true
 
 /// The callback block is executed when user pressed the select button.
-public var didSelectedAssets: ((assets: [DKAsset]) -> Void)?
+public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
 /// The callback block is executed when user pressed the cancel button.
-public var didCancelled: (() -> Void)?
+public var didCancel: (() -> Void)?
 
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
@@ -140,8 +140,8 @@ then you can:
 
 ```objective-c
 DKImagePickerController *imagePickerController = [DKImagePickerController new];
-[imagePickerController setDidSelectedAssets:^(NSArray * __nonnull assets) {
-    NSLog(@"didSelected");
+[imagePickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
+    NSLog(@"didSelectAssets");
 }];
 
 [self presentViewController:imagePickerController animated:YES completion:nil];
