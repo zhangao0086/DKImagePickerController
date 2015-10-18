@@ -159,7 +159,7 @@ If you want to add new language, pull request or issue!
 Any pull requests to be welcome!!!
 
 ## Special Thanks
-Thanks for scottdelly's [contributors][scottdelly]
+Thanks for [scottdelly][scottdelly]'s [contribution][contributors]
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
@@ -167,4 +167,5 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
-[scottdelly]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
+[contributors]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
+[scottdelly]:https://github.com/scottdelly
