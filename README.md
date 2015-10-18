@@ -56,6 +56,9 @@ self.presentViewController(pickerController, animated: true) {}
 #### Customizing
 
 ```swift
+/// Forces selction of tapped image immediatly
+public var singleSelect = false
+
 /// The maximum count of assets which the user will be able to select.
 public var maxSelectableCount = 999
 
