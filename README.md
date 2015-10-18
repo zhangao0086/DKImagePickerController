@@ -85,7 +85,7 @@ public var defaultSelectedAssets: [DKAsset]?
 ```
 
 ##### Customize Navigation Bar
-
+You can easily customize the appearance of navigation bar using the appearance proxy.
 ```swift
 UINavigationBar.appearance().titleTextAttributes = [
     NSFontAttributeName : UIFont(name: "Optima-BoldItalic", size: 21)!,
