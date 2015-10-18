@@ -275,10 +275,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
 		button.addTarget(self, action: "showGroupSelector", forControlEvents: .TouchUpInside)
         return button
     }()
-    
-    private lazy var library: ALAssetsLibrary = {
-        return ALAssetsLibrary()
-    }()
+	
+	static private let library = ALAssetsLibrary()
     
     internal var selectedAssetGroup: DKAssetGroup?
     
@@ -344,7 +342,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
 		
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) { () -> Void in
 			
-			self.library.enumerateGroupsWithTypes(self.imagePickerController!.assetGroupTypes, usingBlock: { [weak self] (group, stop) in
+			self.dynamicType.library.enumerateGroupsWithTypes(self.imagePickerController!.assetGroupTypes, usingBlock: { [weak self] (group, stop) in
 				
 				guard let strongSelf = self else { return }
 				guard let imagePickerController = strongSelf.imagePickerController else { return }
