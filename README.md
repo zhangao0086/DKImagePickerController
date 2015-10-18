@@ -15,7 +15,7 @@ DKImagePickerController
 Update for Xcode 7 with Swift 2.0
 ---
 ## Description
-New version! It's A Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
+New version! It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
 
 ## Requirements
 * iOS 7.1+
@@ -156,10 +156,11 @@ It has been supported languages so far:
 If you want to add new language, pull request or issue!
 
 ---
-Any pull requests to be welcome!!!
+You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Special Thanks
-Thanks for scottdelly's [contributors][scottdelly]
+Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
+Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
@@ -167,4 +168,8 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
-[scottdelly]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
+[scottdelly]:https://github.com/scottdelly
+[scottdellyCon]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
+[scottdellyCon1]:https://github.com/zhangao0086/DKImagePickerController/pull/24/commits
+[LucidityDesign]:https://github.com/LucidityDesign
+[LucidityDesignCon]:https://github.com/zhangao0086/DKImagePickerController/pull/19/commits
