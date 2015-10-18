@@ -156,7 +156,7 @@ It has been supported languages so far:
 If you want to add new language, pull request or issue!
 
 ---
-You can merge your branch into the develop branch. Any Pull Requests to be welcome!!!
+You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Special Thanks
 Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
