@@ -39,7 +39,7 @@ public class DKAsset: NSObject {
     public private(set) var duration: Double?
     
     internal var isFromCamera: Bool = false
-    internal var originalAsset: ALAsset?
+    public private(set) var originalAsset: ALAsset?
     
     internal init(originalAsset: ALAsset) {
         super.init()
