@@ -112,7 +112,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             
         } /* DKImageCheckView */
         
-        private var imageView = UIImageView()
+        private let imageView = UIImageView()
         
         var thumbnail: UIImage! {
             didSet {
