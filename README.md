@@ -59,6 +59,9 @@ self.presentViewController(pickerController, animated: true) {}
 /// The maximum count of assets which the user will be able to select.
 public var maxSelectableCount = 999
 
+// The types of ALAssetsGroups to display in the picker
+public var assetGroupTypes: UInt32 = ALAssetsGroupAll
+
 /// The type of picker interface to be displayed by the controller.
 public var assetType = DKImagePickerControllerAssetType.allAssets
 
@@ -77,6 +80,16 @@ public var didCancelled: (() -> Void)?
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
 ```
+
+##### Customize Navigation Bar
+
+```swift
+UINavigationBar.appearance().titleTextAttributes = [
+    NSFontAttributeName : UIFont(name: "Optima-BoldItalic", size: 21)!,
+    NSForegroundColorAttributeName : UIColor.redColor()
+]
+```
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
 #### Quickly take a picture
 
@@ -143,7 +156,7 @@ If you want to add new language, pull request or issue!
 Any pull requests to be welcome!!!
 
 ## Special Thanks
-Thanks for @scottdelly 's [contributors][scottdelly]
+Thanks for scottdelly's [contributors][scottdelly]
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
