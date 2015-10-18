@@ -266,9 +266,14 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     
     private lazy var selectGroupButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: "showGroupSelector", forControlEvents: .TouchUpInside)
-        button.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        button.titleLabel!.font = UIFont.boldSystemFontOfSize(18.0)
+		
+		let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSForegroundColorAttributeName] as? UIColor
+		button.setTitleColor(globalTitleColor ?? UIColor.blackColor(), forState: .Normal)
+		
+		let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSFontAttributeName] as? UIFont
+		button.titleLabel!.font = globalTitleFont ?? UIFont.boldSystemFontOfSize(18.0)
+		
+		button.addTarget(self, action: "showGroupSelector", forControlEvents: .TouchUpInside)
         return button
     }()
     
@@ -508,10 +513,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         NSNotificationCenter.defaultCenter().postNotificationName(DKImageSelectedNotification, object: imageAssets[assetIndexForIndexPath(indexPath)])
         
-        if !self.imagePickerController!.singleSelect {
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
-            cell.checkView.checkLabel.text = "\(self.imagePickerController!.selectedAssets.count)"
-        }
+		let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
+		cell.checkView.checkLabel.text = "\(self.imagePickerController!.selectedAssets.count)"
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
