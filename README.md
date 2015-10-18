@@ -159,8 +159,8 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the develop branch. Any Pull Requests to be welcome!!!
 
 ## Special Thanks
-Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon]
-Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]
+Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
+Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
@@ -170,5 +170,6 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [DKCamera]:https://github.com/zhangao0086/DKCamera
 [scottdelly]:https://github.com/scottdelly
 [scottdellyCon]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
+[scottdellyCon1]:https://github.com/zhangao0086/DKImagePickerController/pull/24/commits
 [LucidityDesign]:https://github.com/LucidityDesign
 [LucidityDesignCon]:https://github.com/zhangao0086/DKImagePickerController/pull/19/commits
