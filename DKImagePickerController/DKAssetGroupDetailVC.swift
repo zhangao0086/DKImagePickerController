@@ -528,12 +528,11 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
 			let intersect = Set(indexPathsForVisibleItems).intersect(Set(indexPathsForSelectedItems))
 			
 			for selectedIndexPath in intersect {
-				if let selectedAsset = (collectionView.cellForItemAtIndexPath(selectedIndexPath) as? DKVideoAssetCell)?.asset {
-					let selectedIndex = self.imagePickerController!.selectedAssets.indexOf(selectedAsset)!
+				if let selectedCell = (collectionView.cellForItemAtIndexPath(selectedIndexPath) as? DKAssetCell) {
+					let selectedIndex = self.imagePickerController!.selectedAssets.indexOf(selectedCell.asset)!
 					
 					if selectedIndex > removedIndex {
-						let cell = collectionView.cellForItemAtIndexPath(selectedIndexPath) as! DKAssetCell
-						cell.checkView.checkLabel.text = "\(Int(cell.checkView.checkLabel.text!)! - 1)"
+						selectedCell.checkView.checkLabel.text = "\(Int(selectedCell.checkView.checkLabel.text!)! - 1)"
 					}
 				}
 			}
