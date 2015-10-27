@@ -18,12 +18,18 @@ public class DKAsset: NSObject {
     
     /// Returns a CGImage of the representation that is appropriate for displaying full screen.
     public private(set) lazy var fullScreenImage: UIImage? = {
-        return UIImage(CGImage: (self.originalAsset?.defaultRepresentation().fullScreenImage().takeUnretainedValue())!)
+		if let originalAsset = self.originalAsset {
+			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
+		}
+		return nil
     }()
     
     /// Returns a CGImage representation of the asset.
     public private(set) lazy var fullResolutionImage: UIImage? = {
-        return UIImage(CGImage: (self.originalAsset?.defaultRepresentation().fullResolutionImage().takeUnretainedValue())!)
+		if let originalAsset = self.originalAsset {
+			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue()))
+		}
+		return nil
     }()
     
     /// The url uniquely identifies an asset that is an image or a video.
@@ -40,7 +46,21 @@ public class DKAsset: NSObject {
     
     internal var isFromCamera: Bool = false
     public private(set) var originalAsset: ALAsset?
-    
+	
+	/// The source data of the asset.
+	public private(set) lazy var rawData: NSData? = {
+		if let rep = self.originalAsset?.defaultRepresentation() {
+			let sizeOfRawDataInBytes = Int(rep.size())
+			let rawData = NSMutableData(length: sizeOfRawDataInBytes)!
+			let bufferPtr = rawData.mutableBytes
+			let bufferPtr8 = UnsafeMutablePointer<UInt8>(bufferPtr)
+			
+			rep.getBytes(bufferPtr8, fromOffset: 0, length: sizeOfRawDataInBytes, error: nil)
+			return rawData
+		}
+		return nil
+	}()
+	
     internal init(originalAsset: ALAsset) {
         super.init()
         
