@@ -117,9 +117,10 @@ class DKPopoverViewController: UIViewController {
         self.view.addSubview(popoverView)
     }
 
+	@available(iOS, deprecated=8.0)
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
-        
+		super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
+		
         let popoverY = self.fromView.convertPoint(self.fromView.frame.origin, toView: self.view).y + self.fromView.bounds.height
         self.popoverViewHeight = min(self.contentViewController.preferredContentSize.height + self.popoverView.arrowHeight, self.view.bounds.height - popoverY - 40)
         
