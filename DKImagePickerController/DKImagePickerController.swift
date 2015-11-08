@@ -37,6 +37,14 @@ public class DKAsset: NSObject {
     
     /// It's a square thumbnail of the asset.
     public private(set) var thumbnailImage: UIImage?
+	
+	/// The asset's creation date.
+	public private(set) lazy var createDate: NSDate? = {
+		if let originalAsset = self.originalAsset {
+			return originalAsset.valueForProperty(ALAssetPropertyDate) as? NSDate
+		}
+		return nil
+	}()
     
     /// When the asset was an image, it's false. Otherwise true.
     public private(set) var isVideo: Bool = false
