@@ -33,10 +33,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             pickerController.allowMultipleTypes = allowMultipleType
             pickerController.sourceType = sourceType
             
-            pickerController.didCancel = {
-                print("didCancel")
-            }
-            
             pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
                 print("didSelectAssets")
                 print(assets.map({ $0.url}))
