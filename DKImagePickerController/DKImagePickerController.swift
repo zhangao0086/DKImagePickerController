@@ -182,11 +182,9 @@ public class DKImagePickerController: UINavigationController {
     
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: UIButtonType.Custom)
-        button.setTitle("Done", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
         button.reversesTitleShadowWhenHighlighted = true
         button.addTarget(self, action: "done", forControlEvents: UIControlEvents.TouchUpInside)
-        button.sizeToFit()
       
         return button
     }()
@@ -197,6 +195,8 @@ public class DKImagePickerController: UINavigationController {
       
         rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
         rootVC.navigationItem.hidesBackButton = true
+        
+        self.updateDoneButtonTitle()
     }
     
     deinit {
@@ -216,9 +216,9 @@ public class DKImagePickerController: UINavigationController {
     
     private func updateDoneButtonTitle() {
         if self.selectedAssets.count > 0 {
-            self.doneButton.setTitle(DKImageLocalizedString.localizedStringForKey("select") + "(\(selectedAssets.count))", forState: UIControlState.Normal)
+            self.doneButton.setTitle(DKImageLocalizedStringWithKey("select") + "(\(selectedAssets.count))", forState: UIControlState.Normal)
         } else {
-            self.doneButton.setTitle("Done", forState: UIControlState.Normal)
+            self.doneButton.setTitle(DKImageLocalizedStringWithKey("done"), forState: UIControlState.Normal)
         }
         self.doneButton.sizeToFit()
     }

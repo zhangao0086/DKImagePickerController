@@ -221,18 +221,18 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             permissionView.addSubview(permissionView.permitButton)
             
             if style == .Photo {
-                permissionView.titleLabel.text = DKImageLocalizedString.localizedStringForKey("permissionPhoto")
+                permissionView.titleLabel.text = DKImageLocalizedStringWithKey("permissionPhoto")
                 permissionView.titleLabel.textColor = UIColor.grayColor()
             } else {
                 permissionView.titleLabel.textColor = UIColor.whiteColor()
-                permissionView.titleLabel.text = DKImageLocalizedString.localizedStringForKey("permissionCamera")
+                permissionView.titleLabel.text = DKImageLocalizedStringWithKey("permissionCamera")
             }
             permissionView.titleLabel.sizeToFit()
             
             if DKImageSystemVersionLessThan8 {
-                permissionView.permitButton.setTitle(DKImageLocalizedString.localizedStringForKey("gotoSettings"), forState: .Normal)
+                permissionView.permitButton.setTitle(DKImageLocalizedStringWithKey("gotoSettings"), forState: .Normal)
             } else {
-                permissionView.permitButton.setTitle(DKImageLocalizedString.localizedStringForKey("permit"), forState: .Normal)
+                permissionView.permitButton.setTitle(DKImageLocalizedStringWithKey("permit"), forState: .Normal)
                 permissionView.permitButton.setTitleColor(UIColor(red: 0, green: 122.0 / 255, blue: 1, alpha: 1), forState: .Normal)
                 permissionView.permitButton.addTarget(permissionView, action: "gotoSettings", forControlEvents: .TouchUpInside)
             }
@@ -498,10 +498,10 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
             where self.imagePickerController?.allowMultipleTypes == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
                 
-                UIAlertView(title: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideos"),
-                    message: DKImageLocalizedString.localizedStringForKey("selectPhotosOrVideosError"),
+                UIAlertView(title: DKImageLocalizedStringWithKey("selectPhotosOrVideos"),
+                    message: DKImageLocalizedStringWithKey("selectPhotosOrVideosError"),
                     delegate: nil,
-                    cancelButtonTitle: DKImageLocalizedString.localizedStringForKey("ok")).show()
+                    cancelButtonTitle: DKImageLocalizedStringWithKey("ok")).show()
                 
                 return false
         }

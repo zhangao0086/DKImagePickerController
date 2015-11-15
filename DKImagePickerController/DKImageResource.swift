@@ -56,4 +56,7 @@ internal class DKImageLocalizedString {
     
 }
 
+internal func DKImageLocalizedStringWithKey(key: String) -> String {
+    return DKImageLocalizedString.localizedStringForKey(key)
+}
 
