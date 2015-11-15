@@ -162,9 +162,6 @@ public class DKImagePickerController: UINavigationController {
     /// The callback block is executed when user pressed the select button.
     public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
     
-    /// The callback block is executed when user pressed the cancel button.
-    public var didCancel: (() -> Void)?
-    
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
@@ -185,22 +182,21 @@ public class DKImagePickerController: UINavigationController {
     
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: UIButtonType.Custom)
-        button.setTitle("", forState: UIControlState.Normal)
+        button.setTitle("Done", forState: UIControlState.Normal)
         button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
         button.reversesTitleShadowWhenHighlighted = true
         button.addTarget(self, action: "done", forControlEvents: UIControlEvents.TouchUpInside)
-        
+        button.sizeToFit()
+      
         return button
     }()
     
     public convenience init() {
         let rootVC = DKAssetGroupDetailVC()
         self.init(rootViewController: rootVC)
-        
+      
         rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
-        rootVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
-            target: self,
-            action: "dismiss")
+        rootVC.navigationItem.hidesBackButton = true
     }
     
     deinit {
@@ -222,14 +218,9 @@ public class DKImagePickerController: UINavigationController {
         if self.selectedAssets.count > 0 {
             self.doneButton.setTitle(DKImageLocalizedString.localizedStringForKey("select") + "(\(selectedAssets.count))", forState: UIControlState.Normal)
         } else {
-            self.doneButton.setTitle("", forState: UIControlState.Normal)
+            self.doneButton.setTitle("Done", forState: UIControlState.Normal)
         }
         self.doneButton.sizeToFit()
-    }
-    
-    internal func dismiss() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        self.didCancel?()
     }
     
     internal func done() {
