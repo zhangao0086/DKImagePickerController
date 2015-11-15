@@ -117,7 +117,13 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
 				self.thumbnailImageView.image = asset.thumbnailImage
 			}
 		}
-        private let thumbnailImageView = UIImageView()
+        private let thumbnailImageView: UIImageView = {
+            let thumbnailImageView = UIImageView()
+            thumbnailImageView.contentMode = .ScaleAspectFill
+            thumbnailImageView.clipsToBounds = true
+            
+            return thumbnailImageView
+        }()
         
         private let checkView = DKImageCheckView()
         
