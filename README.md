@@ -85,19 +85,19 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
-#### Quickly take a picture
-
-```swift
-pickerController.sourceType = .Camera
-```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
-
 #### Hides camera
 
 ```swift
 pickerController.sourceType = .Photo
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
+
+#### Quickly take a picture
+
+```swift
+pickerController.sourceType = .Camera
+```
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
 
 ## How to use in Objective-C
 
@@ -151,7 +151,7 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Special Thanks
 Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
-Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!
+Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!  
 Thanks for [AnthonyMDev][AnthonyMDev]'s [contribution][scottdellyCon]!
 
 ## License
