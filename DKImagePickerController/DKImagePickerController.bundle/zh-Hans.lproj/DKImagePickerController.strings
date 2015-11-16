@@ -23,3 +23,5 @@
 "selectPhotosOrVideos" = "选择照片或视频";
 
 "selectPhotosOrVideosError" = "不能同时选中照片或视频.";
+
+"done" = "完成";

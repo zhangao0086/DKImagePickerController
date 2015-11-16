@@ -23,3 +23,5 @@
 "selectPhotosOrVideos" = "Select Photos or Videos";
 
 "selectPhotosOrVideosError" = "It is not possible to select photos and videos at the same time.";
+
+"done" = "Done";

@@ -8,8 +8,6 @@ DKImagePickerController
 ---
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot5.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 ---
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot7.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot8.png" />
----
 
 
 Update for Xcode 7 with Swift 2.0
@@ -40,13 +38,9 @@ To use Swift libraries on apps that support iOS 7, you must manually copy the fi
 
 let pickerController = DKImagePickerController()
 
-pickerController.didCancel = { () in
-    println("didCancel")
-}
-
 pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
-    println("didSelectAssets")
-    println(assets)
+    print("didSelectAssets")
+    print(assets)
 }
 
 self.presentViewController(pickerController, animated: true) {}
@@ -77,9 +71,6 @@ public var allowMultipleTypes = true
 /// The callback block is executed when user pressed the select button.
 public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
-/// The callback block is executed when user pressed the cancel button.
-public var didCancel: (() -> Void)?
-
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
 ```
@@ -99,14 +90,14 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```swift
 pickerController.sourceType = .Camera
 ```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit2.gif" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
 
 #### Hides camera
 
 ```swift
 pickerController.sourceType = .Photo
 ```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.png" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
 
 ## How to use in Objective-C
 
@@ -161,6 +152,7 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 ## Special Thanks
 Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
 Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!
+Thanks for [AnthonyMDev][AnthonyMDev]'s [contribution][scottdellyCon]!
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
@@ -168,8 +160,9 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
-[scottdelly]:https://github.com/scottdelly
-[scottdellyCon]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
+[scottdelly]:https://github.com/scottdellyDKImagePickerController
+[scottdellyCon]:https://github.com/zhangao0086//graphs/contributors
 [scottdellyCon1]:https://github.com/zhangao0086/DKImagePickerController/pull/24/commits
 [LucidityDesign]:https://github.com/LucidityDesign
 [LucidityDesignCon]:https://github.com/zhangao0086/DKImagePickerController/pull/19/commits
+[AnthonyMDev]:https://github.com/AnthonyMDev
