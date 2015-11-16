@@ -15,7 +15,13 @@ public class DKCamera: UIViewController {
     public var didCancel: (() -> Void)?
     public var didFinishCapturingImage: ((image: UIImage) -> Void)?
     
-    public var cameraOverlayView: UIView?
+    public var cameraOverlayView: UIView? {
+        didSet {
+            if let cameraOverlayView = cameraOverlayView {
+                self.view.addSubview(cameraOverlayView)
+            }
+        }
+    }
     
     /// The flashModel will to be remembered to next use.
     public var flashMode:AVCaptureFlashMode! {
@@ -108,10 +114,6 @@ public class DKCamera: UIViewController {
     private func setupUI() {
         self.view.backgroundColor = UIColor.blackColor()
         let contentView = self.view
-
-        if let cameraOverlayView = self.cameraOverlayView {
-            self.view.addSubview(cameraOverlayView)
-        }
         
         let bottomView = UIView()
         let bottomViewHeight: CGFloat = 70
@@ -201,6 +203,11 @@ public class DKCamera: UIViewController {
     }
     
     internal func takePicture() {
+        let authStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+        if authStatus == .Denied {
+            return
+        }
+        
         if let stillImageOutput = self.captureSession.outputs.first as? AVCaptureStillImageOutput {
             dispatch_async(dispatch_get_global_queue(0, 0), { () -> Void in
                 let connection = stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
@@ -218,7 +225,7 @@ public class DKCamera: UIViewController {
                                                 
                         if let didFinishCapturingImage = self.didFinishCapturingImage,
                             image = UIImage(data: imageData) {
-
+                                
                                 didFinishCapturingImage(image: image)
                         }
                     } else {

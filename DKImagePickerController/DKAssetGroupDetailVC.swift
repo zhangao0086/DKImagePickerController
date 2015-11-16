@@ -424,11 +424,26 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             self.dismissViewControllerAnimated(true, completion: nil)
         }
         
-        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) != .Authorized {
-            let permissionView = DKPermissionView.permissionView(.Camera)
-            camera.cameraOverlayView = permissionView
+        func cameraDenied() {
+            dispatch_async(dispatch_get_main_queue()) {
+                let permissionView = DKPermissionView.permissionView(.Camera)
+                camera.cameraOverlayView = permissionView
+            }
         }
-
+        
+        let authStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+        if authStatus != .Authorized {
+            if authStatus == .NotDetermined {
+                AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted) -> Void in
+                    if !granted {
+                        cameraDenied()
+                    }
+                })
+            } else {
+                cameraDenied()
+            }
+        }
+        
         return camera
     }
 	
