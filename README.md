@@ -70,6 +70,10 @@ public var allowMultipleTypes = true
 
 /// The callback block is executed when user pressed the select button.
 public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
+public var showCancelButton = false
+
+/// The callback block is executed when user pressed the select button.
+public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
