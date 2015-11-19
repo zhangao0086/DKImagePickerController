@@ -30,6 +30,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             let pickerController = DKImagePickerController()
             pickerController.assetType = assetType
+//			pickerController.showCancelButton = true
             pickerController.allowMultipleTypes = allowMultipleType
             pickerController.sourceType = sourceType
             

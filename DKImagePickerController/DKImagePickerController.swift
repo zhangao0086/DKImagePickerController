@@ -158,9 +158,25 @@ public class DKImagePickerController: UINavigationController {
     
     /// Whether allows to select photos and videos at the same time.
     public var allowMultipleTypes = true
-    
+	
+	/// The callback block is executed when user pressed the cancel button.
+	public var didCancel: (() -> Void)?
+	
     /// The callback block is executed when user pressed the select button.
     public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
+	public var showCancelButton = false {
+		didSet {
+			if let rootVC =  self.viewControllers.first {
+				if showCancelButton {
+					rootVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
+						target: self,
+						action: "dismiss")
+				} else {
+					rootVC.navigationItem.leftBarButtonItem = nil
+				}
+			}
+		}
+	}
     
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
@@ -222,7 +238,12 @@ public class DKImagePickerController: UINavigationController {
         }
         self.doneButton.sizeToFit()
     }
-    
+	
+	internal func dismiss() {
+		self.dismissViewControllerAnimated(true, completion: nil)
+		self.didCancel?()
+	}
+	
     internal func done() {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.didSelectAssets?(assets: self.selectedAssets)
