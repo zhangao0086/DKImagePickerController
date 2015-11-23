@@ -161,9 +161,6 @@ public class DKImagePickerController: UINavigationController {
 	
 	/// The callback block is executed when user pressed the cancel button.
 	public var didCancel: (() -> Void)?
-	
-    /// The callback block is executed when user pressed the select button.
-    public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 	public var showCancelButton = false {
 		didSet {
 			if let rootVC =  self.viewControllers.first {
@@ -177,7 +174,10 @@ public class DKImagePickerController: UINavigationController {
 			}
 		}
 	}
-    
+	
+    /// The callback block is executed when user pressed the select button.
+    public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
+	
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {

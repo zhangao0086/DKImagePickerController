@@ -68,8 +68,8 @@ public var sourceType: DKImagePickerControllerSourceType = .Camera | .Photo
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
 
-/// The callback block is executed when user pressed the select button.
-public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
+/// The callback block is executed when user pressed the cancel button.
+public var didCancel: (() -> Void)?
 public var showCancelButton = false
 
 /// The callback block is executed when user pressed the select button.
