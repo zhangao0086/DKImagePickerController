@@ -112,7 +112,7 @@ public class DKAsset: NSObject {
  * allVideos: Get all video assets in the assets group.
  * allAssets: Get all assets in the group.
  */
-public enum DKImagePickerControllerAssetType : Int {
+@objc public enum DKImagePickerControllerAssetType : Int {
 
     case allPhotos, allVideos, allAssets
 }
