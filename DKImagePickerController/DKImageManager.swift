@@ -8,6 +8,7 @@
 
 import UIKit
 import AssetsLibrary
+import Photos
 
 private extension DKImagePickerControllerAssetType {
 	
@@ -29,90 +30,78 @@ internal class DKAssetGroup : NSObject {
 	var thumbnail: UIImage!
 	var totalCount: Int!
 	
-	private var originalGroup: ALAssetsGroup!
+	private var originalCollection: PHAssetCollection!
+	private var fetchResult: PHFetchResult!
+}
+
+// Asset Model
+
+private extension DKAsset {
+	
 }
 
 internal class DKImageManager: NSObject {
 	
 	static let sharedInstance = DKImageManager()
 	
-	private let fetchGroupsQueue: NSOperationQueue = {
-		let queue = NSOperationQueue()
-		queue.maxConcurrentOperationCount = 1
-		
-		return queue
-	}()
-	
 	private var groups: [DKAssetGroup]?
 	private var latestFetchGroupsError: NSError?
 	
-	private let library = ALAssetsLibrary()
+	private let manager = PHCachingImageManager.defaultManager()
 	
 	func fetchGroups(
 		assetGroupTypes: UInt32,
 		assetType: DKImagePickerControllerAssetType,
 		groupsBlock: (groups: [DKAssetGroup]?, error: NSError?) -> Void) {
+			
 			if self.groups?.count > 0 {
 				groupsBlock(groups: self.groups, error: nil)
 				return
 			}
 			
-			if self.fetchGroupsQueue.operationCount == 0 && self.groups == nil {
-				self.fetchGroupsQueue.addOperationWithBlock {
-					var groups: [DKAssetGroup] = []
-					self.library.enumerateGroupsWithTypes(assetGroupTypes
-						, usingBlock: { (group, stop) -> Void in
-							
-							if group != nil {
-								group.setAssetsFilter(assetType.toALAssetsFilter())
-								
-								if group.numberOfAssets() != 0 {
-									let groupName = group.valueForProperty(ALAssetsGroupPropertyName) as! String
-									
-									let assetGroup = DKAssetGroup()
-									assetGroup.groupName = groupName
-									
-									group.enumerateAssetsAtIndexes(NSIndexSet(index: group.numberOfAssets() - 1),
-										options: .Reverse,
-										usingBlock: { (asset, index, stop) -> Void in
-											if asset != nil {
-												assetGroup.thumbnail = UIImage(CGImage:asset.thumbnail().takeUnretainedValue())
-											}
-									})
-									
-									assetGroup.originalGroup = group
-									assetGroup.totalCount = group.numberOfAssets()
-									groups.insert(assetGroup, atIndex: 0)
-								}
-							} else {
-								self.groups = groups
-								dispatch_async(dispatch_get_main_queue(), { () -> Void in
-									groupsBlock(groups: groups, error: nil)
-								})
-							}
-						}, failureBlock: { error in
-							self.latestFetchGroupsError = error
-							dispatch_async(dispatch_get_main_queue(), { () -> Void in
-								groupsBlock(groups: nil, error: error)
-							})
-					})
+			let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+			var groups: [DKAssetGroup] = []
+			topLevelUserCollections.enumerateObjectsUsingBlock { (result, index, stop) in
+				if let collection = result as? PHAssetCollection {
+					let assetGroup = DKAssetGroup()
+					assetGroup.groupName = collection.localizedTitle
+					assetGroup.totalCount = collection.estimatedAssetCount
+					
+					if let latestAsset = PHAsset.fetchKeyAssetsInAssetCollection(collection, options: nil)?.firstObject as? PHAsset {
+						self.manager.requestImageForAsset(latestAsset,
+							targetSize: CGSize(width: 70, height: 70),
+							contentMode: .AspectFill,
+							options: nil,
+							resultHandler: { image, info in
+								assetGroup.thumbnail = image
+						})
+					}
+					assetGroup.originalCollection = collection
+					groups.append(assetGroup)
 				}
-			} else {
-				self.fetchGroupsQueue.addOperationWithBlock {
-					groupsBlock(groups: self.groups, error: self.latestFetchGroupsError)
-				}
+				self.groups = groups
+				groupsBlock(groups: groups, error: nil)
 			}
 	}
 	
 	func fetchAssetWithGroup(group: DKAssetGroup, index: Int) -> DKAsset {
-		var asset: DKAsset!
-		group.originalGroup.enumerateAssetsAtIndexes(NSIndexSet(index: index), options: .Reverse,
-			usingBlock: { (result, index, stop) -> Void in
-				if result != nil {
-					asset = DKAsset(originalAsset: result)
-				}
-		})
+		
+		if group.fetchResult == nil {
+			group.fetchResult = PHAsset.fetchAssetsInAssetCollection(group.originalCollection, options: nil)
+		}
+		
+		let asset: DKAsset(originalAsset:group.fetchResult[index] as! PHAsset)
 		
 		return asset
+	}
+	
+	func configCell(cell: DKAssetGroupDetailVC.DKAssetCell, asset: DKAsset) {
+		self.manager.requestImageForAsset(originalAsset,
+			targetSize: CGSize(width: 160 * 3, height: 160 * 3),
+			contentMode: .AspectFill,
+			options: nil,
+			resultHandler: { image, info in
+				asset = DKAsset(image: image!)
+		})
 	}
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 import AssetsLibrary
+import Photos
 
 // MARK: - Public DKAsset
 
@@ -18,17 +19,17 @@ public class DKAsset: NSObject {
     
     /// Returns a CGImage of the representation that is appropriate for displaying full screen.
     public private(set) lazy var fullScreenImage: UIImage? = {
-		if let originalAsset = self.originalAsset {
-			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
-		}
+//		if let originalAsset = self.originalAsset {
+//			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
+//		}
 		return nil
     }()
     
     /// Returns a CGImage representation of the asset.
     public private(set) lazy var fullResolutionImage: UIImage? = {
-		if let originalAsset = self.originalAsset {
-			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue()))
-		}
+//		if let originalAsset = self.originalAsset {
+//			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue()))
+//		}
 		return nil
     }()
     
@@ -40,9 +41,9 @@ public class DKAsset: NSObject {
 	
 	/// The asset's creation date.
 	public private(set) lazy var createDate: NSDate? = {
-		if let originalAsset = self.originalAsset {
-			return originalAsset.valueForProperty(ALAssetPropertyDate) as? NSDate
-		}
+//		if let originalAsset = self.originalAsset {
+//			return originalAsset.valueForProperty(ALAssetPropertyDate) as? NSDate
+//		}
 		return nil
 	}()
     
@@ -53,27 +54,27 @@ public class DKAsset: NSObject {
     public private(set) var duration: Double?
     
     internal var isFromCamera: Bool = false
-    public private(set) var originalAsset: ALAsset?
+    public private(set) var originalAsset: PHAsset?
 	
 	/// The source data of the asset.
 	public private(set) lazy var rawData: NSData? = {
-		if let rep = self.originalAsset?.defaultRepresentation() {
-			let sizeOfRawDataInBytes = Int(rep.size())
-			let rawData = NSMutableData(length: sizeOfRawDataInBytes)!
-			let bufferPtr = rawData.mutableBytes
-			let bufferPtr8 = UnsafeMutablePointer<UInt8>(bufferPtr)
-			
-			rep.getBytes(bufferPtr8, fromOffset: 0, length: sizeOfRawDataInBytes, error: nil)
-			return rawData
-		}
+//		if let rep = self.originalAsset?.defaultRepresentation() {
+//			let sizeOfRawDataInBytes = Int(rep.size())
+//			let rawData = NSMutableData(length: sizeOfRawDataInBytes)!
+//			let bufferPtr = rawData.mutableBytes
+//			let bufferPtr8 = UnsafeMutablePointer<UInt8>(bufferPtr)
+//			
+//			rep.getBytes(bufferPtr8, fromOffset: 0, length: sizeOfRawDataInBytes, error: nil)
+//			return rawData
+//		}
 		return nil
 	}()
 	
-    internal init(originalAsset: ALAsset) {
+    init(originalAsset: PHAsset) {
         super.init()
         
         self.thumbnailImage = UIImage(CGImage:originalAsset.aspectRatioThumbnail().takeUnretainedValue())
-        self.url = originalAsset.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
+//        self.url = originalAsset.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
         self.originalAsset = originalAsset
         
         let assetType = originalAsset.valueForProperty(ALAssetPropertyType) as! NSString
