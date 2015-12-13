@@ -10,109 +10,12 @@ import UIKit
 import AssetsLibrary
 import Photos
 
-// MARK: - Public DKAsset
-
 /**
- * An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
- */
-public class DKAsset: NSObject {
-    
-    /// Returns a CGImage of the representation that is appropriate for displaying full screen.
-    public private(set) lazy var fullScreenImage: UIImage? = {
-//		if let originalAsset = self.originalAsset {
-//			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullScreenImage().takeUnretainedValue()))
-//		}
-		return nil
-    }()
-    
-    /// Returns a CGImage representation of the asset.
-    public private(set) lazy var fullResolutionImage: UIImage? = {
-//		if let originalAsset = self.originalAsset {
-//			return UIImage(CGImage: (originalAsset.defaultRepresentation().fullResolutionImage().takeUnretainedValue()))
-//		}
-		return nil
-    }()
-    
-    /// The url uniquely identifies an asset that is an image or a video.
-    public private(set) var url: NSURL?
-    
-    /// It's a square thumbnail of the asset.
-    public private(set) var thumbnailImage: UIImage?
-	
-	/// The asset's creation date.
-	public private(set) lazy var createDate: NSDate? = {
-//		if let originalAsset = self.originalAsset {
-//			return originalAsset.valueForProperty(ALAssetPropertyDate) as? NSDate
-//		}
-		return nil
-	}()
-    
-    /// When the asset was an image, it's false. Otherwise true.
-    public private(set) var isVideo: Bool = false
-    
-    /// play time duration(seconds) of a video.
-    public private(set) var duration: Double?
-    
-    internal var isFromCamera: Bool = false
-    public private(set) var originalAsset: PHAsset?
-	
-	/// The source data of the asset.
-	public private(set) lazy var rawData: NSData? = {
-//		if let rep = self.originalAsset?.defaultRepresentation() {
-//			let sizeOfRawDataInBytes = Int(rep.size())
-//			let rawData = NSMutableData(length: sizeOfRawDataInBytes)!
-//			let bufferPtr = rawData.mutableBytes
-//			let bufferPtr8 = UnsafeMutablePointer<UInt8>(bufferPtr)
-//			
-//			rep.getBytes(bufferPtr8, fromOffset: 0, length: sizeOfRawDataInBytes, error: nil)
-//			return rawData
-//		}
-		return nil
-	}()
-	
-    init(originalAsset: PHAsset) {
-        super.init()
-        
-        self.thumbnailImage = UIImage(CGImage:originalAsset.aspectRatioThumbnail().takeUnretainedValue())
-//        self.url = originalAsset.valueForProperty(ALAssetPropertyAssetURL) as? NSURL
-        self.originalAsset = originalAsset
-        
-        let assetType = originalAsset.valueForProperty(ALAssetPropertyType) as! NSString
-        if assetType == ALAssetTypeVideo {
-            let duration = originalAsset.valueForProperty(ALAssetPropertyDuration) as! NSNumber
-            
-            self.isVideo = true
-            self.duration = duration.doubleValue
-        }
-    }
-    
-    internal init(image: UIImage) {
-        super.init()
-        
-        self.isFromCamera = true
-        self.fullScreenImage = image
-        self.fullResolutionImage = image
-        self.thumbnailImage = image
-    }
-    
-    // Compare two DKAssets
-    override public func isEqual(object: AnyObject?) -> Bool {
-        let another = object as! DKAsset!
-        
-        if let url = self.url, anotherUrl = another.url {
-            return url.isEqual(anotherUrl)
-        } else {
-            return false
-        }
-    }
-}
-
-/**
-
  * allPhotos: Get all photos assets in the assets group.
  * allVideos: Get all video assets in the assets group.
  * allAssets: Get all assets in the group.
  */
+@objc
 public enum DKImagePickerControllerAssetType : Int {
 
     case allPhotos, allVideos, allAssets
@@ -149,11 +52,16 @@ public class DKImagePickerController: UINavigationController {
     public var maxSelectableCount = 999
     
     // The types of ALAssetsGroups to display in the picker
-    public var assetGroupTypes: UInt32 = ALAssetsGroupAll
+//    public var assetGroupTypes: UInt32 = ALAssetsGroupAll
+	public var assetGroupTypes: [PHAssetCollectionSubtype] = [
+		.SmartAlbumUserLibrary,
+		.SmartAlbumFavorites,
+		.AlbumRegular
+	]
 
     /// The type of picker interface to be displayed by the controller.
     public var assetType = DKImagePickerControllerAssetType.allAssets
-    
+	
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
     public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
     

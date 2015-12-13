@@ -89,11 +89,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
             
         } /* DKImageCheckView */
 		
-		var asset: DKAsset! {
-			didSet {
-				self.thumbnailImageView.image = asset.thumbnailImage
-			}
-		}
+		private var asset: DKAsset!
+		
         private let thumbnailImageView: UIImageView = {
             let thumbnailImageView = UIImageView()
             thumbnailImageView.contentMode = .ScaleAspectFill
@@ -138,7 +135,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
 				let videoDurationLabel = self.videoInfoView.viewWithTag(-1) as! UILabel
 				let minutes: Int = Int(asset.duration!) / 60
 				let seconds: Int = Int(asset.duration!) % 60
-				videoDurationLabel.text = "\(minutes):\(seconds)"
+				videoDurationLabel.text = String(format: "\(minutes):%02d", seconds)
 			}
 		}
 		
@@ -274,7 +271,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
     }
-    
+	
+	private var itemSize: CGSize!
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         
@@ -288,6 +286,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
         layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
         
         self.init(collectionViewLayout: layout)
+		
+		self.itemSize = layout.itemSize
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -430,6 +430,13 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
 		
 		cell = self.collectionView!.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath) as! DKAssetCell
 		cell.asset = asset
+		let tag = indexPath.row + 1
+		cell.tag = tag
+		asset.fetchImageWithSize(self.itemSize.toPixel()) { (image) -> Void in
+			if cell.tag == tag {
+				cell.thumbnailImageView.image = image
+			}
+		}
 		
 		if let index = self.imagePickerController!.selectedAssets.indexOf(asset) {
 			cell.selected = true

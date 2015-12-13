@@ -132,7 +132,15 @@ class DKAssetGroupVC: UITableViewController {
         
         let assetGroup = groups![indexPath.row] as DKAssetGroup
         cell.groupNameLabel.text = assetGroup.groupName
-        cell.thumbnailImageView.image = assetGroup.thumbnail
+		
+		let tag = indexPath.row + 1
+		cell.tag = tag
+		
+		DKImageManager.sharedInstance.fetchGroupThumbnailForGroup(assetGroup, size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel()) { (image) -> Void in
+			if cell.tag == tag {
+				cell.thumbnailImageView.image = image
+			}
+		}
         cell.totalCountLabel.text = "\(assetGroup.totalCount)"
         
         if indexPath.row == 0 && tableView.indexPathForSelectedRow == nil {

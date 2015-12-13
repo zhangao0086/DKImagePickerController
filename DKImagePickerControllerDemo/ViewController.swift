@@ -36,8 +36,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
                 print("didSelectAssets")
-                print(assets.map({ $0.url}))
-                
+//                print(assets.map({ $0.url}))
+				
                 self.assets = assets
                 self.previewView?.reloadData()
             }
@@ -120,28 +120,38 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let asset = self.assets![indexPath.row]
-        
+		var cell: UICollectionViewCell?
+		var imageView: UIImageView?
+		
         if asset.isVideo {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath) 
-            
-            let imageView = cell.contentView.viewWithTag(1) as! UIImageView
-            imageView.image = asset.thumbnailImage
-            
-            return cell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath)
+			imageView = cell?.contentView.viewWithTag(1) as? UIImageView
         } else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath) 
-            
-            let imageView = cell.contentView.viewWithTag(1) as! UIImageView
-            imageView.image = asset.thumbnailImage
-            
-            return cell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath)
+            imageView = cell?.contentView.viewWithTag(1) as? UIImageView
         }
+		
+		if let cell = cell, imageView = imageView {
+			let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+			let tag = indexPath.row + 1
+			cell.tag = tag
+			asset.fetchImageWithSize(layout.itemSize.toPixel(), completeBlock: { (image) -> Void in
+				if cell.tag == tag {
+					imageView.image = image
+				}
+			})
+		}
+		
+		return cell!
     }
-    
+	
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let asset = self.assets![indexPath.row]
-
-        playVideo(asset.url!)
+		asset.fetchAVAssetWithCompleteBlock { (avAsset) -> Void in
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				self.playVideo(avAsset!.URL)
+			})
+		}
     }
 }
 
