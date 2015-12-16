@@ -17,8 +17,6 @@ private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 internal let DKImageSelectedNotification = "DKImageSelectedNotification"
 internal let DKImageUnselectedNotification = "DKImageUnselectedNotification"
 
-private let DKImageSystemVersionLessThan8 = UIDevice.currentDevice().systemVersion.compare("8.0.0", options: .NumericSearch) == .OrderedAscending
-
 // Show all images in the asset group
 internal class DKAssetGroupDetailVC: UICollectionViewController {
     
@@ -207,20 +205,16 @@ internal class DKAssetGroupDetailVC: UICollectionViewController {
                 permissionView.titleLabel.textColor = UIColor.whiteColor()
                 permissionView.titleLabel.text = DKImageLocalizedStringWithKey("permissionCamera")
             }
-            permissionView.titleLabel.sizeToFit()
-            
-            if DKImageSystemVersionLessThan8 {
-                permissionView.permitButton.setTitle(DKImageLocalizedStringWithKey("gotoSettings"), forState: .Normal)
-            } else {
-                permissionView.permitButton.setTitle(DKImageLocalizedStringWithKey("permit"), forState: .Normal)
-                permissionView.permitButton.setTitleColor(UIColor(red: 0, green: 122.0 / 255, blue: 1, alpha: 1), forState: .Normal)
-                permissionView.permitButton.addTarget(permissionView, action: "gotoSettings", forControlEvents: .TouchUpInside)
-            }
-            permissionView.permitButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
-            permissionView.permitButton.sizeToFit()
-            permissionView.permitButton.center = CGPoint(x: permissionView.titleLabel.center.x,
-                y: permissionView.titleLabel.bounds.height + 40)
-            
+			permissionView.titleLabel.sizeToFit()
+			
+			permissionView.permitButton.setTitle(DKImageLocalizedStringWithKey("permit"), forState: .Normal)
+			permissionView.permitButton.setTitleColor(UIColor(red: 0, green: 122.0 / 255, blue: 1, alpha: 1), forState: .Normal)
+			permissionView.permitButton.addTarget(permissionView, action: "gotoSettings", forControlEvents: .TouchUpInside)
+			permissionView.permitButton.titleLabel?.font = UIFont.boldSystemFontOfSize(16)
+			permissionView.permitButton.sizeToFit()
+			permissionView.permitButton.center = CGPoint(x: permissionView.titleLabel.center.x,
+				y: permissionView.titleLabel.bounds.height + 40)
+			
             permissionView.frame.size = CGSize(width: max(permissionView.titleLabel.bounds.width, permissionView.permitButton.bounds.width),
                 height: permissionView.permitButton.frame.maxY)
             

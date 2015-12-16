@@ -92,7 +92,11 @@ public class DKAsset: NSObject {
 	}
 	
 	public func fetchImageWithSize(size: CGSize, completeBlock: (image: UIImage?) -> Void) {
-		DKImageManager.sharedInstance.fetchImageForAsset(self, size: size, completeBlock: completeBlock)
+		if self.isFromCamera {
+			completeBlock(image:self.fullScreenImage)
+		} else {
+			DKImageManager.sharedInstance.fetchImageForAsset(self, size: size, completeBlock: completeBlock)
+		}
 	}
 	
 	public func fetchFullScreenImageWithCompleteBlock(completeBlock: (image: UIImage?) -> Void) {
