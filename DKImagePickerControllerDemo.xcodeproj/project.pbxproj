@@ -21,7 +21,6 @@
 		9CBF3F881AB15E100000F1D1 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F781AB15D210000F1D1 /* Main.strings */; };
 		9CC361531BA7E1D100756DDB /* DKCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC361511BA7E1D100756DDB /* DKCamera.swift */; };
 		9CC361541BA7E1D100756DDB /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CC361521BA7E1D100756DDB /* DKCameraResource.bundle */; };
-		9CD130031C144E2D00AB5E2B /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C167BF719DF832B008FA4CA /* AssetsLibrary.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9CD130051C144ED800AB5E2B /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD130041C144ED800AB5E2B /* Photos.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9CD45E7A1B7C9E4600365976 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CD45E791B7C9E4600365976 /* DKImagePickerController.bundle */; };
 		9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */; };
@@ -41,7 +40,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9C167BF719DF832B008FA4CA /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		9C35CBFF19DBB00700557269 /* DKImagePickerControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DKImagePickerControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C456CCC1B7A223300DFD777 /* DKImageResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageResource.swift; sourceTree = "<group>"; };
 		9C4A8D731C1D514D004AAB00 /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
@@ -74,7 +72,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CD130051C144ED800AB5E2B /* Photos.framework in Frameworks */,
-				9CD130031C144E2D00AB5E2B /* AssetsLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,7 +88,6 @@
 		9C35CBF619DBB00700557269 = {
 			isa = PBXGroup;
 			children = (
-				9C167BF719DF832B008FA4CA /* AssetsLibrary.framework */,
 				9CBF3F6A1AB15D210000F1D1 /* DKImagePickerControllerDemo */,
 				9CF72B121B8F073400238B9A /* DKImagePickerControllerDemoTests */,
 				9C35CC0019DBB00700557269 /* Products */,

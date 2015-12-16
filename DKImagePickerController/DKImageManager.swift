@@ -6,7 +6,6 @@
 //  Copyright © 2015年 ZhangAo. All rights reserved.
 //
 
-import AssetsLibrary
 import Photos
 
 public class DKImageManager: NSObject {

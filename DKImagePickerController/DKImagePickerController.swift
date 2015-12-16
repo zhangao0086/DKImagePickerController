@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AssetsLibrary
 import Photos
 
 /**
