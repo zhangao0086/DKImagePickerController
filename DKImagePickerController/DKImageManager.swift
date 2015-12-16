@@ -8,6 +8,35 @@
 
 import Photos
 
+public class DKBaseManager: NSObject {
+
+	private let observers = NSHashTable.weakObjectsHashTable()
+	
+	public func addObserver(object: AnyObject) {
+		self.observers.addObject(object)
+	}
+	
+	public func notifyObserversWithSelector(selector: Selector, object: AnyObject) {
+		if self.observers.count > 0 {
+			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				for observer in self.observers.objectEnumerator() {
+					if observer.respondsToSelector(selector) {
+						observer.performSelector(selector, withObject: object)
+					}
+				}
+			})
+		}
+	}
+	
+	public func removeObserver(object: AnyObject) {
+		self.observers.removeObject(object)
+	}
+}
+
+public func getImageManager() -> DKImageManager {
+	return DKImageManager.sharedInstance
+}
+
 public class DKImageManager: NSObject {
 	
 	static let sharedInstance = DKImageManager()
