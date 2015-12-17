@@ -25,13 +25,15 @@ internal class DKImageResource {
         let image = UIImage(contentsOfFile: imagePath!)
         return image!
     }
-    
+	
+	private class func stretchImgFromMiddle(image: UIImage) -> UIImage {
+		let centerX = image.size.width / 2
+		let centerY = image.size.height / 2
+		return image.resizableImageWithCapInsets(UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
+	}
+	
     class func checkedImage() -> UIImage {
-        var image = imageForResource("checked_background")
-        let center = image.size.width / 2
-        image = image.resizableImageWithCapInsets(UIEdgeInsets(top: center, left: center, bottom: center, right: center))
-        
-        return image
+		return stretchImgFromMiddle(imageForResource("checked_background"))
     }
     
     class func blueTickImage() -> UIImage {
@@ -45,6 +47,10 @@ internal class DKImageResource {
     class func videoCameraIcon() -> UIImage {
         return imageForResource("video_camera")
     }
+	
+	class func emptyAlbumIcon() -> UIImage {
+		return stretchImgFromMiddle(imageForResource("empty_album"))
+	}
     
 }
 
