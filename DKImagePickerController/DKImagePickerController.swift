@@ -117,7 +117,7 @@ public class DKImagePickerController: UINavigationController {
     
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: UIButtonType.Custom)
-        button.setTitleColor(self.navigationBar.tintColor, forState: UIControlState.Normal)
+		button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.navigationBar.tintColor, forState: UIControlState.Normal)
         button.addTarget(self, action: "done", forControlEvents: UIControlEvents.TouchUpInside)
       
         return button
