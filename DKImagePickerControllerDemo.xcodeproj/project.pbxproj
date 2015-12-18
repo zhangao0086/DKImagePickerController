@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		9C456CCD1B7A223300DFD777 /* DKImageResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C456CCC1B7A223300DFD777 /* DKImageResource.swift */; };
-		9C6B3DFF1C2196C3009684FE /* DKImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3DFD1C2196C3009684FE /* DKImageManager.swift */; };
+		9C4C3A951C2401CD00A52572 /* DKGroupDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A901C2401CD00A52572 /* DKGroupDataManager.swift */; };
+		9C4C3A961C2401CD00A52572 /* DKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A921C2401CD00A52572 /* DKAsset.swift */; };
+		9C4C3A971C2401CD00A52572 /* DKAssetGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A931C2401CD00A52572 /* DKAssetGroup.swift */; };
+		9C4C3A981C2401CD00A52572 /* DKImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A941C2401CD00A52572 /* DKImageManager.swift */; };
 		9C6B3E031C219724009684FE /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */; };
 		9C6B3E041C219724009684FE /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */; };
 		9C6B3E0B1C2266A8009684FE /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */; };
-		9C6B3E101C22807C009684FE /* DKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E0E1C22807C009684FE /* DKAsset.swift */; };
-		9C6B3E111C22807C009684FE /* DKAssetGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E0F1C22807C009684FE /* DKAssetGroup.swift */; };
-		9C6B3E131C22808B009684FE /* DKGroupDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E121C22808B009684FE /* DKGroupDataManager.swift */; };
 		9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */; };
 		9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F721AB15D210000F1D1 /* Images.xcassets */; };
 		9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F751AB15D210000F1D1 /* ViewController.swift */; };
@@ -44,13 +44,13 @@
 /* Begin PBXFileReference section */
 		9C35CBFF19DBB00700557269 /* DKImagePickerControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DKImagePickerControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C456CCC1B7A223300DFD777 /* DKImageResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageResource.swift; sourceTree = "<group>"; };
-		9C6B3DFD1C2196C3009684FE /* DKImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageManager.swift; sourceTree = "<group>"; };
+		9C4C3A901C2401CD00A52572 /* DKGroupDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKGroupDataManager.swift; sourceTree = "<group>"; };
+		9C4C3A921C2401CD00A52572 /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
+		9C4C3A931C2401CD00A52572 /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
+		9C4C3A941C2401CD00A52572 /* DKImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageManager.swift; sourceTree = "<group>"; };
 		9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
 		9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
-		9C6B3E0E1C22807C009684FE /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
-		9C6B3E0F1C22807C009684FE /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
-		9C6B3E121C22808B009684FE /* DKGroupDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKGroupDataManager.swift; sourceTree = "<group>"; };
 		9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CBF3F6D1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9CBF3F6F1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -108,13 +108,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9C6B3DFB1C2196C3009684FE /* DKImageManager */ = {
+		9C4C3A8E1C2401CD00A52572 /* DKImageManager */ = {
 			isa = PBXGroup;
 			children = (
-				9C6B3DFD1C2196C3009684FE /* DKImageManager.swift */,
-				9C6B3E0C1C22807C009684FE /* Data */,
+				9C4C3A941C2401CD00A52572 /* DKImageManager.swift */,
+				9C4C3A8F1C2401CD00A52572 /* Data */,
 			);
 			path = DKImageManager;
+			sourceTree = SOURCE_ROOT;
+		};
+		9C4C3A8F1C2401CD00A52572 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				9C4C3A901C2401CD00A52572 /* DKGroupDataManager.swift */,
+				9C4C3A911C2401CD00A52572 /* Model */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		9C4C3A911C2401CD00A52572 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9C4C3A921C2401CD00A52572 /* DKAsset.swift */,
+				9C4C3A931C2401CD00A52572 /* DKAssetGroup.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		9C6B3E001C219724009684FE /* View */ = {
@@ -127,28 +145,11 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		9C6B3E0C1C22807C009684FE /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				9C6B3E121C22808B009684FE /* DKGroupDataManager.swift */,
-				9C6B3E0D1C22807C009684FE /* Model */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		9C6B3E0D1C22807C009684FE /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9C6B3E0E1C22807C009684FE /* DKAsset.swift */,
-				9C6B3E0F1C22807C009684FE /* DKAssetGroup.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		9CBF3F6A1AB15D210000F1D1 /* DKImagePickerControllerDemo */ = {
 			isa = PBXGroup;
 			children = (
 				9CC361501BA7E1D100756DDB /* DKCamera */,
+				9C4C3A8E1C2401CD00A52572 /* DKImageManager */,
 				9CDEF0EF1B62279F003340FE /* DKImagePickerController */,
 				9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */,
 				9CBF3F751AB15D210000F1D1 /* ViewController.swift */,
@@ -176,7 +177,6 @@
 			children = (
 				9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */,
 				9C6B3E001C219724009684FE /* View */,
-				9C6B3DFB1C2196C3009684FE /* DKImageManager */,
 				9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */,
 				9C456CCC1B7A223300DFD777 /* DKImageResource.swift */,
 				9CD45E791B7C9E4600365976 /* DKImagePickerController.bundle */,
@@ -318,18 +318,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C456CCD1B7A223300DFD777 /* DKImageResource.swift in Sources */,
+				9C4C3A981C2401CD00A52572 /* DKImageManager.swift in Sources */,
 				9CC361531BA7E1D100756DDB /* DKCamera.swift in Sources */,
+				9C4C3A961C2401CD00A52572 /* DKAsset.swift in Sources */,
 				9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */,
-				9C6B3E111C22807C009684FE /* DKAssetGroup.swift in Sources */,
-				9C6B3DFF1C2196C3009684FE /* DKImageManager.swift in Sources */,
 				9CDEF0F11B62279F003340FE /* DKImagePickerController.swift in Sources */,
 				9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */,
 				9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */,
 				9C6B3E0B1C2266A8009684FE /* DKPermissionView.swift in Sources */,
 				9C6B3E041C219724009684FE /* DKAssetGroupListVC.swift in Sources */,
-				9C6B3E131C22808B009684FE /* DKGroupDataManager.swift in Sources */,
+				9C4C3A971C2401CD00A52572 /* DKAssetGroup.swift in Sources */,
+				9C4C3A951C2401CD00A52572 /* DKGroupDataManager.swift in Sources */,
 				9C6B3E031C219724009684FE /* DKAssetGroupDetailVC.swift in Sources */,
-				9C6B3E101C22807C009684FE /* DKAsset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
