@@ -41,7 +41,7 @@ To use Swift libraries on apps that support iOS 7, you must manually copy the fi
 
 let pickerController = DKImagePickerController()
 
-pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
+pickerController.didSelectAssets = { (assets: [DKAsset]) in
     print("didSelectAssets")
     print(assets)
 }
@@ -53,33 +53,44 @@ self.presentViewController(pickerController, animated: true) {}
 #### Customizing
 
 ```swift
-/// Forces selction of tapped image immediatly
+/// Forces selection of tapped image immediatly.
 public var singleSelect = false
-
+    
 /// The maximum count of assets which the user will be able to select.
 public var maxSelectableCount = 999
 
-// The types of ALAssetsGroups to display in the picker
-public var assetGroupTypes: UInt32 = ALAssetsGroupAll
+/// Set the defaultAssetGroup to specify which album is the default asset group.
+public var defaultAssetGroup: PHAssetCollectionSubtype?
+
+/// The types of PHAssetCollection to display in the picker.
+public var assetGroupTypes: [PHAssetCollectionSubtype] = [
+    .SmartAlbumUserLibrary,
+    .SmartAlbumFavorites,
+    .AlbumRegular
+    ]
+
+/// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
+public var showsEmptyAlbums = true
 
 /// The type of picker interface to be displayed by the controller.
-public var assetType = DKImagePickerControllerAssetType.allAssets
+public var assetType: DKImagePickerControllerAssetType = .allAssets
 
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-public var sourceType: DKImagePickerControllerSourceType = .Camera | .Photo
+public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
 
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
 
 /// The callback block is executed when user pressed the cancel button.
 public var didCancel: (() -> Void)?
-public var showCancelButton = false
+public var showsCancelButton = false
 
 /// The callback block is executed when user pressed the select button.
 public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
+
 ```
 
 ##### Customize Navigation Bar
