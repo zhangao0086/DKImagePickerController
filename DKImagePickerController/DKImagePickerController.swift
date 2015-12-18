@@ -17,7 +17,7 @@ import Photos
 @objc
 public enum DKImagePickerControllerAssetType : Int {
 	
-	case allPhotos, allVideos, allAssets
+	case AllPhotos, AllVideos, AllAssets
 }
 
 public struct DKImagePickerControllerSourceType : OptionSetType {
@@ -72,7 +72,7 @@ public class DKImagePickerController: UINavigationController {
 	}
 	
 	/// The type of picker interface to be displayed by the controller.
-	public var assetType: DKImagePickerControllerAssetType = .allAssets {
+	public var assetType: DKImagePickerControllerAssetType = .AllAssets {
 		didSet {
 			getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
 		}
@@ -172,9 +172,9 @@ public class DKImagePickerController: UINavigationController {
 		return assetFetchOptions
 	}()
 	private func createAssetFetchOptions() -> PHFetchOptions? {
-		if self.assetType != .allAssets {
+		if self.assetType != .AllAssets {
 			self.assetFetchOptions.predicate = NSPredicate(format: "mediaType == %d",
-				self.assetType == .allPhotos ? PHAssetMediaType.Image.rawValue : PHAssetMediaType.Video.rawValue)
+				self.assetType == .AllPhotos ? PHAssetMediaType.Image.rawValue : PHAssetMediaType.Video.rawValue)
 		}
 		return self.assetFetchOptions
 	}

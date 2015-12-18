@@ -83,7 +83,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             ["Take a picture"],
             ["Hides camera"]
         ]
-        static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos]
+        static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos]
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
