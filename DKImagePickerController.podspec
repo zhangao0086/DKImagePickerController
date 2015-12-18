@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'ImageManager' do |image|
 
-    image.ios.source_files = "DKImageManager/*.swift"
+    image.ios.source_files = "DKImageManager/**/*.swift"
   end
 
 end
