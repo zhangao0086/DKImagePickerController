@@ -32,7 +32,7 @@ pod 'DKImagePickerController'
 
 > The 3.x aren't supported before iOS 8. If you want to support iOS 7, you have to use the [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) branch.
 
-To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
+> To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
 [CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
 
 ## Getting Started
@@ -137,7 +137,7 @@ pickerController.sourceType = .Camera
 
 > See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
 
-* Drag and drop the [DKCamera][DKCamera] and `DKImagePickerController` to your project
+* Drag and drop the [DKCamera][DKCamera] and `DKImageManager` and `DKImagePickerController` to your project
 * Importing it into your Objective-C file: 
 
     ```objective-c
