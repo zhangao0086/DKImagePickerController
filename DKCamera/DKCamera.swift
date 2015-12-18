@@ -11,7 +11,24 @@ import AVFoundation
 import CoreMotion
 
 public class DKCamera: UIViewController {
-
+	
+	public class func checkCameraPermission(handler: (granted: Bool) -> Void) {
+		func hasCameraPermission() -> Bool {
+			return AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) == .Authorized
+		}
+		
+		func needsToRequestCameraPermission() -> Bool {
+			return AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) == .NotDetermined
+		}
+		
+		hasCameraPermission() ? handler(granted: true) : (needsToRequestCameraPermission() ?
+			AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { granted in
+				dispatch_async(dispatch_get_main_queue(), { () -> Void in
+					hasCameraPermission() ? handler(granted: true) : handler(granted: false)
+				})
+			}) : handler(granted: false))
+	}
+	
     public var didCancel: (() -> Void)?
     public var didFinishCapturingImage: ((image: UIImage) -> Void)?
     
@@ -94,7 +111,7 @@ public class DKCamera: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+	
     private func setupDevices() {
         let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo) as! [AVCaptureDevice]
         
