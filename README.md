@@ -148,12 +148,21 @@ pickerController.sourceType = .Camera
 then you can:
 
 ```objective-c
-DKImagePickerController *imagePickerController = [DKImagePickerController new];
-[imagePickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
-    NSLog(@"didSelectAssets");
-}];
+DKImagePickerController *pickerController = [DKImagePickerController new];
+pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
+pickerController.showsCancelButton = NO;
+pickerController.showsEmptyAlbums = YES;
+pickerController.allowMultipleTypes = YES;
+pickerController.defaultSelectedAssets = @[];
+//  pickerController.sourceType         // unavailable
+//  pickerController.assetGroupTypes    // unavailable
+//  pickerController.defaultAssetGroup  // unavailable
 
-[self presentViewController:imagePickerController animated:YES completion:nil];
+ [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
+     NSLog(@"didSelectAssets");
+ }];
+ 
+ [self presentViewController:pickerController animated:YES completion:nil];
 ```
 
 ## Localization
