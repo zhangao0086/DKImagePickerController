@@ -10,13 +10,18 @@ Pod::Spec.new do |s|
                      :tag => s.version.to_s }
   s.source_files  = "DKImagePickerController/*.swift"
   s.resource      = "DKImagePickerController/DKImagePickerController.bundle"
-  s.frameworks    = "Foundation", "UIKit", "AssetsLibrary", "AVFoundation"
+  s.frameworks    = "Foundation", "UIKit", "Photos"
   s.requires_arc  = true
 
-  s.subspec 'Camera' do |ss|
+  s.subspec 'Camera' do |camera|
 
-    ss.ios.source_files = "DKCamera/DKCamera.swift"
-    ss.resource = "DKCamera/DKCameraResource.bundle"
+    camera.ios.source_files = "DKCamera/DKCamera.swift"
+    camera.resource = "DKCamera/DKCameraResource.bundle"
+  end
+
+  s.subspec 'ImageManager' do |image|
+
+    image.ios.source_files = "DKImageManager/*.swift"
   end
 
 end
