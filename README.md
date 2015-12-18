@@ -176,6 +176,19 @@ If you want to add new language, pull request or issue!
 ---
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
+## Changes Log
+### [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) (2015-12-11)
+
+**Implemented enhancements:**
+
+-  Update the title color of the done button.
+
+### [2.4.2](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.2) (2015-12-10)
+
+**Implemented enhancements:**
+
+-  Prefix DKImagePickerControllerAssetType with @objc
+
 ## Special Thanks
 Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
 Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!  
