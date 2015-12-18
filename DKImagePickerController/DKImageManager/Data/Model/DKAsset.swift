@@ -20,20 +20,12 @@ public extension CGSize {
 * An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
 */
 public class DKAsset: NSObject {
-	
+
+	/// Returns a UIImage that is appropriate for displaying full screen.
 	private var fullScreenImage: UIImage?
+	
+	/// Returns the original image.
 	private var originalImage: UIImage?
-	
-	/// The url uniquely identifies an asset that is an image or a video.
-	//    public private(set) var url: NSURL?
-	
-	/// The asset's creation date.
-	public private(set) lazy var createDate: NSDate? = {
-		//		if let originalAsset = self.originalAsset {
-		//			return originalAsset.valueForProperty(ALAssetPropertyDate) as? NSDate
-		//		}
-		return nil
-	}()
 	
 	/// When the asset was an image, it's false. Otherwise true.
 	public private(set) var isVideo: Bool = false
@@ -41,23 +33,8 @@ public class DKAsset: NSObject {
 	/// play time duration(seconds) of a video.
 	public private(set) var duration: Double?
 	
-	internal var isFromCamera: Bool = false
 	public private(set) var originalAsset: PHAsset?
-	
-	/// The source data of the asset.
-	public private(set) lazy var rawData: NSData? = {
-		//		if let rep = self.originalAsset?.defaultRepresentation() {
-		//			let sizeOfRawDataInBytes = Int(rep.size())
-		//			let rawData = NSMutableData(length: sizeOfRawDataInBytes)!
-		//			let bufferPtr = rawData.mutableBytes
-		//			let bufferPtr8 = UnsafeMutablePointer<UInt8>(bufferPtr)
-		//
-		//			rep.getBytes(bufferPtr8, fromOffset: 0, length: sizeOfRawDataInBytes, error: nil)
-		//			return rawData
-		//		}
-		return nil
-	}()
-	
+		
 	init(originalAsset: PHAsset) {
 		super.init()
 		
@@ -72,10 +49,10 @@ public class DKAsset: NSObject {
 		}
 	}
 	
+	private var image: UIImage?
 	internal init(image: UIImage) {
 		super.init()
-		
-		self.isFromCamera = true
+		self.image = image
 		self.fullScreenImage = image
 		self.originalImage = image
 	}
@@ -92,10 +69,10 @@ public class DKAsset: NSObject {
 	}
 	
 	public func fetchImageWithSize(size: CGSize, completeBlock: (image: UIImage?) -> Void) {
-		if self.isFromCamera {
-			completeBlock(image:self.fullScreenImage)
+		if let _ = self.originalAsset {
+			getImageManager().fetchImageForAsset(self, size: size, completeBlock: completeBlock)
 		} else {
-			DKImageManager.sharedInstance.fetchImageForAsset(self, size: size, completeBlock: completeBlock)
+			completeBlock(image: self.image!)
 		}
 	}
 	
@@ -103,7 +80,11 @@ public class DKAsset: NSObject {
 		if let fullScreenImage = self.fullScreenImage {
 			completeBlock(image: fullScreenImage)
 		} else {
-			DKImageManager.sharedInstance.fetchImageForAsset(self, size: UIScreen.mainScreen().bounds.size) { [weak self] image in
+			var screenSize = UIScreen.mainScreen().bounds.size
+			if screenSize.width > screenSize.height {
+				screenSize = CGSize(width: screenSize.height, height: screenSize.width)
+			}
+			getImageManager().fetchImageForAsset(self, size: screenSize) { [weak self] image in
 				guard let strongSelf = self else { return }
 				
 				strongSelf.fullScreenImage = image
@@ -116,7 +97,7 @@ public class DKAsset: NSObject {
 		if let originalImage = self.originalImage {
 			completeBlock(image: originalImage)
 		} else {
-			DKImageManager.sharedInstance.fetchImageForAsset(self, size: PHImageManagerMaximumSize) { [weak self] image in
+			getImageManager().fetchImageForAsset(self, size: PHImageManagerMaximumSize) { [weak self] image in
 				guard let strongSelf = self else { return }
 				
 				strongSelf.originalImage = image
@@ -126,7 +107,7 @@ public class DKAsset: NSObject {
 	}
 	
 	public func fetchAVAssetWithCompleteBlock(completeBlock: (avAsset: AVURLAsset?) -> Void) {
-		DKImageManager.sharedInstance.fetchAVAsset(self, completeBlock: completeBlock)
+		getImageManager().fetchAVAsset(self, completeBlock: completeBlock)
 	}
 	
 }
