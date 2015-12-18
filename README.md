@@ -16,7 +16,7 @@ Update for Xcode 7 with Swift 2.0
 New version! It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
 
 ## Requirements
-* iOS 7.1+
+* iOS 8.0+
 * ARC
 
 ## Installation
@@ -29,7 +29,10 @@ pod 'DKImagePickerController'
 ```
 
 #### iOS 7.x
-To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
+
+> The 3.x aren't supported before iOS 8. If you want to support iOS 7, you have to use the [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) branch.
+
+> To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
 [CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
 
 ## Getting Started
@@ -38,7 +41,7 @@ To use Swift libraries on apps that support iOS 7, you must manually copy the fi
 
 let pickerController = DKImagePickerController()
 
-pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
+pickerController.didSelectAssets = { (assets: [DKAsset]) in
     print("didSelectAssets")
     print(assets)
 }
@@ -50,33 +53,44 @@ self.presentViewController(pickerController, animated: true) {}
 #### Customizing
 
 ```swift
-/// Forces selction of tapped image immediatly
+/// Forces selection of tapped image immediatly.
 public var singleSelect = false
-
+    
 /// The maximum count of assets which the user will be able to select.
 public var maxSelectableCount = 999
 
-// The types of ALAssetsGroups to display in the picker
-public var assetGroupTypes: UInt32 = ALAssetsGroupAll
+/// Set the defaultAssetGroup to specify which album is the default asset group.
+public var defaultAssetGroup: PHAssetCollectionSubtype?
+
+/// The types of PHAssetCollection to display in the picker.
+public var assetGroupTypes: [PHAssetCollectionSubtype] = [
+    .SmartAlbumUserLibrary,
+    .SmartAlbumFavorites,
+    .AlbumRegular
+    ]
+
+/// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
+public var showsEmptyAlbums = true
 
 /// The type of picker interface to be displayed by the controller.
-public var assetType = DKImagePickerControllerAssetType.allAssets
+public var assetType: DKImagePickerControllerAssetType = .AllAssets
 
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-public var sourceType: DKImagePickerControllerSourceType = .Camera | .Photo
+public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
 
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
 
 /// The callback block is executed when user pressed the cancel button.
 public var didCancel: (() -> Void)?
-public var showCancelButton = false
+public var showsCancelButton = false
 
 /// The callback block is executed when user pressed the select button.
 public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
+
 ```
 
 ##### Customize Navigation Bar
@@ -123,7 +137,7 @@ pickerController.sourceType = .Camera
 
 > See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
 
-* Drag and drop the [DKCamera][DKCamera] and `DKImagePickerController` to your project
+* Drag and drop the [DKCamera][DKCamera] and `DKImageManager` and `DKImagePickerController` to your project
 * Importing it into your Objective-C file: 
 
     ```objective-c
@@ -134,12 +148,21 @@ pickerController.sourceType = .Camera
 then you can:
 
 ```objective-c
-DKImagePickerController *imagePickerController = [DKImagePickerController new];
-[imagePickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
-    NSLog(@"didSelectAssets");
-}];
+DKImagePickerController *pickerController = [DKImagePickerController new];
+pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
+pickerController.showsCancelButton = NO;
+pickerController.showsEmptyAlbums = YES;
+pickerController.allowMultipleTypes = YES;
+pickerController.defaultSelectedAssets = @[];
+//  pickerController.sourceType         // unavailable
+//  pickerController.assetGroupTypes    // unavailable
+//  pickerController.defaultAssetGroup  // unavailable
 
-[self presentViewController:imagePickerController animated:YES completion:nil];
+ [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
+     NSLog(@"didSelectAssets");
+ }];
+ 
+ [self presentViewController:pickerController animated:YES completion:nil];
 ```
 
 ## Localization
@@ -153,18 +176,37 @@ If you want to add new language, pull request or issue!
 ---
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
-## Changes Log
-### [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) (2015-12-11)
+## Change Log
 
-**Implemented enhancements:**
+## [3.0.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.0) (2015-12-18)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.3...3.0.0)
 
--  Update the title color of the done button.
+**Closed issues:**
 
-### [2.4.2](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.2) (2015-12-10)
+- Update AssetsLibrary to Photos framework, deprecated [\#47](https://github.com/zhangao0086/DKImagePickerController/issues/47)
+- Crash when trying to force unwrap fullResolution image when there is only nil [\#37](https://github.com/zhangao0086/DKImagePickerController/issues/37)
+- Please Allow Camera Access shows in camera view even if accepted allowing access. [\#31](https://github.com/zhangao0086/DKImagePickerController/issues/31)
+- Hide album "My photo stream" [\#25](https://github.com/zhangao0086/DKImagePickerController/issues/25)
 
-**Implemented enhancements:**
+**Merged pull requests:**
 
--  Prefix DKImagePickerControllerAssetType with @objc
+- Added `defaultAssetGroup`.
+- Added `assetGroupTypes`.
+- Added `showsEmptyAlbums`.
+- Update to **Photos framework**.
+- Removed AssetsLibrary framework.
+- Added `DKImageManager` to separate data access from business logic.
+- Added `DKGroupDataManager` and `DKBaseManager`.
+- Added empty album image.
+
+## [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) (2015-12-11)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.2...2.4.3)
+
+**Closed issues:**
+
+- DKImagePickerControllerAssetType not visible in Objective-C [\#49](https://github.com/zhangao0086/DKImagePickerController/issues/49)
+
+> [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
 ## Special Thanks
 Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  

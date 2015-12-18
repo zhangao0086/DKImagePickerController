@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import Photos
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     var player: MPMoviePlayerController?
@@ -30,14 +31,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             let pickerController = DKImagePickerController()
             pickerController.assetType = assetType
-//			pickerController.showCancelButton = true
+//			pickerController.showsCancelButton = true
+//			pickerController.showsEmptyAlbums = false
             pickerController.allowMultipleTypes = allowMultipleType
             pickerController.sourceType = sourceType
+//			pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
+			pickerController.defaultSelectedAssets = self.assets
             
             pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
                 print("didSelectAssets")
-                print(assets.map({ $0.url}))
-                
+				
                 self.assets = assets
                 self.previewView?.reloadData()
             }
@@ -80,7 +83,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             ["Take a picture"],
             ["Hides camera"]
         ]
-        static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos]
+        static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos]
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -120,28 +123,38 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let asset = self.assets![indexPath.row]
-        
+		var cell: UICollectionViewCell?
+		var imageView: UIImageView?
+		
         if asset.isVideo {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath) 
-            
-            let imageView = cell.contentView.viewWithTag(1) as! UIImageView
-            imageView.image = asset.thumbnailImage
-            
-            return cell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath)
+			imageView = cell?.contentView.viewWithTag(1) as? UIImageView
         } else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath) 
-            
-            let imageView = cell.contentView.viewWithTag(1) as! UIImageView
-            imageView.image = asset.thumbnailImage
-            
-            return cell
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath)
+            imageView = cell?.contentView.viewWithTag(1) as? UIImageView
         }
+		
+		if let cell = cell, imageView = imageView {
+			let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+			let tag = indexPath.row + 1
+			cell.tag = tag
+			asset.fetchImageWithSize(layout.itemSize.toPixel(), completeBlock: { image in
+				if cell.tag == tag {
+					imageView.image = image
+				}
+			})
+		}
+		
+		return cell!
     }
-    
+	
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let asset = self.assets![indexPath.row]
-
-        playVideo(asset.url!)
+		asset.fetchAVAssetWithCompleteBlock { (avAsset) in
+			dispatch_async(dispatch_get_main_queue(), { () in
+				self.playVideo(avAsset!.URL)
+			})
+		}
     }
 }
 
