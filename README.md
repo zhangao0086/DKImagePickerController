@@ -176,18 +176,37 @@ If you want to add new language, pull request or issue!
 ---
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
-## Changes Log
-### [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) (2015-12-11)
+## Change Log
 
-**Implemented enhancements:**
+## [3.0.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.0) (2015-12-18)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.3...3.0.0)
 
--  Update the title color of the done button.
+**Closed issues:**
 
-### [2.4.2](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.2) (2015-12-10)
+- Update AssetsLibrary to Photos framework, deprecated [\#47](https://github.com/zhangao0086/DKImagePickerController/issues/47)
+- Crash when trying to force unwrap fullResolution image when there is only nil [\#37](https://github.com/zhangao0086/DKImagePickerController/issues/37)
+- Please Allow Camera Access shows in camera view even if accepted allowing access. [\#31](https://github.com/zhangao0086/DKImagePickerController/issues/31)
+- Hide album "My photo stream" [\#25](https://github.com/zhangao0086/DKImagePickerController/issues/25)
 
-**Implemented enhancements:**
+**Merged pull requests:**
 
--  Prefix DKImagePickerControllerAssetType with @objc
+- Added `defaultAssetGroup`.
+- Added `assetGroupTypes`.
+- Added `showsEmptyAlbums`.
+- Update to **Photos framework**.
+- Removed AssetsLibrary framework.
+- Added `DKImageManager` to separate data access from business logic.
+- Added `DKGroupDataManager` and `DKBaseManager`.
+- Added empty album image.
+
+## [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) (2015-12-11)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.2...2.4.3)
+
+**Closed issues:**
+
+- DKImagePickerControllerAssetType not visible in Objective-C [\#49](https://github.com/zhangao0086/DKImagePickerController/issues/49)
+
+> [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
 ## Special Thanks
 Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
