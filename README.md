@@ -178,6 +178,13 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
+## [3.0.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.1) (2015-12-22)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.0...3.0.1)
+
+**Merged pull requests:**
+
+- Added default request option.
+
 ## [3.0.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.0) (2015-12-18)
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.3...3.0.0)
 
@@ -198,13 +205,6 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 - Added `DKImageManager` to separate data access from business logic.
 - Added `DKGroupDataManager` and `DKBaseManager`.
 - Added empty album image.
-
-## [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) (2015-12-11)
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.2...2.4.3)
-
-**Closed issues:**
-
-- DKImagePickerControllerAssetType not visible in Objective-C [\#49](https://github.com/zhangao0086/DKImagePickerController/issues/49)
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 

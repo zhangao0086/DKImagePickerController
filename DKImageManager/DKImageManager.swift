@@ -72,10 +72,16 @@ public class DKImageManager: DKBaseManager {
 	}
 	
 	public func fetchImageForAsset(asset: DKAsset, size: CGSize, completeBlock: (image: UIImage?) -> Void) {
+		let options = PHImageRequestOptions()
+		options.deliveryMode = .HighQualityFormat
+		self.fetchImageForAsset(asset, size: size, options: options, completeBlock: completeBlock)
+	}
+	
+	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions, completeBlock: (image: UIImage?) -> Void) {
 		self.manager.requestImageForAsset(asset.originalAsset!,
 			targetSize: size,
 			contentMode: .AspectFill,
-			options: nil,
+			options: options,
 			resultHandler: { image, info in
 				completeBlock(image: image)
 		})

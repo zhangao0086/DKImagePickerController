@@ -1,5 +1,12 @@
 # Change Log
 
+## [3.0.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.1) (2015-12-22)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.0...3.0.1)
+
+**Merged pull requests:**
+
+- Added default request option.
+
 ## [3.0.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.0) (2015-12-18)
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.3...3.0.0)
 
