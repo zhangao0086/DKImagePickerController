@@ -65,6 +65,14 @@ public class DKImageManager: DKBaseManager {
 	
 	private let manager = PHCachingImageManager.defaultManager()
 	
+	private lazy var defaultImageRequestOptions: PHImageRequestOptions = {
+		let options = PHImageRequestOptions()
+		options.deliveryMode = .HighQualityFormat
+		options.resizeMode = .Exact;
+		
+		return options
+	}()
+	
 	public let groupDataManager = DKGroupDataManager()
 	
 	public func invalidate() {
@@ -72,9 +80,7 @@ public class DKImageManager: DKBaseManager {
 	}
 	
 	public func fetchImageForAsset(asset: DKAsset, size: CGSize, completeBlock: (image: UIImage?) -> Void) {
-		let options = PHImageRequestOptions()
-		options.deliveryMode = .HighQualityFormat
-		self.fetchImageForAsset(asset, size: size, options: options, completeBlock: completeBlock)
+		self.fetchImageForAsset(asset, size: size, options: self.defaultImageRequestOptions, completeBlock: completeBlock)
 	}
 	
 	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions, completeBlock: (image: UIImage?) -> Void) {
