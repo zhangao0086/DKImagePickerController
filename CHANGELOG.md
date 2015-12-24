@@ -1,11 +1,22 @@
 # Change Log
 
+## [3.0.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.2) (2015-12-24)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.1...3.0.2)
+
+**Merged pull requests:**
+
+- Updated the defaultImageRequestOptions.
+
 ## [3.0.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.1) (2015-12-22)
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.0...3.0.1)
 
 **Merged pull requests:**
 
 - Added default request option.
+
+**Implemented enhancements:**
+
+- CompleteBlock executes twice [\#54](https://github.com/zhangao0086/DKImagePickerController/issues/54)
 
 ## [3.0.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.0) (2015-12-18)
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/2.4.3...3.0.0)
