@@ -1,5 +1,12 @@
 # Change Log
 
+## [3.0.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.3) (2015-12-25)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.2...3.0.3)
+
+**Merged pull requests:**
+
+- Fixed an issue that may cause full screen image is incorrect.
+
 ## [3.0.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.2) (2015-12-24)
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.1...3.0.2)
 

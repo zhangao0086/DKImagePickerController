@@ -84,7 +84,7 @@ public class DKAsset: NSObject {
 			if screenSize.width > screenSize.height {
 				screenSize = CGSize(width: screenSize.height, height: screenSize.width)
 			}
-			getImageManager().fetchImageForAsset(self, size: screenSize) { [weak self] image in
+			getImageManager().fetchImageForAsset(self, size: screenSize, contentMode: .AspectFit) { [weak self] image in
 				guard let strongSelf = self else { return }
 				
 				strongSelf.fullScreenImage = image
