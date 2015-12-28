@@ -77,15 +77,15 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		return self.groups![groupId]!
 	}
 	
-	public func fetchGroupThumbnailForGroup(groupId: String, size: CGSize, completeBlock: (image: UIImage?) -> Void) {
+	public func fetchGroupThumbnailForGroup(groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		let group = self.fetchGroupWithGroupId(groupId)
 		if group.fetchResult.count == 0 {
-			completeBlock(image: nil)
+			completeBlock(image: nil, info: nil)
 			return
 		}
 		
 		let latestAsset = DKAsset(originalAsset:group.fetchResult.firstObject as! PHAsset)
-		latestAsset.fetchImageWithSize(size, completeBlock: completeBlock)
+		latestAsset.fetchImageWithSize(size, options: options, completeBlock: completeBlock)
 	}
 	
 	public func fetchAssetWithGroup(group: DKAssetGroup, index: Int) -> DKAsset {

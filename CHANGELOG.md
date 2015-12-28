@@ -1,5 +1,21 @@
 # Change Log
 
+## [3.0.4](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.4) (2015-12-28)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.3...3.0.4)
+
+**Closed issues:**
+
+- Cannot use DKAsset.fetchImageWithSize with iCloud photos \(Perhaps?\) [\#58](https://github.com/zhangao0086/DKImagePickerController/issues/58)
+
+**Merged pull requests:**
+
+- Improved performance when getting list of images.
+
+- Added support for iCloud.
+
+- Improved support for iCloud and updated `fetchImage...` interface that added handling for `info`.
+
 ## [3.0.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.3) (2015-12-25)
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.2...3.0.3)
 

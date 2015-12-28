@@ -81,6 +81,9 @@ public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
 
+/// If YES, and the requested image is not stored on the local device, the Picker downloads the image from iCloud.
+public var autoDownloadWhenAssetIsInCloud = true
+
 /// The callback block is executed when user pressed the cancel button.
 public var didCancel: (() -> Void)?
 public var showsCancelButton = false
@@ -178,19 +181,43 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
+> In `3.0.4`, I've updated the `fetchImage...` interface:  
+> the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
+> so you need to change:
+```swift
+asset.fetchImageWithSize(size, completeBlock: { image in
+    // ...
+})
+```
+to:
+```swift
+asset.fetchImageWithSize(size, completeBlock: { image, info in
+    // ...
+})
+```
+
+## [3.0.4](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.4) (2015-12-28)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.3...3.0.4)
+
+**Closed issues:**
+
+- Cannot use DKAsset.fetchImageWithSize with iCloud photos \(Perhaps?\) [\#58](https://github.com/zhangao0086/DKImagePickerController/issues/58)
+
+**Merged pull requests:**
+
+- Improved performance when getting list of images.
+
+- Added support for iCloud.
+
+- Updated `fetchImage...` interface that added handling for `info`.
+
 ## [3.0.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.3) (2015-12-25)
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.2...3.0.3)
 
 **Merged pull requests:**
 
 - Fixed an issue that may cause full screen image is incorrect.
-
-## [3.0.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.2) (2015-12-24)
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.1...3.0.2)
-
-**Merged pull requests:**
-
-- Updated the defaultImageRequestOptions.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 

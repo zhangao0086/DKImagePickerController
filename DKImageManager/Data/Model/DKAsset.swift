@@ -22,10 +22,10 @@ public extension CGSize {
 public class DKAsset: NSObject {
 
 	/// Returns a UIImage that is appropriate for displaying full screen.
-	private var fullScreenImage: UIImage?
+	private var fullScreenImage: (image: UIImage?, info: [NSObject : AnyObject]?)?
 	
 	/// Returns the original image.
-	private var originalImage: UIImage?
+	private var originalImage: (image: UIImage?, info: [NSObject : AnyObject]?)?
 	
 	/// When the asset was an image, it's false. Otherwise true.
 	public private(set) var isVideo: Bool = false
@@ -53,8 +53,8 @@ public class DKAsset: NSObject {
 	internal init(image: UIImage) {
 		super.init()
 		self.image = image
-		self.fullScreenImage = image
-		self.originalImage = image
+		self.fullScreenImage = (image, nil)
+		self.originalImage = (image, nil)
 	}
 	
 	override public func isEqual(object: AnyObject?) -> Bool {
@@ -68,40 +68,44 @@ public class DKAsset: NSObject {
 		}
 	}
 	
-	public func fetchImageWithSize(size: CGSize, completeBlock: (image: UIImage?) -> Void) {
+	public func fetchImageWithSize(size: CGSize, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		self.fetchImageWithSize(size, options: nil, completeBlock: completeBlock)
+	}
+	
+	public func fetchImageWithSize(size: CGSize, options: PHImageRequestOptions?, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		if let _ = self.originalAsset {
-			getImageManager().fetchImageForAsset(self, size: size, completeBlock: completeBlock)
+			getImageManager().fetchImageForAsset(self, size: size, options: options, completeBlock: completeBlock)
 		} else {
-			completeBlock(image: self.image!)
+			completeBlock(image: self.image!, info: nil)
 		}
 	}
 	
-	public func fetchFullScreenImageWithCompleteBlock(completeBlock: (image: UIImage?) -> Void) {
-		if let fullScreenImage = self.fullScreenImage {
-			completeBlock(image: fullScreenImage)
+	public func fetchFullScreenImageWithCompleteBlock(completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		if let (image, info) = self.fullScreenImage {
+			completeBlock(image: image, info: info)
 		} else {
 			var screenSize = UIScreen.mainScreen().bounds.size
 			if screenSize.width > screenSize.height {
 				screenSize = CGSize(width: screenSize.height, height: screenSize.width)
 			}
-			getImageManager().fetchImageForAsset(self, size: screenSize, contentMode: .AspectFit) { [weak self] image in
+			getImageManager().fetchImageForAsset(self, size: screenSize, contentMode: .AspectFit) { [weak self] image, info in
 				guard let strongSelf = self else { return }
 				
-				strongSelf.fullScreenImage = image
-				completeBlock(image: image)
+				strongSelf.fullScreenImage = (image, info)
+				completeBlock(image: image, info: info)
 			}
 		}
 	}
 	
-	public func fetchOriginalImageWithCompleteBlock(completeBlock: (image: UIImage?) -> Void) {
-		if let originalImage = self.originalImage {
-			completeBlock(image: originalImage)
+	public func fetchOriginalImageWithCompleteBlock(completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		if let (image, info) = self.originalImage {
+			completeBlock(image: image, info: info)
 		} else {
-			getImageManager().fetchImageForAsset(self, size: PHImageManagerMaximumSize) { [weak self] image in
+			getImageManager().fetchImageForAsset(self, size: PHImageManagerMaximumSize) { [weak self] image, info in
 				guard let strongSelf = self else { return }
 				
-				strongSelf.originalImage = image
-				completeBlock(image: image)
+				strongSelf.originalImage = (image, info)
+				completeBlock(image: image, info: info)
 			}
 		}
 	}
