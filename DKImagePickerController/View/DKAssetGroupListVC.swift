@@ -116,6 +116,14 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	private var defaultAssetGroup: PHAssetCollectionSubtype?
 	
     private var selectedGroupDidChangeBlock:((group: String?)->())?
+	
+	private lazy var groupThumbnailRequestOptions: PHImageRequestOptions = {
+		let options = PHImageRequestOptions()
+		options.deliveryMode = .Opportunistic
+		options.resizeMode = .Exact;
+		
+		return options
+	}()
     
     override var preferredContentSize: CGSize {
         get {
@@ -194,7 +202,8 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 			cell.thumbnailImageView.image = DKImageResource.emptyAlbumIcon()
 		} else {
 			getImageManager().groupDataManager.fetchGroupThumbnailForGroup(assetGroup.groupId,
-				size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel()) { image in
+				size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
+				options: self.groupThumbnailRequestOptions) { image in
 				if cell.tag == tag {
 					cell.thumbnailImageView.image = image
 				}

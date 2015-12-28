@@ -69,8 +69,12 @@ public class DKAsset: NSObject {
 	}
 	
 	public func fetchImageWithSize(size: CGSize, completeBlock: (image: UIImage?) -> Void) {
+		self.fetchImageWithSize(size, options: nil, completeBlock: completeBlock)
+	}
+	
+	public func fetchImageWithSize(size: CGSize, options: PHImageRequestOptions?, completeBlock: (image: UIImage?) -> Void) {
 		if let _ = self.originalAsset {
-			getImageManager().fetchImageForAsset(self, size: size, completeBlock: completeBlock)
+			getImageManager().fetchImageForAsset(self, size: size, options: options, completeBlock: completeBlock)
 		} else {
 			completeBlock(image: self.image!)
 		}

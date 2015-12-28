@@ -80,30 +80,30 @@ public class DKImageManager: DKBaseManager {
 	}
 	
 	public func fetchImageForAsset(asset: DKAsset, size: CGSize, completeBlock: (image: UIImage?) -> Void) {
-		self.fetchImageForAsset(asset, size: size, options: self.defaultImageRequestOptions, completeBlock: completeBlock)
+		self.fetchImageForAsset(asset, size: size, options: nil, completeBlock: completeBlock)
 	}
 	
 	public func fetchImageForAsset(asset: DKAsset, size: CGSize, contentMode: PHImageContentMode, completeBlock: (image: UIImage?) -> Void) {
-			self.fetchImageForAsset(asset, size: size, options: self.defaultImageRequestOptions, contentMode: contentMode, completeBlock: completeBlock)
+			self.fetchImageForAsset(asset, size: size, options: nil, contentMode: contentMode, completeBlock: completeBlock)
 	}
 
-	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions, completeBlock: (image: UIImage?) -> Void) {
-			self.fetchImageForAsset(asset, size: size, options: options, contentMode: .AspectFill, completeBlock: completeBlock)
+	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, completeBlock: (image: UIImage?) -> Void) {
+		self.fetchImageForAsset(asset, size: size, options: options, contentMode: .AspectFill, completeBlock: completeBlock)
 	}
 	
-	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions, contentMode: PHImageContentMode,
+	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode,
 		completeBlock: (image: UIImage?) -> Void) {
 		self.manager.requestImageForAsset(asset.originalAsset!,
 			targetSize: size,
 			contentMode: contentMode,
-			options: options,
+			options: options ?? self.defaultImageRequestOptions,
 			resultHandler: { image, info in
 				completeBlock(image: image)
 		})
 	}
 	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVURLAsset?) -> Void) {
 		self.manager.requestAVAssetForVideo(asset.originalAsset!,
-			options: nil) { (avAsset, audioMix, info) -> Void in
+			options: nil) { avAsset, audioMix, info in
 				completeBlock(avAsset: avAsset as? AVURLAsset)
 		}
 	}

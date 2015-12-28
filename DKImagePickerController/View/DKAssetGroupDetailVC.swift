@@ -224,6 +224,14 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		
 		self.itemSize = layout.itemSize
     }
+	
+	private lazy var groupImageRequestOptions: PHImageRequestOptions = {
+		let options = PHImageRequestOptions()
+		options.deliveryMode = .Opportunistic
+		options.resizeMode = .Exact;
+		
+		return options
+	}()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -321,7 +329,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		cell.asset = asset
 		let tag = indexPath.row + 1
 		cell.tag = tag
-		asset.fetchImageWithSize(self.itemSize.toPixel()) { image in
+		asset.fetchImageWithSize(self.itemSize.toPixel(), options: self.groupImageRequestOptions) { image in
 			if cell.tag == tag {
 				cell.thumbnailImageView.image = image
 			}
