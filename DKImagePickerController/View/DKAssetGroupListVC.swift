@@ -203,7 +203,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 		} else {
 			getImageManager().groupDataManager.fetchGroupThumbnailForGroup(assetGroup.groupId,
 				size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
-				options: self.groupThumbnailRequestOptions) { image in
+				options: self.groupThumbnailRequestOptions) { image, info in
 				if cell.tag == tag {
 					cell.thumbnailImageView.image = image
 				}
