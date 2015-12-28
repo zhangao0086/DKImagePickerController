@@ -329,7 +329,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		cell.asset = asset
 		let tag = indexPath.row + 1
 		cell.tag = tag
-		asset.fetchImageWithSize(self.itemSize.toPixel(), options: self.groupImageRequestOptions) { image in
+		asset.fetchImageWithSize(self.itemSize.toPixel(), options: self.groupImageRequestOptions) { image, info in
 			if cell.tag == tag {
 				cell.thumbnailImageView.image = image
 			}
