@@ -44,7 +44,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.assets = assets
                 self.previewView?.reloadData()
             }
-            
+			
+			if UI_USER_INTERFACE_IDIOM() == .Pad {
+				pickerController.modalPresentationStyle = .FormSheet;
+			}
+
             self.presentViewController(pickerController, animated: true) {}
     }
     
