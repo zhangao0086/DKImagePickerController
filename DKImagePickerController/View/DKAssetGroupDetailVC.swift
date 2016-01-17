@@ -202,28 +202,31 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 	private var groupListVC: DKAssetGroupListVC!
     
     private var hidesCamera :Bool = false
-    
-    override init(collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(collectionViewLayout: layout)
+	
+    convenience init() {
+        let layout = DKAssetGroupGridLayout()
+        self.init(collectionViewLayout: layout)
     }
 	
-	private var itemSize: CGSize!
-    convenience init() {
-        let layout = UICollectionViewFlowLayout()
-        
-        let interval: CGFloat = 3
-        layout.minimumInteritemSpacing = interval
-        layout.minimumLineSpacing = interval
-        
-        let screenWidth = min(UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height)
-        let itemWidth = (screenWidth - interval * 3) / 3
-        
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-        
-        self.init(collectionViewLayout: layout)
+	override init(collectionViewLayout layout: UICollectionViewLayout) {
+		super.init(collectionViewLayout: layout)
+	}
+	
+	private var currentViewSize: CGSize!
+	override func viewWillLayoutSubviews() {
+		super.viewWillLayoutSubviews()
 		
-		self.itemSize = layout.itemSize
-    }
+		if let currentViewSize = self.currentViewSize where CGSizeEqualToSize(currentViewSize, self.view.bounds.size) {
+			return
+		} else {
+			currentViewSize = self.view.bounds.size
+		}
+		
+		let layout = DKAssetGroupGridLayout(contentSize: self.view.bounds.size)
+		self.collectionView!.setCollectionViewLayout(layout, animated: true) { completed in
+			self.collectionView!.reloadItemsAtIndexPaths(self.collectionView!.indexPathsForVisibleItems())
+		}
+	}
 	
 	private lazy var groupImageRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
