@@ -136,7 +136,9 @@ public class DKImagePickerController: UINavigationController {
     public convenience init() {
 		let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
-      
+		
+		self.preferredContentSize = CGSize(width: 680, height: 600)
+		
         rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
         rootVC.navigationItem.hidesBackButton = true
 		
@@ -180,6 +182,7 @@ public class DKImagePickerController: UINavigationController {
 		assetFetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 		return assetFetchOptions
 	}()
+	
 	private func createAssetFetchOptions() -> PHFetchOptions? {
 		if self.assetType != .AllAssets {
 			self.assetFetchOptions.predicate = NSPredicate(format: "mediaType == %d",
