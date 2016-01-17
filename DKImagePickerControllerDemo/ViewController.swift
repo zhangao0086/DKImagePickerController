@@ -25,17 +25,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
     
-    func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
-        allowMultipleType: Bool = true,
-        sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]) {
+    func showImagePickerWithAssetType(
+		assetType: DKImagePickerControllerAssetType,
+        allowMultipleType: Bool,
+        sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
+		allowsLandscape: Bool) {
             
             let pickerController = DKImagePickerController()
             pickerController.assetType = assetType
-			pickerController.allowsLandscape = true
+			pickerController.allowsLandscape = allowsLandscape
+			pickerController.allowMultipleTypes = allowMultipleType
+			pickerController.sourceType = sourceType
 //			pickerController.showsCancelButton = true
 //			pickerController.showsEmptyAlbums = false
-            pickerController.allowMultipleTypes = allowMultipleType
-            pickerController.sourceType = sourceType
 //			pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
 			pickerController.defaultSelectedAssets = self.assets
             
@@ -83,12 +85,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     struct Demo {
         static let titles = [
-            ["Pick All", "Pick photos only", "Pick videos only"],
-            ["Pick All (only photos or videos)"],
+            ["Pick All", "Pick photos only", "Pick videos only", "Pick All (only photos or videos)"],
             ["Take a picture"],
-            ["Hides camera"]
+            ["Hides camera"],
+			["Allows landscape"],
         ]
-        static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos]
+        static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos, .AllAssets]
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -111,15 +113,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     
         let assetType = Demo.types[indexPath.row]
-        let allowMultipleType = indexPath.section == 0
-        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 2 ? .Camera :
-            (indexPath.section == 3 ? .Photo : [.Camera, .Photo])
-        
-        showImagePickerWithAssetType(assetType,
-            allowMultipleType: allowMultipleType,
-            sourceType: sourceType)
-    }
-    
+        let allowMultipleType = !(indexPath.row == 0 && indexPath.section == 3)
+        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .Camera :
+			(indexPath.section == 2 ? .Photo : [.Camera, .Photo])
+		let allowsLandscape = indexPath.section == 3
+		
+		showImagePickerWithAssetType(
+			assetType,
+			allowMultipleType: allowMultipleType,
+			sourceType: sourceType,
+			allowsLandscape: allowsLandscape
+		)
+	}
+	
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
