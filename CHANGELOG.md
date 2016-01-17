@@ -1,5 +1,19 @@
 # Change Log
 
+## [3.0.5](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.5) (2016-01-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.4...3.0.5)
+
+**Merged pull requests:**
+
+- Added support for iPad.
+
+- Added support for landscape.
+
+- Updated fetching targetSize for full-screen image.
+
+- Make DKAssetGroup public.
+
 ## [3.0.4](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.4) (2015-12-28)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.3...3.0.4)

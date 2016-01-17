@@ -203,6 +203,20 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
+## [3.0.5](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.5) (2016-01-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.4...3.0.5)
+
+**Merged pull requests:**
+
+- Added support for iPad.
+
+- Added support for landscape.
+
+- Updated fetching targetSize for full-screen image.
+
+- Make DKAssetGroup public.
+
 ## [3.0.4](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.4) (2015-12-28)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.3...3.0.4)
@@ -218,13 +232,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 - Added support for iCloud.
 
 - Updated `fetchImage...` interface that added handling for `info`.
-
-## [3.0.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.3) (2015-12-25)
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.2...3.0.3)
-
-**Merged pull requests:**
-
-- Fixed an issue that may cause full screen image is incorrect.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
