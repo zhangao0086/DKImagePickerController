@@ -84,6 +84,9 @@ public var allowMultipleTypes = true
 /// If YES, and the requested image is not stored on the local device, the Picker downloads the image from iCloud.
 public var autoDownloadWhenAssetIsInCloud = true
 
+/// Determines whether or not the rotation is enabled.
+public var allowsLandscape = false
+
 /// The callback block is executed when user pressed the cancel button.
 public var didCancel: (() -> Void)?
 public var showsCancelButton = false
