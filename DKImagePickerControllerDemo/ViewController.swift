@@ -29,13 +29,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		assetType: DKImagePickerControllerAssetType,
         allowMultipleType: Bool,
         sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
-		allowsLandscape: Bool) {
+		allowsLandscape: Bool,
+		singleSelect: Bool) {
             
             let pickerController = DKImagePickerController()
             pickerController.assetType = assetType
 			pickerController.allowsLandscape = allowsLandscape
 			pickerController.allowMultipleTypes = allowMultipleType
 			pickerController.sourceType = sourceType
+			pickerController.singleSelect = singleSelect
 //			pickerController.showsCancelButton = true
 //			pickerController.showsEmptyAlbums = false
 //			pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
@@ -89,6 +91,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             ["Take a picture"],
             ["Hides camera"],
 			["Allows landscape"],
+			["Single select"]
         ]
         static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos, .AllAssets]
     }
@@ -117,12 +120,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .Camera :
 			(indexPath.section == 2 ? .Photo : [.Camera, .Photo])
 		let allowsLandscape = indexPath.section == 3
+		let singleSelect = indexPath.section == 4
 		
 		showImagePickerWithAssetType(
 			assetType,
 			allowMultipleType: allowMultipleType,
 			sourceType: sourceType,
-			allowsLandscape: allowsLandscape
+			allowsLandscape: allowsLandscape,
+			singleSelect: singleSelect
 		)
 	}
 	

@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="8Tz-By-Qpj">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="450"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="425"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="dW1-s1-a0L" style="IBUITableViewCellStyleDefault" id="lZK-CJ-Zrn">
@@ -45,10 +45,10 @@
                                 </connections>
                             </tableView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lbl-5o-9q0">
-                                <rect key="frame" x="0.0" y="450" width="600" height="150"/>
+                                <rect key="frame" x="0.0" y="425" width="600" height="175"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="jIQ-Af-hLa"/>
+                                    <constraint firstAttribute="height" constant="175" id="jIQ-Af-hLa"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="ECP-qh-jmS">
                                     <size key="itemSize" width="100" height="100"/>
