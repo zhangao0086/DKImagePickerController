@@ -165,8 +165,8 @@ public class DKCamera: UIViewController {
 		self.currentDevice = self.captureDeviceBack ?? self.captureDeviceFront
 	}
 	
-	let bottomView = UIView()
-	
+    let bottomView = UIView()
+    
 	public func setupUI() {
 		self.view.backgroundColor = UIColor.blackColor()
 		self.view.addSubview(self.contentView)
@@ -262,7 +262,7 @@ public class DKCamera: UIViewController {
 		self.didCancel?()
 	}
 	
-	internal func takePicture() {
+	public func takePicture() {
 		let authStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 		if authStatus == .Denied {
 			return
@@ -282,7 +282,7 @@ public class DKCamera: UIViewController {
 					
 					if error == nil {
 						let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
-						
+
 						if let didFinishCapturingImage = self.didFinishCapturingImage, image = UIImage(data: imageData) {
 							didFinishCapturingImage(image: image)
 						}
@@ -499,7 +499,7 @@ public class DKCamera: UIViewController {
 	
 	public func updateContentLayoutForCurrentOrientation() {
 		let newAngle = self.currentOrientation.toAngleRelativeToPortrait() - self.originalOrientation.toAngleRelativeToPortrait()
-		
+
 		if self.allowsRotate {
 			var contentViewNewSize: CGSize!
 			let width = self.view.bounds.width
@@ -523,7 +523,7 @@ public class DKCamera: UIViewController {
 			}
 		}
 	}
-	
+
 }
 
 // MARK: - Utilities
