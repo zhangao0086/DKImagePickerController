@@ -9,11 +9,15 @@ DKImagePickerController
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot5.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 ---
 
-
-Update for Xcode 7 with Swift 2.0
----
 ## Description
 It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
+
+### Features
+* Supports both single and multiple selection.
+* Supports filtering albums and sorting by type.
+* Supports landscape and iPad and orientation switching.
+* Supports iCloud.
+* Supports UIAppearance.
 
 ## Requirements
 * iOS 8.0+
