@@ -197,7 +197,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         return button
     }()
 		
-    internal var selectedGroup: String?
+    internal var selectedGroupId: String?
     
 	private var groupListVC: DKAssetGroupListVC!
     
@@ -260,9 +260,9 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		
 		func setup() {
 			getImageManager().groupDataManager.addObserver(self)
-			self.groupListVC = DKAssetGroupListVC(selectedGroupDidChangeBlock: { [unowned self] group in
-				self.selectAssetGroup(group)
-				}, defaultAssetGroup: self.imagePickerController?.defaultAssetGroup)
+			self.groupListVC = DKAssetGroupListVC(selectedGroupDidChangeBlock: { [unowned self] groupId in
+				self.selectAssetGroup(groupId)
+			}, defaultAssetGroup: self.imagePickerController?.defaultAssetGroup)
 			self.groupListVC.loadGroups()
 		}
 		
@@ -271,18 +271,18 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		}
 	}
 	
-    func selectAssetGroup(group: String?) {
-        if self.selectedGroup == group {
+    func selectAssetGroup(groupId: String?) {
+        if self.selectedGroupId == groupId {
             return
         }
         
-        self.selectedGroup = group
+        self.selectedGroupId = groupId
 		self.updateTitleView()
 		self.collectionView!.reloadData()
     }
 	
 	func updateTitleView() {
-		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroup!)
+		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
 		self.title = group.groupName
 		
 		let groupsCount = getImageManager().groupDataManager.groupIds?.count
@@ -313,7 +313,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 	
 	func assetCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
 		let assetIndex = (indexPath.row - (self.hidesCamera ? 0 : 1))
-		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroup!)
+		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
 		
 		let asset = getImageManager().groupDataManager.fetchAssetWithGroup(group, index: assetIndex)
 		
@@ -329,7 +329,9 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		cell.asset = asset
 		let tag = indexPath.row + 1
 		cell.tag = tag
-		asset.fetchImageWithSize(self.itemSize.toPixel(), options: self.groupImageRequestOptions) { image, info in
+		
+		let itemSize = self.collectionView!.collectionViewLayout.layoutAttributesForItemAtIndexPath(indexPath)!.size
+		asset.fetchImageWithSize(itemSize.toPixel(), options: self.groupImageRequestOptions) { image, info in
 			if cell.tag == tag {
 				cell.thumbnailImageView.image = image
 			}
@@ -350,7 +352,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		guard let selectedGroup = self.selectedGroup else { return 0 }
+		guard let selectedGroup = self.selectedGroupId else { return 0 }
 		
 		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(selectedGroup)
         return (group.totalCount ?? 0) + (self.hidesCamera ? 0 : 1)
@@ -415,7 +417,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 	// MARK: - DKGroupDataManagerObserver methods
 	
 	func groupDidUpdate(groupId: String) {
-		if self.selectedGroup == groupId {
+		if self.selectedGroupId == groupId {
 			self.updateTitleView()
 		}
 	}
@@ -429,7 +431,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 					}
 				}
 			}
-			if self.selectedGroup == groupId {
+			if self.selectedGroupId == groupId {
 				self.collectionView?.reloadData()
 			}
 		}

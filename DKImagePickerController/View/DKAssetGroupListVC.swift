@@ -102,7 +102,7 @@ class DKAssetGroupCell: UITableViewCell {
 
 class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
     
-	convenience init(selectedGroupDidChangeBlock: (group: String?) -> (), defaultAssetGroup: PHAssetCollectionSubtype?) {
+	convenience init(selectedGroupDidChangeBlock: (groupId: String?) -> (), defaultAssetGroup: PHAssetCollectionSubtype?) {
 		self.init(style: .Plain)
 		
 		self.defaultAssetGroup = defaultAssetGroup
