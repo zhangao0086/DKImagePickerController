@@ -31,7 +31,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             let pickerController = DKImagePickerController()
             pickerController.assetType = assetType
-//			pickerController.allowsLandscape = true
+			pickerController.allowsLandscape = true
 //			pickerController.showsCancelButton = true
 //			pickerController.showsEmptyAlbums = false
             pickerController.allowMultipleTypes = allowMultipleType
