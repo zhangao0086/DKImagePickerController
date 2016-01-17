@@ -15,6 +15,7 @@
 		9C6B3E031C219724009684FE /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */; };
 		9C6B3E041C219724009684FE /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */; };
 		9C6B3E0B1C2266A8009684FE /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */; };
+		9CBAA4A91C4B893A0097AFAB /* DKAssetGroupGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */; };
 		9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */; };
 		9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F721AB15D210000F1D1 /* Images.xcassets */; };
 		9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F751AB15D210000F1D1 /* ViewController.swift */; };
@@ -51,6 +52,7 @@
 		9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
 		9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
+		9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupGridLayout.swift; sourceTree = "<group>"; };
 		9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CBF3F6D1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9CBF3F6F1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			children = (
 				9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */,
 				9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */,
+				9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */,
 				9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */,
 			);
 			path = View;
@@ -324,6 +327,7 @@
 				9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */,
 				9CDEF0F11B62279F003340FE /* DKImagePickerController.swift in Sources */,
 				9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */,
+				9CBAA4A91C4B893A0097AFAB /* DKAssetGroupGridLayout.swift in Sources */,
 				9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */,
 				9C6B3E0B1C2266A8009684FE /* DKPermissionView.swift in Sources */,
 				9C6B3E041C219724009684FE /* DKAssetGroupListVC.swift in Sources */,
@@ -477,6 +481,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.DKImagePickerControllerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -493,6 +498,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.DKImagePickerControllerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

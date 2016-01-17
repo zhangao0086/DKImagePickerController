@@ -8,9 +8,9 @@
 
 import UIKit
 
-class DKPopoverViewController: UIViewController {
+public class DKPopoverViewController: UIViewController {
     
-    class func popoverViewController(viewController: UIViewController, fromView: UIView) {
+    public class func popoverViewController(viewController: UIViewController, fromView: UIView) {
         let window = UIApplication.sharedApplication().keyWindow!
         
         let popoverViewController = DKPopoverViewController()
@@ -22,7 +22,7 @@ class DKPopoverViewController: UIViewController {
         window.rootViewController!.addChildViewController(popoverViewController)
     }
     
-    class func dismissPopoverViewController() {
+    public class func dismissPopoverViewController() {
         let window = UIApplication.sharedApplication().keyWindow!
 
         for vc in window.rootViewController!.childViewControllers {
@@ -32,7 +32,7 @@ class DKPopoverViewController: UIViewController {
         }
     }
     
-    class DKPopoverView: UIView {
+    private class DKPopoverView: UIView {
         
         var contentView: UIView! {
             didSet {
@@ -99,9 +99,8 @@ class DKPopoverViewController: UIViewController {
     var contentViewController: UIViewController!
     var fromView: UIView!
     private let popoverView = DKPopoverView()
-    private var popoverViewHeight: CGFloat!
     
-    override func loadView() {
+    override public func loadView() {
         super.loadView()
         
         let backgroundView = UIControl(frame: self.view.frame)
@@ -111,37 +110,28 @@ class DKPopoverViewController: UIViewController {
         self.view = backgroundView
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.addSubview(popoverView)
     }
 
 	@available(iOS, deprecated=8.0)
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+    override public func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
 		super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
 		
-        let popoverY = self.fromView.convertPoint(self.fromView.frame.origin, toView: self.view).y + self.fromView.bounds.height
-        self.popoverViewHeight = min(self.contentViewController.preferredContentSize.height + self.popoverView.arrowHeight, self.view.bounds.height - popoverY - 40)
-        
         UIView.animateWithDuration(0.2, animations: {
-            self.popoverView.frame = CGRect(x: 0, y: popoverY,
-                width: self.view.bounds.width, height: self.popoverViewHeight)
+            self.popoverView.frame = self.calculatePopoverViewFrame()
         })
-        
     }
     
     func showInView(view: UIView) {
-        let popoverY = self.fromView.convertPoint(self.fromView.frame.origin, toView: view).y + self.fromView.bounds.height
-        self.popoverViewHeight = min(self.contentViewController.preferredContentSize.height + self.popoverView.arrowHeight, view.bounds.height - popoverY - 40)
-        
-        self.popoverView.frame = CGRect(x: 0, y: popoverY,
-            width: view.bounds.width, height: popoverViewHeight)
+        self.popoverView.frame = self.calculatePopoverViewFrame()
         self.popoverView.contentView = self.contentViewController.view
         
         view.addSubview(self.view)
         
-        self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverViewHeight / 2)), 0.1, 0.1)
+        self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverView.bounds.height / 2)), 0.1, 0.1)
         UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: [.CurveEaseInOut, .AllowUserInteraction], animations: {
             self.popoverView.transform = CGAffineTransformIdentity
             self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
@@ -150,11 +140,33 @@ class DKPopoverViewController: UIViewController {
     
     func dismiss() {
         UIView.animateWithDuration(0.2, animations: {
-            self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverViewHeight / 2)), 0.01, 0.01)
+            self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverView.bounds.height / 2)), 0.01, 0.01)
             self.view.backgroundColor = UIColor.clearColor()
-        }) { (result) -> Void in
+        }) { result in
             self.view.removeFromSuperview()
             self.removeFromParentViewController()
         }
     }
+	
+	func calculatePopoverViewFrame() -> CGRect {
+		let popoverY = self.fromView.convertPoint(self.fromView.frame.origin, toView: self.view).y + self.fromView.bounds.height
+
+		var popoverWidth = self.contentViewController.preferredContentSize.width
+		if popoverWidth == UIViewNoIntrinsicMetric {
+			if UI_USER_INTERFACE_IDIOM() == .Pad {
+				popoverWidth = self.view.bounds.width * 0.6
+			} else {
+				popoverWidth = self.view.bounds.width
+			}
+		}
+		
+		let popoverHeight = min(self.contentViewController.preferredContentSize.height + self.popoverView.arrowHeight, view.bounds.height - popoverY - 40)
+		
+		return CGRect(
+			x: (self.view.bounds.width - popoverWidth) / 2,
+			y: popoverY,
+			width: popoverWidth,
+			height: popoverHeight
+		)
+	}
 }

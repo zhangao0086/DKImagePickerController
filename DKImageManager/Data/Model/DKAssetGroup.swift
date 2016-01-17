@@ -10,10 +10,10 @@ import Photos
 
 // Group Model
 public class DKAssetGroup : NSObject {
-	var groupId: String!
-	var groupName: String!
-	var totalCount: Int!
+	public var groupId: String!
+	public var groupName: String!
+	public var totalCount: Int!
 	
-	internal var originalCollection: PHAssetCollection!
-	internal var fetchResult: PHFetchResult!
+	public var originalCollection: PHAssetCollection!
+	public var fetchResult: PHFetchResult!
 }

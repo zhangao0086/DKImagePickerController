@@ -91,6 +91,9 @@ public class DKImagePickerController: UINavigationController {
 		}
 	}
 	
+	/// Determines whether or not the rotation is enabled.
+	public var allowsLandscape = false
+	
 	/// The callback block is executed when user pressed the cancel button.
 	public var didCancel: (() -> Void)?
 	public var showsCancelButton = false {
@@ -129,13 +132,13 @@ public class DKImagePickerController: UINavigationController {
       
         return button
     }()
-	
-	private var camera: DKCamera!
     
     public convenience init() {
 		let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
-      
+		
+		self.preferredContentSize = CGSize(width: 680, height: 600)
+		
         rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
         rootVC.navigationItem.hidesBackButton = true
 		
@@ -179,6 +182,7 @@ public class DKImagePickerController: UINavigationController {
 		assetFetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 		return assetFetchOptions
 	}()
+	
 	private func createAssetFetchOptions() -> PHFetchOptions? {
 		if self.assetType != .AllAssets {
 			self.assetFetchOptions.predicate = NSPredicate(format: "mediaType == %d",
@@ -197,51 +201,47 @@ public class DKImagePickerController: UINavigationController {
     }
 	
 	private func createCamera() -> DKCamera {
-		if self.camera == nil {
-			let camera = DKCamera()
-			
-			camera.didCancel = {[unowned camera] () -> Void in
-				camera.dismissViewControllerAnimated(true, completion: nil)
-			}
-			
-			camera.didFinishCapturingImage = { [unowned self] (image) in
-				var newImageIdentifier: String!
-				PHPhotoLibrary.sharedPhotoLibrary().performChanges(
-					{ () in
-						let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
-						newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-					}, completionHandler: { (success, error) -> Void in
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
-							if success {
-								if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-									self.dismissViewControllerAnimated(true, completion: nil)
-									self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
-								}
-							} else {
-								self.dismissViewControllerAnimated(true, completion: nil)
-								self.selectedImage(DKAsset(image: image), needsToDismiss: true)
-							}
-						})
-				})
-			}
-			
-			self.camera = camera
-		}
-		self.checkCameraPermission()
+		let camera = DKCamera()
 		
-		return self.camera!
+		camera.didCancel = {[unowned camera] () -> Void in
+			camera.dismissViewControllerAnimated(true, completion: nil)
+		}
+		
+		camera.didFinishCapturingImage = { [unowned self] (image) in
+			var newImageIdentifier: String!
+			PHPhotoLibrary.sharedPhotoLibrary().performChanges(
+				{ () in
+					let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
+					newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
+				}, completionHandler: { (success, error) -> Void in
+					dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						if success {
+							if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
+								self.dismissViewControllerAnimated(true, completion: nil)
+								self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+							}
+						} else {
+							self.dismissViewControllerAnimated(true, completion: nil)
+							self.selectedImage(DKAsset(image: image), needsToDismiss: true)
+						}
+					})
+			})
+		}
+		self.checkCameraPermission(camera)
+		
+		return camera
 	}
 	
-	internal func checkCameraPermission() {
+	internal func checkCameraPermission(camera: DKCamera) {
 		func cameraDenied() {
 			dispatch_async(dispatch_get_main_queue()) {
 				let permissionView = DKPermissionView.permissionView(.Camera)
-				self.camera.cameraOverlayView = permissionView
+				camera.cameraOverlayView = permissionView
 			}
 		}
 		
 		func setup() {
-			self.camera.cameraOverlayView = nil
+			camera.cameraOverlayView = nil
 		}
 		
 		DKCamera.checkCameraPermission { granted in
@@ -288,11 +288,15 @@ public class DKImagePickerController: UINavigationController {
     // MARK: - Handles Orientation
 
     public override func shouldAutorotate() -> Bool {
-        return false
+		return self.allowsLandscape ? true : false
     }
     
     public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.Portrait
+		if self.allowsLandscape {
+			return super.supportedInterfaceOrientations()
+		} else {
+			return UIInterfaceOrientationMask.Portrait
+		}
     }
 }
 
