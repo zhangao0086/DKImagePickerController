@@ -81,11 +81,27 @@ public class DKAsset: NSObject {
 	}
 	
 	public func fetchFullScreenImageWithCompleteBlock(completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		self.fetchFullScreenImage(false, completeBlock: completeBlock)
+	}
+	
+	/**
+	Fetch an image with the current screen size.
+	
+	- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+	- parameter completeBlock: The block is executed when the image download is complete.
+	*/
+	public func fetchFullScreenImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		if let (image, info) = self.fullScreenImage {
 			completeBlock(image: image, info: info)
 		} else {
 			let screenSize = UIScreen.mainScreen().bounds.size
-			getImageManager().fetchImageForAsset(self, size: screenSize.toPixel(), contentMode: .AspectFit) { [weak self] image, info in
+			
+			let options = PHImageRequestOptions()
+			options.deliveryMode = .HighQualityFormat
+			options.resizeMode = .Exact;
+			options.synchronous = sync
+
+			getImageManager().fetchImageForAsset(self, size: screenSize.toPixel(), options: options, contentMode: .AspectFit) { [weak self] image, info in
 				guard let strongSelf = self else { return }
 				
 				strongSelf.fullScreenImage = (image, info)
@@ -95,10 +111,24 @@ public class DKAsset: NSObject {
 	}
 	
 	public func fetchOriginalImageWithCompleteBlock(completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		self.fetchOriginalImage(false, completeBlock: completeBlock)
+	}
+	
+	/**
+	Fetch an image with the original size.
+	
+	- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+	- parameter completeBlock: The block is executed when the image download is complete.
+	*/
+	public func fetchOriginalImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		if let (image, info) = self.originalImage {
 			completeBlock(image: image, info: info)
 		} else {
-			getImageManager().fetchImageForAsset(self, size: PHImageManagerMaximumSize) { [weak self] image, info in
+			let options = PHImageRequestOptions()
+			options.deliveryMode = .HighQualityFormat
+			options.synchronous = sync
+
+			getImageManager().fetchImageForAsset(self, size: PHImageManagerMaximumSize, options: options) { [weak self] image, info in
 				guard let strongSelf = self else { return }
 				
 				strongSelf.originalImage = (image, info)
