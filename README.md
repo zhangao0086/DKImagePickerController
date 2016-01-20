@@ -203,6 +203,14 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
+## [3.0.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.6) (2016-01-20)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.5...3.0.6)
+
+**Merged pull requests:**
+
+- Added a function to sync fetch the full-screen image and the original image.
+
 ## [3.0.5](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.5) (2016-01-17)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.4...3.0.5)
@@ -216,22 +224,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 - Updated fetching targetSize for full-screen image.
 
 - Make DKAssetGroup public.
-
-## [3.0.4](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.4) (2015-12-28)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.3...3.0.4)
-
-**Closed issues:**
-
-- Cannot use DKAsset.fetchImageWithSize with iCloud photos \(Perhaps?\) [\#58](https://github.com/zhangao0086/DKImagePickerController/issues/58)
-
-**Merged pull requests:**
-
-- Improved performance when getting list of images.
-
-- Added support for iCloud.
-
-- Updated `fetchImage...` interface that added handling for `info`.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
@@ -247,7 +239,7 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
 [scottdelly]:https://github.com/scottdellyDKImagePickerController
-[scottdellyCon]:https://github.com/zhangao0086//graphs/contributors
+[scottdellyCon]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
 [scottdellyCon1]:https://github.com/zhangao0086/DKImagePickerController/pull/24/commits
 [LucidityDesign]:https://github.com/LucidityDesign
 [LucidityDesignCon]:https://github.com/zhangao0086/DKImagePickerController/pull/19/commits

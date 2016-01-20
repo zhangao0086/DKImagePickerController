@@ -1,5 +1,13 @@
 # Change Log
 
+## [3.0.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.6) (2016-01-20)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.5...3.0.6)
+
+**Merged pull requests:**
+
+- Added a function to sync fetch the full-screen image and the original image.
+
 ## [3.0.5](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.5) (2016-01-17)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.4...3.0.5)
