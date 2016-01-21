@@ -313,8 +313,10 @@ public class DKCamera: UIViewController {
 	// MARK: - Handles Focus
 	
 	public func handleFocus(gesture: UITapGestureRecognizer) {
-		let touchPoint = gesture.locationInView(self.view)
-		self.focusAtTouchPoint(touchPoint)
+		if let currentDevice = self.currentDevice where currentDevice.focusPointOfInterestSupported {
+			let touchPoint = gesture.locationInView(self.view)
+			self.focusAtTouchPoint(touchPoint)
+		}
 	}
 	
 	// MARK: - Handles Switch Camera
