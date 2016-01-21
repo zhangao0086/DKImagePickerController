@@ -1,5 +1,13 @@
 # Change Log
 
+## [3.0.7](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.7) (2016-01-21)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.6...3.0.7)
+
+**Merged pull requests:**
+
+- Updated DKCamera.
+
 ## [3.0.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.6) (2016-01-20)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.5...3.0.6)
