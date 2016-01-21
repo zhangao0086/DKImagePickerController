@@ -111,8 +111,9 @@ public class DKCamera: UIViewController {
 					let currentOrientation = accelerometerData!.acceleration.toDeviceOrientation() ?? self.currentOrientation
 					if self.originalOrientation == nil {
 						self.initialOriginalOrientationForOrientation()
+						self.currentOrientation = self.originalOrientation
 					}
-					if self.currentOrientation != currentOrientation {
+					if let currentOrientation = currentOrientation where self.currentOrientation != currentOrientation {
 						self.currentOrientation = currentOrientation
 						self.updateContentLayoutForCurrentOrientation()
 					}
@@ -489,11 +490,7 @@ public class DKCamera: UIViewController {
 	}
 	
 	public func initialOriginalOrientationForOrientation() {
-		self.originalOrientation = UIDevice.currentDevice().orientation
-		let supportedInterfaceOrientations = UIApplication.sharedApplication().supportedInterfaceOrientationsForWindow(self.view.window)
-		if !supportedInterfaceOrientations.contains(self.originalOrientation.toInterfaceOrientationMask()) {
-			self.originalOrientation = UIApplication.sharedApplication().statusBarOrientation.toDeviceOrientation()
-		}
+		self.originalOrientation = self.interfaceOrientation.toDeviceOrientation()
 		self.previewLayer.connection.videoOrientation = self.originalOrientation.toAVCaptureVideoOrientation()
 	}
 	
