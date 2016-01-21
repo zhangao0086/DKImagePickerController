@@ -1,5 +1,13 @@
 # Change Log
 
+## [3.0.8](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.8) (2016-01-21)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.7...3.0.8)
+
+**Merged pull requests:**
+
+- Fixed an issue that cause crash when a user taps on front facing camera to focus.
+
 ## [3.0.7](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.7) (2016-01-21)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.6...3.0.7)
