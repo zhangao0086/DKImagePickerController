@@ -1,5 +1,17 @@
 # Change Log
 
+## [3.0.9](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.9) (2016-01-29)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.8...3.0.9)
+
+**Merged pull requests:**
+
+- Fixed an issue that cause showsCancelButton flag is ignored.
+
+**Closed issues:**
+
+- showsCancelButton has no effect if set before presenting the view controller [\#66](https://github.com/zhangao0086/DKImagePickerController/issues/66)
+
 ## [3.0.8](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.8) (2016-01-21)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.7...3.0.8)
