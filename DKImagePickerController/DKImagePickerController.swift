@@ -103,6 +103,8 @@ public class DKImagePickerController: UINavigationController {
 			}
 		}
 	}
+    /// This allows to clear @selectedAssets without creating new picker each time
+    public var shouldDeselectAssets: Bool = false
 	
     /// The callback block is executed when user pressed the select button.
     public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
@@ -169,7 +171,14 @@ public class DKImagePickerController: UINavigationController {
 				self.setViewControllers([rootVC], animated: false)
 				rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
 			}
-		}
+        } else if shouldDeselectAssets {
+            if let collectionVC = viewControllers[0] as? DKAssetGroupDetailVC {
+                for asset in selectedAssets {
+                    unselectedImage(asset)
+                }
+                collectionVC.collectionView?.reloadData()
+            }
+        }
 	}
 	
 	private lazy var assetFetchOptions: PHFetchOptions = {
