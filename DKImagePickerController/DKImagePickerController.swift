@@ -99,13 +99,7 @@ public class DKImagePickerController: UINavigationController {
 	public var showsCancelButton = false {
 		didSet {
 			if let rootVC =  self.viewControllers.first {
-				if showsCancelButton {
-					rootVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
-						target: self,
-						action: "dismiss")
-				} else {
-					rootVC.navigationItem.leftBarButtonItem = nil
-				}
+				self.updateCancelButtonForVC(rootVC)
 			}
 		}
 	}
@@ -116,10 +110,12 @@ public class DKImagePickerController: UINavigationController {
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
-            if let defaultSelectedAssets = self.defaultSelectedAssets {
-                self.selectedAssets = defaultSelectedAssets
-                self.updateDoneButtonTitle()
-            }
+			self.selectedAssets = self.defaultSelectedAssets ?? []
+			
+			if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+				rootVC.collectionView?.reloadData()
+			}
+			self.updateDoneButtonTitle()
         }
     }
     
@@ -171,6 +167,7 @@ public class DKImagePickerController: UINavigationController {
 				self.setViewControllers([self.createCamera()], animated: false)
 			} else {
 				let rootVC = DKAssetGroupDetailVC()
+				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
 				rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
 			}
@@ -189,6 +186,16 @@ public class DKImagePickerController: UINavigationController {
 				self.assetType == .AllPhotos ? PHAssetMediaType.Image.rawValue : PHAssetMediaType.Video.rawValue)
 		}
 		return self.assetFetchOptions
+	}
+	
+	private func updateCancelButtonForVC(vc: UIViewController) {
+		if self.showsCancelButton {
+			vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
+				target: self,
+				action: "dismiss")
+		} else {
+			vc.navigationItem.leftBarButtonItem = nil
+		}
 	}
 	
     private func updateDoneButtonTitle() {

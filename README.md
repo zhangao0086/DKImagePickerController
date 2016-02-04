@@ -203,27 +203,29 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
-## [3.0.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.6) (2016-01-20)
+## [3.0.10](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.10) (2016-02-04)
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.5...3.0.6)
-
-**Merged pull requests:**
-
-- Added a function to sync fetch the full-screen image and the original image.
-
-## [3.0.5](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.5) (2016-01-17)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.4...3.0.5)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.9...3.0.10)
 
 **Merged pull requests:**
 
-- Added support for iPad.
+- Added possibility to deselect all selected assets when showing a single instance picker.
 
-- Added support for landscape.
+**Closed issues:**
 
-- Updated fetching targetSize for full-screen image.
+- Possibility to deselect assets when displaying picker for second time. [\#69](https://github.com/zhangao0086/DKImagePickerController/pull/69)
 
-- Make DKAssetGroup public.
+## [3.0.9](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.9) (2016-01-29)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.8...3.0.9)
+
+**Merged pull requests:**
+
+- Fixed an issue that cause showsCancelButton flag is ignored.
+
+**Closed issues:**
+
+- showsCancelButton has no effect if set before presenting the view controller [\#66](https://github.com/zhangao0086/DKImagePickerController/issues/66)
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
