@@ -110,10 +110,12 @@ public class DKImagePickerController: UINavigationController {
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
-            if let defaultSelectedAssets = self.defaultSelectedAssets {
-                self.selectedAssets = defaultSelectedAssets
-                self.updateDoneButtonTitle()
-            }
+			self.selectedAssets = self.defaultSelectedAssets ?? []
+			
+			if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+				rootVC.collectionView?.reloadData()
+			}
+			self.updateDoneButtonTitle()
         }
     }
     
