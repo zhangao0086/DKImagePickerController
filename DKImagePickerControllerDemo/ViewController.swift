@@ -12,7 +12,8 @@ import Photos
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     var player: MPMoviePlayerController?
-    
+    var cachedPicker : DKImagePickerController?
+
     @IBOutlet var previewView: UICollectionView?
     var assets: [DKAsset]?
     
@@ -30,28 +31,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         allowMultipleType: Bool,
         sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
 		allowsLandscape: Bool,
-		singleSelect: Bool) {
-            
-            let pickerController = DKImagePickerController()
-            pickerController.assetType = assetType
-			pickerController.allowsLandscape = allowsLandscape
-			pickerController.allowMultipleTypes = allowMultipleType
-			pickerController.sourceType = sourceType
-			pickerController.singleSelect = singleSelect
-//			pickerController.showsCancelButton = true
-//			pickerController.showsEmptyAlbums = false
-//			pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
-			pickerController.defaultSelectedAssets = self.assets
-            
+		singleSelect: Bool,
+        shouldDeselect: Bool) {
+
+            let pickerController : DKImagePickerController
+
+            if let cachedPicker = cachedPicker where shouldDeselect == true {
+                pickerController = cachedPicker
+                pickerController.defaultSelectedAssets = nil
+            } else {
+               pickerController = DKImagePickerController()
+                if shouldDeselect {
+                    cachedPicker = pickerController
+                }
+                pickerController.assetType = assetType
+                pickerController.allowsLandscape = allowsLandscape
+                pickerController.allowMultipleTypes = allowMultipleType
+                pickerController.sourceType = sourceType
+                pickerController.singleSelect = singleSelect
+                //			pickerController.showsCancelButton = true
+                //			pickerController.showsEmptyAlbums = false
+                //			pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
+                pickerController.shouldDeselectAssets = shouldDeselect
+                pickerController.defaultSelectedAssets = self.assets
+            }
+
             pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
                 print("didSelectAssets")
-				
+
                 self.assets = assets
                 self.previewView?.reloadData()
             }
-			
-			if UI_USER_INTERFACE_IDIOM() == .Pad {
-				pickerController.modalPresentationStyle = .FormSheet;
+
+            if UI_USER_INTERFACE_IDIOM() == .Pad {
+                pickerController.modalPresentationStyle = .FormSheet;
 			}
 
             self.presentViewController(pickerController, animated: true) {}
@@ -87,13 +100,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     struct Demo {
         static let titles = [
-            ["Pick All", "Pick photos only", "Pick videos only", "Pick All (only photos or videos)"],
+            ["Pick All", "Pick photos only", "Pick videos only", "Pick All (only photos or videos)", "Pick All (reset selection)"],
             ["Take a picture"],
             ["Hides camera"],
 			["Allows landscape"],
 			["Single select"]
         ]
-        static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos, .AllAssets]
+        static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos, .AllAssets, .AllAssets]
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -121,13 +134,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			(indexPath.section == 2 ? .Photo : [.Camera, .Photo])
 		let allowsLandscape = indexPath.section == 3
 		let singleSelect = indexPath.section == 4
-		
+		let shouldDeselect = indexPath.section == 0 && indexPath.row == 4
 		showImagePickerWithAssetType(
 			assetType,
 			allowMultipleType: allowMultipleType,
 			sourceType: sourceType,
 			allowsLandscape: allowsLandscape,
-			singleSelect: singleSelect
+			singleSelect: singleSelect,
+            shouldDeselect: shouldDeselect
 		)
 	}
 	
