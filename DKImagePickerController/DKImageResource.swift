@@ -33,7 +33,7 @@ internal class DKImageResource {
 	}
     
     class func checkedMark() -> UIImage {
-        return imageForResource("icon_image_checked")
+        return imageForResource("icon_image_checked@3x")
     }
 	
     class func checkedImage() -> UIImage {

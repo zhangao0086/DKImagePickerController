@@ -96,7 +96,7 @@ public class DKImagePickerController: UINavigationController {
 	
 	/// The callback block is executed when user pressed the cancel button.
 	public var didCancel: (() -> Void)?
-	public var showsCancelButton = false {
+	public var showsCancelButton = true {
 		didSet {
 			if let rootVC =  self.viewControllers.first {
 				self.updateCancelButtonForVC(rootVC)
