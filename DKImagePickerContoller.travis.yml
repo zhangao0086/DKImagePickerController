@@ -1,7 +1,0 @@
-language: swift
-xcode_project: DKImagePickerController.xcodeproj # path to your xcodeproj folder
-xcode_scheme: DKImagePickerController
-skip_cleanup: true
-on:
-  repo: repo/repo
-  tags: true
