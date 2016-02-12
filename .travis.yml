@@ -2,9 +2,6 @@ language: swift
 xcode_project: DKImagePickerController.xcodeproj # path to your xcodeproj folder
 xcode_scheme: DKImagePickerController
 skip_cleanup: true
-on:
-  repo: ryochan1101/DKImagePickerController
-  tags: true
 script:
 - xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme
   DKImagePickerControllerDemo -sdk iphonesimulator9.0
@@ -14,3 +11,4 @@ deploy:
   file: DKImagePickerController.framework.zip
   on:
     repo: ryochan1101/DKImagePickerController
+    tags: true
