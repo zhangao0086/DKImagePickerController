@@ -1,11 +1,11 @@
 osx_image: xcode7
-
 language: objective-c
-
-#before_install:
-#- export LANG=en_US.UTF-8
-#- brew update
-#- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
-
 script:
-- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator9.0
+- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme
+  DKImagePickerControllerDemo -sdk iphonesimulator9.0
+deploy:
+  provider: releases
+  api_key: ab8000f88bf6aef04e7b58a78ce42d5397d57a0e
+  file: DKImagePickerController.framework.zip
+  on:
+    repo: ryochan1101/DKImagePickerController
