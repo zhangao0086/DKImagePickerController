@@ -36,7 +36,7 @@ class DKAssetGroupCell: UITableViewCell {
 	
     var groupNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFontOfSize(13)
+        label.font = UIFont.systemFontOfSize(13.0)
         return label
     }()
 	

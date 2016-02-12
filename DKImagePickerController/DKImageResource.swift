@@ -31,6 +31,10 @@ internal class DKImageResource {
 		let centerY = image.size.height / 2
 		return image.resizableImageWithCapInsets(UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
 	}
+    
+    class func checkedMark() -> UIImage {
+        return imageForResource("icon_image_checked")
+    }
 	
     class func checkedImage() -> UIImage {
 		return stretchImgFromMiddle(imageForResource("checked_background"))
