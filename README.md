@@ -25,7 +25,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 
 ## Installation
 #### iOS 8 and newer
-DKImagePickerController is available on Cocoapods. Simply add the following line to your podfile:
+DKImagePickerController is available on CocoaPods. Simply add the following line to your podfile:
 
 ```ruby
 # For latest release in cocoapods
