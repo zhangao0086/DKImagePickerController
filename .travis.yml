@@ -1,5 +1,5 @@
 language: swift
-xcode_project: DKImagePickerController.xcodeproj # path to your xcodeproj folder
+xcode_project: DKImagePickerControllerDemo.xcodeproj # path to your xcodeproj folder
 xcode_scheme: DKImagePickerController
 skip_cleanup: true
 script:
@@ -11,4 +11,3 @@ deploy:
   file: DKImagePickerController.framework.zip
   on:
     repo: ryochan1101/DKImagePickerController
-    tags: true
