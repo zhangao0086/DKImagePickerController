@@ -11,4 +11,3 @@ deploy:
   file: DKImagePickerController.framework.zip
   on:
     repo: ryochan1101/DKImagePickerController
-    tags: true
