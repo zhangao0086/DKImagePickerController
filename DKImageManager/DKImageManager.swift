@@ -115,9 +115,14 @@ public class DKImageManager: DKBaseManager {
 				}
 		})
 	}
+	
 	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVURLAsset?) -> Void) {
+		self.fetchAVAsset(asset, options: nil, completeBlock: completeBlock)
+	}
+	
+	public func fetchAVAsset(asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVURLAsset?) -> Void) {
 		self.manager.requestAVAssetForVideo(asset.originalAsset!,
-			options: nil) { avAsset, audioMix, info in
+			options: options) { avAsset, audioMix, info in
 				completeBlock(avAsset: avAsset as? AVURLAsset)
 		}
 	}

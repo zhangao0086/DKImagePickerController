@@ -137,8 +137,18 @@ public class DKAsset: NSObject {
 		}
 	}
 	
-	public func fetchAVAssetWithCompleteBlock(completeBlock: (avAsset: AVURLAsset?) -> Void) {
-		getImageManager().fetchAVAsset(self, completeBlock: completeBlock)
+	/**
+	Fetch an AVAsset with a completeBlock.
+	*/
+	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVURLAsset?) -> Void) {
+		self.fetchAVAsset(nil, completeBlock: completeBlock)
+	}
+	
+	/**
+	Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+	*/
+	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?) -> Void) {
+		getImageManager().fetchAVAsset(self, options: options, completeBlock: completeBlock)
 	}
 	
 }
