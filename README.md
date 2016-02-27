@@ -180,6 +180,7 @@ It has been supported languages so far:
 
 * en.lproj
 * zh-Hans.lproj
+* hu.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -203,6 +204,18 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
+## [3.0.11](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.11) (2016-02-27)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.0.11)
+
+**Merged pull requests:**
+
+- Added a PHVideoRequestOptions API to fetch AVAsset.
+
+**Closed issues:**
+
+- Synchronous options for multiple video fetch [\#76](https://github.com/zhangao0086/DKImagePickerController/pull/76)
+
 ## [3.0.10](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.10) (2016-02-04)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.9...3.0.10)
@@ -214,18 +227,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 **Closed issues:**
 
 - Possibility to deselect assets when displaying picker for second time. [\#69](https://github.com/zhangao0086/DKImagePickerController/pull/69)
-
-## [3.0.9](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.9) (2016-01-29)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.8...3.0.9)
-
-**Merged pull requests:**
-
-- Fixed an issue that cause showsCancelButton flag is ignored.
-
-**Closed issues:**
-
-- showsCancelButton has no effect if set before presenting the view controller [\#66](https://github.com/zhangao0086/DKImagePickerController/issues/66)
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 

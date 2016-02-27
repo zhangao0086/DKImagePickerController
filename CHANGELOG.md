@@ -1,5 +1,17 @@
 # Change Log
 
+## [3.0.11](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.11) (2016-02-27)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.0.11)
+
+**Merged pull requests:**
+
+- Added a PHVideoRequestOptions API to fetch AVAsset.
+
+**Closed issues:**
+
+- Synchronous options for multiple video fetch [\#76](https://github.com/zhangao0086/DKImagePickerController/pull/76)
+
 ## [3.0.10](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.10) (2016-02-04)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.9...3.0.10)
