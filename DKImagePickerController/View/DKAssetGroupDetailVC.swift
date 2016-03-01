@@ -50,25 +50,15 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         class DKImageCheckView: UIView {
             
             private lazy var checkImageView: UIImageView = {
-                let imageView = UIImageView(image: DKImageResource.checkedImage())
+                let imageView = UIImageView(image: DKImageResource.checkedMark())
                 
                 return imageView
-            }()
-            
-            private lazy var checkLabel: UILabel = {
-                let label = UILabel()
-                label.font = UIFont.boldSystemFontOfSize(14)
-                label.textColor = UIColor.whiteColor()
-                label.textAlignment = .Right
-                
-                return label
             }()
             
             override init(frame: CGRect) {
                 super.init(frame: frame)
                 
                 self.addSubview(checkImageView)
-                self.addSubview(checkLabel)
             }
 
             required init?(coder aDecoder: NSCoder) {
@@ -79,7 +69,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
                 super.layoutSubviews()
                 
                 self.checkImageView.frame = self.bounds
-                self.checkLabel.frame = CGRect(x: 0, y: 5, width: self.bounds.width - 5, height: 20)
+                let rightCornerSize = CGSize(width: 24, height: 24)
+                self.checkImageView.frame = CGRectMake(self.frame.size.width-30, 6, rightCornerSize.width, rightCornerSize.height)
             }
             
         } /* DKImageCheckView */
@@ -191,7 +182,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		button.setTitleColor(globalTitleColor ?? UIColor.blackColor(), forState: .Normal)
 		
 		let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSFontAttributeName] as? UIFont
-		button.titleLabel!.font = globalTitleFont ?? UIFont.boldSystemFontOfSize(18.0)
+		button.titleLabel!.font = globalTitleFont ?? UIFont.systemFontOfSize(15.0)
 		
 		button.addTarget(self, action: "showGroupSelector", forControlEvents: .TouchUpInside)
         return button
@@ -340,9 +331,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 			}
 		}
 		
-		if let index = self.imagePickerController!.selectedAssets.indexOf(asset) {
+		if (self.imagePickerController!.selectedAssets.indexOf(asset) != nil) {
 			cell.selected = true
-			cell.checkView.checkLabel.text = "\(index + 1)"
 			self.collectionView!.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition.None)
 		} else {
 			cell.selected = false
@@ -388,32 +378,11 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		let selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
 		self.imagePickerController?.selectedImage(selectedAsset!)
-        
-		let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
-		cell.checkView.checkLabel.text = "\(self.imagePickerController!.selectedAssets.count)"
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
 		if let removedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset {
-			let removedIndex = self.imagePickerController!.selectedAssets.indexOf(removedAsset)!
-			
-			/// Minimize the number of cycles.
-			let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems() as [NSIndexPath]!
-			let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems()
-			
-			let intersect = Set(indexPathsForVisibleItems).intersect(Set(indexPathsForSelectedItems))
-			
-			for selectedIndexPath in intersect {
-				if let selectedCell = (collectionView.cellForItemAtIndexPath(selectedIndexPath) as? DKAssetCell) {
-					let selectedIndex = self.imagePickerController!.selectedAssets.indexOf(selectedCell.asset)!
-					
-					if selectedIndex > removedIndex {
-						selectedCell.checkView.checkLabel.text = "\(Int(selectedCell.checkView.checkLabel.text!)! - 1)"
-					}
-				}
-			}
-			
-			self.imagePickerController?.unselectedImage(removedAsset)
+            self.imagePickerController?.unselectedImage(removedAsset)
 		}
     }
 	

@@ -96,7 +96,7 @@ public class DKImagePickerController: UINavigationController {
 	
 	/// The callback block is executed when user pressed the cancel button.
 	public var didCancel: (() -> Void)?
-	public var showsCancelButton = false {
+	public var showsCancelButton = true {
 		didSet {
 			if let rootVC =  self.viewControllers.first {
 				self.updateCancelButtonForVC(rootVC)
@@ -115,9 +115,13 @@ public class DKImagePickerController: UINavigationController {
 			if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
 				rootVC.collectionView?.reloadData()
 			}
-			self.updateDoneButtonTitle()
+			self.updateDoneButton()
         }
     }
+    
+    public var cameraBlock: ((Void) -> Void)?
+    
+    public var didTakePhoto: ((Void) -> Void)?
     
     internal var selectedAssets = [DKAsset]()
     
@@ -142,8 +146,6 @@ public class DKImagePickerController: UINavigationController {
 		getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
 		getImageManager().groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
 		getImageManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
-		
-        self.updateDoneButtonTitle()
     }
     
     deinit {
@@ -154,7 +156,12 @@ public class DKImagePickerController: UINavigationController {
     override public func viewDidLoad() {
         super.viewDidLoad()
     }
-	
+    
+    public override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        updateDoneButton()
+    }
+    
 	private var hasInitialized = false
 	override public func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
@@ -198,12 +205,12 @@ public class DKImagePickerController: UINavigationController {
 		}
 	}
 	
-    private func updateDoneButtonTitle() {
-        if self.selectedAssets.count > 0 {
-            self.doneButton.setTitle(DKImageLocalizedStringWithKey("select") + "(\(selectedAssets.count))", forState: UIControlState.Normal)
-        } else {
-            self.doneButton.setTitle(DKImageLocalizedStringWithKey("done"), forState: UIControlState.Normal)
-        }
+    private func updateDoneButton() {
+        self.doneButton.setTitle(DKImageLocalizedStringWithKey("決定"), forState: UIControlState.Normal)
+        let valid = self.selectedAssets.count > 0
+        let color = valid ? UINavigationBar.appearance().tintColor : UIColor.lightGrayColor()
+        doneButton.setTitleColor(color, forState: UIControlState.Normal)
+        doneButton.enabled = valid
         self.doneButton.sizeToFit()
     }
 	
@@ -257,7 +264,11 @@ public class DKImagePickerController: UINavigationController {
 	}
 	
 	internal func presentCamera() {
-		self.presentViewController(self.createCamera(), animated: true, completion: nil)
+        if cameraBlock != nil {
+            cameraBlock?()
+        } else {
+            presentViewController(self.createCamera(), animated: true, completion: nil)
+        }
 	}
 	
 	internal func dismiss() {
@@ -283,13 +294,13 @@ public class DKImagePickerController: UINavigationController {
 		} else if self.singleSelect {
 			self.done()
 		} else {
-			updateDoneButtonTitle()
+			updateDoneButton()
 		}
 	}
 	
 	internal func unselectedImage(asset: DKAsset) {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
-		updateDoneButtonTitle()
+		updateDoneButton()
 	}
 	
     // MARK: - Handles Orientation
