@@ -43,12 +43,15 @@ public struct DKImagePickerControllerSourceType : OptionSetType {
  * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
 public class DKImagePickerController: UINavigationController {
-    
-    /// Forces selection of tapped image immediatly.
-	public var singleSelect = false
-		
-    /// The maximum count of assets which the user will be able to select.
-    public var maxSelectableCount = 999
+
+  public var cameraIcon: UIImage?
+  public var overrideBackgroundColor: UIColor?
+
+  /// Forces selection of tapped image immediatly.
+  public var singleSelect = false
+
+  /// The maximum count of assets which the user will be able to select.
+  public var maxSelectableCount = 999
 	
 	/// Set the defaultAssetGroup to specify which album is the default asset group.
 	public var defaultAssetGroup: PHAssetCollectionSubtype?
@@ -167,6 +170,8 @@ public class DKImagePickerController: UINavigationController {
 				self.setViewControllers([self.createCamera()], animated: false)
 			} else {
 				let rootVC = DKAssetGroupDetailVC()
+        rootVC.cameraIcon = cameraIcon
+        rootVC.overrideBackgroundColor = overrideBackgroundColor
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
 				rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
