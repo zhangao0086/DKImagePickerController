@@ -44,6 +44,7 @@ public struct DKImagePickerControllerSourceType : OptionSetType {
 */
 public class DKImagePickerController: UINavigationController {
 
+    public var use16to9Ratio = false
     public var cameraIcon: UIImage?
     public var overrideBackgroundColor: UIColor?
 
@@ -214,6 +215,7 @@ public class DKImagePickerController: UINavigationController {
 
     private func createCamera() -> DKCamera {
         let camera = DKCamera()
+        camera.use16to9Ratio = self.use16to9Ratio
 
         camera.didCancel = {[unowned camera] () -> Void in
             camera.dismissViewControllerAnimated(true, completion: nil)
@@ -230,11 +232,11 @@ public class DKImagePickerController: UINavigationController {
                         if success {
                             if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
                                 self.dismissViewControllerAnimated(true, completion: nil)
-                                self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+                                self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: false)
                             }
                         } else {
                             self.dismissViewControllerAnimated(true, completion: nil)
-                            self.selectedImage(DKAsset(image: image), needsToDismiss: true)
+                            self.selectedImage(DKAsset(image: image), needsToDismiss: false)
                         }
                     })
             })
