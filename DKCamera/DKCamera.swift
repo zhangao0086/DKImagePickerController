@@ -59,7 +59,9 @@ public class DKCamera: UIViewController {
 	public class func isAvailable() -> Bool {
 		return UIImagePickerController.isSourceTypeAvailable(.Camera)
 	}
-	
+
+    public var use16to9Ratio = false
+
 	/// Determines whether or not the rotation is enabled.
 	public var allowsRotate = false
 	
@@ -369,7 +371,10 @@ public class DKCamera: UIViewController {
 	// MARK: - Capture Session
 	
 	public func beginSession() {
-		self.captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        self.captureSession.sessionPreset = AVCaptureSessionPresetPhoto
+        if use16to9Ratio {
+            self.captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        }
 		
 		self.setupCurrentDevice()
 		
