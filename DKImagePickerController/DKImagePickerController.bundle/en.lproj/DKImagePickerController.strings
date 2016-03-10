@@ -24,4 +24,8 @@
 
 "selectPhotosOrVideosError" = "It is not possible to select photos and videos at the same time.";
 
+"tooManyPhotosSelected" = "You've reached the photo limit";
+
+"selectablePhotoLimit" = "Photo limit";
+
 "done" = "Done";

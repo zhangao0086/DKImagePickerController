@@ -24,4 +24,8 @@
 
 "selectPhotosOrVideosError" = "Nem lehet egyszerre képet és videót kiválasztani.";
 
+"tooManyPhotosSelected" = "Több fotó nem választható ki";
+
+"selectablePhotoLimit" = "A kiválasztható képek száma";
+
 "done" = "Kész";

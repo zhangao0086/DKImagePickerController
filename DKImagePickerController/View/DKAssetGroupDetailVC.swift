@@ -306,8 +306,14 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
         
         cell.didCameraButtonClicked = { [unowned self] () in
-            if UIImagePickerController.isSourceTypeAvailable(.Camera) {
-                self.imagePickerController?.presentCamera()
+            if UIImagePickerController.isSourceTypeAvailable(.Camera)
+                && self.imagePickerController!.selectedAssets.count < self.imagePickerController!.maxSelectableCount {
+                    self.imagePickerController?.presentCamera()
+            } else {
+                UIAlertView(title: DKImageLocalizedStringWithKey("selectablePhotoLimit"),
+                    message: DKImageLocalizedStringWithKey("tooManyPhotosSelected") + " (" + String(self.imagePickerController!.maxSelectableCount) + ")",
+                    delegate: nil,
+                    cancelButtonTitle: DKImageLocalizedStringWithKey("ok")).show()
             }
         }
 
@@ -382,7 +388,15 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
                 return false
         }
         
-        return self.imagePickerController!.selectedAssets.count < self.imagePickerController!.maxSelectableCount
+        if (self.imagePickerController!.selectedAssets.count < self.imagePickerController!.maxSelectableCount) {
+            return true;
+        } else {
+            UIAlertView(title: DKImageLocalizedStringWithKey("selectablePhotoLimit"),
+                message: DKImageLocalizedStringWithKey("tooManyPhotosSelected") + "(" + String(self.imagePickerController!.maxSelectableCount) + ")",
+                delegate: nil,
+                cancelButtonTitle: DKImageLocalizedStringWithKey("ok")).show()
+            return false;
+        }
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
