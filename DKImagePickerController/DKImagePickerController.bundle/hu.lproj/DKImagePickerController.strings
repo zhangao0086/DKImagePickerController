@@ -26,6 +26,6 @@
 
 "tooManyPhotosSelected" = "Több fotó nem választható ki";
 
-"selectablePhotoLimit" = "A kiválasztható képek száma";
+"selectablePhotoLimit" = "Limit";
 
 "done" = "Kész";

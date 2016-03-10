@@ -392,7 +392,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
             return true;
         } else {
             UIAlertView(title: DKImageLocalizedStringWithKey("selectablePhotoLimit"),
-                message: DKImageLocalizedStringWithKey("tooManyPhotosSelected") + "(" + String(self.imagePickerController!.maxSelectableCount) + ")",
+                message: DKImageLocalizedStringWithKey("tooManyPhotosSelected") + " (" + String(self.imagePickerController!.maxSelectableCount) + ")",
                 delegate: nil,
                 cancelButtonTitle: DKImageLocalizedStringWithKey("ok")).show()
             return false;
