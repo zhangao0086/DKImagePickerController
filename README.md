@@ -18,6 +18,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports landscape and iPad and orientation switching.
 * Supports iCloud.
 * Supports UIAppearance.
+* Supports custom camera.
 
 ## Requirements
 * iOS 8.0+
@@ -126,6 +127,26 @@ pickerController.sourceType = .Photo
 pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
+
+#### Create a custom camera
+
+You can give a class to custom camera that adopting the `DKImagePickerControllerUIDelegate` protocol.
+```swift
+public class CustomUIDelegate: DKImagePickerControllerUIDelegate {
+    
+    @objc public func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController, didCancel: (() -> Void), didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController {
+        let vc = UIViewController()
+        vc.view.backgroundColor = UIColor.redColor()
+        
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            didCancel()
+        }
+        
+        return vc
+    }
+}
+```
 
 ## How to use in Objective-C
 
