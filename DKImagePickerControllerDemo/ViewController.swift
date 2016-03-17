@@ -10,22 +10,6 @@ import UIKit
 import MediaPlayer
 import Photos
 
-public class CustomUIDelegate: DKImagePickerControllerUIDelegate {
-
-	@objc public func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController, didCancel: (() -> Void), didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController {
-		let vc = UIViewController()
-		vc.view.backgroundColor = UIColor.redColor()
-		
-		let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-		dispatch_after(delayTime, dispatch_get_main_queue()) {
-			didCancel()
-		}
-
-		return vc
-	}
-}
-
-
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     var player: MPMoviePlayerController?
     
@@ -49,7 +33,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		singleSelect: Bool) {
 			
             let pickerController = DKImagePickerController()
-			pickerController.UIDelegate = CustomUIDelegate()
             pickerController.assetType = assetType
 			pickerController.allowsLandscape = allowsLandscape
 			pickerController.allowMultipleTypes = allowMultipleType
