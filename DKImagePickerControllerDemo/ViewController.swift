@@ -31,7 +31,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
 		allowsLandscape: Bool,
 		singleSelect: Bool) {
-            
+			
             let pickerController = DKImagePickerController()
             pickerController.assetType = assetType
 			pickerController.allowsLandscape = allowsLandscape

@@ -9,6 +9,15 @@
 import UIKit
 import Photos
 
+@objc
+public protocol DKImagePickerControllerUIDelegate {
+	
+	func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
+		didCancel: (() -> Void),
+		didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController
+	
+}
+
 /**
 * allPhotos: Get all photos assets in the assets group.
 * allVideos: Get all video assets in the assets group.
@@ -43,7 +52,9 @@ public struct DKImagePickerControllerSourceType : OptionSetType {
  * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
 public class DKImagePickerController: UINavigationController {
-    
+
+	public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
+	
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
 		
@@ -207,53 +218,31 @@ public class DKImagePickerController: UINavigationController {
         self.doneButton.sizeToFit()
     }
 	
-	private func createCamera() -> DKCamera {
-		let camera = DKCamera()
+	private func createCamera() -> UIViewController {
 		
-		camera.didCancel = {[unowned camera] () -> Void in
-			camera.dismissViewControllerAnimated(true, completion: nil)
-		}
-		
-		camera.didFinishCapturingImage = { [unowned self] (image) in
-			var newImageIdentifier: String!
-			PHPhotoLibrary.sharedPhotoLibrary().performChanges(
-				{ () in
-					let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
-					newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-				}, completionHandler: { (success, error) -> Void in
-					dispatch_async(dispatch_get_main_queue(), { () -> Void in
-						if success {
-							if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-								self.dismissViewControllerAnimated(true, completion: nil)
-								self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+		let camera = self.UIDelegate.imagePickerControllerCreateCamera(self,
+			didCancel: { () -> Void in
+				self.dismissViewControllerAnimated(true, completion: nil);
+			}) { (image) -> Void in
+				var newImageIdentifier: String!
+				PHPhotoLibrary.sharedPhotoLibrary().performChanges(
+					{ () in
+						let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
+						newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
+					}, completionHandler: { (success, error) -> Void in
+						dispatch_async(dispatch_get_main_queue(), { () -> Void in
+							if success {
+								if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
+									self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+								}
+							} else {
+								self.selectedImage(DKAsset(image: image), needsToDismiss: true)
 							}
-						} else {
-							self.dismissViewControllerAnimated(true, completion: nil)
-							self.selectedImage(DKAsset(image: image), needsToDismiss: true)
-						}
-					})
-			})
+						})
+				})
 		}
-		self.checkCameraPermission(camera)
 		
 		return camera
-	}
-	
-	internal func checkCameraPermission(camera: DKCamera) {
-		func cameraDenied() {
-			dispatch_async(dispatch_get_main_queue()) {
-				let permissionView = DKPermissionView.permissionView(.Camera)
-				camera.cameraOverlayView = permissionView
-			}
-		}
-		
-		func setup() {
-			camera.cameraOverlayView = nil
-		}
-		
-		DKCamera.checkCameraPermission { granted in
-			granted ? setup() : cameraDenied()
-		}
 	}
 	
 	internal func presentCamera() {
