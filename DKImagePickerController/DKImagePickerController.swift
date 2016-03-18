@@ -9,6 +9,19 @@
 import UIKit
 import Photos
 
+@objc
+public protocol DKImagePickerControllerUIDelegate {
+	
+	// Returns a custom camera.
+	func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
+		didCancel: (() -> Void),
+		didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController
+	
+	// The camera image to be displayed in the album's first cell.
+	func imagePickerControllerCameraImage() -> UIImage
+	
+}
+
 /**
 * allPhotos: Get all photos assets in the assets group.
 * allVideos: Get all video assets in the assets group.
@@ -42,8 +55,15 @@ public struct DKImagePickerControllerSourceType : OptionSetType {
 /**
  * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
-public class DKImagePickerController: UINavigationController {
-    
+public class DKImagePickerController : UINavigationController {
+	
+	private weak static var imagePickerController : DKImagePickerController?
+	internal static func sharedInstance() -> DKImagePickerController {
+		return DKImagePickerController.imagePickerController!;
+	}
+
+	public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
+	
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
 		
@@ -133,6 +153,8 @@ public class DKImagePickerController: UINavigationController {
 		let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
 		
+		DKImagePickerController.imagePickerController = self
+		
 		self.preferredContentSize = CGSize(width: 680, height: 600)
 		
         rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
@@ -207,53 +229,31 @@ public class DKImagePickerController: UINavigationController {
         self.doneButton.sizeToFit()
     }
 	
-	private func createCamera() -> DKCamera {
-		let camera = DKCamera()
+	private func createCamera() -> UIViewController {
 		
-		camera.didCancel = {[unowned camera] () -> Void in
-			camera.dismissViewControllerAnimated(true, completion: nil)
-		}
-		
-		camera.didFinishCapturingImage = { [unowned self] (image) in
-			var newImageIdentifier: String!
-			PHPhotoLibrary.sharedPhotoLibrary().performChanges(
-				{ () in
-					let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
-					newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-				}, completionHandler: { (success, error) -> Void in
-					dispatch_async(dispatch_get_main_queue(), { () -> Void in
-						if success {
-							if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-								self.dismissViewControllerAnimated(true, completion: nil)
-								self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+		let camera = self.UIDelegate.imagePickerControllerCreateCamera(self,
+			didCancel: { () -> Void in
+				self.dismissViewControllerAnimated(true, completion: nil);
+			}) { (image) -> Void in
+				var newImageIdentifier: String!
+				PHPhotoLibrary.sharedPhotoLibrary().performChanges(
+					{ () in
+						let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
+						newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
+					}, completionHandler: { (success, error) -> Void in
+						dispatch_async(dispatch_get_main_queue(), { () -> Void in
+							if success {
+								if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
+									self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+								}
+							} else {
+								self.selectedImage(DKAsset(image: image), needsToDismiss: true)
 							}
-						} else {
-							self.dismissViewControllerAnimated(true, completion: nil)
-							self.selectedImage(DKAsset(image: image), needsToDismiss: true)
-						}
-					})
-			})
+						})
+				})
 		}
-		self.checkCameraPermission(camera)
 		
 		return camera
-	}
-	
-	internal func checkCameraPermission(camera: DKCamera) {
-		func cameraDenied() {
-			dispatch_async(dispatch_get_main_queue()) {
-				let permissionView = DKPermissionView.permissionView(.Camera)
-				camera.cameraOverlayView = permissionView
-			}
-		}
-		
-		func setup() {
-			camera.cameraOverlayView = nil
-		}
-		
-		DKCamera.checkCameraPermission { granted in
-			granted ? setup() : cameraDenied()
-		}
 	}
 	
 	internal func presentCamera() {
@@ -261,6 +261,7 @@ public class DKImagePickerController: UINavigationController {
 	}
 	
 	internal func dismiss() {
+		
 		self.dismissViewControllerAnimated(true, completion: nil)
 		self.didCancel?()
 	}
@@ -305,21 +306,4 @@ public class DKImagePickerController: UINavigationController {
 			return UIInterfaceOrientationMask.Portrait
 		}
     }
-}
-
-// MARK: - Utilities
-
-internal extension UIViewController {
-    
-    var imagePickerController: DKImagePickerController? {
-        get {
-            let nav = self.navigationController
-            if nav is DKImagePickerController {
-                return nav as? DKImagePickerController
-            } else {
-                return nil
-            }
-        }
-    }
-    
 }

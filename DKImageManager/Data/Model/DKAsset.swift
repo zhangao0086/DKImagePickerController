@@ -151,4 +151,20 @@ public class DKAsset: NSObject {
 		getImageManager().fetchAVAsset(self, options: options, completeBlock: completeBlock)
 	}
 	
+	/**
+	Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+	*/
+	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?) -> Void) {
+		if sync {
+			let semaphore = dispatch_semaphore_create(0)
+			self.fetchAVAsset(nil, completeBlock: { (AVAsset) -> Void in
+				completeBlock(AVAsset: AVAsset)
+				dispatch_semaphore_signal(semaphore)
+			})
+			dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+		} else {
+			self.fetchAVAsset(nil, completeBlock: completeBlock)
+		}
+	}
+	
 }

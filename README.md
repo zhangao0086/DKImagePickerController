@@ -18,6 +18,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports landscape and iPad and orientation switching.
 * Supports iCloud.
 * Supports UIAppearance.
+* Supports custom camera.
 
 ## Requirements
 * iOS 8.0+
@@ -127,6 +128,26 @@ pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
 
+#### Create a custom camera
+
+You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.
+```swift
+public class CustomUIDelegate: DKImagePickerControllerUIDelegate {
+    
+    @objc public func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController, didCancel: (() -> Void), didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController {
+        let vc = UIViewController()
+        vc.view.backgroundColor = UIColor.redColor()
+        
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            didCancel()
+        }
+        
+        return vc
+    }
+}
+```
+
 ## How to use in Objective-C
 
 #### If you use [CocoaPods](http://cocoapods.org/)
@@ -204,6 +225,20 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
+## [3.1.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.0) (2016-03-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.11...3.1.0)
+
+**Merged pull requests:**
+
+- Added support for custom camera.
+
+- Added support for UIDelegate.
+
+- Added a function to sync fetch an AVAsset.
+
+- Fixed an issue that may cause crashing when downloading image from iCloud.
+
 ## [3.0.11](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.11) (2016-02-27)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.0.11)
@@ -215,18 +250,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 **Closed issues:**
 
 - Synchronous options for multiple video fetch [\#76](https://github.com/zhangao0086/DKImagePickerController/pull/76)
-
-## [3.0.10](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.10) (2016-02-04)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.9...3.0.10)
-
-**Merged pull requests:**
-
-- Added possibility to deselect all selected assets when showing a single instance picker.
-
-**Closed issues:**
-
-- Possibility to deselect assets when displaying picker for second time. [\#69](https://github.com/zhangao0086/DKImagePickerController/pull/69)
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 

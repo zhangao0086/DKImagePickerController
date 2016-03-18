@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C13DF6F1C90490E001B0ED7 /* DKImagePickerControllerDefaultCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C13DF6E1C90490E001B0ED7 /* DKImagePickerControllerDefaultCamera.swift */; };
 		9C456CCD1B7A223300DFD777 /* DKImageResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C456CCC1B7A223300DFD777 /* DKImageResource.swift */; };
 		9C4C3A951C2401CD00A52572 /* DKGroupDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A901C2401CD00A52572 /* DKGroupDataManager.swift */; };
 		9C4C3A961C2401CD00A52572 /* DKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A921C2401CD00A52572 /* DKAsset.swift */; };
@@ -15,6 +16,7 @@
 		9C6B3E031C219724009684FE /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */; };
 		9C6B3E041C219724009684FE /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */; };
 		9C6B3E0B1C2266A8009684FE /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */; };
+		9CB4B2F81C9A9DB3004971FB /* CustomCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB4B2F71C9A9DB3004971FB /* CustomCamera.swift */; };
 		9CBAA4A91C4B893A0097AFAB /* DKAssetGroupGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */; };
 		9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */; };
 		9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F721AB15D210000F1D1 /* Images.xcassets */; };
@@ -43,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C13DF6E1C90490E001B0ED7 /* DKImagePickerControllerDefaultCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerDefaultCamera.swift; sourceTree = "<group>"; };
 		9C35CBFF19DBB00700557269 /* DKImagePickerControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DKImagePickerControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C456CCC1B7A223300DFD777 /* DKImageResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageResource.swift; sourceTree = "<group>"; };
 		9C4C3A901C2401CD00A52572 /* DKGroupDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKGroupDataManager.swift; sourceTree = "<group>"; };
@@ -52,6 +55,7 @@
 		9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
 		9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
+		9CB4B2F71C9A9DB3004971FB /* CustomCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCamera.swift; sourceTree = "<group>"; };
 		9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupGridLayout.swift; sourceTree = "<group>"; };
 		9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CBF3F6D1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 				9CDEF0EF1B62279F003340FE /* DKImagePickerController */,
 				9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */,
 				9CBF3F751AB15D210000F1D1 /* ViewController.swift */,
+				9CB4B2F71C9A9DB3004971FB /* CustomCamera.swift */,
 				9CBF3F6C1AB15D210000F1D1 /* LaunchScreen.xib */,
 				9CBF3F6E1AB15D210000F1D1 /* Main.storyboard */,
 				9CBF3F721AB15D210000F1D1 /* Images.xcassets */,
@@ -179,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */,
+				9C13DF6E1C90490E001B0ED7 /* DKImagePickerControllerDefaultCamera.swift */,
 				9C6B3E001C219724009684FE /* View */,
 				9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */,
 				9C456CCC1B7A223300DFD777 /* DKImageResource.swift */,
@@ -321,6 +327,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C456CCD1B7A223300DFD777 /* DKImageResource.swift in Sources */,
+				9CB4B2F81C9A9DB3004971FB /* CustomCamera.swift in Sources */,
 				9C4C3A981C2401CD00A52572 /* DKImageManager.swift in Sources */,
 				9CC361531BA7E1D100756DDB /* DKCamera.swift in Sources */,
 				9C4C3A961C2401CD00A52572 /* DKAsset.swift in Sources */,
@@ -334,6 +341,7 @@
 				9C4C3A971C2401CD00A52572 /* DKAssetGroup.swift in Sources */,
 				9C4C3A951C2401CD00A52572 /* DKGroupDataManager.swift in Sources */,
 				9C6B3E031C219724009684FE /* DKAssetGroupDetailVC.swift in Sources */,
+				9C13DF6F1C90490E001B0ED7 /* DKImagePickerControllerDefaultCamera.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
