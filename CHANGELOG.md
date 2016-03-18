@@ -1,5 +1,17 @@
 # Change Log
 
+## [3.1.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.0) (2016-03-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.11...3.1.0)
+
+**Merged pull requests:**
+
+- Added support for custom camera.
+
+- Added a function to sync fetch an AVAsset.
+
+- Fixed an issue that may cause crashing when downloading image from iCloud.
+
 ## [3.0.11](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.11) (2016-02-27)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.0.11)
