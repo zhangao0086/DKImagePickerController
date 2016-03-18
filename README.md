@@ -233,6 +233,8 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 
 - Added support for custom camera.
 
+- Added support for UIDelegate.
+
 - Added a function to sync fetch an AVAsset.
 
 - Fixed an issue that may cause crashing when downloading image from iCloud.
