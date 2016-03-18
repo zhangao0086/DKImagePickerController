@@ -493,7 +493,9 @@ public class DKCamera: UIViewController {
 	
 	public func initialOriginalOrientationForOrientation() {
 		self.originalOrientation = self.interfaceOrientation.toDeviceOrientation()
-		self.previewLayer.connection.videoOrientation = self.originalOrientation.toAVCaptureVideoOrientation()
+		if let connection = self.previewLayer.connection {
+			connection.videoOrientation = self.originalOrientation.toAVCaptureVideoOrientation()
+		}
 	}
 	
 	public func updateContentLayoutForCurrentOrientation() {
