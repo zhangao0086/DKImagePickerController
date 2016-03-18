@@ -8,9 +8,9 @@
 
 import UIKit
 
-public class CustomUIDelegate: DKImagePickerControllerUIDelegate {
+public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate {
 	
-	@objc public func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController, didCancel: (() -> Void), didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController {
+	public override func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController, didCancel: (() -> Void), didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController {
 		let vc = UIViewController()
 		vc.view.backgroundColor = UIColor.redColor()
 		
@@ -21,4 +21,5 @@ public class CustomUIDelegate: DKImagePickerControllerUIDelegate {
 		
 		return vc
 	}
+	
 }
