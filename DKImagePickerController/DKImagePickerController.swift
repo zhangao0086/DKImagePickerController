@@ -12,9 +12,13 @@ import Photos
 @objc
 public protocol DKImagePickerControllerUIDelegate {
 	
+	// Returns a custom camera.
 	func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
 		didCancel: (() -> Void),
 		didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController
+	
+	// The camera image to be displayed in the album's first cell.
+	func imagePickerControllerCameraImage() -> UIImage
 	
 }
 
@@ -51,7 +55,12 @@ public struct DKImagePickerControllerSourceType : OptionSetType {
 /**
  * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
-public class DKImagePickerController: UINavigationController {
+public class DKImagePickerController : UINavigationController {
+	
+	private weak static var imagePickerController : DKImagePickerController?
+	internal static func sharedInstance() -> DKImagePickerController {
+		return DKImagePickerController.imagePickerController!;
+	}
 
 	public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
 	
@@ -143,6 +152,8 @@ public class DKImagePickerController: UINavigationController {
     public convenience init() {
 		let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
+		
+		DKImagePickerController.imagePickerController = self
 		
 		self.preferredContentSize = CGSize(width: 680, height: 600)
 		
@@ -250,6 +261,7 @@ public class DKImagePickerController: UINavigationController {
 	}
 	
 	internal func dismiss() {
+		
 		self.dismissViewControllerAnimated(true, completion: nil)
 		self.didCancel?()
 	}
@@ -294,21 +306,4 @@ public class DKImagePickerController: UINavigationController {
 			return UIInterfaceOrientationMask.Portrait
 		}
     }
-}
-
-// MARK: - Utilities
-
-internal extension UIViewController {
-    
-    var imagePickerController: DKImagePickerController? {
-        get {
-            let nav = self.navigationController
-            if nav is DKImagePickerController {
-                return nav as? DKImagePickerController
-            } else {
-                return nil
-            }
-        }
-    }
-    
 }

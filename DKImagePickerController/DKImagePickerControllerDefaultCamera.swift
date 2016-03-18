@@ -43,4 +43,8 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 			granted ? setup() : cameraDenied()
 		}
 	}
+	
+	public func imagePickerControllerCameraImage() -> UIImage {
+		return DKImageResource.cameraImage()
+	}
 }
