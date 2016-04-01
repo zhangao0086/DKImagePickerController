@@ -105,7 +105,7 @@ public class DKPopoverViewController: UIViewController {
         
         let backgroundView = UIControl(frame: self.view.frame)
         backgroundView.backgroundColor = UIColor.clearColor()
-        backgroundView.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
+        backgroundView.addTarget(self, action: #selector(DKPopoverViewController.dismiss), forControlEvents: .TouchUpInside)
         backgroundView.autoresizingMask = self.view.autoresizingMask
         self.view = backgroundView
     }

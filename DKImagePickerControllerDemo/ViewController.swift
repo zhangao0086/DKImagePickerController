@@ -61,7 +61,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func playVideo(videoURL: NSURL) {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "exitPlayer:", name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.exitPlayer(_:)), name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
         
         let player = MPMoviePlayerController(contentURL: videoURL)
         player.movieSourceType = .File
