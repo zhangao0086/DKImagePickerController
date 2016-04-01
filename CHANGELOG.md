@@ -6,7 +6,15 @@
 
 **Merged pull requests:**
 
-- Fixed an issue that may cause crash when user not authorized camera access.
+- Fixed an issue that will cause the didSelectAssets block is called twice.
+
+- Added support for custom predicate to assets.
+
+- Optimized for fetching original image.
+
+- The fetchImageWithSize fetching image with .AspectFit.
+
+- Fixed an issue that may cause the popover not display as rounded.
 
 ## [3.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.1) (2016-03-18)
 
