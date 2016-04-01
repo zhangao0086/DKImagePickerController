@@ -37,6 +37,7 @@ public class DKPopoverViewController: UIViewController {
         var contentView: UIView! {
             didSet {
                 contentView.layer.cornerRadius = 5
+				contentView.clipsToBounds = true
                 contentView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
                 self.addSubview(contentView)
             }
@@ -126,9 +127,9 @@ public class DKPopoverViewController: UIViewController {
     }
     
     func showInView(view: UIView) {
+		self.popoverView.contentView = self.contentViewController.view
         self.popoverView.frame = self.calculatePopoverViewFrame()
-        self.popoverView.contentView = self.contentViewController.view
-        
+		
         view.addSubview(self.view)
         
         self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverView.bounds.height / 2)), 0.1, 0.1)

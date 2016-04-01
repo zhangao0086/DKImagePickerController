@@ -94,26 +94,46 @@ public class DKImageManager: DKBaseManager {
 	}
 	
 	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode,
-		completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+	                               completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		self.manager.requestImageForAsset(asset.originalAsset!,
-			targetSize: size,
-			contentMode: contentMode,
-			options: options ?? self.defaultImageRequestOptions,
-			resultHandler: { image, info in
-				if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
-					where image == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
-						var requestCloudOptions: PHImageRequestOptions
-						if let options = options {
-							requestCloudOptions = options.copy() as! PHImageRequestOptions
-						} else {
-							requestCloudOptions = self.defaultImageRequestOptions.copy() as! PHImageRequestOptions
-						}
-						requestCloudOptions.networkAccessAllowed = true
-					self.fetchImageForAsset(asset, size: size, options: requestCloudOptions, contentMode: contentMode, completeBlock: completeBlock)
-				} else {
-					completeBlock(image: image, info: info)
-				}
+		                                  targetSize: size,
+		                                  contentMode: contentMode,
+		                                  options: options ?? self.defaultImageRequestOptions,
+		                                  resultHandler: { image, info in
+											if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
+												where image == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+												var requestCloudOptions: PHImageRequestOptions
+												if let options = options {
+													requestCloudOptions = options.copy() as! PHImageRequestOptions
+												} else {
+													requestCloudOptions = self.defaultImageRequestOptions.copy() as! PHImageRequestOptions
+												}
+												requestCloudOptions.networkAccessAllowed = true
+												self.fetchImageForAsset(asset, size: size, options: requestCloudOptions, contentMode: contentMode, completeBlock: completeBlock)
+											} else {
+												completeBlock(image: image, info: info)
+											}
 		})
+	}
+	
+	public func fetchOriginalImageForAsset(asset: DKAsset, options: PHImageRequestOptions?, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		self.manager.requestImageDataForAsset(asset.originalAsset!,
+		                                      options: options ?? self.defaultImageRequestOptions) { (data, dataUTI, orientation, info) in
+												if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
+													where data == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+													var requestCloudOptions: PHImageRequestOptions
+													if let options = options {
+														requestCloudOptions = options.copy() as! PHImageRequestOptions
+													} else {
+														requestCloudOptions = self.defaultImageRequestOptions.copy() as! PHImageRequestOptions
+													}
+													requestCloudOptions.networkAccessAllowed = true
+													self.fetchOriginalImageForAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
+												} else {
+													completeBlock(image: UIImage(data: data!), info: info)
+												}
+		}
+		
 	}
 	
 	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVURLAsset?) -> Void) {

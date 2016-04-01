@@ -80,6 +80,12 @@ public var showsEmptyAlbums = true
 /// The type of picker interface to be displayed by the controller.
 public var assetType: DKImagePickerControllerAssetType = .AllAssets
 
+/// The predicate applies to images only.
+public var imageFetchPredicate: NSPredicate?
+
+/// The predicate applies to videos only.
+public var videoFetchPredicate: NSPredicate?
+
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
 public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
 
@@ -224,6 +230,14 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
     // ...
 })
 ```
+
+## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)
+
+**Merged pull requests:**
+
+- Fixed an issue that may cause crash when user not authorized camera access.
 
 ## [3.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.1) (2016-03-18)
 

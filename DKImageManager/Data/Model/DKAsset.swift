@@ -73,8 +73,12 @@ public class DKAsset: NSObject {
 	}
 	
 	public func fetchImageWithSize(size: CGSize, options: PHImageRequestOptions?, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		self.fetchImageWithSize(size, options: options, contentMode: .AspectFit, completeBlock: completeBlock)
+	}
+	
+	public func fetchImageWithSize(size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		if let _ = self.originalAsset {
-			getImageManager().fetchImageForAsset(self, size: size, options: options, completeBlock: completeBlock)
+			getImageManager().fetchImageForAsset(self, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
 		} else {
 			completeBlock(image: self.image!, info: nil)
 		}
@@ -128,7 +132,7 @@ public class DKAsset: NSObject {
 			options.deliveryMode = .HighQualityFormat
 			options.synchronous = sync
 
-			getImageManager().fetchImageForAsset(self, size: PHImageManagerMaximumSize, options: options) { [weak self] image, info in
+			getImageManager().fetchOriginalImageForAsset(self, options: options) { [weak self] image, info in
 				guard let strongSelf = self else { return }
 				
 				strongSelf.originalImage = (image, info)

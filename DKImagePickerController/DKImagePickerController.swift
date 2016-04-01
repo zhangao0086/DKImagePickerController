@@ -98,6 +98,20 @@ public class DKImagePickerController : UINavigationController {
 		}
 	}
 	
+	/// The predicate applies to images only.
+	public var imageFetchPredicate: NSPredicate? {
+		didSet {
+			getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+		}
+	}
+	
+	/// The predicate applies to videos only.
+	public var videoFetchPredicate: NSPredicate? {
+		didSet {
+			getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+		}
+	}
+	
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
     public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
     
@@ -203,10 +217,37 @@ public class DKImagePickerController : UINavigationController {
 	}()
 	
 	private func createAssetFetchOptions() -> PHFetchOptions? {
-		if self.assetType != .AllAssets {
-			self.assetFetchOptions.predicate = NSPredicate(format: "mediaType == %d",
-				self.assetType == .AllPhotos ? PHAssetMediaType.Image.rawValue : PHAssetMediaType.Video.rawValue)
+		
+		let createImagePredicate = { () -> NSPredicate in
+			var imagePredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.Image.rawValue)
+			if let imageFetchPredicate = self.imageFetchPredicate {
+				imagePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, imageFetchPredicate])
+			}
+	
+			return imagePredicate
 		}
+		
+		let createVideoPredicate = { () -> NSPredicate in
+			var videoPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.Video.rawValue)
+			if let videoFetchPredicate = self.videoFetchPredicate {
+				videoPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [videoPredicate, videoFetchPredicate])
+			}
+			
+			return videoPredicate
+		}
+		
+		var predicate: NSPredicate?
+		switch self.assetType {
+		case .AllAssets:
+			predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [createImagePredicate(), createVideoPredicate()])
+		case .AllPhotos:
+			predicate = createImagePredicate()
+		case .AllVideos:
+			predicate = createVideoPredicate()
+		}
+		
+		self.assetFetchOptions.predicate = predicate
+		
 		return self.assetFetchOptions
 	}
 	
@@ -241,13 +282,19 @@ public class DKImagePickerController : UINavigationController {
 						let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
 						newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
 					}, completionHandler: { (success, error) -> Void in
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						dispatch_async(dispatch_get_main_queue(), {
 							if success {
 								if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-									self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+									if self.sourceType.contains(.Photo) {
+										self.dismissViewControllerAnimated(true, completion: nil)
+									}
+									self.selectedImage(DKAsset(originalAsset: newAsset))
 								}
 							} else {
-								self.selectedImage(DKAsset(image: image), needsToDismiss: true)
+								if self.sourceType.contains(.Photo) {
+									self.dismissViewControllerAnimated(true, completion: nil)
+								}
+								self.selectedImage(DKAsset(image: image))
 							}
 						})
 				})
@@ -261,7 +308,6 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
 	internal func dismiss() {
-		
 		self.dismissViewControllerAnimated(true, completion: nil)
 		self.didCancel?()
 	}
@@ -274,12 +320,9 @@ public class DKImagePickerController : UINavigationController {
     // MARK: - Selection Image
 	
 	internal func selectedImage(asset: DKAsset) {
-		self.selectedImage(asset, needsToDismiss: false)
-	}
-	
-	internal func selectedImage(asset: DKAsset, needsToDismiss: Bool) {
 		selectedAssets.append(asset)
-		if needsToDismiss {
+		
+		if !self.sourceType.contains(.Photo) {
 			self.done()
 		} else if self.singleSelect {
 			self.done()
