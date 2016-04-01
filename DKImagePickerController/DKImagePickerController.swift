@@ -200,7 +200,14 @@ public class DKImagePickerController : UINavigationController {
 			
 			if !self.sourceType.contains(.Photo) {
 				self.navigationBarHidden = true
-				self.setViewControllers([self.createCamera()], animated: false)
+				
+				let camera = self.createCamera()
+				if camera is UINavigationController {
+					self.presentViewController(self.createCamera(), animated: true, completion: nil)
+					self.setViewControllers([], animated: false)
+				} else {
+					self.setViewControllers([camera], animated: false)
+				}
 			} else {
 				let rootVC = DKAssetGroupDetailVC()
 				self.updateCancelButtonForVC(rootVC)
@@ -274,7 +281,10 @@ public class DKImagePickerController : UINavigationController {
 		
 		let camera = self.UIDelegate.imagePickerControllerCreateCamera(self,
 			didCancel: { () -> Void in
-				self.dismissViewControllerAnimated(true, completion: nil);
+				if self.viewControllers.count == 0 {
+					self.dismissViewControllerAnimated(true, completion: nil);
+				}
+				self.dismiss()
 			}) { (image) -> Void in
 				var newImageIdentifier: String!
 				PHPhotoLibrary.sharedPhotoLibrary().performChanges(
@@ -285,7 +295,7 @@ public class DKImagePickerController : UINavigationController {
 						dispatch_async(dispatch_get_main_queue(), {
 							if success {
 								if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-									if self.sourceType.contains(.Photo) {
+									if self.sourceType.contains(.Photo) || self.viewControllers.count == 0 {
 										self.dismissViewControllerAnimated(true, completion: nil)
 									}
 									self.selectedImage(DKAsset(originalAsset: newAsset))
@@ -308,12 +318,12 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
 	internal func dismiss() {
-		self.dismissViewControllerAnimated(true, completion: nil)
+		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
 		self.didCancel?()
 	}
 	
     internal func done() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         self.didSelectAssets?(assets: self.selectedAssets)
     }
     
