@@ -80,6 +80,12 @@ public var showsEmptyAlbums = true
 /// The type of picker interface to be displayed by the controller.
 public var assetType: DKImagePickerControllerAssetType = .AllAssets
 
+/// The predicate applies to images only.
+public var imageFetchPredicate: NSPredicate?
+
+/// The predicate applies to videos only.
+public var videoFetchPredicate: NSPredicate?
+
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
 public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
 

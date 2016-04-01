@@ -98,6 +98,20 @@ public class DKImagePickerController : UINavigationController {
 		}
 	}
 	
+	/// The predicate applies to images only.
+	public var imageFetchPredicate: NSPredicate? {
+		didSet {
+			getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+		}
+	}
+	
+	/// The predicate applies to videos only.
+	public var videoFetchPredicate: NSPredicate? {
+		didSet {
+			getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+		}
+	}
+	
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
     public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
     
@@ -203,10 +217,37 @@ public class DKImagePickerController : UINavigationController {
 	}()
 	
 	private func createAssetFetchOptions() -> PHFetchOptions? {
-		if self.assetType != .AllAssets {
-			self.assetFetchOptions.predicate = NSPredicate(format: "mediaType == %d",
-				self.assetType == .AllPhotos ? PHAssetMediaType.Image.rawValue : PHAssetMediaType.Video.rawValue)
+		
+		let createImagePredicate = { () -> NSPredicate in
+			var imagePredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.Image.rawValue)
+			if let imageFetchPredicate = self.imageFetchPredicate {
+				imagePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, imageFetchPredicate])
+			}
+	
+			return imagePredicate
 		}
+		
+		let createVideoPredicate = { () -> NSPredicate in
+			var videoPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.Video.rawValue)
+			if let videoFetchPredicate = self.videoFetchPredicate {
+				videoPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [videoPredicate, videoFetchPredicate])
+			}
+			
+			return videoPredicate
+		}
+		
+		var predicate: NSPredicate?
+		switch self.assetType {
+		case .AllAssets:
+			predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [createImagePredicate(), createVideoPredicate()])
+		case .AllPhotos:
+			predicate = createImagePredicate()
+		case .AllVideos:
+			predicate = createVideoPredicate()
+		}
+		
+		self.assetFetchOptions.predicate = predicate
+		
 		return self.assetFetchOptions
 	}
 	
