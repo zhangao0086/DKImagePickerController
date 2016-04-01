@@ -241,13 +241,19 @@ public class DKImagePickerController : UINavigationController {
 						let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
 						newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
 					}, completionHandler: { (success, error) -> Void in
-						dispatch_async(dispatch_get_main_queue(), { () -> Void in
+						dispatch_async(dispatch_get_main_queue(), {
 							if success {
 								if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-									self.selectedImage(DKAsset(originalAsset: newAsset), needsToDismiss: true)
+									if self.sourceType.contains(.Photo) {
+										self.dismissViewControllerAnimated(true, completion: nil)
+									}
+									self.selectedImage(DKAsset(originalAsset: newAsset))
 								}
 							} else {
-								self.selectedImage(DKAsset(image: image), needsToDismiss: true)
+								if self.sourceType.contains(.Photo) {
+									self.dismissViewControllerAnimated(true, completion: nil)
+								}
+								self.selectedImage(DKAsset(image: image))
 							}
 						})
 				})
@@ -261,7 +267,6 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
 	internal func dismiss() {
-		
 		self.dismissViewControllerAnimated(true, completion: nil)
 		self.didCancel?()
 	}
@@ -274,12 +279,9 @@ public class DKImagePickerController : UINavigationController {
     // MARK: - Selection Image
 	
 	internal func selectedImage(asset: DKAsset) {
-		self.selectedImage(asset, needsToDismiss: false)
-	}
-	
-	internal func selectedImage(asset: DKAsset, needsToDismiss: Bool) {
 		selectedAssets.append(asset)
-		if needsToDismiss {
+		
+		if !self.sourceType.contains(.Photo) {
 			self.done()
 		} else if self.singleSelect {
 			self.done()
