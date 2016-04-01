@@ -12,12 +12,24 @@ import Photos
 @objc
 public protocol DKImagePickerControllerUIDelegate {
 	
-	// Returns a custom camera.
+	/**
+		Returns a custom camera.
+
+		**Note**
+
+		If you are using a UINavigationController as the custom camera,
+		you should also set the picker's modalPresentationStyle to .OverCurrentContext, like this:
+		
+		```
+		pickerController.modalPresentationStyle = .OverCurrentContext
+		```
+	*/
 	func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
-		didCancel: (() -> Void),
-		didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController
+	                                       didCancel: (() -> Void),
+	                                       didFinishCapturingImage: ((image: UIImage) -> Void),
+	                                       didFinishCapturingVideo: ((videoURL: NSURL) -> Void)) -> UIViewController
 	
-	// The camera image to be displayed in the album's first cell.
+	/// The camera image to be displayed in the album's first cell.
 	func imagePickerControllerCameraImage() -> UIImage
 	
 }
@@ -279,36 +291,63 @@ public class DKImagePickerController : UINavigationController {
 	
 	private func createCamera() -> UIViewController {
 		
-		let camera = self.UIDelegate.imagePickerControllerCreateCamera(self,
-			didCancel: { () -> Void in
-				if self.viewControllers.count == 0 {
-					self.dismissViewControllerAnimated(true, completion: nil);
-				}
-				self.dismiss()
-			}) { (image) -> Void in
-				var newImageIdentifier: String!
-				PHPhotoLibrary.sharedPhotoLibrary().performChanges(
-					{ () in
-						let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
-						newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-					}, completionHandler: { (success, error) -> Void in
-						dispatch_async(dispatch_get_main_queue(), {
-							if success {
-								if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-									if self.sourceType.contains(.Photo) || self.viewControllers.count == 0 {
-										self.dismissViewControllerAnimated(true, completion: nil)
-									}
-									self.selectedImage(DKAsset(originalAsset: newAsset))
-								}
-							} else {
-								if self.sourceType.contains(.Photo) {
-									self.dismissViewControllerAnimated(true, completion: nil)
-								}
-								self.selectedImage(DKAsset(image: image))
-							}
-						})
-				})
+		let didCancel = { () in
+			if self.viewControllers.count == 0 {
+				self.dismissViewControllerAnimated(true, completion: nil);
+			}
+			self.dismiss()
 		}
+		
+		let didFinishCapturingImage = { (image: UIImage) in
+			var newImageIdentifier: String!
+			PHPhotoLibrary.sharedPhotoLibrary().performChanges( { () in
+				let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
+				newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
+			}, completionHandler: { (success, error) in
+				dispatch_async(dispatch_get_main_queue(), {
+					if success {
+						if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
+							if self.sourceType.contains(.Photo) || self.viewControllers.count == 0 {
+								self.dismissViewControllerAnimated(true, completion: nil)
+							}
+							self.selectedImage(DKAsset(originalAsset: newAsset))
+						}
+					} else {
+						if self.sourceType.contains(.Photo) {
+							self.dismissViewControllerAnimated(true, completion: nil)
+						}
+						self.selectedImage(DKAsset(image: image))
+					}
+				})
+			})
+		}
+		
+		let didFinishCapturingVideo = { (videoURL: NSURL) in
+			var newVideoIdentifier: String!
+			PHPhotoLibrary.sharedPhotoLibrary().performChanges({ 
+				let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideoAtFileURL(videoURL)
+				newVideoIdentifier = assetRequest?.placeholderForCreatedAsset?.localIdentifier
+			}, completionHandler: { (success, error) in
+				dispatch_async(dispatch_get_main_queue(), { 
+					if success {
+						if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newVideoIdentifier], options: nil).firstObject as? PHAsset {
+							if self.sourceType.contains(.Photo) || self.viewControllers.count == 0 {
+								self.dismissViewControllerAnimated(true, completion: nil)
+							}
+							self.selectedImage(DKAsset(originalAsset: newAsset))
+						}
+
+					} else {
+						self.dismissViewControllerAnimated(true, completion: nil)
+					}
+				})
+			})
+		}
+		
+		let camera = self.UIDelegate.imagePickerControllerCreateCamera(self,
+		                                                               didCancel: didCancel,
+		                                                               didFinishCapturingImage: didFinishCapturingImage,
+		                                                               didFinishCapturingVideo: didFinishCapturingVideo)
 		
 		return camera
 	}
