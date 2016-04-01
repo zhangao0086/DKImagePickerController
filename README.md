@@ -137,6 +137,7 @@ pickerController.sourceType = .Camera
 #### Create a custom camera
 
 You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.
+The following code uses a `UIImagePickerController`:
 ```swift
 public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
