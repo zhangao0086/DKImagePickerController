@@ -25,41 +25,47 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
     
-    func showImagePickerWithAssetType(
-		assetType: DKImagePickerControllerAssetType,
-        allowMultipleType: Bool,
-        sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
-		allowsLandscape: Bool,
-		singleSelect: Bool) {
+	func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
+	                                  allowMultipleType: Bool,
+	                                  sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
+	                                  allowsLandscape: Bool,
+	                                  singleSelect: Bool) {
+		
+		let pickerController = DKImagePickerController()
+		
+		// Custom camera
+//		pickerController.UIDelegate = CustomUIDelegate()
+//		pickerController.modalPresentationStyle = .OverCurrentContext
+		
+		pickerController.assetType = assetType
+		pickerController.allowsLandscape = allowsLandscape
+		pickerController.allowMultipleTypes = allowMultipleType
+		pickerController.sourceType = sourceType
+		pickerController.singleSelect = singleSelect
+		
+//		pickerController.showsCancelButton = true
+//		pickerController.showsEmptyAlbums = false
+//		pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
+		
+		// Clear all the selected assets if you used the picker controller as a single instance.
+//		pickerController.defaultSelectedAssets = nil
+		
+		pickerController.defaultSelectedAssets = self.assets
+		
+		pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
+			print("didSelectAssets")
 			
-            let pickerController = DKImagePickerController()
-            pickerController.assetType = assetType
-			pickerController.allowsLandscape = allowsLandscape
-			pickerController.allowMultipleTypes = allowMultipleType
-			pickerController.sourceType = sourceType
-			pickerController.singleSelect = singleSelect
-//			pickerController.showsCancelButton = true
-//			pickerController.showsEmptyAlbums = false
-//			pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
-			
-			// Clear all the selected assets if you used the picker controller as a single instance.
-//			pickerController.defaultSelectedAssets = nil
-			pickerController.defaultSelectedAssets = self.assets
-            
-            pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
-                print("didSelectAssets")
-				
-                self.assets = assets
-                self.previewView?.reloadData()
-            }
-			
-			if UI_USER_INTERFACE_IDIOM() == .Pad {
-				pickerController.modalPresentationStyle = .FormSheet;
-			}
-
-            self.presentViewController(pickerController, animated: true) {}
-    }
-    
+			self.assets = assets
+			self.previewView?.reloadData()
+		}
+		
+		if UI_USER_INTERFACE_IDIOM() == .Pad {
+			pickerController.modalPresentationStyle = .FormSheet;
+		}
+		
+		self.presentViewController(pickerController, animated: true) {}
+	}
+	
     func playVideo(videoURL: NSURL) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.exitPlayer(_:)), name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
         

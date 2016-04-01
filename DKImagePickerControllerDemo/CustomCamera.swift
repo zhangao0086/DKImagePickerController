@@ -7,19 +7,47 @@
 //
 
 import UIKit
+import MobileCoreServices
 
-public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate {
+public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 	
-	public override func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController, didCancel: (() -> Void), didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController {
-		let vc = UIViewController()
-		vc.view.backgroundColor = UIColor.redColor()
+	var didCancel: (() -> Void)?
+	var didFinishCapturingImage: ((image: UIImage) -> Void)?
+	var didFinishCapturingVideo: ((videoURL: NSURL) -> Void)?
+	
+	public override func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
+	                                                       didCancel: (() -> Void),
+	                                                       didFinishCapturingImage: ((image: UIImage) -> Void),
+	                                                       didFinishCapturingVideo: ((videoURL: NSURL) -> Void)
+	                                                       ) -> UIViewController {
+		self.didCancel = didCancel
+		self.didFinishCapturingImage = didFinishCapturingImage
+		self.didFinishCapturingVideo = didFinishCapturingVideo
 		
-		let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-		dispatch_after(delayTime, dispatch_get_main_queue()) {
-			didCancel()
+		let picker = UIImagePickerController()
+		picker.delegate = self
+		picker.sourceType = .Camera
+		picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+		
+		return picker
+	}
+	
+	// MARK: - UIImagePickerControllerDelegate methods
+	
+	public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+		let mediaType = info[UIImagePickerControllerMediaType] as! String
+		
+		if mediaType == kUTTypeImage as String {
+			let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+			self.didFinishCapturingImage?(image: image)
+		} else if mediaType == kUTTypeMovie as String {
+			let videoURL = info[UIImagePickerControllerMediaURL] as! NSURL
+			self.didFinishCapturingVideo?(videoURL: videoURL)
 		}
-		
-		return vc
+	}
+	
+	public func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+		self.didCancel?()
 	}
 	
 }
