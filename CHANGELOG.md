@@ -1,5 +1,15 @@
 # Change Log
 
+## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
+
+**Merged pull requests:**
+
+- Added support for custom camera based UINavigationController.
+
+- Added video support for custom camera.
+
 ## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)

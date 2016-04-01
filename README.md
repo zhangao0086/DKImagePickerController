@@ -136,7 +136,7 @@ pickerController.sourceType = .Camera
 
 #### Create a custom camera
 
-You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.
+You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
 The following code uses a `UIImagePickerController`:
 ```swift
 public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -260,6 +260,16 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
+## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
+
+**Merged pull requests:**
+
+- Added support for custom camera based UINavigationController.
+
+- Added video support for custom camera.
+
 ## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)
@@ -283,20 +293,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 **Merged pull requests:**
 
 - Fixed an issue that may cause crash when user not authorized camera access.
-
-## [3.1.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.0) (2016-03-17)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.11...3.1.0)
-
-**Merged pull requests:**
-
-- Added support for custom camera.
-
-- Added support for UIDelegate.
-
-- Added a function to sync fetch an AVAsset.
-
-- Fixed an issue that may cause crashing when downloading image from iCloud.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
