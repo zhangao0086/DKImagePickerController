@@ -136,21 +136,50 @@ pickerController.sourceType = .Camera
 
 #### Create a custom camera
 
-You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.
+You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
+The following code uses a `UIImagePickerController`:
 ```swift
-public class CustomUIDelegate: DKImagePickerControllerUIDelegate {
+public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    @objc public func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController, didCancel: (() -> Void), didFinishCapturingImage: ((image: UIImage) -> Void)) -> UIViewController {
-        let vc = UIViewController()
-        vc.view.backgroundColor = UIColor.redColor()
+    var didCancel: (() -> Void)?
+    var didFinishCapturingImage: ((image: UIImage) -> Void)?
+    var didFinishCapturingVideo: ((videoURL: NSURL) -> Void)?
+    
+    public override func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
+                                                           didCancel: (() -> Void),
+                                                           didFinishCapturingImage: ((image: UIImage) -> Void),
+                                                           didFinishCapturingVideo: ((videoURL: NSURL) -> Void)
+                                                           ) -> UIViewController {
+        self.didCancel = didCancel
+        self.didFinishCapturingImage = didFinishCapturingImage
+        self.didFinishCapturingVideo = didFinishCapturingVideo
         
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
-            didCancel()
-        }
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .Camera
+        picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
         
-        return vc
+        return picker
     }
+    
+    // MARK: - UIImagePickerControllerDelegate methods
+    
+    public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        let mediaType = info[UIImagePickerControllerMediaType] as! String
+        
+        if mediaType == kUTTypeImage as String {
+            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+            self.didFinishCapturingImage?(image: image)
+        } else if mediaType == kUTTypeMovie as String {
+            let videoURL = info[UIImagePickerControllerMediaURL] as! NSURL
+            self.didFinishCapturingVideo?(videoURL: videoURL)
+        }
+    }
+    
+    public func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.didCancel?()
+    }
+    
 }
 ```
 
@@ -231,6 +260,16 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
+## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
+
+**Merged pull requests:**
+
+- Added support for custom camera based UINavigationController.
+
+- Added video support for custom camera.
+
 ## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)
@@ -254,20 +293,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 **Merged pull requests:**
 
 - Fixed an issue that may cause crash when user not authorized camera access.
-
-## [3.1.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.0) (2016-03-17)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.11...3.1.0)
-
-**Merged pull requests:**
-
-- Added support for custom camera.
-
-- Added support for UIDelegate.
-
-- Added a function to sync fetch an AVAsset.
-
-- Fixed an issue that may cause crashing when downloading image from iCloud.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
