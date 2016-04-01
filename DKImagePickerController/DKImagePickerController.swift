@@ -144,7 +144,7 @@ public class DKImagePickerController : UINavigationController {
     private lazy var doneButton: UIButton = {
         let button = UIButton(type: UIButtonType.Custom)
 		button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.navigationBar.tintColor, forState: UIControlState.Normal)
-        button.addTarget(self, action: "done", forControlEvents: UIControlEvents.TouchUpInside)
+        button.addTarget(self, action: #selector(DKImagePickerController.done), forControlEvents: UIControlEvents.TouchUpInside)
       
         return button
     }()
@@ -214,7 +214,7 @@ public class DKImagePickerController : UINavigationController {
 		if self.showsCancelButton {
 			vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
 				target: self,
-				action: "dismiss")
+				action: #selector(DKImagePickerController.dismiss))
 		} else {
 			vc.navigationItem.leftBarButtonItem = nil
 		}
