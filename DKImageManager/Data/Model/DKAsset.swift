@@ -128,7 +128,7 @@ public class DKAsset: NSObject {
 			options.deliveryMode = .HighQualityFormat
 			options.synchronous = sync
 
-			getImageManager().fetchImageForAsset(self, size: PHImageManagerMaximumSize, options: options) { [weak self] image, info in
+			getImageManager().fetchOriginalImageForAsset(self, options: options) { [weak self] image, info in
 				guard let strongSelf = self else { return }
 				
 				strongSelf.originalImage = (image, info)

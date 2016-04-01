@@ -116,6 +116,26 @@ public class DKImageManager: DKBaseManager {
 		})
 	}
 	
+	public func fetchOriginalImageForAsset(asset: DKAsset, options: PHImageRequestOptions?, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		self.manager.requestImageDataForAsset(asset.originalAsset!,
+		                                      options: options ?? self.defaultImageRequestOptions) { (data, dataUTI, orientation, info) in
+												if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
+													where data == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+													var requestCloudOptions: PHImageRequestOptions
+													if let options = options {
+														requestCloudOptions = options.copy() as! PHImageRequestOptions
+													} else {
+														requestCloudOptions = self.defaultImageRequestOptions.copy() as! PHImageRequestOptions
+													}
+													requestCloudOptions.networkAccessAllowed = true
+													self.fetchOriginalImageForAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
+												} else {
+													completeBlock(image: UIImage(data: data!), info: info)
+												}
+		}
+		
+	}
+	
 	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVURLAsset?) -> Void) {
 		self.fetchAVAsset(asset, options: nil, completeBlock: completeBlock)
 	}
