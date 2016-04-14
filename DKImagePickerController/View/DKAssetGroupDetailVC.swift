@@ -306,7 +306,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
         
         cell.didCameraButtonClicked = {
-            if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+            if UIImagePickerController.isSourceTypeAvailable(.Camera) &&
+            DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount {
                 DKImagePickerController.sharedInstance().presentCamera()
             }
         }
