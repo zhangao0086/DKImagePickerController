@@ -292,10 +292,11 @@ public class DKImagePickerController : UINavigationController {
 	private func createCamera() -> UIViewController {
 		
 		let didCancel = { () in
-			if self.viewControllers.count == 0 {
-				self.dismissViewControllerAnimated(true, completion: nil);
-			}
-			self.dismiss()
+            if self.presentedViewController != nil {
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }else {
+                self.dismiss()
+            }
 		}
 		
 		let didFinishCapturingImage = { (image: UIImage) in
