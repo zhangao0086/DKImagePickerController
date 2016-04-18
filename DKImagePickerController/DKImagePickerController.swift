@@ -161,7 +161,6 @@ public class DKImagePickerController : UINavigationController {
 			if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
 				rootVC.collectionView?.reloadData()
 			}
-			self.updateDoneButtonTitle()
         }
     }
     
@@ -376,14 +375,11 @@ public class DKImagePickerController : UINavigationController {
 			self.done()
 		} else if self.singleSelect {
 			self.done()
-		} else {
-			updateDoneButtonTitle()
 		}
 	}
 	
 	internal func unselectedImage(asset: DKAsset) {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
-		updateDoneButtonTitle()
 	}
 	
     // MARK: - Handles Orientation

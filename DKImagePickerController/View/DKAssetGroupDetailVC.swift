@@ -305,15 +305,21 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
     func cameraCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
         
-        cell.didCameraButtonClicked = {
+        cell.didCameraButtonClicked = { [unowned self] in 
             if UIImagePickerController.isSourceTypeAvailable(.Camera) &&
             DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount {
                 DKImagePickerController.sharedInstance().presentCamera()
+            }else {
+                self.showMaxPhotosSelectedAlertView()
             }
         }
 
         return cell
 	}
+    
+    private func showMaxPhotosSelectedAlertView() {
+        UIAlertView(title: "Max photos limit reached", message: "You can select \(DKImagePickerController.sharedInstance().maxSelectableCount) photos", delegate: nil, cancelButtonTitle: "OK").show()
+    }
 	
 	func assetCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
 		let assetIndex = (indexPath.row - (self.hidesCamera ? 0 : 1))
@@ -383,7 +389,11 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
                 return false
         }
         
-        return DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
+        let shouldSelect = DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
+        if !shouldSelect {
+            showMaxPhotosSelectedAlertView()
+        }
+        return shouldSelect
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
