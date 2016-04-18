@@ -161,7 +161,6 @@ public class DKImagePickerController : UINavigationController {
 			if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
 				rootVC.collectionView?.reloadData()
 			}
-			self.updateDoneButtonTitle()
         }
     }
     
@@ -292,10 +291,11 @@ public class DKImagePickerController : UINavigationController {
 	private func createCamera() -> UIViewController {
 		
 		let didCancel = { () in
-			if self.viewControllers.count == 0 {
-				self.dismissViewControllerAnimated(true, completion: nil);
-			}
-			self.dismiss()
+            if self.presentedViewController != nil {
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }else {
+                self.dismiss()
+            }
 		}
 		
 		let didFinishCapturingImage = { (image: UIImage) in
@@ -375,14 +375,11 @@ public class DKImagePickerController : UINavigationController {
 			self.done()
 		} else if self.singleSelect {
 			self.done()
-		} else {
-			updateDoneButtonTitle()
 		}
 	}
 	
 	internal func unselectedImage(asset: DKAsset) {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
-		updateDoneButtonTitle()
 	}
 	
     // MARK: - Handles Orientation
