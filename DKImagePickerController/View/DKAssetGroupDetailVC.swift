@@ -382,6 +382,10 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
                 return false
         }
         
+        if (DKImagePickerController.sharedInstance().allowMultipleTypes && DKImagePickerController.sharedInstance().selectedAssets.count == DKImagePickerController.sharedInstance().maxSelectableCount) {
+            DKImagePickerController.sharedInstance().statusDelegate?.imagePickerControllerDidExceedMaximumNumberOfSelection(DKImagePickerController.sharedInstance())
+        }
+        
         return DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
     }
     

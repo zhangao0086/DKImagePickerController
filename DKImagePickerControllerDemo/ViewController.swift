@@ -10,7 +10,7 @@ import UIKit
 import MediaPlayer
 import Photos
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, DKImagePickerControllerStatusDelegate {
     var player: MPMoviePlayerController?
     
     @IBOutlet var previewView: UICollectionView?
@@ -37,6 +37,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //		pickerController.UIDelegate = CustomUIDelegate()
 //		pickerController.modalPresentationStyle = .OverCurrentContext
 		
+        pickerController.statusDelegate = self;
 		pickerController.assetType = assetType
 		pickerController.allowsLandscape = allowsLandscape
 		pickerController.allowMultipleTypes = allowMultipleType
@@ -65,6 +66,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		
 		self.presentViewController(pickerController, animated: true) {}
 	}
+    
+    //MARK: - DKImagePickerControllerStatusDelegate
+    func imagePickerControllerDidExceedMaximumNumberOfSelection(imagePickerController: DKImagePickerController) {
+        print("imagePickerControllerDidExceedMaximumNumberOfSelection")
+    }
 	
     func playVideo(videoURL: NSURL) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.exitPlayer(_:)), name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
