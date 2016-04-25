@@ -34,6 +34,10 @@ public protocol DKImagePickerControllerUIDelegate {
 	
 }
 
+public protocol DKImagePickerControllerStatusDelegate {
+    func imagePickerControllerDidExceedMaximumNumberOfSelection(imagePickerController: DKImagePickerController)
+}
+
 /**
 * allPhotos: Get all photos assets in the assets group.
 * allVideos: Get all video assets in the assets group.
@@ -75,6 +79,8 @@ public class DKImagePickerController : UINavigationController {
 	}
 
 	public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
+    
+    public var statusDelegate: DKImagePickerControllerStatusDelegate?
 	
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
