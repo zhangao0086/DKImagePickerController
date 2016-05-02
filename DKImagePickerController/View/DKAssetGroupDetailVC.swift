@@ -204,7 +204,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
     private var hidesCamera :Bool = false
 	
     convenience init() {
-        let layout = DKAssetGroupGridLayout()
+        let layout = DKImagePickerController.sharedInstance().UIDelegate.layoutForImagePickerController(DKImagePickerController.sharedInstance()).init()
         self.init(collectionViewLayout: layout)
     }
 	
@@ -221,11 +221,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		} else {
 			currentViewSize = self.view.bounds.size
 		}
-		
-		let layout = DKAssetGroupGridLayout(contentSize: self.view.bounds.size)
-		self.collectionView!.setCollectionViewLayout(layout, animated: true) { completed in
-			self.collectionView!.reloadItemsAtIndexPaths(self.collectionView!.indexPathsForVisibleItems())
-		}
+
+		self.collectionView?.collectionViewLayout.invalidateLayout()
 	}
 	
 	private lazy var groupImageRequestOptions: PHImageRequestOptions = {
@@ -251,7 +248,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         self.collectionView!.registerClass(DKAssetCell.self, forCellWithReuseIdentifier: DKImageAssetIdentifier)
         self.collectionView!.registerClass(DKVideoAssetCell.self, forCellWithReuseIdentifier: DKVideoAssetIdentifier)
 		
-		self.hidesCamera = !DKImagePickerController.sharedInstance().sourceType.contains(.Camera)
+		self.hidesCamera = DKImagePickerController.sharedInstance().sourceType == .Photo
 		self.checkPhotoPermission()
     }
 	
@@ -306,9 +303,11 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
         
         cell.didCameraButtonClicked = {
-            if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+            if UIImagePickerController.isSourceTypeAvailable(.Camera) && DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount  {
                 DKImagePickerController.sharedInstance().presentCamera()
-            }
+			} else {
+				DKImagePickerController.sharedInstance().UIDelegate.imagePickerControllerDidReachMaxLimit(DKImagePickerController.sharedInstance())
+			}
         }
 
         return cell
@@ -381,8 +380,13 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
                 
                 return false
         }
-        
-        return DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
+		
+		let shouldSelect = DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
+		if !shouldSelect {
+			DKImagePickerController.sharedInstance().UIDelegate.imagePickerControllerDidReachMaxLimit(DKImagePickerController.sharedInstance())
+		}
+		
+		return shouldSelect
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

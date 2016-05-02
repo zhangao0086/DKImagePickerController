@@ -73,6 +73,13 @@ public class DKImageManager: DKBaseManager {
 		return options
 	}()
 	
+	private lazy var defaultVideoRequestOptions: PHVideoRequestOptions = {
+		let options = PHVideoRequestOptions()
+		options.deliveryMode = .MediumQualityFormat
+		
+		return options
+	}()
+	
 	public var autoDownloadWhenAssetIsInCloud = true
 	
 	public let groupDataManager = DKGroupDataManager()
@@ -136,14 +143,26 @@ public class DKImageManager: DKBaseManager {
 		
 	}
 	
-	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVURLAsset?) -> Void) {
+	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(asset, options: nil, completeBlock: completeBlock)
 	}
 	
-	public func fetchAVAsset(asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVURLAsset?) -> Void) {
+	public func fetchAVAsset(asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.manager.requestAVAssetForVideo(asset.originalAsset!,
 			options: options) { avAsset, audioMix, info in
-				completeBlock(avAsset: avAsset as? AVURLAsset)
+				if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
+					where avAsset == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+					var requestCloudOptions: PHVideoRequestOptions
+					if let options = options {
+						requestCloudOptions = options.copy() as! PHVideoRequestOptions
+					} else {
+						requestCloudOptions = self.defaultVideoRequestOptions.copy() as! PHVideoRequestOptions
+					}
+					requestCloudOptions.networkAccessAllowed = true
+					self.fetchAVAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
+				} else {
+					completeBlock(avAsset: avAsset as? AVURLAsset, info: info)
+				}
 		}
 	}
 	

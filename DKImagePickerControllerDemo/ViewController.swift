@@ -27,7 +27,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
 	func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
 	                                  allowMultipleType: Bool,
-	                                  sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
+	                                  sourceType: DKImagePickerControllerSourceType = .Both,
 	                                  allowsLandscape: Bool,
 	                                  singleSelect: Bool) {
 		
@@ -127,7 +127,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let assetType = Demo.types[indexPath.row]
         let allowMultipleType = !(indexPath.row == 0 && indexPath.section == 3)
         let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .Camera :
-			(indexPath.section == 2 ? .Photo : [.Camera, .Photo])
+			(indexPath.section == 2 ? .Photo : .Both)
 		let allowsLandscape = indexPath.section == 3
 		let singleSelect = indexPath.section == 4
 		
@@ -175,7 +175,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let asset = self.assets![indexPath.row]
-		asset.fetchAVAssetWithCompleteBlock { (avAsset) in
+		asset.fetchAVAssetWithCompleteBlock { (avAsset, info) in
 			dispatch_async(dispatch_get_main_queue(), { () in
 				self.playVideo(avAsset!.URL)
 			})

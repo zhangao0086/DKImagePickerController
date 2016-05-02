@@ -19,6 +19,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports iCloud.
 * Supports UIAppearance.
 * Supports custom camera.
+* Supports custom UICollectionViewLayout.
 
 ## Requirements
 * iOS 8.0+
@@ -87,7 +88,7 @@ public var imageFetchPredicate: NSPredicate?
 public var videoFetchPredicate: NSPredicate?
 
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
+public var sourceType: DKImagePickerControllerSourceType = .Both
 
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
@@ -220,7 +221,7 @@ pickerController.showsCancelButton = NO;
 pickerController.showsEmptyAlbums = YES;
 pickerController.allowMultipleTypes = YES;
 pickerController.defaultSelectedAssets = @[];
-//  pickerController.sourceType         // unavailable
+pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 //  pickerController.assetGroupTypes    // unavailable
 //  pickerController.defaultAssetGroup  // unavailable
 
@@ -244,55 +245,30 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Change Log
+> In `3.2.0`
+> * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
+> * I've also updated the `fetchAVAsset...` interface:  
+> the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 
-> In `3.0.4`, I've updated the `fetchImage...` interface:  
-> the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
-> so you need to change:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image in
-    // ...
-})
-```
-to:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image, info in
-    // ...
-})
-```
+## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
 
-## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
 
 **Merged pull requests:**
 
-- Added support for custom camera based UINavigationController.
+- Supports accessing sourceType in Objective-C.
 
-- Added video support for custom camera.
+- Added auto download for AVAsset if locally unavailable.
 
-## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
+- Making checkCameraPermission public in DKImagePickerControllerDefault…  …
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)
+- Added support for custom cancel button and done button.
 
-**Merged pull requests:**
+- Fixed dismiss of camera.
 
-- Fixed an issue that will cause the didSelectAssets block is called twice.
+- Added alertview on maxlimit reach.
 
-- Added support for custom predicate to assets.
-
-- Optimized for fetching original image.
-
-- The fetchImageWithSize fetching image with .AspectFit.
-
-- Fixed an issue that may cause the popover not display as rounded.
-
-## [3.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.1) (2016-03-18)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.1.1)
-
-**Merged pull requests:**
-
-- Fixed an issue that may cause crash when user not authorized camera access.
+- Added supports for custom UICollectionViewLayout.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 

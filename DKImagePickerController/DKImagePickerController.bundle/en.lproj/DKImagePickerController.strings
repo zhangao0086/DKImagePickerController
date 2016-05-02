@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Select";
+"select" = "Select(%ld)";
 
 "permissionCamera" = "Please Allow Camera Access";
 
@@ -25,3 +25,7 @@
 "selectPhotosOrVideosError" = "It is not possible to select photos and videos at the same time.";
 
 "done" = "Done";
+
+"maxLimitReached" = "Max photos limit reached";
+
+"maxLimitReachedMessage" = "You can select %ld photos";
