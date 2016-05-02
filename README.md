@@ -87,7 +87,7 @@ public var imageFetchPredicate: NSPredicate?
 public var videoFetchPredicate: NSPredicate?
 
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
+public var sourceType: DKImagePickerControllerSourceType = .Both
 
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
@@ -220,7 +220,7 @@ pickerController.showsCancelButton = NO;
 pickerController.showsEmptyAlbums = YES;
 pickerController.allowMultipleTypes = YES;
 pickerController.defaultSelectedAssets = @[];
-//  pickerController.sourceType         // unavailable
+pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 //  pickerController.assetGroupTypes    // unavailable
 //  pickerController.defaultAssetGroup  // unavailable
 
@@ -244,6 +244,9 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Change Log
+> In `3.2.0`, I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
+> I've also updated the `fetchAVAsset...` interface:  
+> the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 
 > In `3.0.4`, I've updated the `fetchImage...` interface:  
 > the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
