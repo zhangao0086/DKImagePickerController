@@ -52,6 +52,7 @@
 		9C4C3A921C2401CD00A52572 /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
 		9C4C3A931C2401CD00A52572 /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
 		9C4C3A941C2401CD00A52572 /* DKImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageManager.swift; sourceTree = "<group>"; };
+		9C6B0C0A1CD7137A004F0EAE /* DKImagePickerControllerConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DKImagePickerControllerConstants.h; sourceTree = "<group>"; };
 		9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
 		9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
@@ -183,6 +184,7 @@
 		9CDEF0EF1B62279F003340FE /* DKImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
+				9C6B0C0A1CD7137A004F0EAE /* DKImagePickerControllerConstants.h */,
 				9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */,
 				9C13DF6E1C90490E001B0ED7 /* DKImagePickerControllerDefaultCamera.swift */,
 				9C6B3E001C219724009684FE /* View */,
@@ -490,6 +492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.DKImagePickerControllerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = DKImagePickerController/DKImagePickerControllerConstants.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -507,6 +510,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.DKImagePickerControllerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = DKImagePickerController/DKImagePickerControllerConstants.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

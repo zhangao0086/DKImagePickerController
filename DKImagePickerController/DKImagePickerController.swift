@@ -44,11 +44,6 @@ public enum DKImagePickerControllerAssetType : Int {
 	case AllPhotos, AllVideos, AllAssets
 }
 
-@objc
-public enum DKImagePickerControllerSourceType : Int {
-	case Camera, Photo
-}
-
 // MARK: - Public DKImagePickerController
 
 /**
@@ -112,7 +107,7 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-    public var sourceType: [DKImagePickerControllerSourceType] = [.Camera, .Photo]
+    public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
     
     /// Whether allows to select photos and videos at the same time.
     public var allowMultipleTypes = true
