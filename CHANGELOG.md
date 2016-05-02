@@ -1,5 +1,25 @@
 # Change Log
 
+## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
+
+**Merged pull requests:**
+
+- Supports accessing sourceType in Objective-C.
+
+- Added auto download for AVAsset if locally unavailable.
+
+- Making checkCameraPermission public in DKImagePickerControllerDefault…  …
+
+- Added support for custom cancel button and done button.
+
+- Fixed dismiss of camera.
+
+- Added alertview on maxlimit reach.
+
+- Added supports for custom UICollectionViewLayout.
+
 ## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
