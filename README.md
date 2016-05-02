@@ -249,8 +249,6 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 > * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
 > * I've also updated the `fetchAVAsset...` interface:  
 > the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
-> * Added support for custom cancel button and done button. You can adjust the position and style of these buttons.
-> * Added support for custom UICollectionViewLayout.
 
 > In `3.0.4`, I've updated the `fetchImage...` interface:  
 > the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
@@ -267,6 +265,26 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 })
 ```
 
+## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
+
+**Merged pull requests:**
+
+- Supports accessing sourceType in Objective-C.
+
+- Added auto download for AVAsset if locally unavailable.
+
+- Making checkCameraPermission public in DKImagePickerControllerDefault…  …
+
+- Added support for custom cancel button and done button.
+
+- Fixed dismiss of camera.
+
+- Added alertview on maxlimit reach.
+
+- Added supports for custom UICollectionViewLayout.
+
 ## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
@@ -276,30 +294,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 - Added support for custom camera based UINavigationController.
 
 - Added video support for custom camera.
-
-## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)
-
-**Merged pull requests:**
-
-- Fixed an issue that will cause the didSelectAssets block is called twice.
-
-- Added support for custom predicate to assets.
-
-- Optimized for fetching original image.
-
-- The fetchImageWithSize fetching image with .AspectFit.
-
-- Fixed an issue that may cause the popover not display as rounded.
-
-## [3.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.1) (2016-03-18)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.1.1)
-
-**Merged pull requests:**
-
-- Fixed an issue that may cause crash when user not authorized camera access.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
