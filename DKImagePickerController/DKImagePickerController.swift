@@ -59,6 +59,11 @@ public protocol DKImagePickerControllerUIDelegate {
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset)
 	
+	/**
+		Called when the selectedAssets'count did reach `maxSelectableCount`.
+	*/
+	func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController)
+	
 }
 
 /**

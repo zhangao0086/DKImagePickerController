@@ -77,6 +77,14 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 		self.updateDoneButtonTitleForImagePickerController(imagePickerController)
 	}
 	
+	public func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController) {
+		UIAlertView(title: DKImageLocalizedStringWithKey("maxLimitReached"),
+		            message: String(format: DKImageLocalizedStringWithKey("maxLimitReachedMessage"), DKImagePickerController.sharedInstance().maxSelectableCount),
+		            delegate: nil,
+		            cancelButtonTitle: DKImageLocalizedStringWithKey("ok"))
+			.show()
+	}
+	
 	// Internal
 	
 	public func checkCameraPermission(camera: DKCamera) {
@@ -98,7 +106,7 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	
 	public func updateDoneButtonTitleForImagePickerController(imagePickerController: DKImagePickerController) {
 		if imagePickerController.selectedAssets.count > 0 {
-			self.doneButtonForPickerController(imagePickerController).setTitle(DKImageLocalizedStringWithKey("select") + "(\(imagePickerController.selectedAssets.count))", forState: UIControlState.Normal)
+			self.doneButtonForPickerController(imagePickerController).setTitle(String(format: DKImageLocalizedStringWithKey("select"), imagePickerController.selectedAssets.count), forState: UIControlState.Normal)
 		} else {
 			self.doneButtonForPickerController(imagePickerController).setTitle(DKImageLocalizedStringWithKey("done"), forState: UIControlState.Normal)
 		}

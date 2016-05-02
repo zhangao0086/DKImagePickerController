@@ -306,9 +306,11 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
         
         cell.didCameraButtonClicked = {
-            if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+            if UIImagePickerController.isSourceTypeAvailable(.Camera) && DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount  {
                 DKImagePickerController.sharedInstance().presentCamera()
-            }
+			} else {
+				DKImagePickerController.sharedInstance().UIDelegate.imagePickerControllerDidReachMaxLimit(DKImagePickerController.sharedInstance())
+			}
         }
 
         return cell
@@ -381,8 +383,13 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
                 
                 return false
         }
-        
-        return DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
+		
+		let shouldSelect = DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
+		if !shouldSelect {
+			DKImagePickerController.sharedInstance().UIDelegate.imagePickerControllerDidReachMaxLimit(DKImagePickerController.sharedInstance())
+		}
+		
+		return shouldSelect
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
