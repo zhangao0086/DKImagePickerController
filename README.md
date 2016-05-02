@@ -19,6 +19,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports iCloud.
 * Supports UIAppearance.
 * Supports custom camera.
+* Supports custom UICollectionViewLayout.
 
 ## Requirements
 * iOS 8.0+
@@ -249,6 +250,7 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 > * I've also updated the `fetchAVAsset...` interface:  
 > the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 > * Added support for custom cancel button and done button. You can adjust the position and style of these buttons.
+> * Added support for custom UICollectionViewLayout.
 
 > In `3.0.4`, I've updated the `fetchImage...` interface:  
 > the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
