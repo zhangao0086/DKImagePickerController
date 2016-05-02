@@ -44,6 +44,11 @@ public enum DKImagePickerControllerAssetType : Int {
 	case AllPhotos, AllVideos, AllAssets
 }
 
+@objc
+public enum DKImagePickerControllerSourceType : Int {
+	case Camera, Photo, Both
+}
+
 // MARK: - Public DKImagePickerController
 
 /**
@@ -107,7 +112,7 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-    public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
+    public var sourceType: DKImagePickerControllerSourceType = .Both
     
     /// Whether allows to select photos and videos at the same time.
     public var allowMultipleTypes = true
@@ -192,7 +197,7 @@ public class DKImagePickerController : UINavigationController {
 		if !hasInitialized {
 			hasInitialized = true
 			
-			if !self.sourceType.contains(.Photo) {
+			if self.sourceType == .Camera {
 				self.navigationBarHidden = true
 				
 				let camera = self.createCamera()
@@ -289,13 +294,13 @@ public class DKImagePickerController : UINavigationController {
 				dispatch_async(dispatch_get_main_queue(), {
 					if success {
 						if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newImageIdentifier], options: nil).firstObject as? PHAsset {
-							if self.sourceType.contains(.Photo) || self.viewControllers.count == 0 {
+							if self.sourceType != .Camera || self.viewControllers.count == 0 {
 								self.dismissViewControllerAnimated(true, completion: nil)
 							}
 							self.selectedImage(DKAsset(originalAsset: newAsset))
 						}
 					} else {
-						if self.sourceType.contains(.Photo) {
+						if self.sourceType != .Camera {
 							self.dismissViewControllerAnimated(true, completion: nil)
 						}
 						self.selectedImage(DKAsset(image: image))
@@ -313,7 +318,7 @@ public class DKImagePickerController : UINavigationController {
 				dispatch_async(dispatch_get_main_queue(), { 
 					if success {
 						if let newAsset = PHAsset.fetchAssetsWithLocalIdentifiers([newVideoIdentifier], options: nil).firstObject as? PHAsset {
-							if self.sourceType.contains(.Photo) || self.viewControllers.count == 0 {
+							if self.sourceType != .Camera || self.viewControllers.count == 0 {
 								self.dismissViewControllerAnimated(true, completion: nil)
 							}
 							self.selectedImage(DKAsset(originalAsset: newAsset))
@@ -353,7 +358,7 @@ public class DKImagePickerController : UINavigationController {
 	internal func selectedImage(asset: DKAsset) {
 		selectedAssets.append(asset)
 		
-		if !self.sourceType.contains(.Photo) {
+		if self.sourceType == .Camera {
 			self.done()
 		} else if self.singleSelect {
 			self.done()

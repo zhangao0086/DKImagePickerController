@@ -251,7 +251,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         self.collectionView!.registerClass(DKAssetCell.self, forCellWithReuseIdentifier: DKImageAssetIdentifier)
         self.collectionView!.registerClass(DKVideoAssetCell.self, forCellWithReuseIdentifier: DKVideoAssetIdentifier)
 		
-		self.hidesCamera = !DKImagePickerController.sharedInstance().sourceType.contains(.Camera)
+		self.hidesCamera = DKImagePickerController.sharedInstance().sourceType == .Photo
 		self.checkPhotoPermission()
     }
 	
