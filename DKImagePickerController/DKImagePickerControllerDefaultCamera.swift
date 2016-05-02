@@ -31,7 +31,7 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 		return camera
 	}
 	
-	private func checkCameraPermission(camera: DKCamera) {
+	public func checkCameraPermission(camera: DKCamera) {
 		func cameraDenied() {
 			dispatch_async(dispatch_get_main_queue()) {
 				let permissionView = DKPermissionView.permissionView(.Camera)
