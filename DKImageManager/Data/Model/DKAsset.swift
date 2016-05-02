@@ -144,25 +144,25 @@ public class DKAsset: NSObject {
 	/**
 	Fetch an AVAsset with a completeBlock.
 	*/
-	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVURLAsset?) -> Void) {
+	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(nil, completeBlock: completeBlock)
 	}
 	
 	/**
 	Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
-	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?) -> Void) {
+	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		getImageManager().fetchAVAsset(self, options: options, completeBlock: completeBlock)
 	}
 	
 	/**
 	Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
-	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?) -> Void) {
+	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		if sync {
 			let semaphore = dispatch_semaphore_create(0)
-			self.fetchAVAsset(nil, completeBlock: { (AVAsset) -> Void in
-				completeBlock(AVAsset: AVAsset)
+			self.fetchAVAsset(nil, completeBlock: { (AVAsset, info) -> Void in
+				completeBlock(AVAsset: AVAsset, info:info)
 				dispatch_semaphore_signal(semaphore)
 			})
 			dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)

@@ -175,7 +175,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let asset = self.assets![indexPath.row]
-		asset.fetchAVAssetWithCompleteBlock { (avAsset) in
+		asset.fetchAVAssetWithCompleteBlock { (avAsset, info) in
 			dispatch_async(dispatch_get_main_queue(), { () in
 				self.playVideo(avAsset!.URL)
 			})
