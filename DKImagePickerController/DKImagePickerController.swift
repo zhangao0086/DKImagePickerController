@@ -35,31 +35,18 @@ public protocol DKImagePickerControllerUIDelegate {
 }
 
 /**
-* allPhotos: Get all photos assets in the assets group.
-* allVideos: Get all video assets in the assets group.
-* allAssets: Get all assets in the group.
+- AllPhotos: Get all photos assets in the assets group.
+- AllVideos: Get all video assets in the assets group.
+- AllAssets: Get all assets in the group.
 */
 @objc
 public enum DKImagePickerControllerAssetType : Int {
-	
 	case AllPhotos, AllVideos, AllAssets
 }
 
-public struct DKImagePickerControllerSourceType : OptionSetType {
-    
-    private var value: UInt = 0
-    init(_ value: UInt) { self.value = value }
-    // MARK: _RawOptionSetType
-    public init(rawValue value: UInt) { self.value = value }
-    // MARK: NilLiteralConvertible
-    public init(nilLiteral: ()) { self.value = 0 }
-    // MARK: RawRepresentable
-    public var rawValue: UInt { return self.value }
-    // MARK: BitwiseOperationsType
-    public static var allZeros: DKImagePickerControllerSourceType { return self.init(0) }
-    
-    public static var Camera: DKImagePickerControllerSourceType { return self.init(1 << 0) }
-    public static var Photo: DKImagePickerControllerSourceType { return self.init(1 << 1) }
+@objc
+public enum DKImagePickerControllerSourceType : Int {
+	case Camera, Photo
 }
 
 // MARK: - Public DKImagePickerController
@@ -125,7 +112,7 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-    public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
+    public var sourceType: [DKImagePickerControllerSourceType] = [.Camera, .Photo]
     
     /// Whether allows to select photos and videos at the same time.
     public var allowMultipleTypes = true

@@ -27,7 +27,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
 	func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
 	                                  allowMultipleType: Bool,
-	                                  sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
+	                                  sourceType: [DKImagePickerControllerSourceType] = [.Camera, .Photo],
 	                                  allowsLandscape: Bool,
 	                                  singleSelect: Bool) {
 		
@@ -126,8 +126,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
         let assetType = Demo.types[indexPath.row]
         let allowMultipleType = !(indexPath.row == 0 && indexPath.section == 3)
-        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .Camera :
-			(indexPath.section == 2 ? .Photo : [.Camera, .Photo])
+        let sourceType: [DKImagePickerControllerSourceType] = indexPath.section == 1 ? [.Camera] :
+			(indexPath.section == 2 ? [.Photo] : [.Camera, .Photo])
 		let allowsLandscape = indexPath.section == 3
 		let singleSelect = indexPath.section == 4
 		
