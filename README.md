@@ -244,8 +244,9 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Change Log
-> In `3.2.0`, I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
-> I've also updated the `fetchAVAsset...` interface:  
+> In `3.2.0`
+> * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
+> * I've also updated the `fetchAVAsset...` interface:  
 > the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 
 > In `3.0.4`, I've updated the `fetchImage...` interface:  
