@@ -250,21 +250,6 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 > * I've also updated the `fetchAVAsset...` interface:  
 > the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 
-> In `3.0.4`, I've updated the `fetchImage...` interface:  
-> the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
-> so you need to change:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image in
-    // ...
-})
-```
-to:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image, info in
-    // ...
-})
-```
-
 ## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
@@ -284,16 +269,6 @@ asset.fetchImageWithSize(size, completeBlock: { image, info in
 - Added alertview on maxlimit reach.
 
 - Added supports for custom UICollectionViewLayout.
-
-## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
-
-**Merged pull requests:**
-
-- Added support for custom camera based UINavigationController.
-
-- Added video support for custom camera.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
