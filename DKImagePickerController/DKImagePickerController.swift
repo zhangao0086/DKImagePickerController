@@ -37,14 +37,12 @@ public protocol DKImagePickerControllerUIDelegate {
 	/**
 		Called when the user needs to show the cancel button.
 	*/
-	func imagePickerController(imagePickerController: DKImagePickerController,
-	                           showsCancelButtonForVC vc: UIViewController)
+	func imagePickerController(imagePickerController: DKImagePickerController, showsCancelButtonForVC vc: UIViewController)
 	
 	/**
 		Called when the user needs to hide the cancel button.
 	*/
-	func imagePickerController(imagePickerController: DKImagePickerController,
-	                           hidesCancelButtonForVC vc: UIViewController)
+	func imagePickerController(imagePickerController: DKImagePickerController, hidesCancelButtonForVC vc: UIViewController)
 	
 	/**
 		Called when the user needs to show the done button.
