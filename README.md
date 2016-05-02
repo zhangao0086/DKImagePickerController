@@ -260,7 +260,7 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 - Added auto download for AVAsset if locally unavailable.
 
-- Making checkCameraPermission public in DKImagePickerControllerDefault…  …
+- Making checkCameraPermission public in DKImagePickerControllerDefault.
 
 - Added support for custom cancel button and done button.
 
