@@ -204,7 +204,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
     private var hidesCamera :Bool = false
 	
     convenience init() {
-        let layout = DKAssetGroupGridLayout()
+        let layout = DKImagePickerController.sharedInstance().UIDelegate.layoutForImagePickerController(DKImagePickerController.sharedInstance()).init()
         self.init(collectionViewLayout: layout)
     }
 	
@@ -221,11 +221,8 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		} else {
 			currentViewSize = self.view.bounds.size
 		}
-		
-		let layout = DKAssetGroupGridLayout(contentSize: self.view.bounds.size)
-		self.collectionView!.setCollectionViewLayout(layout, animated: true) { completed in
-			self.collectionView!.reloadItemsAtIndexPaths(self.collectionView!.indexPathsForVisibleItems())
-		}
+
+		self.collectionView?.collectionViewLayout.invalidateLayout()
 	}
 	
 	private lazy var groupImageRequestOptions: PHImageRequestOptions = {

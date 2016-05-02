@@ -35,6 +35,11 @@ public protocol DKImagePickerControllerUIDelegate {
 	func imagePickerControllerCameraImage() -> UIImage
 	
 	/**
+		The layout is to provide information about the position and visual state of items in the collection view.
+	*/
+	func layoutForImagePickerController(imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type
+	
+	/**
 		Called when the user needs to show the cancel button.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, showsCancelButtonForVC vc: UIViewController)

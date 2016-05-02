@@ -49,6 +49,10 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 		return camera
 	}
 	
+	public func layoutForImagePickerController(imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type {
+		return DKAssetGroupGridLayout.self
+	}
+	
 	public func imagePickerControllerCameraImage() -> UIImage {
 		return DKImageResource.cameraImage()
 	}
