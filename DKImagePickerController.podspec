@@ -9,7 +9,10 @@ Pod::Spec.new do |s|
   s.source        = { :git => "https://github.com/zhangao0086/DKImagePickerController.git", 
                      :tag => s.version.to_s }
   s.source_files  = "DKImagePickerController/**/*.{h,swift}"
-  public_header_files = "DKImagePickerController/**/*.h"
+
+  s.xcconfig = { 'SWIFT_OBJC_BRIDGING_HEADER' => '${POD_ROOT}/DKImagePickerController/DKImagePickerControllerConstants.h' } 
+
+
   s.resource      = "DKImagePickerController/DKImagePickerController.bundle"
   s.frameworks    = "Foundation", "UIKit", "Photos"
   s.requires_arc  = true
