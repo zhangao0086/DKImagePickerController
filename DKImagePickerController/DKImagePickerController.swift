@@ -29,8 +29,37 @@ public protocol DKImagePickerControllerUIDelegate {
 	                                       didFinishCapturingImage: ((image: UIImage) -> Void),
 	                                       didFinishCapturingVideo: ((videoURL: NSURL) -> Void)) -> UIViewController
 	
-	/// The camera image to be displayed in the album's first cell.
+	/**
+		The camera image to be displayed in the album's first cell.
+	*/
 	func imagePickerControllerCameraImage() -> UIImage
+	
+	/**
+		Called when the user needs to show the cancel button.
+	*/
+	func imagePickerController(imagePickerController: DKImagePickerController,
+	                           showsCancelButtonForVC vc: UIViewController)
+	
+	/**
+		Called when the user needs to hide the cancel button.
+	*/
+	func imagePickerController(imagePickerController: DKImagePickerController,
+	                           hidesCancelButtonForVC vc: UIViewController)
+	
+	/**
+		Called when the user needs to show the done button.
+	*/
+	func imagePickerController(imagePickerController: DKImagePickerController, showsDoneButtonForVC vc: UIViewController)
+	
+	/**
+		Called after the user changes the selection.
+	*/
+	func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset)
+	
+	/**
+		Called after the user changes the selection.
+	*/
+	func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset)
 	
 }
 
@@ -143,25 +172,20 @@ public class DKImagePickerController : UINavigationController {
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
-			self.selectedAssets = self.defaultSelectedAssets ?? []
-			
-			if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-				rootVC.collectionView?.reloadData()
+			if self.defaultSelectedAssets?.count > 0 {
+				self.selectedAssets = self.defaultSelectedAssets ?? []
+				
+				if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+					rootVC.collectionView?.reloadData()
+				}
+				
+				self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
 			}
-			self.updateDoneButtonTitle()
         }
     }
     
-    internal var selectedAssets = [DKAsset]()
-    
-    private lazy var doneButton: UIButton = {
-        let button = UIButton(type: UIButtonType.Custom)
-		button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.navigationBar.tintColor, forState: UIControlState.Normal)
-        button.addTarget(self, action: #selector(DKImagePickerController.done), forControlEvents: UIControlEvents.TouchUpInside)
-      
-        return button
-    }()
-    
+    public var selectedAssets = [DKAsset]()
+	
     public convenience init() {
 		let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
@@ -170,15 +194,13 @@ public class DKImagePickerController : UINavigationController {
 		
 		self.preferredContentSize = CGSize(width: 680, height: 600)
 		
-        rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+		self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)
         rootVC.navigationItem.hidesBackButton = true
 		
 		getImageManager().groupDataManager.assetGroupTypes = self.assetGroupTypes
 		getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
 		getImageManager().groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
 		getImageManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
-		
-        self.updateDoneButtonTitle()
     }
     
     deinit {
@@ -211,7 +233,7 @@ public class DKImagePickerController : UINavigationController {
 				let rootVC = DKAssetGroupDetailVC()
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
-				rootVC.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+				self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)
 			}
 		}
 	}
@@ -259,22 +281,11 @@ public class DKImagePickerController : UINavigationController {
 	
 	private func updateCancelButtonForVC(vc: UIViewController) {
 		if self.showsCancelButton {
-			vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
-				target: self,
-				action: #selector(DKImagePickerController.dismiss))
+			self.UIDelegate.imagePickerController(self, showsCancelButtonForVC: vc)
 		} else {
-			vc.navigationItem.leftBarButtonItem = nil
+			self.UIDelegate.imagePickerController(self, hidesCancelButtonForVC: vc)
 		}
 	}
-	
-    private func updateDoneButtonTitle() {
-        if self.selectedAssets.count > 0 {
-            self.doneButton.setTitle(DKImageLocalizedStringWithKey("select") + "(\(selectedAssets.count))", forState: UIControlState.Normal)
-        } else {
-            self.doneButton.setTitle(DKImageLocalizedStringWithKey("done"), forState: UIControlState.Normal)
-        }
-        self.doneButton.sizeToFit()
-    }
 	
 	private func createCamera() -> UIViewController {
 		
@@ -343,12 +354,12 @@ public class DKImagePickerController : UINavigationController {
 		self.presentViewController(self.createCamera(), animated: true, completion: nil)
 	}
 	
-	internal func dismiss() {
+	public func dismiss() {
 		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
 		self.didCancel?()
 	}
 	
-    internal func done() {
+    public func done() {
 		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         self.didSelectAssets?(assets: self.selectedAssets)
     }
@@ -363,13 +374,13 @@ public class DKImagePickerController : UINavigationController {
 		} else if self.singleSelect {
 			self.done()
 		} else {
-			updateDoneButtonTitle()
+			self.UIDelegate.imagePickerController(self, didSelectAsset: asset)
 		}
 	}
 	
 	internal func unselectedImage(asset: DKAsset) {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
-		updateDoneButtonTitle()
+		self.UIDelegate.imagePickerController(self, didDeselectAsset: asset)
 	}
 	
     // MARK: - Handles Orientation
