@@ -10,9 +10,6 @@ Pod::Spec.new do |s|
                      :tag => s.version.to_s }
   s.source_files  = "DKImagePickerController/**/*.{h,swift}"
 
-  s.public_header_files = "${POD_ROOT}/DKImagePickerController/DKImagePickerControllerConstants.h"
-
-
   s.resource      = "DKImagePickerController/DKImagePickerController.bundle"
   s.frameworks    = "Foundation", "UIKit", "Photos"
   s.requires_arc  = true
