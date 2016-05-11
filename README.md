@@ -238,6 +238,7 @@ It has been supported languages so far:
 * en.lproj
 * zh-Hans.lproj
 * hu.lproj
+* ru.lproj
 
 If you want to add new language, pull request or issue!
 
