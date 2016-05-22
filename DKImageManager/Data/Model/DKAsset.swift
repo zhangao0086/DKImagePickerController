@@ -17,7 +17,7 @@ public extension CGSize {
 }
 
 /**
-* An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
+	An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
 */
 public class DKAsset: NSObject {
 
@@ -85,10 +85,10 @@ public class DKAsset: NSObject {
 	}
 	
 	/**
-	Fetch an image with the current screen size.
+		Fetch an image with the current screen size.
 	
-	- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
-	- parameter completeBlock: The block is executed when the image download is complete.
+		- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+		- parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchFullScreenImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		if let (image, info) = self.fullScreenImage {
@@ -115,10 +115,10 @@ public class DKAsset: NSObject {
 	}
 	
 	/**
-	Fetch an image with the original size.
+		Fetch an image with the original size.
 	
-	- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
-	- parameter completeBlock: The block is executed when the image download is complete.
+		- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+		- parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchOriginalImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		let options = PHImageRequestOptions()
@@ -132,21 +132,21 @@ public class DKAsset: NSObject {
 	}
 	
 	/**
-	Fetch an AVAsset with a completeBlock.
+		Fetch an AVAsset with a completeBlock.
 	*/
 	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(nil, completeBlock: completeBlock)
 	}
 	
 	/**
-	Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+		Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
 	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		getImageManager().fetchAVAsset(self, options: options, completeBlock: completeBlock)
 	}
 	
 	/**
-	Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+		Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
 	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		if sync {
@@ -168,6 +168,9 @@ public class DKAsset: NSObject {
 		return queue
 	}()
 	
+	/**
+		Writes the image in the receiver to the file specified by a given path.
+	*/
 	public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void) {
 		let options = PHImageRequestOptions()
 		options.version = .Current
@@ -184,6 +187,11 @@ public class DKAsset: NSObject {
 		})
 	}
 	
+	/**
+		Writes the AV in the receiver to the file specified by a given path.
+	
+		- parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
+	*/
 	public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void) {
 		self.fetchAVAsset(nil) { (AVAsset, _) in
 			DKAsset.writeQueue.addOperationWithBlock({
