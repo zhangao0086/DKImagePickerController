@@ -24,9 +24,6 @@ public class DKAsset: NSObject {
 	/// Returns a UIImage that is appropriate for displaying full screen.
 	private var fullScreenImage: (image: UIImage?, info: [NSObject : AnyObject]?)?
 	
-	/// Returns the original image.
-	private var originalImage: (image: UIImage?, info: [NSObject : AnyObject]?)?
-	
 	/// When the asset was an image, it's false. Otherwise true.
 	public private(set) var isVideo: Bool = false
 	
@@ -54,7 +51,6 @@ public class DKAsset: NSObject {
 		super.init()
 		self.image = image
 		self.fullScreenImage = (image, nil)
-		self.originalImage = (image, nil)
 	}
 	
 	override public func isEqual(object: AnyObject?) -> Bool {
@@ -125,20 +121,14 @@ public class DKAsset: NSObject {
 	- parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchOriginalImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
-		if let (image, info) = self.originalImage {
+		let options = PHImageRequestOptions()
+		options.version = .Current
+		options.synchronous = sync
+		
+		getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, info) in
+			let image = UIImage(data: data!)
 			completeBlock(image: image, info: info)
-		} else {
-			let options = PHImageRequestOptions()
-			options.deliveryMode = .HighQualityFormat
-			options.synchronous = sync
-
-			getImageManager().fetchOriginalImageForAsset(self, options: options) { [weak self] image, info in
-				guard let strongSelf = self else { return }
-				
-				strongSelf.originalImage = (image, info)
-				completeBlock(image: image, info: info)
-			}
-		}
+		})
 	}
 	
 	/**
@@ -168,6 +158,45 @@ public class DKAsset: NSObject {
 			dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
 		} else {
 			self.fetchAVAsset(nil, completeBlock: completeBlock)
+		}
+	}
+	
+	static let writeQueue: NSOperationQueue = {
+		let queue = NSOperationQueue()
+		queue.name = "DKAsset_Write_Queue"
+		queue.maxConcurrentOperationCount = 5
+		return queue
+	}()
+	
+	public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void) {
+		let options = PHImageRequestOptions()
+		options.version = .Current
+		
+		getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, _) in
+			DKAsset.writeQueue.addOperationWithBlock({
+				if let imageData = data {
+					imageData.writeToFile(path, atomically: true)
+					completeBlock(success: true)
+				} else {
+					completeBlock(success: false)
+				}
+			})
+		})
+	}
+	
+	public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void) {
+		self.fetchAVAsset(nil) { (AVAsset, _) in
+			DKAsset.writeQueue.addOperationWithBlock({
+				if let exportSession = AVAssetExportSession(asset: AVAsset!, presetName: presetName) {
+					exportSession.outputFileType = AVFileTypeQuickTimeMovie
+					exportSession.outputURL = NSURL(fileURLWithPath: path)
+					exportSession.exportAsynchronouslyWithCompletionHandler({
+						completeBlock(success: true)
+					})
+				} else {
+					completeBlock(success: false)
+				}
+			})
 		}
 	}
 	
