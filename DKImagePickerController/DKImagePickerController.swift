@@ -149,7 +149,13 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-    public var sourceType: DKImagePickerControllerSourceType = .Both
+    public var sourceType: DKImagePickerControllerSourceType = .Both {
+        didSet { /// If source type changed in the scenario of sharing instance, view controller should be reinitialized.
+            if(oldValue != sourceType) {
+                self.hasInitialized = false
+            }
+        }
+    }
     
     /// Whether allows to select photos and videos at the same time.
     public var allowMultipleTypes = true
@@ -238,6 +244,7 @@ public class DKImagePickerController : UINavigationController {
 					self.setViewControllers([camera], animated: false)
 				}
 			} else {
+                self.navigationBarHidden = false
 				let rootVC = DKAssetGroupDetailVC()
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
