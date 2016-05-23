@@ -127,11 +127,11 @@ public class DKPopoverViewController: UIViewController {
     }
     
     func showInView(view: UIView) {
+		view.addSubview(self.view)
+		
 		self.popoverView.contentView = self.contentViewController.view
         self.popoverView.frame = self.calculatePopoverViewFrame()
 		
-        view.addSubview(self.view)
-        
         self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverView.bounds.height / 2)), 0.1, 0.1)
         UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: [.CurveEaseInOut, .AllowUserInteraction], animations: {
             self.popoverView.transform = CGAffineTransformIdentity

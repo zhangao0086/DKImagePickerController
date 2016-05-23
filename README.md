@@ -111,6 +111,22 @@ public var defaultSelectedAssets: [DKAsset]?
 
 ```
 
+##### Exporting to file
+```swift
+/**
+    Writes the image in the receiver to the file specified by a given path.
+*/
+public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void)
+
+/**
+    Writes the AV in the receiver to the file specified by a given path.
+
+    - parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
+*/
+public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void)
+
+```
+
 ##### Customize Navigation Bar
 You can easily customize the appearance of navigation bar using the appearance proxy.
 ```swift
@@ -238,6 +254,7 @@ It has been supported languages so far:
 * en.lproj
 * zh-Hans.lproj
 * hu.lproj
+* ru.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -245,10 +262,27 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Change Log
+
+> In `3.2.1`, I've replaced all  `AVURLAsset` to `AVAsset` in order to support Slow Motion.
+
 > In `3.2.0`
 > * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
 > * I've also updated the `fetchAVAsset...` interface:  
 > the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
+
+## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
+
+**Merged pull requests:**
+
+- Add Russian translation.
+
+- Fixed an issue may cause popoverView show in incorrect position.
+
+- Optimized memory usage with large files.
+
+- Added support for Slow Motion.
 
 ## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
 
@@ -260,7 +294,7 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 - Added auto download for AVAsset if locally unavailable.
 
-- Making checkCameraPermission public in DKImagePickerControllerDefault…  …
+- Making checkCameraPermission public in DKImagePickerControllerDefault.
 
 - Added support for custom cancel button and done button.
 

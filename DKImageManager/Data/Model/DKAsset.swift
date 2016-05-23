@@ -17,15 +17,12 @@ public extension CGSize {
 }
 
 /**
-* An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
+	An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
 */
 public class DKAsset: NSObject {
 
 	/// Returns a UIImage that is appropriate for displaying full screen.
 	private var fullScreenImage: (image: UIImage?, info: [NSObject : AnyObject]?)?
-	
-	/// Returns the original image.
-	private var originalImage: (image: UIImage?, info: [NSObject : AnyObject]?)?
 	
 	/// When the asset was an image, it's false. Otherwise true.
 	public private(set) var isVideo: Bool = false
@@ -42,10 +39,8 @@ public class DKAsset: NSObject {
 		
 		let assetType = originalAsset.mediaType
 		if assetType == .Video {
-			let duration = originalAsset.duration
-			
 			self.isVideo = true
-			self.duration = duration
+			self.duration = originalAsset.duration
 		}
 	}
 	
@@ -54,7 +49,6 @@ public class DKAsset: NSObject {
 		super.init()
 		self.image = image
 		self.fullScreenImage = (image, nil)
-		self.originalImage = (image, nil)
 	}
 	
 	override public func isEqual(object: AnyObject?) -> Bool {
@@ -89,10 +83,10 @@ public class DKAsset: NSObject {
 	}
 	
 	/**
-	Fetch an image with the current screen size.
+		Fetch an image with the current screen size.
 	
-	- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
-	- parameter completeBlock: The block is executed when the image download is complete.
+		- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+		- parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchFullScreenImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		if let (image, info) = self.fullScreenImage {
@@ -119,55 +113,97 @@ public class DKAsset: NSObject {
 	}
 	
 	/**
-	Fetch an image with the original size.
+		Fetch an image with the original size.
 	
-	- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
-	- parameter completeBlock: The block is executed when the image download is complete.
+		- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+		- parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchOriginalImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
-		if let (image, info) = self.originalImage {
+		let options = PHImageRequestOptions()
+		options.version = .Current
+		options.synchronous = sync
+		
+		getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, info) in
+			let image = UIImage(data: data!)
 			completeBlock(image: image, info: info)
-		} else {
-			let options = PHImageRequestOptions()
-			options.deliveryMode = .HighQualityFormat
-			options.synchronous = sync
-
-			getImageManager().fetchOriginalImageForAsset(self, options: options) { [weak self] image, info in
-				guard let strongSelf = self else { return }
-				
-				strongSelf.originalImage = (image, info)
-				completeBlock(image: image, info: info)
-			}
-		}
+		})
 	}
 	
 	/**
-	Fetch an AVAsset with a completeBlock.
+		Fetch an AVAsset with a completeBlock.
 	*/
-	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(nil, completeBlock: completeBlock)
 	}
 	
 	/**
-	Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+		Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
-	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		getImageManager().fetchAVAsset(self, options: options, completeBlock: completeBlock)
 	}
 	
 	/**
-	Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+		Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
-	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		if sync {
 			let semaphore = dispatch_semaphore_create(0)
-			self.fetchAVAsset(nil, completeBlock: { (AVAsset, info) -> Void in
+			self.fetchAVAsset(options, completeBlock: { (AVAsset, info) -> Void in
 				completeBlock(AVAsset: AVAsset, info:info)
 				dispatch_semaphore_signal(semaphore)
 			})
 			dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
 		} else {
-			self.fetchAVAsset(nil, completeBlock: completeBlock)
+			self.fetchAVAsset(options, completeBlock: completeBlock)
+		}
+	}
+	
+	static let writeQueue: NSOperationQueue = {
+		let queue = NSOperationQueue()
+		queue.name = "DKAsset_Write_Queue"
+		queue.maxConcurrentOperationCount = 5
+		return queue
+	}()
+	
+	/**
+		Writes the image in the receiver to the file specified by a given path.
+	*/
+	public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void) {
+		let options = PHImageRequestOptions()
+		options.version = .Current
+		
+		getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, _) in
+			DKAsset.writeQueue.addOperationWithBlock({
+				if let imageData = data {
+					imageData.writeToFile(path, atomically: true)
+					completeBlock(success: true)
+				} else {
+					completeBlock(success: false)
+				}
+			})
+		})
+	}
+	
+	/**
+		Writes the AV in the receiver to the file specified by a given path.
+	
+		- parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
+	*/
+	public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void) {
+		self.fetchAVAsset(nil) { (AVAsset, _) in
+			DKAsset.writeQueue.addOperationWithBlock({
+				if let exportSession = AVAssetExportSession(asset: AVAsset!, presetName: presetName) {
+					exportSession.outputFileType = AVFileTypeQuickTimeMovie
+					exportSession.outputURL = NSURL(fileURLWithPath: path)
+					exportSession.shouldOptimizeForNetworkUse = true
+					exportSession.exportAsynchronouslyWithCompletionHandler({
+						completeBlock(success: exportSession.status == .Completed ? true : false)
+					})
+				} else {
+					completeBlock(success: false)
+				}
+			})
 		}
 	}
 	

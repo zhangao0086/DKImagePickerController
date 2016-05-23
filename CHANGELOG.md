@@ -1,5 +1,19 @@
 # Change Log
 
+## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
+
+**Merged pull requests:**
+
+- Add Russian translation.
+
+- Fixed an issue may cause popoverView show in incorrect position.
+
+- Optimized memory usage with large files.
+
+- Added support for Slow Motion.
+
 ## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
@@ -10,7 +24,7 @@
 
 - Added auto download for AVAsset if locally unavailable.
 
-- Making checkCameraPermission public in DKImagePickerControllerDefault…  …
+- Making checkCameraPermission public in DKImagePickerControllerDefault.
 
 - Added support for custom cancel button and done button.
 

@@ -129,7 +129,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 			didSet {
 				let videoDurationLabel = self.videoInfoView.viewWithTag(-1) as! UILabel
 				let minutes: Int = Int(asset.duration!) / 60
-				let seconds: Int = Int(asset.duration!) % 60
+				let seconds: Int = Int(round(asset.duration!)) % 60
 				videoDurationLabel.text = String(format: "\(minutes):%02d", seconds)
 			}
 		}
