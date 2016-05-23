@@ -142,11 +142,11 @@ public class DKImageManager: DKBaseManager {
 		}
 	}
 	
-	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(asset, options: nil, completeBlock: completeBlock)
 	}
 	
-	public func fetchAVAsset(asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAsset(asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.manager.requestAVAssetForVideo(asset.originalAsset!,
 			options: options) { avAsset, audioMix, info in
 				if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
@@ -160,7 +160,7 @@ public class DKImageManager: DKBaseManager {
 					requestCloudOptions.networkAccessAllowed = true
 					self.fetchAVAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
 				} else {
-					completeBlock(avAsset: avAsset as? AVURLAsset, info: info)
+					completeBlock(avAsset: avAsset, info: info)
 				}
 		}
 	}

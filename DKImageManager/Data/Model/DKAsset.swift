@@ -39,10 +39,8 @@ public class DKAsset: NSObject {
 		
 		let assetType = originalAsset.mediaType
 		if assetType == .Video {
-			let duration = originalAsset.duration
-			
 			self.isVideo = true
-			self.duration = duration
+			self.duration = originalAsset.duration
 		}
 	}
 	
@@ -134,30 +132,30 @@ public class DKAsset: NSObject {
 	/**
 		Fetch an AVAsset with a completeBlock.
 	*/
-	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(nil, completeBlock: completeBlock)
 	}
 	
 	/**
 		Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
-	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		getImageManager().fetchAVAsset(self, options: options, completeBlock: completeBlock)
 	}
 	
 	/**
 		Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
 	*/
-	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVURLAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		if sync {
 			let semaphore = dispatch_semaphore_create(0)
-			self.fetchAVAsset(nil, completeBlock: { (AVAsset, info) -> Void in
+			self.fetchAVAsset(options, completeBlock: { (AVAsset, info) -> Void in
 				completeBlock(AVAsset: AVAsset, info:info)
 				dispatch_semaphore_signal(semaphore)
 			})
 			dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
 		} else {
-			self.fetchAVAsset(nil, completeBlock: completeBlock)
+			self.fetchAVAsset(options, completeBlock: completeBlock)
 		}
 	}
 	
@@ -198,8 +196,9 @@ public class DKAsset: NSObject {
 				if let exportSession = AVAssetExportSession(asset: AVAsset!, presetName: presetName) {
 					exportSession.outputFileType = AVFileTypeQuickTimeMovie
 					exportSession.outputURL = NSURL(fileURLWithPath: path)
+					exportSession.shouldOptimizeForNetworkUse = true
 					exportSession.exportAsynchronouslyWithCompletionHandler({
-						completeBlock(success: true)
+						completeBlock(success: exportSession.status == .Completed ? true : false)
 					})
 				} else {
 					completeBlock(success: false)
