@@ -246,10 +246,27 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Change Log
+
+> In `3.2.1`, I've replaced all  `AVURLAsset` to `AVAsset` in order to support Slow Motion.
+
 > In `3.2.0`
 > * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
 > * I've also updated the `fetchAVAsset...` interface:  
 > the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
+
+## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
+
+**Merged pull requests:**
+
+- Add Russian translation.
+
+- Fixed an issue may cause popoverView show in incorrect position.
+
+- Optimized memory usage with large files.
+
+- Added support for Slow Motion.
 
 ## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
 
