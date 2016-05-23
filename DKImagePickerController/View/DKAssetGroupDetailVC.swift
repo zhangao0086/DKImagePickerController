@@ -380,18 +380,6 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
                 
                 return false
         }
-<<<<<<< HEAD
-        
-        if (self.imagePickerController!.selectedAssets.count < self.imagePickerController!.maxSelectableCount) {
-            return true;
-        } else {
-            UIAlertView(title: DKImageLocalizedStringWithKey("selectablePhotoLimit"),
-                message: DKImageLocalizedStringWithKey("tooManyPhotosSelected") + " (" + String(self.imagePickerController!.maxSelectableCount) + ")",
-                delegate: nil,
-                cancelButtonTitle: DKImageLocalizedStringWithKey("ok")).show()
-            return false;
-        }
-=======
 		
 		let shouldSelect = DKImagePickerController.sharedInstance().selectedAssets.count < DKImagePickerController.sharedInstance().maxSelectableCount
 		if !shouldSelect {
@@ -399,7 +387,6 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		}
 		
 		return shouldSelect
->>>>>>> 8343aed72ae99b87ab05a61bf6fb6beb5c1cf043
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
