@@ -1,5 +1,87 @@
 # Change Log
 
+## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
+
+**Merged pull requests:**
+
+- Add Russian translation.
+
+- Fixed an issue may cause popoverView show in incorrect position.
+
+- Optimized memory usage with large files.
+
+- Added support for Slow Motion.
+
+## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
+
+**Merged pull requests:**
+
+- Supports accessing sourceType in Objective-C.
+
+- Added auto download for AVAsset if locally unavailable.
+
+- Making checkCameraPermission public in DKImagePickerControllerDefault.
+
+- Added support for custom cancel button and done button.
+
+- Fixed dismiss of camera.
+
+- Added alertview on maxlimit reach.
+
+- Added supports for custom UICollectionViewLayout.
+
+## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
+
+**Merged pull requests:**
+
+- Added support for custom camera based UINavigationController.
+
+- Added video support for custom camera.
+
+## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)
+
+**Merged pull requests:**
+
+- Fixed an issue that will cause the didSelectAssets block is called twice.
+
+- Added support for custom predicate to assets.
+
+- Optimized for fetching original image.
+
+- The fetchImageWithSize fetching image with .AspectFit.
+
+- Fixed an issue that may cause the popover not display as rounded.
+
+## [3.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.1) (2016-03-18)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.1.1)
+
+**Merged pull requests:**
+
+- Fixed an issue that may cause crash when user not authorized camera access.
+
+## [3.1.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.0) (2016-03-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.11...3.1.0)
+
+**Merged pull requests:**
+
+- Added support for custom camera.
+
+- Added support for UIDelegate.
+
+- Added a function to sync fetch an AVAsset.
+
+- Fixed an issue that may cause crashing when downloading image from iCloud.
+
 ## [3.0.11](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.11) (2016-02-27)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.0.11)

@@ -117,13 +117,13 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			if let changeDetails = changeInstance.changeDetailsForObject(group.originalCollection) {
 				if changeDetails.objectWasDeleted {
 					self.groups![group.groupId] = nil
-					self.notifyObserversWithSelector(Selector("groupDidRemove:"), object: group.groupId)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidRemove(_:)), object: group.groupId)
 					continue
 				}
 				
 				if let objectAfterChanges = changeDetails.objectAfterChanges as? PHAssetCollection {
 					self.updateGroup(self.groups![group.groupId]!, collection: objectAfterChanges)
-					self.notifyObserversWithSelector(Selector("groupDidUpdate:"), object: group.groupId)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidUpdate(_:)), object: group.groupId)
 				}
 			}
 			
@@ -133,7 +133,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 					removedIndexes.enumerateIndexesUsingBlock({ index, stop in
 						removedAssets.append(self.fetchAssetWithGroup(group, index: index))
 					})
-					self.notifyObserversWithSelector(Selector("group:didRemoveAssets:"), object: group.groupId, objectTwo: removedAssets)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didRemoveAssets:)), object: group.groupId, objectTwo: removedAssets)
 				}
 				self.updateGroup(group, fetchResult: changeDetails.fetchResultAfterChanges)
 				
@@ -142,7 +142,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 					for insertedAsset in changeDetails.insertedObjects {
 						insertedAssets.append(DKAsset(originalAsset: insertedAsset as! PHAsset))
 					}
-					self.notifyObserversWithSelector(Selector("group:didInsertAssets:"), object: group.groupId, objectTwo: insertedAssets)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didInsertAssets:)), object: group.groupId, objectTwo: insertedAssets)
 				}
 			}
 		}
