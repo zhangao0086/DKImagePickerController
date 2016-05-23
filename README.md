@@ -111,6 +111,22 @@ public var defaultSelectedAssets: [DKAsset]?
 
 ```
 
+##### Exporting to file
+```swift
+/**
+    Writes the image in the receiver to the file specified by a given path.
+*/
+public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void)
+
+/**
+    Writes the AV in the receiver to the file specified by a given path.
+
+    - parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
+*/
+public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void)
+
+```
+
 ##### Customize Navigation Bar
 You can easily customize the appearance of navigation bar using the appearance proxy.
 ```swift
