@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Kiválaszt";
+"select" = "Kiválaszt(%ld)";
 
 "permissionCamera" = "Kérlek adj hozzáférést a Kamerához";
 
@@ -24,8 +24,8 @@
 
 "selectPhotosOrVideosError" = "Nem lehet egyszerre képet és videót kiválasztani.";
 
-"tooManyPhotosSelected" = "Több fotó nem választható ki";
-
-"selectablePhotoLimit" = "Limit";
-
 "done" = "Kész";
+
+"maxLimitReached" = "Max fotók Elérte a";
+
+"maxLimitReachedMessage" = "Megadhatja %ld fotók";

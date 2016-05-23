@@ -37,6 +37,7 @@ public class DKPopoverViewController: UIViewController {
         var contentView: UIView! {
             didSet {
                 contentView.layer.cornerRadius = 5
+				contentView.clipsToBounds = true
                 contentView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
                 self.addSubview(contentView)
             }
@@ -105,7 +106,7 @@ public class DKPopoverViewController: UIViewController {
         
         let backgroundView = UIControl(frame: self.view.frame)
         backgroundView.backgroundColor = UIColor.clearColor()
-        backgroundView.addTarget(self, action: "dismiss", forControlEvents: .TouchUpInside)
+        backgroundView.addTarget(self, action: #selector(DKPopoverViewController.dismiss), forControlEvents: .TouchUpInside)
         backgroundView.autoresizingMask = self.view.autoresizingMask
         self.view = backgroundView
     }
@@ -126,11 +127,11 @@ public class DKPopoverViewController: UIViewController {
     }
     
     func showInView(view: UIView) {
+		view.addSubview(self.view)
+		
+		self.popoverView.contentView = self.contentViewController.view
         self.popoverView.frame = self.calculatePopoverViewFrame()
-        self.popoverView.contentView = self.contentViewController.view
-        
-        view.addSubview(self.view)
-        
+		
         self.popoverView.transform = CGAffineTransformScale(CGAffineTransformTranslate(self.popoverView.transform, 0, -(self.popoverView.bounds.height / 2)), 0.1, 0.1)
         UIView.animateWithDuration(0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: [.CurveEaseInOut, .AllowUserInteraction], animations: {
             self.popoverView.transform = CGAffineTransformIdentity

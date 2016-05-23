@@ -18,6 +18,8 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports landscape and iPad and orientation switching.
 * Supports iCloud.
 * Supports UIAppearance.
+* Supports custom camera.
+* Supports custom UICollectionViewLayout.
 
 ## Requirements
 * iOS 8.0+
@@ -79,8 +81,14 @@ public var showsEmptyAlbums = true
 /// The type of picker interface to be displayed by the controller.
 public var assetType: DKImagePickerControllerAssetType = .AllAssets
 
+/// The predicate applies to images only.
+public var imageFetchPredicate: NSPredicate?
+
+/// The predicate applies to videos only.
+public var videoFetchPredicate: NSPredicate?
+
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
+public var sourceType: DKImagePickerControllerSourceType = .Both
 
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
@@ -100,6 +108,22 @@ public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
+
+```
+
+##### Exporting to file
+```swift
+/**
+    Writes the image in the receiver to the file specified by a given path.
+*/
+public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void)
+
+/**
+    Writes the AV in the receiver to the file specified by a given path.
+
+    - parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
+*/
+public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void)
 
 ```
 
@@ -126,6 +150,55 @@ pickerController.sourceType = .Photo
 pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
+
+#### Create a custom camera
+
+You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
+The following code uses a `UIImagePickerController`:
+```swift
+public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    var didCancel: (() -> Void)?
+    var didFinishCapturingImage: ((image: UIImage) -> Void)?
+    var didFinishCapturingVideo: ((videoURL: NSURL) -> Void)?
+    
+    public override func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
+                                                           didCancel: (() -> Void),
+                                                           didFinishCapturingImage: ((image: UIImage) -> Void),
+                                                           didFinishCapturingVideo: ((videoURL: NSURL) -> Void)
+                                                           ) -> UIViewController {
+        self.didCancel = didCancel
+        self.didFinishCapturingImage = didFinishCapturingImage
+        self.didFinishCapturingVideo = didFinishCapturingVideo
+        
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .Camera
+        picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
+        
+        return picker
+    }
+    
+    // MARK: - UIImagePickerControllerDelegate methods
+    
+    public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        let mediaType = info[UIImagePickerControllerMediaType] as! String
+        
+        if mediaType == kUTTypeImage as String {
+            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+            self.didFinishCapturingImage?(image: image)
+        } else if mediaType == kUTTypeMovie as String {
+            let videoURL = info[UIImagePickerControllerMediaURL] as! NSURL
+            self.didFinishCapturingVideo?(videoURL: videoURL)
+        }
+    }
+    
+    public func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.didCancel?()
+    }
+    
+}
+```
 
 ## How to use in Objective-C
 
@@ -164,7 +237,7 @@ pickerController.showsCancelButton = NO;
 pickerController.showsEmptyAlbums = YES;
 pickerController.allowMultipleTypes = YES;
 pickerController.defaultSelectedAssets = @[];
-//  pickerController.sourceType         // unavailable
+pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 //  pickerController.assetGroupTypes    // unavailable
 //  pickerController.defaultAssetGroup  // unavailable
 
@@ -181,6 +254,7 @@ It has been supported languages so far:
 * en.lproj
 * zh-Hans.lproj
 * hu.lproj
+* ru.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -189,44 +263,46 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
-> In `3.0.4`, I've updated the `fetchImage...` interface:  
-> the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
-> so you need to change:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image in
-    // ...
-})
-```
-to:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image, info in
-    // ...
-})
-```
+> In `3.2.1`, I've replaced all  `AVURLAsset` to `AVAsset` in order to support Slow Motion.
 
-## [3.0.11](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.11) (2016-02-27)
+> In `3.2.0`
+> * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
+> * I've also updated the `fetchAVAsset...` interface:  
+> the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.0.11)
+## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
 
 **Merged pull requests:**
 
-- Added a PHVideoRequestOptions API to fetch AVAsset.
+- Add Russian translation.
 
-**Closed issues:**
+- Fixed an issue may cause popoverView show in incorrect position.
 
-- Synchronous options for multiple video fetch [\#76](https://github.com/zhangao0086/DKImagePickerController/pull/76)
+- Optimized memory usage with large files.
 
-## [3.0.10](https://github.com/zhangao0086/DKImagePickerController/tree/3.0.10) (2016-02-04)
+- Added support for Slow Motion.
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.9...3.0.10)
+## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
 
 **Merged pull requests:**
 
-- Added possibility to deselect all selected assets when showing a single instance picker.
+- Supports accessing sourceType in Objective-C.
 
-**Closed issues:**
+- Added auto download for AVAsset if locally unavailable.
 
-- Possibility to deselect assets when displaying picker for second time. [\#69](https://github.com/zhangao0086/DKImagePickerController/pull/69)
+- Making checkCameraPermission public in DKImagePickerControllerDefault.
+
+- Added support for custom cancel button and done button.
+
+- Fixed dismiss of camera.
+
+- Added alertview on maxlimit reach.
+
+- Added supports for custom UICollectionViewLayout.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
