@@ -159,12 +159,19 @@ public class DKAsset: NSObject {
 		}
 	}
 	
-	static let writeQueue: NSOperationQueue = {
-		let queue = NSOperationQueue()
-		queue.name = "DKAsset_Write_Queue"
-		queue.maxConcurrentOperationCount = 5
-		return queue
-	}()
+}
+
+public extension DKAsset {
+	
+	struct DKAssetWriter {
+		static let writeQueue: NSOperationQueue = {
+			let queue = NSOperationQueue()
+			queue.name = "DKAsset_Write_Queue"
+			queue.maxConcurrentOperationCount = 5
+			return queue
+		}()
+	}
+	
 	
 	/**
 		Writes the image in the receiver to the file specified by a given path.
@@ -174,7 +181,7 @@ public class DKAsset: NSObject {
 		options.version = .Current
 		
 		getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, _) in
-			DKAsset.writeQueue.addOperationWithBlock({
+			DKAssetWriter.writeQueue.addOperationWithBlock({
 				if let imageData = data {
 					imageData.writeToFile(path, atomically: true)
 					completeBlock(success: true)
@@ -192,7 +199,7 @@ public class DKAsset: NSObject {
 	*/
 	public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void) {
 		self.fetchAVAsset(nil) { (AVAsset, _) in
-			DKAsset.writeQueue.addOperationWithBlock({
+			DKAssetWriter.writeQueue.addOperationWithBlock({
 				if let exportSession = AVAssetExportSession(asset: AVAsset!, presetName: presetName) {
 					exportSession.outputFileType = AVFileTypeQuickTimeMovie
 					exportSession.outputURL = NSURL(fileURLWithPath: path)
@@ -206,5 +213,31 @@ public class DKAsset: NSObject {
 			})
 		}
 	}
+}
+
+public extension AVAsset {
 	
+	public func calculateFileSize() -> Float {
+		if let URLAsset = self as? AVURLAsset {
+			var size: AnyObject?
+			try! URLAsset.URL.getResourceValue(&size, forKey: NSURLFileSizeKey)
+			if let size = size as? NSNumber {
+				return size.floatValue
+			} else {
+				return 0
+			}
+		} else if let _ = self as? AVComposition {
+			var estimatedSize: Float = 0.0
+			var duration: Float = 0.0
+			for track in self.tracks {
+				let rate = track.estimatedDataRate / 8.0
+				let seconds = Float(CMTimeGetSeconds(track.timeRange.duration))
+				duration += seconds
+				estimatedSize += seconds * rate
+			}
+			return estimatedSize
+		} else {
+			return 0
+		}
+	}
 }
