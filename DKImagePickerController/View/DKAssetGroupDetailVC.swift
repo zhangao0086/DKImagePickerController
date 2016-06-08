@@ -227,7 +227,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 	
 	private lazy var groupImageRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
-		options.deliveryMode = .Opportunistic
+		options.deliveryMode = .HighQualityFormat
 		options.resizeMode = .Exact;
 		
 		return options
@@ -333,7 +333,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		cell.tag = tag
 		
 		let itemSize = self.collectionView!.collectionViewLayout.layoutAttributesForItemAtIndexPath(indexPath)!.size
-		asset.fetchImageWithSize(itemSize.toPixel(), options: self.groupImageRequestOptions) { image, info in
+		asset.fetchImageWithSize(itemSize.toPixel(), options: self.groupImageRequestOptions, contentMode: .AspectFill) { (image, info) in
 			if cell.tag == tag {
 				cell.thumbnailImageView.image = image
 			}
