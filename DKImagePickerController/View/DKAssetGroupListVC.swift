@@ -148,10 +148,10 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         self.clearsSelectionOnViewWillAppear = false
 		
 		getImageManager().groupDataManager.addObserver(self)
-    }
+	}
 	
-	internal func loadGroups() {
-		getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
+	internal func asyncFetchGroups() {
+		getImageManager().groupDataManager.asyncFetchGroups { [weak self] groups, error in
 			guard let strongSelf = self else { return }
 			
 			if error == nil {
@@ -163,7 +163,9 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 						scrollPosition: .None)
 				}
 				
-				strongSelf.selectedGroupDidChangeBlock?(group: strongSelf.selectedGroup)
+				dispatch_async(dispatch_get_main_queue(), { 
+					strongSelf.selectedGroupDidChangeBlock?(group: strongSelf.selectedGroup)
+				})
 			}
 		}
 	}

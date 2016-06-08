@@ -263,7 +263,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 			self.groupListVC = DKAssetGroupListVC(selectedGroupDidChangeBlock: { [unowned self] groupId in
 				self.selectAssetGroup(groupId)
 			}, defaultAssetGroup: DKImagePickerController.sharedInstance().defaultAssetGroup)
-			self.groupListVC.loadGroups()
+			self.groupListVC.asyncFetchGroups()
 		}
 		
 		DKImageManager.checkPhotoPermission { granted in
