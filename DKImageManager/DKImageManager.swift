@@ -143,7 +143,7 @@ public class DKImageManager: DKBaseManager {
 			options: options ?? self.defaultVideoRequestOptions) { avAsset, audioMix, info in
 				if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
 					where avAsset == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
-					var requestCloudOptions = (options ?? self.defaultVideoRequestOptions).copy() as! PHVideoRequestOptions
+					let requestCloudOptions = (options ?? self.defaultVideoRequestOptions).copy() as! PHVideoRequestOptions
 					requestCloudOptions.networkAccessAllowed = true
 					self.fetchAVAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
 				} else {

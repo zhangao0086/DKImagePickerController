@@ -150,8 +150,8 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 		getImageManager().groupDataManager.addObserver(self)
 	}
 	
-	internal func asyncFetchGroups() {
-		getImageManager().groupDataManager.asyncFetchGroups { [weak self] groups, error in
+	internal func loadGroups() {
+		getImageManager().groupDataManager.fetchGroups(self.defaultAssetGroup) { [weak self] groups, error in
 			guard let strongSelf = self else { return }
 			
 			if error == nil {
@@ -163,9 +163,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 						scrollPosition: .None)
 				}
 				
-				dispatch_async(dispatch_get_main_queue(), { 
-					strongSelf.selectedGroupDidChangeBlock?(group: strongSelf.selectedGroup)
-				})
+				strongSelf.selectedGroupDidChangeBlock?(group: strongSelf.selectedGroup)
 			}
 		}
 	}
