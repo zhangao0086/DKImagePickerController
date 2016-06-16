@@ -228,7 +228,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 	private lazy var groupImageRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
 		options.deliveryMode = .HighQualityFormat
-		options.resizeMode = .Exact;
+		options.resizeMode = .Exact
 		
 		return options
 	}()

@@ -120,7 +120,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	private lazy var groupThumbnailRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
 		options.deliveryMode = .Opportunistic
-		options.resizeMode = .Exact;
+		options.resizeMode = .Exact
 		
 		return options
 	}()

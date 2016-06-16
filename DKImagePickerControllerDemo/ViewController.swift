@@ -59,7 +59,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		}
 		
 		if UI_USER_INTERFACE_IDIOM() == .Pad {
-			pickerController.modalPresentationStyle = .FormSheet;
+			pickerController.modalPresentationStyle = .FormSheet
 		}
 		
 		self.presentViewController(pickerController, animated: true) {}
