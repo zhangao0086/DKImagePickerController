@@ -115,14 +115,14 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 		}
 	}
 	
-	public func updateDoneButtonTitleForImagePickerController(imagePickerController: DKImagePickerController) {
-		if imagePickerController.selectedAssets.count > 0 {
-			self.doneButtonForPickerController(imagePickerController).setTitle(String(format: DKImageLocalizedStringWithKey("select"), imagePickerController.selectedAssets.count), forState: UIControlState.Normal)
+	public func updateDoneButtonTitle(button: UIButton) {
+		if self.imagePickerController.selectedAssets.count > 0 {
+			button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), self.imagePickerController.selectedAssets.count), forState: UIControlState.Normal)
 		} else {
-			self.doneButtonForPickerController(imagePickerController).setTitle(DKImageLocalizedStringWithKey("done"), forState: UIControlState.Normal)
+			button.setTitle(DKImageLocalizedStringWithKey("done"), forState: UIControlState.Normal)
 		}
 		
-		self.doneButton?.sizeToFit()
+		button.sizeToFit()
 	}
 	
 }
