@@ -12,7 +12,10 @@ import Photos
 @objc
 public protocol DKImagePickerControllerUIDelegate {
 	
-	func bindImagePickerController(imagePickerController: DKImagePickerController)
+	/**
+		The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
+	*/
+	func prepareLayout(imagePickerController: DKImagePickerController, vc: UIViewController)
 	
 	/**
 		Returns a custom camera.
@@ -50,11 +53,6 @@ public protocol DKImagePickerControllerUIDelegate {
 		Called when the user needs to hide the cancel button.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, hidesCancelButtonForVC vc: UIViewController)
-	
-	/**
-		Called when the user needs to show the done button.
-	*/
-	func imagePickerController(imagePickerController: DKImagePickerController, showsDoneButtonForVC vc: UIViewController)
 	
 	/**
 		Called after the user changes the selection.
@@ -101,11 +99,7 @@ public class DKImagePickerController : UINavigationController {
 
 	public var UIDelegate: DKImagePickerControllerUIDelegate = {
 		return DKImagePickerControllerDefaultUIDelegate()
-	}() {
-		didSet {
-			self.UIDelegate.bindImagePickerController(self)
-		}
-	}
+	}()
 	
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
@@ -199,8 +193,6 @@ public class DKImagePickerController : UINavigationController {
 				if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
 					rootVC.collectionView.reloadData()
 				}
-				
-				self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
 			}
         }
     }
@@ -213,8 +205,6 @@ public class DKImagePickerController : UINavigationController {
 		
 		self.preferredContentSize = CGSize(width: 680, height: 600)
 		
-		self.UIDelegate.bindImagePickerController(self)
-		self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)
         rootVC.navigationItem.hidesBackButton = true
 		
 		getImageManager().groupDataManager.assetGroupTypes = self.assetGroupTypes
@@ -255,7 +245,10 @@ public class DKImagePickerController : UINavigationController {
 				rootVC.imagePickerController = self
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
-				self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)
+				self.UIDelegate.prepareLayout(self, vc: rootVC)
+				if self.defaultSelectedAssets?.count > 0 {
+					self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
+				}
 			}
 		}
 	}

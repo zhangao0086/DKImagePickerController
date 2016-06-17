@@ -28,8 +28,9 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	
 	// Delegate methods...
 	
-	public func bindImagePickerController(imagePickerController: DKImagePickerController) {
+	public func prepareLayout(imagePickerController: DKImagePickerController, vc: UIViewController) {
 		self.imagePickerController = imagePickerController
+		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
 	}
 	
 	public func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
@@ -70,10 +71,6 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	public func imagePickerController(imagePickerController: DKImagePickerController,
 	                                  hidesCancelButtonForVC vc: UIViewController) {
 		vc.navigationItem.leftBarButtonItem = nil
-	}
-	
-	public func imagePickerController(imagePickerController: DKImagePickerController, showsDoneButtonForVC vc: UIViewController) {
-		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
 	}
 	
 	public func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset) {
