@@ -243,9 +243,9 @@ public class DKImagePickerController : UINavigationController {
                 self.navigationBarHidden = false
 				let rootVC = DKAssetGroupDetailVC()
 				rootVC.imagePickerController = self
+				self.UIDelegate.prepareLayout(self, vc: rootVC)
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
-				self.UIDelegate.prepareLayout(self, vc: rootVC)
 				if self.defaultSelectedAssets?.count > 0 {
 					self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
 				}
