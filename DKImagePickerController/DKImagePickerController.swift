@@ -12,6 +12,8 @@ import Photos
 @objc
 public protocol DKImagePickerControllerUIDelegate {
 	
+	func bindImagePickerController(imagePickerController: DKImagePickerController)
+	
 	/**
 		Returns a custom camera.
 
@@ -96,13 +98,14 @@ public enum DKImagePickerControllerSourceType : Int {
  * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
 public class DKImagePickerController : UINavigationController {
-	
-	private weak static var imagePickerController : DKImagePickerController?
-	internal static func sharedInstance() -> DKImagePickerController {
-		return DKImagePickerController.imagePickerController!
-	}
 
-	public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
+	public var UIDelegate: DKImagePickerControllerUIDelegate = {
+		return DKImagePickerControllerDefaultUIDelegate()
+	}() {
+		didSet {
+			self.UIDelegate.bindImagePickerController(self)
+		}
+	}
 	
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
@@ -208,10 +211,9 @@ public class DKImagePickerController : UINavigationController {
 		let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
 		
-		DKImagePickerController.imagePickerController = self
-		
 		self.preferredContentSize = CGSize(width: 680, height: 600)
 		
+		self.UIDelegate.bindImagePickerController(self)
 		self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)
         rootVC.navigationItem.hidesBackButton = true
 		
@@ -250,6 +252,7 @@ public class DKImagePickerController : UINavigationController {
 			} else {
                 self.navigationBarHidden = false
 				let rootVC = DKAssetGroupDetailVC()
+				rootVC.imagePickerController = self
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
 				self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)

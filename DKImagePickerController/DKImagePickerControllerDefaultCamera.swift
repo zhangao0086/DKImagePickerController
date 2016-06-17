@@ -11,23 +11,26 @@ import UIKit
 @objc
 public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
 	
-	private var doneButton: UIButton?
+	public weak var imagePickerController: DKImagePickerController!
 	
-	public func doneButtonForPickerController(imagePickerController: DKImagePickerController) -> UIButton {
-		if self.doneButton == nil {
-			let button = UIButton(type: UIButtonType.Custom)
-			button.setTitleColor(UINavigationBar.appearance().tintColor ?? imagePickerController.navigationBar.tintColor, forState: UIControlState.Normal)
-			button.addTarget(imagePickerController, action: #selector(DKImagePickerController.done), forControlEvents: UIControlEvents.TouchUpInside)
-			
-			self.doneButton = button
-			
-			self.updateDoneButtonTitleForImagePickerController(imagePickerController)
-		}
+	public lazy var doneButton: UIButton = {
+		return self.createDoneButton()
+	}()
+	
+	public func createDoneButton() -> UIButton {
+		let button = UIButton(type: UIButtonType.Custom)
+		button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.imagePickerController.navigationBar.tintColor, forState: UIControlState.Normal)
+		button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), forControlEvents: UIControlEvents.TouchUpInside)
+		self.updateDoneButtonTitle(button)
 		
-		return self.doneButton!
+		return button
 	}
 	
 	// Delegate methods...
+	
+	public func bindImagePickerController(imagePickerController: DKImagePickerController) {
+		self.imagePickerController = imagePickerController
+	}
 	
 	public func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
 	                                              didCancel: (() -> Void),
@@ -70,20 +73,20 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	}
 	
 	public func imagePickerController(imagePickerController: DKImagePickerController, showsDoneButtonForVC vc: UIViewController) {
-		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButtonForPickerController(imagePickerController))
+		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
 	}
 	
 	public func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset) {
-		self.updateDoneButtonTitleForImagePickerController(imagePickerController)
+		self.updateDoneButtonTitle(self.doneButton)
 	}
 	
 	public func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset) {
-		self.updateDoneButtonTitleForImagePickerController(imagePickerController)
+		self.updateDoneButtonTitle(self.doneButton)
 	}
 	
 	public func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController) {
 		UIAlertView(title: DKImageLocalizedStringWithKey("maxLimitReached"),
-		            message: String(format: DKImageLocalizedStringWithKey("maxLimitReachedMessage"), DKImagePickerController.sharedInstance().maxSelectableCount),
+		            message: String(format: DKImageLocalizedStringWithKey("maxLimitReachedMessage"), imagePickerController.maxSelectableCount),
 		            delegate: nil,
 		            cancelButtonTitle: DKImageLocalizedStringWithKey("ok"))
 			.show()

@@ -22,7 +22,7 @@ public class DKAssetGroupGridLayout: UICollectionViewFlowLayout {
 		self.minimumInteritemSpacing = interval
 		self.minimumLineSpacing = interval
 		
-		let contentWidth = DKImagePickerController.sharedInstance().view.bounds.width
+		let contentWidth = self.collectionView!.bounds.width
 		
 		let itemCount = Int(floor(contentWidth / minItemWidth))
 		var itemWidth = (contentWidth - interval * (CGFloat(itemCount) - 1)) / CGFloat(itemCount)
