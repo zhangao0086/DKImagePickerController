@@ -255,6 +255,7 @@ It has been supported languages so far:
 * zh-Hans.lproj
 * hu.lproj
 * ru.lproj
+* es.lproj
 
 If you want to add new language, pull request or issue!
 

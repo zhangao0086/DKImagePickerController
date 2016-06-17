@@ -120,7 +120,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	private lazy var groupThumbnailRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
 		options.deliveryMode = .Opportunistic
-		options.resizeMode = .Exact;
+		options.resizeMode = .Exact
 		
 		return options
 	}()
@@ -148,10 +148,10 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         self.clearsSelectionOnViewWillAppear = false
 		
 		getImageManager().groupDataManager.addObserver(self)
-    }
+	}
 	
 	internal func loadGroups() {
-		getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
+		getImageManager().groupDataManager.fetchGroups(self.defaultAssetGroup) { [weak self] groups, error in
 			guard let strongSelf = self else { return }
 			
 			if error == nil {

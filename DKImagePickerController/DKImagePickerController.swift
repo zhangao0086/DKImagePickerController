@@ -13,6 +13,11 @@ import Photos
 public protocol DKImagePickerControllerUIDelegate {
 	
 	/**
+		The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
+	*/
+	func prepareLayout(imagePickerController: DKImagePickerController, vc: UIViewController)
+	
+	/**
 		Returns a custom camera.
 
 		**Note**
@@ -50,11 +55,6 @@ public protocol DKImagePickerControllerUIDelegate {
 	func imagePickerController(imagePickerController: DKImagePickerController, hidesCancelButtonForVC vc: UIViewController)
 	
 	/**
-		Called when the user needs to show the done button.
-	*/
-	func imagePickerController(imagePickerController: DKImagePickerController, showsDoneButtonForVC vc: UIViewController)
-	
-	/**
 		Called after the user changes the selection.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset)
@@ -69,6 +69,10 @@ public protocol DKImagePickerControllerUIDelegate {
 	*/
 	func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController)
 	
+	/**
+		Accessory view below content. default is nil.
+	*/
+	func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView?
 }
 
 /**
@@ -92,13 +96,10 @@ public enum DKImagePickerControllerSourceType : Int {
  * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
 public class DKImagePickerController : UINavigationController {
-	
-	private weak static var imagePickerController : DKImagePickerController?
-	internal static func sharedInstance() -> DKImagePickerController {
-		return DKImagePickerController.imagePickerController!;
-	}
 
-	public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
+	public var UIDelegate: DKImagePickerControllerUIDelegate = {
+		return DKImagePickerControllerDefaultUIDelegate()
+	}()
 	
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
@@ -190,10 +191,8 @@ public class DKImagePickerController : UINavigationController {
 				self.selectedAssets = self.defaultSelectedAssets ?? []
 				
 				if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-					rootVC.collectionView?.reloadData()
+					rootVC.collectionView.reloadData()
 				}
-				
-				self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
 			}
         }
     }
@@ -204,11 +203,8 @@ public class DKImagePickerController : UINavigationController {
 		let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
 		
-		DKImagePickerController.imagePickerController = self
-		
 		self.preferredContentSize = CGSize(width: 680, height: 600)
 		
-		self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)
         rootVC.navigationItem.hidesBackButton = true
 		
 		getImageManager().groupDataManager.assetGroupTypes = self.assetGroupTypes
@@ -246,9 +242,13 @@ public class DKImagePickerController : UINavigationController {
 			} else {
                 self.navigationBarHidden = false
 				let rootVC = DKAssetGroupDetailVC()
+				rootVC.imagePickerController = self
+				self.UIDelegate.prepareLayout(self, vc: rootVC)
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
-				self.UIDelegate.imagePickerController(self, showsDoneButtonForVC: rootVC)
+				if self.defaultSelectedAssets?.count > 0 {
+					self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
+				}
 			}
 		}
 	}
