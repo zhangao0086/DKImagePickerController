@@ -96,7 +96,7 @@ public class DKAsset: NSObject {
 			
 			let options = PHImageRequestOptions()
 			options.deliveryMode = .HighQualityFormat
-			options.resizeMode = .Exact;
+			options.resizeMode = .Exact
 			options.synchronous = sync
 
 			getImageManager().fetchImageForAsset(self, size: screenSize.toPixel(), options: options, contentMode: .AspectFit) { [weak self] image, info in
