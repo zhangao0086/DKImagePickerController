@@ -20,6 +20,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports UIAppearance.
 * Supports custom camera.
 * Supports custom UICollectionViewLayout.
+* Supports footer view.
 
 ## Requirements
 * iOS 8.0+
@@ -151,6 +152,9 @@ pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
 
+##### Customize footer view
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
+
 #### Create a custom camera
 
 You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
@@ -271,6 +275,22 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 > * I've also updated the `fetchAVAsset...` interface:  
 > the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 
+## [3.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.0) (2016-06-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.1...3.3.0)
+
+**Merged pull requests:**
+
+- Fix the thumbnails have low quality.
+
+- Added Turkish localization support.
+
+- Added footer view.
+
+- Removed picker singleton.
+
+- Updated DKImagePickerControllerDefaultUIDelegate.
+
 ## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
@@ -284,26 +304,6 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 - Optimized memory usage with large files.
 
 - Added support for Slow Motion.
-
-## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
-
-**Merged pull requests:**
-
-- Supports accessing sourceType in Objective-C.
-
-- Added auto download for AVAsset if locally unavailable.
-
-- Making checkCameraPermission public in DKImagePickerControllerDefault.
-
-- Added support for custom cancel button and done button.
-
-- Fixed dismiss of camera.
-
-- Added alertview on maxlimit reach.
-
-- Added supports for custom UICollectionViewLayout.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
