@@ -68,7 +68,7 @@ public class DKImageManager: DKBaseManager {
 	private lazy var defaultImageRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
 		options.deliveryMode = .HighQualityFormat
-		options.resizeMode = .Exact;
+		options.resizeMode = .Exact
 		
 		return options
 	}()
@@ -102,21 +102,18 @@ public class DKImageManager: DKBaseManager {
 	
 	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode,
 	                               completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		let options = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
 		self.manager.requestImageForAsset(asset.originalAsset!,
 		                                  targetSize: size,
 		                                  contentMode: contentMode,
-		                                  options: options ?? self.defaultImageRequestOptions,
+		                                  options: options,
 		                                  resultHandler: { image, info in
 											if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
 												where image == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
-												var requestCloudOptions: PHImageRequestOptions
-												if let options = options {
-													requestCloudOptions = options.copy() as! PHImageRequestOptions
-												} else {
-													requestCloudOptions = self.defaultImageRequestOptions.copy() as! PHImageRequestOptions
-												}
-												requestCloudOptions.networkAccessAllowed = true
-												self.fetchImageForAsset(asset, size: size, options: requestCloudOptions, contentMode: contentMode, completeBlock: completeBlock)
+//												var requestCloudOptions = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
+//												requestCloudOptions.networkAccessAllowed = true
+												options.networkAccessAllowed = true
+												self.fetchImageForAsset(asset, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
 											} else {
 												completeBlock(image: image, info: info)
 											}
@@ -128,12 +125,7 @@ public class DKImageManager: DKBaseManager {
 		                                      options: options ?? self.defaultImageRequestOptions) { (data, dataUTI, orientation, info) in
 												if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
 													where data == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
-													var requestCloudOptions: PHImageRequestOptions
-													if let options = options {
-														requestCloudOptions = options.copy() as! PHImageRequestOptions
-													} else {
-														requestCloudOptions = self.defaultImageRequestOptions.copy() as! PHImageRequestOptions
-													}
+													let requestCloudOptions = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
 													requestCloudOptions.networkAccessAllowed = true
 													self.fetchImageDataForAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
 												} else {
@@ -148,15 +140,10 @@ public class DKImageManager: DKBaseManager {
 	
 	public func fetchAVAsset(asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.manager.requestAVAssetForVideo(asset.originalAsset!,
-			options: options) { avAsset, audioMix, info in
+			options: options ?? self.defaultVideoRequestOptions) { avAsset, audioMix, info in
 				if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
 					where avAsset == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
-					var requestCloudOptions: PHVideoRequestOptions
-					if let options = options {
-						requestCloudOptions = options.copy() as! PHVideoRequestOptions
-					} else {
-						requestCloudOptions = self.defaultVideoRequestOptions.copy() as! PHVideoRequestOptions
-					}
+					let requestCloudOptions = (options ?? self.defaultVideoRequestOptions).copy() as! PHVideoRequestOptions
 					requestCloudOptions.networkAccessAllowed = true
 					self.fetchAVAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
 				} else {

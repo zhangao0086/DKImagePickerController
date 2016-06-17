@@ -325,7 +325,7 @@ public class DKCamera: UIViewController {
 		self.currentDevice = self.currentDevice == self.captureDeviceBack ?
 			self.captureDeviceFront : self.captureDeviceBack
 		
-		self.setupCurrentDevice();
+		self.setupCurrentDevice()
 	}
 	
 	// MARK: - Handles Flash
