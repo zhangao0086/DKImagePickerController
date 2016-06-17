@@ -69,6 +69,10 @@ public protocol DKImagePickerControllerUIDelegate {
 	*/
 	func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController)
 	
+	/**
+		Accessory view below content. default is nil.
+	*/
+	func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView?
 }
 
 /**
@@ -95,7 +99,7 @@ public class DKImagePickerController : UINavigationController {
 	
 	private weak static var imagePickerController : DKImagePickerController?
 	internal static func sharedInstance() -> DKImagePickerController {
-		return DKImagePickerController.imagePickerController!;
+		return DKImagePickerController.imagePickerController!
 	}
 
 	public var UIDelegate: DKImagePickerControllerUIDelegate = DKImagePickerControllerDefaultUIDelegate()
@@ -190,7 +194,7 @@ public class DKImagePickerController : UINavigationController {
 				self.selectedAssets = self.defaultSelectedAssets ?? []
 				
 				if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-					rootVC.collectionView?.reloadData()
+					rootVC.collectionView.reloadData()
 				}
 				
 				self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)

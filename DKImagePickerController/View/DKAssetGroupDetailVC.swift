@@ -15,7 +15,7 @@ private let DKImageAssetIdentifier = "DKImageAssetIdentifier"
 private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
 // Show all images in the asset group
-internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataManagerObserver {
+internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
     
     class DKImageCameraCell: UICollectionViewCell {
         
@@ -201,16 +201,10 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
     
 	private var groupListVC: DKAssetGroupListVC!
     
-    private var hidesCamera :Bool = false
+    private var hidesCamera: Bool = false
 	
-    convenience init() {
-        let layout = DKImagePickerController.sharedInstance().UIDelegate.layoutForImagePickerController(DKImagePickerController.sharedInstance()).init()
-        self.init(collectionViewLayout: layout)
-    }
-	
-	override init(collectionViewLayout layout: UICollectionViewLayout) {
-		super.init(collectionViewLayout: layout)
-	}
+	internal var collectionView: UICollectionView!
+	private var footerView: UIView?
 	
 	private var currentViewSize: CGSize!
 	override func viewWillLayoutSubviews() {
@@ -233,24 +227,40 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		return options
 	}()
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.whiteColor()
-        
-        self.collectionView!.backgroundColor = UIColor.whiteColor()
-        self.collectionView!.allowsMultipleSelection = true
-        self.collectionView!.registerClass(DKImageCameraCell.self, forCellWithReuseIdentifier: DKImageCameraIdentifier)
-        self.collectionView!.registerClass(DKAssetCell.self, forCellWithReuseIdentifier: DKImageAssetIdentifier)
-        self.collectionView!.registerClass(DKVideoAssetCell.self, forCellWithReuseIdentifier: DKVideoAssetIdentifier)
+		
+		let layout = DKImagePickerController.sharedInstance().UIDelegate.layoutForImagePickerController(DKImagePickerController.sharedInstance()).init()
+		self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        self.collectionView.backgroundColor = UIColor.whiteColor()
+        self.collectionView.allowsMultipleSelection = true
+		self.collectionView.delegate = self
+		self.collectionView.dataSource = self
+        self.collectionView.registerClass(DKImageCameraCell.self, forCellWithReuseIdentifier: DKImageCameraIdentifier)
+        self.collectionView.registerClass(DKAssetCell.self, forCellWithReuseIdentifier: DKImageAssetIdentifier)
+        self.collectionView.registerClass(DKVideoAssetCell.self, forCellWithReuseIdentifier: DKVideoAssetIdentifier)
+		self.view.addSubview(self.collectionView)
+		
+		self.footerView = DKImagePickerController.sharedInstance().UIDelegate.imagePickerControllerFooterView(DKImagePickerController.sharedInstance())
+		if let footerView = self.footerView {
+			self.view.addSubview(footerView)
+		}
 		
 		self.hidesCamera = DKImagePickerController.sharedInstance().sourceType == .Photo
 		self.checkPhotoPermission()
     }
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
+		if let footerView = self.footerView {
+			footerView.frame = CGRectMake(0, self.view.bounds.height - footerView.bounds.height, self.view.bounds.width, footerView.bounds.height)
+			self.collectionView.frame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height - footerView.bounds.height)
+			
+		} else {
+			self.collectionView.frame = self.view.bounds
+		}
+	}
 	
 	internal func checkPhotoPermission() {
 		func photoDenied() {
@@ -353,14 +363,14 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		guard let selectedGroup = self.selectedGroupId else { return 0 }
 		
 		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(selectedGroup)
         return (group.totalCount ?? 0) + (self.hidesCamera ? 0 : 1)
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         if indexPath.row == 0 && !self.hidesCamera {
             return self.cameraCellForIndexPath(indexPath)
         } else {
@@ -368,7 +378,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
         }
     }
     
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
         if let firstSelectedAsset = DKImagePickerController.sharedInstance().selectedAssets.first,
             selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
             where DKImagePickerController.sharedInstance().allowMultipleTypes == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
@@ -389,7 +399,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		return shouldSelect
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		let selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
 		DKImagePickerController.sharedInstance().selectedImage(selectedAsset!)
         
@@ -397,7 +407,7 @@ internal class DKAssetGroupDetailVC: UICollectionViewController, DKGroupDataMana
 		cell.checkView.checkLabel.text = "\(DKImagePickerController.sharedInstance().selectedAssets.count)"
     }
     
-    override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
 		if let removedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset {
 			let removedIndex = DKImagePickerController.sharedInstance().selectedAssets.indexOf(removedAsset)!
 			

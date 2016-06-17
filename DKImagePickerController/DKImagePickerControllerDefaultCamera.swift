@@ -89,6 +89,10 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 			.show()
 	}
 	
+	public func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView? {
+		return nil
+	}
+	
 	// Internal
 	
 	public func checkCameraPermission(camera: DKCamera) {
