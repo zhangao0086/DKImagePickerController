@@ -1,5 +1,13 @@
 # Change Log
 
+## [3.3.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.1) (2016-06-19)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.0...3.3.1)
+
+**Merged pull requests:**
+
+- Fixed an issue that may cause crash when an asset group doesn't know its totalCount.
+
 ## [3.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.0) (2016-06-17)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.1...3.3.0)
