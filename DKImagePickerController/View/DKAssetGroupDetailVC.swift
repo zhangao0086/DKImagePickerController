@@ -273,6 +273,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 	internal func checkPhotoPermission() {
 		func photoDenied() {
 			self.view.addSubview(DKPermissionView.permissionView(.Photo))
+			self.view.backgroundColor = UIColor.blackColor()
 			self.collectionView?.hidden = true
 		}
 		
@@ -321,7 +322,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
 		cell.setCameraImage(self.imagePickerController.UIDelegate.imagePickerControllerCameraImage())
         
-        cell.didCameraButtonClicked = {
+        cell.didCameraButtonClicked = { [unowned self] in
             if UIImagePickerController.isSourceTypeAvailable(.Camera) && self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount  {
                 self.imagePickerController.presentCamera()
 			} else {

@@ -1,5 +1,15 @@
 # Change Log
 
+## [3.3.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.2) (2016-06-20)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.1...3.3.2)
+
+**Merged pull requests:**
+
+- Fixed an issue that can cause memory leaks to DKAssetGroupDetailVC.
+
+- Fixed an issue that may cause the backgroundColor of the DKAssetGroupDetail's view is incorrect.
+
 ## [3.3.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.1) (2016-06-19)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.0...3.3.1)
