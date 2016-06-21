@@ -64,7 +64,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             private lazy var checkLabel: UILabel = {
                 let label = UILabel()
                 label.font = UIFont.boldSystemFontOfSize(14)
-                label.textColor = UIColor.whiteColor()
+                label.textColor = UIColor.blackColor()
                 label.textAlignment = .Right
                 
                 return label
