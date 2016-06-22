@@ -14,9 +14,6 @@ private let DKImageCameraIdentifier = "DKImageCameraIdentifier"
 private let DKImageAssetIdentifier = "DKImageAssetIdentifier"
 private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
-//selectorTintColor
-//selectorFont
-
 // Show all images in the asset group
 internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
     
@@ -59,21 +56,20 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         
         class DKImageCheckView: UIView {
             
-            var numberColor = UIColor.whiteColor()
-            var numberFont = UIFont.boldSystemFontOfSize(14)
-            var checkedBackgroundColor = UIColor.blueColor()
-            
+            static var numberColor = UIColor.whiteColor()
+            static var numberFont = UIFont.boldSystemFontOfSize(14)
+            static var checkedBackgroundColor = UIColor.blueColor()
 
             internal lazy var checkImageView: UIImageView = {
                 let imageView = UIImageView(image: DKImageResource.checkedImage().imageWithRenderingMode(.AlwaysTemplate))
-                imageView.tintColor = self.checkedBackgroundColor
+                imageView.tintColor = checkedBackgroundColor
                 return imageView
             }()
             
             internal lazy var checkLabel: UILabel = {
                 let label = UILabel()
-                label.font = self.numberFont
-                label.textColor = self.numberColor
+                label.font = numberFont
+                label.textColor = numberColor
                 label.textAlignment = .Right
                 
                 return label
