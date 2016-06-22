@@ -41,8 +41,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		pickerController.allowMultipleTypes = allowMultipleType
 		pickerController.sourceType = sourceType
 		pickerController.singleSelect = singleSelect
-        pickerController.numberColor = UIColor.orangeColor()
-        pickerController.checkedBackgroundImgColor = UIColor.blackColor()
+        pickerController.numberColor = UIColor.yellowColor()
+        pickerController.checkedBackgroundImgColor = UIColor.orangeColor()
+        pickerController.backgroundCollectionViewColor = UIColor.blackColor()
 		
 //		pickerController.showsCancelButton = true
 //		pickerController.showsEmptyAlbums = false

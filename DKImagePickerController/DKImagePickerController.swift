@@ -222,6 +222,12 @@ public class DKImagePickerController : UINavigationController {
         }
     }
     
+    public var backgroundCollectionViewColor: UIColor? {
+        didSet {
+            DKAssetGroupDetailVC.backgroundCollectionViewColor = self.backgroundCollectionViewColor
+        }
+    }
+    
     public var selectedAssets = [DKAsset]()
 	
     public convenience init() {

@@ -16,7 +16,7 @@ private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
 // Show all images in the asset group
 internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
-    
+
     class DKImageCameraCell: UICollectionViewCell {
         
         var didCameraButtonClicked: (() -> Void)?
@@ -217,6 +217,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     private var hidesCamera: Bool = false
 	
 	internal var collectionView: UICollectionView!
+    static var backgroundCollectionViewColor: UIColor! = UIColor.whiteColor()
 	private var footerView: UIView?
 	
 	private var currentViewSize: CGSize!
@@ -242,10 +243,10 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		
+		let background = DKAssetGroupDetailVC.backgroundCollectionViewColor
 		let layout = self.imagePickerController.UIDelegate.layoutForImagePickerController(self.imagePickerController).init()
 		self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        self.collectionView.backgroundColor = UIColor.whiteColor()
+        self.collectionView.backgroundColor = background
         self.collectionView.allowsMultipleSelection = true
 		self.collectionView.delegate = self
 		self.collectionView.dataSource = self
