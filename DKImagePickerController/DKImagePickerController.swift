@@ -73,6 +73,9 @@ public protocol DKImagePickerControllerUIDelegate {
 		Accessory view below content. default is nil.
 	*/
 	func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView?
+
+    
+    
 }
 
 /**
@@ -90,6 +93,7 @@ public enum DKImagePickerControllerSourceType : Int {
 	case Camera, Photo, Both
 }
 
+
 // MARK: - Public DKImagePickerController
 
 /**
@@ -100,7 +104,7 @@ public class DKImagePickerController : UINavigationController {
 	public var UIDelegate: DKImagePickerControllerUIDelegate = {
 		return DKImagePickerControllerDefaultUIDelegate()
 	}()
-	
+
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
 		
@@ -197,6 +201,27 @@ public class DKImagePickerController : UINavigationController {
         }
     }
     
+    //Set the color of the number when object is selected
+    public var numberColor: UIColor? {
+        didSet {
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().numColor = self.numberColor!
+        }
+    }
+    
+    //Set the font of the number when object is selected
+    public var numberFnt: UIFont? {
+        didSet {
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().numFnt = self.numberFnt!
+        }
+    }
+    
+    //Set the color of the object outline when object is selected
+    public var checkedBackgroundImgColor: UIColor? {
+        didSet {
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().checkedBackgroundImgColor = self.checkedBackgroundImgColor!
+        }
+    }
+    
     public var selectedAssets = [DKAsset]()
 	
     public convenience init() {
@@ -243,6 +268,7 @@ public class DKImagePickerController : UINavigationController {
                 self.navigationBarHidden = false
 				let rootVC = DKAssetGroupDetailVC()
 				rootVC.imagePickerController = self
+                
 				self.UIDelegate.prepareLayout(self, vc: rootVC)
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
