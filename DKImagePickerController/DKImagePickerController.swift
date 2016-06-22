@@ -204,14 +204,14 @@ public class DKImagePickerController : UINavigationController {
     //Set the color of the number when object is selected
     public var numberColor: UIColor? {
         didSet {
-            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().numColor = self.numberColor!
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().numberColor = self.numberColor!
         }
     }
     
     //Set the font of the number when object is selected
     public var numberFnt: UIFont? {
         didSet {
-            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().numFnt = self.numberFnt!
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().numberFont = self.numberFnt!
         }
     }
     
