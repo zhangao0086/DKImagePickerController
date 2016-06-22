@@ -61,12 +61,12 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             
             var numberColor = UIColor.whiteColor()
             var numberFont = UIFont.boldSystemFontOfSize(14)
-            var checkedBackgroundImgColor = UIColor.blueColor()
+            var checkedBackgroundColor = UIColor.blueColor()
             
 
             internal lazy var checkImageView: UIImageView = {
                 let imageView = UIImageView(image: DKImageResource.checkedImage().imageWithRenderingMode(.AlwaysTemplate))
-                imageView.tintColor = self.numberColor
+                imageView.tintColor = self.checkedBackgroundColor
                 return imageView
             }()
             

@@ -218,7 +218,7 @@ public class DKImagePickerController : UINavigationController {
     //Set the color of the object outline when object is selected
     public var checkedBackgroundImgColor: UIColor? {
         didSet {
-            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().checkedBackgroundImgColor = self.checkedBackgroundImgColor!
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView().checkedBackgroundColor = self.checkedBackgroundImgColor!
         }
     }
     
