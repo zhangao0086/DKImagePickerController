@@ -59,24 +59,21 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         
         class DKImageCheckView: UIView {
             
-            var numColor = UIColor.whiteColor()
-            var numFnt = UIFont.boldSystemFontOfSize(14)
+            var numberColor = UIColor.whiteColor()
+            var numberFont = UIFont.boldSystemFontOfSize(14)
             var checkedBackgroundImgColor = UIColor.blueColor()
             
 
             internal lazy var checkImageView: UIImageView = {
-                
-                //case/switch statement
                 let imageView = UIImageView(image: DKImageResource.checkedImage().imageWithRenderingMode(.AlwaysTemplate))
-                imageView.tintColor = self.numColor
+                imageView.tintColor = self.numberColor
                 return imageView
             }()
             
             internal lazy var checkLabel: UILabel = {
                 let label = UILabel()
-                //Make it so you can set these
-                label.font = DKImagePickerController().numberFnt
-                label.textColor = DKImagePickerController().numberColor
+                label.font = self.numberFont
+                label.textColor = self.numberColor
                 label.textAlignment = .Right
                 
                 return label
