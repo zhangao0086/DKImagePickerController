@@ -209,9 +209,9 @@ public class DKImagePickerController : UINavigationController {
     }
     
     //Set the font of the number when object is selected
-    public var numberFnt: UIFont? {
+    public var numberFont: UIFont? {
         didSet {
-            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.numberFont = self.numberFnt!
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.numberFont = self.numberFont!
         }
     }
     
