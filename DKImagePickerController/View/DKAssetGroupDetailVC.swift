@@ -16,7 +16,7 @@ private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
 // Show all images in the asset group
 internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
-    
+
     class DKImageCameraCell: UICollectionViewCell {
         
         var didCameraButtonClicked: (() -> Void)?
@@ -51,20 +51,25 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         
     } /* DKImageCameraCell */
 
+    
     class DKAssetCell: UICollectionViewCell {
         
         class DKImageCheckView: UIView {
             
-            private lazy var checkImageView: UIImageView = {
-                let imageView = UIImageView(image: DKImageResource.checkedImage())
-                
+            static var numberColor = UIColor.whiteColor()
+            static var numberFont = UIFont.boldSystemFontOfSize(14)
+            static var checkedBackgroundColor = UIColor.blueColor()
+
+            internal lazy var checkImageView: UIImageView = {
+                let imageView = UIImageView(image: DKImageResource.checkedImage().imageWithRenderingMode(.AlwaysTemplate))
+                imageView.tintColor = checkedBackgroundColor
                 return imageView
             }()
             
-            private lazy var checkLabel: UILabel = {
+            internal lazy var checkLabel: UILabel = {
                 let label = UILabel()
-                label.font = UIFont.boldSystemFontOfSize(14)
-                label.textColor = UIColor.whiteColor()
+                label.font = numberFont
+                label.textColor = numberColor
                 label.textAlignment = .Right
                 
                 return label
@@ -212,6 +217,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     private var hidesCamera: Bool = false
 	
 	internal var collectionView: UICollectionView!
+    static var backgroundCollectionViewColor: UIColor! = UIColor.whiteColor()
 	private var footerView: UIView?
 	
 	private var currentViewSize: CGSize!
@@ -237,10 +243,10 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		
+		let background = DKAssetGroupDetailVC.backgroundCollectionViewColor
 		let layout = self.imagePickerController.UIDelegate.layoutForImagePickerController(self.imagePickerController).init()
 		self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        self.collectionView.backgroundColor = UIColor.whiteColor()
+        self.collectionView.backgroundColor = background
         self.collectionView.allowsMultipleSelection = true
 		self.collectionView.delegate = self
 		self.collectionView.dataSource = self
