@@ -430,6 +430,14 @@ public class DKImagePickerController : UINavigationController {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
 		self.UIDelegate.imagePickerController(self, didDeselectAsset: asset)
 	}
+    
+    public func removeAsset(index: Int){
+        let asset = self.selectedAssets[index]
+        self.unselectedImage(asset)
+        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            rootVC.collectionView?.reloadData()
+        }
+    }
 	
     // MARK: - Handles Orientation
 
