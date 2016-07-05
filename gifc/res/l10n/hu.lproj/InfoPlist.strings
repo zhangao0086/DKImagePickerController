@@ -1,0 +1,7 @@
+"NSLocationWhenInUseUsageDescription" = "Mi szüksége van a elhelyezés-hoz geotag fotóit.";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsFullRange" = "Shoot With Full Range";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsMultiPoint" = "Shoot With Multi Points";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeEditLastPhoto" = "Az utolsó képek szerkesztése";
+/* Translated from: Open Album */
+"UIApplicationShortcutItemTitle.STShortcutItemTypeOpenAlbum" = "Nyitott Album";
+"STAppMarketingTitle" = "Live Focus - Shoot First, Focus Later";

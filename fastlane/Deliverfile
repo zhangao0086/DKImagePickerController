@@ -1,0 +1,16 @@
+###################### More Options ######################
+# If you want to have even more control, check out the documentation
+# https://github.com/KrauseFx/deliver/blob/master/Deliverfile.md
+
+
+###################### Automatically generated ######################
+# Feel free to remove the following line if you use fastlane (which you should)
+
+# https://github.com/fastlane/deliver/blob/master/lib/deliver/options.rb
+
+username "illhert@yahoo.com" # your Apple ID user
+app_identifier "com.stells.gifc"
+app_version "1.3"
+metadata_path "./fastlane/com.stells.gifc"
+screenshots_path "/Users/blackgene/Documents/gifc\-resources/appstore/screenshots/gifc"
+ipa "gifc.ipa"

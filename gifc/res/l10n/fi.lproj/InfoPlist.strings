@@ -1,0 +1,7 @@
+"NSLocationWhenInUseUsageDescription" = "Me tarvitaan sijaintisi paikkatunnistetietoja valokuvia.";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsFullRange" = "Shoot With Full Range";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsMultiPoint" = "Shoot With Multi Points";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeEditLastPhoto" = "Muokkaa Tuoreimmat kuvat";
+/* Translated from: Open Album */
+"UIApplicationShortcutItemTitle.STShortcutItemTypeOpenAlbum" = "Avaa albumi";
+"STAppMarketingTitle" = "Live Focus - Shoot First, Focus Later";

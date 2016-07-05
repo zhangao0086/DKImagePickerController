@@ -1,0 +1,7 @@
+"NSLocationWhenInUseUsageDescription" = "हम की जरूरत है geotag करने के लिए अपना स्थान आपकी तस्वीरें।";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsFullRange" = "Shoot With Full Range";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsMultiPoint" = "Shoot With Multi Points";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeEditLastPhoto" = "हाल ही में तस्वीरों को संपादित करें";
+/* Translated from: Open Album */
+"UIApplicationShortcutItemTitle.STShortcutItemTypeOpenAlbum" = "खुला एल्बम";
+"STAppMarketingTitle" = "Live Focus - Shoot First, Focus Later";

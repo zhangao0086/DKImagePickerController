@@ -1,0 +1,7 @@
+"NSLocationWhenInUseUsageDescription" = "Abbiamo bisogno di vostra posizione per geotaggare le foto.";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsFullRange" = "Shoot With Full Range";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsMultiPoint" = "Shoot With Multi Points";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeEditLastPhoto" = "Modificare le foto più recenti";
+/* Translated from: Open Album */
+"UIApplicationShortcutItemTitle.STShortcutItemTypeOpenAlbum" = "Apra l'Album";
+"STAppMarketingTitle" = "Live Focus - Shoot First, Focus Later";

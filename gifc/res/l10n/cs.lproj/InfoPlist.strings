@@ -1,0 +1,7 @@
+"NSLocationWhenInUseUsageDescription" = "Jsme potřebuje vaši polohu do geotag fotografie.";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsFullRange" = "Shoot With Full Range";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsMultiPoint" = "Shoot With Multi Points";
+"UIApplicationShortcutItemTitle.STShortcutItemTypeEditLastPhoto" = "Upravit nedávné fotografie";
+/* Translated from: Open Album */
+"UIApplicationShortcutItemTitle.STShortcutItemTypeOpenAlbum" = "Otevřené Album";
+"STAppMarketingTitle" = "Live Focus - Shoot First, Focus Later";
