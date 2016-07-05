@@ -110,7 +110,7 @@ def common_pods
   pod "BGUtilities"
 end
 
-target 'gifc' do
+target 'giff' do
   # In-App purchase
   pod 'RMStore', '~> 0.7'
   pod 'RMStore/NSUserDefaultsPersistence'

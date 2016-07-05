@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-python deliver_rnote.py com.stells.gifc
+python deliver_rnote.py com.stells.giff
 '''
 
 import yaml, os, codecs, time, datetime,re,argparse,textwrap, subprocess
@@ -25,13 +25,13 @@ __force__= args.force is not None
 
 #path
 __dirpath__=os.path.dirname(os.path.realpath(__file__))
-__gifcwww__=expanduser('~/Documents/gifcwww/')
+__giffwww__=expanduser('~/Documents/giffwww/')
 __presskit_screenshots__=expanduser('~/Documents/livefocus-presskit/screenshots')
-__deliver_elie_screenshots__=expanduser('~/Documents/gifc-resources/appstore/screenshots/gifc')
-__deliver_l10n_res__=os.path.join(__dirpath__, '../gifc/res/l10n')
+__deliver_elie_screenshots__=expanduser('~/Documents/giff-resources/appstore/screenshots/giff')
+__deliver_l10n_res__=os.path.join(__dirpath__, '../giff/res/l10n')
 
 #iamelie
-__iamelie_config__ = yaml.safe_load(open(os.path.join(__gifcwww__,'_config.yml')))
+__iamelie_config__ = yaml.safe_load(open(os.path.join(__giffwww__,'_config.yml')))
 __note_file__='release_notes.txt'
 __notice_src_file__='notices.txt'
 __replace_targets__=[(u'\u2022', '-'),('+', '-')]
@@ -118,7 +118,7 @@ def get_post_file(entities):
 	return '-'.join(entities)+'.md'
 
 def get_post_file_abs_path(filename):
-	return os.path.join(__gifcwww__, '_posts', filename)
+	return os.path.join(__giffwww__, '_posts', filename)
 
 def find_post_file(containing_filename):
 	return find_post_file_by_target(None, containing_filename)
@@ -137,7 +137,7 @@ def get_global_notice_data():
 #site data
 def deploy_to_iamelie_site_data():
 	datas_default = __data__[__data__[__default_target_key__]]
-	data_file_path = os.path.join(__gifcwww__,'_data')
+	data_file_path = os.path.join(__giffwww__,'_data')
 	for iamelie_data_file in [f for d, a, f in os.walk(data_file_path)][0]:
 		if iamelie_data_file.startswith('.') or not os.path.isfile(os.path.join(data_file_path, iamelie_data_file)):
 			continue
@@ -203,12 +203,12 @@ for dir, a, files in os.walk(__dirpath__):
 		if existed_file:
 			os.remove(existed_file)
 		#post
-		of = open_file(os.path.join(__gifcwww__, '_posts', target, get_post_file([mdate, 'Release', __version__, lang])))
+		of = open_file(os.path.join(__giffwww__, '_posts', target, get_post_file([mdate, 'Release', __version__, lang])))
 		of.write(content.strip())
 		of.close()
 
 		#html
-		hf = open_file(os.path.join(__gifcwww__, 'notes', target, lang_p[1:]+'.html'))
+		hf = open_file(os.path.join(__giffwww__, 'notes', target, lang_p[1:]+'.html'))
 		hf.write(textwrap.dedent(
 		"""\
 		---
@@ -229,7 +229,7 @@ for dir, a, files in os.walk(__dirpath__):
 		local_notice_file = find_post_file_by_target(target, get_post_file(['Notice', lang]))
 
 		def __get_notice_filepath(_mdate):
-			return os.path.join(__gifcwww__, '_posts', target, get_post_file([_mdate, 'Notice', lang]))
+			return os.path.join(__giffwww__, '_posts', target, get_post_file([_mdate, 'Notice', lang]))
 
 		#skip if same note of same version
 		if not __force__ and not local_notice_file and not has_global_notice:

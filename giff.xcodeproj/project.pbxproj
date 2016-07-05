@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		312DD782C6DA9054BFB612D9 /* libPods-gifc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 523D14932897B1BC9F51F359 /* libPods-gifc.a */; };
+		312DD782C6DA9054BFB612D9 /* libPods-giff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 523D14932897B1BC9F51F359 /* libPods-giff.a */; };
 		4F71D03D739E5F7582B5DBCC /* bg_viewfinder_postfocus_v3point_line.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D81A344F8621BAE1D99E /* bg_viewfinder_postfocus_v3point_line.svg */; };
 		4F71D03E6AED67BE8642F8A0 /* ico_cell_blank.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D3FF7F23C8E777423D71 /* ico_cell_blank.svg */; };
 		4F71D060B690432AFFE50BBA /* bg_viewfinder_fullrange_default.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D4DD17097C1CB4B4D19A /* bg_viewfinder_fullrange_default.svg */; };
@@ -22,7 +22,7 @@
 		4F71D51ED092604E7E600BA8 /* set_resolution_full.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D41BF339D7E2D2A7A2E3 /* set_resolution_full.svg */; };
 		4F71D56322919F1A1E1444C5 /* ios_photos.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DDCC6F60F70FBDE346FE /* ios_photos.svg */; };
 		4F71D5D2290C8EBDDA77F451 /* STCaptureResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D5C35AF53115772962A8 /* STCaptureResponse.m */; };
-		4F71D5DA6F60BFBDD1F5A619 /* STGIFCAnimatableLogoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D8D343A6C7E2A202E59A /* STGIFCAnimatableLogoView.m */; };
+		4F71D5DA6F60BFBDD1F5A619 /* STGIFFAnimatableLogoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */; };
 		4F71D661EE32C8B989FE941F /* logo_part_1.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D0B83249614D69708FEC /* logo_part_1.svg */; };
 		4F71D6A26E908715BE42D285 /* STExporterSaveToPhotos.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D7CC5477AFB3529D50A4 /* STExporterSaveToPhotos.m */; };
 		4F71D6A781E56FDC223C71F9 /* STPostFocusCaptureRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC04BCE7BCE3C8209FE5 /* STPostFocusCaptureRequest.m */; };
@@ -32,7 +32,7 @@
 		4F71D7239D1845C99381273D /* RLMCapturedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D8AEF12644D342578130 /* RLMCapturedImage.m */; };
 		4F71D767F5F8A52B4A95749B /* STCapturedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D522C22BEEC8626EA65E /* STCapturedImage.m */; };
 		4F71D7F98F4103B2D422FEB5 /* set_postfocus_point.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D6703E85613489D2C738 /* set_postfocus_point.svg */; };
-		4F71D82136AB38D1ADDCD716 /* STGIFCStandardColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D33E62373415D7393C86 /* STGIFCStandardColor.m */; };
+		4F71D82136AB38D1ADDCD716 /* STGIFFStandardColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D33E62373415D7393C86 /* STGIFFStandardColor.m */; };
 		4F71D847CC7779E077E6F194 /* set_postfocus_vertical_3point.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D5EB3BF4F313CAEB5EC9 /* set_postfocus_vertical_3point.svg */; };
 		4F71D86B1C60E1C226D705D6 /* STCapturedImageSet+PostFocus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DD848C9A2D20B0F98D71 /* STCapturedImageSet+PostFocus.m */; };
 		4F71D9280E857A2CA498B710 /* STCapturedImageStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D787EF3B162A2D72AADD /* STCapturedImageStorageManager.m */; };
@@ -338,13 +338,13 @@
 		A050D26E1CC5DD0D00628C2F /* STAppInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0A41CC5DD0D00628C2F /* STAppInfoView.m */; };
 		A050D26F1CC5DD0D00628C2F /* STSettingScreenControllableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0A61CC5DD0D00628C2F /* STSettingScreenControllableItem.m */; };
 		A050D2711CC5DD0D00628C2F /* STElieStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0AB1CC5DD0D00628C2F /* STElieStatusBar.m */; };
-		A050D2721CC5DD0D00628C2F /* STGIFCApp.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0AD1CC5DD0D00628C2F /* STGIFCApp.m */; };
-		A050D2731CC5DD0D00628C2F /* STGIFCAppSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0AF1CC5DD0D00628C2F /* STGIFCAppSetting.m */; };
-		A050D2791CC5DD0D00628C2F /* STGIFCRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0BB1CC5DD0D00628C2F /* STGIFCRootViewController.m */; };
+		A050D2721CC5DD0D00628C2F /* STGIFFApp.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0AD1CC5DD0D00628C2F /* STGIFFApp.m */; };
+		A050D2731CC5DD0D00628C2F /* STGIFFAppSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0AF1CC5DD0D00628C2F /* STGIFFAppSetting.m */; };
+		A050D2791CC5DD0D00628C2F /* STGIFFRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0BB1CC5DD0D00628C2F /* STGIFFRootViewController.m */; };
 		A050D27A1CC5DD0D00628C2F /* STUIApplication+QuickAction.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0BD1CC5DD0D00628C2F /* STUIApplication+QuickAction.m */; };
 		A050D27B1CC5DD0D00628C2F /* STUIApplication+SpotlightSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0BF1CC5DD0D00628C2F /* STUIApplication+SpotlightSearch.m */; };
 		A050D27C1CC5DD0D00628C2F /* STUserActor.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0C11CC5DD0D00628C2F /* STUserActor.m */; };
-		A050D27D1CC5DD0D00628C2F /* UIAlertController+STGIFCApp.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0C31CC5DD0D00628C2F /* UIAlertController+STGIFCApp.m */; };
+		A050D27D1CC5DD0D00628C2F /* UIAlertController+STGIFFApp.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0C31CC5DD0D00628C2F /* UIAlertController+STGIFFApp.m */; };
 		A050D27E1CC5DD0D00628C2F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = A050D0C51CC5DD0D00628C2F /* .gitignore */; };
 		A050D27F1CC5DD0D00628C2F /* M13ProgressViewBorderedCenterBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0C81CC5DD0D00628C2F /* M13ProgressViewBorderedCenterBar.m */; };
 		A050D2801CC5DD0D00628C2F /* M13ProgressViewBorderedSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0CA1CC5DD0D00628C2F /* M13ProgressViewBorderedSlider.m */; };
@@ -383,7 +383,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		02B6B859343A696912154B7B /* Pods-gifc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gifc.release.xcconfig"; path = "Pods/Target Support Files/Pods-gifc/Pods-gifc.release.xcconfig"; sourceTree = "<group>"; };
+		02B6B859343A696912154B7B /* Pods-giff.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-giff.release.xcconfig"; path = "Pods/Target Support Files/Pods-giff/Pods-giff.release.xcconfig"; sourceTree = "<group>"; };
 		4F71D058B456F27E483B3118 /* STExporterSaveToPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STExporterSaveToPhotos.h; sourceTree = "<group>"; };
 		4F71D0936A78DFF0EC992EE1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4F71D0B83249614D69708FEC /* logo_part_1.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = logo_part_1.svg; sourceTree = "<group>"; };
@@ -396,7 +396,7 @@
 		4F71D24C93D4A92B99A914A6 /* NSDictionary+STUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+STUtil.h"; sourceTree = "<group>"; };
 		4F71D265AAEDAAC78DD97E1D /* logo_part_2.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = logo_part_2.svg; sourceTree = "<group>"; };
 		4F71D26714BAB7552F773108 /* icon.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = icon.svg; sourceTree = "<group>"; };
-		4F71D33E62373415D7393C86 /* STGIFCStandardColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFCStandardColor.m; sourceTree = "<group>"; };
+		4F71D33E62373415D7393C86 /* STGIFFStandardColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFStandardColor.m; sourceTree = "<group>"; };
 		4F71D3401F5ECD85A0B7AEA8 /* set_resolution_4k.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_resolution_4k.svg; sourceTree = "<group>"; };
 		4F71D371759A4C435CABAAE3 /* set_torchlight_off.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_torchlight_off.svg; sourceTree = "<group>"; };
 		4F71D37DA8ED66E260CAB455 /* STExportSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STExportSelectView.h; sourceTree = "<group>"; };
@@ -410,7 +410,7 @@
 		4F71D522C22BEEC8626EA65E /* STCapturedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImage.m; sourceTree = "<group>"; };
 		4F71D59BF022B0B57752944B /* STRLMFileWritable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRLMFileWritable.h; sourceTree = "<group>"; };
 		4F71D5C35AF53115772962A8 /* STCaptureResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCaptureResponse.m; sourceTree = "<group>"; };
-		4F71D5DB487DA3FA6434CB72 /* STGIFCAnimatableLogoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFCAnimatableLogoView.h; sourceTree = "<group>"; };
+		4F71D5DB487DA3FA6434CB72 /* STGIFFAnimatableLogoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFAnimatableLogoView.h; sourceTree = "<group>"; };
 		4F71D5EB3BF4F313CAEB5EC9 /* set_postfocus_vertical_3point.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_postfocus_vertical_3point.svg; sourceTree = "<group>"; };
 		4F71D62FDA3FA095A67EE4F8 /* STCaptureResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCaptureResponse.h; sourceTree = "<group>"; };
 		4F71D6406D30CCA3B8ACF7D8 /* logo_part_0.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = logo_part_0.svg; sourceTree = "<group>"; };
@@ -419,7 +419,7 @@
 		4F71D6938BF3F2425E1E163F /* down_triangle_rounded.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = down_triangle_rounded.svg; sourceTree = "<group>"; };
 		4F71D6BF172C062443B9E70E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		4F71D6E47674B33F45BBC26E /* go_take.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = go_take.svg; sourceTree = "<group>"; };
-		4F71D703126510249FD53F07 /* STGIFCStandardColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFCStandardColor.h; sourceTree = "<group>"; };
+		4F71D703126510249FD53F07 /* STGIFFStandardColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFStandardColor.h; sourceTree = "<group>"; };
 		4F71D771DBF54CD30A0F803E /* STExportSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STExportSelectView.m; sourceTree = "<group>"; };
 		4F71D77A2D519CF8BB69CA14 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		4F71D787EF3B162A2D72AADD /* STCapturedImageStorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageStorageManager.m; sourceTree = "<group>"; };
@@ -430,7 +430,7 @@
 		4F71D842DF81F1D2DA5F56A6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4F71D843E3D75E5C8EC9BF78 /* STCapturedResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedResource.m; sourceTree = "<group>"; };
 		4F71D8AEF12644D342578130 /* RLMCapturedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLMCapturedImage.m; sourceTree = "<group>"; };
-		4F71D8D343A6C7E2A202E59A /* STGIFCAnimatableLogoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFCAnimatableLogoView.m; sourceTree = "<group>"; };
+		4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFAnimatableLogoView.m; sourceTree = "<group>"; };
 		4F71D992355DC6EA0659B392 /* set_torchlight_strong.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_torchlight_strong.svg; sourceTree = "<group>"; };
 		4F71D9ED178A74260B47ED9F /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = System/Library/Frameworks/CoreSpotlight.framework; sourceTree = SDKROOT; };
 		4F71DA1A687CAE3DAC506D38 /* STPreviewPresenterAnimatableImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPreviewPresenterAnimatableImage.h; sourceTree = "<group>"; };
@@ -460,7 +460,7 @@
 		4F71DFA4BE0A87BBA6FC2B9B /* logo_elie.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = logo_elie.svg; sourceTree = "<group>"; };
 		4F71DFC051942C2D1F506D81 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		4F71DFE02EEC9A7E4BD483EE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		523D14932897B1BC9F51F359 /* libPods-gifc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gifc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		523D14932897B1BC9F51F359 /* libPods-giff.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-giff.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5908079B6785553724EB2D21 /* Pods-elie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-elie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-elie/Pods-elie.debug.xcconfig"; sourceTree = "<group>"; };
 		8D9C205E897D0027705CD7BC /* Pods-elie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-elie.release.xcconfig"; path = "Pods/Target Support Files/Pods-elie/Pods-elie.release.xcconfig"; sourceTree = "<group>"; };
 		9DB5E13500F79AF2CB3F4426 /* Pods-eliew.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eliew.release.xcconfig"; path = "Pods/Target Support Files/Pods-eliew/Pods-eliew.release.xcconfig"; sourceTree = "<group>"; };
@@ -999,20 +999,20 @@
 		A050D0A61CC5DD0D00628C2F /* STSettingScreenControllableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STSettingScreenControllableItem.m; sourceTree = "<group>"; };
 		A050D0AA1CC5DD0D00628C2F /* STElieStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STElieStatusBar.h; sourceTree = "<group>"; };
 		A050D0AB1CC5DD0D00628C2F /* STElieStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STElieStatusBar.m; sourceTree = "<group>"; };
-		A050D0AC1CC5DD0D00628C2F /* STGIFCApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFCApp.h; sourceTree = "<group>"; };
-		A050D0AD1CC5DD0D00628C2F /* STGIFCApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFCApp.m; sourceTree = "<group>"; };
-		A050D0AE1CC5DD0D00628C2F /* STGIFCAppSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFCAppSetting.h; sourceTree = "<group>"; };
-		A050D0AF1CC5DD0D00628C2F /* STGIFCAppSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFCAppSetting.m; sourceTree = "<group>"; };
-		A050D0BA1CC5DD0D00628C2F /* STGIFCRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFCRootViewController.h; sourceTree = "<group>"; };
-		A050D0BB1CC5DD0D00628C2F /* STGIFCRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFCRootViewController.m; sourceTree = "<group>"; };
+		A050D0AC1CC5DD0D00628C2F /* STGIFFApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFApp.h; sourceTree = "<group>"; };
+		A050D0AD1CC5DD0D00628C2F /* STGIFFApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFApp.m; sourceTree = "<group>"; };
+		A050D0AE1CC5DD0D00628C2F /* STGIFFAppSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFAppSetting.h; sourceTree = "<group>"; };
+		A050D0AF1CC5DD0D00628C2F /* STGIFFAppSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFAppSetting.m; sourceTree = "<group>"; };
+		A050D0BA1CC5DD0D00628C2F /* STGIFFRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFRootViewController.h; sourceTree = "<group>"; };
+		A050D0BB1CC5DD0D00628C2F /* STGIFFRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFRootViewController.m; sourceTree = "<group>"; };
 		A050D0BC1CC5DD0D00628C2F /* STUIApplication+QuickAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STUIApplication+QuickAction.h"; sourceTree = "<group>"; };
 		A050D0BD1CC5DD0D00628C2F /* STUIApplication+QuickAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STUIApplication+QuickAction.m"; sourceTree = "<group>"; };
 		A050D0BE1CC5DD0D00628C2F /* STUIApplication+SpotlightSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STUIApplication+SpotlightSearch.h"; sourceTree = "<group>"; };
 		A050D0BF1CC5DD0D00628C2F /* STUIApplication+SpotlightSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STUIApplication+SpotlightSearch.m"; sourceTree = "<group>"; };
 		A050D0C01CC5DD0D00628C2F /* STUserActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STUserActor.h; sourceTree = "<group>"; };
 		A050D0C11CC5DD0D00628C2F /* STUserActor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STUserActor.m; sourceTree = "<group>"; };
-		A050D0C21CC5DD0D00628C2F /* UIAlertController+STGIFCApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+STGIFCApp.h"; sourceTree = "<group>"; };
-		A050D0C31CC5DD0D00628C2F /* UIAlertController+STGIFCApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+STGIFCApp.m"; sourceTree = "<group>"; };
+		A050D0C21CC5DD0D00628C2F /* UIAlertController+STGIFFApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+STGIFFApp.h"; sourceTree = "<group>"; };
+		A050D0C31CC5DD0D00628C2F /* UIAlertController+STGIFFApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+STGIFFApp.m"; sourceTree = "<group>"; };
 		A050D0C51CC5DD0D00628C2F /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A050D0C71CC5DD0D00628C2F /* M13ProgressViewBorderedCenterBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewBorderedCenterBar.h; sourceTree = "<group>"; };
 		A050D0C81CC5DD0D00628C2F /* M13ProgressViewBorderedCenterBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewBorderedCenterBar.m; sourceTree = "<group>"; };
@@ -1054,7 +1054,7 @@
 		A0FA45DF1A45C0FB008AE63A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A0FA45E11A45C104008AE63A /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		C136154840460CAA8B08B2E5 /* Pods-eliew.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eliew.debug.xcconfig"; path = "Pods/Target Support Files/Pods-eliew/Pods-eliew.debug.xcconfig"; sourceTree = "<group>"; };
-		D9F749B6F71B61F1A2A2FC0A /* Pods-gifc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gifc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-gifc/Pods-gifc.debug.xcconfig"; sourceTree = "<group>"; };
+		D9F749B6F71B61F1A2A2FC0A /* Pods-giff.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-giff.debug.xcconfig"; path = "Pods/Target Support Files/Pods-giff/Pods-giff.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1081,7 +1081,7 @@
 				A09EB7201C4C987C00FB53B7 /* CoreSpotlight.framework in Frameworks */,
 				A09EB7211C4C987C00FB53B7 /* MobileCoreServices.framework in Frameworks */,
 				A09EB7221C4C987C00FB53B7 /* SafariServices.framework in Frameworks */,
-				312DD782C6DA9054BFB612D9 /* libPods-gifc.a in Frameworks */,
+				312DD782C6DA9054BFB612D9 /* libPods-giff.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,8 +1095,8 @@
 				8D9C205E897D0027705CD7BC /* Pods-elie.release.xcconfig */,
 				C136154840460CAA8B08B2E5 /* Pods-eliew.debug.xcconfig */,
 				9DB5E13500F79AF2CB3F4426 /* Pods-eliew.release.xcconfig */,
-				D9F749B6F71B61F1A2A2FC0A /* Pods-gifc.debug.xcconfig */,
-				02B6B859343A696912154B7B /* Pods-gifc.release.xcconfig */,
+				D9F749B6F71B61F1A2A2FC0A /* Pods-giff.debug.xcconfig */,
+				02B6B859343A696912154B7B /* Pods-giff.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1113,7 +1113,7 @@
 			path = Save;
 			sourceTree = "<group>";
 		};
-		A050CDE71CC5DD0C00628C2F /* gifc */ = {
+		A050CDE71CC5DD0C00628C2F /* giff */ = {
 			isa = PBXGroup;
 			children = (
 				A050CDE81CC5DD0C00628C2F /* AppDelegate.h */,
@@ -1124,7 +1124,7 @@
 				A050CDED1CC5DD0C00628C2F /* res */,
 				A050CF0C1CC5DD0D00628C2F /* src */,
 			);
-			path = gifc;
+			path = giff;
 			sourceTree = "<group>";
 		};
 		A050CDED1CC5DD0C00628C2F /* res */ = {
@@ -1338,25 +1338,25 @@
 				A050D0961CC5DD0D00628C2F /* Products */,
 				A050D0A21CC5DD0D00628C2F /* Setting */,
 				A050D0A91CC5DD0D00628C2F /* StatusBar */,
-				A050D0AC1CC5DD0D00628C2F /* STGIFCApp.h */,
-				A050D0AD1CC5DD0D00628C2F /* STGIFCApp.m */,
-				A050D0AE1CC5DD0D00628C2F /* STGIFCAppSetting.h */,
-				A050D0AF1CC5DD0D00628C2F /* STGIFCAppSetting.m */,
-				A050D0BA1CC5DD0D00628C2F /* STGIFCRootViewController.h */,
-				A050D0BB1CC5DD0D00628C2F /* STGIFCRootViewController.m */,
+				A050D0AC1CC5DD0D00628C2F /* STGIFFApp.h */,
+				A050D0AD1CC5DD0D00628C2F /* STGIFFApp.m */,
+				A050D0AE1CC5DD0D00628C2F /* STGIFFAppSetting.h */,
+				A050D0AF1CC5DD0D00628C2F /* STGIFFAppSetting.m */,
+				A050D0BA1CC5DD0D00628C2F /* STGIFFRootViewController.h */,
+				A050D0BB1CC5DD0D00628C2F /* STGIFFRootViewController.m */,
 				A050D0BC1CC5DD0D00628C2F /* STUIApplication+QuickAction.h */,
 				A050D0BD1CC5DD0D00628C2F /* STUIApplication+QuickAction.m */,
 				A050D0BE1CC5DD0D00628C2F /* STUIApplication+SpotlightSearch.h */,
 				A050D0BF1CC5DD0D00628C2F /* STUIApplication+SpotlightSearch.m */,
 				A050D0C01CC5DD0D00628C2F /* STUserActor.h */,
 				A050D0C11CC5DD0D00628C2F /* STUserActor.m */,
-				A050D0C21CC5DD0D00628C2F /* UIAlertController+STGIFCApp.h */,
-				A050D0C31CC5DD0D00628C2F /* UIAlertController+STGIFCApp.m */,
+				A050D0C21CC5DD0D00628C2F /* UIAlertController+STGIFFApp.h */,
+				A050D0C31CC5DD0D00628C2F /* UIAlertController+STGIFFApp.m */,
 				A050D0C41CC5DD0D00628C2F /* UXComponents */,
-				4F71D33E62373415D7393C86 /* STGIFCStandardColor.m */,
-				4F71D703126510249FD53F07 /* STGIFCStandardColor.h */,
-				4F71D8D343A6C7E2A202E59A /* STGIFCAnimatableLogoView.m */,
-				4F71D5DB487DA3FA6434CB72 /* STGIFCAnimatableLogoView.h */,
+				4F71D33E62373415D7393C86 /* STGIFFStandardColor.m */,
+				4F71D703126510249FD53F07 /* STGIFFStandardColor.h */,
+				4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */,
+				4F71D5DB487DA3FA6434CB72 /* STGIFFAnimatableLogoView.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2003,7 +2003,7 @@
 		A0951E861A45B71D0023CF83 = {
 			isa = PBXGroup;
 			children = (
-				A050CDE71CC5DD0C00628C2F /* gifc */,
+				A050CDE71CC5DD0C00628C2F /* giff */,
 				A0951E901A45B71D0023CF83 /* Products */,
 				0256CB554B7DE438E703CF16 /* Pods */,
 				FA4FB0AC419A4F7957089488 /* Frameworks */,
@@ -2039,7 +2039,7 @@
 				4F71D9ED178A74260B47ED9F /* CoreSpotlight.framework */,
 				4F71D68FE8F2BF346B4B807B /* MobileCoreServices.framework */,
 				4F71D6BF172C062443B9E70E /* SafariServices.framework */,
-				523D14932897B1BC9F51F359 /* libPods-gifc.a */,
+				523D14932897B1BC9F51F359 /* libPods-giff.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2327,7 +2327,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-gifc/Pods-gifc-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-giff/Pods-giff-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A09EB7D41C4C987C00FB53B7 /* ShellScript */ = {
@@ -2355,7 +2355,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-gifc/Pods-gifc-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-giff/Pods-giff-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2442,7 +2442,7 @@
 				A050D21F1CC5DD0D00628C2F /* STFilterPresenterBase.m in Sources */,
 				A050D1B61CC5DD0D00628C2F /* STCaptureProcessor.m in Sources */,
 				A050D1EC1CC5DD0D00628C2F /* STOrientationItem.m in Sources */,
-				A050D2791CC5DD0D00628C2F /* STGIFCRootViewController.m in Sources */,
+				A050D2791CC5DD0D00628C2F /* STGIFFRootViewController.m in Sources */,
 				A050D25F1CC5DD0D00628C2F /* STExportView.m in Sources */,
 				A050D2431CC5DD0D00628C2F /* STExporter.m in Sources */,
 				A050D1B11CC5DD0D00628C2F /* SMKDetectionCamera+BlockDelegate.m in Sources */,
@@ -2520,10 +2520,10 @@
 				A050D1E31CC5DD0D00628C2F /* STCoreLocationWhenInUsePermission.m in Sources */,
 				A050D2691CC5DD0D00628C2F /* STProductCatalogContentView.m in Sources */,
 				A050D2211CC5DD0D00628C2F /* STFilter.m in Sources */,
-				A050D2731CC5DD0D00628C2F /* STGIFCAppSetting.m in Sources */,
+				A050D2731CC5DD0D00628C2F /* STGIFFAppSetting.m in Sources */,
 				A050D2661CC5DD0D00628C2F /* STPhotoSelector.m in Sources */,
 				A050D2491CC5DD0D00628C2F /* STExporterLine.m in Sources */,
-				A050D27D1CC5DD0D00628C2F /* UIAlertController+STGIFCApp.m in Sources */,
+				A050D27D1CC5DD0D00628C2F /* UIAlertController+STGIFFApp.m in Sources */,
 				A050D1CC1CC5DD0D00628C2F /* NSNumber+STUtil.m in Sources */,
 				A050D26F1CC5DD0D00628C2F /* STSettingScreenControllableItem.m in Sources */,
 				A050D2111CC5DD0D00628C2F /* SCGridView.m in Sources */,
@@ -2534,7 +2534,7 @@
 				A050D23E1CC5DD0D00628C2F /* STTransformEditorResult.m in Sources */,
 				A050D1FC1CC5DD0D00628C2F /* UIColor+STColorUtil.m in Sources */,
 				A050D1BF1CC5DD0D00628C2F /* CALayer+STUtil.m in Sources */,
-				A050D2721CC5DD0D00628C2F /* STGIFCApp.m in Sources */,
+				A050D2721CC5DD0D00628C2F /* STGIFFApp.m in Sources */,
 				A050D2651CC5DD0D00628C2F /* STPreviewCollector.m in Sources */,
 				A050D23A1CC5DD0D00628C2F /* STEditorCommand.m in Sources */,
 				A050D1D21CC5DD0D00628C2F /* NSSet+STUtil.m in Sources */,
@@ -2566,8 +2566,8 @@
 				4F71D7239D1845C99381273D /* RLMCapturedImage.m in Sources */,
 				4F71DE25115B0B7C8CF99091 /* STCapturedImageSet.m in Sources */,
 				4F71DE29BA37FC20C618849C /* STCapturedResource.m in Sources */,
-				4F71D82136AB38D1ADDCD716 /* STGIFCStandardColor.m in Sources */,
-				4F71D5DA6F60BFBDD1F5A619 /* STGIFCAnimatableLogoView.m in Sources */,
+				4F71D82136AB38D1ADDCD716 /* STGIFFStandardColor.m in Sources */,
+				4F71D5DA6F60BFBDD1F5A619 /* STGIFFAnimatableLogoView.m in Sources */,
 				4F71DB45A122E17B8700A1AB /* STExportSelectView.m in Sources */,
 				4F71D86B1C60E1C226D705D6 /* STCapturedImageSet+PostFocus.m in Sources */,
 				4F71DB3B234AC2A2B288B155 /* STExporter+ConfigGIF.m in Sources */,
@@ -2769,7 +2769,7 @@
 		};
 		A09EB7D71C4C987C00FB53B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D9F749B6F71B61F1A2A2FC0A /* Pods-gifc.debug.xcconfig */;
+			baseConfigurationReference = D9F749B6F71B61F1A2A2FC0A /* Pods-giff.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -2784,20 +2784,19 @@
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "gifc/giff-Prefix.pch";
+				GCC_PREFIX_HEADER = "giff/giff-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
 					"ST_IAP=1",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "$(SRCROOT)/gifc/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/giff/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${PROJECT_DIR}/elie/src/External/WeChatSDK\"",
-					"$(PROJECT_DIR)/gifc/src/External/WeChatSDK",
+					"$(PROJECT_DIR)/giff/src/External/WeChatSDK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stells.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = giff;
@@ -2808,7 +2807,7 @@
 		};
 		A09EB7D81C4C987C00FB53B7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 02B6B859343A696912154B7B /* Pods-gifc.release.xcconfig */;
+			baseConfigurationReference = 02B6B859343A696912154B7B /* Pods-giff.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -2821,20 +2820,19 @@
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "gifc/giff-Prefix.pch";
+				GCC_PREFIX_HEADER = "giff/giff-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
 					"ST_IAP=1",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "$(SRCROOT)/gifc/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/giff/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${PROJECT_DIR}/elie/src/External/WeChatSDK\"",
-					"$(PROJECT_DIR)/gifc/src/External/WeChatSDK",
+					"$(PROJECT_DIR)/giff/src/External/WeChatSDK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.stells.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = giff;

@@ -5,7 +5,7 @@ Post Adjustment Your Picture
 
 # Accounts
 ## Internal
-* scheme : gifc://
+* scheme : giff://
 
 ## www
 * http://postfoc.us
