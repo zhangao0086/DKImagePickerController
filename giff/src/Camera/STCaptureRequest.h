@@ -33,6 +33,8 @@ https://en.wikipedia.org/wiki/List_of_common_resolutions
 Size * 3/4
  */
 typedef NS_ENUM(NSInteger, CaptureOutputPixelDimension) {
+    CaptureOutputPixelDimension640 = 640,
+    CaptureOutputPixelDimension800 = 800,
     CaptureOutputPixelDimension1024 = 1024,
     CaptureOutputPixelDimension1280 = 1280,
     CaptureOutputPixelDimension1440_HDV = 1440,
@@ -71,6 +73,8 @@ typedef NS_ENUM(NSInteger, CaptureOutputPixelDimension) {
 + (instancetype)request;
 
 + (NSArray *)supportedPresets;
+
++ (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset;
 
 - (GPUImageOutput <GPUImageInput> *)createOutput;
 @end

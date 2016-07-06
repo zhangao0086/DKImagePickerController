@@ -923,11 +923,7 @@ STExportSelectView * exportSelectView;
     self.subControl.rightButton.currentMappedValue = @(mode);
     [self.subControl.rightButton dispatchSelected];
 
-    if([STGIFFApp postFocusAvailable]){
-        [[STUserActor sharedInstance] act:STUserActionManualPostFocusCapture object:nil];
-    }else{
-        [[STUserActor sharedInstance] act:STUserActionManualCapture object:nil];
-    }
+    [[STUserActor sharedInstance] act:STUserActionManualAnimatableCapture object:nil];
 }
 
 #pragma mark QuickCapture
@@ -1892,11 +1888,7 @@ static UIView *_quickCaptureButtonContainer;
 
                     [_homeCollectable retract:YES];
 
-                    if([STGIFFApp postFocusAvailable]){
-                        [[STUserActor sharedInstance] act:STUserActionManualPostFocusCapture object:nil];
-                    }else{
-                        [[STUserActor sharedInstance] act:STUserActionManualCapture object:nil];
-                    }
+                    [[STUserActor sharedInstance] act:STUserActionManualAnimatableCapture object:nil];
                 };
             }
         }];

@@ -52,4 +52,17 @@
     }
 }
 
++ (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset {
+    switch(preset){
+        case CaptureOutputSizePresetLarge:
+            return CaptureOutputPixelDimension1024;
+        case CaptureOutputSizePresetMedium:
+            return CaptureOutputPixelDimension800;
+        case CaptureOutputSizePresetSmall:
+            return CaptureOutputPixelDimension640;
+        default:
+            NSAssert(NO, @"Not supported presets at this request");
+            return [self CaptureOutputSizePresetsPixelSize:CaptureOutputSizePresetSmall];
+    }
+}
 @end

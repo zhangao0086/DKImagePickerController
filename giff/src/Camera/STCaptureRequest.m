@@ -8,7 +8,7 @@
 #import "NSObject+STUtil.h"
 #import "STFilterManager.h"
 #import "STCaptureResponse.h"
-#import "NSString+STUtil.h"
+#import "NSNumber+STUtil.h"
 
 
 @implementation STCaptureRequest
@@ -57,85 +57,26 @@
     static NSArray * _supportedPresets;
     @synchronized (self) {
         if(!_supportedPresets){
-            switch ([STApp deviceModelFamily]){
-                case STDeviceModelFamilyNotHandled:
-                    _supportedPresets = @[
-                            @(CaptureOutputSizePresetSmall),
-                            @(CaptureOutputSizePresetLarge)
-                    ];
-                    break;
-
-                case STDeviceModelFamilyIPadPro:
-                case STDeviceModelFamilyIPhone6s:
-                case STDeviceModelFamilyIPhoneSE:
-                case STDeviceModelFamilyUpComming:
-                    _supportedPresets = @[
-                            @(CaptureOutputSizePresetSmall),
-                            @(CaptureOutputSizePresetMedium),
-                            @(CaptureOutputSizePresetLarge),
-                            @(CaptureOutputSizePreset4K)
-                    ];
-                    break;
-
-                default:
-                    _supportedPresets = @[
-                            @(CaptureOutputSizePresetSmall),
-                            @(CaptureOutputSizePresetMedium),
-                            @(CaptureOutputSizePresetLarge)
-                    ];
-                    break;
-            }
+            _supportedPresets = [@(CaptureOutputSizePreset_count) st_intArray];
         }
     }
     return _supportedPresets;
 }
 
 - (CGFloat)captureOutputPixelSizeForCurrentPreset {
-    return [self.class _CaptureOutputSizePresetsPixelSize:self.captureOutputSizePreset];
+    return [self.class CaptureOutputSizePresetsPixelSize:self.captureOutputSizePreset];
 }
 
-+ (CGFloat)_CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset {
-    switch ([STApp deviceModelFamily]){
-        case STDeviceModelFamilyNotHandled:
-            switch(preset){
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension1920_HD;
-                default:
-                    return CaptureOutputPixelDimension1024;
-            }
-        case STDeviceModelFamilyIPadPro:
-        case STDeviceModelFamilyIPhone6s:
-        case STDeviceModelFamilyIPhoneSE:
-        case STDeviceModelFamilyUpComming:
-            switch(preset){
-                case CaptureOutputSizePreset4K:
-                    return STElieCameraCurrentImageMaxSidePixelSize_FullDimension;
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension3072_3K;
-                case CaptureOutputSizePresetMedium:
-                    return CaptureOutputPixelDimension2048_2K;
-                default:
-                    return STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen;
-            }
-        case STDeviceModelFamilyIPhone6:
-        case STDeviceModelFamilyCurrentIPad:
-            switch(preset){
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension3072_3K;
-                case CaptureOutputSizePresetMedium:
-                    return CaptureOutputPixelDimension1920_HD;
-                default:
-                    return CaptureOutputPixelDimension1280;
-            }
++ (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset {
+    switch(preset){
+        case CaptureOutputSizePreset4K:
+            return STElieCameraCurrentImageMaxSidePixelSize_FullDimension;
+        case CaptureOutputSizePresetLarge:
+            return CaptureOutputPixelDimension3072_3K;
+        case CaptureOutputSizePresetMedium:
+            return CaptureOutputPixelDimension2048_2K;
         default:
-            switch(preset){
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension2480;
-                case CaptureOutputSizePresetMedium:
-                    return CaptureOutputPixelDimension1920_HD;
-                default:
-                    return CaptureOutputPixelDimension1280;
-            }
+            return STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen;
     }
 }
 

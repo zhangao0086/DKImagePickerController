@@ -36,6 +36,89 @@
     return [[self.focusPointsOfInterestSet st_objectOrNilAtIndex:self.indexOfFocusPointsOfInterestSet] CGPointValue];
 }
 
+#pragma mark Capture Output Presets
++ (NSArray *)supportedPresets{
+    static NSArray * _supportedPresets;
+    @synchronized (self) {
+        if(!_supportedPresets){
+            switch ([STApp deviceModelFamily]){
+                case STDeviceModelFamilyNotHandled:
+                    _supportedPresets = @[
+                            @(CaptureOutputSizePresetSmall),
+                            @(CaptureOutputSizePresetLarge)
+                    ];
+                    break;
+
+                case STDeviceModelFamilyIPadPro:
+                case STDeviceModelFamilyIPhone6s:
+                case STDeviceModelFamilyIPhoneSE:
+                case STDeviceModelFamilyUpComming:
+                    _supportedPresets = @[
+                            @(CaptureOutputSizePresetSmall),
+                            @(CaptureOutputSizePresetMedium),
+                            @(CaptureOutputSizePresetLarge),
+                            @(CaptureOutputSizePreset4K)
+                    ];
+                    break;
+
+                default:
+                    _supportedPresets = @[
+                            @(CaptureOutputSizePresetSmall),
+                            @(CaptureOutputSizePresetMedium),
+                            @(CaptureOutputSizePresetLarge)
+                    ];
+                    break;
+            }
+        }
+    }
+    return _supportedPresets;
+}
+
++ (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset {
+    switch ([STApp deviceModelFamily]){
+        case STDeviceModelFamilyNotHandled:
+            switch(preset){
+                case CaptureOutputSizePresetLarge:
+                    return CaptureOutputPixelDimension1920_HD;
+                default:
+                    return CaptureOutputPixelDimension1024;
+            }
+        case STDeviceModelFamilyIPadPro:
+        case STDeviceModelFamilyIPhone6s:
+        case STDeviceModelFamilyIPhoneSE:
+        case STDeviceModelFamilyUpComming:
+            switch(preset){
+                case CaptureOutputSizePreset4K:
+                    return STElieCameraCurrentImageMaxSidePixelSize_FullDimension;
+                case CaptureOutputSizePresetLarge:
+                    return CaptureOutputPixelDimension3072_3K;
+                case CaptureOutputSizePresetMedium:
+                    return CaptureOutputPixelDimension2048_2K;
+                default:
+                    return STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen;
+            }
+        case STDeviceModelFamilyIPhone6:
+        case STDeviceModelFamilyCurrentIPad:
+            switch(preset){
+                case CaptureOutputSizePresetLarge:
+                    return CaptureOutputPixelDimension3072_3K;
+                case CaptureOutputSizePresetMedium:
+                    return CaptureOutputPixelDimension1920_HD;
+                default:
+                    return CaptureOutputPixelDimension1280;
+            }
+        default:
+            switch(preset){
+                case CaptureOutputSizePresetLarge:
+                    return CaptureOutputPixelDimension2480;
+                case CaptureOutputSizePresetMedium:
+                    return CaptureOutputPixelDimension1920_HD;
+                default:
+                    return CaptureOutputPixelDimension1280;
+            }
+    }
+}
+
 #pragma mark Definition Of Restrict CaptureOutputSizePreset
 + (CaptureOutputSizePreset)restrictCaptureOutputSizePresetByPostFocusMode:(STPostFocusMode)mode targetPreset:(CaptureOutputSizePreset)preset circulate:(BOOL)circulate {
     NSArray * const supportedPresets = [self supportedPresets];

@@ -897,9 +897,23 @@ static ALAssetsLibrary * assetLibrary;
     if(!request){
         request = [STAnimatableCaptureRequest requestWithNeedsFilterItem:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem];
     }
+
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+
+#if DEBUG
+    NSDate * startDate = [NSDate date];
+#endif
+//    STUserActionManualAnimatableCapture
     request.origin = STPhotoItemOriginAnimatable;
+    request.captureOutputSizePreset = CaptureOutputSizePresetSmall;
+    request.autoReverseFrames = YES;
+    request.needsLoadAnimatableImagesToMemory = YES;
     request.responseHandler = ^(STCaptureResponse *result) {
         [[NSNotificationCenter defaultCenter] st_postNotificationName:STNotificationManualCaptureFinished];
+#if DEBUG
+        NSLog(@"TIME : %.20fs", [[NSDate date] timeIntervalSinceDate:startDate]);
+#endif
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 
         if(result){
             STGIFFAppSetting.get.afterManualCaptureAction = STAfterManualCaptureActionEnterAnimatableReview;
@@ -932,8 +946,6 @@ static ALAssetsLibrary * assetLibrary;
         }
 
     };
-    request.autoReverseFrames = YES;
-
     [[STElieCamera sharedInstance] captureAnimatable:request];
 }
 
