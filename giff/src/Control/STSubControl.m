@@ -444,26 +444,13 @@
          * right
          */
         if([STPhotoSelector sharedInstance].previewTargetPhotoItem.sourceForCapturedImageSet){
-            static NSTimer * TimerForGIFPlayer;
-            static void(^BlockToResetGIFPlay)(void) = ^{
-                [STPhotoSelector sharedInstance].previewView.visibleControl = YES;
-                [TimerForGIFPlayer invalidate];
-                TimerForGIFPlayer = nil;
-            };
-
-            __block CGFloat progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue;
-            __block CGFloat progressPostFocusSliderValueDirection = 1;
-            TimerForGIFPlayer = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
-                progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
-                if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
-                    progressPostFocusSliderValueDirection *= -1;
-                }
-            } repeats:YES];
-
             //stop if change main mode
             [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:@"STSubControl_[STMainControl sharedInstance].mode" changed:^(id value, id _weakSelf) {
-                BlockToResetGIFPlay();
+                [[STPhotoSelector sharedInstance].previewView stopLoopingSliderValue];
             }];
+
+            //start loop
+            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
 
             [_right setButtons:@[[R ico_animatable]] colors:nil style:defaultStyle];
             _right.toggleEnabled = YES;
@@ -505,16 +492,7 @@
                                 [selectedView dispatchToggled];
                             }];
 
-                            [STPhotoSelector sharedInstance].previewView.visibleControl = NO;
-
-                            __block CGFloat progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue;
-                            __block CGFloat progressPostFocusSliderValueDirection = 1;
-                            TimerForGIFPlayer = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
-                                progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
-                                if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
-                                    progressPostFocusSliderValueDirection *= -1;
-                                }
-                            } repeats:YES];
+                            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
 
                             [[STElieStatusBar sharedInstance] success];
                         }else{
@@ -530,8 +508,7 @@
                 }else{
                     [_right expand];
 
-                    BlockToResetGIFPlay();
-
+                    [[STPhotoSelector sharedInstance].previewView stopLoopingSliderValue];
                 }
             }];
 

@@ -37,5 +37,9 @@ typedef NS_ENUM(NSInteger, STViewFinderType) {
 
 - (void)setPostFocusSliderValueWithAnimation:(CGFloat)postFocusSliderValue;
 
+- (void)startLoopingSliderValue:(BOOL)reverse;
+
+- (void)stopLoopingSliderValue;
+
 - (void)resetExposure;
 @end

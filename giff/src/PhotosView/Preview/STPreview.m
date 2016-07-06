@@ -421,6 +421,38 @@ NSString * const TimerIdForEditControls = @"finished_post_focusing";
 
 }
 
+#pragma mark Slider Value
+- (void)setPostFocusSliderValueWithAnimation:(CGFloat)postFocusSliderValue {
+    _postFocusSliderValue = postFocusSliderValue;
+    [self.postFocusSlider setProgress:_postFocusSliderValue animated:YES];
+}
+
+- (void)setPostFocusSliderPointingValue:(CGFloat)postFocusSliderPointingValue {
+    _postFocusSliderPointingValue = postFocusSliderPointingValue;
+    self.postFocusSlider.progressOfPointer = _postFocusSliderPointingValue;
+}
+
+
+static NSTimer * TimerForLoopingSliderValue;
+- (void)startLoopingSliderValue:(BOOL)reverse {
+    [STPhotoSelector sharedInstance].previewView.visibleControl = NO;
+
+    __block CGFloat progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue;
+    __block CGFloat progressPostFocusSliderValueDirection = 1;
+    TimerForLoopingSliderValue = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
+        progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
+        if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
+            progressPostFocusSliderValueDirection *= -1;
+        }
+    } repeats:YES];
+}
+
+- (void)stopLoopingSliderValue {
+    [STPhotoSelector sharedInstance].previewView.visibleControl = YES;
+    [TimerForLoopingSliderValue invalidate];
+    TimerForLoopingSliderValue = nil;
+}
+
 #pragma mark PostFocus - LensPosition
 - (void)setPostFocusSliderValue:(CGFloat)postFocusSliderValue {
     if(_postFocusSliderValue==postFocusSliderValue){
@@ -432,16 +464,6 @@ NSString * const TimerIdForEditControls = @"finished_post_focusing";
     [self didChangeValueForKey:@keypath(self.postFocusSliderValue)];
 
     [self.postFocusSlider setProgress:_postFocusSliderValue animated:NO];
-}
-
-- (void)setPostFocusSliderValueWithAnimation:(CGFloat)postFocusSliderValue {
-    _postFocusSliderValue = postFocusSliderValue;
-    [self.postFocusSlider setProgress:_postFocusSliderValue animated:YES];
-}
-
-- (void)setPostFocusSliderPointingValue:(CGFloat)postFocusSliderPointingValue {
-    _postFocusSliderPointingValue = postFocusSliderPointingValue;
-    self.postFocusSlider.progressOfPointer = _postFocusSliderPointingValue;
 }
 
 - (void)_setPostFocusSliding:(BOOL)sliding{
@@ -546,40 +568,9 @@ NSString * const TimerIdForEditControls = @"finished_post_focusing";
              * STCapturedImageSetTypeAnimatable
              */
         else if(STCapturedImageSetTypeAnimatable==currentPhotoItem.sourceForCapturedImageSet.type){
-            self.postFocusSliderView.visible = YES;
-
-            //visible focus pointer view
-            switch ([currentPhotoItem.sourceForCapturedImageSet postFocusMode]){
-                case STPostFocusMode5Points:
-                case STPostFocusModeVertical3Points:
-                    self.focusPointerView.visible = YES;
-                    break;
-                default:
-                    self.focusPointerView.visible = NO;
-                    break;
-            }
-
-            if(self.focusPointerView.visible){
-                CGPoint initialFocusPoint = [[currentPhotoItem.sourceForCapturedImageSet.focusPointsOfInterestSet st_objectOrNilAtIndex:currentPhotoItem.sourceForCapturedImageSet.indexOfFocusPointsOfInterestSet] CGPointValue];
-                self.focusPointerCenter = CGPointMake(self.width*initialFocusPoint.x, self.height*initialFocusPoint.y);
-            }
-
-            //visible vertical focus pointer
-            switch ([currentPhotoItem.sourceForCapturedImageSet postFocusMode]){
-                case STPostFocusModeVertical3Points:{
-                    self.verticalFocusPointerView.visible = YES;
-                    NSValue * focusedPointValue = [currentPhotoItem.sourceForCapturedImageSet.focusPointsOfInterestSet st_objectOrNilAtIndex:currentPhotoItem.sourceForCapturedImageSet.indexOfFocusPointsOfInterestSet];
-                    if(focusedPointValue){
-                        self.verticalFocusPointerView.y = self.height*[focusedPointValue CGPointValue].y;
-                    }else{
-                        [self.verticalFocusPointerView centerToParentVertical];
-                    }
-                }
-                    break;
-                default:
-                    self.verticalFocusPointerView.visible = NO;
-                    break;
-            }
+            self.postFocusSliderView.visible = NO;
+            self.focusPointerView.visible = NO;
+            self.verticalFocusPointerView.visible = NO;
 
             //visible iconview
             if(currentPhotoItem.origin != STPhotoItemOriginUndefined){
