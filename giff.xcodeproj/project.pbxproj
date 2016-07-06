@@ -461,9 +461,6 @@
 		4F71DFC051942C2D1F506D81 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		4F71DFE02EEC9A7E4BD483EE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		523D14932897B1BC9F51F359 /* libPods-giff.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-giff.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5908079B6785553724EB2D21 /* Pods-elie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-elie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-elie/Pods-elie.debug.xcconfig"; sourceTree = "<group>"; };
-		8D9C205E897D0027705CD7BC /* Pods-elie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-elie.release.xcconfig"; path = "Pods/Target Support Files/Pods-elie/Pods-elie.release.xcconfig"; sourceTree = "<group>"; };
-		9DB5E13500F79AF2CB3F4426 /* Pods-eliew.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eliew.release.xcconfig"; path = "Pods/Target Support Files/Pods-eliew/Pods-eliew.release.xcconfig"; sourceTree = "<group>"; };
 		A050CDE81CC5DD0C00628C2F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A050CDE91CC5DD0C00628C2F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A050CDEA1CC5DD0C00628C2F /* giff-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "giff-Prefix.pch"; sourceTree = "<group>"; };
@@ -1053,7 +1050,6 @@
 		A0FA45DD1A45C0F4008AE63A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		A0FA45DF1A45C0FB008AE63A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		A0FA45E11A45C104008AE63A /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
-		C136154840460CAA8B08B2E5 /* Pods-eliew.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eliew.debug.xcconfig"; path = "Pods/Target Support Files/Pods-eliew/Pods-eliew.debug.xcconfig"; sourceTree = "<group>"; };
 		D9F749B6F71B61F1A2A2FC0A /* Pods-giff.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-giff.debug.xcconfig"; path = "Pods/Target Support Files/Pods-giff/Pods-giff.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1091,10 +1087,6 @@
 		0256CB554B7DE438E703CF16 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5908079B6785553724EB2D21 /* Pods-elie.debug.xcconfig */,
-				8D9C205E897D0027705CD7BC /* Pods-elie.release.xcconfig */,
-				C136154840460CAA8B08B2E5 /* Pods-eliew.debug.xcconfig */,
-				9DB5E13500F79AF2CB3F4426 /* Pods-eliew.release.xcconfig */,
 				D9F749B6F71B61F1A2A2FC0A /* Pods-giff.debug.xcconfig */,
 				02B6B859343A696912154B7B /* Pods-giff.release.xcconfig */,
 			);
@@ -2811,8 +2803,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COMPRESS_PNG_FILES = NO;
 				DEFINES_MODULE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
