@@ -490,6 +490,9 @@ NSString * const TimerIdForEditControls = @"finished_post_focusing";
 
     }else{
         STPhotoItem * currentPhotoItem = [STPhotoSelector sharedInstance].previewTargetPhotoItem;
+        /*
+         * STCapturedImageSetTypePostFocus
+         */
         if(STCapturedImageSetTypePostFocus==currentPhotoItem.sourceForCapturedImageSet.type){
             self.postFocusSliderView.visible = YES;
 
@@ -529,6 +532,56 @@ NSString * const TimerIdForEditControls = @"finished_post_focusing";
             /*
              * visible iconview
              */
+            if(currentPhotoItem.origin != STPhotoItemOriginUndefined){
+                if([STApp screenFamily] > STScreenFamily35){
+                    [currentPhotoItem presentIcon:_previewControlView];
+                }
+            }else{
+                [currentPhotoItem unpresentIcon:_previewControlView];
+            }
+
+        }
+
+            /*
+             * STCapturedImageSetTypeAnimatable
+             */
+        else if(STCapturedImageSetTypeAnimatable==currentPhotoItem.sourceForCapturedImageSet.type){
+            self.postFocusSliderView.visible = YES;
+
+            //visible focus pointer view
+            switch ([currentPhotoItem.sourceForCapturedImageSet postFocusMode]){
+                case STPostFocusMode5Points:
+                case STPostFocusModeVertical3Points:
+                    self.focusPointerView.visible = YES;
+                    break;
+                default:
+                    self.focusPointerView.visible = NO;
+                    break;
+            }
+
+            if(self.focusPointerView.visible){
+                CGPoint initialFocusPoint = [[currentPhotoItem.sourceForCapturedImageSet.focusPointsOfInterestSet st_objectOrNilAtIndex:currentPhotoItem.sourceForCapturedImageSet.indexOfFocusPointsOfInterestSet] CGPointValue];
+                self.focusPointerCenter = CGPointMake(self.width*initialFocusPoint.x, self.height*initialFocusPoint.y);
+            }
+
+            //visible vertical focus pointer
+            switch ([currentPhotoItem.sourceForCapturedImageSet postFocusMode]){
+                case STPostFocusModeVertical3Points:{
+                    self.verticalFocusPointerView.visible = YES;
+                    NSValue * focusedPointValue = [currentPhotoItem.sourceForCapturedImageSet.focusPointsOfInterestSet st_objectOrNilAtIndex:currentPhotoItem.sourceForCapturedImageSet.indexOfFocusPointsOfInterestSet];
+                    if(focusedPointValue){
+                        self.verticalFocusPointerView.y = self.height*[focusedPointValue CGPointValue].y;
+                    }else{
+                        [self.verticalFocusPointerView centerToParentVertical];
+                    }
+                }
+                    break;
+                default:
+                    self.verticalFocusPointerView.visible = NO;
+                    break;
+            }
+
+            //visible iconview
             if(currentPhotoItem.origin != STPhotoItemOriginUndefined){
                 if([STApp screenFamily] > STScreenFamily35){
                     [currentPhotoItem presentIcon:_previewControlView];

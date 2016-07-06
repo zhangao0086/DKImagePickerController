@@ -175,7 +175,8 @@ static STPhotoSelector *_instance = nil;
 
         }else if(action == STAfterManualCaptureActionEnterAnimatableReview){
 
-            [self doEnterAnimatableReviewAfterCapture:photoItemSource transition:STPreviewCollectorEnterTransitionContextDefault];
+            [self doEnterEditAfterCapture:photoItemSource transition:STPreviewCollectorEnterTransitionContextDefault];
+//            [self doEnterAnimatableReviewAfterCapture:photoItemSource transition:STPreviewCollectorEnterTransitionContextDefault];
         }
     }
     else if(STElieCamera.mode == STCameraModeElie){
@@ -1877,8 +1878,8 @@ static SVGKFastImageView *_nophotoView;
     STPhotoItem *item = [STPhotoItem itemWithIndex:self.gridView.items.count];
     item.orientationOriginated = photoSource.orientation;
 
-    //TODO: 현재는 PostFocus전용이지만 추후 전체를 통합
-    if(photoSource.imageSet.defaultImage.imageUrl){
+    //TODO: 현재는 imageSet전용이지만 추후 전체를 통합
+    if(photoSource.imageSet.defaultImage){
         item.sourceForCapturedImageSet = photoSource.imageSet;
         item.metadataFromCamera = photoSource.metaData;
 

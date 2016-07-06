@@ -339,7 +339,6 @@ static STCameraMode _mode = STCameraModeNotInitialized;
 #pragma mark Capture Animatable
 - (void)captureAnimatable:(STAnimatableCaptureRequest *)request;{
     NSParameterAssert(request.responseHandler);
-    NSParameterAssert(request.needsLoadAnimatableImagesToMemory);
 
     NSTimeInterval totalDuration = request.maxDuration;
     NSTimeInterval frameCount = request.frameCount;
@@ -351,42 +350,56 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     GPUImageOutput <GPUImageInput> * targetOutput = request.createOutput;
 
     captureDelayTimer = [NSTimer bk_scheduledTimerWithTimeInterval:request.frameCaptureInterval block:^(NSTimer *timer) {
-        //get image
-        UIImage * capturedImage = [self currentImage:targetOutput maxSidePixelSizeOfOutput:request.captureOutputPixelSizeForCurrentPreset];
-        [images addObject:[STCapturedImage imageWithImage:capturedImage]];
-        ++count;
+        @autoreleasepool {
+            //get image
+            UIImage * capturedImage = [self currentImage:targetOutput maxSidePixelSizeOfOutput:request.captureOutputPixelSizeForCurrentPreset];
+            STCapturedImage * responseImage = [STCapturedImage new];
 
-        //progress
-        BOOL stop = NO;
-        !request.progressHandler?:request.progressHandler(count/frameCount, count, (NSUInteger) frameCount, &stop);
+            if(request.needsLoadAnimatableImagesToMemory){
+                responseImage.image = capturedImage;
+                [images addObject:responseImage];
 
-        //finalize
-        if(count==frameCount || stop){
-            [captureDelayTimer invalidate];
-            captureDelayTimer = nil;
-
-            NSAssert(stop || images.count==frameCount, @"images.count is not matched with frameCount");
-
-            NSMutableArray * reverseArray = [NSMutableArray arrayWithArray:[images copy]];
-
-            //autoReverseFrames
-            if(request.autoReverseFrames){
-                [images removeLastObject];
-                [images removeObject:[images firstObject]];
-                while(images.count){
-                    [reverseArray addObject:[images pop]];
+            }else{
+                NSURL * fileURL = [[[@(count) stringValue] st_add:@"_animatable_captured"] URLForTemp:@"jpg"];
+                if([responseImage save:capturedImage to:fileURL]){
+                    responseImage.imageUrl = fileURL;
+                    [images addObject:responseImage];
                 }
             }
 
-//            UIImage * resultImage = [UIImage animatedImageWithImages:reverseArray duration:totalDuration * (images.count/frameCount)];
-            images = nil;
-            count = 0;
+            ++count;
 
-            [self st_runAsMainQueueAsyncWithoutDeadlocking:^{
-                STCaptureResponse * response = [STCaptureResponse responseWithRequest:request];
-                response.imageSet = [STCapturedImageSet setWithImages:reverseArray];
-                [response response];
-            }];
+            //progress
+            BOOL stop = NO;
+            !request.progressHandler?:request.progressHandler(count/frameCount, count, (NSUInteger) frameCount, &stop);
+
+            //finalize
+            if(count==frameCount || stop){
+                [captureDelayTimer invalidate];
+                captureDelayTimer = nil;
+
+                NSAssert(stop || images.count==frameCount, @"images.count is not matched with frameCount");
+
+                NSMutableArray * reverseArray = [NSMutableArray arrayWithArray:[images copy]];
+
+                //autoReverseFrames
+//            if(request.autoReverseFrames){
+//                [images removeLastObject];
+//                [images removeObject:[images firstObject]];
+//                while(images.count){
+//                    [reverseArray addObject:[images pop]];
+//                }
+//            }
+
+                images = nil;
+                count = 0;
+
+                [self st_runAsMainQueueAsyncWithoutDeadlocking:^{
+                    STCaptureResponse * response = [STCaptureResponse responseWithRequest:request];
+                    response.imageSet = [STCapturedImageSet setWithImages:reverseArray];
+                    [response response];
+                }];
+            }
         }
     } repeats:YES];
 }

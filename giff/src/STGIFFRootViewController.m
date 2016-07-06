@@ -907,7 +907,7 @@ static ALAssetsLibrary * assetLibrary;
     request.origin = STPhotoItemOriginAnimatable;
     request.captureOutputSizePreset = CaptureOutputSizePresetSmall;
     request.autoReverseFrames = YES;
-    request.needsLoadAnimatableImagesToMemory = YES;
+//    request.needsLoadAnimatableImagesToMemory = YES;
     request.responseHandler = ^(STCaptureResponse *result) {
         [[NSNotificationCenter defaultCenter] st_postNotificationName:STNotificationManualCaptureFinished];
 #if DEBUG

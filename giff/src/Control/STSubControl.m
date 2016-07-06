@@ -450,6 +450,16 @@
                 [TimerForGIFPlayer invalidate];
                 TimerForGIFPlayer = nil;
             };
+
+            __block CGFloat progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue;
+            __block CGFloat progressPostFocusSliderValueDirection = 1;
+            TimerForGIFPlayer = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
+                progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
+                if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
+                    progressPostFocusSliderValueDirection *= -1;
+                }
+            } repeats:YES];
+
             //stop if change main mode
             [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:@"STSubControl_[STMainControl sharedInstance].mode" changed:^(id value, id _weakSelf) {
                 BlockToResetGIFPlay();
@@ -458,6 +468,7 @@
             [_right setButtons:@[[R ico_animatable]] colors:nil style:defaultStyle];
             _right.toggleEnabled = YES;
             _right.selectedState = NO;
+
             [_right whenToggled:^(STStandardButton *selectedView, BOOL selected) {
 
                 if(selected){
