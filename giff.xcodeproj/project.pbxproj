@@ -1093,6 +1093,13 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		4F71D39511EF255884307854 /* CameraAfterImage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CameraAfterImage;
+			sourceTree = "<group>";
+		};
 		4F71D9AD9769E25020914586 /* Save */ = {
 			isa = PBXGroup;
 			children = (
@@ -1349,6 +1356,7 @@
 				4F71D703126510249FD53F07 /* STGIFFStandardColor.h */,
 				4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */,
 				4F71D5DB487DA3FA6434CB72 /* STGIFFAnimatableLogoView.h */,
+				4F71D39511EF255884307854 /* CameraAfterImage */,
 			);
 			path = src;
 			sourceTree = "<group>";

@@ -403,7 +403,7 @@ NSString * const TimerIdForEditControls = @"finished_post_focusing";
 //            progress = .5;
 //        }
 
-        self.postFocusSliderValue = progress;
+        self.masterPositionSliderValue = progress;
 
     } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
         [self st_performOnceAfterDelay:TimerIdForEditControls interval:.4 block:^{
@@ -423,13 +423,13 @@ NSString * const TimerIdForEditControls = @"finished_post_focusing";
 
 #pragma mark Slider Value
 - (void)setPostFocusSliderValueWithAnimation:(CGFloat)postFocusSliderValue {
-    _postFocusSliderValue = postFocusSliderValue;
-    [self.postFocusSlider setProgress:_postFocusSliderValue animated:YES];
+    _masterPositionSliderValue = postFocusSliderValue;
+    [self.postFocusSlider setProgress:_masterPositionSliderValue animated:YES];
 }
 
-- (void)setPostFocusSliderPointingValue:(CGFloat)postFocusSliderPointingValue {
-    _postFocusSliderPointingValue = postFocusSliderPointingValue;
-    self.postFocusSlider.progressOfPointer = _postFocusSliderPointingValue;
+- (void)setMasterPositionSlidingValue:(CGFloat)masterPositionSlidingValue {
+    _masterPositionSlidingValue = masterPositionSlidingValue;
+    self.postFocusSlider.progressOfPointer = _masterPositionSlidingValue;
 }
 
 
@@ -437,10 +437,10 @@ static NSTimer * TimerForLoopingSliderValue;
 - (void)startLoopingSliderValue:(BOOL)reverse {
     [STPhotoSelector sharedInstance].previewView.visibleControl = NO;
 
-    __block CGFloat progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue;
+    __block CGFloat progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.masterPositionSliderValue;
     __block CGFloat progressPostFocusSliderValueDirection = 1;
     TimerForLoopingSliderValue = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
-        progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.postFocusSliderValue = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
+        progressPostFocusSliderValue = [STPhotoSelector sharedInstance].previewView.masterPositionSliderValue = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
         if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
             progressPostFocusSliderValueDirection *= -1;
         }
@@ -454,39 +454,28 @@ static NSTimer * TimerForLoopingSliderValue;
 }
 
 #pragma mark PostFocus - LensPosition
-- (void)setPostFocusSliderValue:(CGFloat)postFocusSliderValue {
-    if(_postFocusSliderValue==postFocusSliderValue){
+- (void)setMasterPositionSliderValue:(CGFloat)masterPositionSliderValue {
+    if(_masterPositionSliderValue==masterPositionSliderValue){
         return;
     }
 
-    [self willChangeValueForKey:@keypath(self.postFocusSliderValue)];
-    _postFocusSliderValue = postFocusSliderValue;
-    [self didChangeValueForKey:@keypath(self.postFocusSliderValue)];
+    [self willChangeValueForKey:@keypath(self.masterPositionSliderValue)];
+    _masterPositionSliderValue = masterPositionSliderValue;
+    [self didChangeValueForKey:@keypath(self.masterPositionSliderValue)];
 
-    [self.postFocusSlider setProgress:_postFocusSliderValue animated:NO];
+    [self.postFocusSlider setProgress:_masterPositionSliderValue animated:NO];
 }
 
 - (void)_setPostFocusSliding:(BOOL)sliding{
-    if(_postFocusSliding==sliding){
+    if(_masterPositionSliderSliding==sliding){
         return;
     }
-    [self willChangeValueForKey:@keypath(self.postFocusSliding)];
-    _postFocusSliding = sliding;
-    [self didChangeValueForKey:@keypath(self.postFocusSliding)];
+    [self willChangeValueForKey:@keypath(self.masterPositionSliderSliding)];
+    _masterPositionSliderSliding = sliding;
+    [self didChangeValueForKey:@keypath(self.masterPositionSliderSliding)];
 }
 
 #pragma mark PostFocus - FocusPoints
-
-- (void)setPostFocusPointOfInterestValue:(CGPoint)postFocusPointOfInterestValue {
-    if(CGPointEqualToPoint(_postFocusPointOfInterestValue,postFocusPointOfInterestValue)){
-       return;
-    }
-    self.focusPointerCenter = CGPointMake(self.width*postFocusPointOfInterestValue.x, self.height*postFocusPointOfInterestValue.y);
-
-    [self willChangeValueForKey:@keypath(self.postFocusPointOfInterestValue)];
-    _postFocusPointOfInterestValue = postFocusPointOfInterestValue;
-    [self didChangeValueForKey:@keypath(self.postFocusPointOfInterestValue)];
-}
 
 - (void)removePreviewControlsView{
     [self st_clearPerformOnceAfterDelay:TimerIdForEditControls];
@@ -568,7 +557,7 @@ static NSTimer * TimerForLoopingSliderValue;
              * STCapturedImageSetTypeAnimatable
              */
         else if(STCapturedImageSetTypeAnimatable==currentPhotoItem.sourceForCapturedImageSet.type){
-            self.postFocusSliderView.visible = NO;
+            self.postFocusSliderView.visible = YES;
             self.focusPointerView.visible = NO;
             self.verticalFocusPointerView.visible = NO;
 
@@ -1224,15 +1213,7 @@ static NSTimer * TimerForLoopingSliderValue;
 
         [self beginFocusPoint:location];
         
-        switch([self currentFocusMode]){
-            case STPostFocusModeVertical3Points:
-                [self setPostFocusPointOfInterestValue:CGPointMake(.5f,location.y/self.height)];
-                break;
-            default:
-                [self setPostFocusPointOfInterestValue:CGPointMake(location.x/self.width,location.y/self.height)];
-                break;
-        }
-        
+
         [self st_performOnceAfterDelay:.5 block:^{
             [self endFocusPoint];
         }];

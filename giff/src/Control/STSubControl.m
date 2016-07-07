@@ -450,7 +450,7 @@
             }];
 
             //start loop
-            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
+//            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
 
             [_right setButtons:@[[R ico_animatable]] colors:nil style:defaultStyle];
             _right.toggleEnabled = YES;

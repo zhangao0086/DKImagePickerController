@@ -24,12 +24,9 @@ typedef NS_ENUM(NSInteger, STViewFinderType) {
 @property (nonatomic, assign) BOOL visibleControl;
 
 //post focus - lens position
-@property (nonatomic, assign) CGFloat postFocusSliderValue;
-@property (nonatomic, assign) BOOL postFocusSliding;
-@property (nonatomic, assign) CGFloat postFocusSliderPointingValue;
-//post focus - focus points
-@property (nonatomic, assign) CGPoint postFocusPointOfInterestValue;
-@property (nonatomic, assign) BOOL postFocusPointing;
+@property (nonatomic, assign) CGFloat masterPositionSliderValue;
+@property (nonatomic, assign) BOOL masterPositionSliderSliding;
+@property (nonatomic, assign) CGFloat masterPositionSlidingValue;
 
 - (void)reset:(BOOL)animation;
 
