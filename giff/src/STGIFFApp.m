@@ -194,7 +194,7 @@
 }
 
 + (NSString *)marketingSubTitle{
-    return [[[self marketingTitle] split:@"Live Focus - "] lastObject];
+    return [[[self marketingTitle] split:@"GGIIFF - "] lastObject];
 }
 
 #pragma mark UserInfo

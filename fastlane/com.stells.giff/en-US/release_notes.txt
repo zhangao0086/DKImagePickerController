@@ -13,7 +13,7 @@ Highlights of the previous update :
     • Full Range - About 42% faster than previous speed.
     • 5 Focal Points - About 11% faster than previous speed.
     • Vertical Focal Points - About 1.8x faster than "5 Focal Points" mode.
-+ Since the version 1.1.1, You can export all of live-focused photos to camera roll from the album of Live Focus! : Click the iOS Photos icon in sharing view.
++ Since the version 1.1.1, You can export all of live-focused photos to camera roll from the album of GGIIFF! : Click the iOS Photos icon in sharing view.
 + Added the ability to do save immediately the Live-Focused photo after shooting: Click the small button at the right side of capture button.
 • Since the version 1.1, exposure will be locked while shooting.
 • GIF exporting feature has been improved and added the reversed animation.

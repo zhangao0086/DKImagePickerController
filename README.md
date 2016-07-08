@@ -1,4 +1,4 @@
-Live Focus - Shoot First, Focus Later.
+GGIIFF - GIFs Like After-Image.
 
 Post-Capture Focus
 Post Adjustment Your Picture

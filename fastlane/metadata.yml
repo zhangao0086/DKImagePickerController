@@ -20,7 +20,7 @@ com.stells.giff:
         # notices: Dear my Elie's owners, We've found a crash that happens intermittently when first installed user selects a purchasing target filter at version 1.1. Already we've fixed it, and waiting for review from apple team. When it happens to you, please just restart an app. If you do, you will be able to purchase normally. New version 1.1.1(hotfix) will release within few days!
     #        support_url: http://elie.camera/vimeo
     en-US:
-        name: Live Focus - Shoot First, Focus Later
+        name: GGIIFF - GIFs Like After-Image
         release_notes: |
             + Here is amazing new feature you've been waiting for: High resolution output support up to 4K.
                 • 4K: iPhone 6s/6s Plus/SE, iPad Pro or newer.
@@ -37,7 +37,7 @@ com.stells.giff:
                 • Full Range - About 42% faster than previous speed.
                 • 5 Focal Points - About 11% faster than previous speed.
                 • Vertical Focal Points - About 1.8x faster than "5 Focal Points" mode.
-            + Since the version 1.1.1, You can export all of live-focused photos to camera roll from the album of Live Focus! : Click the iOS Photos icon in sharing view.
+            + Since the version 1.1.1, You can export all of live-focused photos to camera roll from the album of GGIIFF! : Click the iOS Photos icon in sharing view.
             + Added the ability to do save immediately the Live-Focused photo after shooting: Click the small button at the right side of capture button.
             • Since the version 1.1, exposure will be locked while shooting.
             • GIF exporting feature has been improved and added the reversed animation.
