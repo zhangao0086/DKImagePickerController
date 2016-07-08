@@ -294,6 +294,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             }
         }];
 
+        [self updateNeedsAfterImageSetWithFrameAt:selectedIndex imageSet:targetImageSet];
     }
 }
 
@@ -301,32 +302,50 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     STCapturedImage * selectedImage_base = imageSet.images[index];
     NSURL * selectedImageUrl_base = selectedImage_base.fullScreenUrl ?: selectedImage_base.imageUrl;
 
-
     //set image to base image
-    ((UIImageView *)self.carousel.currentItemView).image = [UIImage imageWithContentsOfFile:selectedImageUrl_base.path];
+    UIImage * selectedImage = ((UIImageView *)self.carousel.currentItemView).image = [UIImage imageWithContentsOfFile:selectedImageUrl_base.path];
 
     //layer0
     UIImageView * imageView_layer0 = (UIImageView *)[self.carousel.currentItemView viewWithTagName:@"proto_view"];
-    UIImage * image_layer0;
     NSInteger frameOffset_layer0 = -2;
     NSUInteger currentFrame_layer0 = index+frameOffset_layer0;
-
-    if([imageSet.images st_objectOrNilAtIndex:currentFrame_layer0]){
-        STCapturedImage * selectedImage_layer0 = imageSet.images[currentFrame_layer0];
-        NSURL * selectedImageUrl_layer0 = selectedImage_layer0.fullScreenUrl ?: selectedImage_layer0.imageUrl;
-        image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_layer0 path]];
-    }else{
-        image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_base path]];
-    }
     if(!imageView_layer0){
-        imageView_layer0 = [[UIImageView alloc] initWithImage:image_layer0];
+        imageView_layer0 = [[UIImageView alloc] initWithSize:((UIImageView *)self.carousel.currentItemView).size];
         imageView_layer0.size = ((UIImageView *)self.carousel.currentItemView).size;
         imageView_layer0.tagName = @"proto_view";
         imageView_layer0.alpha = .4;
         [self.carousel.currentItemView addSubview:imageView_layer0];
-    }else{
-        imageView_layer0.image = image_layer0;
     }
+
+    dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+        UIImage * image_layer0;
+        if([imageSet.images st_objectOrNilAtIndex:currentFrame_layer0]){
+            STCapturedImage * selectedImage_layer0 = imageSet.images[currentFrame_layer0];
+            NSURL * selectedImageUrl_layer0 = selectedImage_layer0.fullScreenUrl ?: selectedImage_layer0.imageUrl;
+            image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_layer0 path]];
+        }else{
+            image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_base path]];
+        }
+
+        UIImage * resultImage = [[STFilterManager sharedManager]
+                buildOutputImage:image_layer0
+                         enhance:NO
+                          filter:[[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems[[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems.count-2]]
+                extendingFilters:nil
+                    rotationMode:kGPUImageNoRotation
+                     outputScale:1
+           useCurrentFrameBuffer:YES
+              lockFrameRendering:NO];
+
+        dispatch_async(dispatch_get_main_queue(),^{
+
+            imageView_layer0.image = resultImage;
+
+
+        });
+    });
+
+
 }
 
 - (void)applyNeedsAfterImageSetWithFrameAt{
