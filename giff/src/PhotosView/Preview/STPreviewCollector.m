@@ -31,6 +31,7 @@
 #import "STCapturedImageSet+PostFocus.h"
 #import "FBSDKTypeUtility.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
+#import "STCapturedImageProtected.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -160,92 +161,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     }else if(type== STPhotoViewTypeEditAfterCapture){
         Weaks
 
-        STCapturedImageSet * slidingTargetImageSet = nil;
-        switch([self.targetPhotoItem.sourceForCapturedImageSet postFocusMode]){
-            case STPostFocusMode5Points:
-            case STPostFocusModeVertical3Points:
-                slidingTargetImageSet = [STCapturedImageSet setWithCompactedImagesFrom:self.targetPhotoItem.sourceForCapturedImageSet];
-                break;
-            default:
-                slidingTargetImageSet = self.targetPhotoItem.sourceForCapturedImageSet;
-                break;
-        }
-
-        STCapturedImage * const anySlidingTargetImage = [slidingTargetImageSet.images firstObject];
-        NSArray<NSURL *> * const slidingTargetFullScreenImagesUrls = [slidingTargetImageSet.images mapWithItemsKeyPath:@keypath(anySlidingTargetImage.fullScreenUrl)
-                                                                                             orDefaultKeypath:@keypath(anySlidingTargetImage.imageUrl)];
-
-        NSArray<NSURL *> * const deco_slidingTargetFullScreenImagesUrls = [slidingTargetImageSet.images mapWithItemsKeyPath:@keypath(anySlidingTargetImage.fullScreenUrl)
-                                                                                                      orDefaultKeypath:@keypath(anySlidingTargetImage.imageUrl)];
-
-
-#if DEBUG
-        for(STCapturedImage * image in slidingTargetImageSet.images){
-            NSLog(@"%d %f %f", image.focusAdjusted, image.lensPosition, image.createdTime);
-        }
-#endif
-
-        if(slidingTargetFullScreenImagesUrls.count){
-            __block NSUInteger selectedIndex = slidingTargetImageSet.indexOfDefaultImage;
-
-            NSAssert([slidingTargetFullScreenImagesUrls st_objectOrNilAtIndex:selectedIndex],@"indexOfDefaultImage is wrong.");
-            if(![slidingTargetFullScreenImagesUrls st_objectOrNilAtIndex:selectedIndex]){
-                selectedIndex = 0;
-            }
-
-            [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderValue) id:@"postFocusSliderValue"];
-
-            _previewView.masterPositionSliderValue = selectedIndex / (slidingTargetFullScreenImagesUrls.count * 1.f) ;
-            _previewView.masterPositionSlidingValue = selectedIndex / (slidingTargetFullScreenImagesUrls.count * 1.f) ;
-
-            [_previewView st_addKeypathListener:@keypath(_previewView.masterPositionSliderValue) id:@"postFocusSliderValue" newValueBlock:^(id value, id _weakSelf) {
-                @autoreleasepool {
-                    NSUInteger index = (NSUInteger) nearbyint((slidingTargetFullScreenImagesUrls.count-1) * [value floatValue]);
-
-                    if(index!=selectedIndex){
-                        ((UIImageView *)Wself.carousel.currentItemView).image = [UIImage imageWithContentsOfFile:[slidingTargetFullScreenImagesUrls[index] path]];
-
-                        //TODO: 여기 로직 프로토 타입
-                        UIImageView * protoView = (UIImageView *)[Wself.carousel.currentItemView viewWithTagName:@"proto_view"];
-                        UIImage * pproimage;
-
-                        if([slidingTargetFullScreenImagesUrls st_objectOrNilAtIndex:index-2]){
-                            pproimage = [UIImage imageWithContentsOfFile:[deco_slidingTargetFullScreenImagesUrls[index-2] path]];
-                        }else{
-                            pproimage = [UIImage imageWithContentsOfFile:[slidingTargetFullScreenImagesUrls[index] path]];
-                        }
-                        if(!protoView){
-                            protoView = [[UIImageView alloc] initWithImage:pproimage];
-                            protoView.size = ((UIImageView *)Wself.carousel.currentItemView).size;
-                            protoView.tagName = @"proto_view";
-                            protoView.alpha = .4;
-                            [Wself.carousel.currentItemView addSubview:protoView];
-                        }else{
-                            protoView.image = pproimage;
-                        }
-
-                        selectedIndex = index;
-                    }
-                }
-            }];
-            [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding"];
-            [_previewView st_addKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding" newValueBlock:^(id value, id _weakSelf) {
-                BOOL sliding = [value boolValue];
-
-                if(!sliding){
-
-                    NSUInteger indexOfSlidingTargetImagesUrls = (NSUInteger) round((slidingTargetFullScreenImagesUrls.count-1) * _previewView.masterPositionSliderValue);
-                    STCapturedImage * anyGlobalPreviewImage = [self.targetPhotoItem.sourceForCapturedImageSet.images firstObject];
-                    NSArray<NSURL *> * globalPreviewImageUrls = [self.targetPhotoItem.sourceForCapturedImageSet.images mapWithItemsKeyPath:@keypath(anyGlobalPreviewImage.fullScreenUrl) orDefaultKeypath:@keypath(anyGlobalPreviewImage.imageUrl)];
-                    NSUInteger globalIndex = [globalPreviewImageUrls indexOfObject:slidingTargetFullScreenImagesUrls[indexOfSlidingTargetImagesUrls]];
-
-                    [self.targetPhotoItem setAssigningIndexFromCapturedImageSet:globalIndex];
-                    [self.presenter beginAndAutomaticallyEndHighQualityContext];
-                    [self reloadSmoothly];
-                }
-            }];
-
-        }
+        [self enterAfterImageEditingMode];
 
         [self enterTransition:nil];
 
@@ -337,6 +253,99 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     [self addObserver];
 }
 
+#pragma mark AfterImage Impl.
+- (void)enterAfterImageEditingMode{
+    Weaks
+
+    STCapturedImageSet * targetImageSet = self.targetPhotoItem.sourceForCapturedImageSet;
+    
+#if DEBUG
+    for(STCapturedImage * image in targetImageSet.images){
+        NSLog(@"%d %f %f", image.focusAdjusted, image.lensPosition, image.createdTime);
+    }
+#endif
+
+    if(targetImageSet.images.count){
+        __block NSUInteger selectedIndex = targetImageSet.indexOfDefaultImage;
+
+        NSAssert([targetImageSet.images st_objectOrNilAtIndex:selectedIndex],@"indexOfDefaultImage is wrong.");
+        if(![targetImageSet.images st_objectOrNilAtIndex:selectedIndex]){
+            selectedIndex = 0;
+        }
+
+        [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderValue) id:@"postFocusSliderValue"];
+
+        _previewView.masterPositionSliderValue = selectedIndex / (targetImageSet.images.count * 1.f) ;
+        _previewView.masterPositionSlidingValue = selectedIndex / (targetImageSet.images.count * 1.f) ;
+        [_previewView st_addKeypathListener:@keypath(_previewView.masterPositionSliderValue) id:@"postFocusSliderValue" newValueBlock:^(id value, id _weakSelf) {
+            @autoreleasepool {
+                NSUInteger index = (NSUInteger) nearbyint((targetImageSet.images.count-1) * [value floatValue]);
+
+                if(index!=selectedIndex){
+                    [Wself updateNeedsAfterImageSetWithFrameAt:index imageSet:targetImageSet];
+                    selectedIndex = index;
+                }
+            }
+        }];
+        [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding"];
+        [_previewView st_addKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding" newValueBlock:^(id value, id _weakSelf) {
+            if(![value boolValue]){
+                [Wself applyNeedsAfterImageSetWithFrameAt];
+            }
+        }];
+
+    }
+}
+
+- (void)updateNeedsAfterImageSetWithFrameAt:(NSUInteger)index imageSet:(STCapturedImageSet *)imageSet{
+    STCapturedImage * selectedImage_base = imageSet.images[index];
+    NSURL * selectedImageUrl_base = selectedImage_base.fullScreenUrl ?: selectedImage_base.imageUrl;
+
+
+    //set image to base image
+    ((UIImageView *)self.carousel.currentItemView).image = [UIImage imageWithContentsOfFile:selectedImageUrl_base.path];
+
+    //layer0
+    UIImageView * imageView_layer0 = (UIImageView *)[self.carousel.currentItemView viewWithTagName:@"proto_view"];
+    UIImage * image_layer0;
+    NSInteger frameOffset_layer0 = -2;
+    NSUInteger currentFrame_layer0 = index+frameOffset_layer0;
+
+    if([imageSet.images st_objectOrNilAtIndex:currentFrame_layer0]){
+        STCapturedImage * selectedImage_layer0 = imageSet.images[currentFrame_layer0];
+        NSURL * selectedImageUrl_layer0 = selectedImage_layer0.fullScreenUrl ?: selectedImage_layer0.imageUrl;
+        image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_layer0 path]];
+    }else{
+        image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_base path]];
+    }
+    if(!imageView_layer0){
+        imageView_layer0 = [[UIImageView alloc] initWithImage:image_layer0];
+        imageView_layer0.size = ((UIImageView *)self.carousel.currentItemView).size;
+        imageView_layer0.tagName = @"proto_view";
+        imageView_layer0.alpha = .4;
+        [self.carousel.currentItemView addSubview:imageView_layer0];
+    }else{
+        imageView_layer0.image = image_layer0;
+    }
+}
+
+- (void)applyNeedsAfterImageSetWithFrameAt{
+    NSArray <STCapturedImage *> * images = self.targetPhotoItem.sourceForCapturedImageSet.images;
+    NSUInteger indexOfSlidingTargetImagesUrls = (NSUInteger) round((images.count-1) * _previewView.masterPositionSliderValue);
+//    STCapturedImage * anyGlobalPreviewImage = [images firstObject];
+//    NSArray<NSURL *> * globalPreviewImageUrls = [images mapWithItemsKeyPath:@keypath(anyGlobalPreviewImage.fullScreenUrl) orDefaultKeypath:@keypath(anyGlobalPreviewImage.imageUrl)];
+//    NSUInteger globalIndex = [globalPreviewImageUrls indexOfObject:images[indexOfSlidingTargetImagesUrls]];
+
+    [self.targetPhotoItem setAssigningIndexFromCapturedImageSet:indexOfSlidingTargetImagesUrls];
+    [self.presenter beginAndAutomaticallyEndHighQualityContext];
+    [self reloadSmoothly];
+}
+
+- (void)exitAfterImageEditingMode{
+    [[self.carousel.currentItemView viewWithTagName:@"proto_view"] clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+
+}
+
 - (void)reset {
     [self unlockUpdateZoomFromCurrentScrollOffset];
     [self setZoomInRatio:0 animation:NO];
@@ -375,6 +384,8 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 }
 
 - (void)finishAllResources; {
+    [self exitAfterImageEditingMode];
+
     [UIView setAnimationsEnabled:NO];
     [self reset];
 

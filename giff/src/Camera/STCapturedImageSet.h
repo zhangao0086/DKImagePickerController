@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, STCapturedImageSetType) {
 @property(nonatomic, readonly) NSArray * focusPointsOfInterestSet;
 @property(nonatomic, readonly) CGSize outputSizeForFocusPoints;
 
+@property(nonatomic, readonly) STCapturedImage * defaultImage;
 @property(nonatomic, readonly) NSMutableArray <STCapturedImage *> * images;
 @property(nonatomic, readonly) NSUInteger count;
 @property(nonatomic, readonly) STCapturedImageSetType type;
@@ -33,8 +34,6 @@ typedef NS_ENUM(NSInteger, STCapturedImageSetType) {
 + (instancetype)setWithImages:(NSArray<STCapturedImage *> *)images transferByOtherSet:(STCapturedImageSet *)otherSet;
 
 + (instancetype)setWithCompactedImagesFrom:(STCapturedImageSet *)otherSet;
-
-- (STCapturedImage *)defaultImage;
 
 - (BOOL)reindexingDefaultImage;
 
