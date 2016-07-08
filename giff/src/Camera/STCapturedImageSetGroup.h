@@ -5,10 +5,11 @@
 
 #import <Foundation/Foundation.h>
 #import "STCapturedResource.h"
+#import "STRLMFileWritable.h"
 
 @class STCapturedImageSet;
 
-@interface STCapturedImageSetGroup : STCapturedResource
+@interface STCapturedImageSetGroup : STCapturedResource <STRLMFileWritable>
 @property(nonatomic, assign) NSUInteger indexOfDefaultImageSet;
 @property(nonatomic, readonly) STCapturedImageSet * defaultImageSet;
 
