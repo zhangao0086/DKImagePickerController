@@ -313,15 +313,14 @@
 
     [self clearButtonDrawable:view disposeContents:NO];
 
-    CGRect bounds = CGRectNull;
-
     if([object isKindOfClass:UIImage.class]){
         view.image = object;
-        bounds = (CGRect){CGPointZero, [object size]};
 
     }else if([object isKindOfClass:NSString.class]){
         view.image = [UIImage imageBundledCache:object];
-        bounds = (CGRect){CGPointZero, [view.image size]};
+
+    }else if([object isKindOfClass:NSURL.class]){
+        view.image = [UIImage imageWithContentsOfFile:((NSURL *)object).path];
 
     }else if([object isKindOfClass:CALayer.class]){
         CALayer * layerObject = object;
@@ -331,8 +330,6 @@
         if(self.fitViewsImageToBounds && !CGSizeEqualToSize(layerObject.size, self.size)){
             layerObject.size = self.size;
         }
-
-        bounds = [object bounds];
 
     }else if([object isKindOfClass:UIView.class]){
         UIView * viewObject = object;
@@ -345,7 +342,6 @@
                 viewObject.size = self.size;
             }
         }
-        bounds = [object bounds];
 
     }else{
         NSAssert(NO, @"must set as drawable types, such as UIImage, NSString(for create UIImage), CALayer, UIView instead of \"%@\"", object);
