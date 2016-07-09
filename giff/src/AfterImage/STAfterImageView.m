@@ -4,9 +4,14 @@
 //
 
 #import "STAfterImageView.h"
+#import "STCapturedImageSet.h"
 
 @implementation STAfterImageView {
 
+}
+
+- (void)setImageSet:(STCapturedImageSet *)imageSet {
+    _imageSet = imageSet;
 }
 
 @end

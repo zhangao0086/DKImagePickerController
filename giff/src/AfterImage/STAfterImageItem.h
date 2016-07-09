@@ -8,6 +8,9 @@
 #import "STRLMFileWritable.h"
 #import "RLMCapturedImage.h"
 
+@class STAfterImageLayerItem;
+
 @interface STAfterImageItem : NSDictionary
-@property (nonatomic, assign) CGFloat alpha;
+@property (nonatomic, assign) NSString * uuid;
+@property (nonatomic, readwrite) NSArray<STAfterImageLayerItem *> * layers;
 @end
