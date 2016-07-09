@@ -158,6 +158,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>NSLocationWhenInUseUsageDescription</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to capture images.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to save photos.</string>
 	<key>STAppMarketingTitle</key>
 	<string>STAppMarketingTitle</string>
 	<key>STRatePeriod</key>
