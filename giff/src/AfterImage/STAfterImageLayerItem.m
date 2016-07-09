@@ -3,9 +3,7 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import <SpriteKit/SpriteKit.h>
 #import "STAfterImageLayerItem.h"
-
 
 @implementation STAfterImageLayerItem {
 
