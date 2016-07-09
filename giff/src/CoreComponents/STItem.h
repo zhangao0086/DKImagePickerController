@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface STItem : NSObject{
+@interface STItem : NSObject <NSCoding>{
 @protected
     NSString * _uuid;
 }

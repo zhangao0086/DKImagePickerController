@@ -21,21 +21,17 @@
 }
 
 - (void)setImageSet:(STCapturedImageSet *)imageSet {
-    NSAssert(!imageSet || [imageSet.extensionData isKindOfClass:[STAfterImageItem class]], @"given imageSet did not contain STAfterImageItem in .extensionData");
-
-    //base
-    STCapturedImage * anyImage = [imageSet.images firstObject];
-    NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
-
-    NSArray<NSURL *>* imageUrls = [imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
-
-    [self setViews:imageUrls];
+    NSAssert(!imageSet || [imageSet.extensionObject isKindOfClass:[STAfterImageItem class]], @"given imageSet did not contain STAfterImageItem in .extensionData");
 
     //sub set
     if(imageSet) {
-        //set
-        if ([imageSet.extensionData isKindOfClass:[STAfterImageItem class]]) {
-            _afterImageItem = [[STAfterImageItem alloc] initWithData:_imageSet.extensionData];
+        STCapturedImage * anyImage = [imageSet.images firstObject];
+        NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
+        NSArray<NSURL *>* imageUrls = [imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
+
+        //set - heavy cost
+        if (![imageSet isEqual:_imageSet] && [imageSet.extensionObject isKindOfClass:[STAfterImageItem class]]) {
+            _afterImageItem = (STAfterImageItem *)imageSet.extensionObject;
 
             if (!_afterImageSublayersView) {
                 _afterImageSublayersView = [[UIView alloc] initWithSize:self.size];
@@ -46,10 +42,11 @@
                 STSelectableView *layerView = [[STSelectableView alloc] initWithFrame:_afterImageSublayersView.bounds];
 
                 //TODO: preheating - 여기서 미리 랜더링된 필터를 temp url에 저장 후 그 url을 보여주는 것도 나쁘지 않을듯
-                [layerView setViews:imageUrls];
                 [_afterImageSublayersView addSubview:layerView];
+                [layerView setViews:imageUrls];
             }
         }
+        [self setViews:imageUrls];
 
     }else{
         //clear
@@ -71,11 +68,15 @@
 - (void)setViewsDisplay {
     [super setViewsDisplay];
 
+
+    oo(_afterImageSublayersView.subviews);
     [_afterImageSublayersView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
         STAfterImageLayerItem *layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:index];
         NSUInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
-        BOOL overRanged = layerView.count>=layerIndex;
+        ii(layerIndex);
+        ii(layerItem.frameIndexOffset);
+        BOOL overRanged = self.count>=layerIndex;
 
         if(overRanged){
             layerView.visible = NO;

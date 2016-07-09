@@ -10,6 +10,17 @@
 
 }
 
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+    if (self = [super init]) {
+        self.uuid = [decoder decodeObjectForKey:@keypath(self.uuid)];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:self.uuid forKey:@keypath(self.uuid)];
+}
+
 - (id)init; {
     self = [super init];
     if (self) {

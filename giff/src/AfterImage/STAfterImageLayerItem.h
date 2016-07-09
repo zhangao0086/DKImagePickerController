@@ -4,14 +4,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "STItem.h"
 
 
-@interface STAfterImageLayerItem : NSDictionary
+@interface STAfterImageLayerItem : STItem
 @property (nonatomic, assign) CGFloat alpha;
 @property (nonatomic, assign) NSInteger frameIndexOffset;
 @property (nonatomic, assign) NSString * filterId;
 
-- (instancetype)initWithData:(NSDictionary *)data;
-
-+ (instancetype)itemWithData:(NSDictionary *)data;
 @end

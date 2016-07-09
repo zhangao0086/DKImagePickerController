@@ -10,12 +10,11 @@
 
 @class STAfterImageLayerItem;
 
-@interface STAfterImageItem : NSDictionary
-@property (nonatomic, assign) NSString * uuid;
-@property (nonatomic, readwrite) NSArray<STAfterImageLayerItem *> * layers;
+@interface STAfterImageItem : STItem
+@property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
 
-- (instancetype)initWithData:(NSDictionary *)data;
+- (instancetype)initWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
 
-+ (instancetype)itemWithData:(NSDictionary *)data;
++ (instancetype)itemWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
 
 @end

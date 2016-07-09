@@ -6,41 +6,41 @@
 #import "STAfterImageItem.h"
 #import "STAfterImageLayerItem.h"
 
-
 @implementation STAfterImageItem {
 
 }
 
-NSString * const kUuid = @"kUuid";
-- (void)setUuid:(NSString *)uuid {
-    _uuid = uuid;
-    [self setValue:uuid forKey:kUuid];
-}
-
-NSString * const kLayers = @"kLayers";
-- (void)setLayers:(NSArray *)layers {
+- (void)setLayers:(NSArray<STAfterImageLayerItem *> *)layers {
 #if DEBUG
     for(id element in layers){
         NSAssert([element isKindOfClass:[STAfterImageLayerItem class]], @"elements of layers is not STAfterImageLayerItem");
     }
 #endif
     _layers = layers;
-    [self setValue:layers forKey:kLayers];
 }
 
-- (instancetype)initWithData:(NSDictionary *)data {
+- (instancetype)initWithLayers:(NSArray *)layers {
     self = [super init];
     if (self) {
-        NSParameterAssert(!!data[kUuid]);
-        NSParameterAssert(!!data[kLayers]);
-        self.uuid = data[kUuid];
-        self.layers = data[kLayers];
+        self.layers = layers;
     }
     return self;
 }
 
-+ (instancetype)itemWithData:(NSDictionary *)data {
-    return [[self alloc] initWithData:data];
++ (instancetype)itemWithLayers:(NSArray *)layers {
+    return [[self alloc] initWithLayers:layers];
 }
+
+- (id)initWithCoder:(NSCoder *)decoder {
+    if (self = [super initWithCoder:decoder]) {
+        self.layers = [decoder decodeObjectForKey:@keypath(self.layers)];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:self.layers forKey:@keypath(self.layers)];
+}
+
 
 @end

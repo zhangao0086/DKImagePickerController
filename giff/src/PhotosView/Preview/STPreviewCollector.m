@@ -32,6 +32,8 @@
 #import "FBSDKTypeUtility.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STCapturedImageProtected.h"
+#import "STAfterImageView.h"
+#import "STAfterImageLayerItem.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -66,6 +68,8 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     BOOL _lockUpdateScrollZoomWhileResetScroll;
 
     UIImageView *_coverImageViewToReloadSmoothly;
+
+    STAfterImageView * _afterImageView;
 
 #pragma mark filtertest
     /*
@@ -298,61 +302,72 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     }
 }
 
-static NSMutableDictionary * _cachedRenderAfterImages = nil;
 - (void)renderAfterImageSetWithFrameAt:(NSUInteger)index imageSet:(STCapturedImageSet *)imageSet{
+
     @autoreleasepool {
-        STCapturedImage * selectedImage_base = imageSet.images[index];
-        NSURL * selectedImageUrl_base = selectedImage_base.fullScreenUrl ?: selectedImage_base.imageUrl;
-
-
-        //set image to base image
-        UIImage * selectedImage = ((UIImageView *)self.carousel.currentItemView).image = [UIImage imageWithContentsOfFile:selectedImageUrl_base.path];
-
-        //layer0
-        UIImageView * imageView_layer0 = (UIImageView *)[self.carousel.currentItemView viewWithTagName:@"proto_view"];
-        NSInteger frameOffset_layer0 = -2;
-        NSUInteger currentFrame_layer0 = index+frameOffset_layer0;
-        if(!imageView_layer0){
-            imageView_layer0 = [[UIImageView alloc] initWithSize:((UIImageView *)self.carousel.currentItemView).size];
-            imageView_layer0.size = ((UIImageView *)self.carousel.currentItemView).size;
-            imageView_layer0.tagName = @"proto_view";
-            imageView_layer0.alpha = .4;
-            [self.carousel.currentItemView addSubview:imageView_layer0];
+        if(!_afterImageView){
+            _afterImageView = [[STAfterImageView alloc] initWithSize:self.carousel.currentItemView.size];
+            [self.carousel.currentItemView addSubview:_afterImageView];
         }
 
+        STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
+        layerItem.alpha = .4;
+        layerItem.frameIndexOffset = -2;
+        imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem]];
+        [_afterImageView setImageSet:imageSet];
+        _afterImageView.currentIndex = index;
 
-        //TODO: 캐시하도록 하자
-        STFilter * filterForAfterImage_layer0 = [[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems[[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems.count-2]];
-
-        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-            @autoreleasepool {
-                UIImage * image_layer0;
-                if([imageSet.images st_objectOrNilAtIndex:currentFrame_layer0]){
-                    STCapturedImage * selectedImage_layer0 = imageSet.images[currentFrame_layer0];
-                    NSURL * selectedImageUrl_layer0 = selectedImage_layer0.fullScreenUrl ?: selectedImage_layer0.imageUrl;
-                    image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_layer0 path]];
-                }else{
-                    image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_base path]];
-                }
-
-                UIImage * resultImage = [[STFilterManager sharedManager]
-                        buildOutputImage:image_layer0
-                                 enhance:NO
-                                  filter:filterForAfterImage_layer0
-                        extendingFilters:nil
-                            rotationMode:kGPUImageNoRotation
-                             outputScale:1
-                   useCurrentFrameBuffer:YES
-                      lockFrameRendering:NO];
-
-                dispatch_async(dispatch_get_main_queue(),^{
-
-                    imageView_layer0.image = resultImage;
-                });
-            }
-
-
-        });
+//        STCapturedImage * selectedImage_base = imageSet.images[index];
+//        NSURL * selectedImageUrl_base = selectedImage_base.fullScreenUrl ?: selectedImage_base.imageUrl;
+//
+//        //set image to base image
+//        UIImage * selectedImage = ((UIImageView *)self.carousel.currentItemView).image = [UIImage imageWithContentsOfFile:selectedImageUrl_base.path];
+//
+//        //layer0
+//        UIImageView * imageView_layer0 = (UIImageView *)[self.carousel.currentItemView viewWithTagName:@"proto_view"];
+//        NSInteger frameOffset_layer0 = -2;
+//        NSUInteger currentFrame_layer0 = index+frameOffset_layer0;
+//        if(!imageView_layer0){
+//            imageView_layer0 = [[UIImageView alloc] initWithSize:((UIImageView *)self.carousel.currentItemView).size];
+//            imageView_layer0.size = ((UIImageView *)self.carousel.currentItemView).size;
+//            imageView_layer0.tagName = @"proto_view";
+//            imageView_layer0.alpha = .4;
+//            [self.carousel.currentItemView addSubview:imageView_layer0];
+//        }
+//
+//
+//        //TODO: 캐시하도록 하자
+//        STFilter * filterForAfterImage_layer0 = [[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems[[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems.count-2]];
+//
+//        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+//            @autoreleasepool {
+//                UIImage * image_layer0;
+//                if([imageSet.images st_objectOrNilAtIndex:currentFrame_layer0]){
+//                    STCapturedImage * selectedImage_layer0 = imageSet.images[currentFrame_layer0];
+//                    NSURL * selectedImageUrl_layer0 = selectedImage_layer0.fullScreenUrl ?: selectedImage_layer0.imageUrl;
+//                    image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_layer0 path]];
+//                }else{
+//                    image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_base path]];
+//                }
+//
+//                UIImage * resultImage = [[STFilterManager sharedManager]
+//                        buildOutputImage:image_layer0
+//                                 enhance:NO
+//                                  filter:filterForAfterImage_layer0
+//                        extendingFilters:nil
+//                            rotationMode:kGPUImageNoRotation
+//                             outputScale:1
+//                   useCurrentFrameBuffer:YES
+//                      lockFrameRendering:NO];
+//
+//                dispatch_async(dispatch_get_main_queue(),^{
+//
+//                    imageView_layer0.image = resultImage;
+//                });
+//            }
+//
+//
+//        });
     }
 }
 
@@ -369,7 +384,10 @@ static NSMutableDictionary * _cachedRenderAfterImages = nil;
 }
 
 - (void)exitAfterImageEditingMode{
-    [[self.carousel.currentItemView viewWithTagName:@"proto_view"] clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+//    [[self.carousel.currentItemView viewWithTagName:@"proto_view"] clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+
+    [_afterImageView clearViews];
+    [_afterImageView removeFromSuperview];
 
 }
 

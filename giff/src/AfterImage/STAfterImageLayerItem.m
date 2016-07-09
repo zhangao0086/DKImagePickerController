@@ -9,39 +9,18 @@
 
 }
 
-NSString * const kAlpha = @"kAlpha";
-- (void)setAlpha:(CGFloat)alpha {
-    _alpha = alpha;
-    [self setValue:@(alpha) forKey:kAlpha];
-}
-
-NSString * const kFrameIndexOffset = @"kFrameIndexOffset";
-- (void)setFrameIndexOffset:(NSInteger)frameIndexOffset {
-    _frameIndexOffset = frameIndexOffset;
-    [self setValue:@(frameIndexOffset) forKey:kAlpha];
-}
-
-NSString * const kFilterId = @"kFilterId";
-- (void)setFilterId:(NSString *)filterId {
-    _filterId = filterId;
-    [self setValue:filterId forKey:kFilterId];
-}
-
-- (instancetype)initWithData:(NSDictionary *)data {
-    self = [super init];
-    if (self) {
-        NSParameterAssert(!!data[kAlpha]);
-        NSParameterAssert(!!data[kFrameIndexOffset]);
-        NSParameterAssert(!!data[kFilterId]);
-        self.alpha = [data[kAlpha] floatValue];
-        self.frameIndexOffset = [data[kFrameIndexOffset] integerValue];
-        self.filterId = data[kFilterId];
+- (id)initWithCoder:(NSCoder *)decoder {
+    if (self = [super initWithCoder:decoder]) {
+        self.alpha = [decoder decodeFloatForKey:@keypath(self.alpha)];
+        self.frameIndexOffset = [decoder decodeIntegerForKey:@keypath(self.frameIndexOffset)];
+        self.filterId = [decoder decodeObjectForKey:@keypath(self.filterId)];
     }
     return self;
 }
 
-+ (instancetype)itemWithData:(NSDictionary *)data {
-    return [[self alloc] initWithData:data];
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeFloat:self.alpha forKey:@keypath(self.alpha)];
+    [encoder encodeInteger:self.frameIndexOffset forKey:@keypath(self.frameIndexOffset)];
+    [encoder encodeObject:self.filterId forKey:@keypath(self.filterId)];
 }
-
 @end

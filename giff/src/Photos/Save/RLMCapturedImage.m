@@ -29,7 +29,7 @@
         NSParameterAssert(capturedResource.createdTime);
         self.uuid = capturedResource.uuid;
         self.createdTime = capturedResource.createdTime;
-        self.extensionData = nil;
+        self.extensionData = [NSKeyedArchiver archivedDataWithRootObject:capturedResource.extensionObject];
     }
     return self;
 }
@@ -41,7 +41,7 @@
     resource.uuid = self.uuid;
     resource.createdTime = self.createdTime;
     resource.savedTime = self.savedTime;
-    resource.extensionData = nil;
+    resource.extensionObject = [NSKeyedUnarchiver unarchiveObjectWithData:self.extensionData];
 }
 @end
 
