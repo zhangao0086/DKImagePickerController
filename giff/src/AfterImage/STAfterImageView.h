@@ -5,10 +5,8 @@
 
 #import <Foundation/Foundation.h>
 
-@class STCapturedImageSetGroup;
-@class STAfterImage;
-
+@class STAfterImageItem;
 
 @interface STAfterImageView : STUIView
-@property (nonatomic, readwrite) STAfterImage * image;
+@property (nonatomic, readwrite) STAfterImageItem * image;
 @end

@@ -4,9 +4,6 @@
 //
 
 #import "STAfterImageView.h"
-#import "STCapturedImageSetGroup.h"
-#import "STAfterImage.h"
-
 
 @implementation STAfterImageView {
 

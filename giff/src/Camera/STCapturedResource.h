@@ -11,4 +11,5 @@
 @property(nonatomic, assign) NSTimeInterval createdTime;
 @property(nonatomic, assign) NSTimeInterval savedTime;
 @property(nonatomic, readonly, getter=isSaved) BOOL saved;
+@property(nonatomic, readwrite) NSDictionary * extensionData;
 @end

@@ -3,10 +3,10 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STAfterImage.h"
+#import "STAfterImageItem.h"
 
 
-@implementation STAfterImage {
+@implementation STAfterImageItem {
 
 }
 @end

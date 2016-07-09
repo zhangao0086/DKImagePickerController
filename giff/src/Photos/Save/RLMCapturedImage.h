@@ -18,6 +18,7 @@
 @class RLMCapturedImageSet;
 @class STCapturedImage;
 @class STCapturedImageSet;
+@class STCapturedResource;
 
 #pragma mark RLMCGPoint
 @interface RLMCGPoint : RLMObject
@@ -36,6 +37,7 @@ RLM_ARRAY_TYPE(RLMCGPoint)
 @property NSString * uuid;
 @property NSTimeInterval createdTime;
 @property NSTimeInterval savedTime;
+@property NSData * extensionData;
 @end
 RLM_ARRAY_TYPE(RLMCapturedResource)
 

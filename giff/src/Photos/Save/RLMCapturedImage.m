@@ -14,7 +14,35 @@
 #import "STApp+Logger.h"
 
 #pragma mark RLMCapturedResource
-@implementation RLMCapturedResource
+@implementation RLMCapturedResource{
+}
+
++ (instancetype)imageWithCapturedResource:(STCapturedResource *)capturedResource{
+    return [[self alloc] initWithCapturedResource:capturedResource];
+}
+
+- (instancetype)initWithCapturedResource:(STCapturedResource *)capturedResource{
+    self = [super init];
+    if (self) {
+        NSParameterAssert(capturedResource);
+        NSParameterAssert(capturedResource.uuid);
+        NSParameterAssert(capturedResource.createdTime);
+        self.uuid = capturedResource.uuid;
+        self.createdTime = capturedResource.createdTime;
+        self.extensionData = nil;
+    }
+    return self;
+}
+
+- (void)loadResource:(STCapturedResource *)resource{
+    NSParameterAssert(self.uuid);
+    NSParameterAssert(self.createdTime);
+    NSParameterAssert(self.savedTime);
+    resource.uuid = self.uuid;
+    resource.createdTime = self.createdTime;
+    resource.savedTime = self.savedTime;
+    resource.extensionData = nil;
+}
 @end
 
 #pragma mark RLMCapturedImage
@@ -28,17 +56,12 @@
 }
 
 - (instancetype)initWithCapturedImage:(STCapturedImage *)capturedImage parentSet:(RLMCapturedImageSet *)imageSet{
-    self = [super init];
+    self = [super initWithCapturedResource:capturedImage];
     if (self) {
-        NSParameterAssert(capturedImage);
         NSParameterAssert(imageSet);
         NSParameterAssert(capturedImage.imageUrl.path);
-        NSParameterAssert(capturedImage.createdTime);
         NSParameterAssert(!CGSizeEqualToSize(capturedImage.pixelSize, CGSizeZero));
         _capturedImage = capturedImage;
-
-        self.uuid = capturedImage.uuid;
-        self.createdTime = capturedImage.createdTime;
 
         self.parentSet = imageSet;
 
@@ -57,17 +80,14 @@
 
 - (STCapturedImage *)fetchImage{
     NSParameterAssert(self.imagePathForDocument);
-    NSParameterAssert(self.uuid);
     NSParameterAssert(self.savedTime);
-    NSParameterAssert(self.createdTime);
 
     STCapturedImage * image = [STCapturedImage imageWithImageUrl:[[self.imagePathForDocument absolutePathFromDocument] fileURL]];
-    image.uuid = self.uuid;
+    [self loadResource:image];
+
     image.thumbnailUrl = [[[self thumbnailPathForDocument] absolutePathFromDocument] fileURL];
     image.fullScreenUrl = [[[self fullScreenPathForDocument] absolutePathFromDocument] fileURL];
 
-    image.createdTime = self.createdTime;
-    image.savedTime = self.savedTime;
     image.pixelSize = CGSizeFromString(self.pixelSize);
     NSParameterAssert(!CGSizeEqualToSize(CGSizeZero, image.pixelSize));
 
@@ -182,16 +202,12 @@
 #pragma mark RLMCapturedImageSet
 @implementation RLMCapturedImageSet
 - (instancetype)initWithCapturedImageSet:(STCapturedImageSet *)capturedImageSet {
-    self = [super init];
+    self = [super initWithCapturedResource:capturedImageSet];
     if (self) {
         NSParameterAssert(capturedImageSet.type!=STCapturedImageSetTypeUnspecified);
-        NSParameterAssert(capturedImageSet);
-        NSParameterAssert(capturedImageSet.createdTime);
         NSParameterAssert(capturedImageSet.images.count);
 
         self.type = capturedImageSet.type;
-        self.uuid = capturedImageSet.uuid;
-        self.createdTime = capturedImageSet.createdTime;
 
         self.indexOfDefaultImage = capturedImageSet.indexOfDefaultImage;
 
@@ -221,25 +237,17 @@
 }
 
 - (STCapturedImageSet *)fetchImageSet{
-
     NSParameterAssert(self.images.count);
-    NSParameterAssert(self.uuid);
-    NSParameterAssert(self.savedTime);
-    NSParameterAssert(self.createdTime);
 
     STCapturedImageSet * imageSet = [STCapturedImageSet setWithImages:[[@([self.images count]) st_intArray] mapWithIndex:^id(id object, NSInteger index) {
         RLMCapturedImage * rlm_image = [self.images objectAtIndex:[object unsignedIntegerValue]];
         return [rlm_image fetchImage];
     }]];
 
-    imageSet.uuid = self.uuid;
-    imageSet.createdTime = self.createdTime;
-    imageSet.savedTime = self.savedTime;
+    [self loadResource:imageSet];
 
     imageSet.type = (STCapturedImageSetType) self.type;
-
     imageSet.indexOfDefaultImage = (NSUInteger) self.indexOfDefaultImage;
-
 
     imageSet.indexOfFocusPointsOfInterestSet = (NSUInteger) self.indexOfFocusPointsOfInterestSet;
     imageSet.outputSizeForFocusPoints = CGSizeFromString(self.outputSizeForFocusPoints);

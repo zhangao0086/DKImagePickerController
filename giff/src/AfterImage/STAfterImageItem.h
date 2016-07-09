@@ -7,8 +7,7 @@
 #import "STItem.h"
 #import "STRLMFileWritable.h"
 #import "RLMCapturedImage.h"
-#import "STCapturedImageSetGroup.h"
 
-@interface STAfterImage : STItem
+@interface STAfterImageItem : NSDictionary
 @property (nonatomic, assign) CGFloat alpha;
 @end

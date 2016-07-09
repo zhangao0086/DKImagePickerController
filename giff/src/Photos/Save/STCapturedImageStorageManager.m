@@ -25,7 +25,7 @@
 
         };
         RLMRealmConfiguration *configuration = [RLMRealmConfiguration defaultConfiguration];
-        configuration.schemaVersion = 6;
+        configuration.schemaVersion = 7;
         configuration.migrationBlock = migrationBlock;
 
         [RLMRealmConfiguration setDefaultConfiguration:configuration];
