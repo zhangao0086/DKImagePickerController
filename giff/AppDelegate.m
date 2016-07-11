@@ -82,8 +82,7 @@
 - (void)startApp {
     //start camera
 
-    [[STElieCamera initSharedInstanceWithSessionPreset:AVCaptureSessionPresetPhoto position:AVCaptureDevicePositionFront] outputRect:[[UIScreen mainScreen] bounds]];
-//    [[STElieCamera initSharedInstanceWithSessionPreset:STElieAppSetting.get.captureSessionPreset position:AVCaptureDevicePositionBack] outputRect:[[UIScreen mainScreen] bounds]];
+    [[STElieCamera initSharedInstanceWithSessionPreset:AVCaptureSessionPresetPhoto position:AVCaptureDevicePositionBack] outputRect:[[UIScreen mainScreen] bounds]];
 
     [[STElieCamera sharedInstance] startCameraCapture];
 
