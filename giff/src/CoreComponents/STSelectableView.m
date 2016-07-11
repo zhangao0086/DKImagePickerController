@@ -128,6 +128,10 @@
             _front.userInteractionEnabled = YES;
         }
 
+        for(UIView * subviewInContentView in _contentView.subviews){
+            [subviewInContentView saveInitialLayout];
+        }
+
         if(self.userInteractionEnabled){
             [self setGestureViewsRecognizers];
         }
@@ -315,12 +319,18 @@
 
     if([object isKindOfClass:UIImage.class]){
         view.image = object;
+        //TODO: detailed code review required for legacies - in this case setLayout needed?
+//        [self setNeedsLayoutOfContentViewsToFit:view];
 
     }else if([object isKindOfClass:NSString.class]){
         view.image = [UIImage imageBundledCache:object];
+        //TODO: detailed code review required for legacies - in this case setLayout needed?
+//        [self setNeedsLayoutOfContentViewsToFit:view];
 
     }else if([object isKindOfClass:NSURL.class]){
         view.image = [UIImage imageWithContentsOfFile:((NSURL *)object).path];
+
+        [self setNeedsLayoutOfContentViewsToFit:view];
 
     }else if([object isKindOfClass:CALayer.class]){
         CALayer * layerObject = object;
@@ -335,13 +345,7 @@
         UIView * viewObject = object;
         [view addSubview:viewObject];
 
-        //fit size
-        if(self.fitViewsImageToBounds){
-            viewObject.contentMode = UIViewContentModeScaleAspectFit;
-            if(!CGSizeEqualToSize(viewObject.size, self.size)){
-                viewObject.size = self.size;
-            }
-        }
+        [self setNeedsLayoutOfContentViewsToFit:viewObject];
 
     }else{
         NSAssert(NO, @"must set as drawable types, such as UIImage, NSString(for create UIImage), CALayer, UIView instead of \"%@\"", object);
@@ -359,6 +363,19 @@
         [view st_removeAllSubviews];
     }
 //    view.layer.sublayers = nil;
+}
+
+- (void)setNeedsLayoutOfContentViewsToFit:(UIView *)targetView{
+    if(self.fitViewsImageToBounds){
+        if(targetView.contentMode != UIViewContentModeScaleAspectFit){
+            targetView.contentMode = UIViewContentModeScaleAspectFit;
+        }
+        if(!CGSizeEqualToSize(targetView.size, self.size)){
+            targetView.size = self.size;
+        }
+    }else{
+        [targetView restoreInitialLayout];
+    }
 }
 
 - (NSUInteger)setNextIndex

@@ -48,25 +48,40 @@ END_DEALLOC_CATEGORY
 }
 
 DEFINE_ASSOCIATOIN_KEY(kInitialFrame);
-DEFINE_ASSOCIATOIN_KEY(kInitialBounds);
-
 - (CGRect)initialFrame {
     return [[self bk_associatedValueForKey:kInitialFrame] CGRectValue];
 }
 
+DEFINE_ASSOCIATOIN_KEY(kInitialBounds);
 - (CGRect)initialBounds {
     return [[self bk_associatedValueForKey:kInitialBounds] CGRectValue];
+}
+
+DEFINE_ASSOCIATOIN_KEY(kInitialViewContentMode);
+- (UIViewContentMode)initialViewContentMode {
+    return (UIViewContentMode) [[self bk_associatedValueForKey:kInitialViewContentMode] integerValue];
 }
 
 - (void)saveInitialLayout {
     [self bk_associateValue:[NSValue valueWithCGRect:self.frame] withKey:kInitialFrame];
     [self bk_associateValue:[NSValue valueWithCGRect:self.bounds] withKey:kInitialBounds];
+    [self bk_associateValue:@(self.contentMode) withKey:kInitialViewContentMode];
 }
 
 - (void)restoreInitialLayout {
+    if([self equalToInitialLayout]){
+       return;
+    }
     [self setFrame:[self initialFrame]];
     [self setBounds:[self initialBounds]];
+    self.contentMode = [self initialViewContentMode];
     [self setNeedsLayout];
+}
+
+- (BOOL)equalToInitialLayout{
+    return CGRectEqualToRect(self.frame, self.initialFrame)
+            && CGRectEqualToRect(self.bounds, self.initialBounds)
+            && self.contentMode == self.initialViewContentMode;
 }
 
 #define kAnimatableVisible @"UIView.animatableVisible"

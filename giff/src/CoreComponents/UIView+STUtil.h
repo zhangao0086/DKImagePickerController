@@ -49,9 +49,13 @@ typedef NS_ENUM(NSInteger, STSlideAllowedDirection) {
 
 - (id)initWithSizeWidth:(CGFloat)width;
 
+- (UIViewContentMode)initialViewContentMode;
+
 - (void)saveInitialLayout;
 
 - (void)restoreInitialLayout;
+
+- (BOOL)equalToInitialLayout;
 
 - (void)lockVisibleToHide;
 
