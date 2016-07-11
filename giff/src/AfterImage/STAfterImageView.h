@@ -6,10 +6,10 @@
 #import <Foundation/Foundation.h>
 #import "STSelectableView.h"
 #import "STAfterImageItem.h"
+#import "STSelectableCapturedImageSetView.h"
 
 @class STAfterImageItem;
 @class STCapturedImageSet;
 
-@interface STAfterImageView : STSelectableView
-@property (nonatomic, readwrite) STCapturedImageSet * imageSet;
+@interface STAfterImageView : STSelectableCapturedImageSetView
 @end
