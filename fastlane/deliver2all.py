@@ -86,11 +86,11 @@ def get_content_for_markdown(content_str):
 		content_str = content_str.encode('utf8')
 
 	content_str = content_str.decode('utf8')
-	
+
 	#replace chars
 	for s, r in __replace_targets__:
 		content_str= content_str.replace(s,r).strip()
-		
+
 	#filtering lines
 	content_str_by_line = ''
 	for line in content_str.splitlines(True):
@@ -100,8 +100,8 @@ def get_content_for_markdown(content_str):
 				content_str = content_str_by_line
 			break
 		content_str_by_line += line
-		
-	return content_str 
+
+	return content_str
 
 def get_content_for_markdown_of_file(file):
 	if not file:
@@ -141,7 +141,7 @@ def deploy_to_iamelie_site_data():
 	for iamelie_data_file in [f for d, a, f in os.walk(data_file_path)][0]:
 		if iamelie_data_file.startswith('.') or not os.path.isfile(os.path.join(data_file_path, iamelie_data_file)):
 			continue
-			
+
 		data_file_lang = os.path.splitext(iamelie_data_file)[0]
 		data_titie = datas_default[filter(lambda lang: data_file_lang in lang, datas_default)[0]]['name']
 		data_lines=[]
@@ -331,7 +331,7 @@ for d, a, f in os.walk(__deliver_l10n_res__):
 		lang = langcode.split('-')[0]
 		matched_langs = filter(lambda key: key.split('-')[0] == lang, string_targetdata)
 		matched_lang = matched_langs[0] if len(matched_langs) else 'en-US'
-		
+
 		#zh care
 		if lang == 'zh':
 			_zh_matched_lang = None
@@ -340,7 +340,7 @@ for d, a, f in os.walk(__deliver_l10n_res__):
 			#if zh familiy contains string_targetdata
 			if _zh_matched_lang and _zh_matched_lang in string_targetdata:
 				matched_lang = _zh_matched_lang
-				
+
 		#get data
 		matched_data = string_targetdata[matched_lang]
 

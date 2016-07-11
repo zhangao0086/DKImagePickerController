@@ -2,7 +2,7 @@
     • 4K: iPhone 6s/6s Plus/SE, iPad Pro or newer.
     • 3K: iPhone 6/6 Plus, iPad Air 2
     • 2K: iPhone 5/5s/5c, iPod Touch 6G, iPad 2-4/Air/Mini
-    • HD 1440p: Older version of iPhone, iPod Touch, iPad                
+    • HD 1440p: Older version of iPhone, iPod Touch, iPad
 + A switchable button for new modes S,M,L,4K has been added to the left side of capture button.
 • Huge performance and memory usage improvements that makes high-res output possible.
 • Other many minor bug fixes.

@@ -10,7 +10,7 @@
 
 username "illhert@yahoo.com" # your Apple ID user
 app_identifier "com.stells.giff"
-app_version "1.3"
+app_version "1.0"
 metadata_path "./fastlane/com.stells.giff"
 screenshots_path "/Users/blackgene/Documents/giff\-resources/appstore/screenshots/giff"
 ipa "giff.ipa"
