@@ -160,7 +160,7 @@
     }] mapWithIndex:^id(STCapturedImage * image, NSInteger index) {
         @autoreleasepool {
             if(image.frameImageURLToExportGIF){
-                return image.frameImageURLToExportGIF;
+                return image.frameImageURLToExportGIF.path;
             }
 
             if(image.fullScreenUrl){
