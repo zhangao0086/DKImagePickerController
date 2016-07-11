@@ -7,6 +7,7 @@
 #import "STCapturedImageSet.h"
 #import "NSArray+STUtil.h"
 #import "STAfterImageLayerItem.h"
+#import "UIView+STUtil.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
