@@ -313,42 +313,44 @@
 }
 
 - (void)setButtonDrawable:(UIImageView *)view set:(id)object{
-    NSParameterAssert(object);
+    @autoreleasepool {
+        NSParameterAssert(object);
 
-    [self clearButtonDrawable:view disposeContents:NO];
+        [self clearButtonDrawable:view disposeContents:NO];
 
-    if([object isKindOfClass:UIImage.class]){
-        view.image = object;
-        //TODO: detailed code review required for legacies - in this case setLayout needed?
+        if([object isKindOfClass:UIImage.class]){
+            view.image = object;
+            //TODO: detailed code review required for legacies - in this case setLayout needed?
 //        [self setNeedsLayoutOfContentViewsToFit:view];
 
-    }else if([object isKindOfClass:NSString.class]){
-        view.image = [UIImage imageBundledCache:object];
-        //TODO: detailed code review required for legacies - in this case setLayout needed?
+        }else if([object isKindOfClass:NSString.class]){
+            view.image = [UIImage imageBundledCache:object];
+            //TODO: detailed code review required for legacies - in this case setLayout needed?
 //        [self setNeedsLayoutOfContentViewsToFit:view];
 
-    }else if([object isKindOfClass:NSURL.class]){
-        view.image = [UIImage imageWithContentsOfFile:((NSURL *)object).path];
+        }else if([object isKindOfClass:NSURL.class]){
+            view.image = [UIImage imageWithContentsOfFile:((NSURL *)object).path];
 
-        [self setNeedsLayoutOfContentViewsToFit:view];
+            [self setNeedsLayoutOfContentViewsToFit:view];
 
-    }else if([object isKindOfClass:CALayer.class]){
-        CALayer * layerObject = object;
-        [view.layer addSublayer:layerObject];
+        }else if([object isKindOfClass:CALayer.class]){
+            CALayer * layerObject = object;
+            [view.layer addSublayer:layerObject];
 
-        //fit size
-        if(self.fitViewsImageToBounds && !CGSizeEqualToSize(layerObject.size, self.size)){
-            layerObject.size = self.size;
+            //fit size
+            if(self.fitViewsImageToBounds && !CGSizeEqualToSize(layerObject.size, self.size)){
+                layerObject.size = self.size;
+            }
+
+        }else if([object isKindOfClass:UIView.class]){
+            UIView * viewObject = object;
+            [view addSubview:viewObject];
+
+            [self setNeedsLayoutOfContentViewsToFit:viewObject];
+
+        }else{
+            NSAssert(NO, @"must set as drawable types, such as UIImage, NSString(for create UIImage), CALayer, UIView instead of \"%@\"", object);
         }
-
-    }else if([object isKindOfClass:UIView.class]){
-        UIView * viewObject = object;
-        [view addSubview:viewObject];
-
-        [self setNeedsLayoutOfContentViewsToFit:viewObject];
-
-    }else{
-        NSAssert(NO, @"must set as drawable types, such as UIImage, NSString(for create UIImage), CALayer, UIView instead of \"%@\"", object);
     }
 }
 

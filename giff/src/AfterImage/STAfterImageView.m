@@ -20,6 +20,20 @@
     STAfterImageItem * _afterImageItem;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        _afterImageSublayersContainerView = [[UIView alloc] initWithSize:self.size];
+        [self insertSubview:_afterImageSublayersContainerView aboveSubview:_contentView];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    self.imageSet = nil;
+    _afterImageSublayersContainerView = nil;
+}
+
 - (void)setImageSet:(STCapturedImageSet *)imageSet {
     NSAssert(!imageSet || [imageSet.extensionObject isKindOfClass:[STAfterImageItem class]], @"given imageSet did not contain STAfterImageItem in .extensionData");
 
@@ -32,11 +46,6 @@
             NSArray<NSURL *>* imageUrls = [imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
 
             _afterImageItem = (STAfterImageItem *)imageSet.extensionObject;
-
-            if (!_afterImageSublayersContainerView) {
-                _afterImageSublayersContainerView = [[UIView alloc] initWithSize:self.size];
-                [self insertSubview:_afterImageSublayersContainerView aboveSubview:_contentView];
-            }
 
             for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
                 STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_afterImageSublayersContainerView.size];
@@ -63,7 +72,7 @@
         [_afterImageSublayersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
             [((STSelectableView *) view) clearViews];
         }];
-        [_afterImageSublayersContainerView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
+        [_afterImageSublayersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
     }
     [super clearViews];
 }

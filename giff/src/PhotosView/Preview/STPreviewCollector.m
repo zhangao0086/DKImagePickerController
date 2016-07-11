@@ -298,12 +298,12 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             }
         }];
 
+
         [self renderAfterImageSetWithFrameAt:selectedIndex imageSet:targetImageSet];
     }
 }
 
 - (void)renderAfterImageSetWithFrameAt:(NSUInteger)index imageSet:(STCapturedImageSet *)imageSet{
-
     @autoreleasepool {
         if(!_afterImageView){
             _afterImageView = [[STAfterImageView alloc] initWithSize:_previewView.size];
@@ -314,12 +314,21 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             [_previewView insertSubview:_afterImageView aboveSubview:self.previewView.contentView];
             [_afterImageView centerToParent];
         }
-        
-        STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
-        layerItem.alpha = .4;
-        layerItem.frameIndexOffset = -2;
-        imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem]];
-        [_afterImageView setImageSet:imageSet];
+
+        //set default
+        if(!imageSet.extensionObject){
+            STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
+            layerItem.alpha = .4;
+            layerItem.frameIndexOffset = -2;
+
+            STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
+            layerItem2.alpha = .4;
+            layerItem2.frameIndexOffset = 2;
+
+            imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem,layerItem2]];
+        }
+
+        _afterImageView.imageSet = imageSet;
         _afterImageView.currentIndex = index;
 
 //        STCapturedImage * selectedImage_base = imageSet.images[index];
@@ -391,7 +400,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 - (void)exitAfterImageEditingMode{
 //    [[self.carousel.currentItemView viewWithTagName:@"proto_view"] clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 
-    [_afterImageView clearViews];
+    _afterImageView.imageSet = nil;
     [_afterImageView removeFromSuperview];
 
 }
