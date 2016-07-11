@@ -20,6 +20,7 @@
 #import "STExporter+ConfigGIF.h"
 #import "STExporter+Config.h"
 #import "PHAsset+STUtil.h"
+#import "STCapturedImage+STExporterIOGIF.h"
 
 @implementation STExporter (IOGIF)
 
@@ -158,6 +159,10 @@
 
     }] mapWithIndex:^id(STCapturedImage * image, NSInteger index) {
         @autoreleasepool {
+            if(image.frameImageURLToExportGIF){
+                return image.frameImageURLToExportGIF;
+            }
+
             if(image.fullScreenUrl){
                 return [image fullScreenUrl].path;
             }
