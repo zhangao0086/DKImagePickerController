@@ -16,7 +16,7 @@
 @end
 
 @implementation STAfterImageView {
-    UIView * _afterImageSublayersView;
+    UIView * _afterImageSublayersContainerView;
     STAfterImageItem * _afterImageItem;
 }
 
@@ -25,58 +25,57 @@
 
     //sub set
     if(imageSet) {
-        STCapturedImage * anyImage = [imageSet.images firstObject];
-        NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
-        NSArray<NSURL *>* imageUrls = [imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
-
         //set - heavy cost
         if (![imageSet isEqual:_imageSet] && [imageSet.extensionObject isKindOfClass:[STAfterImageItem class]]) {
+            STCapturedImage * anyImage = [imageSet.images firstObject];
+            NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
+            NSArray<NSURL *>* imageUrls = [imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
+
             _afterImageItem = (STAfterImageItem *)imageSet.extensionObject;
 
-            if (!_afterImageSublayersView) {
-                _afterImageSublayersView = [[UIView alloc] initWithSize:self.size];
-                [self insertSubview:_afterImageSublayersView aboveSubview:_contentView];
+            if (!_afterImageSublayersContainerView) {
+                _afterImageSublayersContainerView = [[UIView alloc] initWithSize:self.size];
+                [self insertSubview:_afterImageSublayersContainerView aboveSubview:_contentView];
             }
 
             for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
-                STSelectableView *layerView = [[STSelectableView alloc] initWithFrame:_afterImageSublayersView.bounds];
+                STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_afterImageSublayersContainerView.size];
+                layerView.fitViewsImageToBounds = YES;
 
                 //TODO: preheating - 여기서 미리 랜더링된 필터를 temp url에 저장 후 그 url을 보여주는 것도 나쁘지 않을듯
-                [_afterImageSublayersView addSubview:layerView];
+                [_afterImageSublayersContainerView addSubview:layerView];
                 [layerView setViews:imageUrls];
             }
-        }
-        [self setViews:imageUrls];
 
+            [self setViews:imageUrls];
+        }
     }else{
         //clear
-        [self clearViews];
         _afterImageItem = nil;
+        [self clearViews];
     }
 
     _imageSet = imageSet;
 }
 
 - (void)clearViews {
-    [_afterImageSublayersView st_eachSubviews:^(UIView *view, NSUInteger index) {
-        [((STSelectableView *) view) clearViews];
-    }];
-    [_afterImageSublayersView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
+    if(!_afterImageItem){
+        [_afterImageSublayersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
+            [((STSelectableView *) view) clearViews];
+        }];
+        [_afterImageSublayersContainerView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
+    }
     [super clearViews];
 }
 
 - (void)setViewsDisplay {
     [super setViewsDisplay];
 
-
-    oo(_afterImageSublayersView.subviews);
-    [_afterImageSublayersView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
+    [_afterImageSublayersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
         STAfterImageLayerItem *layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:index];
         NSUInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
-        ii(layerIndex);
-        ii(layerItem.frameIndexOffset);
-        BOOL overRanged = self.count>=layerIndex;
+        BOOL overRanged = layerIndex>=self.count;
 
         if(overRanged){
             layerView.visible = NO;

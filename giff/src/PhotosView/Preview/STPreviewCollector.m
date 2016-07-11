@@ -306,10 +306,15 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 
     @autoreleasepool {
         if(!_afterImageView){
-            _afterImageView = [[STAfterImageView alloc] initWithSize:self.carousel.currentItemView.size];
-            [self.carousel.currentItemView addSubview:_afterImageView];
+            _afterImageView = [[STAfterImageView alloc] initWithSize:_previewView.size];
+            _afterImageView.fitViewsImageToBounds = YES;
         }
 
+        if(![[_previewView subviews] containsObject:_afterImageView]){
+            [_previewView insertSubview:_afterImageView aboveSubview:self.previewView.contentView];
+            [_afterImageView centerToParent];
+        }
+        
         STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
         layerItem.alpha = .4;
         layerItem.frameIndexOffset = -2;
