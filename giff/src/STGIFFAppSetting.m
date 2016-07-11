@@ -174,18 +174,6 @@ STAppSettingCorePropertiesImplementation
 
 }
 
-- (void)setPolicy {
-    [super setPolicy];
-
-    //TODO: 추후 메뉴얼 즉시 진입을 안정화 시키고 이 코드를 삭제함.
-    self.mode = STCameraModeElie;
-
-    if([@"1.1" isEqualToString:[STApp appVersion]]){
-        self.afterManualCaptureAction = STAfterManualCaptureActionEnterEdit;
-    }
-
-}
-
 - (void)setPolicyLaunchFirst {
 
 }
