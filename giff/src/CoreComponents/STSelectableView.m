@@ -101,8 +101,14 @@
     _back = nil;
 }
 
-#pragma mark Views
+#pragma mark Views - Set
+- (void)willSetViews:(NSArray *)presentableObjects{}
+
+- (void)didSetViews:(NSArray *)presentableObjects{}
+
 - (void)setViews:(NSArray *)presentableObjects {
+    [self willSetViews:presentableObjects];
+
     [self clearViews];
 
     if(presentableObjects){
@@ -137,13 +143,22 @@
         }
         [self setViewsDisplay];
     }
+
+    [self didSetViews:presentableObjects];
 }
+
+#pragma mark Views - Clear
+- (void)willClearViews{}
+
+- (void)didClearViews{}
 
 - (void)whenBeforeClearViews:(void (^)(void))clearViews; {
     _whenBeforeClearViews = clearViews;
 }
 
 - (void)clearViews {
+    [self willClearViews];
+
     !_whenBeforeClearViews?:_whenBeforeClearViews();
     _whenBeforeClearViews = nil;
 
@@ -154,6 +169,8 @@
     }
     self.viewsPresentableObjects = nil;
     [self resetIndex];
+
+    [self didClearViews];
 }
 
 - (void)setAllowSelectAsTap:(BOOL)allowSelectAsTap; {

@@ -43,6 +43,10 @@
 
 - (id)initWithFrame:(CGRect)frame viewsAsInteractionDisabled:(NSArray *)presentableObjects;
 
+- (void)willSetViews:(NSArray *)presentableObjects;
+
+- (void)didSetViews:(NSArray *)presentableObjects;
+
 - (void)setViews:(NSArray *)presentableObjects;
 
 - (void)clearViews;
@@ -50,6 +54,10 @@
 - (void)whenSelected:(void (^)(STSelectableView *selectedView, NSInteger index))selected;
 
 - (void)whenSelectedWithMappedValue:(void (^)(STSelectableView *selectedView, NSInteger index, id value))selected;
+
+- (void)willClearViews;
+
+- (void)didClearViews;
 
 - (void)whenBeforeClearViews:(void (^)(void))clearViews;
 
