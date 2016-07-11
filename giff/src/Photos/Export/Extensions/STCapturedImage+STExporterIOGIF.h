@@ -7,4 +7,5 @@
 #import "STCapturedImage.h"
 
 @interface STCapturedImage (STExporterIOGIF)
+@property (nonatomic, readwrite, nullable) NSURL *frameImageURLToExportGIF;
 @end
