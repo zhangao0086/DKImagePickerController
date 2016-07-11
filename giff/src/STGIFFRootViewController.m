@@ -916,8 +916,6 @@ static ALAssetsLibrary * assetLibrary;
         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 
         if(result){
-            STGIFFAppSetting.get.afterManualCaptureAction = STAfterManualCaptureActionEnterAnimatableReview;
-
             [[STPhotoSelector sharedInstance] doAfterCaptured:[STPhotoItemSource sourceWithResponse:result]];
 
 //            UIImage * animatedImage = result.image;
