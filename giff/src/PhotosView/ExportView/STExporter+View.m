@@ -6,7 +6,7 @@
 #import "STExporter+View.h"
 #import "STPhotoItem+UIAccessory.h"
 #import "NSGIF.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "STExporter+IO.h"
 #import "STExportView.h"
 #import "STStandardReachableButton.h"

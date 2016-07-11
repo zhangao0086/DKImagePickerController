@@ -6,7 +6,7 @@
 #import "STPhotoItem+STExporterIOGIF.h"
 #import "NSGIF.h"
 #import "BlocksKit.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 
 NSString * const STPhotoItemsGIFsFileNamePrefix = @"com_stells_exported_gif_";
 

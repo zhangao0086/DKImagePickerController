@@ -3,10 +3,10 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "BlocksKit.h"
 
-@implementation STPhotoItem (ExporterIO)
+@implementation STPhotoItem (STExporterIO)
 
 DEFINE_ASSOCIATOIN_KEY(kExporting)
 - (BOOL)exporting {

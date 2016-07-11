@@ -21,7 +21,7 @@
 #import "NSNumber+STUtil.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "NSGIF.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "NSArray+STUtil.h"
 #import "STExporter+IOGIF.h"
 #import "STPhotoItem+STExporterIOGIF.h"

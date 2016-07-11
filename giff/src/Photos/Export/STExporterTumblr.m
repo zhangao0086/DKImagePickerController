@@ -17,7 +17,7 @@
 #import "R.h"
 #import "UIAlertController+STGIFFApp.h"
 #import "STPhotoItem.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "NSURL+STUtil.h"
 #import "STExporter+View.h"
 #import "JXHTTPOperation+Convenience.h"

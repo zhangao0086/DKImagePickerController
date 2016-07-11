@@ -39,7 +39,7 @@
 #import "RLMCapturedImage.h"
 #import "NSNumber+STUtil.h"
 #import "STFilterPresenterBase.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "STUIApplication.h"
 #import "STApp+Logger.h"
 

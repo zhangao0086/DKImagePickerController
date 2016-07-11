@@ -13,7 +13,7 @@
 #import "STExporter+URL.h"
 #import "STExporter+Handle.h"
 #import "STExporter+IOGIF.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "STExporter+ConfigGIF.h"
 #import "FBSDKMessengerShareOptions.h"
 #import "FBSDKMessengerSharer.h"

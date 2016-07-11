@@ -7,7 +7,7 @@
 #import "STExporter+Handle.h"
 #import "NSObject+STUtil.h"
 #import "STPhotoSelector.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 
 @implementation STExporterSaveToPhotos {
 

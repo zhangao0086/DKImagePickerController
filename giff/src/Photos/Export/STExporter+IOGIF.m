@@ -11,7 +11,7 @@
 #import "BlocksKit.h"
 #import "FCFileManager.h"
 #import "NSArray+STUtil.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "STPhotoItem+STExporterIOGIF.h"
 #import "NSData+STGIFUtil.h"
 #import "STCapturedImageSet.h"

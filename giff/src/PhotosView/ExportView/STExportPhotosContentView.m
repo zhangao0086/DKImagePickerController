@@ -24,7 +24,7 @@
 #import "DFAnimatedImageView.h"
 #import "STQueueManager.h"
 #import "DFAnimatedImageView+Loader.h"
-#import "STPhotoItem+ExporterIO.h"
+#import "STPhotoItem+STExporterIO.h"
 #import "CALayer+STUtil.h"
 #import "STPhotoItem+UIAccessory.h"
 #import "STPhotoItem+STExporterIOGIF.h"
