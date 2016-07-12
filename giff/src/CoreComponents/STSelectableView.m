@@ -258,7 +258,7 @@
 }
 
 - (void)setCurrentIndex:(NSUInteger)currentIndex; {
-    if(currentIndex==NSUIntegerMax){
+    if(!self.count || currentIndex==NSUIntegerMax){
         return;
     }
 
