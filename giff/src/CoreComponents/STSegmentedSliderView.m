@@ -168,10 +168,16 @@
 }
 
 - (CGSize) thumbViewSize{
-    return CGSizeMake(self.boundsHeight, self.boundsHeight);
+    if(_contentView.visible){
+        //default
+        return CGSizeMake(self.boundsHeight, self.boundsHeight);
+    }else{
+        //delegated
+        return _thumbView.size;
+    }
 }
 
-- (CGFloat) halfOfThumbViewSize{
+- (CGFloat)halfWidthSizeOfThumbView{
     return [self thumbViewSize].width*.5f;
 }
 
@@ -215,8 +221,8 @@
 }
 
 - (void(^)(UIGestureRecognizer *, UIGestureRecognizerState, CGPoint))getGestureBlock {
-    CGPoint leftMargin = CGPointMake([self halfOfThumbViewSize], [self halfOfThumbViewSize]);
-    CGPoint rightMargin = CGPointMake(self.right-[self halfOfThumbViewSize], [self halfOfThumbViewSize]);
+    CGPoint leftMargin = CGPointMake([self halfWidthSizeOfThumbView], [self halfWidthSizeOfThumbView]);
+    CGPoint rightMargin = CGPointMake(self.right- [self halfWidthSizeOfThumbView], [self halfWidthSizeOfThumbView]);
     __block CGFloat offset = 0;
 
     return ^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
@@ -329,7 +335,7 @@
 
     CGFloat paddingHorizontal = self.boundsHeightHalf - _thumbView.boundsHeightHalf;
 
-    CGFloat halfSize = [self halfOfThumbViewSize];
+    CGFloat halfSize = [self halfWidthSizeOfThumbView];
 
     for (int i = 0; i < _numberOfPoints; i++) {
         [_centerPositions addObject:[NSValue valueWithCGPoint:CGPointMake((paddingHorizontal + halfSize) + (i * ((self.boundsWidth - (halfSize + paddingHorizontal) * 2)) / (_numberOfPoints>1 ? _numberOfPoints - 1 : 1) ), self.boundsHeightHalf)]];

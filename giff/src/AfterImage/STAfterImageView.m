@@ -87,36 +87,22 @@
     }
 
     for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
+        //layer view
         STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_afterImageSublayersContainerView.size];
         layerView.fitViewsImageToBounds = YES;
-
         //TODO: preheating - 여기서 미리 랜더링된 필터를 temp url에 저장 후 그 url을 보여주는 것도 나쁘지 않을듯
         [_afterImageSublayersContainerView addSubview:layerView];
         [layerView setViews:presentableObjects];
+
+        //slider
+        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:self.size];
+        offsetSlider.delegateSlider = self;
+        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
+        [layerView addSubview:offsetSlider];
     }
 
     [super willSetViews:presentableObjects];
-
-    STSegmentedSliderView * slider = [[STSegmentedSliderView alloc] initWithSize:self.size];
-    slider.delegateSlider = self;
-    slider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
-    [self addSubview:slider];
 }
-
-- (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-
-}
-
-- (UIView *)createThumbView {
-    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(10, self.height)];
-    thumbView.backgroundColor = [UIColor blackColor];
-    return thumbView;
-}
-
-- (UIView *)createBackgroundView:(CGRect)bounds {
-    return nil;
-}
-
 
 - (void)willClearViews {
     if(_afterImageItem){
@@ -129,6 +115,21 @@
     [_afterImageSublayersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 
     [super willClearViews];
+}
+
+#pragma mark OffsetSlider
+- (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+
+}
+
+- (UIView *)createThumbView {
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(10, self.height)];
+    thumbView.backgroundColor = [UIColor blackColor];
+    return thumbView;
+}
+
+- (UIView *)createBackgroundView:(CGRect)bounds {
+    return nil;
 }
 
 @end
