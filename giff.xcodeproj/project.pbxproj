@@ -183,8 +183,6 @@
 		A050D1B61CC5DD0D00628C2F /* STCaptureProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF1C1CC5DD0D00628C2F /* STCaptureProcessor.m */; };
 		A050D1B71CC5DD0D00628C2F /* STCaptureRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF1E1CC5DD0D00628C2F /* STCaptureRequest.m */; };
 		A050D1B81CC5DD0D00628C2F /* STElieCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF201CC5DD0D00628C2F /* STElieCamera.m */; };
-		A050D1B91CC5DD0D00628C2F /* STMenuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF241CC5DD0D00628C2F /* STMenuItemView.m */; };
-		A050D1BA1CC5DD0D00628C2F /* STElieControlSubselectionSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF261CC5DD0D00628C2F /* STElieControlSubselectionSlider.m */; };
 		A050D1BB1CC5DD0D00628C2F /* STHome.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF281CC5DD0D00628C2F /* STHome.m */; };
 		A050D1BC1CC5DD0D00628C2F /* STMainControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF2A1CC5DD0D00628C2F /* STMainControl.m */; };
 		A050D1BD1CC5DD0D00628C2F /* STSubControl.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF2C1CC5DD0D00628C2F /* STSubControl.m */; };
@@ -689,10 +687,6 @@
 		A050CF1E1CC5DD0D00628C2F /* STCaptureRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCaptureRequest.m; sourceTree = "<group>"; };
 		A050CF1F1CC5DD0D00628C2F /* STElieCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STElieCamera.h; sourceTree = "<group>"; };
 		A050CF201CC5DD0D00628C2F /* STElieCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STElieCamera.m; sourceTree = "<group>"; };
-		A050CF231CC5DD0D00628C2F /* STMenuItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STMenuItemView.h; sourceTree = "<group>"; };
-		A050CF241CC5DD0D00628C2F /* STMenuItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STMenuItemView.m; sourceTree = "<group>"; };
-		A050CF251CC5DD0D00628C2F /* STElieControlSubselectionSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STElieControlSubselectionSlider.h; sourceTree = "<group>"; };
-		A050CF261CC5DD0D00628C2F /* STElieControlSubselectionSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STElieControlSubselectionSlider.m; sourceTree = "<group>"; };
 		A050CF271CC5DD0D00628C2F /* STHome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STHome.h; sourceTree = "<group>"; };
 		A050CF281CC5DD0D00628C2F /* STHome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STHome.m; sourceTree = "<group>"; };
 		A050CF291CC5DD0D00628C2F /* STMainControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STMainControl.h; sourceTree = "<group>"; };
@@ -1462,9 +1456,6 @@
 		A050CF211CC5DD0D00628C2F /* Control */ = {
 			isa = PBXGroup;
 			children = (
-				A050CF221CC5DD0D00628C2F /* Menu */,
-				A050CF251CC5DD0D00628C2F /* STElieControlSubselectionSlider.h */,
-				A050CF261CC5DD0D00628C2F /* STElieControlSubselectionSlider.m */,
 				A050CF271CC5DD0D00628C2F /* STHome.h */,
 				A050CF281CC5DD0D00628C2F /* STHome.m */,
 				A050CF291CC5DD0D00628C2F /* STMainControl.h */,
@@ -1473,15 +1464,6 @@
 				A050CF2C1CC5DD0D00628C2F /* STSubControl.m */,
 			);
 			path = Control;
-			sourceTree = "<group>";
-		};
-		A050CF221CC5DD0D00628C2F /* Menu */ = {
-			isa = PBXGroup;
-			children = (
-				A050CF231CC5DD0D00628C2F /* STMenuItemView.h */,
-				A050CF241CC5DD0D00628C2F /* STMenuItemView.m */,
-			);
-			path = Menu;
 			sourceTree = "<group>";
 		};
 		A050CF2D1CC5DD0D00628C2F /* CoreComponents */ = {
@@ -2498,7 +2480,6 @@
 				A050D1CE1CC5DD0D00628C2F /* NSObject+STAppProducts.m in Sources */,
 				A050D1FE1CC5DD0D00628C2F /* UIImage+STUtil.m in Sources */,
 				A050D2081CC5DD0D00628C2F /* BCMeshTransform+BasicTransforms.m in Sources */,
-				A050D1B91CC5DD0D00628C2F /* STMenuItemView.m in Sources */,
 				A050D2711CC5DD0D00628C2F /* STElieStatusBar.m in Sources */,
 				A050D21B1CC5DD0D00628C2F /* SVGKFastImageView+STUtil.m in Sources */,
 				A050D1E21CC5DD0D00628C2F /* STContinuousForceTouchGestureRecognizer.m in Sources */,
@@ -2544,7 +2525,6 @@
 				A050D1BD1CC5DD0D00628C2F /* STSubControl.m in Sources */,
 				A050D1EA1CC5DD0D00628C2F /* STMotionScrollLivePhotoView.m in Sources */,
 				A050D2401CC5DD0D00628C2F /* STExporter+Handle.m in Sources */,
-				A050D1BA1CC5DD0D00628C2F /* STElieControlSubselectionSlider.m in Sources */,
 				A050D2801CC5DD0D00628C2F /* M13ProgressViewBorderedSlider.m in Sources */,
 				A050D2011CC5DD0D00628C2F /* UITouchLongPressGestureRecognizer.m in Sources */,
 				A050D23B1CC5DD0D00628C2F /* STEditorResult.m in Sources */,

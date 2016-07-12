@@ -23,7 +23,6 @@
 #import "PINMemoryCache.h"
 #import "STCaptureProcessor.h"
 #import "FCFileManager.h"
-#import "STQueueManager.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -75,6 +74,10 @@
 
     //touch launch time
     [STGIFFAppSetting.get touchForLastLaunchTime];
+
+#if DEBUG
+    [[STUIApplication sharedApplication] launchFromNeededShortcutItemType:@"STShortcutItemTypeEditLastPhoto" completionHandler:nil];
+#endif
 
     return YES;
 }
