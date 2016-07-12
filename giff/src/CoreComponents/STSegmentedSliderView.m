@@ -168,7 +168,7 @@
 }
 
 - (CGSize) thumbViewSize{
-    if(_contentView.visible){
+    if([_contentView isEqual:_thumbView]){
         //default
         return CGSizeMake(self.boundsHeight, self.boundsHeight);
     }else{

@@ -95,7 +95,7 @@
         [layerView setViews:presentableObjects];
 
         //slider
-        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:self.size];
+        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:layerView.size];
         offsetSlider.delegateSlider = self;
         offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
         [layerView addSubview:offsetSlider];
@@ -119,7 +119,7 @@
 
 #pragma mark OffsetSlider
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-
+    ii(index);
 }
 
 - (UIView *)createThumbView {
