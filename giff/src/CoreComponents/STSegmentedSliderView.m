@@ -10,6 +10,7 @@
 #import "STSegmentedSliderView.h"
 #import "UIView+STUtil.h"
 #import "CAShapeLayer+STUtil.h"
+#import "NSArray+STUtil.h"
 
 @implementation STSegmentedSliderView {
     UIView *_segmentationViewContainer;
@@ -177,6 +178,10 @@
     }
 }
 
+- (UIView *)trackView{
+    return self;
+}
+
 - (CGFloat)halfWidthSizeOfThumbView{
     return [self thumbViewSize].width*.5f;
 }
@@ -189,12 +194,17 @@
     [self setThumbViewCenter:p animation:_movingThumbAnimationEnabled completion:block];
 }
 
-- (void)setThumbViewCenter:(CGPoint)point animation:(BOOL)animation completion:(void (^)(void))block{
+- (void)setThumbViewCenter:(CGPoint)centerPoint animation:(BOOL)animation completion:(void (^)(void))block{
+    CGFloat padding = [self halfWidthSizeOfThumbView];
+    CGFloat maxPosition = self.trackView.width-padding;
+    centerPoint.x = CLAMP(centerPoint.x, padding, maxPosition);
+    _normalizedCenterPositionOfThumbView = (centerPoint.x-padding)/(maxPosition+padding);
+
     if(animation){
         Weaks
         [NSObject animate:^{
             Strongs
-            Sself->_thumbView.easeInEaseOut.center = point;
+            Sself->_thumbView.easeInEaseOut.center = centerPoint;
 
         } completion:^(BOOL finished) {
             Strongs
@@ -208,7 +218,7 @@
 //        if([[_thumbView pop_animationKeys] count])
 //            [_thumbView pop_removeAllAnimations];
 
-        _thumbView.center = point;
+        _thumbView.center = centerPoint;
 
         if(block) block();
     }
@@ -287,10 +297,15 @@
     BOOL changed = self.currentIndex != index;
 
     [super setCurrentIndex:index];
-    
-    if ([_centerPositions count] > index) {
+
+    if([_centerPositions count]==0){
+        if ([_delegateSlider respondsToSelector:@selector(didSlide:withSelectedIndex:)]) {
+            [_delegateSlider didSlide:self withSelectedIndex:index];
+        }
+
+    } else if ([_centerPositions count] > index) {
         Weaks
-        [self setThumbViewCenter:[[_centerPositions objectAtIndex:index] CGPointValue] completion:^{
+        [self setThumbViewCenter:[[_centerPositions st_objectOrNilAtIndex:index] CGPointValue] completion:^{
             Strongs
             if (changed && [Sself->_delegateSlider respondsToSelector:@selector(didSlide:withSelectedIndex:)]) {
                 [Sself->_delegateSlider didSlide:Sself withSelectedIndex:index];

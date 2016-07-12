@@ -8,7 +8,6 @@
 #import "NSArray+STUtil.h"
 #import "STAfterImageLayerItem.h"
 #import "UIView+STUtil.h"
-#import "STSegmentedSliderView.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -119,7 +118,7 @@
 
 #pragma mark OffsetSlider
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-    ii(index);
+    ff(timeSlider.normalizedCenterPositionOfThumbView);
 }
 
 - (UIView *)createThumbView {
