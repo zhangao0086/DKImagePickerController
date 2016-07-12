@@ -51,8 +51,8 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			
 			for (_, groupType) in assetGroupTypes.enumerate() {
 				let fetchResult = PHAssetCollection.fetchAssetCollectionsWithType(self.collectionTypeForSubtype(groupType),
-					subtype: groupType,
-					options: nil)
+				                                                                  subtype: groupType,
+				                                                                  options: nil)
 				fetchResult.enumerateObjectsUsingBlock { object, index, stop in
 					if let collection = object as? PHAssetCollection {
 						let assetGroup = DKAssetGroup()

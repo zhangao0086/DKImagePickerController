@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import MediaPlayer
 import Photos
+import AVKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
-    var player: MPMoviePlayerController?
-    
+
     @IBOutlet var previewView: UICollectionView?
     var assets: [DKAsset]?
     
@@ -27,7 +26,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
 	func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
 	                                  allowMultipleType: Bool,
-	                                  sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo],
+	                                  sourceType: DKImagePickerControllerSourceType = .Both,
 	                                  allowsLandscape: Bool,
 	                                  singleSelect: Bool) {
 		
@@ -42,6 +41,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		pickerController.allowMultipleTypes = allowMultipleType
 		pickerController.sourceType = sourceType
 		pickerController.singleSelect = singleSelect
+        pickerController.numberColor = UIColor.yellowColor()
+        pickerController.checkedBackgroundImgColor = UIColor.orangeColor()
+        pickerController.backgroundCollectionViewColor = UIColor.blackColor()
 		
 //		pickerController.showsCancelButton = true
 //		pickerController.showsEmptyAlbums = false
@@ -60,36 +62,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		}
 		
 		if UI_USER_INTERFACE_IDIOM() == .Pad {
-			pickerController.modalPresentationStyle = .FormSheet;
+			pickerController.modalPresentationStyle = .FormSheet
 		}
 		
 		self.presentViewController(pickerController, animated: true) {}
 	}
 	
-    func playVideo(videoURL: NSURL) {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.exitPlayer(_:)), name: MPMoviePlayerPlaybackDidFinishNotification, object: nil)
-        
-        let player = MPMoviePlayerController(contentURL: videoURL)
-        player.movieSourceType = .File
-        player.controlStyle = .Fullscreen
-        player.fullscreen = true
-        
-        player.view.frame = view.bounds
-        view.addSubview(player.view)
-        
-        player.prepareToPlay()
-        player.play()
-        
-        self.player = player
-    }
-    
-    func exitPlayer(notification: NSNotification) {
-        let reason = (notification.userInfo!)[MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] as! NSNumber!
-        if reason.integerValue == MPMovieFinishReason.UserExited.rawValue {
-            NSNotificationCenter.defaultCenter().removeObserver(self)
-            self.player?.view.removeFromSuperview()
-            self.player = nil
-        }
+    func playVideo(asset: AVAsset) {
+		let avPlayerItem = AVPlayerItem(asset: asset)
+		
+		let avPlayer = AVPlayer(playerItem: avPlayerItem)
+		let player = AVPlayerViewController()
+		player.player = avPlayer
+		
+        avPlayer.play()
+		
+		self.presentViewController(player, animated: true, completion: nil)
     }
     
     // MARK: - UITableViewDataSource, UITableViewDelegate methods
@@ -127,7 +115,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let assetType = Demo.types[indexPath.row]
         let allowMultipleType = !(indexPath.row == 0 && indexPath.section == 3)
         let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .Camera :
-			(indexPath.section == 2 ? .Photo : [.Camera, .Photo])
+			(indexPath.section == 2 ? .Photo : .Both)
 		let allowsLandscape = indexPath.section == 3
 		let singleSelect = indexPath.section == 4
 		
@@ -175,9 +163,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let asset = self.assets![indexPath.row]
-		asset.fetchAVAssetWithCompleteBlock { (avAsset) in
+		asset.fetchAVAssetWithCompleteBlock { (avAsset, info) in
 			dispatch_async(dispatch_get_main_queue(), { () in
-				self.playVideo(avAsset!.URL)
+				self.playVideo(avAsset!)
 			})
 		}
     }

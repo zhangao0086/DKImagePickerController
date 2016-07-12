@@ -19,6 +19,8 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports iCloud.
 * Supports UIAppearance.
 * Supports custom camera.
+* Supports custom UICollectionViewLayout.
+* Supports footer view.
 
 ## Requirements
 * iOS 8.0+
@@ -87,7 +89,7 @@ public var imageFetchPredicate: NSPredicate?
 public var videoFetchPredicate: NSPredicate?
 
 /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-public var sourceType: DKImagePickerControllerSourceType = [.Camera, .Photo]
+public var sourceType: DKImagePickerControllerSourceType = .Both
 
 /// Whether allows to select photos and videos at the same time.
 public var allowMultipleTypes = true
@@ -107,6 +109,22 @@ public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
+
+```
+
+##### Exporting to file
+```swift
+/**
+    Writes the image in the receiver to the file specified by a given path.
+*/
+public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void)
+
+/**
+    Writes the AV in the receiver to the file specified by a given path.
+
+    - parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
+*/
+public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void)
 
 ```
 
@@ -133,6 +151,9 @@ pickerController.sourceType = .Photo
 pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
+
+##### Customize footer view
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
 
 #### Create a custom camera
 
@@ -220,7 +241,7 @@ pickerController.showsCancelButton = NO;
 pickerController.showsEmptyAlbums = YES;
 pickerController.allowMultipleTypes = YES;
 pickerController.defaultSelectedAssets = @[];
-//  pickerController.sourceType         // unavailable
+pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 //  pickerController.assetGroupTypes    // unavailable
 //  pickerController.defaultAssetGroup  // unavailable
 
@@ -237,6 +258,8 @@ It has been supported languages so far:
 * en.lproj
 * zh-Hans.lproj
 * hu.lproj
+* ru.lproj
+* es.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -245,54 +268,42 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
-> In `3.0.4`, I've updated the `fetchImage...` interface:  
-> the `completeBlock: (image: UIImage?) -> Void` was changed to `completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void`
-> so you need to change:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image in
-    // ...
-})
-```
-to:
-```swift
-asset.fetchImageWithSize(size, completeBlock: { image, info in
-    // ...
-})
-```
+> In `3.2.1`, I've replaced all  `AVURLAsset` to `AVAsset` in order to support Slow Motion.
 
-## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
+> In `3.2.0`
+> * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
+> * I've also updated the `fetchAVAsset...` interface:  
+> the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)
+## [3.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.0) (2016-06-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.1...3.3.0)
 
 **Merged pull requests:**
 
-- Added support for custom camera based UINavigationController.
+- Fix the thumbnails have low quality.
 
-- Added video support for custom camera.
+- Added Turkish localization support.
 
-## [3.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.2) (2016-04-01)
+- Added footer view.
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.1...3.1.2)
+- Removed picker singleton.
 
-**Merged pull requests:**
+- Updated DKImagePickerControllerDefaultUIDelegate.
 
-- Fixed an issue that will cause the didSelectAssets block is called twice.
+## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
 
-- Added support for custom predicate to assets.
-
-- Optimized for fetching original image.
-
-- The fetchImageWithSize fetching image with .AspectFit.
-
-- Fixed an issue that may cause the popover not display as rounded.
-
-## [3.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.1) (2016-03-18)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.0.10...3.1.1)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
 
 **Merged pull requests:**
 
-- Fixed an issue that may cause crash when user not authorized camera access.
+- Add Russian translation.
+
+- Fixed an issue may cause popoverView show in incorrect position.
+
+- Optimized memory usage with large files.
+
+- Added support for Slow Motion.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 

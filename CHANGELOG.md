@@ -1,5 +1,73 @@
 # Change Log
 
+## [3.3.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.2) (2016-06-20)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.1...3.3.2)
+
+**Merged pull requests:**
+
+- Fixed an issue that can cause memory leaks to DKAssetGroupDetailVC.
+
+- Fixed an issue that may cause the backgroundColor of the DKAssetGroupDetail's view is incorrect.
+
+## [3.3.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.1) (2016-06-19)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.0...3.3.1)
+
+**Merged pull requests:**
+
+- Fixed an issue that may cause crash when an asset group doesn't know its totalCount.
+
+## [3.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.0) (2016-06-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.1...3.3.0)
+
+**Merged pull requests:**
+
+- Fix the thumbnails have low quality.
+
+- Added Turkish localization support.
+
+- Added footer view.
+
+- Removed picker singleton.
+
+- Updated DKImagePickerControllerDefaultUIDelegate.
+
+## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
+
+**Merged pull requests:**
+
+- Add Russian translation.
+
+- Fixed an issue may cause popoverView show in incorrect position.
+
+- Optimized memory usage with large files.
+
+- Added support for Slow Motion.
+
+## [3.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.0) (2016-05-02)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.3...3.2.0)
+
+**Merged pull requests:**
+
+- Supports accessing sourceType in Objective-C.
+
+- Added auto download for AVAsset if locally unavailable.
+
+- Making checkCameraPermission public in DKImagePickerControllerDefault.
+
+- Added support for custom cancel button and done button.
+
+- Fixed dismiss of camera.
+
+- Added alertview on maxlimit reach.
+
+- Added supports for custom UICollectionViewLayout.
+
 ## [3.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.1.3) (2016-04-01)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.1.2...3.1.3)

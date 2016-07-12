@@ -42,7 +42,7 @@ class DKAssetGroupCell: UITableViewCell {
 	
     var totalCountLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFontOfSize(11)
+        label.font = UIFont.systemFontOfSize(10)
         label.textColor = UIColor.grayColor()
         return label
     }()
@@ -120,7 +120,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	private lazy var groupThumbnailRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
 		options.deliveryMode = .Opportunistic
-		options.resizeMode = .Exact;
+		options.resizeMode = .Exact
 		
 		return options
 	}()
@@ -148,7 +148,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         self.clearsSelectionOnViewWillAppear = false
 		
 		getImageManager().groupDataManager.addObserver(self)
-    }
+	}
 	
 	internal func loadGroups() {
 		getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
