@@ -97,6 +97,7 @@
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:layerView.size];
         offsetSlider.delegateSlider = self;
         offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
+        offsetSlider.normalizedCenterPositionOfThumbView = .5;
         [layerView addSubview:offsetSlider];
     }
 
@@ -118,7 +119,8 @@
 
 #pragma mark OffsetSlider
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-    ff(timeSlider.normalizedCenterPositionOfThumbView);
+
+    ff(timeSlider.normalizedCenterPositionOfThumbView*10);
 }
 
 - (UIView *)createThumbView {

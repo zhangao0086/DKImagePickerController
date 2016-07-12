@@ -200,6 +200,9 @@
     centerPoint.x = CLAMP(centerPoint.x, padding, maxPosition);
     _normalizedCenterPositionOfThumbView = (centerPoint.x-padding)/(maxPosition+padding);
 
+    centerPoint.x = (_normalizedCenterPositionOfThumbView*(maxPosition+padding)) + padding;
+
+
     if(animation){
         Weaks
         [NSObject animate:^{
@@ -222,6 +225,14 @@
 
         if(block) block();
     }
+}
+
+- (void)setNormalizedCenterPositionOfThumbView:(CGFloat)normalizedCenterPositionOfThumbView {
+    _normalizedCenterPositionOfThumbView = CLAMP(normalizedCenterPositionOfThumbView, 0, 1);
+    CGFloat padding = [self halfWidthSizeOfThumbView];
+    CGFloat maxPosition = self.trackView.width-padding;
+    CGFloat centerX = (_normalizedCenterPositionOfThumbView*(maxPosition+padding)) + padding;
+    [self setThumbViewCenter:CGPointMake(centerX,_thumbView.center.y) animation:NO completion:nil];
 }
 
 #pragma mark User touch
