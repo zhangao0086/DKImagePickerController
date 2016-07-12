@@ -95,6 +95,8 @@
 
         //slider
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:layerView.size];
+        offsetSlider.tag = [_afterImageItem.layers indexOfObject:layerItem];
+        offsetSlider.tagName = layerItem.uuid;
         offsetSlider.delegateSlider = self;
         offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
         offsetSlider.normalizedCenterPositionOfThumbView = .5;
@@ -119,8 +121,18 @@
 
 #pragma mark OffsetSlider
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+    NSInteger targetIndexOfLayer = timeSlider.tag;
+    STAfterImageLayerItem * layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
-    ff(timeSlider.normalizedCenterPositionOfThumbView*10);
+    NSInteger slidedIndex = (NSInteger) round(self.count * timeSlider.normalizedCenterPositionOfThumbView);
+
+    layerItem.frameIndexOffset = (NSInteger) ((NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5);
+
+    self.currentIndex = slidedIndex;
+
+    ii(slidedIndex);
+    ff(round(timeSlider.normalizedCenterPositionOfThumbView*10));
+    ii(layerItem.frameIndexOffset);
 }
 
 - (UIView *)createThumbView {
