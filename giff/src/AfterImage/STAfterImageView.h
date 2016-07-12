@@ -7,9 +7,10 @@
 #import "STSelectableView.h"
 #import "STAfterImageItem.h"
 #import "STSelectableCapturedImageSetView.h"
+#import "STSegmentedSliderView.h"
 
 @class STAfterImageItem;
 @class STCapturedImageSet;
 
-@interface STAfterImageView : STSelectableCapturedImageSetView
+@interface STAfterImageView : STSelectableCapturedImageSetView <STSegmentedSliderControlDelegate>
 @end

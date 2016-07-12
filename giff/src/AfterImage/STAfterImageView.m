@@ -8,6 +8,7 @@
 #import "NSArray+STUtil.h"
 #import "STAfterImageLayerItem.h"
 #import "UIView+STUtil.h"
+#import "STSegmentedSliderView.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -17,6 +18,17 @@
     UIView * _afterImageSublayersContainerView;
     STAfterImageItem * _afterImageItem;
 }
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+
+
+    }
+
+    return self;
+}
+
 
 - (void)dealloc {
     self.imageSet = nil;
@@ -84,7 +96,27 @@
     }
 
     [super willSetViews:presentableObjects];
+
+    STSegmentedSliderView * slider = [[STSegmentedSliderView alloc] initWithSize:self.size];
+    slider.delegateSlider = self;
+    slider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
+    [self addSubview:slider];
 }
+
+- (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+
+}
+
+- (UIView *)createThumbView {
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(10, self.height)];
+    thumbView.backgroundColor = [UIColor blackColor];
+    return thumbView;
+}
+
+- (UIView *)createBackgroundView:(CGRect)bounds {
+    return nil;
+}
+
 
 - (void)willClearViews {
     if(_afterImageItem){
