@@ -22,12 +22,6 @@
     if (self) {
         [self setBackgroundColor:[UIColor clearColor]];
 
-        _thumbView = [self makeThumbView];
-        _thumbView.frame = CGRectModified_AGK(self.bounds, ^CGRect(CGRect rect) {
-            rect.size = CGSizeMake(rect.size.height, rect.size.height);
-            return rect;
-        });
-
         _backgroundView = [[UIView alloc] initWithFrame:self.bounds];
         [_backgroundView.layer addSublayer:[[CAShapeLayer roundRect:self.bounds.size color:[UIColor whiteColor]] clearLineWidth]];
 
@@ -48,30 +42,47 @@
 }
 
 - (void)setDelegateSlider:(id <STSegmentedSliderControlDelegate>)delegateSlider; {
-    _delegateSlider = delegateSlider;
+    BOOL newCreating = [delegateSlider isEqual:_delegateSlider];
+     _delegateSlider = delegateSlider;
 
-    id bg = nil;
-
-    if(self.blockForCreateBackgroundPresentableObject){
-        bg = self.blockForCreateBackgroundPresentableObject(self.bounds);
-    }else if([self.delegateSlider respondsToSelector:@selector(createBackgroundView:)]){
-        bg = [self.delegateSlider createBackgroundView:self.bounds];
-    }else if([self.delegateSlider respondsToSelector:@selector(createBackgroundLayer:)]){
-        bg = [self.delegateSlider createBackgroundLayer:self.bounds];
-    }
-
-    if(bg){
-        [_backgroundView removeFromSuperview];
-        _backgroundView = [UIView st_createViewFromPresentableObject:bg];
-        [self insertSubview:_backgroundView belowSubview:_segmentationViewContainer];
-    }
+    [self setSliderContentViews:newCreating];
 }
 
 - (void)createContent; {
     [super createContent];
 
-    [self addSubview:_segmentationViewContainer];
-    [self insertSubview:_thumbView aboveSubview:_segmentationViewContainer];
+    [self setSliderContentViews:NO];
+}
+
+- (void)setSliderContentViews:(BOOL)newlyCreate {
+    if(!_segmentationViewContainer.superview){
+        [self addSubview:_segmentationViewContainer];
+    }
+
+    //thumbview
+    if(!_thumbView || newlyCreate){
+        [_thumbView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
+        _thumbView = [self makeThumbView];
+        [self insertSubview:_thumbView aboveSubview:_segmentationViewContainer];
+    }
+
+    //background view
+    if(!_backgroundView || newlyCreate){
+        id bg = nil;
+        if(self.blockForCreateBackgroundPresentableObject){
+            bg = self.blockForCreateBackgroundPresentableObject(self.bounds);
+        }else if([self.delegateSlider respondsToSelector:@selector(createBackgroundView:)]){
+            bg = [self.delegateSlider createBackgroundView:self.bounds];
+        }else if([self.delegateSlider respondsToSelector:@selector(createBackgroundLayer:)]){
+            bg = [self.delegateSlider createBackgroundLayer:self.bounds];
+        }
+
+        if(bg){
+            [_backgroundView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
+            _backgroundView = [UIView st_createViewFromPresentableObject:bg];
+            [self insertSubview:_backgroundView belowSubview:_segmentationViewContainer];
+        }
+    }
 }
 
 - (void)layoutSubviews; {
@@ -142,10 +153,17 @@
 }
 
 - (UIView *)makeThumbView {
+    //delegated
     if([self.delegateSlider respondsToSelector:@selector(createThumbView)]){
         _contentView.visible = NO;
         return [self.delegateSlider createThumbView];
     }
+
+    //default layout
+    _contentView.frame = CGRectModified_AGK(self.bounds, ^CGRect(CGRect rect) {
+        rect.size = CGSizeMake(rect.size.height, rect.size.height);
+        return rect;
+    });
     return _contentView;
 }
 
