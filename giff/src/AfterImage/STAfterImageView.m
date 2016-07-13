@@ -79,8 +79,10 @@
         [_controlView saveInitialLayout];
     }
 
-    for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
+    CGSize sliderSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_afterImageItem.layers.count);
 
+    for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
+        NSUInteger index = [_afterImageItem.layers indexOfObject:layerItem];
         //layer
         STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_sublayersContainerView.size];
         layerView.fitViewsImageToBounds = YES;
@@ -89,26 +91,30 @@
         [layerView setViews:presentableObjects];
 
         //control - slider
-        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:layerView.size];
-        offsetSlider.tag = [_afterImageItem.layers indexOfObject:layerItem];
+        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderSize];
+        ss(sliderSize);
+        offsetSlider.y = index * sliderSize.height;
+        offsetSlider.tag = index;
         offsetSlider.tagName = layerItem.uuid;
         offsetSlider.delegateSlider = self;
 //        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
         offsetSlider.normalizedCenterPositionOfThumbView = .5;
 
         Weaks
-        [offsetSlider.thumbView whenPanAsSlideVertical:nil started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
-
-        } changed:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, CGFloat distance, CGPoint movedOffset, CGFloat distanceReachRatio, STSlideDirection direction, BOOL confirmed) {
-
-            layerItem.alpha = CLAMP(locationInSelf.y,0,offsetSlider.thumbBoundView.height)/offsetSlider.thumbBoundView.height;
-            [Wself setViewsDisplay];
-
-        } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
-
-        }];
+//        [offsetSlider.thumbView whenPanAsSlideVertical:nil started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
+//
+//        } changed:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, CGFloat distance, CGPoint movedOffset, CGFloat distanceReachRatio, STSlideDirection direction, BOOL confirmed) {
+//
+//            layerItem.alpha = CLAMP(locationInSelf.y,0,offsetSlider.thumbBoundView.height)/offsetSlider.thumbBoundView.height;
+//            [Wself setViewsDisplay];
+//
+//        } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
+//
+//        }];
         [_controlView addSubview:offsetSlider];
     }
+
+    [_controlView st_gridSubviewsAsCenter:0 rowHeight:sliderSize.height column:1];
 
     [super willSetViews:presentableObjects];
 }
@@ -142,9 +148,12 @@
 }
 
 - (UIView *)createThumbView {
-    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, self.height)];
-    thumbView.backgroundColor = [UIColor blackColor];
-    return thumbView;
+    if(_afterImageItem.layers.count){
+        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _sublayersContainerView.height/_afterImageItem.layers.count)];
+        thumbView.backgroundColor = [UIColor blackColor];
+        return thumbView;
+    }
+    return nil;
 }
 
 - (UIView *)createBackgroundView:(CGRect)bounds {
