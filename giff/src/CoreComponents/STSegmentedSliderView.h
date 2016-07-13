@@ -13,7 +13,8 @@
 @class STSegmentedSliderView;
 @protocol STSegmentedSliderControlDelegate <STSeletableViewDelegate>
 @optional
-- (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index;
+- (void)didSlide:(STSegmentedSliderView *)slider withSelectedIndex:(int)index;
+- (void)doingSlide:(STSegmentedSliderView *)slider withSelectedIndex:(int)index;
 - (CALayer *)createBackgroundLayer:(CGRect)bounds;
 - (UIView *)createBackgroundView:(CGRect)bounds;
 - (UIView *)createThumbView;

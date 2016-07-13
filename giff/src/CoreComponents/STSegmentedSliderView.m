@@ -264,7 +264,12 @@
 
         if (stateChanged) {
             offset = loc.x - _thumbView.center.x;
-            super.currentIndex = (NSUInteger) [self currentNeedsIndex:offset];
+            NSUInteger changedIndex = (NSUInteger) [self currentNeedsIndex:offset];
+            super.currentIndex = changedIndex;
+
+            if ([_delegateSlider respondsToSelector:@selector(doingSlide:withSelectedIndex:)]) {
+                [_delegateSlider doingSlide:self withSelectedIndex:changedIndex];
+            }
         }
 
         if ([sender state] == UIGestureRecognizerStateEnded) {
