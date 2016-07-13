@@ -16,22 +16,15 @@
 #import "STEditorResult.h"
 #import "NSObject+STUtil.h"
 #import "STGIFFAppSetting.h"
-#import "NSObject+STThreadUtil.h"
 #import "STEditorCommand.h"
 #import "STFilterPresenterBase.h"
-#import "STSubControl.h"
 #import "STStandardButton.h"
-#import "SDImageCache.h"
-#import "STQueueManager.h"
 #import "STElieStatusBar.h"
 #import "STFilterManager.h"
 #import "STCapturedImage.h"
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSet.h"
-#import "STCapturedImageSet+PostFocus.h"
-#import "FBSDKTypeUtility.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
-#import "STCapturedImageProtected.h"
 #import "STAfterImageView.h"
 #import "STAfterImageLayerItem.h"
 
@@ -298,7 +291,6 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             }
         }];
 
-
         [self renderAfterImageSetWithFrameAt:selectedIndex imageSet:targetImageSet];
     }
 }
@@ -318,12 +310,12 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
         //set default
         if(!imageSet.extensionObject){
             STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
-            layerItem.alpha = .4;
+            layerItem.alpha = .5;
             layerItem.frameIndexOffset = -2;
 
             STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
-            layerItem2.alpha = .4;
-            layerItem2.frameIndexOffset = 2;
+            layerItem2.alpha = .5;
+            layerItem2.frameIndexOffset = 0;
 
             imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem,layerItem2]];
         }

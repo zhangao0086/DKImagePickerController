@@ -24,7 +24,7 @@
         //set - heavy cost
         if (newImageSet) {
             NSArray * presentableObjectForImageSet = [self presentableObjectsForImageSet];
-            NSAssert(presentableObjectForImageSet.count==_imageSet.count,@"The count of presentableObjectForImageSet must be matched to its count of imageset");
+            NSAssert(!presentableObjectForImageSet || presentableObjectForImageSet.count==_imageSet.count,@"The count of presentableObjectForImageSet must be matched to its count of imageset");
             [self setViews:presentableObjectForImageSet];
         }
     }else{

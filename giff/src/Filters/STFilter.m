@@ -39,18 +39,30 @@
         return [self initWithLookupName:_item.fileNameForCLUT];
 
     }else{
+        return [self initWithFilters:nil];
+    }
+}
 
-        self = [super init];
-        if (self) {
+- (id)initWithFilters:(NSArray<GPUImageFilter *> *)arrayOfFilters {
+    self = [super init];
+    if (self) {
+        if(arrayOfFilters.count){
+            self.filterName = [@"elie.filter.definedFilters" st_add:self.st_uid];
+            self.initialFilters = arrayOfFilters;
+            self.terminalFilter = [arrayOfFilters lastObject];
+
+        }else{
             GPUImageFilter * imageFilter =  [[GPUImageFilter alloc] init];
             self.filterName = [@"elie.filter.emptyFilter." st_add:self.st_uid];
             self.initialFilters = @[imageFilter];
             self.terminalFilter = imageFilter;
         }
-        return self;
     }
+    return self;
 }
 
+
+#pragma mark CLUT filter
 - (id)initWithLookupName:(NSString *)lookupName
 {
     self = [super init];

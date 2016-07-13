@@ -8,6 +8,8 @@
 #import "NSArray+STUtil.h"
 #import "STAfterImageLayerItem.h"
 #import "UIView+STUtil.h"
+#import "STCapturedImage.h"
+#import "STAfterImageLayerView.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -62,6 +64,15 @@
     [super setImageSet:imageSet];
 }
 
+- (NSArray *)presentableObjectsForImageSet{
+    if(self.imageSet.images.count){
+        STCapturedImage * anyImage = [self.imageSet.images firstObject];
+        NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
+        return [self.imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
+    }
+    return nil;
+}
+
 - (void)willSetViews:(NSArray *)presentableObjects {
     if(!_afterImageItem.layers){
         return;
@@ -79,12 +90,16 @@
         [_controlView saveInitialLayout];
     }
 
+
     CGSize sliderSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_afterImageItem.layers.count);
 
     for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
         NSUInteger index = [_afterImageItem.layers indexOfObject:layerItem];
-        //layer
-        STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_sublayersContainerView.size];
+        //layercb
+        STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
+        layerItem.filterId = @"dummy";
+
+        layerView.layerItem = layerItem;
         layerView.fitViewsImageToBounds = YES;
         //TODO: preheating - 여기서 미리 랜더링된 필터를 temp url에 저장 후 그 url을 보여주는 것도 나쁘지 않을듯
         [_sublayersContainerView addSubview:layerView];
