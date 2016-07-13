@@ -10,5 +10,6 @@
 
 @interface STSelectableCapturedImageSetView : STSelectableView
 @property (nonatomic, readwrite) STCapturedImageSet * imageSet;
+@property (nonatomic, readonly) NSArray<id> * presentableObjectsForImageSet;
 @end
 

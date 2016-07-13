@@ -17,23 +17,30 @@
 
 - (void)setImageSet:(STCapturedImageSet *)imageSet {
     //sub set
-    if(imageSet) {
+    if(imageSet.count) {
         BOOL newImageSet = ![imageSet isEqual:_imageSet];
         _imageSet = imageSet;
 
         //set - heavy cost
         if (newImageSet) {
-            STCapturedImage * anyImage = [_imageSet.images firstObject];
-            NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
-            NSArray<NSURL *>* imageUrls = [_imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
-
-            [self setViews:imageUrls];
+            NSArray * presentableObjectForImageSet = [self presentableObjectsForImageSet];
+            NSAssert(presentableObjectForImageSet.count==_imageSet.count,@"The count of presentableObjectForImageSet must be matched to its count of imageset");
+            [self setViews:presentableObjectForImageSet];
         }
     }else{
         //clear
         [self clearViews];
         _imageSet = nil;
     }
+}
+
+- (NSArray *)presentableObjectsForImageSet{
+    if(_imageSet.images.count){
+        STCapturedImage * anyImage = [_imageSet.images firstObject];
+        NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
+        return[_imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
+    }
+    return nil;
 }
 
 @end
