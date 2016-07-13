@@ -270,6 +270,8 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             selectedIndex = 0;
         }
 
+        selectedIndex = (NSUInteger) floor(targetImageSet.images.count/2);
+
         [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderValue) id:@"postFocusSliderValue"];
 
         _previewView.masterPositionSliderValue = selectedIndex / (targetImageSet.images.count * 1.f) ;
@@ -311,10 +313,12 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
         if(!imageSet.extensionObject){
             STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
             layerItem.alpha = .5;
+            layerItem.filterId = @"monochrome";
             layerItem.frameIndexOffset = -2;
 
             STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
             layerItem2.alpha = .5;
+            layerItem2.filterId = @"falsecolor";
             layerItem2.frameIndexOffset = 0;
 
             imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem,layerItem2]];

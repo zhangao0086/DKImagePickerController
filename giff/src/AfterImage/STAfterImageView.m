@@ -97,8 +97,6 @@
         NSUInteger index = [_afterImageItem.layers indexOfObject:layerItem];
         //layercb
         STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
-        layerItem.filterId = @"dummy";
-
         layerView.layerItem = layerItem;
         layerView.fitViewsImageToBounds = YES;
         //TODO: preheating - 여기서 미리 랜더링된 필터를 temp url에 저장 후 그 url을 보여주는 것도 나쁘지 않을듯

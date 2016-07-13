@@ -48,7 +48,15 @@
 
                         }else{
                             //newly create
-                            STFilter * filter = [[STFilter alloc] initWithFilters:@[[[GPUImageFalseColorFilter alloc] init]]];
+
+                            GPUImageFilter * sourceFilter = nil;
+                            if([@"falsecolor" isEqualToString:Wself.layerItem.filterId]){
+                                sourceFilter = [[GPUImageFalseColorFilter alloc] init];
+                            }else if([@"monochrome" isEqualToString:Wself.layerItem.filterId]){
+                                sourceFilter = [[GPUImageMonochromeFilter alloc] init];
+                            }
+
+                            STFilter * filter = [[STFilter alloc] initWithFilters:@[sourceFilter]];
                             UIImage * targetImage = [UIImage imageWithContentsOfFile:imageUrl.path];
                             UIImage * resultImage = [[STFilterManager sharedManager]
                                     buildOutputImage:targetImage
