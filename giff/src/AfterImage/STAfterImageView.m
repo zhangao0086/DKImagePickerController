@@ -18,17 +18,6 @@
     STAfterImageItem * _afterImageItem;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-
-
-    }
-
-    return self;
-}
-
-
 - (void)dealloc {
     self.imageSet = nil;
     [_afterImageSublayersContainerView removeFromSuperview];
@@ -49,13 +38,13 @@
     [_afterImageSublayersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
         STAfterImageLayerItem *layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:index];
-        NSUInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
-        BOOL overRanged = layerIndex>=self.count;
-
+        NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
+        BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
+        
         if(overRanged){
-            layerView.visible = NO;
+            layerView.visibleContentView = NO;
         }else{
-            layerView.visible = YES;
+            layerView.visibleContentView = YES;
             layerView.alpha = layerItem.alpha;
             //TODO: render filter
             layerView.currentIndex = layerIndex;
@@ -123,14 +112,11 @@
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
     STAfterImageLayerItem * layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:targetIndexOfLayer];
-
-    NSInteger slidedIndex = (NSInteger) round(self.count * timeSlider.normalizedCenterPositionOfThumbView);
-
     layerItem.frameIndexOffset = (NSInteger) ((NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5);
 
-    self.currentIndex = slidedIndex;
+    self.currentIndex = (NSUInteger) round((self.count-1) * timeSlider.normalizedCenterPositionOfThumbView);
 
-    ii(slidedIndex);
+    ii(self.count);
     ff(round(timeSlider.normalizedCenterPositionOfThumbView*10));
     ii(layerItem.frameIndexOffset);
 }
