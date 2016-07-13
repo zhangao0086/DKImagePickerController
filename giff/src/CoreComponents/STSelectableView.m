@@ -431,6 +431,14 @@
     return [[_contentView subviews] first];
 }
 
+- (void)setVisibleContentView:(BOOL)visibleContentView {
+    _contentView.visible = visibleContentView;
+}
+
+- (BOOL)visibleContentView {
+    return _contentView.visible;
+}
+
 - (void)dispatchSelected {
 
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelected:index:)])

@@ -26,6 +26,7 @@
 @property (nonatomic, assign) BOOL fitViewsImageToBounds;
 @property (nonatomic, assign) BOOL autoOrientationOnlySelectableViews;
 @property (nonatomic, assign) BOOL animationEnabled;
+@property (nonatomic, assign) BOOL visibleContentView;
 @property (nonatomic, readwrite) NSArray * valuesMap;
 
 - (id)initWithFrame:(CGRect)frame
