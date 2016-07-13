@@ -130,15 +130,15 @@
 
 #pragma mark OffsetSlider
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+    [self doingSlide:timeSlider withSelectedIndex:index];
+}
+
+- (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
     STAfterImageLayerItem * layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:targetIndexOfLayer];
     layerItem.frameIndexOffset = (NSInteger) ((NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5);
 
-    self.currentIndex = (NSUInteger) round((self.count-1) * timeSlider.normalizedCenterPositionOfThumbView);
-
-    ii(self.count);
-    ff(round(timeSlider.normalizedCenterPositionOfThumbView*10));
-    ii(layerItem.frameIndexOffset);
+    [self setViewsDisplay];
 }
 
 - (UIView *)createThumbView {
