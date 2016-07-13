@@ -27,6 +27,7 @@
 @property (nonatomic, assign) BOOL allowMoveThumbAsTap;
 @property (nonatomic, readonly) UIView *thumbView;
 @property (nonatomic, assign) CGFloat normalizedCenterPositionOfThumbView;
+@property (nonatomic, readonly) UIView *thumbBoundView;
 @property (nonatomic, readonly) UIView *backgroundView;
 @property (nonatomic, readonly) NSArray *centerPositions;
 @property (nonatomic, readwrite) NSArray *segmentationViews;

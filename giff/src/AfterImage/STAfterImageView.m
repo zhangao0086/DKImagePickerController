@@ -14,37 +14,36 @@
 @end
 
 @implementation STAfterImageView {
-    UIView * _afterImageSublayersContainerView;
+    UIView * _sublayersContainerView;
+    UIView * _controlView;
     STAfterImageItem * _afterImageItem;
 }
 
 - (void)dealloc {
     self.imageSet = nil;
-    [_afterImageSublayersContainerView removeFromSuperview];
-    _afterImageSublayersContainerView = nil;
 }
 
 - (void)setViewsDisplay {
     [super setViewsDisplay];
 
     if(self.fitViewsImageToBounds){
-        if(!CGSizeEqualToSize(_afterImageSublayersContainerView.size, self.size)){
-            _afterImageSublayersContainerView.size = self.size;
+        if(!CGSizeEqualToSize(_sublayersContainerView.size, self.size)){
+            _sublayersContainerView.size = self.size;
         }
     }else{
-        [_afterImageSublayersContainerView restoreInitialLayout];
+        [_sublayersContainerView restoreInitialLayout];
     }
 
-    [_afterImageSublayersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
+    [_sublayersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
         STAfterImageLayerItem *layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:index];
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
-        
+
         if(overRanged){
-            layerView.visibleContentView = NO;
+            layerView.visible = NO;
         }else{
-            layerView.visibleContentView = YES;
+            layerView.visible = YES;
             layerView.alpha = layerItem.alpha;
             //TODO: render filter
             layerView.currentIndex = layerIndex;
@@ -68,28 +67,47 @@
         return;
     }
 
-    if(!_afterImageSublayersContainerView){
-        _afterImageSublayersContainerView = [[UIView alloc] initWithSize:self.size];
-        [self insertSubview:_afterImageSublayersContainerView aboveSubview:_contentView];
-        [_afterImageSublayersContainerView saveInitialLayout];
+    if(!_sublayersContainerView){
+        _sublayersContainerView = [[UIView alloc] initWithSize:self.size];
+        [self insertSubview:_sublayersContainerView aboveSubview:_contentView];
+        [_sublayersContainerView saveInitialLayout];
+    }
+
+    if(!_controlView){
+        _controlView = [[UIView alloc] initWithSize:self.size];
+        [self insertSubview:_controlView aboveSubview:_sublayersContainerView];
+        [_controlView saveInitialLayout];
     }
 
     for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
-        //layer view
-        STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_afterImageSublayersContainerView.size];
+
+        //layer
+        STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_sublayersContainerView.size];
         layerView.fitViewsImageToBounds = YES;
         //TODO: preheating - 여기서 미리 랜더링된 필터를 temp url에 저장 후 그 url을 보여주는 것도 나쁘지 않을듯
-        [_afterImageSublayersContainerView addSubview:layerView];
+        [_sublayersContainerView addSubview:layerView];
         [layerView setViews:presentableObjects];
 
-        //slider
+        //control - slider
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:layerView.size];
         offsetSlider.tag = [_afterImageItem.layers indexOfObject:layerItem];
         offsetSlider.tagName = layerItem.uuid;
         offsetSlider.delegateSlider = self;
-        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
+//        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
         offsetSlider.normalizedCenterPositionOfThumbView = .5;
-        [layerView addSubview:offsetSlider];
+
+        Weaks
+        [offsetSlider.thumbView whenPanAsSlideVertical:nil started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
+
+        } changed:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, CGFloat distance, CGPoint movedOffset, CGFloat distanceReachRatio, STSlideDirection direction, BOOL confirmed) {
+
+            layerItem.alpha = CLAMP(locationInSelf.y,0,offsetSlider.thumbBoundView.height)/offsetSlider.thumbBoundView.height;
+            [Wself setViewsDisplay];
+
+        } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
+
+        }];
+        [_controlView addSubview:offsetSlider];
     }
 
     [super willSetViews:presentableObjects];
@@ -100,10 +118,12 @@
         return;
     }
 
-    [_afterImageSublayersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
+    [_sublayersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
         [((STSelectableView *) view) clearViews];
     }];
-    [_afterImageSublayersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+    [_sublayersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+
+    [_controlView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 
     [super willClearViews];
 }
@@ -122,7 +142,7 @@
 }
 
 - (UIView *)createThumbView {
-    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(10, self.height)];
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, self.height)];
     thumbView.backgroundColor = [UIColor blackColor];
     return thumbView;
 }
