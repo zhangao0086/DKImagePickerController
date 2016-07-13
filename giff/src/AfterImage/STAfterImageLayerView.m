@@ -10,11 +10,16 @@
 #import "STQueueManager.h"
 #import "STFilter.h"
 #import "STFilterManager.h"
-#import "NSArray+BlocksKit.h"
+#import "NSArray+STUtil.h"
 
 
 @implementation STAfterImageLayerView {
     NSArray<NSURL *>* _preheatedImageUrlsAfterEffectsApplied;
+}
+
+- (void)dealloc {
+    _layerItem = nil;
+    _preheatedImageUrlsAfterEffectsApplied = nil;
 }
 
 - (void)setViews:(NSArray *)presentableObjects {
@@ -28,25 +33,36 @@
         }else{
             Weaks
             dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-                NSArray * preheatedImageUrls = [presentableObjects bk_map:^id(NSURL * imageUrl) {
+                NSArray <NSURL *> * preheatedImageUrls = [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger index) {
                     NSAssert([imageUrl isKindOfClass:NSURL.class], @"only NSURL was allowed.");
 
                     @autoreleasepool {
-                        STFilter * filter = [[STFilter alloc] initWithFilters:@[[[GPUImageFalseColorFilter alloc] init]]];
-                        UIImage * targetImage = [UIImage imageWithContentsOfFile:imageUrl.path];
-                        UIImage * resultImage = [[STFilterManager sharedManager]
-                                buildOutputImage:targetImage
-                                         enhance:NO
-                                          filter:filter
-                                extendingFilters:nil
-                                    rotationMode:kGPUImageNoRotation
-                                     outputScale:1
-                           useCurrentFrameBuffer:YES
-                              lockFrameRendering:NO];
+                        NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"%@_%@_f%d",
+                                        Wself.layerItem.uuid,
+                                        Wself.layerItem.filterId,
+                                        index] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
-                        NSURL * tempURLToApplyEffect = [@"STAfterImageLayerView_filtered_image" URLForTemp:Wself.layerItem.filterId extension:@"jpg"];
-                        if([UIImageJPEGRepresentation(resultImage, 1) writeToURL:tempURLToApplyEffect atomically:NO]){
+                        if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
+                            //cached
                             return tempURLToApplyEffect;
+
+                        }else{
+                            //newly create
+                            STFilter * filter = [[STFilter alloc] initWithFilters:@[[[GPUImageFalseColorFilter alloc] init]]];
+                            UIImage * targetImage = [UIImage imageWithContentsOfFile:imageUrl.path];
+                            UIImage * resultImage = [[STFilterManager sharedManager]
+                                    buildOutputImage:targetImage
+                                             enhance:NO
+                                              filter:filter
+                                    extendingFilters:nil
+                                        rotationMode:kGPUImageNoRotation
+                                         outputScale:1
+                               useCurrentFrameBuffer:YES
+                                  lockFrameRendering:NO];
+
+                            if([UIImageJPEGRepresentation(resultImage, 1) writeToURL:tempURLToApplyEffect atomically:NO]){
+                                return tempURLToApplyEffect;
+                            }
                         }
                         return nil;
                     }
@@ -58,6 +74,7 @@
                         [super setViews:_preheatedImageUrlsAfterEffectsApplied];
                     });
                 }
+
             });
         }
     }else{
