@@ -20,55 +20,55 @@
     _preheatedImageUrlsAfterEffectsApplied = nil;
 }
 
-- (void)setViews:(NSArray *)presentableObjects {
-    NSAssert(_layerItem, @"set _layerItem first");
-
-    if(_layerItem.effect){
-
-        if(_preheatedImageUrlsAfterEffectsApplied){
-            [super setViews:_preheatedImageUrlsAfterEffectsApplied];
-
-        }else{
-            Weaks
-            dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-                NSArray <NSURL *> * preheatedImageUrls = [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger index) {
-                    NSAssert([imageUrl isKindOfClass:NSURL.class], @"only NSURL was allowed.");
-
-                    @autoreleasepool {
-                        NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"%@_%@_f%d",
-                                        Wself.layerItem.uuid,
-                                        Wself.layerItem.effect,
-                                        index
-                        ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
-
-                        if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
-                            //cached
-                            return tempURLToApplyEffect;
-
-                        }else{
-                            //newly create
-                            if([UIImageJPEGRepresentation([_layerItem.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
-                                    writeToURL:tempURLToApplyEffect
-                                    atomically:NO]){
-                                return tempURLToApplyEffect;
-                            }
-                        }
-                        return nil;
-                    }
-                }];
-
-                if(preheatedImageUrls.count){
-                    dispatch_async(dispatch_get_main_queue(),^{
-                        _preheatedImageUrlsAfterEffectsApplied = preheatedImageUrls;
-                        [super setViews:_preheatedImageUrlsAfterEffectsApplied];
-                    });
-                }
-
-            });
-        }
-    }else{
-        _preheatedImageUrlsAfterEffectsApplied = nil;
-        [super setViews:presentableObjects];
-    }
-}
+//- (void)setViews:(NSArray *)presentableObjects {
+//    NSAssert(_layerItem, @"set _layerItem first");
+//
+//    if(_layerItem.effect){
+//
+//        if(_preheatedImageUrlsAfterEffectsApplied){
+//            [super setViews:_preheatedImageUrlsAfterEffectsApplied];
+//
+//        }else{
+//            Weaks
+//            dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+//                NSArray <NSURL *> * preheatedImageUrls = [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger index) {
+//                    NSAssert([imageUrl isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+//
+//                    @autoreleasepool {
+//                        NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"%@_%@_f%d",
+//                                        Wself.layerItem.uuid,
+//                                        Wself.layerItem.effect,
+//                                        index
+//                        ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
+//
+//                        if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
+//                            //cached
+//                            return tempURLToApplyEffect;
+//
+//                        }else{
+//                            //newly create
+//                            if([UIImageJPEGRepresentation([_layerItem.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
+//                                    writeToURL:tempURLToApplyEffect
+//                                    atomically:NO]){
+//                                return tempURLToApplyEffect;
+//                            }
+//                        }
+//                        return nil;
+//                    }
+//                }];
+//
+//                if(preheatedImageUrls.count){
+//                    dispatch_async(dispatch_get_main_queue(),^{
+//                        _preheatedImageUrlsAfterEffectsApplied = preheatedImageUrls;
+//                        [super setViews:_preheatedImageUrlsAfterEffectsApplied];
+//                    });
+//                }
+//
+//            });
+//        }
+//    }else{
+//        _preheatedImageUrlsAfterEffectsApplied = nil;
+//        [super setViews:presentableObjects];
+//    }
+//}
 @end

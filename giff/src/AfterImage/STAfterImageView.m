@@ -9,6 +9,9 @@
 #import "STAfterImageLayerItem.h"
 #import "UIView+STUtil.h"
 #import "STAfterImageLayerView.h"
+#import "STQueueManager.h"
+#import "NSString+STUtil.h"
+#import "STAfterImageLayerEffect.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -41,6 +44,7 @@
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
 
+                                
         if(overRanged){
             layerView.visible = NO;
         }else{
@@ -84,14 +88,56 @@
     CGSize sliderSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_afterImageItem.layers.count);
 
     for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
+
+        Weaks
+        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+            STAfterImageLayerItem *_layerItem = layerItem;
+            
+            NSArray <NSURL *> * preheatedImageUrls = !_layerItem.effect ? nil : [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger index) {
+                NSAssert([imageUrl isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+
+                @autoreleasepool {
+                    NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
+                                                                               _layerItem.uuid,
+                                                                               _layerItem.effect.uuid,
+                                                                               index
+                    ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
+
+                    if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
+                        //cached
+                                                return tempURLToApplyEffect;
+
+                    }else{
+                        //newly create
+
+                        if([UIImageJPEGRepresentation([_layerItem.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
+                                writeToURL:tempURLToApplyEffect
+                                atomically:NO]){
+
+                                                        return tempURLToApplyEffect;
+                        }
+                    }
+
+                                        return nil;
+                }
+            }];
+
+            if(preheatedImageUrls.count){
+                dispatch_async(dispatch_get_main_queue(),^{
+                    //layercb
+                    STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
+                    layerView.layerItem = _layerItem;
+                    layerView.fitViewsImageToBounds = YES;
+                    [_sublayersContainerView addSubview:layerView];
+
+                    [layerView setViews:preheatedImageUrls];
+
+                    [Wself setViewsDisplay];
+                });
+            }
+
+        });
         NSUInteger index = [_afterImageItem.layers indexOfObject:layerItem];
-        //layercb
-        STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
-        layerView.layerItem = layerItem;
-        layerView.fitViewsImageToBounds = YES;
-        //TODO: preheating - 여기서 미리 랜더링된 필터를 temp url에 저장 후 그 url을 보여주는 것도 나쁘지 않을듯
-        [_sublayersContainerView addSubview:layerView];
-        [layerView setViews:presentableObjects];
 
         //control - slider
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderSize];
@@ -102,7 +148,7 @@
 //        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
         offsetSlider.normalizedCenterPositionOfThumbView = .5;
 
-        Weaks
+//        Weaks
 //        [offsetSlider.thumbView whenPanAsSlideVertical:nil started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
 //
 //        } changed:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, CGFloat distance, CGPoint movedOffset, CGFloat distanceReachRatio, STSlideDirection direction, BOOL confirmed) {
@@ -144,8 +190,10 @@
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
     STAfterImageLayerItem * layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:targetIndexOfLayer];
-    layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
+        
+    layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+    
     [self setViewsDisplay];
 }
 

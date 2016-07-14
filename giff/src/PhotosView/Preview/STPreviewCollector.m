@@ -316,15 +316,15 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
         if(!imageSet.extensionObject){
             STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
             layerItem.alpha = .5;
-            layerItem.frameIndexOffset = -2;
-            layerItem.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor redColor]];
+            layerItem.frameIndexOffset = 0;
+            layerItem.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor greenColor]];
 
             STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
             layerItem2.alpha = .5;
             layerItem2.frameIndexOffset = 0;
             layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor bananaColor]];
 
-            imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem,layerItem2]];
+            imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem, layerItem2]];
         }
 
         _afterImageView.imageSet = imageSet;
