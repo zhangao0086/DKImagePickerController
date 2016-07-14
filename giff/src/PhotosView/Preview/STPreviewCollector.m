@@ -27,6 +27,8 @@
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STAfterImageView.h"
 #import "STAfterImageLayerItem.h"
+#import "STAfterImageLayerEffect.h"
+#import "STAfterImageLayersColorEffect.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -313,13 +315,13 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
         if(!imageSet.extensionObject){
             STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
             layerItem.alpha = .5;
-            layerItem.filterId = @"monochrome";
             layerItem.frameIndexOffset = -2;
+            layerItem.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor redColor]];
 
             STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
             layerItem2.alpha = .5;
-            layerItem2.filterId = @"falsecolor";
             layerItem2.frameIndexOffset = 0;
+            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor blueColor]];
 
             imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem,layerItem2]];
         }

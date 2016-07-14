@@ -6,11 +6,9 @@
 #import "STAfterImageLayerView.h"
 #import "STAfterImageLayerItem.h"
 #import "NSString+STUtil.h"
-#import "GPUImageContext.h"
 #import "STQueueManager.h"
-#import "STFilter.h"
-#import "STFilterManager.h"
 #import "NSArray+STUtil.h"
+#import "STAfterImageLayerEffect.h"
 
 
 @implementation STAfterImageLayerView {
@@ -25,7 +23,7 @@
 - (void)setViews:(NSArray *)presentableObjects {
     NSAssert(_layerItem, @"set _layerItem first");
 
-    if(_layerItem.filterId){
+    if(_layerItem.effect){
 
         if(_preheatedImageUrlsAfterEffectsApplied){
             [super setViews:_preheatedImageUrlsAfterEffectsApplied];
@@ -39,7 +37,7 @@
                     @autoreleasepool {
                         NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"%@_%@_f%d",
                                         Wself.layerItem.uuid,
-                                        Wself.layerItem.filterId,
+                                        Wself.layerItem.effect,
                                         index] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
                         if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
@@ -48,27 +46,9 @@
 
                         }else{
                             //newly create
-
-                            GPUImageFilter * sourceFilter = nil;
-                            if([@"falsecolor" isEqualToString:Wself.layerItem.filterId]){
-                                sourceFilter = [[GPUImageFalseColorFilter alloc] init];
-                            }else if([@"monochrome" isEqualToString:Wself.layerItem.filterId]){
-                                sourceFilter = [[GPUImageMonochromeFilter alloc] init];
-                            }
-
-                            STFilter * filter = [[STFilter alloc] initWithFilters:@[sourceFilter]];
-                            UIImage * targetImage = [UIImage imageWithContentsOfFile:imageUrl.path];
-                            UIImage * resultImage = [[STFilterManager sharedManager]
-                                    buildOutputImage:targetImage
-                                             enhance:NO
-                                              filter:filter
-                                    extendingFilters:nil
-                                        rotationMode:kGPUImageNoRotation
-                                         outputScale:1
-                               useCurrentFrameBuffer:YES
-                                  lockFrameRendering:NO];
-
-                            if([UIImageJPEGRepresentation(resultImage, 1) writeToURL:tempURLToApplyEffect atomically:NO]){
+                            if([UIImageJPEGRepresentation([_layerItem.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
+                                    writeToURL:tempURLToApplyEffect
+                                    atomically:NO]){
                                 return tempURLToApplyEffect;
                             }
                         }

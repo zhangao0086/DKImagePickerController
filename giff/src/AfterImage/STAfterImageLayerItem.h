@@ -6,11 +6,11 @@
 #import <Foundation/Foundation.h>
 #import "STItem.h"
 
+@class STAfterImageLayerEffect;
 
 @interface STAfterImageLayerItem : STItem
 @property (nonatomic, assign) CGFloat alpha;
 @property (nonatomic, assign) CGFloat scale;
 @property (nonatomic, assign) NSInteger frameIndexOffset;
-@property (nonatomic, assign) NSString * filterId;
-
+@property (nonatomic, readwrite) STAfterImageLayerEffect * effect;
 @end

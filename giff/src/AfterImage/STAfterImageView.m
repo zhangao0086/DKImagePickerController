@@ -8,7 +8,6 @@
 #import "NSArray+STUtil.h"
 #import "STAfterImageLayerItem.h"
 #import "UIView+STUtil.h"
-#import "STCapturedImage.h"
 #import "STAfterImageLayerView.h"
 
 @interface STSelectableView(Protected)
@@ -63,15 +62,6 @@
 
     [super setImageSet:imageSet];
 }
-
-//- (NSArray *)presentableObjectsForImageSet{
-//    if(self.imageSet.images.count){
-//        STCapturedImage * anyImage = [self.imageSet.images firstObject];
-//        NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
-//        return [self.imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
-//    }
-//    return nil;
-//}
 
 - (void)willSetViews:(NSArray *)presentableObjects {
     if(!_afterImageItem.layers){
