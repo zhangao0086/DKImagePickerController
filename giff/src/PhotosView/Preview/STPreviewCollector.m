@@ -30,6 +30,8 @@
 #import "STAfterImageLayerEffect.h"
 #import "STAfterImageLayersColorEffect.h"
 #import "Colours.h"
+#import "Macros.h"
+#import "STAfterImageLayersBlendEffect.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -313,18 +315,25 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
         }
 
         //set default
-        if(!imageSet.extensionObject){
+        NSMutableArray * layers = [NSMutableArray array];
+//        if(!imageSet.extensionObject){
+        if(YES){
             STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
-            layerItem.alpha = .5;
+            layerItem.alpha = 1;
             layerItem.frameIndexOffset = 0;
-            layerItem.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor greenColor]];
+            layerItem.effect = [[STAfterImageLayersBlendEffect alloc] init];
+            [layers addObject:layerItem];
 
             STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
-            layerItem2.alpha = .5;
+            layerItem2.alpha = .3;
+//            layerItem.scale = 1.05;
             layerItem2.frameIndexOffset = 0;
-            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor bananaColor]];
+            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromHex(0xE2489F)];
+            [layers addObject:layerItem2];
+        }
 
-            imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem, layerItem2]];
+        if(layers.count){
+            imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:layers];
         }
 
         _afterImageView.imageSet = imageSet;

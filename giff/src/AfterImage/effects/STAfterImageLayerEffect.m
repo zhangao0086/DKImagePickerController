@@ -4,8 +4,6 @@
 //
 
 #import "STAfterImageLayerEffect.h"
-#import "GPUImageContext.h"
-
 
 @implementation STAfterImageLayerEffect{
 }

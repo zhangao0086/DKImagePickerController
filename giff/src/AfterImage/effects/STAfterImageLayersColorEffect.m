@@ -35,10 +35,10 @@
 }
 
 - (UIImage *)processEffect:(UIImage *__nullable)sourceImage {
-    GPUImageFalseColorFilter * sourceFilter = [[GPUImageFalseColorFilter alloc] init];
-//    sourceFilter.intensity = self.intensity;
+    GPUImageMonochromeFilter * sourceFilter = [[GPUImageMonochromeFilter alloc] init];
+    sourceFilter.intensity = self.intensity;
     NSArray* colors = [self.color rgbaArray];
-    [sourceFilter setFirstColorRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
+    [sourceFilter setColorRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
 
     STFilter * filter = [[STFilter alloc] initWithFilters:@[sourceFilter]];
     return [[STFilterManager sharedManager]

@@ -44,7 +44,6 @@
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
 
-                                
         if(overRanged){
             layerView.visible = NO;
         }else{
@@ -54,6 +53,10 @@
             layerView.currentIndex = layerIndex;
         }
     }];
+
+
+    self.backgroundColor = [UIColor blackColor];
+    _contentView.visible = NO;
 }
 
 - (void)setImageSet:(STCapturedImageSet *)imageSet {
@@ -76,6 +79,7 @@
         _sublayersContainerView = [[UIView alloc] initWithSize:self.size];
         [self insertSubview:_sublayersContainerView aboveSubview:_contentView];
         [_sublayersContainerView saveInitialLayout];
+        _sublayersContainerView.clipsToBounds = YES;
     }
 
     if(!_controlView){
@@ -105,7 +109,7 @@
 
                     if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
                         //cached
-                                                return tempURLToApplyEffect;
+                        return tempURLToApplyEffect;
 
                     }else{
                         //newly create
@@ -113,12 +117,10 @@
                         if([UIImageJPEGRepresentation([_layerItem.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
                                 writeToURL:tempURLToApplyEffect
                                 atomically:NO]){
-
-                                                        return tempURLToApplyEffect;
+                            return tempURLToApplyEffect;
                         }
                     }
-
-                                        return nil;
+                    return nil;
                 }
             }];
 
