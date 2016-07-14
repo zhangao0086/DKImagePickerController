@@ -25,13 +25,12 @@
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSet.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
-#import "STAfterImageView.h"
 #import "STAfterImageLayerItem.h"
 #import "STAfterImageLayerEffect.h"
 #import "STAfterImageLayersColorEffect.h"
-#import "Colours.h"
 #import "Macros.h"
 #import "STAfterImageLayersBlendEffect.h"
+#import "STAfterImageView.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"

@@ -10,7 +10,7 @@
 
 @class STAfterImageLayerItem;
 
-@interface STAfterImageItem : STItem
+@interface STAfterImageItem : STAfterImageLayerItem
 @property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
 
 - (instancetype)initWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;

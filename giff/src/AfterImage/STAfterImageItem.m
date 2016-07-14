@@ -3,8 +3,8 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STAfterImageItem.h"
 #import "STAfterImageLayerItem.h"
+#import "STAfterImageItem.h"
 
 @implementation STAfterImageItem {
 

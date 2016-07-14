@@ -3,7 +3,6 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STAfterImageView.h"
 #import "STCapturedImageSet.h"
 #import "NSArray+STUtil.h"
 #import "STAfterImageLayerItem.h"
@@ -12,6 +11,7 @@
 #import "STQueueManager.h"
 #import "NSString+STUtil.h"
 #import "STAfterImageLayerEffect.h"
+#import "STAfterImageView.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -92,19 +92,20 @@
     CGSize sliderSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_afterImageItem.layers.count);
 
     for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
+        NSUInteger indexOfLayer = [_afterImageItem.layers indexOfObject:layerItem];
 
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
             STAfterImageLayerItem *_layerItem = layerItem;
             
-            NSArray <NSURL *> * preheatedImageUrls = !_layerItem.effect ? nil : [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger index) {
+            NSArray <NSURL *> * preheatedImageUrls = !_layerItem.effect ? nil : [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger indexOfPresentableObject) {
                 NSAssert([imageUrl isKindOfClass:NSURL.class], @"only NSURL was allowed.");
 
                 @autoreleasepool {
                     NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
                                                                                _layerItem.uuid,
                                                                                _layerItem.effect.uuid,
-                                                                               index
+                                                                               indexOfPresentableObject
                     ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
                     if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
@@ -139,12 +140,11 @@
             }
 
         });
-        NSUInteger index = [_afterImageItem.layers indexOfObject:layerItem];
 
         //control - slider
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderSize];
-        offsetSlider.y = index * sliderSize.height;
-        offsetSlider.tag = index;
+        offsetSlider.y = indexOfLayer * sliderSize.height;
+        offsetSlider.tag = indexOfLayer;
         offsetSlider.tagName = layerItem.uuid;
         offsetSlider.delegateSlider = self;
 //        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
