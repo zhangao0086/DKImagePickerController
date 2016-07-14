@@ -20,7 +20,7 @@
 @implementation STAfterImageView {
     UIView * _sublayersContainerView;
     UIView * _controlView;
-    STAfterImageItem * _afterImageItem;
+    STAfterImageLayerItem * _afterImageItem;
 }
 
 - (void)dealloc {
@@ -60,9 +60,9 @@
 }
 
 - (void)setImageSet:(STCapturedImageSet *)imageSet {
-    NSAssert(!imageSet || [imageSet.extensionObject isKindOfClass:[STAfterImageItem class]], @"given imageSet did not contain STAfterImageItem in .extensionData");
-    if([imageSet.extensionObject isKindOfClass:[STAfterImageItem class]]){
-        _afterImageItem = (STAfterImageItem *)imageSet.extensionObject;
+    NSAssert(!imageSet || [imageSet.extensionObject isKindOfClass:[STAfterImageLayerItem class]], @"given imageSet did not contain STAfterImageItem in .extensionData");
+    if([imageSet.extensionObject isKindOfClass:[STAfterImageLayerItem class]]){
+        _afterImageItem = (STAfterImageLayerItem *)imageSet.extensionObject;
     }else{
         _afterImageItem = nil;
     }
@@ -193,7 +193,6 @@
     NSInteger targetIndexOfLayer = timeSlider.tag;
     STAfterImageLayerItem * layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
-        
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
     
     [self setViewsDisplay];

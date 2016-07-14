@@ -41,7 +41,9 @@
     resource.uuid = self.uuid;
     resource.createdTime = self.createdTime;
     resource.savedTime = self.savedTime;
-    resource.extensionObject = [NSKeyedUnarchiver unarchiveObjectWithData:self.extensionData];
+    @try {
+        resource.extensionObject = [NSKeyedUnarchiver unarchiveObjectWithData:self.extensionData];
+    }@finally {}
 }
 @end
 

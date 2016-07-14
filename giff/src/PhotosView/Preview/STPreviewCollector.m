@@ -332,7 +332,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
         }
 
         if(layers.count){
-            imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:layers];
+            imageSet.extensionObject = [[STAfterImageLayerItem alloc] initWithLayers:layers];
         }
 
         _afterImageView.imageSet = imageSet;

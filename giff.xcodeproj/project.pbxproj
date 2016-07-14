@@ -24,7 +24,6 @@
 		4F71D4E517458028F4AE03CC /* logo_part_2.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D265AAEDAAC78DD97E1D /* logo_part_2.svg */; };
 		4F71D514DCA330574F67D1FE /* logo_elie.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DFA4BE0A87BBA6FC2B9B /* logo_elie.svg */; };
 		4F71D51ED092604E7E600BA8 /* set_resolution_full.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D41BF339D7E2D2A7A2E3 /* set_resolution_full.svg */; };
-		4F71D53F947F769EA93604A0 /* STAfterImageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D4CC5E655178E7892B4E /* STAfterImageItem.m */; };
 		4F71D56322919F1A1E1444C5 /* ios_photos.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DDCC6F60F70FBDE346FE /* ios_photos.svg */; };
 		4F71D5D2290C8EBDDA77F451 /* STCaptureResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D5C35AF53115772962A8 /* STCaptureResponse.m */; };
 		4F71D5DA6F60BFBDD1F5A619 /* STGIFFAnimatableLogoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */; };
@@ -409,7 +408,6 @@
 		4F71D24C93D4A92B99A914A6 /* NSDictionary+STUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+STUtil.h"; sourceTree = "<group>"; };
 		4F71D265AAEDAAC78DD97E1D /* logo_part_2.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = logo_part_2.svg; sourceTree = "<group>"; };
 		4F71D26714BAB7552F773108 /* icon.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = icon.svg; sourceTree = "<group>"; };
-		4F71D2D0FA2FCDFF19736E4B /* STAfterImageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STAfterImageItem.h; sourceTree = "<group>"; };
 		4F71D33E62373415D7393C86 /* STGIFFStandardColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFStandardColor.m; sourceTree = "<group>"; };
 		4F71D3401F5ECD85A0B7AEA8 /* set_resolution_4k.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_resolution_4k.svg; sourceTree = "<group>"; };
 		4F71D3616CB9036630E657C5 /* STAfterImageLayersBlendEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STAfterImageLayersBlendEffect.m; sourceTree = "<group>"; };
@@ -422,7 +420,6 @@
 		4F71D43A9F6FF6C3DED4ABD8 /* STExporter+IOGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STExporter+IOGIF.m"; sourceTree = "<group>"; };
 		4F71D47AA9D2960523FF1C1E /* STStandardPointableSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STStandardPointableSlider.m; sourceTree = "<group>"; };
 		4F71D4B09EDE32123D00A57F /* STSelectableCapturedImageSetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STSelectableCapturedImageSetView.h; sourceTree = "<group>"; };
-		4F71D4CC5E655178E7892B4E /* STAfterImageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STAfterImageItem.m; sourceTree = "<group>"; };
 		4F71D4DBC03E99567683E523 /* bg_viewfinder_postfocus_5point.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = bg_viewfinder_postfocus_5point.svg; sourceTree = "<group>"; };
 		4F71D4DD17097C1CB4B4D19A /* bg_viewfinder_fullrange_default.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = bg_viewfinder_fullrange_default.svg; sourceTree = "<group>"; };
 		4F71D522C22BEEC8626EA65E /* STCapturedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImage.m; sourceTree = "<group>"; };
@@ -1121,8 +1118,6 @@
 			children = (
 				4F71D5488E5274FE85378609 /* STAfterImageView.m */,
 				4F71D235C550801764F0BB9F /* STAfterImageView.h */,
-				4F71D4CC5E655178E7892B4E /* STAfterImageItem.m */,
-				4F71D2D0FA2FCDFF19736E4B /* STAfterImageItem.h */,
 				4F71D2308DC0D34B871E3482 /* STAfterImageLayerItem.m */,
 				4F71DD3DBD0DDD6215BCB8D6 /* STAfterImageLayerItem.h */,
 				4F71D03F76937A7C21424F35 /* STAfterImageLayerView.m */,
@@ -2626,7 +2621,6 @@
 				4F71DE7E965B770B11D49C68 /* STExporter+IOGIF.m in Sources */,
 				4F71D6A26E908715BE42D285 /* STExporterSaveToPhotos.m in Sources */,
 				4F71D1AAC7F3BE1B0297FF1D /* STAfterImageView.m in Sources */,
-				4F71D53F947F769EA93604A0 /* STAfterImageItem.m in Sources */,
 				4F71DC45F5FD468FA6181274 /* STAfterImageLayerItem.m in Sources */,
 				4F71D70424A4B3D09163ECC2 /* STCapturedImage+STExporterIOGIF.m in Sources */,
 				4F71D426590E9FDE3C420D8D /* STPhotoItem+STExporterIOGIF.m in Sources */,
