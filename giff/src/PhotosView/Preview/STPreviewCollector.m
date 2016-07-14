@@ -29,6 +29,7 @@
 #import "STAfterImageLayerItem.h"
 #import "STAfterImageLayerEffect.h"
 #import "STAfterImageLayersColorEffect.h"
+#import "Colours.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -321,7 +322,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
             layerItem2.alpha = .5;
             layerItem2.frameIndexOffset = 0;
-            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor blueColor]];
+            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:[UIColor bananaColor]];
 
             imageSet.extensionObject = [[STAfterImageItem alloc] initWithLayers:@[layerItem,layerItem2]];
         }

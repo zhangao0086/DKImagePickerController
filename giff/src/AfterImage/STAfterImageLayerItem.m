@@ -16,11 +16,6 @@
     return self;
 }
 
-- (void)setScale:(CGFloat)scale {
-    NSAssert(scale<1,@"scale must be higer than 1");
-    _scale = scale;
-}
-
 - (id)initWithCoder:(NSCoder *)decoder {
     if (self = [super initWithCoder:decoder]) {
         self.alpha = [decoder decodeFloatForKey:@keypath(self.alpha)];

@@ -44,9 +44,9 @@
         if(overRanged){
             layerView.visible = NO;
         }else{
+            layerView.scaleXYValue = layerItem.scale;
             layerView.visible = YES;
             layerView.alpha = layerItem.alpha;
-            //TODO: render filter
             layerView.currentIndex = layerIndex;
         }
     }];
@@ -95,7 +95,6 @@
 
         //control - slider
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderSize];
-        ss(sliderSize);
         offsetSlider.y = index * sliderSize.height;
         offsetSlider.tag = index;
         offsetSlider.tagName = layerItem.uuid;
@@ -145,7 +144,7 @@
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
     STAfterImageLayerItem * layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:targetIndexOfLayer];
-    layerItem.frameIndexOffset = (NSInteger) ((NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5);
+    layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
     [self setViewsDisplay];
 }

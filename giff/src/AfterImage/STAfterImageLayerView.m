@@ -38,7 +38,8 @@
                         NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"%@_%@_f%d",
                                         Wself.layerItem.uuid,
                                         Wself.layerItem.effect,
-                                        index] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
+                                        index
+                        ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
                         if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
                             //cached
