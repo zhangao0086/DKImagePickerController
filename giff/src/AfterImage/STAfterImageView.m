@@ -114,7 +114,6 @@
 
                     }else{
                         //newly create
-
                         if([UIImageJPEGRepresentation([_layerItem.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
                                 writeToURL:tempURLToApplyEffect
                                 atomically:NO]){
