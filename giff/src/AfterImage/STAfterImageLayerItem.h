@@ -9,6 +9,7 @@
 @class STAfterImageLayerEffect;
 
 @interface STAfterImageLayerItem : STItem
+@property (nonatomic, readonly) STAfterImageLayerItem * superlayer;
 @property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
 @property (nonatomic, assign) CGFloat alpha;
 @property (nonatomic, assign) CGFloat scale;

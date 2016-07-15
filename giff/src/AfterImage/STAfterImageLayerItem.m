@@ -8,6 +8,10 @@
 #import "NSString+STUtil.h"
 #import "NSArray+STUtil.h"
 
+@interface STAfterImageLayerItem(Private)
+@property (nonatomic, readwrite) STAfterImageLayerItem * superlayer;
+@end
+
 @implementation STAfterImageLayerItem
 
 - (instancetype)init {
@@ -19,11 +23,10 @@
 }
 
 - (void)setLayers:(NSArray<STAfterImageLayerItem *> *)layers {
-#if DEBUG
-    for(id element in layers){
-        NSAssert([element isKindOfClass:[STAfterImageLayerItem class]], @"elements of layers is not STAfterImageLayerItem");
+    for(STAfterImageLayerItem * layer in layers){
+        NSAssert([layer isKindOfClass:[STAfterImageLayerItem class]], @"elements of layers is not STAfterImageLayerItem");
+        layer.superlayer = self;
     }
-#endif
     _layers = layers;
 }
 
@@ -41,6 +44,8 @@
 
 - (NSArray *)processPresentableObjects:(NSArray *)presentableObjects {
     Weaks
+    NSAssert([[presentableObjects firstObject] isKindOfClass:NSURL.class], @"now support only for NSURL yet.");
+
     return !self.effect ?
             presentableObjects :
             [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger indexOfPresentableObject) {

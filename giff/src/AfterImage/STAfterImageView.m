@@ -94,6 +94,7 @@
 
 - (void)addLayers:(NSArray *)presentableObjects{
     NSArray * const sourceImageUrls = presentableObjects;
+
     for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
         NSUInteger indexOfLayer = [_afterImageItem.layers indexOfObject:layerItem];
         layerItem.index = indexOfLayer;
