@@ -5,6 +5,8 @@
 
 #import "STAfterImageLayerItem.h"
 #import "STAfterImageLayerEffect.h"
+#import "NSString+STUtil.h"
+#import "NSArray+STUtil.h"
 
 @implementation STAfterImageLayerItem
 
@@ -35,6 +37,37 @@
 
 + (instancetype)itemWithLayers:(NSArray *)layers {
     return [[self alloc] initWithLayers:layers];
+}
+
+- (NSArray *)processPresentableObjects:(NSArray *)presentableObjects {
+    Weaks
+    return !self.effect ?
+            presentableObjects :
+            [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger indexOfPresentableObject) {
+        NSAssert([imageUrl isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+
+        @autoreleasepool {
+            NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
+                                                                       Wself.uuid,
+                                                                       Wself.effect.uuid,
+                                                                       indexOfPresentableObject
+            ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
+
+            if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
+                //cached
+                return tempURLToApplyEffect;
+
+            }else{
+                //newly create
+                if([UIImageJPEGRepresentation([Wself.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
+                        writeToURL:tempURLToApplyEffect
+                        atomically:NO]){
+                    return tempURLToApplyEffect;
+                }
+            }
+            return nil;
+        }
+    }];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

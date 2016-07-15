@@ -41,7 +41,7 @@
     [sourceFilter setColorRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
 
     STFilter * filter = [[STFilter alloc] initWithFilters:@[sourceFilter]];
-    return [[STFilterManager sharedManager]
+    UIImage * result = [[STFilterManager sharedManager]
             buildOutputImage:sourceImage
                      enhance:NO
                       filter:filter
@@ -50,6 +50,7 @@
                  outputScale:1
        useCurrentFrameBuffer:YES
           lockFrameRendering:NO];
+    return result;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

@@ -5,6 +5,8 @@
 
 #import "STAfterImageLayersBlendEffect.h"
 #import "UIImage+STUtil.h"
+#import "UIColor+BFPaperColors.h"
+#import "Colours.h"
 
 /*
  * GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:self.inputImage smoothlyScaleOutput:NO];
@@ -37,15 +39,29 @@ UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
 
 - (UIImage *)processEffect:(UIImage *__nullable)sourceImage {
     @autoreleasepool {
-        GPUImageOverlayBlendFilter * overlayBlendFilter = [[GPUImageOverlayBlendFilter alloc] init];
 
-        GPUImagePicture * sourcePicture = [[GPUImagePicture alloc] initWithImage:[UIImage imageBundled:@"blend.JPG"] smoothlyScaleOutput:YES];
-        [sourcePicture addTarget:overlayBlendFilter];
-        [sourcePicture processImage];
+        GPUImageChromaKeyBlendFilter * overlayBlendFilter = [[GPUImageChromaKeyBlendFilter alloc] init];
+        overlayBlendFilter.thresholdSensitivity = .4;
+//        overlayBlendFilter.smoothing = .6;
 
-        GPUImagePicture * originalPicture = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:YES];
-        [originalPicture addTarget:overlayBlendFilter];
-        [originalPicture processImage];
+//        NSArray* colors = [UIColorFromRGB(0x4470c0) rgbaArray];
+//        oo(colors);
+//        [overlayBlendFilter setColorToReplaceRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
+        [overlayBlendFilter setColorToReplaceRed:0 green:1 blue:0];
+
+        //source
+        GPUImagePicture * pictureChromakey = [[GPUImagePicture alloc] initWithImage:[UIImage imageBundled:@"chro0.png"] smoothlyScaleOutput:YES];
+        [pictureChromakey addTarget:overlayBlendFilter];
+        [pictureChromakey processImage];
+
+        GPUImagePicture * pictureToInsert = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:YES];
+        [pictureToInsert addTarget:overlayBlendFilter];
+        [pictureToInsert processImage];
+
+//        GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
+//        blendFilter.mix = 1.0;
+//        [sourcePicture addTarget:blendFilter];
+//        [overlayBlendFilter addTarget:blendFilter];
 
         [overlayBlendFilter useNextFrameForImageCapture];
 

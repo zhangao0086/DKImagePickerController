@@ -28,9 +28,10 @@
 #import "STAfterImageLayerItem.h"
 #import "STAfterImageLayerEffect.h"
 #import "STAfterImageLayersColorEffect.h"
-#import "Macros.h"
 #import "STAfterImageLayersBlendEffect.h"
 #import "STAfterImageView.h"
+#import "NSData+STGIFUtil.h"
+#import <UIColor+BFPaperColors/UIColor+BFPaperColors.h>
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -313,22 +314,27 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             [_afterImageView centerToParent];
         }
 
+//        NSData * gifData = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] bundlePath], @"chrogif.gif"]];
+//        UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
+
         //set default
         NSMutableArray * layers = [NSMutableArray array];
-//        if(!imageSet.extensionObject){
-        if(YES){
+//        if(!imageSet.extensionObject){ 
+        if(!_afterImageView.imageSet){
             STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
-            layerItem.alpha = 1;
+            layerItem.alpha = .4;
             layerItem.frameIndexOffset = 0;
             layerItem.effect = [[STAfterImageLayersBlendEffect alloc] init];
+
+//            layerItem.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromRGB(0x4470c0)];
             [layers addObject:layerItem];
 
-            STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
-            layerItem2.alpha = .3;
-//            layerItem.scale = 1.05;
-            layerItem2.frameIndexOffset = 0;
-            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromHex(0xE2489F)];
-            [layers addObject:layerItem2];
+//            STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
+//            layerItem2.alpha = .3;
+////            layerItem.scale = 1.05;
+//            layerItem2.frameIndexOffset = 0;
+//            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromHex(0xE2489F)];
+//            [layers addObject:layerItem2];
         }
 
         if(layers.count){

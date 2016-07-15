@@ -54,9 +54,8 @@
         }
     }];
 
-
-    self.backgroundColor = [UIColor blackColor];
-    _contentView.visible = NO;
+//    self.backgroundColor = [UIColor blackColor];
+//    _contentView.visible = NO;
 }
 
 - (void)setImageSet:(STCapturedImageSet *)imageSet {
@@ -88,66 +87,52 @@
         [_controlView saveInitialLayout];
     }
 
+    [self addLayers:presentableObjects];
 
-    CGSize sliderSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_afterImageItem.layers.count);
+    [super willSetViews:presentableObjects];
+}
 
+- (void)addLayers:(NSArray *)presentableObjects{
+    NSArray * const sourceImageUrls = presentableObjects;
     for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
         NSUInteger indexOfLayer = [_afterImageItem.layers indexOfObject:layerItem];
+        layerItem.index = indexOfLayer;
 
-        Weaks
-        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-            STAfterImageLayerItem *_layerItem = layerItem;
-            
-            NSArray <NSURL *> * preheatedImageUrls = !_layerItem.effect ? nil : [presentableObjects mapWithIndex:^id(NSURL *imageUrl, NSInteger indexOfPresentableObject) {
-                NSAssert([imageUrl isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+        if(layerItem.effect){
+            Weaks
+            dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+                STAfterImageLayerItem *_layerItem = layerItem;
+                NSArray * effectAppliedImageUrls = [_layerItem processPresentableObjects:sourceImageUrls];
+                NSAssert(effectAppliedImageUrls.count==sourceImageUrls.count,@"effectAppliedImageUrls has been broken");
 
-                @autoreleasepool {
-                    NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
-                                                                               _layerItem.uuid,
-                                                                               _layerItem.effect.uuid,
-                                                                               indexOfPresentableObject
-                    ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
-
-                    if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
-                        //cached
-                        return tempURLToApplyEffect;
-
-                    }else{
-                        //newly create
-                        if([UIImageJPEGRepresentation([_layerItem.effect processEffect:[UIImage imageWithContentsOfFile:imageUrl.path]], 1)
-                                writeToURL:tempURLToApplyEffect
-                                atomically:NO]){
-                            return tempURLToApplyEffect;
-                        }
-                    }
-                    return nil;
-                }
-            }];
-
-            if(preheatedImageUrls.count){
                 dispatch_async(dispatch_get_main_queue(),^{
-                    //layercb
-                    STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
-                    layerView.layerItem = _layerItem;
-                    layerView.fitViewsImageToBounds = YES;
-                    [_sublayersContainerView addSubview:layerView];
-
-                    [layerView setViews:preheatedImageUrls];
-
-                    [Wself setViewsDisplay];
+                    [Wself appendLayer:_layerItem presentableObjects:effectAppliedImageUrls];
                 });
-            }
+            });
+        }else{
+            [self appendLayer:layerItem presentableObjects:sourceImageUrls];
+        }
+    }
+}
 
-        });
+- (void)appendLayer:(STAfterImageLayerItem *)layerItem presentableObjects:(NSArray *)presentableObjects{
+    //layer
+    STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
+    layerView.layerItem = layerItem;
+    layerView.fitViewsImageToBounds = YES;
+    [_sublayersContainerView addSubview:layerView];
+    [layerView setViews:presentableObjects];
 
-        //control - slider
-        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderSize];
-        offsetSlider.y = indexOfLayer * sliderSize.height;
-        offsetSlider.tag = indexOfLayer;
-        offsetSlider.tagName = layerItem.uuid;
-        offsetSlider.delegateSlider = self;
+
+    //control
+    CGSize sliderControlSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_afterImageItem.layers.count);
+    STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderControlSize];
+    offsetSlider.y = layerItem.index * sliderControlSize.height;
+    offsetSlider.tag = layerItem.index;
+    offsetSlider.tagName = layerItem.uuid;
+    offsetSlider.delegateSlider = self;
 //        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
-        offsetSlider.normalizedCenterPositionOfThumbView = .5;
+    offsetSlider.normalizedCenterPositionOfThumbView = .5;
 
 //        Weaks
 //        [offsetSlider.thumbView whenPanAsSlideVertical:nil started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
@@ -160,12 +145,10 @@
 //        } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
 //
 //        }];
-        [_controlView addSubview:offsetSlider];
-    }
+    [_controlView addSubview:offsetSlider];
+    [_controlView st_gridSubviewsAsCenter:0 rowHeight:sliderControlSize.height column:1];
 
-    [_controlView st_gridSubviewsAsCenter:0 rowHeight:sliderSize.height column:1];
-
-    [super willSetViews:presentableObjects];
+    [self setViewsDisplay];
 }
 
 - (void)willClearViews {

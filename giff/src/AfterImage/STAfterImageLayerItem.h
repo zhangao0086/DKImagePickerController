@@ -18,4 +18,7 @@
 - (instancetype)initWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
 
 + (instancetype)itemWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
+
+- (NSArray *)processPresentableObjects:(NSArray *)presentableObjects;
+
 @end
