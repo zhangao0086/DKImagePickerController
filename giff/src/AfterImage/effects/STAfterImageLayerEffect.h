@@ -9,6 +9,10 @@
 #import "STFilter.h"
 #import "STFilterManager.h"
 
+@class STAfterImageLayerItem;
+
 @interface STAfterImageLayerEffect : STItem
-- (UIImage *)processEffect:(UIImage * __nullable)sourceImage;
+@property (nonatomic, readwrite) STAfterImageLayerItem * targetLayer;
+@property (nonatomic, readwrite) NSArray<STAfterImageLayerItem *> * layersToApply;
+- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages;
 @end

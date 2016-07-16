@@ -27,11 +27,9 @@
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STAfterImageLayerItem.h"
 #import "STAfterImageLayerEffect.h"
-#import "STAfterImageLayersColorEffect.h"
 #import "STAfterImageLayersBlendEffect.h"
 #import "STAfterImageView.h"
-#import "NSData+STGIFUtil.h"
-#import <UIColor+BFPaperColors/UIColor+BFPaperColors.h>
+#import "STAfterImageLayersColorEffect.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -306,7 +304,6 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     @autoreleasepool {
         if(!_afterImageView){
             _afterImageView = [[STAfterImageView alloc] initWithSize:_previewView.size];
-            _afterImageView.fitViewsImageToBounds = YES;
         }
 
         if(![[_previewView subviews] containsObject:_afterImageView]){
@@ -318,16 +315,14 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 //        UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
 
         //set default
-        NSMutableArray * layers = [NSMutableArray array];
-//        if(!imageSet.extensionObject){ 
-        if(!_afterImageView.imageSet){
-            STAfterImageLayerItem * layerItem = [[STAfterImageLayerItem alloc] init];
+//        if(!imageSet.extensionObject){
+        if(!_afterImageView.layers.count){
+            STAfterImageLayerItem * layerItem = [STAfterImageLayerItem itemWithSourceImageSets:@[imageSet]];
             layerItem.alpha = .4;
             layerItem.frameIndexOffset = 0;
-            layerItem.effect = [[STAfterImageLayersBlendEffect alloc] init];
+            layerItem.effect = [[STAfterImageLayersColorEffect alloc] init];
 
 //            layerItem.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromRGB(0x4470c0)];
-            [layers addObject:layerItem];
 
 //            STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
 //            layerItem2.alpha = .3;
@@ -335,13 +330,18 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 //            layerItem2.frameIndexOffset = 0;
 //            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromHex(0xE2489F)];
 //            [layers addObject:layerItem2];
+
+//            STAfterImageLayerItem * imageLayerItem = nil;
+//            if(layers.count){
+//                imageSet.extensionObject = imageLayerItem = [[STAfterImageLayerItem alloc] initWithLayers:layers];
+//            }else{
+//                imageLayerItem = (STAfterImageLayerItem *) imageSet.extensionObject;
+//            }
+//            imageLayerItem.sourceImageSets = @[imageSet, [STCapturedImageSet setWithImages:nil]];
+
+            [_afterImageView appendLayer:layerItem];
         }
 
-        if(layers.count){
-            imageSet.extensionObject = [[STAfterImageLayerItem alloc] initWithLayers:layers];
-        }
-
-        _afterImageView.imageSet = imageSet;
         _afterImageView.currentIndex = index;
 
 //        STCapturedImage * selectedImage_base = imageSet.images[index];
@@ -413,8 +413,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 - (void)exitAfterImageEditingMode{
 //    [[self.carousel.currentItemView viewWithTagName:@"proto_view"] clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 
-    _afterImageView.imageSet = nil;
-    [_afterImageView removeFromSuperview];
+    [_afterImageView removeAllLayers];
 
 }
 

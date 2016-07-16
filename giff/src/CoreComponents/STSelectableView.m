@@ -329,7 +329,7 @@
     return behindView;
 }
 
-- (void)setButtonDrawable:(UIImageView *)view set:(id)object{
+- (void) setButtonDrawable:(UIImageView *)view set:(id)object{
     @autoreleasepool {
         NSParameterAssert(object);
 

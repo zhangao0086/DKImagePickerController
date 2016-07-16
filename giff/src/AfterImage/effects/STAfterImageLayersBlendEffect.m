@@ -37,9 +37,10 @@ UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
 
 }
 
-- (UIImage *)processEffect:(UIImage *__nullable)sourceImage {
-    @autoreleasepool {
+- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+    NSAssert(sourceImages.count==2, @"2 sourceImage supported");
 
+    @autoreleasepool {
         GPUImageChromaKeyBlendFilter * overlayBlendFilter = [[GPUImageChromaKeyBlendFilter alloc] init];
         overlayBlendFilter.thresholdSensitivity = .4;
 //        overlayBlendFilter.smoothing = .6;
@@ -50,11 +51,11 @@ UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
         [overlayBlendFilter setColorToReplaceRed:0 green:1 blue:0];
 
         //source
-        GPUImagePicture * pictureChromakey = [[GPUImagePicture alloc] initWithImage:[UIImage imageBundled:@"chro0.png"] smoothlyScaleOutput:YES];
+        GPUImagePicture * pictureChromakey = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:YES];
         [pictureChromakey addTarget:overlayBlendFilter];
         [pictureChromakey processImage];
 
-        GPUImagePicture * pictureToInsert = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:YES];
+        GPUImagePicture * pictureToInsert = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:YES];
         [pictureToInsert addTarget:overlayBlendFilter];
         [pictureToInsert processImage];
 
@@ -65,7 +66,7 @@ UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
 
         [overlayBlendFilter useNextFrameForImageCapture];
 
-        return [overlayBlendFilter imageFromCurrentFramebufferWithOrientation:sourceImage.imageOrientation];
+        return [overlayBlendFilter imageFromCurrentFramebufferWithOrientation:[[sourceImages firstObject] imageOrientation]];
     }
 }
 @end

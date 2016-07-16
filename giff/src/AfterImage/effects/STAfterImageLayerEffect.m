@@ -4,12 +4,15 @@
 //
 
 #import "STAfterImageLayerEffect.h"
+#import "STAfterImageLayerItem.h"
 
 @implementation STAfterImageLayerEffect{
 }
 
 #pragma mark Process
-- (UIImage *)processEffect:(UIImage *)sourceImage {
-    return sourceImage;
+
+- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+    return [sourceImages firstObject];
 }
+
 @end

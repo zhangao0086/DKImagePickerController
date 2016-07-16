@@ -9,7 +9,6 @@
 #import "UIView+STUtil.h"
 #import "STAfterImageLayerView.h"
 #import "STQueueManager.h"
-#import "NSString+STUtil.h"
 #import "STAfterImageLayerEffect.h"
 #import "STAfterImageView.h"
 
@@ -20,27 +19,25 @@
 @implementation STAfterImageView {
     UIView * _sublayersContainerView;
     UIView * _controlView;
-    STAfterImageLayerItem * _afterImageItem;
+    NSMutableArray * _layers;
 }
 
 - (void)dealloc {
-    self.imageSet = nil;
+    _layers = nil;
 }
 
 - (void)setViewsDisplay {
-    [super setViewsDisplay];
 
-    if(self.fitViewsImageToBounds){
-        if(!CGSizeEqualToSize(_sublayersContainerView.size, self.size)){
-            _sublayersContainerView.size = self.size;
-        }
-    }else{
-        [_sublayersContainerView restoreInitialLayout];
+    if(!CGSizeEqualToSize(_sublayersContainerView.size, self.size)){
+        _sublayersContainerView.size = self.size;
     }
 
     [_sublayersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STAfterImageLayerView * layerView = (STAfterImageLayerView *) view;
-        STAfterImageLayerItem *layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:index];
+        STAfterImageLayerItem *layerItem = [_layers st_objectOrNilAtIndex:index];
+
+        ii(self.currentIndex);
+        ii(layerItem.frameIndexOffset);
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
 
@@ -51,6 +48,10 @@
             layerView.visible = YES;
             layerView.alpha = layerItem.alpha;
             layerView.currentIndex = layerIndex;
+
+            ii(layerIndex);
+            ii(layerView.currentIndex);
+            ii(layerView.count);
         }
     }];
 
@@ -58,25 +59,21 @@
 //    _contentView.visible = NO;
 }
 
-- (void)setImageSet:(STCapturedImageSet *)imageSet {
-    NSAssert(!imageSet || [imageSet.extensionObject isKindOfClass:[STAfterImageLayerItem class]], @"given imageSet did not contain STAfterImageItem in .extensionData");
-    if([imageSet.extensionObject isKindOfClass:[STAfterImageLayerItem class]]){
-        _afterImageItem = (STAfterImageLayerItem *)imageSet.extensionObject;
-    }else{
-        _afterImageItem = nil;
-    }
+- (void)setCurrentIndex:(NSUInteger)currentIndex {
+    _currentIndex = currentIndex;
 
-    [super setImageSet:imageSet];
+    [self setViewsDisplay];
 }
 
-- (void)willSetViews:(NSArray *)presentableObjects {
-    if(!_afterImageItem.layers){
-        return;
-    }
 
+- (NSArray *)layers {
+    return _layers;
+}
+
+- (void)initToAddLayersIfNeeded{
     if(!_sublayersContainerView){
         _sublayersContainerView = [[UIView alloc] initWithSize:self.size];
-        [self insertSubview:_sublayersContainerView aboveSubview:_contentView];
+        [self insertSubview:_sublayersContainerView atIndex:0];
         [_sublayersContainerView saveInitialLayout];
         _sublayersContainerView.clipsToBounds = YES;
     }
@@ -87,36 +84,45 @@
         [_controlView saveInitialLayout];
     }
 
-    [self addLayers:presentableObjects];
-
-    [super willSetViews:presentableObjects];
-}
-
-- (void)addLayers:(NSArray *)presentableObjects{
-    NSArray * const sourceImageUrls = presentableObjects;
-
-    for (STAfterImageLayerItem *layerItem in _afterImageItem.layers) {
-        NSUInteger indexOfLayer = [_afterImageItem.layers indexOfObject:layerItem];
-        layerItem.index = indexOfLayer;
-
-        if(layerItem.effect){
-            Weaks
-            dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-                STAfterImageLayerItem *_layerItem = layerItem;
-                NSArray * effectAppliedImageUrls = [_layerItem processPresentableObjects:sourceImageUrls];
-                NSAssert(effectAppliedImageUrls.count==sourceImageUrls.count,@"effectAppliedImageUrls has been broken");
-
-                dispatch_async(dispatch_get_main_queue(),^{
-                    [Wself appendLayer:_layerItem presentableObjects:effectAppliedImageUrls];
-                });
-            });
-        }else{
-            [self appendLayer:layerItem presentableObjects:sourceImageUrls];
-        }
+    if(!_layers.count){
+        _layers = [NSMutableArray array];
     }
 }
 
-- (void)appendLayer:(STAfterImageLayerItem *)layerItem presentableObjects:(NSArray *)presentableObjects{
+- (void)appendLayer:(STAfterImageLayerItem *)layerItem{
+    [self initToAddLayersIfNeeded];
+
+    if(layerItem.effect){
+        Weaks
+        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+            NSArray * effectAppliedImageUrls = [layerItem processResources];
+            
+            dispatch_async(dispatch_get_main_queue(),^{
+                [Wself appendLayerView:layerItem presentableObjects:effectAppliedImageUrls];
+            });
+        });
+    }else{
+        //set default 0 STCapturedImageSet
+        [self appendLayerView:layerItem presentableObjects:[layerItem resourcesToProcessFromSourceImageSet:[[layerItem sourceImageSets] firstObject]]];
+    }
+}
+
+- (void)removeAllLayers{
+    [_sublayersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
+        [((STSelectableView *) view) clearViews];
+    }];
+    [_sublayersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+
+    [_controlView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+
+    [_layers removeAllObjects];
+}
+
+- (void)appendLayerView:(STAfterImageLayerItem *)layerItem presentableObjects:(NSArray *)presentableObjects{
+
+    [_layers addObject:layerItem];
+    layerItem.index = [_layers indexOfObject:layerItem];
+
     //layer
     STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
     layerView.layerItem = layerItem;
@@ -126,7 +132,7 @@
 
 
     //control
-    CGSize sliderControlSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_afterImageItem.layers.count);
+    CGSize sliderControlSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_layers.count);
     STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderControlSize];
     offsetSlider.y = layerItem.index * sliderControlSize.height;
     offsetSlider.tag = layerItem.index;
@@ -152,21 +158,6 @@
     [self setViewsDisplay];
 }
 
-- (void)willClearViews {
-    if(_afterImageItem){
-        return;
-    }
-
-    [_sublayersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
-        [((STSelectableView *) view) clearViews];
-    }];
-    [_sublayersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
-
-    [_controlView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
-
-    [super willClearViews];
-}
-
 #pragma mark OffsetSlider
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     [self doingSlide:timeSlider withSelectedIndex:index];
@@ -174,16 +165,18 @@
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
-    STAfterImageLayerItem * layerItem = [_afterImageItem.layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    STAfterImageLayerItem * layerItem = [_layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
-    
+
+    ii(layerItem.frameIndexOffset);
+
     [self setViewsDisplay];
 }
 
 - (UIView *)createThumbView {
-    if(_afterImageItem.layers.count){
-        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _sublayersContainerView.height/_afterImageItem.layers.count)];
+    if(_layers.count){
+        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _sublayersContainerView.height/_layers.count)];
         thumbView.backgroundColor = [UIColor blackColor];
         return thumbView;
     }

@@ -41,4 +41,8 @@
 - (NSArray *)subarrayForChunk:(NSUInteger)chunk length:(NSUInteger)length;
 
 - (NSArray *)chunkifyWithMaxSize:(NSUInteger)size;
+
+- (NSUInteger)containsNull;
+
+- (BOOL)containsAllItemsNull;
 @end

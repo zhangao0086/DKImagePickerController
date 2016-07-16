@@ -7,19 +7,30 @@
 #import "STItem.h"
 
 @class STAfterImageLayerEffect;
+@class STCapturedImageSet;
 
 @interface STAfterImageLayerItem : STItem
+//initial attributes
+@property (nonatomic, readonly) NSArray<STCapturedImageSet *> * sourceImageSets;
 @property (nonatomic, readonly) STAfterImageLayerItem * superlayer;
-@property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
+//storing attributes
+//@property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
 @property (nonatomic, assign) CGFloat alpha;
 @property (nonatomic, assign) CGFloat scale;
 @property (nonatomic, assign) NSInteger frameIndexOffset;
 @property (nonatomic, readwrite) STAfterImageLayerEffect * effect;
 
-- (instancetype)initWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
+//- (instancetype)initWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
+//
+//+ (instancetype)itemWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
 
-+ (instancetype)itemWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
+- (instancetype)initWithSourceImageSets:(NSArray *)sourceImageSets;
 
-- (NSArray *)processPresentableObjects:(NSArray *)presentableObjects;
++ (instancetype)itemWithSourceImageSets:(NSArray *)sourceImageSets;
 
+- (NSArray *)processResources;
+
+- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceImageSets;
+
+- (NSArray<id> *)resourcesToProcessFromSourceImageSet:(STCapturedImageSet *)imageSet;
 @end

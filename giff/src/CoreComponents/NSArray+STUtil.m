@@ -178,4 +178,12 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
     return chunks;
 }
 
+
+- (NSUInteger)containsNull{
+    return [[NSCountedSet setWithArray:self] countForObject:[NSNull null]];
+}
+
+- (BOOL)containsAllItemsNull{
+    return self.count == [self containsNull];
+}
 @end

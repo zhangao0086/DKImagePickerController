@@ -34,7 +34,9 @@
     return self;
 }
 
-- (UIImage *)processEffect:(UIImage *__nullable)sourceImage {
+- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+    NSAssert(sourceImages.count==1, @"Single sourceImage supported");
+
     GPUImageMonochromeFilter * sourceFilter = [[GPUImageMonochromeFilter alloc] init];
     sourceFilter.intensity = self.intensity;
     NSArray* colors = [self.color rgbaArray];
@@ -42,7 +44,7 @@
 
     STFilter * filter = [[STFilter alloc] initWithFilters:@[sourceFilter]];
     UIImage * result = [[STFilterManager sharedManager]
-            buildOutputImage:sourceImage
+            buildOutputImage:[sourceImages firstObject]
                      enhance:NO
                       filter:filter
             extendingFilters:nil
