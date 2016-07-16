@@ -60,8 +60,10 @@
 
 - (NSArray *)processResources {
     Weaks
-    return !self.effect ? [self resourcesToProcessFromSourceImageSet:[self.sourceImageSets firstObject]] : [self.resourcesSetToProcessFromSourceImageSets mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
+    //TODO: effect가 없으면서 sourceImageSets이 2이상 (즉 이미지 레벨에서 겹치길 원한다는 의미)일때는 기본 알파 블렌딩
+    NSArray * processedResources = !self.effect ? [self resourcesToProcessFromSourceImageSet:[self.sourceImageSets firstObject]] : [self.resourcesSetToProcessFromSourceImageSets mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
         NSAssert([[resourceItemSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+
         @autoreleasepool {
             NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
                                                                        Wself.uuid,
@@ -96,6 +98,8 @@
             return nil;
         }
     }];
+    NSAssert([processedResources containsNull]==0, @"null is contained in processedResources");
+    return processedResources;
 }
 
 - (void)setSourceImageSets:(NSArray *)sourceImageSets {
