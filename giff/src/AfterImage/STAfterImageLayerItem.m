@@ -25,9 +25,10 @@
     return self;
 }
 
+
 - (instancetype)initWithSourceImageSets:(NSArray *)sourceImageSets {
     self = [self init];
-    _sourceImageSets = sourceImageSets;
+    self.sourceImageSets = sourceImageSets;
     return self;
 }
 
@@ -35,6 +36,14 @@
     return [[self alloc] initWithSourceImageSets:sourceImageSets];
 }
 
+- (void)setSourceImageSets:(NSArray *)sourceImageSets {
+    NSAssert(sourceImageSets.count, @"empty sourceImageSets is not allowed.");
+    STCapturedImageSet * imageSet0 = [sourceImageSets firstObject];
+    NSArray * arrayOfImageSetsCount = [sourceImageSets mapWithItemsKeyPath:@keypath(imageSet0.count)];
+    NSAssert(sourceImageSets.count == [[NSCountedSet setWithArray:arrayOfImageSetsCount] countForObject:@(imageSet0.count)],
+            @"all source image set's count is must be same");
+    _sourceImageSets = sourceImageSets;
+}
 
 //- (void)setLayers:(NSArray<STAfterImageLayerItem *> *)layers {
 //    for(STAfterImageLayerItem * layer in layers){
@@ -57,55 +66,57 @@
 //}
 
 - (NSArray *)processResources {
+    NSAssert(self.sourceImageSets.count,@"self.sourceImageSets is empty.");
+
     Weaks
-    //TODO: effect가 없으면서 sourceImageSets이 2이상 (즉 이미지 레벨에서 겹치길 원한다는 의미)일때는 기본 알파 블렌딩
-    NSArray * processedResources = !self.effect ? [self resourcesToProcessFromSourceImageSet:[self.sourceImageSets firstObject]] : [self.resourcesSetToProcessFromSourceImageSets mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
-        NSAssert([[resourceItemSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+    NSArray * processedResources = nil;
+    if(self.effect){
+        processedResources = [self.resourcesSetToProcessFromSourceImageSets mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
+            NSAssert([[resourceItemSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
 
-        @autoreleasepool {
-            NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
-                                                                       Wself.uuid,
-                                                                       Wself.effect.uuid,
-                                                                       indexOfResourceItemSet
-            ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
+            @autoreleasepool {
+                NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
+                                                                           Wself.uuid,
+                                                                           Wself.effect.uuid,
+                                                                           indexOfResourceItemSet
+                ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
-            if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
-                //cached
-                return tempURLToApplyEffect;
+                if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
+                    //cached
+                    return tempURLToApplyEffect;
 
-            }else{
-                //newly create
-                NSArray * imagesToProcessEffect = [resourceItemSet mapWithIndex:^id(NSURL * imageUrl, NSInteger index) {
-                    @autoreleasepool {
-                        NSAssert([imageUrl isKindOfClass:NSURL.class],@"resource type was supported only as NSURL");
-                        NSAssert([[NSFileManager defaultManager] fileExistsAtPath:imageUrl.path], @"file does not exists.");
-                        return [UIImage imageWithContentsOfFile:imageUrl.path];
-                    }
-                }];
+                }else{
+                    //newly create
+                    NSArray * imagesToProcessEffect = [resourceItemSet mapWithIndex:^id(NSURL * imageUrl, NSInteger index) {
+                        @autoreleasepool {
+                            NSAssert([imageUrl isKindOfClass:NSURL.class],@"resource type was supported only as NSURL");
+                            NSAssert([[NSFileManager defaultManager] fileExistsAtPath:imageUrl.path], @"file does not exists.");
+                            return [UIImage imageWithContentsOfFile:imageUrl.path];
+                        }
+                    }];
 
-                BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
-                NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
-                if(!containsNullInImages){
-                    if([UIImageJPEGRepresentation([Wself.effect processEffect:imagesToProcessEffect], 1)
-                            writeToURL:tempURLToApplyEffect
-                            atomically:NO]){
-                        return tempURLToApplyEffect;
+                    BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
+                    NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
+                    if(!containsNullInImages){
+                        if([UIImageJPEGRepresentation([Wself.effect processEffect:imagesToProcessEffect], 1)
+                                writeToURL:tempURLToApplyEffect
+                                atomically:NO]){
+                            return tempURLToApplyEffect;
+                        }
                     }
                 }
+                return nil;
             }
-            return nil;
-        }
-    }];
-    NSAssert([processedResources containsNull]==0, @"null is contained in processedResources");
+        }];
+
+    }else{
+        //TODO: effect가 없으면서 sourceImageSets이 2이상 (즉 이미지 레벨에서 겹치길 원한다는 의미)일때는 기본 알파 블렌딩?
+        processedResources = [self resourcesToProcessFromSourceImageSet:[self.sourceImageSets firstObject]];
+    }
+
+    NSAssert(processedResources.count, @"processedResources is empty");
+    NSAssert([processedResources containsNull]==0, @"processedResources contained null");
     return processedResources;
-}
-
-- (void)setSourceImageSets:(NSArray *)sourceImageSets {
-    _sourceImageSets = sourceImageSets;
-
-    STCapturedImageSet * imageSet0 = [_sourceImageSets firstObject];
-    NSArray * arrayOfImageSetsCount = [_sourceImageSets mapWithItemsKeyPath:@keypath(imageSet0.count)];
-    NSAssert(_sourceImageSets.count == [[NSCountedSet setWithArray:arrayOfImageSetsCount] countForObject:@(imageSet0.count)], @"all source image set's count is must be same");
 }
 
 - (NSArray<id> *)resourcesToProcessFromSourceImageSet:(STCapturedImageSet *)imageSet{
@@ -137,14 +148,13 @@
             if(![rejoinResults st_objectOrNilAtIndex:subindex]) {
                 [rejoinResults addObject:[NSMutableArray arrayWithCapacity:resourceSets.count]];
             }
-
+            
             if(![rejoinResults[subindex] st_objectOrNilAtIndex:index]){
                 [rejoinResults[subindex] addObject:[NSMutableArray arrayWithCapacity:results.count]];
             }
             rejoinResults[subindex][index] = object;
         }];
     }];
-
     return rejoinResults;
 }
 

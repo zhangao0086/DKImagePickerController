@@ -4,7 +4,6 @@
 //
 
 #import "STAfterImageLayerEffect.h"
-#import "STAfterImageLayerItem.h"
 
 @implementation STAfterImageLayerEffect{
 }

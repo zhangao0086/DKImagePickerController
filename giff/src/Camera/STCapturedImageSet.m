@@ -22,6 +22,8 @@
 - (instancetype)initWithImages:(NSArray<STCapturedImage *> *)images {
     self = [super init];
     if (self) {
+        NSAssert(images.count,@"Empty images is not allowed");
+        NSAssert(![images containsNull],@"Null contained images is not allowed");
         _images = [NSMutableArray<STCapturedImage *> arrayWithArray:images];
 #if DEBUG
         for(STCapturedImage * image in _images){

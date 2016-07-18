@@ -38,35 +38,42 @@ UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
 }
 
 - (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
-    NSAssert(sourceImages.count==2, @"2 sourceImage supported");
+    if(sourceImages.count<2){
+        return [super processEffect:sourceImages];
+    }
+
+    NSAssert(sourceImages.count==2, @"Max 2 sourceImage supported");
 
     @autoreleasepool {
         GPUImageChromaKeyBlendFilter * overlayBlendFilter = [[GPUImageChromaKeyBlendFilter alloc] init];
-        overlayBlendFilter.thresholdSensitivity = .4;
-//        overlayBlendFilter.smoothing = .6;
-
-//        NSArray* colors = [UIColorFromRGB(0x4470c0) rgbaArray];
-//        oo(colors);
-//        [overlayBlendFilter setColorToReplaceRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
+        overlayBlendFilter.thresholdSensitivity = .47;
+        overlayBlendFilter.smoothing = .1;
         [overlayBlendFilter setColorToReplaceRed:0 green:1 blue:0];
 
+        UIImage * sourceImage = sourceImages[0];
         //source
-        GPUImagePicture * pictureChromakey = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:YES];
-        [pictureChromakey addTarget:overlayBlendFilter];
-        [pictureChromakey processImage];
+        GPUImagePicture * chromakeyPicture = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:YES];
+        [chromakeyPicture addTarget:overlayBlendFilter];
+        [chromakeyPicture processImage];
 
-        GPUImagePicture * pictureToInsert = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:YES];
-        [pictureToInsert addTarget:overlayBlendFilter];
-        [pictureToInsert processImage];
+        GPUImagePicture * sourceImagePicture = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:YES];
+        [sourceImagePicture addTarget:overlayBlendFilter];
+        [sourceImagePicture processImage];
 
 //        GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
 //        blendFilter.mix = 1.0;
 //        [sourcePicture addTarget:blendFilter];
 //        [overlayBlendFilter addTarget:blendFilter];
 
+        if(self.fitOutputSizeToSourceImage){
+            [overlayBlendFilter forceProcessingAtSize:sourceImage.size];
+        }
+
         [overlayBlendFilter useNextFrameForImageCapture];
 
         return [overlayBlendFilter imageFromCurrentFramebufferWithOrientation:[[sourceImages firstObject] imageOrientation]];
     }
 }
+
+
 @end

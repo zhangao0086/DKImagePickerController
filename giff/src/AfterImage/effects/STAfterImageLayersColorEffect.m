@@ -4,34 +4,28 @@
 //
 
 #import "STAfterImageLayersColorEffect.h"
-#import "GPUImageContext.h"
-#import "STFilterManager.h"
-#import "STFilter.h"
 #import "Colours.h"
 
 
 @implementation STAfterImageLayersColorEffect {
 
 }
-- (instancetype)initWithColor:(UIColor *)color {
-    self = [super init];
-    if (self) {
-        self.color = color;
-    }
-
-    return self;
-}
-
-+ (instancetype)effectWithColor:(UIColor *)color {
-    return [[self alloc] initWithColor:color];
-}
-
 - (instancetype)init {
     self = [super init];
     if (self) {
         _intensity = 1;
     }
     return self;
+}
+
+- (instancetype)initWithColor:(UIColor *)color {
+    self = [self init];
+    self.color = color;
+    return self;
+}
+
++ (instancetype)effectWithColor:(UIColor *)color {
+    return [[self alloc] initWithColor:color];
 }
 
 - (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {

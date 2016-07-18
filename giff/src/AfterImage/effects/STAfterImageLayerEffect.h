@@ -12,7 +12,5 @@
 @class STAfterImageLayerItem;
 
 @interface STAfterImageLayerEffect : STItem
-@property (nonatomic, readwrite) STAfterImageLayerItem * targetLayer;
-@property (nonatomic, readwrite) NSArray<STAfterImageLayerItem *> * layersToApply;
 - (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages;
 @end

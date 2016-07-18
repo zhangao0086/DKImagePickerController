@@ -36,8 +36,6 @@
         STAfterImageLayerView * layerView = (STAfterImageLayerView *) view;
         STAfterImageLayerItem *layerItem = [_layers st_objectOrNilAtIndex:index];
 
-        ii(self.currentIndex);
-        ii(layerItem.frameIndexOffset);
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
 
@@ -48,10 +46,6 @@
             layerView.visible = YES;
             layerView.alpha = layerItem.alpha;
             layerView.currentIndex = layerIndex;
-
-            ii(layerIndex);
-            ii(layerView.currentIndex);
-            ii(layerView.count);
         }
     }];
 
@@ -168,8 +162,6 @@
     STAfterImageLayerItem * layerItem = [_layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
-
-    ii(layerItem.frameIndexOffset);
 
     [self setViewsDisplay];
 }

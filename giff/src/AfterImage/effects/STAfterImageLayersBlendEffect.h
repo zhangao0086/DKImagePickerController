@@ -5,7 +5,8 @@
 
 #import <Foundation/Foundation.h>
 #import "STAfterImageLayerEffect.h"
+#import "STMultiImageSetAfterImageLayerEffect.h"
 
 
-@interface STAfterImageLayersBlendEffect : STAfterImageLayerEffect
+@interface STAfterImageLayersBlendEffect : STMultiImageSetAfterImageLayerEffect
 @end

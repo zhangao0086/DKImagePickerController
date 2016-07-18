@@ -11,7 +11,7 @@
 
 @interface STAfterImageLayerItem : STItem
 //initial attributes
-@property (nonatomic, readonly) NSArray<STCapturedImageSet *> * sourceImageSets;
+@property (nonatomic, readwrite) NSArray<STCapturedImageSet *> * sourceImageSets;
 @property (nonatomic, readonly) STAfterImageLayerItem * superlayer;
 //storing attributes
 //@property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;

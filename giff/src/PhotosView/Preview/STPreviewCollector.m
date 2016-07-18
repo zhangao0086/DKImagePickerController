@@ -30,6 +30,9 @@
 #import "STAfterImageLayersBlendEffect.h"
 #import "STAfterImageView.h"
 #import "STAfterImageLayersColorEffect.h"
+#import "NSData+STGIFUtil.h"
+#import "NSString+STUtil.h"
+#import "UIColor+BFPaperColors.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -300,6 +303,51 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     }
 }
 
+//TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
+- (STCapturedImageSet *)createEffectGIFResourcesFromName:(NSString *)presetName{
+
+    NSArray * capturedImagesFromGifData;
+
+    if([@"funnyman" isEqualToString:presetName]){
+        NSData * gifData = [NSData dataWithContentsOfFile:[@"chrogif.gif" bundleFilePath]];
+        if(!gifData){
+            return nil;
+        }
+
+        UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
+
+        NSArray * imagesToCreateImageSet = nil;
+        if(gifImages.images.count > self.targetPhotoItem.sourceForCapturedImageSet.images.count){
+            NSRange cuttingRange = NSMakeRange(0,self.targetPhotoItem.sourceForCapturedImageSet.images.count);
+            imagesToCreateImageSet = [gifImages.images subarrayWithRange:cuttingRange];
+        }else{
+            //TODO: 이 경우 gif가 imageSet보다 길이 짧은때 정지 화면 아이템을 넣던지 imageSet에서 이미지를 빼던지 보정 처리 필요
+        }
+
+        capturedImagesFromGifData = [imagesToCreateImageSet mapWithIndex:^id(UIImage * image, NSInteger number) {
+            NSURL * url = [[@(number) stringValue] URLForTemp:@"giff_effect_adding_resource_f" extension:@"png"];
+            if([UIImagePNGRepresentation(image) writeToURL:url atomically:YES]){
+                return [STCapturedImage imageWithImageUrl:url];
+            }
+            NSAssert(NO, @"write failed");
+            return nil;
+        }];
+    }
+
+    return [STCapturedImageSet setWithImages: capturedImagesFromGifData];
+}
+
+- (void)prepareEffectGIFLayersIfNeeded:(STAfterImageLayerItem *)layerItem {
+    if([layerItem.effect.uuid isEqualToString:@"funnyman"]){
+        STCapturedImageSet * effectAppliedImageSet = [self createEffectGIFResourcesFromName:layerItem.effect.uuid];
+
+        if(effectAppliedImageSet){
+            layerItem.sourceImageSets = [layerItem.sourceImageSets arrayByAddingObjectsFromArray:@[effectAppliedImageSet]];
+        }
+    }
+}
+//TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
+
 - (void)renderAfterImageSetWithFrameAt:(NSUInteger)index imageSet:(STCapturedImageSet *)imageSet{
     @autoreleasepool {
         if(!_afterImageView){
@@ -310,100 +358,62 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             [_previewView insertSubview:_afterImageView aboveSubview:self.previewView.contentView];
             [_afterImageView centerToParent];
         }
-
-//        NSData * gifData = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] bundlePath], @"chrogif.gif"]];
-//        UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
-
         //set default
-//        if(!imageSet.extensionObject){
-        if(!_afterImageView.layers.count){
+
+        if(imageSet.extensionObject){
+            //vaild check
+            NSAssert([imageSet.extensionObject isKindOfClass:NSArray.class], @"imageSet.extensionObject is not NSArray");
+
+            if(!_afterImageView.layers.count){
+                for(STAfterImageLayerItem * layerItem in (NSArray *)imageSet.extensionObject){
+                    BOOL valid = layerItem
+                            && [layerItem isKindOfClass:STAfterImageLayerItem.class]
+                            && layerItem.sourceImageSets.count;
+                    NSAssert(valid, @"elements of imageSet.extensionObject is invalid item");
+
+                    if(valid){
+                        //recreate effects
+                        if(layerItem.effect){
+                            [self prepareEffectGIFLayersIfNeeded:layerItem];
+                        }
+
+                        [_afterImageView appendLayer:layerItem];
+                    }
+                }
+                NSAssert(_afterImageView.layers.count, @"after image can't initialize");
+            }
+
+        }else{
             STAfterImageLayerItem * layerItem = [STAfterImageLayerItem itemWithSourceImageSets:@[imageSet]];
-            layerItem.alpha = .4;
+
+            if(layerItem.effect){
+                [self prepareEffectGIFLayersIfNeeded:layerItem];
+            }
+
             layerItem.frameIndexOffset = 0;
-            layerItem.effect = [[STAfterImageLayersColorEffect alloc] init];
+            STAfterImageLayersBlendEffect * effect = [[STAfterImageLayersBlendEffect alloc] init];
+            effect.fitOutputSizeToSourceImage = YES;
+            effect.uuid = @"funnyman";
+            layerItem.effect = effect;
 
-//            layerItem.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromRGB(0x4470c0)];
-
-//            STAfterImageLayerItem * layerItem2 = [[STAfterImageLayerItem alloc] init];
-//            layerItem2.alpha = .3;
-////            layerItem.scale = 1.05;
-//            layerItem2.frameIndexOffset = 0;
-//            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromHex(0xE2489F)];
-//            [layers addObject:layerItem2];
-
-//            STAfterImageLayerItem * imageLayerItem = nil;
-//            if(layers.count){
-//                imageSet.extensionObject = imageLayerItem = [[STAfterImageLayerItem alloc] initWithLayers:layers];
-//            }else{
-//                imageLayerItem = (STAfterImageLayerItem *) imageSet.extensionObject;
-//            }
-//            imageLayerItem.sourceImageSets = @[imageSet, [STCapturedImageSet setWithImages:nil]];
+            STAfterImageLayerItem * layerItem2 = [STAfterImageLayerItem itemWithSourceImageSets:@[imageSet]];
+            layerItem2.alpha = .4;
+            layerItem2.frameIndexOffset = 0;
+            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromRGB(0xE2489F)];
 
             [_afterImageView appendLayer:layerItem];
+            [_afterImageView appendLayer:layerItem2];
+
+            imageSet.extensionObject = _afterImageView.layers;
         }
 
         _afterImageView.currentIndex = index;
-
-//        STCapturedImage * selectedImage_base = imageSet.images[index];
-//        NSURL * selectedImageUrl_base = selectedImage_base.fullScreenUrl ?: selectedImage_base.imageUrl;
-//
-//        //set image to base image
-//        UIImage * selectedImage = ((UIImageView *)self.carousel.currentItemView).image = [UIImage imageWithContentsOfFile:selectedImageUrl_base.path];
-//
-//        //layer0
-//        UIImageView * imageView_layer0 = (UIImageView *)[self.carousel.currentItemView viewWithTagName:@"proto_view"];
-//        NSInteger frameOffset_layer0 = -2;
-//        NSUInteger currentFrame_layer0 = index+frameOffset_layer0;
-//        if(!imageView_layer0){
-//            imageView_layer0 = [[UIImageView alloc] initWithSize:((UIImageView *)self.carousel.currentItemView).size];
-//            imageView_layer0.size = ((UIImageView *)self.carousel.currentItemView).size;
-//            imageView_layer0.tagName = @"proto_view";
-//            imageView_layer0.alpha = .4;
-//            [self.carousel.currentItemView addSubview:imageView_layer0];
-//        }
-//
-//
-//        //TODO: 캐시하도록 하자
-//        STFilter * filterForAfterImage_layer0 = [[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems[[STPhotoSelector sharedInstance].previewState.currentFocusedGroupItems.count-2]];
-//
-//        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-//            @autoreleasepool {
-//                UIImage * image_layer0;
-//                if([imageSet.images st_objectOrNilAtIndex:currentFrame_layer0]){
-//                    STCapturedImage * selectedImage_layer0 = imageSet.images[currentFrame_layer0];
-//                    NSURL * selectedImageUrl_layer0 = selectedImage_layer0.fullScreenUrl ?: selectedImage_layer0.imageUrl;
-//                    image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_layer0 path]];
-//                }else{
-//                    image_layer0 = [UIImage imageWithContentsOfFile:[selectedImageUrl_base path]];
-//                }
-//
-//                UIImage * resultImage = [[STFilterManager sharedManager]
-//                        buildOutputImage:image_layer0
-//                                 enhance:NO
-//                                  filter:filterForAfterImage_layer0
-//                        extendingFilters:nil
-//                            rotationMode:kGPUImageNoRotation
-//                             outputScale:1
-//                   useCurrentFrameBuffer:YES
-//                      lockFrameRendering:NO];
-//
-//                dispatch_async(dispatch_get_main_queue(),^{
-//
-//                    imageView_layer0.image = resultImage;
-//                });
-//            }
-//
-//
-//        });
     }
 }
 
 - (void)applyNeedsAfterImageSetWithFrameAt{
     NSArray <STCapturedImage *> * images = self.targetPhotoItem.sourceForCapturedImageSet.images;
     NSUInteger indexOfSlidingTargetImagesUrls = (NSUInteger) round((images.count-1) * _previewView.masterPositionSliderValue);
-//    STCapturedImage * anyGlobalPreviewImage = [images firstObject];
-//    NSArray<NSURL *> * globalPreviewImageUrls = [images mapWithItemsKeyPath:@keypath(anyGlobalPreviewImage.fullScreenUrl) orDefaultKeypath:@keypath(anyGlobalPreviewImage.imageUrl)];
-//    NSUInteger globalIndex = [globalPreviewImageUrls indexOfObject:images[indexOfSlidingTargetImagesUrls]];
 
     [self.targetPhotoItem setAssigningIndexFromCapturedImageSet:indexOfSlidingTargetImagesUrls];
     [self.presenter beginAndAutomaticallyEndHighQualityContext];
@@ -411,10 +421,8 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 }
 
 - (void)exitAfterImageEditingMode{
-//    [[self.carousel.currentItemView viewWithTagName:@"proto_view"] clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 
     [_afterImageView removeAllLayers];
-
 }
 
 - (void)reset {

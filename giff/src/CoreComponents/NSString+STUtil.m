@@ -90,7 +90,7 @@
 
 - (NSURL *)URLForTemp:(NSString *)prefix extension:(NSString *)extension{
     NSURL * url = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:prefix ? [prefix st_add:self] : self]];
-    return extension && extension.length ? [url URLByAppendingPathExtension:extension] : url;
+    return extension.length ? [url URLByAppendingPathExtension:extension] : url;
 }
 
 - (NSURL *)URLForDocument{
