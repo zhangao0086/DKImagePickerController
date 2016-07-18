@@ -20,16 +20,14 @@
     self = [super init];
     if (self) {
         self.scale = 1;
+        self.alpha = 1;
     }
     return self;
 }
 
 - (instancetype)initWithSourceImageSets:(NSArray *)sourceImageSets {
-    self = [super init];
-    if (self) {
-        _sourceImageSets = sourceImageSets;
-    }
-
+    self = [self init];
+    _sourceImageSets = sourceImageSets;
     return self;
 }
 
