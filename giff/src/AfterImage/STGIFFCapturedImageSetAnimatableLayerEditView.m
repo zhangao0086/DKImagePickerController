@@ -5,18 +5,18 @@
 
 #import "STCapturedImageSet.h"
 #import "NSArray+STUtil.h"
-#import "STAfterImageLayerItem.h"
+#import "STCapturedImageSetAnimatableLayer.h"
 #import "UIView+STUtil.h"
 #import "STAfterImageLayerView.h"
 #import "STQueueManager.h"
-#import "STAfterImageLayerEffect.h"
-#import "STAfterImageView.h"
+#import "STCapturedImageSetDisplayableProcessor.h"
+#import "STGIFFCapturedImageSetAnimatableLayerEditView.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
 @end
 
-@implementation STAfterImageView {
+@implementation STGIFFCapturedImageSetAnimatableLayerEditView {
     UIView * _sublayersContainerView;
     UIView * _controlView;
     NSMutableArray * _layers;
@@ -34,7 +34,7 @@
 
     [_sublayersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STAfterImageLayerView * layerView = (STAfterImageLayerView *) view;
-        STAfterImageLayerItem *layerItem = [_layers st_objectOrNilAtIndex:index];
+        STCapturedImageSetAnimatableLayer *layerItem = [_layers st_objectOrNilAtIndex:index];
 
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
@@ -83,7 +83,7 @@
     }
 }
 
-- (void)appendLayer:(STAfterImageLayerItem *)layerItem{
+- (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem{
     [self initToAddLayersIfNeeded];
 
     if(layerItem.effect){
@@ -112,7 +112,7 @@
     [_layers removeAllObjects];
 }
 
-- (void)appendLayerView:(STAfterImageLayerItem *)layerItem presentableObjects:(NSArray *)presentableObjects{
+- (void)appendLayerView:(STCapturedImageSetAnimatableLayer *)layerItem presentableObjects:(NSArray *)presentableObjects{
 
     [_layers addObject:layerItem];
     layerItem.index = [_layers indexOfObject:layerItem];
@@ -159,7 +159,7 @@
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
-    STAfterImageLayerItem * layerItem = [_layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    STCapturedImageSetAnimatableLayer * layerItem = [_layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 

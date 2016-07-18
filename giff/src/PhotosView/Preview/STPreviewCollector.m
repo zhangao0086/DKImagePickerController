@@ -25,14 +25,15 @@
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSet.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
-#import "STAfterImageLayerItem.h"
-#import "STAfterImageLayerEffect.h"
-#import "STAfterImageLayersBlendEffect.h"
-#import "STAfterImageView.h"
+#import "STCapturedImageSetDisplayLayer.h"
+#import "STCapturedImageSetDisplayableProcessor.h"
+#import "STAfterImageLayersChromakeyEffect.h"
+#import "STGIFFCapturedImageSetAnimatableLayerEditView.h"
 #import "STAfterImageLayersColorEffect.h"
 #import "NSData+STGIFUtil.h"
 #import "NSString+STUtil.h"
 #import "UIColor+BFPaperColors.h"
+#import "STCapturedImageSetAnimatableLayer.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -68,7 +69,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 
     UIImageView *_coverImageViewToReloadSmoothly;
 
-    STAfterImageView * _afterImageView;
+    STGIFFCapturedImageSetAnimatableLayerEditView * _afterImageView;
 
 #pragma mark filtertest
     /*
@@ -337,7 +338,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     return [STCapturedImageSet setWithImages: capturedImagesFromGifData];
 }
 
-- (void)prepareEffectGIFLayersIfNeeded:(STAfterImageLayerItem *)layerItem {
+- (void)prepareEffectGIFLayersIfNeeded:(STCapturedImageSetDisplayLayer *)layerItem {
     if([layerItem.effect.uuid isEqualToString:@"funnyman"]){
         STCapturedImageSet * effectAppliedImageSet = [self createEffectGIFResourcesFromName:layerItem.effect.uuid];
 
@@ -351,7 +352,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 - (void)renderAfterImageSetWithFrameAt:(NSUInteger)index imageSet:(STCapturedImageSet *)imageSet{
     @autoreleasepool {
         if(!_afterImageView){
-            _afterImageView = [[STAfterImageView alloc] initWithSize:_previewView.size];
+            _afterImageView = [[STGIFFCapturedImageSetAnimatableLayerEditView alloc] initWithSize:_previewView.size];
         }
 
         if(![[_previewView subviews] containsObject:_afterImageView]){
@@ -365,9 +366,9 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             NSAssert([imageSet.extensionObject isKindOfClass:NSArray.class], @"imageSet.extensionObject is not NSArray");
 
             if(!_afterImageView.layers.count){
-                for(STAfterImageLayerItem * layerItem in (NSArray *)imageSet.extensionObject){
+                for(STCapturedImageSetDisplayLayer * layerItem in (NSArray *)imageSet.extensionObject){
                     BOOL valid = layerItem
-                            && [layerItem isKindOfClass:STAfterImageLayerItem.class]
+                            && [layerItem isKindOfClass:STCapturedImageSetDisplayLayer.class]
                             && layerItem.sourceImageSets.count;
                     NSAssert(valid, @"elements of imageSet.extensionObject is invalid item");
 
@@ -384,19 +385,19 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             }
 
         }else{
-            STAfterImageLayerItem * layerItem = [STAfterImageLayerItem itemWithSourceImageSets:@[imageSet]];
+            STCapturedImageSetAnimatableLayer * layerItem = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
 
             if(layerItem.effect){
                 [self prepareEffectGIFLayersIfNeeded:layerItem];
             }
 
             layerItem.frameIndexOffset = 0;
-            STAfterImageLayersBlendEffect * effect = [[STAfterImageLayersBlendEffect alloc] init];
+            STAfterImageLayersChromakeyEffect * effect = [[STAfterImageLayersChromakeyEffect alloc] init];
             effect.fitOutputSizeToSourceImage = YES;
             effect.uuid = @"funnyman";
             layerItem.effect = effect;
 
-            STAfterImageLayerItem * layerItem2 = [STAfterImageLayerItem itemWithSourceImageSets:@[imageSet]];
+            STCapturedImageSetAnimatableLayer * layerItem2 = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
             layerItem2.alpha = .4;
             layerItem2.frameIndexOffset = 0;
             layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromRGB(0xE2489F)];

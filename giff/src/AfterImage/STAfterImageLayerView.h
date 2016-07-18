@@ -6,8 +6,8 @@
 #import <Foundation/Foundation.h>
 #import "STSelectableView.h"
 
-@class STAfterImageLayerItem;
+@class STCapturedImageSetDisplayLayer;
 
 @interface STAfterImageLayerView : STSelectableView
-@property (nonatomic, readwrite, nullable) STAfterImageLayerItem *layerItem;
+@property (nonatomic, readwrite, nullable) STCapturedImageSetDisplayLayer *layerItem;
 @end

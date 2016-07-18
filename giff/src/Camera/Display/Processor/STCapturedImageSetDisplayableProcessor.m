@@ -3,9 +3,9 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STAfterImageLayerEffect.h"
+#import "STCapturedImageSetDisplayableProcessor.h"
 
-@implementation STAfterImageLayerEffect{
+@implementation STCapturedImageSetDisplayableProcessor{
 }
 
 #pragma mark Process

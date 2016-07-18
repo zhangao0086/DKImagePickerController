@@ -4,8 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STAfterImageLayerEffect.h"
+#import "STCapturedImageSetDisplayableProcessor.h"
 
-@interface STMultiImageSetAfterImageLayerEffect : STAfterImageLayerEffect
+@interface STCapturedImageSetDisplayableMultiSourceProcessor : STCapturedImageSetDisplayableProcessor
 @property (nonatomic, assign) BOOL fitOutputSizeToSourceImage;
 @end

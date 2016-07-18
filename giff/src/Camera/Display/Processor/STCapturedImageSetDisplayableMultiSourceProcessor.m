@@ -3,10 +3,10 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STMultiImageSetAfterImageLayerEffect.h"
+#import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
 
 
-@implementation STMultiImageSetAfterImageLayerEffect {
+@implementation STCapturedImageSetDisplayableMultiSourceProcessor {
 
 }
 

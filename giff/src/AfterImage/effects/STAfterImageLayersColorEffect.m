@@ -5,6 +5,9 @@
 
 #import "STAfterImageLayersColorEffect.h"
 #import "Colours.h"
+#import "GPUImageMonochromeFilter.h"
+#import "STFilter.h"
+#import "STFilterManager.h"
 
 
 @implementation STAfterImageLayersColorEffect {

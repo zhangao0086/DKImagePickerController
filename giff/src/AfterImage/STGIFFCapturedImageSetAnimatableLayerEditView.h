@@ -8,11 +8,13 @@
 #import "STSelectableCapturedImageSetView.h"
 #import "STSegmentedSliderView.h"
 
-@interface STAfterImageView : STUIView <STSegmentedSliderControlDelegate>
-@property (nonatomic, assign) NSUInteger currentIndex;
-@property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
+@class STCapturedImageSetAnimatableLayer;
 
-- (void)appendLayer:(STAfterImageLayerItem *)layerItem;
+@interface STGIFFCapturedImageSetAnimatableLayerEditView : STUIView <STSegmentedSliderControlDelegate>
+@property (nonatomic, assign) NSUInteger currentIndex;
+@property (nonatomic, readonly) NSArray<STCapturedImageSetAnimatableLayer *> * layers;
+
+- (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem;
 
 - (void)removeAllLayers;
 @end

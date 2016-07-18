@@ -3,18 +3,18 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STAfterImageLayerItem.h"
-#import "STAfterImageLayerEffect.h"
+#import "STCapturedImageSetDisplayLayer.h"
+#import "STCapturedImageSetDisplayableProcessor.h"
 #import "NSString+STUtil.h"
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSet.h"
 #import "STCapturedImage.h"
 
-@interface STAfterImageLayerItem(Private)
-@property (nonatomic, readwrite) STAfterImageLayerItem * superlayer;
+@interface STCapturedImageSetDisplayLayer(Private)
+@property (nonatomic, readwrite) STCapturedImageSetDisplayLayer * superlayer;
 @end
 
-@implementation STAfterImageLayerItem
+@implementation STCapturedImageSetDisplayLayer
 
 - (instancetype)init {
     self = [super init];
@@ -163,7 +163,6 @@
 //        self.layers = [decoder decodeObjectForKey:@keypath(self.layers)];
         self.alpha = [decoder decodeFloatForKey:@keypath(self.alpha)];
         self.scale = [decoder decodeFloatForKey:@keypath(self.scale)];
-        self.frameIndexOffset = [decoder decodeIntegerForKey:@keypath(self.frameIndexOffset)];
         self.effect = [decoder decodeObjectForKey:@keypath(self.effect)];
     }
     return self;
@@ -174,7 +173,6 @@
 //    [encoder encodeObject:self.layers forKey:@keypath(self.layers)];
     [encoder encodeFloat:self.alpha forKey:@keypath(self.alpha)];
     [encoder encodeFloat:self.scale forKey:@keypath(self.scale)];
-    [encoder encodeInteger:self.frameIndexOffset forKey:@keypath(self.frameIndexOffset)];
     [encoder encodeObject:self.effect forKey:@keypath(self.effect)];
 }
 @end

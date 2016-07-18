@@ -4,9 +4,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STAfterImageLayerEffect.h"
+#import "STCapturedImageSetDisplayableProcessor.h"
 
-@interface STAfterImageLayersColorEffect : STAfterImageLayerEffect
+@interface STAfterImageLayersColorEffect : STCapturedImageSetDisplayableProcessor
 @property (nonatomic, assign) CGFloat intensity;
 @property (nonatomic, readwrite) UIColor * color;
 

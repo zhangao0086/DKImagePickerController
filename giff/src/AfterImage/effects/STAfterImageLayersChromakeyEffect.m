@@ -3,7 +3,9 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STAfterImageLayersBlendEffect.h"
+#import <GPUImage/GPUImageChromaKeyBlendFilter.h>
+#import <GPUImage/GPUImagePicture.h>
+#import "STAfterImageLayersChromakeyEffect.h"
 #import "UIImage+STUtil.h"
 #import "UIColor+BFPaperColors.h"
 #import "Colours.h"
@@ -33,7 +35,7 @@ GPUImageSoftLightBlendFilter *pass2Filter = [[GPUImageSoftLightBlendFilter alloc
 UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
  */
 
-@implementation STAfterImageLayersBlendEffect {
+@implementation STAfterImageLayersChromakeyEffect {
 
 }
 

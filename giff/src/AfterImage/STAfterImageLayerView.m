@@ -4,11 +4,11 @@
 //
 
 #import "STAfterImageLayerView.h"
-#import "STAfterImageLayerItem.h"
+#import "STCapturedImageSetDisplayLayer.h"
 #import "NSString+STUtil.h"
 #import "STQueueManager.h"
 #import "NSArray+STUtil.h"
-#import "STAfterImageLayerEffect.h"
+#import "STCapturedImageSetDisplayableProcessor.h"
 
 
 @implementation STAfterImageLayerView {

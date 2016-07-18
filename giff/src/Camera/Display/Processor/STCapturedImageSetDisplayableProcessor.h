@@ -5,12 +5,9 @@
 
 #import <Foundation/Foundation.h>
 #import "STItem.h"
-#import "GPUImage.h"
-#import "STFilter.h"
-#import "STFilterManager.h"
 
-@class STAfterImageLayerItem;
+@class STCapturedImageSetDisplayLayer;
 
-@interface STAfterImageLayerEffect : STItem
+@interface STCapturedImageSetDisplayableProcessor : STItem
 - (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages;
 @end
