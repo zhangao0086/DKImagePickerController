@@ -15,7 +15,7 @@
 @property (nonatomic, readonly) STFilterItem * item;
 
 - (id)initWith:(STFilterItem *)item;
-- (id)initWithFilters:(NSArray<GPUImageFilter *> *)filters;
+- (id)initWithFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)filters;
 
 - (id)initWithLookupName:(NSString *)lookupName;
 - (id)initWithLookupImage:(UIImage *)lookupImage;

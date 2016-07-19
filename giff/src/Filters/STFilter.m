@@ -43,7 +43,7 @@
     }
 }
 
-- (id)initWithFilters:(NSArray<GPUImageFilter *> *)arrayOfFilters {
+- (id)initWithFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)arrayOfFilters {
     self = [super init];
     if (self) {
         if(arrayOfFilters.count){
