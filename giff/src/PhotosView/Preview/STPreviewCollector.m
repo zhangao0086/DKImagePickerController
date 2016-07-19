@@ -305,15 +305,15 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 }
 
 //TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
-- (STCapturedImageSet *)createEffectGIFResourcesFromName:(NSString *)presetName{
+static NSString * FUNNYMAN = @"funnyman";
+static NSString * BASICFRAME = @"basicframe";
 
-    NSArray * capturedImagesFromGifData;
-
-    if([@"funnyman" isEqualToString:presetName]){
+- (void)applyEffectForLayer:(STCapturedImageSetDisplayLayer *)layerItem {
+    /*
+     * chroma key
+     */
+    if([layerItem.effect.uuid isEqualToString:FUNNYMAN]){
         NSData * gifData = [NSData dataWithContentsOfFile:[@"chrogif.gif" bundleFilePath]];
-        if(!gifData){
-            return nil;
-        }
 
         UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
 
@@ -325,7 +325,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             //TODO: 이 경우 gif가 imageSet보다 길이 짧은때 정지 화면 아이템을 넣던지 imageSet에서 이미지를 빼던지 보정 처리 필요
         }
 
-        capturedImagesFromGifData = [imagesToCreateImageSet mapWithIndex:^id(UIImage * image, NSInteger number) {
+        NSArray * capturedImagesFromGifData = [imagesToCreateImageSet mapWithIndex:^id(UIImage * image, NSInteger number) {
             NSURL * url = [[@(number) stringValue] URLForTemp:@"giff_effect_adding_resource_f" extension:@"png"];
             if([UIImagePNGRepresentation(image) writeToURL:url atomically:YES]){
                 return [STCapturedImage imageWithImageUrl:url];
@@ -333,18 +333,15 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             NSAssert(NO, @"write failed");
             return nil;
         }];
-    }
-
-    return [STCapturedImageSet setWithImages: capturedImagesFromGifData];
-}
-
-- (void)prepareEffectGIFLayersIfNeeded:(STCapturedImageSetDisplayLayer *)layerItem {
-    if([layerItem.effect.uuid isEqualToString:@"funnyman"]){
-        STCapturedImageSet * effectAppliedImageSet = [self createEffectGIFResourcesFromName:layerItem.effect.uuid];
-
+        STCapturedImageSet * effectAppliedImageSet = [STCapturedImageSet setWithImages: capturedImagesFromGifData];
         if(effectAppliedImageSet){
             layerItem.sourceImageSets = [layerItem.sourceImageSets arrayByAddingObjectsFromArray:@[effectAppliedImageSet]];
         }
+    }
+    else if([layerItem.effect.uuid isEqualToString:BASICFRAME]){
+
+
+
     }
 }
 //TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
@@ -375,7 +372,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
                     if(valid){
                         //recreate effects
                         if(layerItem.effect){
-                            [self prepareEffectGIFLayersIfNeeded:layerItem];
+                            [self applyEffectForLayer:layerItem];
                         }
 
                         [_afterImageView appendLayer:layerItem];
@@ -388,13 +385,13 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             STCapturedImageSetAnimatableLayer * layerItem = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
 
             if(layerItem.effect){
-                [self prepareEffectGIFLayersIfNeeded:layerItem];
+                [self applyEffectForLayer:layerItem];
             }
 
             layerItem.frameIndexOffset = 0;
             STAfterImageLayersChromakeyEffect * effect = [[STAfterImageLayersChromakeyEffect alloc] init];
             effect.fitOutputSizeToSourceImage = YES;
-            effect.uuid = @"funnyman";
+            effect.uuid = FUNNYMAN;
             layerItem.effect = effect;
 
             STCapturedImageSetAnimatableLayer * layerItem2 = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
