@@ -10,4 +10,6 @@
 
 @interface STCapturedImageSetDisplayableProcessor : STItem
 - (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages;
+
+- (NSUInteger)supportedNumberOfSourceImages;
 @end

@@ -14,4 +14,7 @@
     return [sourceImages firstObject];
 }
 
+- (NSUInteger)supportedNumberOfSourceImages {
+    return 1;
+}
 @end

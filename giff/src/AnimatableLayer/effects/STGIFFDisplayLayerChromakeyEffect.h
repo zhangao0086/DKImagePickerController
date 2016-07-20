@@ -8,5 +8,5 @@
 #import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
 
 
-@interface STAfterImageLayersChromakeyEffect : STCapturedImageSetDisplayableMultiSourceProcessor
+@interface STGIFFDisplayLayerChromakeyEffect : STCapturedImageSetDisplayableMultiSourceProcessor
 @end

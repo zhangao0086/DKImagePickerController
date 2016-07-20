@@ -73,7 +73,11 @@
     if(self.effect){
         processedResources = [self.resourcesSetToProcessFromSourceImageSets mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
             NSAssert([[resourceItemSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
-
+#if DEBUG
+            [resourceItemSet eachWithIndex:^(NSURL * object, NSUInteger index) {
+                oo([object path]);
+            }];
+#endif
             @autoreleasepool {
                 NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
                                                                            Wself.uuid,
@@ -98,10 +102,19 @@
                     BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
                     NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
                     if(!containsNullInImages){
-                        if([UIImageJPEGRepresentation([Wself.effect processEffect:imagesToProcessEffect], 1)
+                        BOOL vailedImageSetNumbers = imagesToProcessEffect.count== [Wself.effect supportedNumberOfSourceImages];
+                        NSAssert(vailedImageSetNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.effect.class), [Wself.effect supportedNumberOfSourceImages]]));
+
+                        UIImage * processedImage = vailedImageSetNumbers ?
+                                [Wself.effect processEffect:imagesToProcessEffect] : [imagesToProcessEffect firstObject];
+
+                        NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
+                        if([UIImageJPEGRepresentation(processedImage, 1)
                                 writeToURL:tempURLToApplyEffect
-                                atomically:NO]){
+                                atomically:YES]){
                             return tempURLToApplyEffect;
+                        }else{
+                            NSAssert(NO, ([@"Write failed : " st_add:tempURLToApplyEffect.path]));
                         }
                     }
                 }

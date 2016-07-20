@@ -5,7 +5,7 @@
 
 #import <GPUImage/GPUImageChromaKeyBlendFilter.h>
 #import <GPUImage/GPUImagePicture.h>
-#import "STAfterImageLayersChromakeyEffect.h"
+#import "STGIFFDisplayLayerChromakeyEffect.h"
 #import "UIImage+STUtil.h"
 #import "UIColor+BFPaperColors.h"
 #import "Colours.h"
@@ -35,8 +35,17 @@ GPUImageSoftLightBlendFilter *pass2Filter = [[GPUImageSoftLightBlendFilter alloc
 UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
  */
 
-@implementation STAfterImageLayersChromakeyEffect {
+/*
+GPUImagePicture : addTargets -> useNextFrameForImageCapture -> processImage
+GPUImageFilter : addTargets-> forceProcessingAtSize -> useNextFrameForImageCapture -> imageFromCurrentFramebufferWithOrientation
+ */
 
+@implementation STGIFFDisplayLayerChromakeyEffect {
+
+}
+
+- (NSUInteger)supportedNumberOfSourceImages {
+    return 2;
 }
 
 - (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
@@ -56,11 +65,10 @@ UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
         //source
         GPUImagePicture * chromakeyPicture = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:YES];
         [chromakeyPicture addTarget:overlayBlendFilter];
-        [chromakeyPicture processImage];
 
         GPUImagePicture * sourceImagePicture = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:YES];
         [sourceImagePicture addTarget:overlayBlendFilter];
-        [sourceImagePicture processImage];
+
 
 //        GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
 //        blendFilter.mix = 1.0;
@@ -71,8 +79,13 @@ UIImage *outputImage = [pass2Filter imageFromCurrentlyProcessedOutput];
             [overlayBlendFilter forceProcessingAtSize:sourceImage.size];
         }
 
-        [overlayBlendFilter useNextFrameForImageCapture];
+        [chromakeyPicture processImage];
+        [chromakeyPicture useNextFrameForImageCapture];
 
+        [sourceImagePicture processImage];
+        [sourceImagePicture useNextFrameForImageCapture];
+
+        [overlayBlendFilter useNextFrameForImageCapture];
         return [overlayBlendFilter imageFromCurrentFramebufferWithOrientation:[[sourceImages firstObject] imageOrientation]];
     }
 }

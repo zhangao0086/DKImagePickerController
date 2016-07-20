@@ -23,4 +23,9 @@
     [super encodeWithCoder:encoder];
     [encoder encodeBool:self.fitOutputSizeToSourceImage forKey:@keypath(self.fitOutputSizeToSourceImage)];
 }
+
+- (NSUInteger)supportedNumberOfSourceImages {
+    return NSUIntegerMax;
+}
+
 @end

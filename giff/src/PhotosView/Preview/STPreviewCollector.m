@@ -27,13 +27,16 @@
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STCapturedImageSetDisplayLayer.h"
 #import "STCapturedImageSetDisplayableProcessor.h"
-#import "STAfterImageLayersChromakeyEffect.h"
-#import "STGIFFCapturedImageSetAnimatableLayerEditView.h"
-#import "STAfterImageLayersColorEffect.h"
+#import "STGIFFDisplayLayerChromakeyEffect.h"
+#import "STGIFFAnimatableLayerEditView.h"
+#import "STGIFFDisplayLayerColorizeEffect.h"
 #import "NSData+STGIFUtil.h"
 #import "NSString+STUtil.h"
 #import "UIColor+BFPaperColors.h"
 #import "STCapturedImageSetAnimatableLayer.h"
+#import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
+#import "STGIFFDisplayLayerLeifEffect.h"
+#import "STGIFFDisplayLayerJanneEffect.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -69,7 +72,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 
     UIImageView *_coverImageViewToReloadSmoothly;
 
-    STGIFFCapturedImageSetAnimatableLayerEditView * _afterImageView;
+    STGIFFAnimatableLayerEditView * _afterImageView;
 
 #pragma mark filtertest
     /*
@@ -288,7 +291,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
                 NSUInteger index = (NSUInteger) nearbyint((targetImageSet.images.count-1) * [value floatValue]);
 
                 if(index!=selectedIndex){
-                    [Wself renderAfterImageSetWithFrameAt:index imageSet:targetImageSet];
+                    [Wself renderAfterImageSetWithFrameAt:index];
                     selectedIndex = index;
                 }
             }
@@ -300,15 +303,39 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             }
         }];
 
-        [self renderAfterImageSetWithFrameAt:selectedIndex imageSet:targetImageSet];
+        [self renderAfterImageSetWithFrameAt:selectedIndex];
     }
 }
 
+#pragma mark create Layers / effects
 //TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
 static NSString * FUNNYMAN = @"funnyman";
-static NSString * BASICFRAME = @"basicframe";
+static NSString * ONE_DIFF_FRAME = @"basicframe";
+static NSString * LEIF = @"leif";
+static NSString * JANNE = @"Janne";
 
-- (void)applyEffectForLayer:(STCapturedImageSetDisplayLayer *)layerItem {
+- (STCapturedImageSetAnimatableLayer *)createLayerFromCurrentImageSet{
+    NSString * presetName = JANNE;
+
+    //create
+    STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
+    STCapturedImageSetAnimatableLayer * layerItem = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
+    STCapturedImageSetDisplayableProcessor * effect = nil;
+
+    if([LEIF isEqualToString:presetName]){
+        effect = [[STGIFFDisplayLayerLeifEffect alloc] init];
+    }
+    else if([JANNE isEqualToString:presetName]){
+        effect = [[STGIFFDisplayLayerJanneEffect alloc] init];
+    }
+
+    effect.uuid = presetName;
+    layerItem.effect = effect;
+    return layerItem;
+}
+
+- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayer *)layerItem {
+    STCapturedImageSet * sourceSet = self.targetPhotoItem.sourceForCapturedImageSet;
     /*
      * chroma key
      */
@@ -318,8 +345,8 @@ static NSString * BASICFRAME = @"basicframe";
         UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
 
         NSArray * imagesToCreateImageSet = nil;
-        if(gifImages.images.count > self.targetPhotoItem.sourceForCapturedImageSet.images.count){
-            NSRange cuttingRange = NSMakeRange(0,self.targetPhotoItem.sourceForCapturedImageSet.images.count);
+        if(gifImages.images.count > sourceSet.images.count){
+            NSRange cuttingRange = NSMakeRange(0,sourceSet.images.count);
             imagesToCreateImageSet = [gifImages.images subarrayWithRange:cuttingRange];
         }else{
             //TODO: 이 경우 gif가 imageSet보다 길이 짧은때 정지 화면 아이템을 넣던지 imageSet에서 이미지를 빼던지 보정 처리 필요
@@ -338,18 +365,40 @@ static NSString * BASICFRAME = @"basicframe";
             layerItem.sourceImageSets = [layerItem.sourceImageSets arrayByAddingObjectsFromArray:@[effectAppliedImageSet]];
         }
     }
-    else if([layerItem.effect.uuid isEqualToString:BASICFRAME]){
+    else if([layerItem.effect.uuid isEqualToString:ONE_DIFF_FRAME]){
+        NSArray<STCapturedImage *> * preparedImages = nil;
+        STGIFFDisplayLayerFrameSwappingColorizeBlendEffect * _effect = (STGIFFDisplayLayerFrameSwappingColorizeBlendEffect *)layerItem.effect;
 
+        if(_effect.frameIndexOffset==0){
+            preparedImages = sourceSet.images;
 
+        }else{
+            //frame adjust
+            NSMutableArray<STCapturedImage *> *copiedSourceImages = [sourceSet.images mutableCopy];
+            NSUInteger indexAbsStep = (NSUInteger) ABS(_effect.frameIndexOffset);
+
+            if(_effect.frameIndexOffset>0){
+                NSArray * tail = [copiedSourceImages pop:indexAbsStep];
+                preparedImages = [tail arrayByAddingObjectsFromArray:copiedSourceImages];
+
+            }else if(_effect.frameIndexOffset<0){
+                NSArray * head = [copiedSourceImages shift:indexAbsStep];
+                preparedImages = [copiedSourceImages arrayByAddingObjectsFromArray:head];
+            }
+        }
+
+        layerItem.sourceImageSets = [layerItem.sourceImageSets arrayByAddingObjectsFromArray:@[[STCapturedImageSet setWithImages:preparedImages]]];
 
     }
 }
-//TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
 
-- (void)renderAfterImageSetWithFrameAt:(NSUInteger)index imageSet:(STCapturedImageSet *)imageSet{
+#pragma mark render Layers
+- (void)renderAfterImageSetWithFrameAt:(NSUInteger)index{
     @autoreleasepool {
+        STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
+
         if(!_afterImageView){
-            _afterImageView = [[STGIFFCapturedImageSetAnimatableLayerEditView alloc] initWithSize:_previewView.size];
+            _afterImageView = [[STGIFFAnimatableLayerEditView alloc] initWithSize:_previewView.size];
         }
 
         if(![[_previewView subviews] containsObject:_afterImageView]){
@@ -362,45 +411,35 @@ static NSString * BASICFRAME = @"basicframe";
             //vaild check
             NSAssert([imageSet.extensionObject isKindOfClass:NSArray.class], @"imageSet.extensionObject is not NSArray");
 
-            if(!_afterImageView.layers.count){
+            if(!_afterImageView.layers.count){ //from storage
                 for(STCapturedImageSetDisplayLayer * layerItem in (NSArray *)imageSet.extensionObject){
                     BOOL valid = layerItem
                             && [layerItem isKindOfClass:STCapturedImageSetDisplayLayer.class]
                             && layerItem.sourceImageSets.count;
+
                     NSAssert(valid, @"elements of imageSet.extensionObject is invalid item");
 
                     if(valid){
                         //recreate effects
                         if(layerItem.effect){
-                            [self applyEffectForLayer:layerItem];
+                            [self prepareLayerEffect:layerItem];
                         }
 
                         [_afterImageView appendLayer:layerItem];
                     }
                 }
+                //FIXME: 여기서 크래시 중
                 NSAssert(_afterImageView.layers.count, @"after image can't initialize");
             }
 
         }else{
-            STCapturedImageSetAnimatableLayer * layerItem = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
 
+            //from capture
+            STCapturedImageSetAnimatableLayer * layerItem = [self createLayerFromCurrentImageSet];
             if(layerItem.effect){
-                [self applyEffectForLayer:layerItem];
+                [self prepareLayerEffect:layerItem];
             }
-
-            layerItem.frameIndexOffset = 0;
-            STAfterImageLayersChromakeyEffect * effect = [[STAfterImageLayersChromakeyEffect alloc] init];
-            effect.fitOutputSizeToSourceImage = YES;
-            effect.uuid = FUNNYMAN;
-            layerItem.effect = effect;
-
-            STCapturedImageSetAnimatableLayer * layerItem2 = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
-            layerItem2.alpha = .4;
-            layerItem2.frameIndexOffset = 0;
-            layerItem2.effect = [STAfterImageLayersColorEffect effectWithColor:UIColorFromRGB(0xE2489F)];
-
             [_afterImageView appendLayer:layerItem];
-            [_afterImageView appendLayer:layerItem2];
 
             imageSet.extensionObject = _afterImageView.layers;
         }

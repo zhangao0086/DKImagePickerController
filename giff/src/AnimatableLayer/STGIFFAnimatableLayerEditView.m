@@ -10,13 +10,13 @@
 #import "STAfterImageLayerView.h"
 #import "STQueueManager.h"
 #import "STCapturedImageSetDisplayableProcessor.h"
-#import "STGIFFCapturedImageSetAnimatableLayerEditView.h"
+#import "STGIFFAnimatableLayerEditView.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
 @end
 
-@implementation STGIFFCapturedImageSetAnimatableLayerEditView {
+@implementation STGIFFAnimatableLayerEditView {
     UIView * _sublayersContainerView;
     UIView * _controlView;
     NSMutableArray * _layers;
@@ -73,9 +73,9 @@
     }
 
     if(!_controlView){
-        _controlView = [[UIView alloc] initWithSize:self.size];
-        [self insertSubview:_controlView aboveSubview:_sublayersContainerView];
-        [_controlView saveInitialLayout];
+//        _controlView = [[UIView alloc] initWithSize:self.size];
+//        [self insertSubview:_controlView aboveSubview:_sublayersContainerView];
+//        [_controlView saveInitialLayout];
     }
 
     if(!_layers.count){
@@ -90,7 +90,7 @@
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
             NSArray * effectAppliedImageUrls = [layerItem processResources];
-            
+
             dispatch_async(dispatch_get_main_queue(),^{
                 [Wself appendLayerView:layerItem presentableObjects:effectAppliedImageUrls];
             });

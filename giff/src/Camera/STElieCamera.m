@@ -354,6 +354,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
             //get image
             UIImage * capturedImage = [self currentImage:targetOutput maxSidePixelSizeOfOutput:request.captureOutputPixelSizeForCurrentPreset];
             STCapturedImage * responseImage = [STCapturedImage new];
+            responseImage.index = count;
 
             if(request.needsLoadAnimatableImagesToMemory){
                 responseImage.image = capturedImage;

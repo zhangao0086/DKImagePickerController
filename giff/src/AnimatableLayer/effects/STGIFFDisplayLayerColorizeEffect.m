@@ -3,14 +3,14 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STAfterImageLayersColorEffect.h"
+#import "STGIFFDisplayLayerColorizeEffect.h"
 #import "Colours.h"
 #import "GPUImageMonochromeFilter.h"
 #import "STFilter.h"
 #import "STFilterManager.h"
 
 
-@implementation STAfterImageLayersColorEffect {
+@implementation STGIFFDisplayLayerColorizeEffect {
 
 }
 - (instancetype)init {
@@ -32,8 +32,6 @@
 }
 
 - (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
-    NSAssert(sourceImages.count==1, @"Single sourceImage supported");
-
     GPUImageMonochromeFilter * sourceFilter = [[GPUImageMonochromeFilter alloc] init];
     sourceFilter.intensity = self.intensity;
     NSArray* colors = [self.color rgbaArray];

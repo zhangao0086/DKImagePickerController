@@ -1,5 +1,5 @@
 //
-// Created by BLACKGENE on 7/19/16.
+// Created by BLACKGENE on 7/20/16.
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
@@ -7,5 +7,6 @@
 #import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
 
 
-@interface STAfterImageLayersMultiSourcedBlendEffect : STCapturedImageSetDisplayableMultiSourceProcessor
+@interface STGIFFDisplayLayerLeifEffect : STCapturedImageSetDisplayableProcessor
+
 @end

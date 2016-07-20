@@ -10,7 +10,7 @@
 
 @class STCapturedImageSetAnimatableLayer;
 
-@interface STGIFFCapturedImageSetAnimatableLayerEditView : STUIView <STSegmentedSliderControlDelegate>
+@interface STGIFFAnimatableLayerEditView : STUIView <STSegmentedSliderControlDelegate>
 @property (nonatomic, assign) NSUInteger currentIndex;
 @property (nonatomic, readonly) NSArray<STCapturedImageSetAnimatableLayer *> * layers;
 

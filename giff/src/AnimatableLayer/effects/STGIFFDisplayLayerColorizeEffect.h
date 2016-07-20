@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "STCapturedImageSetDisplayableProcessor.h"
 
-@interface STAfterImageLayersColorEffect : STCapturedImageSetDisplayableProcessor
+@interface STGIFFDisplayLayerColorizeEffect : STCapturedImageSetDisplayableProcessor
 @property (nonatomic, assign) CGFloat intensity;
 @property (nonatomic, readwrite) UIColor * color;
 
