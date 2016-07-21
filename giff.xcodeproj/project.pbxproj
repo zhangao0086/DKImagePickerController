@@ -1245,7 +1245,7 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		4F71DF8B4D8BC83DC897C11B /* Resource */ = {
+		4F71DF8B4D8BC83DC897C11B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
 				4F71D444A5AEF60E2281FFEF /* STCapturedImage.m */,
@@ -1259,7 +1259,7 @@
 				4F71DE1F93AF506D3617FA7B /* STCapturedResource.h */,
 				4F71D3CBB55856F6B7D88267 /* STCapturedResource.m */,
 			);
-			path = Resource;
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		A050CDE71CC5DD0C00628C2F /* giff */ = {
@@ -1519,7 +1519,7 @@
 				A050CF1F1CC5DD0D00628C2F /* STElieCamera.h */,
 				A050CF201CC5DD0D00628C2F /* STElieCamera.m */,
 				4F71D8282AC69FDE91BD231D /* Display */,
-				4F71DF8B4D8BC83DC897C11B /* Resource */,
+				4F71DF8B4D8BC83DC897C11B /* Assets */,
 				4F71D0766BB957A1E7E231BD /* IO */,
 			);
 			path = Camera;
