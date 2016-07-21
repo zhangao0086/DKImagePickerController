@@ -73,7 +73,9 @@
                                 [Wself.targetLayer.effect processImages:imagesToProcessEffect] : [imagesToProcessEffect firstObject];
 
                         NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
-                        if([UIImageJPEGRepresentation(processedImage, 1)
+
+                        if([(self.loselessImageEncoding ?
+                                UIImagePNGRepresentation(processedImage) : UIImageJPEGRepresentation(processedImage, 1))
                                 writeToURL:tempURLToApplyEffect
                                 atomically:YES]){
                             return tempURLToApplyEffect;

@@ -11,7 +11,7 @@
 
 @interface STCapturedImageSetDisplayProcessor : NSObject
 //@property(nonatomic, readonly) STCapturedImageSetDisplayLayer * targetLayer;
-//@property(nonatomic, assign) BOOL allowLoselessImageEncoding;
+@property(nonatomic, assign) BOOL loselessImageEncoding;
 
 - (instancetype)initWithTargetLayer:(STCapturedImageSetDisplayLayer *)targetLayer;
 
