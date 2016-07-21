@@ -4,7 +4,7 @@
 //
 
 #import "STCapturedImageSetDisplayLayer.h"
-#import "STCapturedImageSetDisplayableProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 #import "NSString+STUtil.h"
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSet.h"
@@ -106,7 +106,7 @@
                         NSAssert(vailedImageSetNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.effect.class), [Wself.effect supportedNumberOfSourceImages]]));
 
                         UIImage * processedImage = vailedImageSetNumbers ?
-                                [Wself.effect processEffect:imagesToProcessEffect] : [imagesToProcessEffect firstObject];
+                                [Wself.effect processImages:imagesToProcessEffect] : [imagesToProcessEffect firstObject];
 
                         NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
                         if([UIImageJPEGRepresentation(processedImage, 1)

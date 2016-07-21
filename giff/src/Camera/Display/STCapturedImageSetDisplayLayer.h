@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "STItem.h"
 
-@class STCapturedImageSetDisplayableProcessor;
+@class STMultiSourcingImageProcessor;
 @class STCapturedImageSet;
 
 @interface STCapturedImageSetDisplayLayer : STItem
@@ -17,7 +17,7 @@
 //@property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
 @property (nonatomic, assign) CGFloat alpha;
 @property (nonatomic, assign) CGFloat scale;
-@property (nonatomic, readwrite) STCapturedImageSetDisplayableProcessor * effect;
+@property (nonatomic, readwrite) STMultiSourcingImageProcessor * effect;
 
 //- (instancetype)initWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
 //

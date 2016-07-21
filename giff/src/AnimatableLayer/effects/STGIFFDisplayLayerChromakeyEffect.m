@@ -48,9 +48,9 @@ GPUImageFilter : addTargets-> forceProcessingAtSize -> useNextFrameForImageCaptu
     return 2;
 }
 
-- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+- (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     if(sourceImages.count<2){
-        return [super processEffect:sourceImages];
+        return [super processImages:sourceImages];
     }
 
     NSAssert(sourceImages.count==2, @"Max 2 sourceImage supported");

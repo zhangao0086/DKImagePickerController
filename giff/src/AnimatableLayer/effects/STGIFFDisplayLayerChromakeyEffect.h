@@ -4,9 +4,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STCapturedImageSetDisplayableProcessor.h"
-#import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 
 
-@interface STGIFFDisplayLayerChromakeyEffect : STCapturedImageSetDisplayableMultiSourceProcessor
+@interface STGIFFDisplayLayerChromakeyEffect : STMultiSourcingImageProcessor
 @end

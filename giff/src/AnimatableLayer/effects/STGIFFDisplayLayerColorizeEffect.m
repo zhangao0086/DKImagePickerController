@@ -31,7 +31,7 @@
     return [[self alloc] initWithColor:color];
 }
 
-- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+- (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     GPUImageMonochromeFilter * sourceFilter = [[GPUImageMonochromeFilter alloc] init];
     sourceFilter.intensity = self.intensity;
     NSArray* colors = [self.color rgbaArray];

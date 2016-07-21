@@ -8,7 +8,7 @@
 #import "NSString+STUtil.h"
 #import "STQueueManager.h"
 #import "NSArray+STUtil.h"
-#import "STCapturedImageSetDisplayableProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 
 
 @implementation STAfterImageLayerView {

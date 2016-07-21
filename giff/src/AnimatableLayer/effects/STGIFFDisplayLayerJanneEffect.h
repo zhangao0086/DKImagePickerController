@@ -4,8 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 
 
-@interface STGIFFDisplayLayerJanneEffect : STCapturedImageSetDisplayableProcessor
+@interface STGIFFDisplayLayerJanneEffect : STMultiSourcingImageProcessor
 @end

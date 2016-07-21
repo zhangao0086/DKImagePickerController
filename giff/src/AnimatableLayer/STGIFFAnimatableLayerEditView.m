@@ -9,7 +9,7 @@
 #import "UIView+STUtil.h"
 #import "STAfterImageLayerView.h"
 #import "STQueueManager.h"
-#import "STCapturedImageSetDisplayableProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 #import "STGIFFAnimatableLayerEditView.h"
 
 @interface STSelectableView(Protected)

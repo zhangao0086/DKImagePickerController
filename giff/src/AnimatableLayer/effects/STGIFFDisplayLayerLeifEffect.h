@@ -4,9 +4,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 
 
-@interface STGIFFDisplayLayerLeifEffect : STCapturedImageSetDisplayableProcessor
+@interface STGIFFDisplayLayerLeifEffect : STMultiSourcingImageProcessor
 
 @end

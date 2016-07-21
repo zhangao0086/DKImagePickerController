@@ -4,10 +4,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 
 
-@interface STGIFFDisplayLayerFrameSwappingColorizeBlendEffect : STCapturedImageSetDisplayableMultiSourceProcessor
+@interface STGIFFDisplayLayerFrameSwappingColorizeBlendEffect : STMultiSourcingImageProcessor
 @property (nonatomic, assign) NSInteger frameIndexOffset;
 @property (nonatomic, assign) CGFloat alpha;
 @end

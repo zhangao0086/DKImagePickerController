@@ -30,7 +30,7 @@
     //Standard method of multi blending : https://github.com/BradLarson/GPUImage/issues/269
 }
 
-- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+- (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
 
         //TODO: 이걸 Array를 넣든지 거의 무한대로 되게 구조를 변경

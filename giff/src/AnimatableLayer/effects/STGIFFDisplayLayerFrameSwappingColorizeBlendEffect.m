@@ -40,7 +40,7 @@
     return 2;
 }
 
-- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+- (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
 
         GPUImageSoftLightBlendFilter * blendFilter = [[GPUImageSoftLightBlendFilter alloc] init];

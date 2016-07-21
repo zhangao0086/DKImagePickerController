@@ -26,7 +26,7 @@
 #import "STCapturedImageSet.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STCapturedImageSetDisplayLayer.h"
-#import "STCapturedImageSetDisplayableProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 #import "STGIFFDisplayLayerChromakeyEffect.h"
 #import "STGIFFAnimatableLayerEditView.h"
 #import "STGIFFDisplayLayerColorizeEffect.h"
@@ -320,7 +320,7 @@ static NSString * JANNE = @"Janne";
     //create
     STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
     STCapturedImageSetAnimatableLayer * layerItem = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
-    STCapturedImageSetDisplayableProcessor * effect = nil;
+    STMultiSourcingImageProcessor * effect = nil;
 
     if([LEIF isEqualToString:presetName]){
         effect = [[STGIFFDisplayLayerLeifEffect alloc] init];

@@ -6,10 +6,10 @@
 #import <Foundation/Foundation.h>
 #import "STItem.h"
 
-@class STCapturedImageSetDisplayLayer;
+@interface STMultiSourcingImageProcessor : STItem
+@property (nonatomic, assign) BOOL fitOutputSizeToSourceImage;
 
-@interface STCapturedImageSetDisplayableProcessor : STItem
-- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages;
+- (UIImage * __nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages;
 
 - (NSUInteger)supportedNumberOfSourceImages;
 @end

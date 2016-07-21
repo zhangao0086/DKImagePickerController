@@ -32,7 +32,7 @@
 
 }
 
-- (UIImage *)processEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+- (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
         GPUImagePicture * sourcePicture = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:YES];
 

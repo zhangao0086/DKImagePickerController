@@ -1,15 +1,22 @@
 //
-// Created by BLACKGENE on 7/18/16.
+// Created by BLACKGENE on 7/14/16.
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STCapturedImageSetDisplayableMultiSourceProcessor.h"
+#import "STMultiSourcingImageProcessor.h"
 
-
-@implementation STCapturedImageSetDisplayableMultiSourceProcessor {
-
+@implementation STMultiSourcingImageProcessor{
 }
 
+#pragma mark Process
+
+- (NSUInteger)supportedNumberOfSourceImages {
+    return 1;
+}
+
+- (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+    return [sourceImages firstObject];
+}
 
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super initWithCoder:decoder];
@@ -22,10 +29,6 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [super encodeWithCoder:encoder];
     [encoder encodeBool:self.fitOutputSizeToSourceImage forKey:@keypath(self.fitOutputSizeToSourceImage)];
-}
-
-- (NSUInteger)supportedNumberOfSourceImages {
-    return NSUIntegerMax;
 }
 
 @end
