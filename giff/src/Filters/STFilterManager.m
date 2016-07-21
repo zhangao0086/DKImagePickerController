@@ -27,7 +27,9 @@
 #import "NSArray+BlocksKit.h"
 #import "NSArray+STUtil.h"
 #import "NSString+STUtil.h"
+#import "STGPUImageOutputComposeItem.h"
 #import "M13OrderedDictionary.h"
+#import "STGPUImageOutputComposeItem.h"
 
 @interface STFilterManager ()
 
@@ -91,6 +93,63 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
     return filter;
 //    }];
 }
+
+- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(GPUImageOutput *)inputSource items:(NSArray<STGPUImageOutputComposeItem *> *)items {
+
+    //init
+    if (items.count) {
+        [inputSource addTarget:[items[0] composer]];
+
+        for (STGPUImageOutputComposeItem *currentItem in items) {
+            NSParameterAssert(currentItem.source);
+            NSParameterAssert(currentItem.composer);
+
+            NSUInteger index = [items indexOfObject:currentItem];
+            STGPUImageOutputComposeItem *nextItem = [items st_objectOrNilAtIndex:index + 1];
+
+            [currentItem.source addTarget:currentItem.composer];
+
+            if (nextItem) {
+                [currentItem.composer addTarget:nextItem.composer];
+
+            } else {
+                break;
+            }
+        }
+
+        //process last blender
+        for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
+            if (currentItem.composer) {
+                [currentItem.composer useNextFrameForImageCapture];
+                break;
+            }
+        }
+
+        //process outputs
+        for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
+            if ([currentItem.source isKindOfClass:GPUImagePicture.class]) {
+                [(GPUImagePicture *) currentItem.source processImage];
+            }
+            [currentItem.source useNextFrameForImageCapture];
+        }
+
+        //process input source
+        [inputSource useNextFrameForImageCapture];
+        if([inputSource isKindOfClass:GPUImagePicture.class]){
+            [((GPUImagePicture *)inputSource) processImage];
+        }
+
+        //return last blender's output
+        for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
+            if (currentItem.composer) {
+                return currentItem.composer;
+            }
+        }
+    }
+
+    return inputSource;
+}
+
 
 - (NSArray *)buildOutputChain:(GPUImageOutput *)sourceOutput filters:(NSArray *)filters to:(id <GPUImageInput>)inputTarget enhance:(BOOL)enhance{
     @synchronized (self) {

@@ -15,6 +15,7 @@
 @class GPUImageFilterGroup;
 @protocol GPUImageInput;
 @class M13OrderedDictionary;
+@class STGPUImageOutputComposeItem;
 
 @interface STFilterManager : NSObject
 
@@ -26,6 +27,8 @@
 - (void)loadFilterInfoWithCompletion:(void (^)(NSArray *filterInfoList))completion;
 
 - (STFilter *)acquire:(STFilterItem *)item;
+
+- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(GPUImageOutput *)inputSource items:(NSArray<STGPUImageOutputComposeItem *> *)items;
 
 - (NSArray *)buildOutputChain:(GPUImageOutput *)sourceOutput filters:(NSArray *)filters to:(id <GPUImageInput>)inputTarget enhance:(BOOL)enhance;
 

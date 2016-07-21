@@ -1,0 +1,21 @@
+//
+// Created by BLACKGENE on 7/21/16.
+// Copyright (c) 2016 stells. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "STItem.h"
+
+@class GPUImageTwoInputFilter;
+@class GPUImageOutput;
+
+
+@interface STGPUImageOutputComposeItem : STItem
+@property (nonatomic, readwrite) GPUImageOutput *source;
+@property (nonatomic, readwrite) GPUImageTwoInputFilter *composer;
+
+- (instancetype)initWithSource:(GPUImageOutput *)source composer:(GPUImageTwoInputFilter *)composer;
+
++ (instancetype)itemWithSource:(GPUImageOutput *)source composer:(GPUImageTwoInputFilter *)composer;
+
+@end

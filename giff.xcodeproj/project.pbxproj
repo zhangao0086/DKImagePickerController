@@ -19,6 +19,7 @@
 		4F71D1BB37ED179E23BE5E85 /* STPhotoItem+STExporterIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DE9BA46776E4E9FEAEA6 /* STPhotoItem+STExporterIO.m */; };
 		4F71D26BE6233F0BB706E300 /* STAnimatableCaptureRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D97ECBA17982DC349D73 /* STAnimatableCaptureRequest.m */; };
 		4F71D33095FD415B768BC8F6 /* STCapturedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D444A5AEF60E2281FFEF /* STCapturedImage.m */; };
+		4F71D338334F5260AF394634 /* STGPUImageOutputComposeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D389C405E51F536B020A /* STGPUImageOutputComposeItem.m */; };
 		4F71D35BD563596E85877F56 /* set_resolution_medium.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D0D2E259FCF2DB3A53C9 /* set_resolution_medium.svg */; };
 		4F71D3675E5A7C4F0C632D6D /* STMultiSourcingImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC608A8141B705DA42B3 /* STMultiSourcingImageProcessor.m */; };
 		4F71D393253E6E52F50CA295 /* go_take.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D6E47674B33F45BBC26E /* go_take.svg */; };
@@ -425,6 +426,7 @@
 		4F71D3616CB9036630E657C5 /* STGIFFDisplayLayerChromakeyEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerChromakeyEffect.m; sourceTree = "<group>"; };
 		4F71D371759A4C435CABAAE3 /* set_torchlight_off.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_torchlight_off.svg; sourceTree = "<group>"; };
 		4F71D37DA8ED66E260CAB455 /* STExportSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STExportSelectView.h; sourceTree = "<group>"; };
+		4F71D389C405E51F536B020A /* STGPUImageOutputComposeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGPUImageOutputComposeItem.m; sourceTree = "<group>"; };
 		4F71D3B2DAC753B62FD305B4 /* ico_cell_origin_postfocus_point.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = ico_cell_origin_postfocus_point.svg; sourceTree = "<group>"; };
 		4F71D3CBB55856F6B7D88267 /* STCapturedResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedResource.m; sourceTree = "<group>"; };
 		4F71D3E9F4FAC964B1B40097 /* STPostFocusCaptureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPostFocusCaptureRequest.h; sourceTree = "<group>"; };
@@ -483,6 +485,7 @@
 		4F71DA2FACA4D38B13669625 /* ico_cell_origin_room=go_room.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = "ico_cell_origin_room=go_room.svg"; sourceTree = "<group>"; };
 		4F71DA8B37FE7246C9917A24 /* RLMCapturedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLMCapturedImage.h; sourceTree = "<group>"; };
 		4F71DA9BB0683F9B1C8C62A0 /* STCapturedImage+STExporterIOGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STCapturedImage+STExporterIOGIF.h"; sourceTree = "<group>"; };
+		4F71DAEAC078074ABFA88728 /* STGPUImageOutputComposeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGPUImageOutputComposeItem.h; sourceTree = "<group>"; };
 		4F71DB590D5094AD238A9224 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		4F71DBDFD3656A18A585947F /* STPhotoItem+STExporterIOGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STPhotoItem+STExporterIOGIF.h"; sourceTree = "<group>"; };
 		4F71DC031155C096639A58EA /* STCapturedImageSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageSet.m; sourceTree = "<group>"; };
@@ -1844,6 +1847,8 @@
 				A050D0071CC5DD0D00628C2F /* STFilterItem.m */,
 				A050D0081CC5DD0D00628C2F /* STFilterManager.h */,
 				A050D0091CC5DD0D00628C2F /* STFilterManager.m */,
+				4F71D389C405E51F536B020A /* STGPUImageOutputComposeItem.m */,
+				4F71DAEAC078074ABFA88728 /* STGPUImageOutputComposeItem.h */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -2706,6 +2711,7 @@
 				4F71D3675E5A7C4F0C632D6D /* STMultiSourcingImageProcessor.m in Sources */,
 				4F71DB6C1FC6CCE7BAA68671 /* STCapturedImageProcessor.m in Sources */,
 				4F71D196341FACB753247AB8 /* STCapturedImageSetDisplayProcessor.m in Sources */,
+				4F71D338334F5260AF394634 /* STGPUImageOutputComposeItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -33,6 +33,16 @@
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
 
+//        UIImage *inputImage = sourceImages[0];
+//        GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO];
+//
+//        return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:inputPicture items:@[
+//                [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO]
+//                                                   composer:[[GPUImageSoftLightBlendFilter alloc] init]],
+//                [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO]
+//                                                   composer:[[GPUImageSoftLightBlendFilter alloc] init]]
+//        ]] imageFromCurrentFramebuffer];
+
         //TODO: 이걸 Array를 넣든지 거의 무한대로 되게 구조를 변경
         //TODO: PepVentosa + Leif Podhajsky 스타일 모두와 관련된 효과
         GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
