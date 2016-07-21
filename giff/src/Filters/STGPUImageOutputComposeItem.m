@@ -17,6 +17,20 @@
     return self;
 }
 
+- (instancetype)initWithSource:(GPUImageOutput *)source {
+    self = [super init];
+    if (self) {
+        self.source = source;
+    }
+
+    return self;
+}
+
++ (instancetype)itemWithSource:(GPUImageOutput *)source {
+    return [[self alloc] initWithSource:source];
+}
+
+
 + (instancetype)itemWithSource:(GPUImageOutput *)source composer:(GPUImageTwoInputFilter *)composer {
     return [[self alloc] initWithSource:source composer:composer];
 }

@@ -37,6 +37,7 @@
         UIImage *inputImage = sourceImages[0];
         GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO];
 
+
         STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO]
                                            composer:[[GPUImageSoftLightBlendFilter alloc] init]];
         GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
@@ -53,11 +54,12 @@
                 scaleFilter2
         ];
 
-        return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:inputPicture items:@[
+        return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:@[
+                [STGPUImageOutputComposeItem itemWithSource:inputPicture],
                 composeItem1,
                 composeItem2
+        ] processForImage:YES] imageFromCurrentFramebuffer];
 
-        ]] imageFromCurrentFramebuffer];
     }
 }
 

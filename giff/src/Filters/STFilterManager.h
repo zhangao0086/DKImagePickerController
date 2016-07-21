@@ -28,7 +28,7 @@
 
 - (STFilter *)acquire:(STFilterItem *)item;
 
-- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(GPUImageOutput *)inputSource items:(NSArray<STGPUImageOutputComposeItem *> *)items;
+- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(NSArray<STGPUImageOutputComposeItem *> *)items processForImage:(BOOL)processForImage;
 
 - (NSArray *)buildOutputChain:(GPUImageOutput *)sourceOutput filters:(NSArray *)filters to:(id <GPUImageInput>)inputTarget enhance:(BOOL)enhance;
 

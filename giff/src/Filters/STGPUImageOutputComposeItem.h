@@ -15,6 +15,11 @@
 @property (nonatomic, readwrite) GPUImageOutput *source;
 @property (nonatomic, readwrite) GPUImageTwoInputFilter *composer;
 
+- (instancetype)initWithSource:(GPUImageOutput *)source;
+
++ (instancetype)itemWithSource:(GPUImageOutput *)source;
+
+
 - (instancetype)initWithSource:(GPUImageOutput *)source composer:(GPUImageTwoInputFilter *)composer;
 
 + (instancetype)itemWithSource:(GPUImageOutput *)source composer:(GPUImageTwoInputFilter *)composer;

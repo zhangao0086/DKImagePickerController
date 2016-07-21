@@ -94,24 +94,19 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
 //    }];
 }
 
-- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(GPUImageOutput *)inputSource items:(NSArray<STGPUImageOutputComposeItem *> *)items{
+- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(NSArray<STGPUImageOutputComposeItem *> *)items processForImage:(BOOL)processForImage{
 
     //init
     if (items.count) {
-        [inputSource addTarget:[items[0] composer]];
-
         for (STGPUImageOutputComposeItem *currentItem in items) {
             NSParameterAssert(currentItem.source);
-            NSParameterAssert(currentItem.composer);
-
             NSUInteger index = [items indexOfObject:currentItem];
+            NSAssert(index==0 || currentItem.composer,@"composer is must offer excluding first item");
             STGPUImageOutputComposeItem *nextItem = [items st_objectOrNilAtIndex:index + 1];
 
-            if(currentItem.filters.count){
-                [self buildOutputChain:currentItem.source filters:currentItem.filters to:currentItem.composer enhance:NO];
-            }else{
-                [currentItem.source addTarget:currentItem.composer];
-            }
+            GPUImageTwoInputFilter * targetComposer = currentItem.composer ?: nextItem.composer;
+
+            [self buildOutputChain:currentItem.source filters:currentItem.filters to:targetComposer enhance:NO];
 
             if (nextItem) {
                 [currentItem.composer addTarget:nextItem.composer];
@@ -123,8 +118,8 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
 
         //process lastest blender
         for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
-            if (currentItem.composer && [currentItem.source isKindOfClass:GPUImagePicture.class]) {
-                [currentItem.composer useNextFrameForImageCapture];
+            if (currentItem.composer) {
+                !processForImage?:[currentItem.composer useNextFrameForImageCapture];
                 break;
             }
         }
@@ -133,14 +128,8 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
         for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
             if ([currentItem.source isKindOfClass:GPUImagePicture.class]) {
                 [(GPUImagePicture *) currentItem.source processImage];
-                [currentItem.source useNextFrameForImageCapture];
             }
-        }
-
-        //process input source
-        if([inputSource isKindOfClass:GPUImagePicture.class]){
-            [((GPUImagePicture *)inputSource) processImage];
-            [inputSource useNextFrameForImageCapture];
+            !processForImage?:[currentItem.source useNextFrameForImageCapture];
         }
 
         //return lastest blender's output
@@ -151,7 +140,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
         }
     }
 
-    return inputSource;
+    return nil;
 }
 
 
