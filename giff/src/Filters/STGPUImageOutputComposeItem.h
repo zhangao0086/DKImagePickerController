@@ -8,9 +8,10 @@
 
 @class GPUImageTwoInputFilter;
 @class GPUImageOutput;
-
+@protocol GPUImageInput;
 
 @interface STGPUImageOutputComposeItem : STItem
+@property (nonatomic, readwrite) NSArray<GPUImageOutput <GPUImageInput> *> *filters;
 @property (nonatomic, readwrite) GPUImageOutput *source;
 @property (nonatomic, readwrite) GPUImageTwoInputFilter *composer;
 

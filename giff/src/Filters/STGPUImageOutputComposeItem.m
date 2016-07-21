@@ -5,7 +5,6 @@
 
 #import "STGPUImageOutputComposeItem.h"
 #import "GPUImageTwoInputFilter.h"
-#import "GPUImageOutput.h"
 
 @implementation STGPUImageOutputComposeItem
 - (instancetype)initWithSource:(GPUImageOutput *)source composer:(GPUImageTwoInputFilter *)composer {

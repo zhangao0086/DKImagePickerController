@@ -94,7 +94,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
 //    }];
 }
 
-- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(GPUImageOutput *)inputSource items:(NSArray<STGPUImageOutputComposeItem *> *)items {
+- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(GPUImageOutput *)inputSource items:(NSArray<STGPUImageOutputComposeItem *> *)items{
 
     //init
     if (items.count) {
@@ -107,7 +107,11 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
             NSUInteger index = [items indexOfObject:currentItem];
             STGPUImageOutputComposeItem *nextItem = [items st_objectOrNilAtIndex:index + 1];
 
-            [currentItem.source addTarget:currentItem.composer];
+            if(currentItem.filters.count){
+                [self buildOutputChain:currentItem.source filters:currentItem.filters to:currentItem.composer enhance:NO];
+            }else{
+                [currentItem.source addTarget:currentItem.composer];
+            }
 
             if (nextItem) {
                 [currentItem.composer addTarget:nextItem.composer];
@@ -117,9 +121,9 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
             }
         }
 
-        //process last blender
+        //process lastest blender
         for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
-            if (currentItem.composer) {
+            if (currentItem.composer && [currentItem.source isKindOfClass:GPUImagePicture.class]) {
                 [currentItem.composer useNextFrameForImageCapture];
                 break;
             }
@@ -129,17 +133,17 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
         for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
             if ([currentItem.source isKindOfClass:GPUImagePicture.class]) {
                 [(GPUImagePicture *) currentItem.source processImage];
+                [currentItem.source useNextFrameForImageCapture];
             }
-            [currentItem.source useNextFrameForImageCapture];
         }
 
         //process input source
-        [inputSource useNextFrameForImageCapture];
         if([inputSource isKindOfClass:GPUImagePicture.class]){
             [((GPUImagePicture *)inputSource) processImage];
+            [inputSource useNextFrameForImageCapture];
         }
 
-        //return last blender's output
+        //return lastest blender's output
         for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
             if (currentItem.composer) {
                 return currentItem.composer;
@@ -158,7 +162,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
         }
 
         NSMutableArray * chain = [ (enhance ? @[sourceOutput, self.enhanceFilter] : @[sourceOutput] ) mutableCopy];
-        if(filters && filters.count){
+        if(filters.count){
             [chain addObjectsFromArray:filters];
         }
 
