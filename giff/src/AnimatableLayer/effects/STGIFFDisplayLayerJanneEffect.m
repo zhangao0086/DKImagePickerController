@@ -36,12 +36,18 @@
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
         UIImage *inputImage = sourceImages[0];
-        GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO];
+
+        //0
+        STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
+        composeItem0.source = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO];
 
         GPUImageBrightnessFilter * brightnessFilter = [[GPUImageBrightnessFilter alloc] init];
         brightnessFilter.brightness = -.5f;
-        [inputPicture addTarget:brightnessFilter];
+        composeItem0.filters = @[
+                brightnessFilter
+        ];
 
+        //1
         STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
         composeItem1.source = [[GPUImagePicture alloc] initWithImage:[UIImage imageBundled:@"input.jpg"] smoothlyScaleOutput:YES];
         composeItem1.composer = [[GPUImageLightenBlendFilter alloc] init];
@@ -60,6 +66,7 @@
                 colorFilter_add
         ];
 
+        //2
         STGPUImageOutputComposeItem * composeItem2 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO]
                                                                                         composer:[[GPUImageSoftLightBlendFilter alloc] init]];
         GPUImageTransformFilter * scaleFilter2 = [[GPUImageTransformFilter alloc] init];
@@ -68,12 +75,11 @@
                 scaleFilter2
         ];
 
-//        return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:brightnessFilter items:@[
-//                composeItem1,
-//                composeItem2
-//
-//        ]] imageFromCurrentFramebuffer];
-        return nil;
+        return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:@[
+                composeItem0
+                ,composeItem1
+//                ,composeItem2
+        ] processForImage:YES] imageFromCurrentFramebuffer];
 
 //        GPUImagePicture * sourcePicture = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:YES];
 //
