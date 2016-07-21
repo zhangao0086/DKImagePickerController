@@ -26,10 +26,4 @@
 - (instancetype)initWithSourceImageSets:(NSArray *)sourceImageSets;
 
 + (instancetype)itemWithSourceImageSets:(NSArray *)sourceImageSets;
-
-- (NSArray *)processResources;
-
-- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceImageSets;
-
-- (NSArray<id> *)resourcesToProcessFromSourceImageSet:(STCapturedImageSet *)imageSet;
 @end

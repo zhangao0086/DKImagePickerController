@@ -21,7 +21,7 @@
 #import "STPermissionManager.h"
 #import "STStandardButton.h"
 #import "STAnimatableCaptureRequest.h"
-#import "STCaptureProcessor.h"
+#import "STCapturedImageProcessor.h"
 #import "STCaptureResponse.h"
 #import "STPostFocusCaptureRequest.h"
 #import "STUIApplication.h"
@@ -258,7 +258,7 @@ static ALAssetsLibrary * assetLibrary;
     if(STPermissionManager.camera.isAuthorized){
         Weaks
         //start watching
-        [[STCaptureProcessor sharedProcessor] startWatching];
+        [[STCapturedImageProcessor sharedProcessor] startWatching];
 
         [[NSNotificationCenter defaultCenter] postNotificationName:STNotificationCameraInitialized object:nil];
 

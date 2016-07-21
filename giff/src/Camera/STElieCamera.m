@@ -20,7 +20,7 @@
 #import "STOrientationItem.h"
 #import "STAnimatableCaptureRequest.h"
 #import "STCapturedImage.h"
-#import "STCaptureProcessor.h"
+#import "STCapturedImageProcessor.h"
 #import "STCaptureResponse.h""
 #import "STPostFocusCaptureRequest.h"
 #import "M13OrderedDictionary.h"
@@ -308,7 +308,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
 
 #pragma mark Capture
 - (BOOL)isCapturing {
-    return [STCaptureProcessor sharedProcessor].processing || self.stillImageOutput.isCapturingStillImage;
+    return [STCapturedImageProcessor sharedProcessor].processing || self.stillImageOutput.isCapturingStillImage;
 }
 
 - (void)capture:(STCaptureRequest *)request;
@@ -332,7 +332,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
                                               interfaceOrientation:motionManager.interfaceOrientation
                                                   imageOrientation:motionManager.imageOrientation];
 
-        [[STCaptureProcessor sharedProcessor] requestData:[AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer] request:request];
+        [[STCapturedImageProcessor sharedProcessor] requestData:[AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer] request:request];
     }];
 };
 

@@ -4,7 +4,7 @@
 //
 
 #import <ImageIO/ImageIO.h>
-#import "STCaptureProcessor.h"
+#import "STCapturedImageProcessor.h"
 #import "STOrientationItem.h"
 #import "STCaptureRequest.h"
 #import "M13OrderedDictionary.h"
@@ -20,7 +20,7 @@
 #import "STCaptureResponse.h"
 #import "STCapturedImageSet.h"
 
-@interface STCaptureProcessor ()
+@interface STCapturedImageProcessor ()
 @property(nonatomic, strong) DirectoryWatcher *watcher;
 @property(nonatomic, strong) TABFileMonitor *watcher2;
 @property(atomic, strong) M13MutableOrderedDictionary *requestsQueue;
@@ -28,7 +28,7 @@
 @property(atomic, assign) BOOL receivedMemoryWarning;
 @end
 
-@implementation STCaptureProcessor
+@implementation STCapturedImageProcessor
 
 static NSString * const PREFIX_CAPTURED_FILE = @"elie_captured_temp";
 static NSUInteger const MAX_CONCURRENT_PROCESSING_COUNT = 3;
@@ -40,8 +40,8 @@ static NSTimeInterval const DELAY_FOR_PROCESSING_IDLE = 3;
 
 static NSString * TEMP_PATH_CAPTURED_FILE;
 
-+ (STCaptureProcessor *)sharedProcessor {
-    static STCaptureProcessor *_instance = nil;
++ (STCapturedImageProcessor *)sharedProcessor {
+    static STCapturedImageProcessor *_instance = nil;
     BlockOnce(^{
         _instance = [[self alloc] init];
         TEMP_PATH_CAPTURED_FILE = NSTemporaryDirectory();
@@ -57,19 +57,19 @@ static NSString * TEMP_PATH_CAPTURED_FILE;
 
         [[NSNotificationCenter defaultCenter] st_addObserverWithMainQueue:self forName:UIApplicationDidReceiveMemoryWarningNotification usingBlock:^(NSNotification *note, id observer) {
             @synchronized (observer) {
-                ((STCaptureProcessor *)observer).receivedMemoryWarning = YES;
+                ((STCapturedImageProcessor *)observer).receivedMemoryWarning = YES;
             }
         }];
 
         [[NSNotificationCenter defaultCenter] st_addObserverWithMainQueue:self forName:UIApplicationDidEnterBackgroundNotification usingBlock:^(NSNotification *note, id observer) {
             @synchronized (observer) {
-                ((STCaptureProcessor *)observer).receivedMemoryWarning = NO;
+                ((STCapturedImageProcessor *)observer).receivedMemoryWarning = NO;
             }
         }];
 
         [[NSNotificationCenter defaultCenter] st_addObserverWithMainQueue:self forName:UIApplicationWillResignActiveNotification usingBlock:^(NSNotification *note, id observer) {
             @synchronized (observer) {
-                ((STCaptureProcessor *)observer).receivedMemoryWarning = NO;
+                ((STCapturedImageProcessor *)observer).receivedMemoryWarning = NO;
             }
         }];
     }

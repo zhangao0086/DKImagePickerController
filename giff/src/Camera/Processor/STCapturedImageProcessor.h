@@ -9,12 +9,12 @@
 
 @class STCaptureRequest;
 
-@interface STCaptureProcessor : NSObject <DirectoryWatcherDelegate, TABFileMonitorDelegate>
+@interface STCapturedImageProcessor : NSObject <DirectoryWatcherDelegate, TABFileMonitorDelegate>
 
 @property(atomic, assign) BOOL watchingStarted;
 @property(atomic, readonly) BOOL processing;
 
-+ (STCaptureProcessor *)sharedProcessor;
++ (STCapturedImageProcessor *)sharedProcessor;
 
 - (void)clean;
 

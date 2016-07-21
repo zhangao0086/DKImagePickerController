@@ -40,7 +40,7 @@
 #import "NSObject+STThreadUtil.h"
 #import "UIScrollView+AGK+Properties.h"
 #import "STPermissionManager.h"
-#import "STCaptureProcessor.h"
+#import "STCapturedImageProcessor.h"
 #import "STFilterManager.h"
 #import "STUIApplication.h"
 #import "STFilterGroupItem.h"
@@ -1874,7 +1874,7 @@ static UIView *_quickCaptureButtonContainer;
     else if(_mode== STControlDisplayModeLivePreview){
         Weaks
         [_home whenTapped:^{
-            if([STCaptureProcessor sharedProcessor].processing){
+            if([STCapturedImageProcessor sharedProcessor].processing){
                 [STStandardUX expressDenied:_home];
 
             }else{

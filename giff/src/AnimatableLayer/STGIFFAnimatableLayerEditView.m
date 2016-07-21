@@ -11,6 +11,7 @@
 #import "STQueueManager.h"
 #import "STMultiSourcingImageProcessor.h"
 #import "STGIFFAnimatableLayerEditView.h"
+#import "STCapturedImageSetDisplayProcessor.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -86,10 +87,12 @@
 - (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem{
     [self initToAddLayersIfNeeded];
 
+    STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayer:layerItem];
+
     if(layerItem.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-            NSArray * effectAppliedImageUrls = [layerItem processResources];
+            NSArray * effectAppliedImageUrls = [processor processResources];
 
             dispatch_async(dispatch_get_main_queue(),^{
                 [Wself appendLayerView:layerItem presentableObjects:effectAppliedImageUrls];
@@ -97,7 +100,7 @@
         });
     }else{
         //set default 0 STCapturedImageSet
-        [self appendLayerView:layerItem presentableObjects:[layerItem resourcesToProcessFromSourceImageSet:[[layerItem sourceImageSets] firstObject]]];
+        [self appendLayerView:layerItem presentableObjects:[processor resourcesToProcessFromSourceImageSet:[[layerItem sourceImageSets] firstObject]]];
     }
 }
 

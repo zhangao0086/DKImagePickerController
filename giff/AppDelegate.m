@@ -21,7 +21,7 @@
 #import "STUIApplication+QuickAction.h"
 #import "STUIApplication+SpotlightSearch.h"
 #import "PINMemoryCache.h"
-#import "STCaptureProcessor.h"
+#import "STCapturedImageProcessor.h"
 #import "FCFileManager.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -146,8 +146,8 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application{
 
-    if(![STCaptureProcessor sharedProcessor].processing){
-        [[STCaptureProcessor sharedProcessor] clean];
+    if(![STCapturedImageProcessor sharedProcessor].processing){
+        [[STCapturedImageProcessor sharedProcessor] clean];
     }
 //    [[STLocalAuthManager sharedManager] expire];
     [STGIFFAppSetting.get clearGeotagDataIfAllowed];
@@ -184,7 +184,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [[STCaptureProcessor sharedProcessor] clean];
+    [[STCapturedImageProcessor sharedProcessor] clean];
     [STGIFFAppSetting.get clearGeotagDataIfAllowed];
     [STGIFFAppSetting.get synchronize];
 
