@@ -69,22 +69,6 @@
 
 @implementation R
 
-+ (NSString *)bg_viewfinder_fullrange_default; {
-    return @"bg_viewfinder_fullrange_default.svg";
-}
-
-+ (NSString *)bg_viewfinder_postfocus_5point; {
-    return @"bg_viewfinder_postfocus_5point.svg";
-}
-
-+ (NSString *)bg_viewfinder_postfocus_v3point; {
-    return @"bg_viewfinder_postfocus_v3point.svg";
-}
-
-+ (NSString *)bg_viewfinder_postfocus_v3point_line; {
-    return @"bg_viewfinder_postfocus_v3point_line.svg";
-}
-
 + (NSString *)camera_front; {
     return @"camera_front.svg";
 }

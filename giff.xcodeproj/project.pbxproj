@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		312DD782C6DA9054BFB612D9 /* libPods-giff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 523D14932897B1BC9F51F359 /* libPods-giff.a */; };
-		4F71D03D739E5F7582B5DBCC /* bg_viewfinder_postfocus_v3point_line.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D81A344F8621BAE1D99E /* bg_viewfinder_postfocus_v3point_line.svg */; };
 		4F71D03E6AED67BE8642F8A0 /* ico_cell_blank.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D3FF7F23C8E777423D71 /* ico_cell_blank.svg */; };
-		4F71D060B690432AFFE50BBA /* bg_viewfinder_fullrange_default.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D4DD17097C1CB4B4D19A /* bg_viewfinder_fullrange_default.svg */; };
 		4F71D0CA757E4B99A9CF2298 /* STPreviewPresenterAnimatableImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DD9519C73B5BEEF14313 /* STPreviewPresenterAnimatableImage.m */; };
 		4F71D17570EB6BFF5525EB8E /* set_torchlight_on.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DA20030C611C8BC69FDC /* set_torchlight_on.svg */; };
 		4F71D196341FACB753247AB8 /* STCapturedImageSetDisplayProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DCFB3B83FD13A975B6B0 /* STCapturedImageSetDisplayProcessor.m */; };
@@ -64,11 +62,9 @@
 		4F71DD4169B0EB846D00BD80 /* STGIFFDisplayLayerJanneEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D89E504DE9FBDFEA873C /* STGIFFDisplayLayerJanneEffect.m */; };
 		4F71DD46F2D5DC3EB6EA2863 /* STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D925ED72D1F4B3F395C5 /* STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.m */; };
 		4F71DDD193134EC64A340451 /* NSDictionary+STUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D1D7235A2F354A834B0D /* NSDictionary+STUtil.m */; };
-		4F71DE0CF6AFE902AA70746F /* bg_viewfinder_postfocus_5point.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D4DBC03E99567683E523 /* bg_viewfinder_postfocus_5point.svg */; };
 		4F71DE43438B909D63CD0E23 /* STCapturedImageSetDisplayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D17BBB89D5F918547429 /* STCapturedImageSetDisplayLayer.m */; };
 		4F71DE7E965B770B11D49C68 /* STExporter+IOGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D43A9F6FF6C3DED4ABD8 /* STExporter+IOGIF.m */; };
 		4F71DF2D95AFFE3823B727E6 /* STCapturedImageSet+PostFocus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC7A5125F1640917C3C0 /* STCapturedImageSet+PostFocus.m */; };
-		4F71DF661FB3E1404A6BEDCC /* bg_viewfinder_postfocus_v3point.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D1B6E20236A02F50EDBC /* bg_viewfinder_postfocus_v3point.svg */; };
 		4F71DFA9092E237827E6FE2B /* STStandardPointableSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D47AA9D2960523FF1C1E /* STStandardPointableSlider.m */; };
 		4F71DFE97EE20596ECC8B7B3 /* STGPUImageOutputComposeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D3EADF65237E2B284141 /* STGPUImageOutputComposeItem.m */; };
 		4F71DFFC82C582EC8E97AC65 /* set_torchlight_strong.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D992355DC6EA0659B392 /* set_torchlight_strong.svg */; };
@@ -411,7 +407,6 @@
 		4F71D138C0E19D47C015CFF5 /* STExporter+ConfigGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STExporter+ConfigGIF.h"; sourceTree = "<group>"; };
 		4F71D161041DCBEE3F38A043 /* STExporter+ConfigGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STExporter+ConfigGIF.m"; sourceTree = "<group>"; };
 		4F71D17BBB89D5F918547429 /* STCapturedImageSetDisplayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageSetDisplayLayer.m; sourceTree = "<group>"; };
-		4F71D1B6E20236A02F50EDBC /* bg_viewfinder_postfocus_v3point.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = bg_viewfinder_postfocus_v3point.svg; sourceTree = "<group>"; };
 		4F71D1D7235A2F354A834B0D /* NSDictionary+STUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+STUtil.m"; sourceTree = "<group>"; };
 		4F71D1F8B417DE141A847589 /* STGIFFDisplayLayerColorizeEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFDisplayLayerColorizeEffect.h; sourceTree = "<group>"; };
 		4F71D1FA683A45CFB46D64C0 /* STPhotoItem+STExporterIOGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STPhotoItem+STExporterIOGIF.m"; sourceTree = "<group>"; };
@@ -439,8 +434,6 @@
 		4F71D466B6EC403B7728CB4C /* STCaptureResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCaptureResponse.h; sourceTree = "<group>"; };
 		4F71D47AA9D2960523FF1C1E /* STStandardPointableSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STStandardPointableSlider.m; sourceTree = "<group>"; };
 		4F71D4CE33205F28C6D789C2 /* STCaptureRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCaptureRequest.m; sourceTree = "<group>"; };
-		4F71D4DBC03E99567683E523 /* bg_viewfinder_postfocus_5point.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = bg_viewfinder_postfocus_5point.svg; sourceTree = "<group>"; };
-		4F71D4DD17097C1CB4B4D19A /* bg_viewfinder_fullrange_default.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = bg_viewfinder_fullrange_default.svg; sourceTree = "<group>"; };
 		4F71D526C3DDF2138863954D /* STGPUImageOffsetScalingFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGPUImageOffsetScalingFilter.m; sourceTree = "<group>"; };
 		4F71D5273FC8E8536340AFC5 /* STCapturedImage+STExporterIOGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STCapturedImage+STExporterIOGIF.m"; sourceTree = "<group>"; };
 		4F71D5488E5274FE85378609 /* STGIFFAnimatableLayerEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFAnimatableLayerEditView.m; sourceTree = "<group>"; };
@@ -468,7 +461,6 @@
 		4F71D7F35C9CD0C0BC48C967 /* STCapturedImageSetAnimatableLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCapturedImageSetAnimatableLayer.h; sourceTree = "<group>"; };
 		4F71D7F93681FAF61DEB0D9B /* STCapturedImageSetAnimatableLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageSetAnimatableLayer.m; sourceTree = "<group>"; };
 		4F71D80A861BC2ED5B6E645F /* STCapturedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCapturedImage.h; sourceTree = "<group>"; };
-		4F71D81A344F8621BAE1D99E /* bg_viewfinder_postfocus_v3point_line.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = bg_viewfinder_postfocus_v3point_line.svg; sourceTree = "<group>"; };
 		4F71D84002885E18053166DA /* set_resolution_small.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_resolution_small.svg; sourceTree = "<group>"; };
 		4F71D842DF81F1D2DA5F56A6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		4F71D89E504DE9FBDFEA873C /* STGIFFDisplayLayerJanneEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerJanneEffect.m; sourceTree = "<group>"; };
@@ -1426,8 +1418,6 @@
 				4F71DE9A5569D456EA33A09C /* ico_macro.svg */,
 				4F71DA20030C611C8BC69FDC /* set_torchlight_on.svg */,
 				4F71D371759A4C435CABAAE3 /* set_torchlight_off.svg */,
-				4F71D4DD17097C1CB4B4D19A /* bg_viewfinder_fullrange_default.svg */,
-				4F71D4DBC03E99567683E523 /* bg_viewfinder_postfocus_5point.svg */,
 				4F71D6406D30CCA3B8ACF7D8 /* logo_part_0.svg */,
 				4F71D0B83249614D69708FEC /* logo_part_1.svg */,
 				4F71D265AAEDAAC78DD97E1D /* logo_part_2.svg */,
@@ -1441,9 +1431,7 @@
 				4F71DFA4BE0A87BBA6FC2B9B /* logo_elie.svg */,
 				4F71D3B2DAC753B62FD305B4 /* ico_cell_origin_postfocus_point.svg */,
 				4F71D6938BF3F2425E1E163F /* down_triangle_rounded.svg */,
-				4F71D1B6E20236A02F50EDBC /* bg_viewfinder_postfocus_v3point.svg */,
 				4F71D5EB3BF4F313CAEB5EC9 /* set_postfocus_vertical_3point.svg */,
-				4F71D81A344F8621BAE1D99E /* bg_viewfinder_postfocus_v3point_line.svg */,
 				4F71D3401F5ECD85A0B7AEA8 /* set_resolution_4k.svg */,
 				4F71D41BF339D7E2D2A7A2E3 /* set_resolution_full.svg */,
 				4F71D0D2E259FCF2DB3A53C9 /* set_resolution_medium.svg */,
@@ -2395,8 +2383,6 @@
 				4F71D930B07A1B8E6F805C07 /* ico_macro.svg in Resources */,
 				4F71D17570EB6BFF5525EB8E /* set_torchlight_on.svg in Resources */,
 				4F71D6DE5AC7DA1736DA3AEA /* set_torchlight_off.svg in Resources */,
-				4F71D060B690432AFFE50BBA /* bg_viewfinder_fullrange_default.svg in Resources */,
-				4F71DE0CF6AFE902AA70746F /* bg_viewfinder_postfocus_5point.svg in Resources */,
 				4F71DB41501E404DCCCA57D6 /* logo_part_0.svg in Resources */,
 				4F71D661EE32C8B989FE941F /* logo_part_1.svg in Resources */,
 				4F71D4E517458028F4AE03CC /* logo_part_2.svg in Resources */,
@@ -2411,9 +2397,7 @@
 				4F71D703E48BE12CCEE0C901 /* ico_cell_origin_postfocus_point.svg in Resources */,
 				4F71DFFFC48E318ADC182B42 /* down_triangle_rounded.svg in Resources */,
 				4F71D56322919F1A1E1444C5 /* ios_photos.svg in Resources */,
-				4F71DF661FB3E1404A6BEDCC /* bg_viewfinder_postfocus_v3point.svg in Resources */,
 				4F71D847CC7779E077E6F194 /* set_postfocus_vertical_3point.svg in Resources */,
-				4F71D03D739E5F7582B5DBCC /* bg_viewfinder_postfocus_v3point_line.svg in Resources */,
 				4F71D3F146E266CA927B8AD5 /* set_resolution_4k.svg in Resources */,
 				4F71D51ED092604E7E600BA8 /* set_resolution_full.svg in Resources */,
 				4F71D35BD563596E85877F56 /* set_resolution_medium.svg in Resources */,

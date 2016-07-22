@@ -51,8 +51,6 @@
 @property(nonatomic, strong) UIView * verticalFocusPointerView;
 
 @property(nonatomic, strong) STViewFinderPointLayer *pointerLayer;
-//view finder
-@property(nonatomic, strong) UIView *viewFinderView;
 //lock
 @property(nonatomic, strong) UIView * afAELockButton;
 //zoom
@@ -607,41 +605,6 @@ static NSTimer * TimerForLoopingSliderValue;
 //    self.zoomProgressLabel = nil;
 }
 
-- (void)setViewFinderType:(STViewFinderType)type{
-    if(type==STViewFinderTypeNone){
-        self.viewFinderView.visible = NO;
-
-    }else{
-        NSString * imageName = nil;
-        switch (type){
-            case STViewFinderTypePostFocus5Point:
-                imageName = [R bg_viewfinder_postfocus_5point];
-                break;
-            case STViewFinderTypePostFocusModeVertical3Points:
-                imageName = [R bg_viewfinder_postfocus_v3point];
-                break;
-            case STViewFinderTypePostFocusFullRangeDefault:
-                imageName = [R bg_viewfinder_fullrange_default];
-                break;
-            default:
-                NSAssert(NO,@"not supported");
-                break;
-        }
-
-        //view finder
-        if(!self.viewFinderView){
-            self.viewFinderView = [[UIImageView alloc] initWithSize:self.size];
-            [_cameraControlView insertSubview:self.viewFinderView atIndex:0];
-        }
-
-        ((UIImageView *)self.viewFinderView).image = [self st_cachedImage:[@"STViewFinder" st_add:imageName] useDisk:YES init:^UIImage * {
-            return [[SVGKImage imageNamedNoCache:imageName widthSizeWidth:self.width] UIImage];
-        }];
-        self.viewFinderView.userInteractionEnabled = NO;
-        self.viewFinderView.alpha = .35f;
-    }
-}
-
 - (void)addCameraControlsView {
     if(_cameraControlView){
         _cameraControlView.visible = YES;
@@ -992,25 +955,6 @@ static NSTimer * TimerForLoopingSliderValue;
     [[STElieCamera sharedInstance] whenValueOf:@keypath([STElieCamera sharedInstance].changingFacingCamera) id:@"STPreview.observe.changingFacingCamera" changed:^(id value, id _weakSelf) {
         [Wself resetAFAE];
     }];
-
-    [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].postFocusMode) id:@"STPreview.observe.postFocusMode" changed:^(id value, id _weakSelf) {
-        switch ((STPostFocusMode) [value integerValue]) {
-            case STPostFocusMode5Points:
-                self.viewFinderType = STViewFinderTypePostFocus5Point;
-                break;
-            case STPostFocusModeVertical3Points:
-                self.viewFinderType = STViewFinderTypePostFocusModeVertical3Points;
-                break;
-            case STPostFocusModeFullRange:
-                self.viewFinderType = STViewFinderTypePostFocusFullRangeDefault;
-                break;
-            case STPostFocusModeNone:
-                self.viewFinderType = STViewFinderTypeNone;
-                break;
-            default:
-                break;
-        }
-    } getInitialValue:YES];
 }
 
 - (void)unsubscribeWhenUsingCamera {

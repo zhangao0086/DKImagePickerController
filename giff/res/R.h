@@ -37,14 +37,6 @@
 
 @interface R : NSObject
 
-+ (NSString *)bg_viewfinder_fullrange_default;
-
-+ (NSString *)bg_viewfinder_postfocus_5point;
-
-+ (NSString *)bg_viewfinder_postfocus_v3point;
-
-+ (NSString *)bg_viewfinder_postfocus_v3point_line;
-
 + (NSString *)camera_front;
 
 + (NSString *)camera_rear;
