@@ -126,29 +126,24 @@ static ALAssetsLibrary * assetLibrary;
     sideR.origin.x = previewCenter.x- sideR.size.width/2;
     sideR.origin.y = previewCenter.y- sideR.size.height/2;
 
-    // init elie presenter
-//    _curtain = [[STElieCurtain alloc] initWithFrame:self.view.frame];
-
-    // init elie control
-    STMainControl * control = [STMainControl initSharedInstanceWithFrame:CGRectMake(0, 0, self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
-    control.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.2];
-    control.bottom = self.view.height;
-
-    // init control grid
-//    _controlBoardController = [STSettingScreenController sharedController];
-//    _controlBoardController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//    _controlBoardController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-//    _controlBoardController.view.autoresizingMask = UIViewAutoresizingNone;
-//    _controlBoardController.view.frame = UIEdgeInsetsInsetRect(self.view.bounds, UIEdgeInsetsMake(0, 0, control.height, 0));
-//    _controlBoardController.view.backgroundColor = [UIColor clearColor];
-//    [self addChildViewController:_controlBoardController];
-//    _controlBoardController.view.hidden = YES;
-
     // init photo selection instance
     _photoSelectionView = [STPhotoSelector initSharedInstanceWithFrame:self.view.bounds];
     _photoSelectionView.collectionView.backgroundView = nil;
     _photoSelectionView.collectionView.backgroundColor = [UIColor clearColor];
     _photoSelectionView.backgroundColor = [STGIFFApp launchScreenBackgroundColor];
+
+    // init elie control
+    STUIView * optionControl = [[STUIView alloc] initWithSize:CGSizeMake(self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
+    optionControl.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:.2];
+    optionControl.y = _cameraFrame.size.height;
+
+    STUIView * sourceControl = [[STUIView alloc] initWithSize:CGSizeMake(self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
+    sourceControl.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:.2];
+    sourceControl.y = _cameraFrame.size.height*2;
+
+    STMainControl * control = [STMainControl initSharedInstanceWithFrame:CGRectMake(0, 0, self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
+    control.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.2];
+    control.bottom = self.view.height;
 
     // init status bar
     [STElieStatusBar sharedInstance].y = 0;// needsCameraFrameHeight;
@@ -158,9 +153,9 @@ static ALAssetsLibrary * assetLibrary;
       */
     _mainViewWrapper = [[STUIView alloc] initWithFrame:self.view.bounds];
     [_mainViewWrapper addSubview:_photoSelectionView];
-//    [_mainViewWrapper addSubview:_controlBoardController.view];
+    [_mainViewWrapper addSubview:sourceControl];
+    [_mainViewWrapper addSubview:optionControl];
     [_mainViewWrapper addSubview:control];
-//    [_mainViewWrapper addSubview:[STElieStatusBar sharedInstance]];
 
 
     [self.view addSubview:_mainViewWrapper];
