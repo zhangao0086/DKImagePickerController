@@ -684,7 +684,6 @@ UIImageView * BlurPreviewCoverView;
             filter
          */
         _previewCollector.previewView.visible = NO;
-        _previewCollector.previewView.y = 0;
         [_previewCollector closeIfStarted];
 
         /*
@@ -719,7 +718,6 @@ UIImageView * BlurPreviewCoverView;
         [self setTouchInsidePolicy:STUIViewTouchInsidePolicyContentInside];
 
         _previewCollector.previewView.visible = YES;
-        _previewCollector.previewView.y = [STElieStatusBar sharedInstance].layoutHeight;
         [_previewCollector start:type];
 
         self.gridView.animatableVisible = NO;
@@ -734,7 +732,6 @@ UIImageView * BlurPreviewCoverView;
         [self setTouchInsidePolicy:STUIViewTouchInsidePolicyContentInside];
 
         _previewCollector.previewView.visible = YES;
-        _previewCollector.previewView.y = [STElieStatusBar sharedInstance].layoutHeight;
         [_previewCollector start:type];
 
         self.gridView.animatableVisible = NO;
@@ -746,7 +743,6 @@ UIImageView * BlurPreviewCoverView;
         [self setTouchInsidePolicy:STUIViewTouchInsidePolicyContentInside];
 
         _previewCollector.previewView.visible = YES;
-        _previewCollector.previewView.y = [STElieStatusBar sharedInstance].layoutHeight;
         [_previewCollector start:type];
 
         self.gridView.animatableVisible = NO;
@@ -762,7 +758,6 @@ UIImageView * BlurPreviewCoverView;
          */
 
         _previewCollector.previewView.visible = YES;
-        _previewCollector.previewView.y = [STElieStatusBar sharedInstance].layoutHeight;
 
         /*
             grid
@@ -1092,44 +1087,6 @@ static BOOL _lockedRegisteredChangeObserver;
 
 - (void) didCancelPullToRefresh:(UIScrollView *)scrollView; {
 //    [self cancelPullingGrid];
-}
-
-/*
-    pull function
- */
-- (void)beganPullingGrid {
-
-}
-
-- (void)performPullingGrid:(CGFloat)scrollViewY {
-    CGFloat offset = scrollViewY;
-    CGFloat maxOffset = [STStandardUX maxOffsetForPullToGridView];
-    CGFloat reachRatioFromPull = (maxOffset-offset)/maxOffset;
-    CGFloat reachRatioFromBounds = (self.boundsHeightHalf-offset)/(self.boundsHeightHalf);
-
-    CGFloat minScale = [STStandardUI scaleXYValueForBackward];
-    CGFloat scaleToSmall = CLAMP(reachRatioFromBounds, minScale, 1);
-
-    if(maxOffset>=offset){
-        [STMainControl sharedInstance].previewVisibility = CLAMP(reachRatioFromPull, 0, 1);
-    }
-
-    [_previewCollector willEnterTransitionLive];
-    [_previewCollector.previewView st_setShadowToFront:UIRectEdgeBottom size:-30 shadowColor:nil].alpha = .85;
-    _previewCollector.previewView.visible = YES;
-    _previewCollector.previewView.y = -_previewCollector.previewView.height + scrollViewY;
-}
-
-- (void)cancelPullingGrid {
-    [_previewCollector cancelPreTransitionLive];
-    _previewCollector.previewView.scaleXYValue = 1;
-    _previewCollector.previewView.y = -_previewCollector.previewView.height;
-    _previewCollector.previewView.visible = NO;
-
-    [STMainControl sharedInstance].previewVisibility = 1;
-    self.gridView.visible = YES;
-
-    [self finishPullingGrid];
 }
 
 - (void)finishPullingGrid {
