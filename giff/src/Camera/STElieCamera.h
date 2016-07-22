@@ -89,9 +89,11 @@ extern CGFloat const STElieCameraCurrentImageMaxSidePixelSize_ThumbnailPreview;
 //utility
 @property NSInteger exifOrientation;
 
-+ (STElieCamera *)initSharedInstanceWithSessionPreset:(NSString *)preset position:(AVCaptureDevicePosition)position;
++ (instancetype)initSharedInstanceWithSessionPreset:(NSString *)preset position:(AVCaptureDevicePosition)position;
 
-+ (STElieCamera *)sharedInstance;
++ (instancetype)initSharedInstanceWithSessionPreset:(NSString *)preset position:(AVCaptureDevicePosition)position preferredOutputRatio:(CGFloat)ratio;
+
++ (instancetype)sharedInstance;
 
 + (void)setMode:(STCameraMode)mode;
 

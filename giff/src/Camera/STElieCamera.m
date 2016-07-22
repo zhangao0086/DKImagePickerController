@@ -67,15 +67,19 @@ static STElieCamera *_instance = nil;
     return _instance;
 }
 
-+ (STElieCamera *)initSharedInstanceWithSessionPreset:(NSString *)preset position:(AVCaptureDevicePosition)position {
++ (instancetype)initSharedInstanceWithSessionPreset:(NSString *)preset position:(AVCaptureDevicePosition)position {
+    return [self initSharedInstanceWithSessionPreset:preset position:position preferredOutputRatio:0];
+}
+
++ (instancetype)initSharedInstanceWithSessionPreset:(NSString *)preset position:(AVCaptureDevicePosition)position preferredOutputRatio:(CGFloat)ratio; {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _instance = [[self alloc] initWithSessionPreset:preset cameraPosition:position];
+        _instance = [[self alloc] initWithSessionPreset:preset cameraPosition:position preferredOutputRatio:ratio];
     });
     return _instance;
 }
 
-- (id)initWithSessionPreset:(NSString *)sessionPreset cameraPosition:(AVCaptureDevicePosition)cameraPosition; {
+- (instancetype)initWithSessionPreset:(NSString *)sessionPreset cameraPosition:(AVCaptureDevicePosition)cameraPosition preferredOutputRatio:(CGFloat)ratio; {
     self = [super initWithSessionPreset:sessionPreset cameraPosition:cameraPosition];
     if (self) {
         dispatch_queue_t captureQueue = dispatch_queue_create("com.elie.capturequeue", DISPATCH_QUEUE_SERIAL);
@@ -101,10 +105,14 @@ static STElieCamera *_instance = nil;
 
         focusCompleteOperations = [NSMutableArray array];
 
-        [self setOutputInfo];
-        [self st_observe:@keypath(self.captureSession.sessionPreset) block:^(id value, __weak id _weakSelf) {
-            [_weakSelf setOutputInfo];
-        }];
+        if(ratio){
+            _outputVerticalRatio = ratio;
+        }else{
+            [self setOptimizedDefaultsOutputRatio];
+            [self st_observe:@keypath(self.captureSession.sessionPreset) block:^(id value, __weak id _weakSelf) {
+                [_weakSelf setOptimizedDefaultsOutputRatio];
+            }];
+        }
     }
     return self;
 }
@@ -154,7 +162,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     return 1.777777f;
 }
 
-- (void)setOutputInfo{
+- (void)setOptimizedDefaultsOutputRatio{
     //0.002406s
     NSDictionary *dict = [self.captureSession.outputs[0] videoSettings];
     CGSize outputSize = CGSizeMake([dict[@"Width"] floatValue], [dict[@"Height"] floatValue]);
