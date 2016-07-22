@@ -899,9 +899,7 @@ static ALAssetsLibrary * assetLibrary;
 
 - (void)captureAnimatable:(STAnimatableCaptureRequest *)request {
     if(!request){
-        request = [STAnimatableCaptureRequest requestWithNeedsFilter:
-                [[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem]
-        ];
+        request = [STAnimatableCaptureRequest requestWithNeedsFilter:[[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(0.f, 0.125f, 1.f, .75f)]];
     }
 
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];

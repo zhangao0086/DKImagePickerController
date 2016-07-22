@@ -1615,6 +1615,7 @@ CGFloat const STElieCameraCurrentImageMaxSidePixelSize_ThumbnailPreview = 800;
     @synchronized (self) {
         UIImage * image = nil;
         if(self.targets.count){
+            //FIXME: needsOutput에 다중 필터가 들어올 수 없음 -> 이것도 언제 정리.
             GPUImageOutput<GPUImageInput> *imageOutput = !needsOutput ? nil : [[self.targets reverse] bk_match:^BOOL(id obj) {
                 return [obj isKindOfClass:GPUImageOutput.class]
                         && [obj conformsToProtocol:@protocol(GPUImageInput)]
