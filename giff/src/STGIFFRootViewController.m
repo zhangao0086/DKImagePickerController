@@ -130,7 +130,8 @@ static ALAssetsLibrary * assetLibrary;
 //    _curtain = [[STElieCurtain alloc] initWithFrame:self.view.frame];
 
     // init elie control
-    STMainControl * control = [STMainControl initSharedInstanceWithFrame:CGRectMake(0, 0, self.view.width, self.view.height-_cameraFrame.size.height-[STElieStatusBar sharedInstance].layoutHeight)];
+    STMainControl * control = [STMainControl initSharedInstanceWithFrame:CGRectMake(0, 0, self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
+    control.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.2];
     control.bottom = self.view.height;
 
     // init control grid
@@ -159,7 +160,7 @@ static ALAssetsLibrary * assetLibrary;
     [_mainViewWrapper addSubview:_photoSelectionView];
 //    [_mainViewWrapper addSubview:_controlBoardController.view];
     [_mainViewWrapper addSubview:control];
-    [_mainViewWrapper addSubview:[STElieStatusBar sharedInstance]];
+//    [_mainViewWrapper addSubview:[STElieStatusBar sharedInstance]];
 
 
     [self.view addSubview:_mainViewWrapper];
