@@ -76,7 +76,7 @@
     [STGIFFAppSetting.get touchForLastLaunchTime];
 
 #if DEBUG
-    [[STUIApplication sharedApplication] launchFromNeededShortcutItemType:@"STShortcutItemTypeEditLastPhoto" completionHandler:nil];
+//    [[STUIApplication sharedApplication] launchFromNeededShortcutItemType:@"STShortcutItemTypeEditLastPhoto" completionHandler:nil];
 #endif
 
     return YES;

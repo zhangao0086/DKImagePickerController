@@ -143,9 +143,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     if([STApp isInSimulator]){
         return [self.class outputVerticalRatioDefault];
     }
-
-    CGFloat deviceRatio = _outputVerticalRatio;
-    return deviceRatio < self.class.outputVerticalMinimizeRatioHD ? self.class.outputVerticalRatioDefault : deviceRatio;
+    return _outputVerticalRatio ?: self.class.outputVerticalRatioDefault;
 }
 
 + (CGFloat)outputVerticalRatioDefault; {
@@ -154,10 +152,6 @@ static STCameraMode _mode = STCameraModeNotInitialized;
 
 + (CGFloat)outputVerticalRatioHD; {
     return 1.777777f;
-}
-
-+ (CGFloat)outputVerticalMinimizeRatioHD; {
-    return 1.7f;
 }
 
 - (void)setOutputInfo{
