@@ -277,18 +277,20 @@
 }
 
 - (void)addBackgroundView:(BOOL)userForCamera{
+    //FIXME:위치 씨발 뭣데문에 그런지 모르겠네
+    
     CGFloat downScaleRatio = 2;
     CGFloat verticalRatio = ceil([STPhotoSelector sharedInstance].height/[STElieCamera sharedInstance].outputScreenSize.height);
     if(!_backgroundView){
         GPUImageView * activeBackgroundView = [[GPUImageView alloc] initWithSize:CGSizeByScale([STElieCamera sharedInstance].outputScreenSize,1/downScaleRatio)];
         activeBackgroundView.contentMode = UIViewContentModeScaleToFill;
-        [self insertSubview:activeBackgroundView atIndex:0];
+//        [self insertSubview:activeBackgroundView atIndex:0];
         [activeBackgroundView centerToParent];
         activeBackgroundView.scaleX = downScaleRatio;
         activeBackgroundView.scaleY = downScaleRatio * verticalRatio;
         activeBackgroundView.y += [STElieStatusBar sharedInstance].layoutHeight / verticalRatio;
         activeBackgroundView.userInteractionEnabled = NO;
-        [activeBackgroundView st_coverBlur:NO styleDark:NO completion:nil];
+//        [activeBackgroundView st_coverBlur:NO styleDark:NO completion:nil];
         _backgroundView = activeBackgroundView;
     }
 
