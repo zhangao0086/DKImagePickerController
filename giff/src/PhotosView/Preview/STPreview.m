@@ -325,19 +325,6 @@
         self.focusPointerCenter = self.center;
     }
 
-    /*
-     * Vertical Focus Pointer
-     */
-
-    if(!_useForCamera){
-        if(STPostFocusModeVertical3Points ==[self currentFocusMode]){
-            if(!self.verticalFocusPointerView){
-                self.verticalFocusPointerView = [SVGKFastImageView viewWithImageNamed:[R bg_viewfinder_postfocus_v3point_line] sizeWidth:self.width];
-                [_previewControlView addSubview:self.verticalFocusPointerView];
-            }
-            self.verticalFocusPointerView.alpha = .5;
-        }
-    }
 }
 
 #pragma mark PreviewMode Controls
