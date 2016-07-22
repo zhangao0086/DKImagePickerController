@@ -49,13 +49,8 @@ GPUImageFilter : addTargets-> forceProcessingAtSize -> useNextFrameForImageCaptu
 }
 
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-    if(sourceImages.count<2){
-        return [super processImages:sourceImages];
-    }
-
-    NSAssert(sourceImages.count==2, @"Max 2 sourceImage supported");
-
     @autoreleasepool {
+        
         GPUImageChromaKeyBlendFilter * overlayBlendFilter = [[GPUImageChromaKeyBlendFilter alloc] init];
         overlayBlendFilter.thresholdSensitivity = .47;
         overlayBlendFilter.smoothing = .1;
