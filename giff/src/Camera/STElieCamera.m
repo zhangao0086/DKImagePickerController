@@ -50,8 +50,6 @@
 @property (nonatomic, readwrite) GPUImageLuminosity * luminosityDetector;
 @property (atomic, readwrite) M13MutableOrderedDictionary *luminosityDetectionBlocks;
 
-- (id)initWithSessionPreset:(NSString *)sessionPreset cameraPosition:(AVCaptureDevicePosition)cameraPosition;
-
 - (void)startObserveInputCamera;
 - (void)stopObserveInputCamera;
 @end
@@ -349,7 +347,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     __block NSTimer * captureDelayTimer = nil;
     __block NSMutableArray<STCapturedImage *> * images = [NSMutableArray arrayWithCapacity:(NSUInteger) frameCount];
 
-    GPUImageOutput <GPUImageInput> * targetOutput = request.createOutput;
+    GPUImageOutput <GPUImageInput> * targetOutput = request.needsFilter;
 
     captureDelayTimer = [NSTimer bk_scheduledTimerWithTimeInterval:request.frameCaptureInterval block:^(NSTimer *timer) {
         @autoreleasepool {
@@ -429,7 +427,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
 
     __block NSMutableArray<STCapturedImage *> * images = [NSMutableArray arrayWithCapacity:(NSUInteger) frameCount];
 
-    GPUImageOutput <GPUImageInput> * targetOutput = request.createOutput;
+    GPUImageOutput <GPUImageInput> * targetOutput = request.needsFilter;
 
     CGFloat const StartingLensPosition = self.inputCamera.lensPosition;
     CGPoint const StartingFocusPoint = CGPointOfInterestInBound(request.outputSizeForFocusPoints, self.inputCamera.focusPointOfInterest);
@@ -691,7 +689,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
         [responseImage setOrientationsByCurrent];
 
         //new capture
-        GPUImageOutput <GPUImageInput> * targetOutput = request.createOutput;
+        GPUImageOutput <GPUImageInput> * targetOutput = request.needsFilter;
         UIImage * image = [self currentImage:targetOutput maxSidePixelSizeOfOutput:request.captureOutputPixelSizeForCurrentPreset];
 
         if(request.needsLoadAnimatableImagesToMemory){

@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, CaptureOutputPixelDimension) {
 @property (nonatomic, assign) AfterCaptureProcessingPriority afterCaptureProcessingPriority;
 @property (nonatomic, assign) CaptureOutputSizePreset captureOutputSizePreset;
 @property (nonatomic, readonly) CGFloat captureOutputPixelSizeForCurrentPreset;
-@property (nonatomic, readwrite) STFilterItem * needsFilterItem;
+@property (nonatomic, readwrite) GPUImageOutput <GPUImageInput> * needsFilter;
 @property (nonatomic, readwrite) STOrientationItem * needsOrientationItem;
 @property (nonatomic, assign) STPhotoItemOrigin origin;
 
@@ -66,7 +66,7 @@ typedef NS_ENUM(NSInteger, CaptureOutputPixelDimension) {
 
 - (void)dispose;
 
-+ (instancetype)requestWithNeedsFilterItem:(STFilterItem *)needsFilterItem;
++ (instancetype)requestWithNeedsFilter:(GPUImageOutput <GPUImageInput> *)needsFilter;
 
 + (instancetype)requestWithResultBlock:(STCaptureResponseHandler)block;
 
@@ -76,5 +76,4 @@ typedef NS_ENUM(NSInteger, CaptureOutputPixelDimension) {
 
 + (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset;
 
-- (GPUImageOutput <GPUImageInput> *)createOutput;
 @end

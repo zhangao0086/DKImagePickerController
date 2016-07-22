@@ -299,8 +299,8 @@ static NSString * TEMP_PATH_CAPTURED_FILE;
         }
 
         //resolve GPUImageRotation
-        STFilter *keyFiler = [[STFilterManager sharedManager] acquire:request.needsFilterItem];
-        
+        STFilter *keyFiler = [request.needsFilter isKindOfClass:STFilter.class] ? (STFilter *)request.needsFilter : [[STFilter alloc] initWithFilters:@[request.needsFilter]];
+
         [keyFiler setInputRotation:[[STElieCamera sharedInstance] GPUImageInputRotation:request.needsOrientationItem.interfaceOrientation] atIndex:0];
 
         /*

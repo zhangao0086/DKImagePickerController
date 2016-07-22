@@ -28,6 +28,8 @@
 #import "STHome.h"
 #import "NSString+STUtil.h"
 #import "STFilterPresenterBase.h"
+#import "STFilterManager.h"
+#import "STFilter.h"
 
 @interface STGIFFRootViewController (){
     //Device Control
@@ -768,7 +770,7 @@ static ALAssetsLibrary * assetLibrary;
         request.faceRect = [[_faceRects last] CGRectValue];
         request.faceRectBounds = _cameraFrame;
     }
-    request.needsFilterItem = [[STMainControl sharedInstance] homeSelectedFilterItem];
+    request.needsFilter = [[STFilterManager sharedManager] acquire:[[STMainControl sharedInstance] homeSelectedFilterItem]];
     request.origin = STPhotoItemOriginElie;
 
     //now
@@ -809,7 +811,9 @@ static ALAssetsLibrary * assetLibrary;
      * make capture
      */
     if(!request){
-        request = [STCaptureRequest requestWithNeedsFilterItem:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem];
+        request = [STCaptureRequest requestWithNeedsFilter:
+                [[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem]
+        ];
     }
 
     //setup priority
@@ -895,7 +899,9 @@ static ALAssetsLibrary * assetLibrary;
 
 - (void)captureAnimatable:(STAnimatableCaptureRequest *)request {
     if(!request){
-        request = [STAnimatableCaptureRequest requestWithNeedsFilterItem:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem];
+        request = [STAnimatableCaptureRequest requestWithNeedsFilter:
+                [[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem]
+        ];
     }
 
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
@@ -949,7 +955,10 @@ static ALAssetsLibrary * assetLibrary;
 
 - (void)capturePostFocus:(STPostFocusCaptureRequest *)request {
     if(!request){
-        request = [STPostFocusCaptureRequest requestWithNeedsFilterItem:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem];
+        request = [STPostFocusCaptureRequest requestWithNeedsFilter:
+                [[STFilterManager sharedManager] acquire:[STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem]
+        ];
+
     }
 
 #pragma mark Product

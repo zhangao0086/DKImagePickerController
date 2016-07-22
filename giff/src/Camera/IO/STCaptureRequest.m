@@ -4,12 +4,9 @@
 //
 
 #import "STCaptureRequest.h"
-#import "STFilterItem.h"
 #import "NSObject+STUtil.h"
-#import "STFilterManager.h"
 #import "STCaptureResponse.h"
 #import "NSNumber+STUtil.h"
-
 
 @implementation STCaptureRequest
 
@@ -27,14 +24,14 @@
 
 - (void)dispose{
     _uid = nil;
-    self.needsFilterItem = nil;
+    self.needsFilter = nil;
     self.needsOrientationItem = nil;
     self.responseHandler = nil;
 }
 
-+ (instancetype)requestWithNeedsFilterItem:(STFilterItem *)needsFilterItem {
++ (instancetype)requestWithNeedsFilter:(GPUImageOutput <GPUImageInput> *)needsFilter {
     STCaptureRequest *p = [self request];
-    p.needsFilterItem = needsFilterItem;
+    p.needsFilter = needsFilter;
     return p;
 }
 
@@ -46,10 +43,6 @@
 
 + (instancetype)request {
     return [[self alloc] init];
-}
-
-- (GPUImageOutput <GPUImageInput> *)createOutput {
-    return self.needsFilterItem  ? [[STFilterManager sharedManager] acquire:self.needsFilterItem] : nil;
 }
 
 #pragma mark Capture Pixel Size

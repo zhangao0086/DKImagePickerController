@@ -1014,7 +1014,7 @@ static UIView *_quickCaptureButtonContainer;
             }
         };
 
-        request.needsFilterItem = Wself.homeSelectedFilterItem;
+        request.needsFilter = [[STFilterManager sharedManager] acquire:Wself.homeSelectedFilterItem];
         request.origin = STPhotoItemOriginQuickCamera;
         [[STUserActor sharedInstance] act:STUserActionManualCapture object:request];
 
