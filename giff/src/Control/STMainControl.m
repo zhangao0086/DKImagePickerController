@@ -673,14 +673,7 @@ STExportSelectView * exportSelectView;
     }
 
     Weaks
-    NSArray *exportTypes = [[STExportManager sharedManager] acquire:[STPhotoSelector sharedInstance].currentFocusedPhotoItems];
-
-    if(!exportSelectView){
-        exportSelectView = [[STExportSelectView alloc] initWithSize:[STPhotoSelector sharedInstance].previewView.size];
-    }
-
-    [[STPhotoSelector sharedInstance].previewView addSubview:exportSelectView];
-    exportSelectView.exporterTypes = exportTypes;
+    _exportControlView.exporterTypes = [[STExportManager sharedManager] acquire:[STPhotoSelector sharedInstance].currentFocusedPhotoItems];
 
     [self whenNewValueOnceOf:@keypath(self.mode) changed:^(id value, id _weakSelf) {
         [exportSelectView removeFromSuperview];

@@ -7,4 +7,5 @@
 
 
 @interface STExportControlView : STUIView
+@property (nonatomic, readwrite) NSArray<NSValue *> *exporterTypes;
 @end

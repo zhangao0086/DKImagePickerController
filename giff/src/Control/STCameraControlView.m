@@ -28,7 +28,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor brownColor];
     }
 
     return self;
@@ -61,7 +60,7 @@
     //left button
     _appInfoButton = [STStandardButton subSmallSize];
     _appInfoButton.preferredIconImagePadding = _appInfoButton.height/4;
-    [_appInfoButton setButtons:@[[R set_info_indicator_bullet]] colors:nil style:STStandardButtonStylePTTP];
+    [_appInfoButton setButtons:@[[R set_info_indicator_bullet]] style:STStandardButtonStylePTTP];
     [_appInfoButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
         [[STElieCamera sharedInstance] pauseCameraCapture];
 

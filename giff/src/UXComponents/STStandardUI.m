@@ -73,7 +73,7 @@ static id<STStandardColor> colorScheme;
 }
 
 + (UIColor *)buttonColorFront; {
-    return DEFINED_COLOR_OR(buttonColorFront) [UIColor paperColorGray200];
+    return DEFINED_COLOR_OR(buttonColorFront) [UIColor whiteColor];
 }
 
 + (UIColor *)buttonColorBack; {

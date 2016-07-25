@@ -19,8 +19,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor redColor];
-    }
+     }
 
     return self;
 }
@@ -64,7 +63,7 @@
     //left button
     _backButton = [STStandardButton subSmallSize];
     _backButton.preferredIconImagePadding = _backButton.height/4;
-    [_backButton setButtons:@[[R set_info_indicator_bullet]] colors:nil];
+    [_backButton setButtons:@[[R set_info_indicator_bullet]] style:STStandardButtonStylePTTP];
     [_backButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
     }];
@@ -72,8 +71,8 @@
     //right button
     _exportButton = [STStandardButton subSmallSize];
     _exportButton.allowSelectAsTap = YES;
-    _exportButton.preferredIconImagePadding = _backButton.height/4;
-    [_exportButton setButtons:@[[R go_roll]] colors:nil];
+    _exportButton.preferredIconImagePadding = _exportButton.height/4;
+    [_exportButton setButtons:@[[R go_roll]] style:STStandardButtonStylePTTP];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
     }];
