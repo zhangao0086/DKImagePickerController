@@ -1166,19 +1166,20 @@
 				4F71D235C550801764F0BB9F /* STGIFFAnimatableLayerPresentingView.h */,
 				4F71D03F76937A7C21424F35 /* STAfterImageLayerView.m */,
 				4F71D40717C58914F6137F92 /* STAfterImageLayerView.h */,
-				4F71D24697EE7563F4F7673F /* effects */,
-				4F71D41C4299C3CCC1F5713D /* filters */,
+				4F71D24697EE7563F4F7673F /* Effects */,
+				4F71D41C4299C3CCC1F5713D /* Filters */,
 				4F71DAFB8B186DEE40223A3D /* STGIFFAnimatableLayerFrameEditItemView.m */,
 				4F71D48EC35BC3E79DD2E998 /* STGIFFAnimatableLayerFrameEditItemView.h */,
 				4F71D24007AE3B29B057E665 /* STAfterImageLayerCollectionView.m */,
 				4F71DA824CDB0C2370D5C974 /* STAfterImageLayerCollectionView.h */,
 				4F71DAFFE554E79E0D98C54B /* STGIFFAnimatableLayerFrameEditView.m */,
 				4F71D7FF66F2AF1CF00303CD /* STGIFFAnimatableLayerFrameEditView.h */,
+				4F71D4769A525E95761BC659 /* Views */,
 			);
 			path = AnimatableLayer;
 			sourceTree = "<group>";
 		};
-		4F71D24697EE7563F4F7673F /* effects */ = {
+		4F71D24697EE7563F4F7673F /* Effects */ = {
 			isa = PBXGroup;
 			children = (
 				4F71DCA93BF646BFF8F2CED6 /* STGIFFDisplayLayerColorizeEffect.m */,
@@ -1192,16 +1193,23 @@
 				4F71D89E504DE9FBDFEA873C /* STGIFFDisplayLayerJanneEffect.m */,
 				4F71D904B694231C157AC9B0 /* STGIFFDisplayLayerJanneEffect.h */,
 			);
-			path = effects;
+			path = Effects;
 			sourceTree = "<group>";
 		};
-		4F71D41C4299C3CCC1F5713D /* filters */ = {
+		4F71D41C4299C3CCC1F5713D /* Filters */ = {
 			isa = PBXGroup;
 			children = (
 				4F71D526C3DDF2138863954D /* STGPUImageOffsetScalingFilter.m */,
 				4F71D0E809959AE9BEC986D1 /* STGPUImageOffsetScalingFilter.h */,
 			);
-			path = filters;
+			path = Filters;
+			sourceTree = "<group>";
+		};
+		4F71D4769A525E95761BC659 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		4F71D4B70C0C5E2A9102599C /* View */ = {

@@ -5,7 +5,6 @@
 
 #import "STAfterImageLayerCollectionView.h"
 #import "STCapturedImageSetAnimatableLayer.h"
-#import "NSArray+STUtil.h"
 #import "UIView+STUtil.h"
 #import "STAfterImageLayerView.h"
 
@@ -18,9 +17,7 @@
 }
 
 - (void)setViewsDisplay {
-    [_layersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
 
-    }];
 }
 
 - (void)setCurrentIndex:(NSUInteger)currentIndex {
@@ -61,7 +58,4 @@
 
     [_layers removeAllObjects];
 }
-
-
-
 @end

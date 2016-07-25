@@ -17,25 +17,17 @@
 - (void)setViewsDisplay;
 @end
 
-@implementation STGIFFAnimatableLayerPresentingView {
-    UIView * _sublayersContainerView;
-    UIView * _controlView;
-    NSMutableArray * _layers;
-}
-
-- (void)dealloc {
-    _layers = nil;
-}
+@implementation STGIFFAnimatableLayerPresentingView
 
 - (void)setViewsDisplay {
 
-    if(!CGSizeEqualToSize(_sublayersContainerView.size, self.size)){
-        _sublayersContainerView.size = self.size;
+    if(!CGSizeEqualToSize(_layersContainerView.size, self.size)){
+        _layersContainerView.size = self.size;
     }
 
-    [_sublayersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
+    [_layersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STAfterImageLayerView * layerView = (STAfterImageLayerView *) view;
-        STCapturedImageSetAnimatableLayer *layerItem = [_layers st_objectOrNilAtIndex:index];
+        STCapturedImageSetAnimatableLayer *layerItem = [self.layers st_objectOrNilAtIndex:index];
 
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
@@ -50,45 +42,12 @@
         }
     }];
 
-//    self.backgroundColor = [UIColor blackColor];
-//    _contentView.visible = NO;
-}
-
-- (void)setCurrentIndex:(NSUInteger)currentIndex {
-    _currentIndex = currentIndex;
-
-    [self setViewsDisplay];
-}
-
-
-- (NSArray *)layers {
-    return _layers;
-}
-
-- (void)initToAddLayersIfNeeded{
-    if(!_sublayersContainerView){
-        _sublayersContainerView = [[UIView alloc] initWithSize:self.size];
-        [self insertSubview:_sublayersContainerView atIndex:0];
-        [_sublayersContainerView saveInitialLayout];
-        _sublayersContainerView.clipsToBounds = YES;
-    }
-
-    if(!_controlView){
-//        _controlView = [[UIView alloc] initWithSize:self.size];
-//        [self insertSubview:_controlView aboveSubview:_sublayersContainerView];
-//        [_controlView saveInitialLayout];
-    }
-
-    if(!_layers.count){
-        _layers = [NSMutableArray array];
-    }
 }
 
 - (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem{
-    [self initToAddLayersIfNeeded];
+    [super appendLayer:layerItem];
 
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayer:layerItem];
-
     if(layerItem.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
@@ -104,53 +63,13 @@
     }
 }
 
-- (void)removeAllLayers{
-    [_sublayersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
-        [((STSelectableView *) view) clearViews];
-    }];
-    [_sublayersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
-
-    [_controlView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
-
-    [_layers removeAllObjects];
-}
-
 - (void)appendLayerView:(STCapturedImageSetAnimatableLayer *)layerItem presentableObjects:(NSArray *)presentableObjects{
-
-    [_layers addObject:layerItem];
-    layerItem.index = [_layers indexOfObject:layerItem];
-
     //layer
-    STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_sublayersContainerView.size];
+    STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_layersContainerView.size];
     layerView.layerItem = layerItem;
     layerView.fitViewsImageToBounds = YES;
-    [_sublayersContainerView addSubview:layerView];
+    [_layersContainerView addSubview:layerView];
     [layerView setViews:presentableObjects];
-
-
-    //control
-    CGSize sliderControlSize = CGSizeMake(_sublayersContainerView.width, _sublayersContainerView.height/_layers.count);
-    STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderControlSize];
-    offsetSlider.y = layerItem.index * sliderControlSize.height;
-    offsetSlider.tag = layerItem.index;
-    offsetSlider.tagName = layerItem.uuid;
-    offsetSlider.delegateSlider = self;
-//        offsetSlider.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.4];
-    offsetSlider.normalizedCenterPositionOfThumbView = .5;
-
-//        Weaks
-//        [offsetSlider.thumbView whenPanAsSlideVertical:nil started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
-//
-//        } changed:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, CGFloat distance, CGPoint movedOffset, CGFloat distanceReachRatio, STSlideDirection direction, BOOL confirmed) {
-//
-//            layerItem.alpha = CLAMP(locationInSelf.y,0,offsetSlider.thumbBoundView.height)/offsetSlider.thumbBoundView.height;
-//            [Wself setViewsDisplay];
-//
-//        } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
-//
-//        }];
-    [_controlView addSubview:offsetSlider];
-    [_controlView st_gridSubviewsAsCenter:0 rowHeight:sliderControlSize.height column:1];
 
     [self setViewsDisplay];
 }
@@ -162,7 +81,7 @@
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
-    STCapturedImageSetAnimatableLayer * layerItem = [_layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    STCapturedImageSetAnimatableLayer * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
@@ -170,8 +89,8 @@
 }
 
 - (UIView *)createThumbView {
-    if(_layers.count){
-        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _sublayersContainerView.height/_layers.count)];
+    if(self.layers.count){
+        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _layersContainerView.height/self.layers.count)];
         thumbView.backgroundColor = [UIColor blackColor];
         return thumbView;
     }
