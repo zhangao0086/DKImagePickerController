@@ -43,9 +43,6 @@
     NSMutableDictionary *_rightLastSelectedIndex;
     NSMutableDictionary *_rightFuturePromiseSelectedIndex;
     NSMutableDictionary *_rightFuturePromiseBadgeTexts;
-
-    STUIView * _optionControl;
-    STUIView * _sourceControl;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -86,17 +83,6 @@
         _rightFuturePromiseSelectedIndex = [NSMutableDictionary dictionary];
         _rightFuturePromiseBadgeTexts = [NSMutableDictionary dictionary];
 
-        //option control
-        STUIView * cameraOptionControl = [[STUIView alloc] initWithSize:CGSizeMake(self.width, self.height/3.5f)];
-        cameraOptionControl.backgroundColor = [[UIColor almondColor] colorWithAlphaComponent:.2];
-        _optionControl = cameraOptionControl;
-
-        //source control
-        STUIView * sourceControl = [[STUIView alloc] initWithSize:CGSizeMake(self.width, self.height/3.5f)];
-        sourceControl.backgroundColor = [[UIColor babyBlueColor] colorWithAlphaComponent:.2];
-        sourceControl.bottom = self.height;
-        _sourceControl = sourceControl;
-
     }
     return self;
 }
@@ -104,10 +90,8 @@
 - (void)didCreateContent; {
     [super didCreateContent];
 
-    [self addSubview:_optionControl];
     [self addSubview:_left];
     [self addSubview:_right];
-    [self addSubview:_sourceControl];
 
     [STStandardUI setDropShadowWithDarkBackground:_left.layer];
     [STStandardUI setDropShadowWithDarkBackground:_right.layer];

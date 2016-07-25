@@ -60,8 +60,8 @@
 
     //left button
     _appInfoButton = [STStandardButton subSmallSize];
-    _appInfoButton.preferredIconImagePadding = self.height/4;
-    [_appInfoButton setButtons:@[[R set_info_indicator_bullet]] colors:nil];
+    _appInfoButton.preferredIconImagePadding = _appInfoButton.height/4;
+    [_appInfoButton setButtons:@[[R set_info_indicator_bullet]] colors:nil style:STStandardButtonStylePTTP];
     [_appInfoButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
         [[STElieCamera sharedInstance] pauseCameraCapture];
 
@@ -91,8 +91,8 @@
     //right button
     _sourceLibraryButton = [STStandardButton subSmallSize];
     _sourceLibraryButton.allowSelectAsTap = YES;
-    _sourceLibraryButton.preferredIconImagePadding = self.height/4;
-    [_sourceLibraryButton setButtons:@[[R go_roll]] colors:nil];
+    _sourceLibraryButton.preferredIconImagePadding = _sourceLibraryButton.height/4;
+    [_sourceLibraryButton setButtons:@[[R go_roll]] colors:nil style:STStandardButtonStylePTTP];
     [_sourceLibraryButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
         _sourceLibraryButton.badgeSmallPoint = NO;
 

@@ -511,10 +511,13 @@ BOOL _scrollStopped = YES;
     /*
      * subControlView
      */
+    _cameraControlView = [[STCameraControlView alloc] initWithSize:self.size];
+    _editControlView = [[STEditControlView alloc] initWithSize:self.size];
+    _exportControlView = [[STExportControlView alloc] initWithSize:self.size];
     [_controlView setViews:@[
-            (_cameraControlView = [[STCameraControlView alloc] initWithSize:self.size])
-            , (_editControlView = [[STEditControlView alloc] initWithSize:self.size])
-            , (_exportControlView = [[STExportControlView alloc] initWithSize:self.size])
+            _cameraControlView
+            , _editControlView
+            , _exportControlView
     ]];
     _controlView.valuesMap = @[
             @(STControlDisplayModeLivePreview),
