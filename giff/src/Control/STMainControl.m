@@ -496,6 +496,8 @@ BOOL _scrollStopped = YES;
     _subControl = [[STSubControl alloc] initWithFrame:[self bounds]];
 
     _controlView = [[STSelectableView alloc] initWithSize:self.size];
+    _controlView.touchInsidePolicy = STUIViewTouchInsidePolicyContentInside;
+    _controlView.allowSelectAsSlide = _controlView.allowSelectAsTap = NO;
 
     _homeFilterCollector = [[STFilterCollector alloc] init];
 

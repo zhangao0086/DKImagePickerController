@@ -489,42 +489,10 @@ static ALAssetsLibrary * assetLibrary;
 }
 
 
-- (BOOL)context_needsUpdateViewsOrientation {
-    BOOL needs = YES;
-    switch ([STMainControl sharedInstance].mode){
-        case STControlDisplayModeMain:
-        case STControlDisplayModeEditAfterCapture:
-        case STControlDisplayModeReviewAfterAnimatableCapture:
-        case STControlDisplayModeEdit:
-        case STControlDisplayModeEditTool:
-        case STControlDisplayModeExport:
-            needs = NO;
-            break;
-        default:
-            break;
-    }
-    return needs;
-}
-
 //pragma mark MainLayout
 //FIXME: main control 변화 흐름은 한곳에서 관리
 - (void)_setNeedsLayoutWhenChangedMainControlDisplayMode:(STControlDisplayMode)mode previousMode:(STControlDisplayMode)previosMode{
-    //main
-//    if (previosMode == STControlDisplayModeHome && mode == STControlDisplayModeMain) {
-//        [_controlBoardController willEnter];
-//        [[STMainControl sharedInstance] showCoverWith:_controlBoardController.view completion:^{
-//            [STStandardUX startParallaxToViews:@[@[_controlBoardController.gridViewInCurrentPage]]];
-//            [_controlBoardController didEntered];
-//        }];
-//
-//    } else if (previosMode == STControlDisplayModeMain && mode == STControlDisplayModeHome) {
-//        [_controlBoardController willExit];
-//        [[STMainControl sharedInstance] hideCoverWith:_controlBoardController.view completion:^{
-//            [_controlBoardController didExited];
-//            [self applySettingsAfterControlExitIfNeeded];
-//        }];
-//        [STStandardUX stopParallaxToViews:@[_controlBoardController.gridViewInCurrentPage]];
-//    }
+
 
     //slide up
     if(mode==STControlDisplayModeHomeSelectable){
@@ -894,11 +862,9 @@ static ALAssetsLibrary * assetLibrary;
 #if DEBUG
     NSDate * startDate = [NSDate date];
 #endif
-//    STUserActionManualAnimatableCapture
     request.origin = STPhotoItemOriginAnimatable;
     request.captureOutputSizePreset = CaptureOutputSizePresetSmall;
     request.autoReverseFrames = YES;
-//    request.needsLoadAnimatableImagesToMemory = YES;
     request.responseHandler = ^(STCaptureResponse *result) {
         [[NSNotificationCenter defaultCenter] st_postNotificationName:STNotificationManualCaptureFinished];
 #if DEBUG
@@ -908,29 +874,6 @@ static ALAssetsLibrary * assetLibrary;
 
         if(result){
             [[STPhotoSelector sharedInstance] doAfterCaptured:[STPhotoItemSource sourceWithResponse:result]];
-
-//            UIImage * animatedImage = result.image;
-//            UIImageView * view = [[UIImageView alloc] initWithSize:CGSizeByScale(animatedImage.size, .5)];
-//            view.image = animatedImage;
-//            view.tagName = @"imageview";
-//            [[self.view viewWithTagName:view.tagName] clearAllOwnedImagesIfNeededAndRemoveFromSuperview:NO];
-//            [self.view addSubview:view];
-//            [view centerToParent];
-
-//            NSURL * fileurl = [@"tempgif.gif" URLForTemp];
-//
-//            [UIImageAnimatedGIFRepresentation(animatedImage) writeToURL:fileurl atomically:YES];
-
-//            avController = [[UIActivityViewController alloc] initWithActivityItems:@[fileurl] applicationActivities:nil];
-//            avController.excludedActivityTypes = @[
-////                UIActivityTypeSaveToCameraRoll,
-//                    UIActivityTypePostToTwitter,
-//                    UIActivityTypeAddToReadingList
-//            ];
-//            avController.completionWithItemsHandler = (UIActivityViewControllerCompletionWithItemsHandler) ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-//
-//            };
-//            [self presentViewController:avController animated:YES completion:nil];
 
         }
 
