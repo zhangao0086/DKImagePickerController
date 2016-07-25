@@ -29,10 +29,6 @@
 
 + (STMainControl *)sharedInstance;
 
-- (void)showCoverWith:(UIView *)view completion:(void (^)(void))completion;
-
-- (void)hideCoverWith:(UIView *)view completion:(void (^)(void))completion;
-
 - (void)showControls;
 
 - (void)hideControls;
@@ -95,16 +91,6 @@
 - (void)whenChangedDisplayMode:(void (^)(STControlDisplayMode mode, STControlDisplayMode previousMode))block;
 
 - (void)requestQuickPostFocusCaptureIfPossible:(STPostFocusMode)mode;
-
-- (void)requestQuickCaptureIfPossible;
-
-- (void)quickCaptureAndClose;
-
-- (void)readyToStartQuickCapture;
-
-- (void)readyToFrontQuickCapture;
-
-- (void)readyToRearQuickCapture;
 
 - (void)backToHome;
 

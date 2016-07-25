@@ -3,7 +3,6 @@
 // Copyright (c) 2014 Eliecam. All rights reserved.
 //
 
-#import <MTGeometry/MTGeometry.h>
 #import <SVGKit/SVGKImage.h>
 #import <SVGKit/SVGKImageView.h>
 #import <BlocksKit/NSArray+BlocksKit.h>
@@ -12,7 +11,6 @@
 #import "STHome.h"
 #import "STCarouselHolderController.h"
 #import "STPhotoSelector.h"
-#import "STSubControl.h"
 #import "STUserActor.h"
 #import "STFilterItem.h"
 #import "CAShapeLayer+STUtil.h"
@@ -31,7 +29,6 @@
 #import "STFilterPresenterBase.h"
 #import "STExporter+Config.h"
 #import "STElieStatusBar.h"
-#import "SVGKImage+STUtil.h"
 #import "SVGKFastImageView.h"
 #import "SVGKFastImageView+STUtil.h"
 #import "R.h"
@@ -42,7 +39,6 @@
 #import "STPermissionManager.h"
 #import "STCapturedImageProcessor.h"
 #import "STFilterManager.h"
-#import "STUIApplication.h"
 #import "STFilterGroupItem.h"
 #import "STProductCatalogView.h"
 #import "M13OrderedDictionary.h"
@@ -328,21 +324,6 @@ static BOOL _needsShowCollectables = NO;
     [self setMode:STControlDisplayModeHome];
 }
 
-
-#pragma mark Static Instant Effect
-#pragma mark Cover
-- (void)showCoverWith:(UIView *)view completion:(void (^)(void))completion{
-    [_subControl setVisibleWithEffect:YES effect:STSubControlVisibleEffectCover relationView:view completion:^(POPAnimation *anim, BOOL finished) {
-        !completion ?: completion();
-    }];
-}
-
-- (void)hideCoverWith:(UIView *)view completion:(void (^)(void))completion{
-    [_subControl setVisibleWithEffect:NO effect:STSubControlVisibleEffectCover relationView:view completion:^(POPAnimation *anim, BOOL finished) {
-        !completion ?: completion();
-    }];
-}
-
 #pragma mark Show/Hide
 static BOOL _controlsShowen = YES;
 - (void)showControls {
@@ -435,13 +416,6 @@ BOOL _scrollStopped = YES;
         [[STPhotoSelector sharedInstance] doScrollTop];
         [Wself showControlsWhenStopScrolling];
     }];
-
-//    [_subControl setVisibleWithEffect:NO effect:STSubControlVisibleEffectEnterCenter relationView:_home completion:^(POPAnimation *anim, BOOL finished) {
-//        if(finished){
-//            Strongs
-//            button.spring.bottom = button.superview.bottom-8;
-//        }
-//    }];
 }
 
 #pragma mark ParallaxEffect
@@ -462,16 +436,6 @@ BOOL _scrollStopped = YES;
 #pragma mark Home Collectable
 - (void)setNeededToShowOrHideHomeCollectable {
     switch (self.mode){
-//        case STControlDisplayModeEditAfterCapture:{
-//            if(_previousMode!=STControlDisplayModeHome){
-//                _homeCollectable.visible = YES;
-//                [_homeCollectable expand];
-//            }else{
-//                _homeCollectable.visible = NO;
-//                [_homeCollectable retract:NO];
-//            }
-//        }
-//            break;
         case STControlDisplayModeLivePreview:{
             _homeCollectable.visible = YES;
             [_homeCollectable expand];
@@ -536,22 +500,6 @@ BOOL _scrollStopped = YES;
 
     [self setMode:STControlDisplayModeHome];
 
-    /*
-        adds
-     */
-
-////    [self st_setShadow:UIRectEdgeBottom size:-self.height shadowColor:UIColorFromRGB(0xd2d2d2) clearColor:[STStandardUI.blankObjectColor colorWithAlphaComponent:0] rasterize:YES strong:NO atIndex:0];
-//    [self st_setShadow:UIRectEdgeBottom size:-self.height shadowColor:nil clearColor:nil rasterize:NO strong:YES atIndex:0];
-//    [self st_shadow].y += 1;
-//
-//    UIVisualEffectView * effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-//    effectView.size = self.size;
-//
-//    effectView.maskView = self.st_shadow;
-////    effectView.bottom = self.bottom;
-//    [self addSubview:effectView];
-
-//    effectView.maskView = self.st_shadow;
 
     [self addSubview:_subControl];
     [self addSubview:_home];
@@ -925,298 +873,6 @@ STExportSelectView * exportSelectView;
 
     [[STUserActor sharedInstance] act:STUserActionManualAnimatableCapture object:nil];
 }
-
-#pragma mark QuickCapture
-
-static STStandardButton *_quickCaptureButtonCancel;
-static STStandardButton *_quickCaptureButtonFrontCamera;
-static STStandardButton *_quickCaptureButtonRearCamera;
-static UIImageView *_currentQuickCaptureModeView;
-static UIView *_quickCaptureButtonContainer;
-
-- (void)requestQuickCaptureIfPossible {
-    Weaks
-    if([STGIFFApp afterCameraInitialized:@"STMainControl.quickaction.quickcapture" perform:^{
-        Strongs
-        [Sself->_home cancelRestoreStateEffect];
-        [Sself requestQuickCaptureIfPossible];
-    }]){
-        return;
-    }
-
-    [STUIApplication st_performOnceAfterDelay:@"quick_capture_at_launch_phase0" interval:.5 block:^{
-        [[STMainControl sharedInstance] readyToStartQuickCapture];
-
-        [STUIApplication st_performOnceAfterDelay:@"quick_capture_at_launch_phase1" interval:.5 block:^{
-            [[STMainControl sharedInstance] readyToRearQuickCapture];
-
-            [STUIApplication st_performOnceAfterDelay:@"quick_capture_at_launch_phase2" interval:.5 block:^{
-                [[STMainControl sharedInstance] quickCaptureAndClose];
-            }];
-        }];
-    }];
-}
-
-- (void)initQuickcapture {
-    Weaks
-    UILongPressGestureRecognizer * longPressGestureRecognizer = [_home whenLongTapAsTapDownUp:^(UILongPressGestureRecognizer *sender, CGPoint location) {
-        [Wself readyToStartQuickCapture];
-
-    } changed:^(UILongPressGestureRecognizer *sender, CGPoint location) {
-
-        Strongs
-        CGPoint loc = [sender locationInView:Sself];
-        if (Sself.width/3 < loc.x && loc.x < Sself.width*2/3) {
-            [Sself readyToRearQuickCapture];
-
-        } else if (location.x > sender.view.boundsWidthHalf) {
-            [Sself readyToFrontQuickCapture];
-
-        } else if (location.x < sender.view.boundsWidthHalf) {
-            [Sself readyToCancelQuickCapture];
-        }
-
-    } ended:^(UILongPressGestureRecognizer *sender, CGPoint location) {
-        Strongs
-        CGPoint loc = [sender locationInView:Sself];
-        if (Sself.width/3 < loc.x && loc.x < Sself.width*2/3) {
-            [Sself quickCaptureAndClose];
-
-        } else if (location.x > sender.view.boundsWidthHalf) {
-            [Sself quickCaptureAndClose];
-
-        } else if (location.x < sender.view.boundsWidthHalf) {
-            [Sself closeQuickCapture];
-            [Sself waitAndReturnFromQuickCaptureToElie];
-        }
-    }];
-
-    [STStandardUX resolveLongTapDelay:longPressGestureRecognizer];
-    longPressGestureRecognizer.minimumPressDuration = .25;
-}
-
-- (void)quickCaptureAndClose {
-    [self closeQuickCapture];
-
-    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-
-    Weaks
-    [self st_performOnceAfterDelay:@"quickcapture_delay" interval:.1 block:^{
-        STCaptureRequest * request = [STCaptureRequest request];
-        request.responseHandler = ^(STCaptureResponse *result) {
-            Strongs
-            [Sself waitAndReturnFromQuickCaptureToElie];
-            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-            [[STElieStatusBar sharedInstance] stopProgress];
-
-            if(!result){
-                [[STElieStatusBar sharedInstance] fail];
-            }
-        };
-
-        request.needsFilter = [[STFilterManager sharedManager] acquire:Wself.homeSelectedFilterItem];
-        request.origin = STPhotoItemOriginQuickCamera;
-        [[STUserActor sharedInstance] act:STUserActionManualCapture object:request];
-
-        [[STElieStatusBar sharedInstance] startProgress:nil];
-        [[STElieStatusBar sharedInstance] show];
-    }];
-}
-
-//ready
-- (void)readyToStartQuickCapture {
-    if(_home.previewQuickCaptureMode){
-        return;
-    }
-
-    self.st_shadow.visible = NO;
-
-    _home.previewQuickCaptureMode = YES;
-
-    [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManualQuick)];
-
-    //bottom control button
-    _home.spinnerVisiblity = 0;
-//    _home.backgroundCircleColor = [UIColor clearColor];
-    [_subControl setVisibleWithEffect:NO effect:STSubControlVisibleEffectNone];
-
-    if (![[STPhotoSelector sharedInstance] st_isCoverShowen]) {
-
-        [[STPhotoSelector sharedInstance] st_coverBlur:NO styleDark:NO completion:nil];
-
-        UIVisualEffectView *bgBlurView = (UIVisualEffectView *) [[STPhotoSelector sharedInstance] st_coveredView];
-
-        UIVisualEffectView *vibView = [[UIVisualEffectView alloc] initWithEffect:[UIVibrancyEffect effectForBlurEffect:(UIBlurEffect *) bgBlurView.effect]];
-        vibView.frame = bgBlurView.bounds;
-        [bgBlurView.contentView addSubview:vibView];
-
-        CGPoint centerPosition = CGRectGetMid_AGK([self convertRect:_home.frame toView:bgBlurView]);
-
-        //left : cancel
-        STStandardButton *left = [STStandardButton subSize];
-        left.preferredIconImagePadding = left.width*.23f;
-
-        [left setButtons:@[[R go_x]] colors:@[[UIColor whiteColor]] style:STStandardButtonStylePTTP];
-        left.userInteractionEnabled = NO;
-        left.center = centerPosition;
-        left.centerX = bgBlurView.width / 5;
-        [vibView.contentView addSubview:left];
-        _quickCaptureButtonCancel = left;
-
-        //center
-        STStandardButton *center = [[STStandardButton subSize] setButtons:@[[R camera_rear]] colors:@[[UIColor whiteColor]] style:STStandardButtonStylePTTP];
-        center.userInteractionEnabled = NO;
-        center.center = centerPosition;
-        [vibView.contentView addSubview:center];
-        _quickCaptureButtonRearCamera = center;
-
-        //right
-        STStandardButton *right = [[STStandardButton subSize] setButtons:@[[R camera_front]] colors:@[[UIColor whiteColor]] style:STStandardButtonStylePTTP];
-        right.userInteractionEnabled = NO;
-        right.center = centerPosition;
-        right.centerX = bgBlurView.width * 4 / 5;
-        [vibView.contentView addSubview:right];
-        _quickCaptureButtonFrontCamera = right;
-
-        //current mode view
-        if(!_currentQuickCaptureModeView){
-            _currentQuickCaptureModeView = [[UIImageView alloc] initWithSize:[STStandardLayout sizeSub]];
-        }
-        _currentQuickCaptureModeView.center = centerPosition;
-        _currentQuickCaptureModeView.centerY = [self boundsHeightHalf];
-
-        [vibView.contentView addSubview:_currentQuickCaptureModeView];
-
-        //dot dot dot
-        SVGKFastImageView *lddd = [SVGKFastImageView viewWithImageNamed:[R dotdotdot] sizeWidth:[STStandardLayout widthSub]];
-        lddd.center = centerPosition;
-        lddd.centerX -= CGPointDistance(right.center, centerPosition)/2;
-        [vibView.contentView addSubview:lddd];
-
-        SVGKFastImageView *rddd = [SVGKFastImageView viewWithImageNamed:[R dotdotdot] sizeWidth:[STStandardLayout widthSub]];
-        rddd.center = centerPosition;
-        rddd.centerX += CGPointDistance(right.center, centerPosition)/2;
-        [vibView.contentView addSubview:rddd];
-
-        _quickCaptureButtonContainer = vibView.contentView;
-
-        [self readyToRearQuickCapture];
-
-        //enable auto rrotation
-        _currentQuickCaptureModeView.autoOrientationEnabled = YES;
-        _quickCaptureButtonCancel.autoOrientationEnabled = YES;
-        _quickCaptureButtonFrontCamera.autoOrientationEnabled = YES;
-        _quickCaptureButtonRearCamera.autoOrientationEnabled = YES;
-    }
-}
-
-- (void)setQuickCaptureModeTitleIcon:(STStandardButton *)button{
-    _currentQuickCaptureModeView.image = [SVGKImage UIImageNamed:button.iconSourceImageNames[0] withSizeWidth:[STStandardLayout widthSub]];
-}
-
-//cancel
-- (void)readyToCancelQuickCapture {
-    _quickCaptureButtonCancel.selectedState = YES;
-    _quickCaptureButtonFrontCamera.selectedState = NO;
-    _quickCaptureButtonRearCamera.selectedState = NO;
-
-    [self setQuickCaptureModeTitleIcon:_quickCaptureButtonCancel];
-
-    _home.previewSuspending = YES;
-
-    [[STElieCamera sharedInstance] changeFacingCamera:NO completion:nil];
-}
-
-//front
-- (void)readyToFrontQuickCapture {
-    _quickCaptureButtonCancel.selectedState = NO;
-    _quickCaptureButtonFrontCamera.selectedState = YES;
-    _quickCaptureButtonRearCamera.selectedState = NO;
-
-    [self setQuickCaptureModeTitleIcon:_quickCaptureButtonFrontCamera];
-
-    if([STGIFFApp isInSimulator]){
-        _home.previewSuspending = NO;
-    }else{
-        _home.previewSuspending = [[STElieCamera sharedInstance] changeFacingCamera:YES completion:^(BOOL changed){
-            _home.previewSuspending = NO;
-        }];
-    }
-}
-
-//rear
-- (void)readyToRearQuickCapture {
-    _quickCaptureButtonCancel.selectedState = NO;
-    _quickCaptureButtonFrontCamera.selectedState = NO;
-    _quickCaptureButtonRearCamera.selectedState = YES;
-
-    if([STGIFFApp isInSimulator]){
-        _home.previewSuspending = NO;
-    }else{
-        _home.previewSuspending = [[STElieCamera sharedInstance] changeFacingCamera:NO completion:^(BOOL changed){
-            _home.previewSuspending = NO;
-        }];
-    }
-
-    [self setQuickCaptureModeTitleIcon:_quickCaptureButtonRearCamera];
-}
-
-//close quick capture
-- (void)closeQuickCapture:(void(^)(void))completion{
-    if(!_home.previewQuickCaptureMode){
-        return;
-    }
-
-    self.st_shadow.visible = YES;
-
-    //clear autorotation
-    //https://fabric.io/jessi/ios/apps/com.stells.eliew/issues/56d63d9af5d3a7f76b3bbc0f
-    _currentQuickCaptureModeView.autoOrientationAnimationEnabled = NO;
-    _quickCaptureButtonCancel.autoOrientationAnimationEnabled = NO;
-    _quickCaptureButtonFrontCamera.autoOrientationAnimationEnabled = NO;
-    _quickCaptureButtonRearCamera.autoOrientationAnimationEnabled = NO;
-
-    _currentQuickCaptureModeView.autoOrientationEnabled = NO;
-    _quickCaptureButtonCancel.autoOrientationEnabled = NO;
-    _quickCaptureButtonFrontCamera.autoOrientationEnabled = NO;
-    _quickCaptureButtonRearCamera.autoOrientationEnabled = NO;
-
-    //remove
-    [_quickCaptureButtonContainer st_removeAllSubviews];
-    _quickCaptureButtonContainer = nil;
-    _quickCaptureButtonCancel = nil;
-    _quickCaptureButtonFrontCamera = nil;
-    _quickCaptureButtonRearCamera = nil;
-    [_currentQuickCaptureModeView clearAllOwnedImagesIfNeeded:NO];
-
-    //reset home
-    _home.previewQuickCaptureMode = NO;
-    _home.spinnerVisiblity = 1;
-    [_subControl setVisibleWithEffect:YES effect:STSubControlVisibleEffectNone];
-
-    Weaks
-    _home.userInteractionEnabled = NO;
-    [[STPhotoSelector sharedInstance] st_coverRemove:YES promiseIfAnimationFinished:YES finished:^{
-        _home.userInteractionEnabled = YES;
-
-        !completion?:completion();
-    }];
-}
-- (void)closeQuickCapture{
-    [self closeQuickCapture:nil];
-}
-
-- (void)waitAndReturnFromQuickCaptureToElie{
-    [[STElieStatusBar sharedInstance] lockShowHide];
-
-    [STStandardUX resetAndRevertStateAfterShortDelay:@"waitAndReturnFromQuickCaptureToElie" block:^{
-        [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeElie)];
-
-        [[STElieStatusBar sharedInstance] unlockShowHideAndRevert];
-    }];
-}
-
-
 
 #pragma mark SetMode, Navigate
 - (void)backToHome {
@@ -1720,54 +1376,9 @@ static UIView *_quickCaptureButtonContainer;
 
     if(_mode== STControlDisplayModeHome){
 
-        Weaks
-//        [_home whenSlided:^(BOOL confirmed, STSlideDirection direction) {
-//            if(confirmed){
-//                if (direction == STSlideDirectionUp) {
-//
-//                } else if (direction == STSlideDirectionDown) {
-//                    [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManual)];
-//                }
-//
-//                [STPhotoSelector sharedInstance].collectionView.y = 0;
-//                [[STPhotoSelector sharedInstance] finishPullingGrid];
-//
-//            }else{
-//                [STPhotoSelector sharedInstance].collectionView.spring.y = 0;
-//                [[STPhotoSelector sharedInstance] cancelPullingGrid];
-//
-//                [[STElieStatusBar sharedInstance] show];
-//            }
-//        }];
-//
-//        [_home whenSlidingChange:^(CGFloat reachRatio, BOOL confirmed, STSlideDirection direction) {
-//
-//            CGFloat scrollY = [STStandardUX maxOffsetForPullToGridView]*2*reachRatio;
-//            [[STPhotoSelector sharedInstance] performPullingGrid:scrollY];
-//            [STPhotoSelector sharedInstance].collectionView.y = scrollY;
-//
-//            if(reachRatio>.8){
-//                [[STElieStatusBar sharedInstance] hide];
-//            }else{
-//                [[STElieStatusBar sharedInstance] show];
-//            }
-//        }];
-
         [_home whenTapped:^{
-
-//            UIImageView * coveredView = [_home.containerButton coverAndUncoverBegin:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance]];
             [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManual)];
-//            [_home.containerButton coverAndUncoverEnd:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance] beforeCoverView:coveredView comletion:nil];
-
-//            if([STFilterManager sharedManager].filterGroups){
-//                [Wself setMode:STControlDisplayModeHomeFilterSelectable];
-//
-//            }else{
-//                [STStandardUX expressDenied:_home];
-//            }
         }];
-
-//        [self initQuickcapture];
     }
 
     else if(_mode== STControlDisplayModeHomeFilterSelectable){
