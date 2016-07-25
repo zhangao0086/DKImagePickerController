@@ -7,5 +7,6 @@
 #import "STAfterImageLayerCollectionView.h"
 
 
-@interface STGIFFAnimatableLayerFrameEditView : STAfterImageLayerCollectionView
+@interface STEditControlFrameEditView : STAfterImageLayerCollectionView
+
 @end

@@ -18,4 +18,6 @@
 - (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem;
 
 - (void)removeAllLayers;
+
+- (void)setNeedsLayersDisplayAndLayout;
 @end

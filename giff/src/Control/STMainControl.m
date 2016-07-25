@@ -27,6 +27,7 @@
 #import "STElieStatusBar.h"
 #import "SVGKFastImageView.h"
 #import "SVGKFastImageView+STUtil.h"
+#import "STEditControlView.h"
 #import "R.h"
 
 
@@ -83,7 +84,6 @@
     //subcontrolview
     STSelectableView * _controlView;
     STCameraControlView * _cameraControlView;
-    STEditControlView * _editControlView;
     STExportControlView * _exportControlView;
 }
 

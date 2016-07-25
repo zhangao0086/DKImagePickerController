@@ -9,11 +9,13 @@
 #import "STExporter.h"
 #import "STSubControl.h"
 #import "STElieCamera.h"
+#import "STEditControlView.h"
 
 @class STHome;
 @class STStandardButton;
 @class STSubControl;
 @class STFilterItem;
+@class STEditControlView;
 
 @interface STMainControl : STUIView <STSegmentedSliderControlDelegate, STUIViewPersistantState>
 
@@ -24,6 +26,8 @@
 @property (nonatomic, readonly) STSubControl * subControl;
 
 @property (nonatomic, readonly) STFilterItem * homeSelectedFilterItem;
+
+@property (nonatomic, readonly) STEditControlView * editControlView;
 
 + (STMainControl *)initSharedInstanceWithFrame:(CGRect)frame;
 

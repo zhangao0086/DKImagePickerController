@@ -16,14 +16,14 @@
     _layers = nil;
 }
 
-- (void)setViewsDisplay {
+- (void)setNeedsLayersDisplayAndLayout {
 
 }
 
 - (void)setCurrentIndex:(NSUInteger)currentIndex {
     _currentIndex = currentIndex;
 
-    [self setViewsDisplay];
+    [self setNeedsLayersDisplayAndLayout];
 }
 
 - (NSArray *)layers {
@@ -54,7 +54,9 @@
     [_layersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
         if([view isKindOfClass:STSelectableView.class]){
             [((STSelectableView *) view) clearViews];
-        };
+        }else if([view isKindOfClass:STUIView.class]){
+            [((STUIView *) view) disposeContent];
+        }
     }];
     [_layersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 

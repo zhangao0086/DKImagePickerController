@@ -18,7 +18,7 @@
 
 @implementation STGIFFAnimatableLayerPresentingView
 
-- (void)setViewsDisplay {
+- (void)setNeedsLayersDisplayAndLayout {
 
     if(!CGSizeEqualToSize(_layersContainerView.size, self.size)){
         _layersContainerView.size = self.size;
@@ -69,7 +69,7 @@
     [_layersContainerView addSubview:layerView];
     [layerView setViews:presentableObjects];
 
-    [self setViewsDisplay];
+    [self setNeedsLayersDisplayAndLayout];
 }
 
 #pragma mark OffsetSlider
@@ -83,7 +83,7 @@
 
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
-    [self setViewsDisplay];
+    [self setNeedsLayersDisplayAndLayout];
 }
 
 - (UIView *)createThumbView {

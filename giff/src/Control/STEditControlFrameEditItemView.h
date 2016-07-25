@@ -7,8 +7,9 @@
 
 @class STCapturedImageSet;
 @class STCapturedImageSetDisplayLayer;
+@class STCapturedImageSetAnimatableLayer;
 
 
-@interface STGIFFAnimatableLayerFrameEditItemView : STUIView
-@property (nonatomic, readwrite) STCapturedImageSetDisplayLayer * layerItem;
+@interface STEditControlFrameEditItemView : STUIView
+@property (nonatomic, readwrite) STCapturedImageSetAnimatableLayer * layerItem;
 @end

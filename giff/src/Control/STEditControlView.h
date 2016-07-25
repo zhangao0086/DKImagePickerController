@@ -5,8 +5,10 @@
 
 #import <Foundation/Foundation.h>
 
+#import "STEditControlFrameEditView.h"
+
+@class STEditControlFrameEditView;
 
 @interface STEditControlView : STUIView
-
-
+@property (nonatomic, readonly) STEditControlFrameEditView * layersFrameEditView;
 @end

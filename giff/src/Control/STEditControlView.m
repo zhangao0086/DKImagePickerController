@@ -6,7 +6,6 @@
 #import "STEditControlView.h"
 #import "STStandardButton.h"
 #import "R.h"
-#import "STGIFFAnimatableLayerFrameEditView.h"
 #import "UIView+STUtil.h"
 
 
@@ -14,7 +13,8 @@
     STStandardButton *_backButton;
 
     STStandardButton *_exportButton;
-    STGIFFAnimatableLayerFrameEditView *_layersFrameEditView;
+
+    STEditControlFrameEditView * _layersFrameEditView;
 }
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -51,9 +51,11 @@
 }
 
 - (void)createEditControls {
-    _layersFrameEditView = [[STGIFFAnimatableLayerFrameEditView alloc] initWithSize:CGSizeMake(self.width, self.height/4)];
+    [self layersFrameEditView];
+}
 
-    _layersFrameEditView.backgroundColor = [UIColor grayColor];
+- (STEditControlFrameEditView *)layersFrameEditView {
+    return _layersFrameEditView ?: (_layersFrameEditView = [[STEditControlFrameEditView alloc] initWithSize:CGSizeMake(self.width, self.height/4)]);
 }
 
 

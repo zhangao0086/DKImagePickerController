@@ -37,6 +37,7 @@
 #import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "STGIFFDisplayLayerLeifEffect.h"
 #import "STGIFFDisplayLayerJanneEffect.h"
+#import "STEditControlView.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -406,6 +407,7 @@ static NSString * JANNE = @"Janne";
             [_afterImageView centerToParent];
         }
         //set default
+        //TODO: frameEditor에서 추가를 선택햇을 경우 말그대로 다시 layer를 추가적으로 append후 리 랜더링 해줘야 한다
 
         if(imageSet.extensionObject){
             //vaild check
@@ -440,6 +442,7 @@ static NSString * JANNE = @"Janne";
                 [self prepareLayerEffect:layerItem];
             }
             [_afterImageView appendLayer:layerItem];
+            [[STMainControl sharedInstance].editControlView.layersFrameEditView appendLayer:layerItem];
 
             imageSet.extensionObject = _afterImageView.layers;
         }
@@ -460,6 +463,7 @@ static NSString * JANNE = @"Janne";
 - (void)exitAfterImageEditingMode{
 
     [_afterImageView removeAllLayers];
+    [[STMainControl sharedInstance].editControlView.layersFrameEditView removeAllLayers];
 }
 
 - (void)reset {
