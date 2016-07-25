@@ -11,7 +11,7 @@
 
 
 @implementation STEditControlFrameEditView {
-
+    STStandardButton * _frameAddButotn;
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
@@ -28,7 +28,6 @@
     [super appendLayer:layerItem];
 
     //layer
-
     for(STCapturedImageSet *imageSet in layerItem.sourceImageSets){
         STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width, self.height/2)];
         editItemView.imageSet = imageSet;

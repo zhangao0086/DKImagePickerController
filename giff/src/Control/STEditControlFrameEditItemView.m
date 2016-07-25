@@ -24,7 +24,7 @@
     if (self) {
         _removeButton = [[STStandardButton alloc] initWithSizeWidth:self.height];
         [self addSubview:_removeButton];
-        [_removeButton setButtons:@[R.go_remove] colors:nil style:STStandardButtonStylePTBT]
+        [_removeButton setButtons:@[R.go_remove] colors:nil style:STStandardButtonStylePTBT];
         _removeButton.right = self.right;
     }
 
@@ -48,6 +48,9 @@
             thumbnailCellView.image = thumbnailImage;
             thumbnailCellView.x = maxThumbnailWidth * index;
         }];
+
+        [self bringSubviewToFront:_removeButton];
+        
     }else{
         [self disposeContent];
     }
