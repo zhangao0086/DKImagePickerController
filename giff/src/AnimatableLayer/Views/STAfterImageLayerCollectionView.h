@@ -9,7 +9,7 @@
 
 @interface STAfterImageLayerCollectionView : STUIView{
 @protected
-    UIView * _layersContainerView;
+    UIView * _contentView;
 }
 
 @property (nonatomic, assign) NSUInteger currentIndex;

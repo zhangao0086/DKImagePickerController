@@ -20,11 +20,11 @@
 
 - (void)setNeedsLayersDisplayAndLayout {
 
-    if(!CGSizeEqualToSize(_layersContainerView.size, self.size)){
-        _layersContainerView.size = self.size;
+    if(!CGSizeEqualToSize(_contentView.size, self.size)){
+        _contentView.size = self.size;
     }
 
-    [_layersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
+    [_contentView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
         STCapturedImageSetAnimatableLayer *layerItem = [self.layers st_objectOrNilAtIndex:index];
 
@@ -64,9 +64,9 @@
 
 - (void)appendLayerView:(STCapturedImageSetAnimatableLayer *)layerItem presentableObjects:(NSArray *)presentableObjects{
     //layer
-    STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_layersContainerView.size];
+    STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_contentView.size];
     layerView.fitViewsImageToBounds = YES;
-    [_layersContainerView addSubview:layerView];
+    [_contentView addSubview:layerView];
     [layerView setViews:presentableObjects];
 
     [self setNeedsLayersDisplayAndLayout];
@@ -88,7 +88,7 @@
 
 - (UIView *)createThumbView {
     if(self.layers.count){
-        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _layersContainerView.height/self.layers.count)];
+        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _contentView.height/self.layers.count)];
         thumbView.backgroundColor = [UIColor blackColor];
         return thumbView;
     }

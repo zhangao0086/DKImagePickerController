@@ -11,5 +11,5 @@
 
 
 @interface STEditControlFrameEditItemView : STUIView
-@property (nonatomic, readwrite) STCapturedImageSetAnimatableLayer * layerItem;
+@property (nonatomic, readwrite) STCapturedImageSet * imageSet;
 @end
