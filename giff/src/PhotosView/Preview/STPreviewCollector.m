@@ -28,7 +28,7 @@
 #import "STCapturedImageSetDisplayLayer.h"
 #import "STMultiSourcingImageProcessor.h"
 #import "STGIFFDisplayLayerChromakeyEffect.h"
-#import "STGIFFAnimatableLayerEditView.h"
+#import "STGIFFAnimatableLayerPresentingView.h"
 #import "STGIFFDisplayLayerColorizeEffect.h"
 #import "NSData+STGIFUtil.h"
 #import "NSString+STUtil.h"
@@ -72,7 +72,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 
     UIImageView *_coverImageViewToReloadSmoothly;
 
-    STGIFFAnimatableLayerEditView * _afterImageView;
+    STGIFFAnimatableLayerPresentingView * _afterImageView;
 
 #pragma mark filtertest
     /*
@@ -398,7 +398,7 @@ static NSString * JANNE = @"Janne";
         STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
 
         if(!_afterImageView){
-            _afterImageView = [[STGIFFAnimatableLayerEditView alloc] initWithSize:_previewView.size];
+            _afterImageView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSize:_previewView.size];
         }
 
         if(![[_previewView subviews] containsObject:_afterImageView]){

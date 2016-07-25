@@ -10,14 +10,14 @@
 #import "STAfterImageLayerView.h"
 #import "STQueueManager.h"
 #import "STMultiSourcingImageProcessor.h"
-#import "STGIFFAnimatableLayerEditView.h"
+#import "STGIFFAnimatableLayerPresentingView.h"
 #import "STCapturedImageSetDisplayProcessor.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
 @end
 
-@implementation STGIFFAnimatableLayerEditView {
+@implementation STGIFFAnimatableLayerPresentingView {
     UIView * _sublayersContainerView;
     UIView * _controlView;
     NSMutableArray * _layers;
