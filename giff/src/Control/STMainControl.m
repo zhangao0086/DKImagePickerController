@@ -504,7 +504,7 @@ BOOL _scrollStopped = YES;
     [self setMode:STControlDisplayModeHome];
 
 
-//    [self addSubview:_subControl];
+    [self addSubview:_subControl];
     [self addSubview:_controlView];
     [self addSubview:_home];
 
