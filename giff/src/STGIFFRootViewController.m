@@ -133,15 +133,15 @@ static ALAssetsLibrary * assetLibrary;
     _photoSelectionView.backgroundColor = [STGIFFApp launchScreenBackgroundColor];
 
     // init elie control
-    STUIView * optionControl = [[STUIView alloc] initWithSize:CGSizeMake(self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
-    optionControl.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:.2];
-    optionControl.y = _cameraFrame.size.height;
+//    STUIView * optionControl = [[STUIView alloc] initWithSize:CGSizeMake(self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
+//    optionControl.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:.2];
+//    optionControl.y = _cameraFrame.size.height;
+//
+//    STUIView * sourceControl = [[STUIView alloc] initWithSize:CGSizeMake(self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
+//    sourceControl.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:.2];
+//    sourceControl.y = _cameraFrame.size.height*2;
 
-    STUIView * sourceControl = [[STUIView alloc] initWithSize:CGSizeMake(self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
-    sourceControl.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:.2];
-    sourceControl.y = _cameraFrame.size.height*2;
-
-    STMainControl * control = [STMainControl initSharedInstanceWithFrame:CGRectMake(0, 0, self.view.width, (self.view.height-_cameraFrame.size.height)/3)];
+    STMainControl * control = [STMainControl initSharedInstanceWithFrame:CGRectMake(0, 0, self.view.width, self.view.height-_cameraFrame.size.height)];
     control.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:.2];
     control.bottom = self.view.height;
 
@@ -153,8 +153,8 @@ static ALAssetsLibrary * assetLibrary;
       */
     _mainViewWrapper = [[STUIView alloc] initWithFrame:self.view.bounds];
     [_mainViewWrapper addSubview:_photoSelectionView];
-    [_mainViewWrapper addSubview:sourceControl];
-    [_mainViewWrapper addSubview:optionControl];
+//    [_mainViewWrapper addSubview:sourceControl];
+//    [_mainViewWrapper addSubview:optionControl];
     [_mainViewWrapper addSubview:control];
 
 
