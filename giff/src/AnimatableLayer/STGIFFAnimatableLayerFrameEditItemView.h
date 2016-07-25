@@ -6,8 +6,9 @@
 #import <Foundation/Foundation.h>
 
 @class STCapturedImageSet;
+@class STCapturedImageSetDisplayLayer;
 
 
 @interface STGIFFAnimatableLayerFrameEditItemView : STUIView
-@property (nonatomic, readwrite) STCapturedImageSet * imageSet;
+@property (nonatomic, readwrite) STCapturedImageSetDisplayLayer * layerItem;
 @end

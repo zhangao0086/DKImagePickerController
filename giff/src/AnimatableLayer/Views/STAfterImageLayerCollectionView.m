@@ -6,7 +6,7 @@
 #import "STAfterImageLayerCollectionView.h"
 #import "STCapturedImageSetAnimatableLayer.h"
 #import "UIView+STUtil.h"
-#import "STAfterImageLayerView.h"
+#import "STSelectableView.h"
 
 @implementation STAfterImageLayerCollectionView {
     NSMutableArray * _layers;
@@ -52,7 +52,9 @@
 
 - (void)removeAllLayers{
     [_layersContainerView st_eachSubviews:^(UIView *view, NSUInteger index) {
-        [((STSelectableView *) view) clearViews];
+        if([view isKindOfClass:STSelectableView.class]){
+            [((STSelectableView *) view) clearViews];
+        };
     }];
     [_layersContainerView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 

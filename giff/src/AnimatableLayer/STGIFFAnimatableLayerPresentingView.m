@@ -7,7 +7,6 @@
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSetAnimatableLayer.h"
 #import "UIView+STUtil.h"
-#import "STAfterImageLayerView.h"
 #import "STQueueManager.h"
 #import "STMultiSourcingImageProcessor.h"
 #import "STGIFFAnimatableLayerPresentingView.h"
@@ -26,7 +25,7 @@
     }
 
     [_layersContainerView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
-        STAfterImageLayerView * layerView = (STAfterImageLayerView *) view;
+        STSelectableView * layerView = (STSelectableView *) view;
         STCapturedImageSetAnimatableLayer *layerItem = [self.layers st_objectOrNilAtIndex:index];
 
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
@@ -65,8 +64,7 @@
 
 - (void)appendLayerView:(STCapturedImageSetAnimatableLayer *)layerItem presentableObjects:(NSArray *)presentableObjects{
     //layer
-    STAfterImageLayerView *layerView = [[STAfterImageLayerView alloc] initWithSize:_layersContainerView.size];
-    layerView.layerItem = layerItem;
+    STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_layersContainerView.size];
     layerView.fitViewsImageToBounds = YES;
     [_layersContainerView addSubview:layerView];
     [layerView setViews:presentableObjects];
