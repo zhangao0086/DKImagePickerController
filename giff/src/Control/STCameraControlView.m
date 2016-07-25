@@ -40,7 +40,7 @@
     [self createOptionControls];
     [self createSourceControls];
 
-    CGFloat padding = [STStandardLayout widthSubAssistance];
+    CGFloat padding = [STStandardLayout widthBullet];
 
     [self addSubview:_appInfoButton];
     _appInfoButton.x = padding;

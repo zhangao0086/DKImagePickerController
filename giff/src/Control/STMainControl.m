@@ -494,6 +494,7 @@ BOOL _scrollStopped = YES;
     _home.touchInsidePolicy = STUIViewTouchInsidePolicyContentInside;
 
     _subControl = [[STSubControl alloc] initWithFrame:[self bounds]];
+    _subControl.touchInsidePolicy = STUIViewTouchInsidePolicyContentInside;
 
     _controlView = [[STSelectableView alloc] initWithSize:self.size];
     _controlView.touchInsidePolicy = STUIViewTouchInsidePolicyContentInside;
@@ -504,8 +505,8 @@ BOOL _scrollStopped = YES;
     [self setMode:STControlDisplayModeHome];
 
 
-    [self addSubview:_subControl];
     [self addSubview:_controlView];
+    [self addSubview:_subControl];
     [self addSubview:_home];
 
     /*

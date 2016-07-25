@@ -22,7 +22,7 @@
         _frameAddButton = [[STStandardButton alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
         _frameAddButton.fitIconImageSizeToCenterSquare = YES;
         [self addSubview:_frameAddButton];
-        [_frameAddButton setButtons:@[[R set_add]] colors:nil];
+        [_frameAddButton setButtons:@[[R set_add]] colors:nil style:STStandardButtonStylePTBT];
     }
 
     return self;

@@ -32,7 +32,7 @@
     [self createEffectSelector];
     [self createSourceControls];
 
-    CGFloat padding = [STStandardLayout widthSubAssistance];
+    CGFloat padding = [STStandardLayout widthBullet];
 
     [self addSubview:_backButton];
     _backButton.x = padding;
@@ -63,7 +63,7 @@
 
     //left button
     _backButton = [STStandardButton subSmallSize];
-    _backButton.preferredIconImagePadding = self.height/4;
+    _backButton.preferredIconImagePadding = _backButton.height/4;
     [_backButton setButtons:@[[R set_info_indicator_bullet]] colors:nil];
     [_backButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
@@ -72,7 +72,7 @@
     //right button
     _exportButton = [STStandardButton subSmallSize];
     _exportButton.allowSelectAsTap = YES;
-    _exportButton.preferredIconImagePadding = self.height/4;
+    _exportButton.preferredIconImagePadding = _backButton.height/4;
     [_exportButton setButtons:@[[R go_roll]] colors:nil];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
