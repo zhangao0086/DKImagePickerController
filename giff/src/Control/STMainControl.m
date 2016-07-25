@@ -502,7 +502,7 @@ BOOL _scrollStopped = YES;
     [self setMode:STControlDisplayModeHome];
 
 
-    [self addSubview:_subControl];
+//    [self addSubview:_subControl];
     [self addSubview:_controlView];
     [self addSubview:_home];
 
@@ -510,16 +510,15 @@ BOOL _scrollStopped = YES;
      * subControlView
      */
     [_controlView setViews:@[
-            _cameraControlView = [STCameraControlView new]
-            , _editControlView = [STEditControlView new]
-            , _exportControlView = [STExportControlView new]]
-    ];
-    _controlView.valuesMap = @[@(STControlDisplayModeLivePreview),
+            (_cameraControlView = [[STCameraControlView alloc] initWithSize:self.size])
+            , (_editControlView = [[STEditControlView alloc] initWithSize:self.size])
+            , (_exportControlView = [[STExportControlView alloc] initWithSize:self.size])
+    ]];
+    _controlView.valuesMap = @[
+            @(STControlDisplayModeLivePreview),
             @(STControlDisplayModeEditAfterCapture),
-            @(STControlDisplayModeExport)];
-    _controlView.currentMappedValue = @(STControlDisplayModeLivePreview);
-
-
+            @(STControlDisplayModeExport)
+    ];
 
     /*
      * home collectable
@@ -944,6 +943,8 @@ STExportSelectView * exportSelectView;
     }
 
     if(self.contentDidCreated && changed){
+        _controlView.currentMappedValue = @(_mode);
+
         [self willModeChanged];
         [self setNeedsLayoutByMode];
         [self setActionsByMode];
