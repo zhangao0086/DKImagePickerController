@@ -13,7 +13,6 @@
 #import "STPhotoSelector.h"
 #import "STUserActor.h"
 #import "STFilterItem.h"
-#import "STFilterPresenterItemView.h"
 #import "STExportManager.h"
 #import "STCaptureRequest.h"
 #import "STStandardButton.h"
@@ -47,6 +46,9 @@
 #import "STExportSelectView.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STPostFocusCaptureRequest.h"
+#import "STCameraControlView.h"
+#import "STEditControlView.h"
+#import "STExportControlView.h"
 
 @interface STMainControl ()
 - (void)willModeChanged;
@@ -77,6 +79,12 @@
     STStandardNavigationButton * _homeCollectable;
 
     STSubControl *_subControl;
+
+    //subcontrolview
+    STSelectableView * _controlView;
+    STCameraControlView * _cameraControlView;
+    STEditControlView * _editControlView;
+    STExportControlView * _exportControlView;
 }
 
 static STMainControl *_instance = nil;
@@ -237,8 +245,6 @@ static BOOL _needsShowCollectables = NO;
         }
     }
 }
-
-
 
 - (void)enterEdit {
     [self setMode:STControlDisplayModeEdit];
@@ -489,13 +495,31 @@ BOOL _scrollStopped = YES;
 
     _subControl = [[STSubControl alloc] initWithFrame:[self bounds]];
 
+    _controlView = [[STSelectableView alloc] initWithSize:self.size];
+
     _homeFilterCollector = [[STFilterCollector alloc] init];
 
     [self setMode:STControlDisplayModeHome];
 
 
     [self addSubview:_subControl];
+    [self addSubview:_controlView];
     [self addSubview:_home];
+
+    /*
+     * subControlView
+     */
+    [_controlView setViews:@[
+            _cameraControlView = [STCameraControlView new]
+            , _editControlView = [STEditControlView new]
+            , _exportControlView = [STExportControlView new]]
+    ];
+    _controlView.valuesMap = @[@(STControlDisplayModeLivePreview),
+            @(STControlDisplayModeEditAfterCapture),
+            @(STControlDisplayModeExport)];
+    _controlView.currentMappedValue = @(STControlDisplayModeLivePreview);
+
+
 
     /*
      * home collectable
