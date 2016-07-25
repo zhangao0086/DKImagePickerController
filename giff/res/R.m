@@ -257,6 +257,10 @@
     return @"logo_part_2.svg";
 }
 
++ (NSString *)set_add; {
+    return @"set_add.svg";
+}
+
 + (NSString *)set_done; {
     return @"set_done.svg";
 }

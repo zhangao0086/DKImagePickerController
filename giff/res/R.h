@@ -131,6 +131,8 @@
 
 + (NSString *)logo_part_2;
 
++ (NSString *)set_add;
+
 + (NSString *)set_done;
 
 + (NSString *)set_edit_autoenhance;

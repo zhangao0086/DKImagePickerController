@@ -5,7 +5,6 @@
 
 #import "STEditControlFrameEditItemView.h"
 #import "STCapturedImageSet.h"
-#import "STCapturedImageSetDisplayLayer.h"
 #import "STCapturedImage.h"
 #import "UIView+STUtil.h"
 #import "STSelectableView.h"
@@ -24,6 +23,8 @@
     if (self) {
         _removeButton = [[STStandardButton alloc] initWithSizeWidth:self.height];
         [self addSubview:_removeButton];
+        _removeButton.backgroundColor = [UIColor grayColor];
+        _removeButton.fitIconImageSizeToCenterSquare = YES;
         [_removeButton setButtons:@[R.go_remove] colors:nil style:STStandardButtonStylePTBT];
         _removeButton.right = self.right;
     }
@@ -50,7 +51,7 @@
         }];
 
         [self bringSubviewToFront:_removeButton];
-        
+
     }else{
         [self disposeContent];
     }
