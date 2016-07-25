@@ -10,6 +10,7 @@
 #import "STCapturedImageSetAnimatableLayer.h"
 #import "STStandardButton.h"
 #import "R.h"
+#import "NSArray+STUtil.h"
 
 
 @implementation STEditControlFrameEditView {
@@ -53,6 +54,7 @@
     for(STCapturedImageSet *imageSet in layerItem.sourceImageSets){
         STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width, self.heightForFrameItemView)];
         editItemView.imageSet = imageSet;
+        editItemView.subFrameOffsetSlider.delegateSlider = self;
         editItemView.backgroundColor = [UIColor orangeColor];
         [_contentView addSubview:editItemView];
     }
@@ -68,5 +70,18 @@
     [super removeAllLayers];
 }
 
+#pragma mark OffsetSlider
+- (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+    [self doingSlide:timeSlider withSelectedIndex:index];
+}
+
+- (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+    NSInteger targetIndexOfLayer = timeSlider.tag;
+
+    STCapturedImageSetAnimatableLayer * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+
+    [self setNeedsLayersDisplayAndLayout];
+}
 
 @end

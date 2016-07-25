@@ -5,8 +5,9 @@
 
 #import <Foundation/Foundation.h>
 #import "STAfterImageLayerCollectionView.h"
+#import "STSegmentedSliderView.h"
 
 
-@interface STEditControlFrameEditView : STAfterImageLayerCollectionView
+@interface STEditControlFrameEditView : STAfterImageLayerCollectionView <STSegmentedSliderControlDelegate>
 
 @end

@@ -10,6 +10,7 @@
 #import "STSelectableView.h"
 #import "STStandardButton.h"
 #import "R.h"
+#import "STSegmentedSliderView.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -50,6 +51,13 @@
             thumbnailCellView.x = maxThumbnailWidth * index;
         }];
 
+        //control
+        CGSize sliderControlSize = CGSizeMake(self.width-squareWidth, squareWidth);
+        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderControlSize];
+        offsetSlider.normalizedCenterPositionOfThumbView = .5;
+        [self addSubview:offsetSlider];
+        _subFrameOffsetSlider = offsetSlider;
+
         [self bringSubviewToFront:_removeButton];
 
     }else{
@@ -64,6 +72,5 @@
 
     [super disposeContent];
 }
-
 
 @end

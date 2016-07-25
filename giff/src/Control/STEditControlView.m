@@ -63,7 +63,7 @@
     //left button
     _backButton = [STStandardButton subSmallSize];
     _backButton.preferredIconImagePadding = _backButton.height/4;
-    [_backButton setButtons:@[[R set_info_indicator_bullet]] style:STStandardButtonStylePTTP];
+    [_backButton setButtons:@[[R go_back]] style:STStandardButtonStylePTTP];
     [_backButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
     }];
@@ -72,7 +72,8 @@
     _exportButton = [STStandardButton subSmallSize];
     _exportButton.allowSelectAsTap = YES;
     _exportButton.preferredIconImagePadding = _exportButton.height/4;
-    [_exportButton setButtons:@[[R go_roll]] style:STStandardButtonStylePTTP];
+
+    [_exportButton setButtons:@[R.export.share] style:STStandardButtonStylePTTP];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
     }];

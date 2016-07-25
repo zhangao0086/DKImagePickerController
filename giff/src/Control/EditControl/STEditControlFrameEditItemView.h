@@ -4,6 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "STSegmentedSliderView.h"
 
 @class STCapturedImageSet;
 @class STCapturedImageSetDisplayLayer;
@@ -12,4 +13,5 @@
 
 @interface STEditControlFrameEditItemView : STUIView
 @property (nonatomic, readwrite) STCapturedImageSet * imageSet;
+@property (nonatomic, readonly) STSegmentedSliderView * subFrameOffsetSlider;
 @end
