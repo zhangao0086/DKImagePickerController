@@ -8,6 +8,6 @@
 @class STCapturedImageSet;
 
 
-@interface STEditFrameItemView : STUIView
+@interface STGIFFAnimatableLayerFrameEditItemView : STUIView
 @property (nonatomic, readwrite) STCapturedImageSet * imageSet;
 @end

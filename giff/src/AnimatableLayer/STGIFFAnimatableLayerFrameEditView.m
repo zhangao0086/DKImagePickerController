@@ -3,11 +3,10 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STEditFrameItemView.h"
-#import "STCapturedImageSet.h"
+#import "STGIFFAnimatableLayerFrameEditView.h"
 
 
-@implementation STEditFrameItemView {
+@implementation STGIFFAnimatableLayerFrameEditView {
 
 }
 @end
