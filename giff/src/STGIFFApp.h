@@ -213,7 +213,7 @@ typedef NS_ENUM(NSInteger, STAnimatableCaptureDuration) {
 
 typedef NS_ENUM(NSInteger, STControlDisplayMode) {
     STControlDisplayModeHome,
-    STControlDisplayModeHomeFilterSelectable,
+    STControlDisplayModeHomeSelectable,
     STControlDisplayModeEdit,
     STControlDisplayModeEditAfterCapture,
     STControlDisplayModeReviewAfterAnimatableCapture,

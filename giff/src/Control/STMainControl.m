@@ -1,7 +1,7 @@
-//
-// Created by BLACKGENE on 2014. 9. 2..
-// Copyright (c) 2014 Eliecam. All rights reserved.
-//
+
+
+
+
 
 #import <SVGKit/SVGKImage.h>
 #import <SVGKit/SVGKImageView.h>
@@ -13,7 +13,6 @@
 #import "STPhotoSelector.h"
 #import "STUserActor.h"
 #import "STFilterItem.h"
-#import "CAShapeLayer+STUtil.h"
 #import "STFilterPresenterItemView.h"
 #import "STExportManager.h"
 #import "STCaptureRequest.h"
@@ -23,9 +22,7 @@
 #import "STStandardCollectableButton.h"
 #import "STStandardNavigationButton.h"
 #import "NSArray+STUtil.h"
-#import "CALayer+STUtil.h"
 #import "NSObject+STUtil.h"
-#import "UIImage+Filtering.h"
 #import "STFilterPresenterBase.h"
 #import "STExporter+Config.h"
 #import "STElieStatusBar.h"
@@ -43,8 +40,6 @@
 #import "STProductCatalogView.h"
 #import "M13OrderedDictionary.h"
 #import "NSString+STUtil.h"
-#import "STStandardReachableButton.h"
-#import "STFilterPresenterProductItemView.h"
 #import "STApp+Logger.h"
 #import "STExporter+View.h"
 #import "UIColor+BFPaperColors.h"
@@ -217,7 +212,7 @@ static BOOL _needsShowCollectables = NO;
     [_home setIndexNumberOfSegments:count];
     [_home setIndexProgress:count ? (CGFloat)(index+1)/count : 0];
 
-    //cart icon
+
     STFilterItem * currentFilterItem = [STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem;
     if(currentFilterItem.type == STFilterTypeITunesProduct){
         [self __setToHomeStyle:R.ico_cart color:currentFilterItem.representativeColor];
@@ -244,7 +239,7 @@ static BOOL _needsShowCollectables = NO;
 }
 
 
-// Edit selected
+
 - (void)enterEdit {
     [self setMode:STControlDisplayModeEdit];
 }
@@ -254,7 +249,7 @@ static BOOL _needsShowCollectables = NO;
     [self back];
 }
 
-// Edit Aftercapture
+
 - (void)enterEditAfterCapture {
     [self setMode:STControlDisplayModeEditAfterCapture];
 }
@@ -263,7 +258,7 @@ static BOOL _needsShowCollectables = NO;
     [self back];
 }
 
-// Review AftercaptureAnimatable
+
 - (void)enterReviewAfterAnimatableCapture {
     [self setMode:STControlDisplayModeReviewAfterAnimatableCapture];
 }
@@ -272,7 +267,7 @@ static BOOL _needsShowCollectables = NO;
     [self back];
 }
 
-// Edit Tool
+
 - (void)enterEditTool {
     [self setMode:STControlDisplayModeEditTool];
 }
@@ -281,7 +276,7 @@ static BOOL _needsShowCollectables = NO;
     [self back];
 }
 
-// Camera
+
 - (void)enterLivePreview {;
     [self setMode:STControlDisplayModeLivePreview];
 }
@@ -314,12 +309,12 @@ static BOOL _needsShowCollectables = NO;
     [self main];
 }
 
-//Export
+
 - (void)export {
     [self setMode:STControlDisplayModeExport reload:self.mode == STControlDisplayModeExport];
 }
 
-//home
+
 - (void)home {
     [self setMode:STControlDisplayModeHome];
 }
@@ -351,19 +346,17 @@ static BOOL _controlsShowen = YES;
 - (BOOL)interruptShowHideControlsWhenScrolling {
     BOOL interrupt = NO;
 
-    //while loading current source
+
     if([STPhotoSelector sharedInstance].loadingSource){
         interrupt = YES;
     }
 
-    //by mode
+
     switch(_mode){
         case STControlDisplayModeHome:
             break;
 
-        case STControlDisplayModeHomeFilterSelectable:
-            [self backToHome];
-            interrupt = YES;
+        case STControlDisplayModeHomeSelectable:
             break;
 
         default:
@@ -371,12 +364,12 @@ static BOOL _controlsShowen = YES;
             break;
     }
 
-    //Control can only perform show/hide when collection view's height X 3 is smaller than content height.
+
     if(!interrupt && [STPhotoSelector sharedInstance].collectionView.height * [STStandardUX maxMultipleNumberOfFrameHeightByContentHeightToHideControlsWhenScrolling] > [STPhotoSelector sharedInstance].collectionView.contentSizeHeight){
         interrupt = YES;
     }
 
-    //show controls if interrupt
+
     if(interrupt){
         [self showControlsWhenStopScrolling];
     }
@@ -396,7 +389,7 @@ BOOL _scrollStopped = YES;
     }
 
     [self setMode:_mode reload:YES];
-//    [_subControl setVisibleWithEffect:YES effect:STSubControlVisibleEffectEnterCenter];
+
 }
 
 - (void)hideControlsWhenStartScrolling {
@@ -432,7 +425,7 @@ BOOL _scrollStopped = YES;
     [STStandardUX stopParallaxToViews:@[_home, _subControl]];
 }
 
-// show/hide top collectables
+
 #pragma mark Home Collectable
 - (void)setNeededToShowOrHideHomeCollectable {
     switch (self.mode){
@@ -477,7 +470,7 @@ BOOL _scrollStopped = YES;
     }
 }
 
-//Quick Capture
+
 
 #pragma mark internal inits
 - (id)initWithFrame:(CGRect)frame; {
@@ -559,15 +552,15 @@ BOOL _scrollStopped = YES;
 
     resolutionCollectable.valuesMap = supportedPresets;
     resolutionCollectable.currentMappedValue = @([self setCaptureSizePreset:(CaptureOutputSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO]);
-    //postFocusMode -> captureOutputSizePreset -> currentMappedValue
+
     [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].postFocusMode) id:@"postFocusMode_maincontrol" changed:^(id value, id _weakSelf) {
         [self setCaptureSizePreset:(CaptureOutputSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO];
     }];
-    //user click -> captureOutputSizePreset -> currentMappedValue
+
     [resolutionCollectable whenSelectedWithMappedValue:^(STSelectableView *button, NSInteger index, id value) {
         [self setCaptureSizePreset:(CaptureOutputSizePreset) [value integerValue] userTapped:YES];
     }];
-    //captureOutputSizePreset -> collectable
+
     [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].captureOutputSizePreset) id:@"captureOutputSizePreset_maincontrol" changed:^(id value, id _weakSelf) {
         resolutionCollectable.currentMappedValue = value;
     }];
@@ -580,7 +573,7 @@ BOOL _scrollStopped = YES;
     _homeCollectable.autoRetractWhenSelectCollectableItem = NO;
     _homeCollectable.autoUXLayoutWhenExpanding = YES;
     _homeCollectable.invertMaskInButtonAreaForCollectableBackground = YES;
-    // as a collectable
+
     _homeCollectable.collectablesSelectAsIndependent = NO;
     _homeCollectable.collectableToggleEnabled = YES;
     [_homeCollectable setCollectablesAsButtons:@[manualAfterCaptureCollectable,resolutionCollectable] backgroundStyle:STStandardButtonStylePTBT];
@@ -682,7 +675,7 @@ STExportSelectView * exportSelectView;
 
     [exportSelectView removeFromSuperview];
 
-    //display icon
+
     [self displayExporterIcon:exportType attach:YES];
 
     /*
@@ -696,11 +689,11 @@ STExportSelectView * exportSelectView;
             [self back];
         });
 
-        //force show status bar
+
         [[STElieStatusBar sharedInstance] show];
         [[STElieStatusBar sharedInstance] lockShowHide];
 
-        //lock user interactions
+
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     }
 
@@ -751,10 +744,10 @@ STExportSelectView * exportSelectView;
             });
         }
 
-        //unlock force showed statusbar if needed.
+
         [[STElieStatusBar sharedInstance] unlockShowHideAndRevert];
 
-        //unlock user interations
+
         if([[UIApplication sharedApplication] isIgnoringInteractionEvents]){
             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         }
@@ -803,8 +796,8 @@ STExportSelectView * exportSelectView;
 
 - (BOOL)isMustBackToHomeAfterFinished:(STExportType)exportType{
     switch (exportType){
-//        case STExportTypeSavedPhotos:
-//            return NO;
+
+
         default:
             return YES;
     }
@@ -881,9 +874,7 @@ STExportSelectView * exportSelectView;
         switch (mode){
             case STControlDisplayModeHome:break;
             case STControlDisplayModeMain_initial:break;
-            case STControlDisplayModeHomeFilterSelectable:
-                [[_home selectableButton] dispatchSelected];
-                break;
+            case STControlDisplayModeHomeSelectable: break;
             case STControlDisplayModeLivePreview:
                 [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeElie)];
                 break;
@@ -995,8 +986,8 @@ STExportSelectView * exportSelectView;
     if(mode== STControlDisplayModeHome){
         [self _setHome];
     }
-    else if(mode== STControlDisplayModeHomeFilterSelectable){
-        [self _setHomeFilterSelectable];
+    else if(mode== STControlDisplayModeHomeSelectable){
+        NSAssert(NO, @"STControlDisplayModeHomeSelectable");
     }
     else if(mode== STControlDisplayModeExport){
         [self _setExport];
@@ -1023,13 +1014,13 @@ STExportSelectView * exportSelectView;
 
 #pragma mark Meta setlayout
 - (void)__setToHomeStyle:(NSString *)iconImageName color:(UIColor*)color {
-    //color
+
     UIColor * assigningColor = color?:[STStandardUI pointColor];
     if(![_home.backgroundCircleColor isEqual:assigningColor]){
         _home.backgroundCircleColor = assigningColor;
     }
 
-    //home icon image
+
     if(!iconImageName){
         switch(_mode){
             case STControlDisplayModeHome:
@@ -1054,7 +1045,7 @@ STExportSelectView * exportSelectView;
             case STControlDisplayModeHome:{
                 static UIColor * HomeButtonIconBackgroundColor;
                 if(!HomeButtonIconBackgroundColor){
-                    //TODO: colorWithGradientStyle 메모리 체크
+
                     HomeButtonIconBackgroundColor = [UIColor colorWithGradientStyle:UIGradientStyleTopToBottom
                                                                           withFrame:_home.containerButton.bounds
                                                                           andColors:@[UIColorFromRGB(0xa19699), UIColorFromRGB(0x8a8d92)]];
@@ -1081,7 +1072,7 @@ STExportSelectView * exportSelectView;
         }
     }
 
-    //background
+
     switch(_mode){
         case STControlDisplayModeHome:{
             static UIColor * HomeButtonPointColor;
@@ -1103,7 +1094,7 @@ STExportSelectView * exportSelectView;
             break;
     }
 
-    //shadow
+
     if(!_home.containerButton.shadowEnabled){
         _home.containerButton.shadowEnabled = YES;
     }
@@ -1120,9 +1111,9 @@ STExportSelectView * exportSelectView;
 }
 
 - (void)__setToDefaultWithAnimation:(BOOL)animation{
-    // Home
+
     _home.hidden = NO;
-    // Home Icon
+
     [self __setToHomeStyle:nil color:nil];
 
     [_home pop_removeAllAnimations];
@@ -1144,7 +1135,7 @@ STExportSelectView * exportSelectView;
     } completion:nil];
 
 
-    //subcontrol
+
     _subControl.hidden = NO;
     _subControl.center = CGRectGetMid_AGK([self centeredHomeFrame]);
 
@@ -1161,166 +1152,6 @@ STExportSelectView * exportSelectView;
 }
 
 #pragma mark QuickFilter
-- (void)__setHomeFilterSelectable_home_position:(BOOL)apply animation:(BOOL)animation{
-    CGFloat collectionBoundsHeight = self.height;
-
-    [_home pop_removeAllAnimations];
-
-    id target = animation ? _home.spring : _home;
-    if(apply){
-        [target setScaleXYValue:.7];
-        [target setBottom:collectionBoundsHeight - (collectionBoundsHeight/11)];
-    }else{
-        [target setScaleXYValue:1];
-        [target setFrame:[self centeredHomeFrame]];
-    }
-
-}
-- (void)_setHomeFilterSelectable{
-    Weaks
-
-    //home
-    NSString * lineLayerName = @"line";
-
-    CGFloat const collectionWidth = [STApp screenFamily]==STScreenFamily55 ? 82 : 78;
-    CGFloat collectionBoundsHeight = self.height;
-
-    //FIXME: memory leak.
-    UIImage * homeImage = [[[_home snapshotCurrent] grayscale] brightenWithValue:60];//gaussianBlurWithBias:255];
-
-    NSUInteger selectedFilterIndex = self.homeSelectedFilterItemIndex;
-
-    STStandardReachableButton * reachableButton = [STStandardReachableButton mainSize];
-    reachableButton.bindReachedProgressToCurrentIndex = YES;
-    reachableButton.bindReachedToSelectedState = NO;
-    reachableButton.reachedProgressCirclePadding = 4;
-    reachableButton.animateSelectedViewScaleIfVisibleOutlineProgress = YES;
-    reachableButton.animateBackgroundViewWhenStateChange = YES;
-
-    STStandardButton * button = [_home setDisplayOnlyButton:reachableButton];
-    button.backgroundViewAutoClear = YES;
-    if(selectedFilterIndex != 0){
-        [button setButtons:@[[R go_x], [R set_reset]] colors:@[[STStandardUI buttonColorFront], [STStandardUI buttonColorFront]] style:STStandardButtonStylePTBP];
-    }else{
-        [button setButtons:@[[R go_x]] colors:@[[STStandardUI buttonColorFront]] style:STStandardButtonStylePTBP];
-    }
-
-    _home.visible = YES;
-    [self __setHomeFilterSelectable_home_position:YES animation:YES];
-
-    //subcontrol
-    _subControl.hidden = YES;
-
-    //collectable
-    //TODO: _homeFilterCollector.carousel 소거되는지 확인
-    _homeFilterCollector.carousel = [[iCarousel alloc] initWithFrame:CGRectMakeWithSize_AGK((CGSize){self.width, collectionBoundsHeight})];
-    [self insertSubview:_homeFilterCollector.carousel aboveSubview:_subControl];
-
-    _homeFilterCollector.carousel.contentOffset = CGSizeMake(0, -collectionWidth/2);
-    _homeFilterCollector.carousel.type = iCarouselTypeWheel;
-    _homeFilterCollector.itemWidth = collectionWidth;
-    _homeFilterCollector.blockForiCarouselOption = ^CGFloat(iCarouselOption option, CGFloat value) {
-        switch (option)
-        {
-            case iCarouselOptionVisibleItems:
-            {
-                return 5;
-            }
-            case iCarouselOptionWrap:
-            {
-                return YES;
-            }
-            case iCarouselOptionAngle:{
-                return 0.514703;
-            }
-            case iCarouselOptionRadius:{
-                return 165.7;
-            }
-            case iCarouselOptionSpacing:
-            {
-                return (CGFloat) (value * 1.1); //0-2
-            }
-            default:
-            {
-                return value;
-            }
-        }
-    };
-
-    WeakAssign(button)
-    _homeFilterCollector.blockForFilterItemView = ^STFilterPresenterItemView *(NSInteger index, STFilterItem * filterItem, UIView *view) {
-        Strongs
-        STFilterPresenterItemView * itemView;
-
-         if(view==nil){
-            itemView = [[STFilterPresenterProductItemView alloc] initWithFrame:[STElieCamera.sharedInstance outputRect:CGRectMakeValue(collectionWidth)]];
-            [itemView usingGPUImage];
-
-            itemView.gpuView.contentMode = UIViewContentModeScaleAspectFill;
-            itemView.centerY = itemView.height/2;
-            itemView.image = homeImage;
-
-            [itemView st_takeSnapshotWithBlurredOverlayView:YES dark:NO];
-            itemView.gpuView.alpha = 0;
-
-            CAShapeLayer *mask = [CAShapeLayer circle:collectionWidth];
-            mask.contentsGravity = kCAGravityCenter;
-            mask.lineWidth = 0;
-            mask.positionY = (CGFloat) ((itemView.height-mask.pathHeight)*.5);
-            itemView.layer.mask = mask;
-
-            CAShapeLayer *line = [CAShapeLayer circle:collectionWidth];
-            line.fillColor = nil;
-            line.positionY = mask.positionY;
-            line.strokeColor = [[STStandardUI strokeColorPoint] CGColor];
-            line.lineWidth = 2;
-            line.rasterizationEnabled = YES;
-            line.name = lineLayerName;
-
-            [itemView.layer addSublayer:line];
-
-        }else{
-             itemView = (STFilterPresenterItemView *) view;
-         }
-
-        itemView.targetFilterItem = filterItem;
-        [itemView layoutSubviews];
-
-        return itemView;
-    };
-
-    [_homeFilterCollector initFiltersIncludeDefault];
-    [_homeFilterCollector startForLive:_homeFilterCollector.carousel];
-
-    [STStandardUX setAnimationFeelToRelaxedSpring:_homeFilterCollector.carousel];
-    _homeFilterCollector.carousel.visible = YES;
-    _homeFilterCollector.carousel.scaleXY = CGPointMake(.6, .6);
-    _homeFilterCollector.carousel.pop_duration = .2;
-    _homeFilterCollector.carousel.spring.scaleXY = CGPointMake(1, 1);
-
-    @weakify(self)
-    __block BOOL rendered = NO;
-    [_homeFilterCollector.presenter whenAllItemRenderFinished:^{
-        if(!rendered){
-            rendered = YES;
-
-            [[_homeFilterCollector.carousel visibleItemViews] eachViewsWithIndex:^(UIView *view, NSUInteger index) {
-                STFilterPresenterItemView * _view = (STFilterPresenterItemView *) view;
-
-                _view.gpuView.easeInEaseOut.duration = .3;
-                [NSObject animate:^{
-                    _view.gpuView.easeInEaseOut.alpha = 1;
-                } completion:^(BOOL finished) {
-                    _view.image = nil;
-                }];
-            }];
-
-            [self st_performOnceAfterDelay:.25 block:^{
-                [_homeFilterCollector.carousel scrollToItemAtIndex:selectedFilterIndex animated:YES];
-            }];
-        }
-    }];
-}
 
 - (void)_setEdit {
     [self __setToDefaultWithAnimation:YES];
@@ -1381,34 +1212,9 @@ STExportSelectView * exportSelectView;
         }];
     }
 
-    else if(_mode== STControlDisplayModeHomeFilterSelectable){
-        Weaks
-        [[_home selectableButton] whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-            if(_homeFilterCollector.carousel.currentItemIndex==0){
-                [Wself back];
-            }else{
-                [_homeFilterCollector.carousel scrollToItemAtIndex:0 animated:YES];
-                [_homeFilterCollector carousel:_homeFilterCollector.carousel didSelectItemAtIndex:0];
-            }
-        }];
+    else if(_mode== STControlDisplayModeHomeSelectable){
 
-        [_homeFilterCollector whenDidEndScroll:nil];
-        [_homeFilterCollector whenDidSelected:^(NSInteger selectedIndex) {
-            Strongs
-            WeakAssign(Sself)
-            [Sself->_homeFilterCollector whenDidEndScroll:^(NSInteger ix) {
-                [weak_Sself selectFilterItemFromSelectableItemAt:ix];
-            }];
-        }];
-
-        [_homeFilterCollector whenChangedScrolledIndex:^(NSInteger i) {
-            Strongs
-            STStandardReachableButton * reachableButton = (STStandardReachableButton *) [Sself->_home selectableButton];
-            reachableButton.reachedProgress = i==0 ? 0 : 1;
-            reachableButton.outlineProgress = AGKRemapToZeroOne(i, 0, Sself->_homeFilterCollector.items.count-1);
-            reachableButton.backgroundViewAsOwnBackgroundColorWithShapeMask = [Wself _homeFilterItemAt:i].representativeColor;
-        }];
-        _home.selectableButton.backgroundViewAsOwnBackgroundColorWithShapeMask = _homeFilterCollector.state.currentFocusedFilterItem.representativeColor;
+        NSAssert(NO,@"STControlDisplayModeHomeFilterSelectable");
     }
 
     else if(_mode== STControlDisplayModeEdit){
@@ -1470,11 +1276,11 @@ STExportSelectView * exportSelectView;
         Weaks
 
         [_home.selectableButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-//            [Wself tryExportByType:[self targetExportType]];
+
         }];
 
         [(STStandardNavigationButton *)_home.selectableButton whenCollectableSelected:^(STStandardButton *collectableButton, NSUInteger index) {
-//            [Wself tryExportByType:(STExportType) [collectableButton.valuesMap.first integerValue]];
+
         }];
     }
 
@@ -1506,7 +1312,6 @@ STExportSelectView * exportSelectView;
 
         [_home whenSlidedAsConfirmed:^(STSlideDirection direction) {
             if (direction == STSlideDirectionUp) {
-//                [[STUserActor sharedInstance] act:STUserActionChangeCameraMode];
                 [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeElie)];
             }
         }];
@@ -1521,7 +1326,7 @@ STExportSelectView * exportSelectView;
             filterItem.type = STFilterTypeDefault;
         }
     }
-    //reload purchased state if needed
+
     [[STPhotoSelector sharedInstance] doLayoutPreviewCollectionViews];
 }
 
@@ -1538,56 +1343,6 @@ STExportSelectView * exportSelectView;
                      } completion:completionBlock];
 }
 
-#pragma mark Filter Purchasing - Selectable
-- (void)selectFilterItemFromSelectableItemAt:(NSInteger)selectedIndex{
-    STFilterItem *  defaultFilterItem = self.homeSelectedFilterItem?: [self _homeFilterItemAt:0];
-    STFilterItem * filterItem = [self _homeFilterItemAt:selectedIndex];
-    NSString * productId = filterItem.type == STFilterTypeITunesProduct ? filterItem.productId: nil;
-    STStandardButton * button = [_home selectableButton];
-
-    if([STGIFFApp isPurchasedProduct:productId]){
-        [self selectFilterItemFromSelectableItem:productId filterItem:filterItem defaultFilterItem:defaultFilterItem];
-        [self back];
-
-    }else{
-        Weaks
-        WeakAssign(button);
-        [STProductCatalogView openWith:button
-                             productId:productId
-                            iconImages:[[STFilterManager sharedManager] getSampleFilteredImages:_homeFilterCollector.state.currentFocusedGroupIndex productId:productId]
-                              willOpen:^(STProductCatalogView *view, STProductItem * item) {
-                                  //position of home
-                                  [Wself __setHomeFilterSelectable_home_position:NO animation:NO];
-                              }
-                               didOpen:nil
-                                 tried:^{
-
-                                     [Wself selectFilterItemFromSelectableItem:productId filterItem:filterItem defaultFilterItem:defaultFilterItem];
-
-                                 } purchased:^(NSString *_success_productId) {
-
-
-                } failed:^(NSString *_failed_productId) {
-
-                } willClose:^(BOOL afterPurchased) {
-                    //reset position of home
-                    if(!afterPurchased){
-                        [Wself __setHomeFilterSelectable_home_position:YES animation:NO];
-                    }
-
-                } didClose:^(BOOL afterPurchased) {
-                    if (afterPurchased) {
-                        [Wself selectFilterItemFromSelectableItem:productId filterItem:filterItem defaultFilterItem:defaultFilterItem];
-                        [Wself back];
-
-                    }else{
-                        [weak_button dispatchSelected];
-                    }
-                }];
-    }
-
-    [STGIFFApp logClick:@"FilterSelectByHomeSelectable" key:filterItem.uid_short];
-}
 
 - (void)selectFilterItemFromSelectableItem:(NSString *)productId filterItem:(STFilterItem *)filterItem defaultFilterItem:(STFilterItem *)defaultFilterItem{
     Weaks
@@ -1596,7 +1351,7 @@ STExportSelectView * exportSelectView;
         Sself->_homeSelectedFilterItem = resultValue;
 
         if(resultValue.productId && success){
-            //update type of filter items.
+
             Sself->_homeSelectedFilterItem.type = STFilterTypeDefault;
 
             [Sself setFilterGroupPurchasedSuccessAt:Sself->_homeFilterCollector.state.currentFocusedGroupIndex productId:resultValue.productId];
@@ -1610,7 +1365,7 @@ STExportSelectView * exportSelectView;
     STFilterItem * filterItem = [STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem;
     STFilterItem * defaultFilterItem = [STPhotoSelector sharedInstance].previewState.defaultFilterItem;
     NSString * productId = filterItem.type == STFilterTypeITunesProduct ? filterItem.productId : nil;
-    //selectableButton or containerButton
+
     STStandardButton * button = _home.selectableButton?:_home.containerButton;
 
     if([STGIFFApp isPurchasedProduct:productId]){

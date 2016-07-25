@@ -479,7 +479,7 @@ static ALAssetsLibrary * assetLibrary;
         case STControlDisplayModeEditAfterCapture:
         case STControlDisplayModeReviewAfterAnimatableCapture:
         case STControlDisplayModeEditTool:
-        case STControlDisplayModeHomeFilterSelectable:
+        case STControlDisplayModeHomeSelectable:
             return NO;
 
         default: break;
@@ -527,11 +527,11 @@ static ALAssetsLibrary * assetLibrary;
 //    }
 
     //slide up
-    if(mode==STControlDisplayModeHomeFilterSelectable){
-        [[STPhotoSelector sharedInstance] doSlideUp:YES];
+    if(mode==STControlDisplayModeHomeSelectable){
 
-    }else if (previosMode == STControlDisplayModeHomeFilterSelectable) {
-        [[STPhotoSelector sharedInstance] doSlideUp:NO];
+
+    }else if (previosMode == STControlDisplayModeHomeSelectable) {
+
     }
 
     //shadow
