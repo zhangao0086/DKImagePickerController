@@ -233,16 +233,13 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
     NSArray * buttons = [imageNames ? imageNames : colors mapWithIndex:^id(id object, NSInteger index) {
         NSString * imageName = [imageNames st_objectOrNilAtIndex:index];
 
-        UIColor * color = [colors st_objectOrNilAtIndex:index];
-        if(!color){
-            color = [self.class defaultForegroundImageColor];
-        }
-        UIColor * bgColor = [bgColors st_objectOrNilAtIndex:index];
-        if(!bgColor){
-            bgColor = [self.class defaultBackgroundImageColor];
-        }
+        UIColor * color = [colors st_objectOrNilAtIndex:index] ?: [self.class defaultForegroundImageColor];
 
-        CGSize size = self.size;
+        UIColor * bgColor = [bgColors st_objectOrNilAtIndex:index] ?: [self.class defaultBackgroundImageColor];
+
+        CGSize size = self.fitIconImageSizeToCenterSquare ?
+                CGSizeMakeValue(CGSizeMinSide(self.size)) : self.size;
+
 
         CGFloat inset = self.preferredIconImagePadding!=0 ?
                 self.preferredIconImagePadding

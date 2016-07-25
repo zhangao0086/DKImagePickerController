@@ -121,6 +121,7 @@ typedef NS_ENUM(NSInteger, STStandardButtonRenderingMode){
  * Icon Image
  */
 @property (nonatomic, readonly) STStandardButtonStyle style;
+@property (nonatomic, assign) BOOL fitIconImageSizeToCenterSquare;
 @property (nonatomic, assign) BOOL autoAdjustVectorIconImagePaddingIfNeeded;
 @property (nonatomic, assign) CGFloat preferredIconImagePadding;
 @property (nonatomic, assign) CGFloat preferredIconImageRotationDegree;
