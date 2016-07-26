@@ -8,6 +8,7 @@
 #import "UIView+STUtil.h"
 #import "STCapturedImageSetDisplayLayerSet.h"
 #import "STCapturedImageSetAnimatableLayerSet.h"
+#import "STCapturedImageSetAnimatableLayer.h"
 #import "STStandardButton.h"
 #import "R.h"
 #import "NSArray+STUtil.h"
@@ -47,13 +48,14 @@
     return self.height/2;
 }
 
-- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerItem {
-    [super appendLayer:layerItem];
+- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerSet {
+    [super appendLayer:layerSet];
 
     //layer
-    for(STCapturedImageSet *imageSet in layerItem.sourceImageSets){
+    for(STCapturedImageSetAnimatableLayer *layer in layerSet.layers){
+        NSAssert([layer isKindOfClass:STCapturedImageSetAnimatableLayer.class],@"Only STCapturedImageSetAnimatableLayer is allowed");
         STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width, self.heightForFrameItemView)];
-        editItemView.imageSet = imageSet;
+        editItemView.displayLayer = layer;
         editItemView.frameOffsetSlider.delegateSlider = self;
         editItemView.backgroundColor = [UIColor orangeColor];
         [_contentView addSubview:editItemView];
@@ -64,7 +66,7 @@
 
 - (void)removeAllLayers {
     [_contentView st_eachSubviews:^(UIView *view, NSUInteger index) {
-        ((STEditControlFrameEditItemView *)view).imageSet = nil;
+        ((STEditControlFrameEditItemView *)view).displayLayer = nil;
     }];
 
     [super removeAllLayers];

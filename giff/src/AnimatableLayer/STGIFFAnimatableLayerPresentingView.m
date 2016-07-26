@@ -26,43 +26,43 @@
 
     [_contentView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
-        STCapturedImageSetAnimatableLayerSet *layerItem = [self.layers st_objectOrNilAtIndex:index];
+        STCapturedImageSetAnimatableLayerSet *layerSet = [self.layers st_objectOrNilAtIndex:index];
 
-        NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
+        NSInteger layerIndex = self.currentIndex + layerSet.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
 
         if(overRanged){
             layerView.visible = NO;
         }else{
-            layerView.scaleXYValue = layerItem.scale;
+            layerView.scaleXYValue = layerSet.scale;
             layerView.visible = YES;
-            layerView.alpha = layerItem.alpha;
+            layerView.alpha = layerSet.alpha;
             layerView.currentIndex = layerIndex;
         }
     }];
 
 }
 
-- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerItem{
-    [super appendLayer:layerItem];
+- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    [super appendLayer:layerSet];
 
-    STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayer:layerItem];
-    if(layerItem.effect){
+    STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayer:layerSet];
+    if(layerSet.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
             NSArray * effectAppliedImageUrls = [processor processResources];
 
             dispatch_async(dispatch_get_main_queue(),^{
-                [Wself appendLayerView:layerItem presentableObjects:effectAppliedImageUrls];
+                [Wself appendLayerView:layerSet presentableObjects:effectAppliedImageUrls];
             });
         });
     }else{
         //set default 0 STCapturedImageSet
-        [self appendLayerView:layerItem presentableObjects:[processor resourcesToProcessFromSourceImageSet:[[layerItem sourceImageSets] firstObject]]];
+        [self appendLayerView:layerSet presentableObjects:[processor resourcesToProcessFromSourceLayer:[layerSet.layers firstObject]]];
     }
 }
 
-- (void)appendLayerView:(STCapturedImageSetAnimatableLayerSet *)layerItem presentableObjects:(NSArray *)presentableObjects{
+- (void)appendLayerView:(STCapturedImageSetAnimatableLayerSet *)layerSet presentableObjects:(NSArray *)presentableObjects{
     //layer
     STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_contentView.size];
     layerView.fitViewsImageToBounds = YES;
@@ -79,9 +79,9 @@
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
-    STCapturedImageSetAnimatableLayerSet * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    STCapturedImageSetAnimatableLayerSet * layerSet = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
-    layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+    layerSet.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
     [self setNeedsLayersDisplayAndLayout];
 }

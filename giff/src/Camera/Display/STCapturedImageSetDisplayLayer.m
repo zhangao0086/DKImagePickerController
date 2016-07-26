@@ -1,11 +1,6 @@
-//
-// Created by BLACKGENE on 7/26/16.
-// Copyright (c) 2016 stells. All rights reserved.
-//
-
+#import "STCapturedImage.h"
 #import "STCapturedImageSetDisplayLayer.h"
 #import "STCapturedImageSet.h"
-
 
 @implementation STCapturedImageSetDisplayLayer {
 
@@ -18,6 +13,7 @@
 
     return self;
 }
+
 
 + (instancetype)layerWithImageSet:(STCapturedImageSet *)imageSet {
     return [[self alloc] initWithImageSet:imageSet];

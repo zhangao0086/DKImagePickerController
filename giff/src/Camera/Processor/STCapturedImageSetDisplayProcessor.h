@@ -7,6 +7,7 @@
 
 @class STCapturedImageSet;
 @class STCapturedImageSetDisplayLayerSet;
+@class STCapturedImageSetDisplayLayer;
 
 
 @interface STCapturedImageSetDisplayProcessor : NSObject
@@ -19,7 +20,7 @@
 
 - (NSArray *)processResources;
 
-- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceImageSets;
+- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceLayers;
 
-- (NSArray<id> *)resourcesToProcessFromSourceImageSet:(STCapturedImageSet *)imageSet;
+- (NSArray<id> *)resourcesToProcessFromSourceLayer:(STCapturedImageSetDisplayLayer *)layer;
 @end

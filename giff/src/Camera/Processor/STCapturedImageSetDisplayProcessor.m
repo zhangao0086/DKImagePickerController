@@ -10,9 +10,10 @@
 #import "STCapturedImageSet.h"
 #import "STCapturedImageSetDisplayLayerSet.h"
 #import "STCapturedImage.h"
+#import "STCapturedImageSetDisplayLayer.h"
 
 @interface STCapturedImageSetDisplayProcessor()
-@property(nonatomic, readwrite) STCapturedImageSetDisplayLayerSet * targetLayer;
+@property(nonatomic, readwrite) STCapturedImageSetDisplayLayerSet * targetLayerSet;
 @end
 
 @implementation STCapturedImageSetDisplayProcessor {
@@ -20,7 +21,7 @@
 - (instancetype)initWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer {
     self = [super init];
     if (self) {
-        _targetLayer = targetLayer;
+        _targetLayerSet = targetLayer;
     }
     return self;
 }
@@ -30,12 +31,12 @@
 }
 
 - (NSArray *)processResources {
-    NSAssert(_targetLayer.sourceImageSets.count,@"_targetLayer.sourceImageSets is empty.");
+    NSAssert(_targetLayerSet.layers.count,@"_targetLayer.layers is empty.");
 
     Weaks
     NSArray * processedResources = nil;
-    if(_targetLayer.effect){
-        processedResources = [self.resourcesSetToProcessFromSourceImageSets mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
+    if(_targetLayerSet.effect){
+        processedResources = [self.resourcesSetToProcessFromSourceLayers mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
             NSAssert([[resourceItemSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
 #if DEBUG
             [resourceItemSet eachWithIndex:^(NSURL * object, NSUInteger index) {
@@ -44,8 +45,8 @@
 #endif
             @autoreleasepool {
                 NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
-                                                                           Wself.targetLayer.uuid,
-                                                                           Wself.targetLayer.effect.uuid,
+                                                                           Wself.targetLayerSet.uuid,
+                                                                           Wself.targetLayerSet.effect.uuid,
                                                                            indexOfResourceItemSet
                 ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
@@ -66,11 +67,11 @@
                     BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
                     NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
                     if(!containsNullInImages){
-                        BOOL vailedImageSetNumbers = imagesToProcessEffect.count== [Wself.targetLayer.effect supportedNumberOfSourceImages];
-                        NSAssert(vailedImageSetNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.targetLayer.effect.class), [Wself.targetLayer.effect supportedNumberOfSourceImages]]));
+                        BOOL vailedLayerNumbers = imagesToProcessEffect.count== [Wself.targetLayerSet.effect supportedNumberOfSourceImages];
+                        NSAssert(vailedLayerNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.targetLayerSet.effect.class), [Wself.targetLayerSet.effect supportedNumberOfSourceImages]]));
 
-                        UIImage * processedImage = vailedImageSetNumbers ?
-                                [Wself.targetLayer.effect processImages:imagesToProcessEffect] : [imagesToProcessEffect firstObject];
+                        UIImage * processedImage = vailedLayerNumbers ?
+                                [Wself.targetLayerSet.effect processImages:imagesToProcessEffect] : [imagesToProcessEffect firstObject];
 
                         NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
 
@@ -89,8 +90,8 @@
         }];
 
     }else{
-        //TODO: effect가 없으면서 sourceImageSets이 2이상 (즉 이미지 레벨에서 겹치길 원한다는 의미)일때는 기본 알파 블렌딩?
-        processedResources = [self resourcesToProcessFromSourceImageSet:[_targetLayer.sourceImageSets firstObject]];
+        //TODO: effect가 없으면서.layers이 2이상 (즉 이미지 레벨에서 겹치길 원한다는 의미)일때는 기본 알파 블렌딩?
+        processedResources = [self resourcesToProcessFromSourceLayer:[_targetLayerSet.layers firstObject]];
     }
 
     NSAssert(processedResources.count, @"processedResources is empty");
@@ -98,19 +99,19 @@
     return processedResources;
 }
 
-- (NSArray<id> *)resourcesToProcessFromSourceImageSet:(STCapturedImageSet *)imageSet{
-    NSAssert(imageSet.images.count, @"imageSet's count of SourceImageSets is must be higer than 0 ");
-    if(imageSet.images.count){
-        STCapturedImage * anyImage = [imageSet.images firstObject];
+- (NSArray<id> *)resourcesToProcessFromSourceLayer:(STCapturedImageSetDisplayLayer *)layer{
+    NSAssert(layer.imageSet.images.count, @"imageSet's count of SourceImageSets is must be higer than 0 ");
+    if(layer.imageSet.images.count){
+        STCapturedImage * anyImage = [layer.imageSet.images firstObject];
         NSAssert(anyImage.imageUrl, @"STCapturedImage's imageUrl does not exist.");
-        return [imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
+        return [layer.imageSet.images mapWithItemsKeyPath:@keypath(anyImage.fullScreenUrl) orDefaultKeypath:@keypath(anyImage.imageUrl)];
     }
     return nil;
 }
 
-- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceImageSets{
-    NSArray * results = [_targetLayer.sourceImageSets mapWithIndex:^id(STCapturedImageSet * imageSet, NSInteger index) {
-        return [self resourcesToProcessFromSourceImageSet:imageSet];
+- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceLayers{
+    NSArray * results = [_targetLayerSet.layers mapWithIndex:^id(STCapturedImageSetDisplayLayer * layer, NSInteger index) {
+        return [self resourcesToProcessFromSourceLayer:layer];
     }];
 
     BOOL containsNull = [results containsNull]>0;

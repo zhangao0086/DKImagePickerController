@@ -9,9 +9,10 @@
 @class STCapturedImageSet;
 @class STCapturedImageSetDisplayLayerSet;
 @class STCapturedImageSetAnimatableLayerSet;
+@class STCapturedImageSetAnimatableLayer;
 
 
 @interface STEditControlFrameEditItemView : STUIView
-@property (nonatomic, readwrite) STCapturedImageSet * imageSet;
+@property (nonatomic, readwrite) STCapturedImageSetAnimatableLayer * displayLayer;
 @property (nonatomic, readonly) STSegmentedSliderView * frameOffsetSlider;
 @end

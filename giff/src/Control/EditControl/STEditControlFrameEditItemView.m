@@ -7,10 +7,9 @@
 #import "STCapturedImageSet.h"
 #import "STCapturedImage.h"
 #import "UIView+STUtil.h"
-#import "STSelectableView.h"
+#import "STCapturedImageSetAnimatableLayer.h"
 #import "STStandardButton.h"
 #import "R.h"
-#import "STSegmentedSliderView.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -33,15 +32,14 @@
     return self;
 }
 
+- (void)setDisplayLayer:(STCapturedImageSetAnimatableLayer *)displayLayer {
+    _displayLayer = displayLayer;
 
-- (void)setImageSet:(STCapturedImageSet *)imageSet {
-    _imageSet = imageSet;
-
-    if(_imageSet.count){
+    if(_displayLayer.imageSet.count){
         CGFloat squareWidth = self.height;
-        CGFloat maxThumbnailWidth = (self.width-squareWidth)/_imageSet.count;
+        CGFloat maxThumbnailWidth = (self.width-squareWidth)/_displayLayer.imageSet.count;
 
-        [_imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
+        [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
             NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
             UIImageView * thumbnailCellView = [[UIImageView alloc] initWithSizeWidth:squareWidth];
             [self addSubview:thumbnailCellView];
@@ -65,8 +63,9 @@
     }
 }
 
+
 - (void)disposeContent {
-    _imageSet = nil;
+    _displayLayer = nil;
 
     [self clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 

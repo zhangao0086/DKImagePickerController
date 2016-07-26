@@ -5,25 +5,19 @@
 
 #import <Foundation/Foundation.h>
 #import "STItem.h"
+#import "STCapturedImageSetDisplayObject.h"
 
 @class STMultiSourcingImageProcessor;
 @class STCapturedImageSet;
+@class STCapturedImageSetDisplayLayer;
 
-@interface STCapturedImageSetDisplayLayerSet : STItem
-//initial attributes
-@property (nonatomic, readwrite) NSArray<STCapturedImageSet *> * sourceImageSets;
-@property (nonatomic, readonly) STCapturedImageSetDisplayLayerSet * superlayer;
+@interface STCapturedImageSetDisplayLayerSet : STCapturedImageSetDisplayObject
 //storing attributes
-//@property (nonatomic, readonly) NSArray<STAfterImageLayerItem *> * layers;
-@property (nonatomic, assign) CGFloat alpha;
-@property (nonatomic, assign) CGFloat scale;
+@property (nonatomic, readwrite) NSArray<STCapturedImageSetDisplayLayer *> * layers;
 @property (nonatomic, readwrite) STMultiSourcingImageProcessor * effect;
 
-//- (instancetype)initWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
-//
-//+ (instancetype)itemWithLayers:(NSArray<STAfterImageLayerItem *> *)layers;
+- (instancetype)initWithLayers:(NSArray *)layers;
 
-- (instancetype)initWithSourceImageSets:(NSArray *)sourceImageSets;
++ (instancetype)setWithLayers:(NSArray *)layers;
 
-+ (instancetype)itemWithSourceImageSets:(NSArray *)sourceImageSets;
 @end

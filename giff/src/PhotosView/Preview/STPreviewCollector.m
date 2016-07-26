@@ -38,6 +38,7 @@
 #import "STGIFFDisplayLayerLeifEffect.h"
 #import "STGIFFDisplayLayerJanneEffect.h"
 #import "STEditControlView.h"
+#import "STCapturedImageSetAnimatableLayer.h"
 
 #define kDefaultNumbersOfVisible 5
 #define kBlurredImageKey @"_bluredPreviewCapturedImage"
@@ -320,7 +321,9 @@ static NSString * JANNE = @"Janne";
 
     //create
     STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
-    STCapturedImageSetAnimatableLayerSet * layerItem = [STCapturedImageSetAnimatableLayerSet itemWithSourceImageSets:@[imageSet]];
+
+
+    STCapturedImageSetAnimatableLayerSet * layerSet = [STCapturedImageSetAnimatableLayerSet setWithLayers:@[[STCapturedImageSetAnimatableLayer layerWithImageSet:imageSet]]];
     STMultiSourcingImageProcessor * effect = nil;
 
     if([LEIF isEqualToString:presetName]){
@@ -331,16 +334,16 @@ static NSString * JANNE = @"Janne";
     }
 
     effect.uuid = presetName;
-    layerItem.effect = effect;
-    return layerItem;
+    layerSet.effect = effect;
+    return layerSet;
 }
 
-- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerItem {
+- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerSet {
     STCapturedImageSet * sourceSet = self.targetPhotoItem.sourceForCapturedImageSet;
     /*
      * chroma key
      */
-    if([layerItem.effect.uuid isEqualToString:FUNNYMAN]){
+    if([layerSet.effect.uuid isEqualToString:FUNNYMAN]){
         NSData * gifData = [NSData dataWithContentsOfFile:[@"chrogif.gif" bundleFilePath]];
 
         UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
@@ -361,14 +364,15 @@ static NSString * JANNE = @"Janne";
             NSAssert(NO, @"write failed");
             return nil;
         }];
-        STCapturedImageSet * effectAppliedImageSet = [STCapturedImageSet setWithImages: capturedImagesFromGifData];
-        if(effectAppliedImageSet){
-            layerItem.sourceImageSets = [layerItem.sourceImageSets arrayByAddingObjectsFromArray:@[effectAppliedImageSet]];
+
+        STCapturedImageSetDisplayLayer * effectAppliedLayer = [STCapturedImageSetDisplayLayer layerWithImageSet:[STCapturedImageSet setWithImages: capturedImagesFromGifData]];
+        if(effectAppliedLayer){
+            layerSet.layers = [layerSet.layers arrayByAddingObjectsFromArray:@[effectAppliedLayer]];
         }
     }
-    else if([layerItem.effect.uuid isEqualToString:ONE_DIFF_FRAME]){
+    else if([layerSet.effect.uuid isEqualToString:ONE_DIFF_FRAME]){
         NSArray<STCapturedImage *> * preparedImages = nil;
-        STGIFFDisplayLayerFrameSwappingColorizeBlendEffect * _effect = (STGIFFDisplayLayerFrameSwappingColorizeBlendEffect *)layerItem.effect;
+        STGIFFDisplayLayerFrameSwappingColorizeBlendEffect * _effect = (STGIFFDisplayLayerFrameSwappingColorizeBlendEffect *)layerSet.effect;
 
         if(_effect.frameIndexOffset==0){
             preparedImages = sourceSet.images;
@@ -388,7 +392,9 @@ static NSString * JANNE = @"Janne";
             }
         }
 
-        layerItem.sourceImageSets = [layerItem.sourceImageSets arrayByAddingObjectsFromArray:@[[STCapturedImageSet setWithImages:preparedImages]]];
+        layerSet.layers = [layerSet.layers arrayByAddingObjectsFromArray:@[
+                [STCapturedImageSetDisplayLayer layerWithImageSet:[STCapturedImageSet setWithImages:preparedImages]]
+        ]];
 
     }
 }
@@ -414,20 +420,20 @@ static NSString * JANNE = @"Janne";
             NSAssert([imageSet.extensionObject isKindOfClass:NSArray.class], @"imageSet.extensionObject is not NSArray");
 
             if(!_afterImageView.layers.count){ //from storage
-                for(STCapturedImageSetDisplayLayerSet * layerItem in (NSArray *)imageSet.extensionObject){
-                    BOOL valid = layerItem
-                            && [layerItem isKindOfClass:STCapturedImageSetDisplayLayerSet.class]
-                            && layerItem.sourceImageSets.count;
+                for(STCapturedImageSetDisplayLayerSet * layerSet in (NSArray *)imageSet.extensionObject){
+                    BOOL valid = layerSet
+                            && [layerSet isKindOfClass:STCapturedImageSetDisplayLayerSet.class]
+                            && layerSet.layers.count;
 
                     NSAssert(valid, @"elements of imageSet.extensionObject is invalid item");
 
                     if(valid){
                         //recreate effects
-                        if(layerItem.effect){
-                            [self prepareLayerEffect:layerItem];
+                        if(layerSet.effect){
+                            [self prepareLayerEffect:layerSet];
                         }
 
-                        [_afterImageView appendLayer:layerItem];
+                        [_afterImageView appendLayer:layerSet];
                     }
                 }
                 //FIXME: 여기서 크래시 중
@@ -437,12 +443,12 @@ static NSString * JANNE = @"Janne";
         }else{
 
             //from capture
-            STCapturedImageSetAnimatableLayerSet * layerItem = [self createLayerFromCurrentImageSet];
-            if(layerItem.effect){
-                [self prepareLayerEffect:layerItem];
+            STCapturedImageSetAnimatableLayerSet * layerSet = [self createLayerFromCurrentImageSet];
+            if(layerSet.effect){
+                [self prepareLayerEffect:layerSet];
             }
-            [_afterImageView appendLayer:layerItem];
-            [[STMainControl sharedInstance].editControlView.layersFrameEditView appendLayer:layerItem];
+            [_afterImageView appendLayer:layerSet];
+            [[STMainControl sharedInstance].editControlView.layersFrameEditView appendLayer:layerSet];
 
             imageSet.extensionObject = _afterImageView.layers;
         }

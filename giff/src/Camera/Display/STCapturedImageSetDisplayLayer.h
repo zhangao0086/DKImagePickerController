@@ -5,11 +5,12 @@
 
 #import <Foundation/Foundation.h>
 #import "STItem.h"
+#import "STCapturedImageSetDisplayObject.h"
 
 @class STCapturedImageSet;
 
 
-@interface STCapturedImageSetDisplayLayer : STItem
+@interface STCapturedImageSetDisplayLayer : STCapturedImageSetDisplayObject
 @property (nonatomic, readonly) STCapturedImageSet * imageSet;
 
 - (instancetype)initWithImageSet:(STCapturedImageSet *)imageSet;
