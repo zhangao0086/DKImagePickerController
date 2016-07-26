@@ -565,7 +565,7 @@ static NSString * TagNameForEffectView = @"com.stells.effectview";
 static NSString * TagNameForEffectViewVibrancy = @"com.stells.effectviewVibrancy";
 
 - (UIVisualEffectView *)maskedEffectView:(CALayer *)layer{
-    return (UIVisualEffectView *) [self st_matchSubviews:^BOOL(UIView *view, NSUInteger index) {
+    return (UIVisualEffectView *) [self st_matchedSubview:^BOOL(UIView *view, NSUInteger index) {
         return [layer isEqual:view.layer.mask] && [view.tagName isEqualToString:TagNameForEffectView];
     }];
 }
@@ -693,7 +693,7 @@ static NSString * TagNameForEffectViewVibrancy = @"com.stells.effectviewVibrancy
     return (UIView *)self.subviews.lastObject;
 }
 
-- (UIView *)st_matchSubviews:(BOOL (^)(UIView* view, NSUInteger index))block {
+- (UIView *)st_matchedSubview:(BOOL (^)(UIView* view, NSUInteger index))block {
     __block UIView * matchedView = nil;
     [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if(block(obj, idx)){

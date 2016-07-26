@@ -15,4 +15,5 @@
 @interface STEditControlFrameEditItemView : STUIView
 @property (nonatomic, readwrite) STCapturedImageSetAnimatableLayer * displayLayer;
 @property (nonatomic, readonly) STSegmentedSliderView * frameOffsetSlider;
+@property (nonatomic, readonly) STStandardButton * removeButton;
 @end

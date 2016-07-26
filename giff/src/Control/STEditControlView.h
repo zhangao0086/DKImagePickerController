@@ -10,5 +10,5 @@
 @class STEditControlFrameEditView;
 
 @interface STEditControlView : STUIView
-@property (nonatomic, readonly) STEditControlFrameEditView * layersFrameEditView;
+@property (nonatomic, readonly) STEditControlFrameEditView * frameEditView;
 @end

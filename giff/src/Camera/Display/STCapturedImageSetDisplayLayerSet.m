@@ -30,13 +30,15 @@
 }
 
 - (void)setLayers:(NSArray *)layers {
-    NSAssert(layers.count, @"empty layer is not allowed.");
-    STCapturedImageSetDisplayLayer * layer0 = [layers firstObject];
-    NSArray * arrayOfImageSetsCount = [layers mapWithItemsKeyPath:@keypath(layer0.imageSet.count)];
-    NSAssert(layers.count == [[NSCountedSet setWithArray:arrayOfImageSetsCount] countForObject:@(layer0.imageSet.count)],
-            @"all source image set's of Layer count is must be same");
-
-    _layers = layers;
+    if(layers.count){
+        STCapturedImageSetDisplayLayer * layer0 = [layers firstObject];
+        NSArray * arrayOfImageSetsCount = [layers mapWithItemsKeyPath:@keypath(layer0.imageSet.count)];
+        NSAssert(layers.count == [[NSCountedSet setWithArray:arrayOfImageSetsCount] countForObject:@(layer0.imageSet.count)],
+                @"all source image set's of Layer count is must be same");
+        _layers = layers;
+    }else{
+        _layers = nil;
+    }
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

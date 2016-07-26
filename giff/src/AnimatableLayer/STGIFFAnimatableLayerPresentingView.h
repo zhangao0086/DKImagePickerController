@@ -7,9 +7,9 @@
 #import "STSelectableView.h"
 #import "STSelectableCapturedImageSetView.h"
 #import "STSegmentedSliderView.h"
-#import "STAfterImageLayerCollectionView.h"
+#import "STCapturedImageSetAnimatableLayerSetCollectionView.h"
 
 @class STCapturedImageSetAnimatableLayerSet;
 
-@interface STGIFFAnimatableLayerPresentingView : STAfterImageLayerCollectionView <STSegmentedSliderControlDelegate>
+@interface STGIFFAnimatableLayerPresentingView : STCapturedImageSetAnimatableLayerSetCollectionView <STSegmentedSliderControlDelegate>
 @end

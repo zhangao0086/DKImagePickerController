@@ -14,8 +14,6 @@
 
 @implementation STEditControlFrameEditItemView {
     UIView * _thumbnailCellContainerView;
-
-    STStandardButton * _removeButton;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

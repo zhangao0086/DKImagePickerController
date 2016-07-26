@@ -113,7 +113,7 @@ typedef NS_ENUM(NSInteger, STSlideAllowedDirection) {
 
 - (UIView *)lastSubview;
 
-- (UIView *)st_matchSubviews:(BOOL (^)(UIView *view, NSUInteger index))block;
+- (UIView *)st_matchedSubview:(BOOL (^)(UIView *view, NSUInteger index))block;
 
 - (void)st_addSubPresentableObject:(id)object;
 

@@ -26,7 +26,7 @@
 
     [_contentView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
-        STCapturedImageSetAnimatableLayerSet *layerSet = [self.layers st_objectOrNilAtIndex:index];
+        STCapturedImageSetAnimatableLayerSet *layerSet = [self.layerSets st_objectOrNilAtIndex:index];
 
         NSInteger layerIndex = self.currentIndex + layerSet.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
@@ -43,8 +43,8 @@
 
 }
 
-- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerSet{
-    [super appendLayer:layerSet];
+- (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    [super appendLayerSet:layerSet];
 
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayer:layerSet];
     if(layerSet.effect){
@@ -66,10 +66,15 @@
     //layer
     STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_contentView.size];
     layerView.fitViewsImageToBounds = YES;
+    layerView.tagName = layerSet.uuid;
     [_contentView addSubview:layerView];
     [layerView setViews:presentableObjects];
 
     [self setNeedsLayersDisplayAndLayout];
+}
+
+- (UIView *)itemViewOfLayerSetAt:(STCapturedImageSetAnimatableLayerSet *)layerSet {
+    return [_contentView viewWithTagName:layerSet.uuid];
 }
 
 #pragma mark OffsetSlider
@@ -79,7 +84,7 @@
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
-    STCapturedImageSetAnimatableLayerSet * layerSet = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    STCapturedImageSetAnimatableLayerSet * layerSet = [self.layerSets st_objectOrNilAtIndex:targetIndexOfLayer];
 
     layerSet.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
@@ -87,8 +92,8 @@
 }
 
 - (UIView *)createThumbView {
-    if(self.layers.count){
-        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _contentView.height/self.layers.count)];
+    if(self.layerSets.count){
+        UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(20, _contentView.height/self.layerSets.count)];
         thumbView.backgroundColor = [UIColor blackColor];
         return thumbView;
     }

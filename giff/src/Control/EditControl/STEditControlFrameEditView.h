@@ -4,10 +4,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STAfterImageLayerCollectionView.h"
+#import "STCapturedImageSetAnimatableLayerSetCollectionView.h"
 #import "STSegmentedSliderView.h"
 
 
-@interface STEditControlFrameEditView : STAfterImageLayerCollectionView <STSegmentedSliderControlDelegate>
-
+@interface STEditControlFrameEditView : STCapturedImageSetAnimatableLayerSetCollectionView <STSegmentedSliderControlDelegate>
+@property (nonatomic, readonly) NSUInteger maxNumberOfLayersOfLayerSet;
 @end

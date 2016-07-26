@@ -31,6 +31,8 @@ extern NSString * const STPreviewCollectorNotificationPreviewBeginDragging;
 
 - (void)apply;
 
+- (void)reloadSmoothly;
+
 - (void)reset;
 
 - (BOOL)isCurrentTypeAllowedTool;

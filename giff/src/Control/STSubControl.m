@@ -436,7 +436,7 @@
             }];
         }
         [_left whenSelected:^(STSelectableView *button, NSInteger index) {
-            [[STPhotoSelector sharedInstance] doExitEditAndCancelAfterCapture];
+            [[STPhotoSelector sharedInstance] doExitEditAfterCapture:NO];
         }];
         //reset
         _left.collectablesSelectAsIndependent = NO;

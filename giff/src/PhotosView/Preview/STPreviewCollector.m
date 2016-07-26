@@ -74,7 +74,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 
     UIImageView *_coverImageViewToReloadSmoothly;
 
-    STGIFFAnimatableLayerPresentingView * _afterImageView;
+
 
 #pragma mark filtertest
     /*
@@ -170,7 +170,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     }else if(type== STPhotoViewTypeEditAfterCapture){
         Weaks
 
-        [self enterAfterImageEditingMode];
+//        [self enterAfterImageEditingMode];
 
         [self enterTransition:nil];
 
@@ -262,215 +262,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     [self addObserver];
 }
 
-#pragma mark AfterImage Impl.
-- (void)enterAfterImageEditingMode{
-    Weaks
 
-    STCapturedImageSet * targetImageSet = self.targetPhotoItem.sourceForCapturedImageSet;
-    
-#if DEBUG
-    for(STCapturedImage * image in targetImageSet.images){
-        NSLog(@"%d %f %f", image.focusAdjusted, image.lensPosition, image.createdTime);
-    }
-#endif
-
-    if(targetImageSet.images.count){
-        __block NSUInteger selectedIndex = targetImageSet.indexOfDefaultImage;
-
-        NSAssert([targetImageSet.images st_objectOrNilAtIndex:selectedIndex],@"indexOfDefaultImage is wrong.");
-        if(![targetImageSet.images st_objectOrNilAtIndex:selectedIndex]){
-            selectedIndex = 0;
-        }
-
-        selectedIndex = (NSUInteger) floor(targetImageSet.images.count/2);
-
-        [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderValue) id:@"postFocusSliderValue"];
-
-        _previewView.masterPositionSliderValue = selectedIndex / (targetImageSet.images.count * 1.f) ;
-        _previewView.masterPositionSlidingValue = selectedIndex / (targetImageSet.images.count * 1.f) ;
-        [_previewView st_addKeypathListener:@keypath(_previewView.masterPositionSliderValue) id:@"postFocusSliderValue" newValueBlock:^(id value, id _weakSelf) {
-            @autoreleasepool {
-                NSUInteger index = (NSUInteger) nearbyint((targetImageSet.images.count-1) * [value floatValue]);
-
-                if(index!=selectedIndex){
-                    [Wself renderAfterImageSetWithFrameAt:index];
-                    selectedIndex = index;
-                }
-            }
-        }];
-        [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding"];
-        [_previewView st_addKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding" newValueBlock:^(id value, id _weakSelf) {
-            if(![value boolValue]){
-                [Wself applyNeedsAfterImageSetWithFrameAt];
-            }
-        }];
-
-        [self renderAfterImageSetWithFrameAt:selectedIndex];
-    }
-}
-
-#pragma mark create Layers / effects
-//TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
-static NSString * FUNNYMAN = @"funnyman";
-static NSString * ONE_DIFF_FRAME = @"basicframe";
-static NSString * LEIF = @"leif";
-static NSString * JANNE = @"Janne";
-
-- (STCapturedImageSetAnimatableLayerSet *)createLayerFromCurrentImageSet{
-    NSString * presetName = JANNE;
-
-    //create
-    STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
-
-
-    STCapturedImageSetAnimatableLayerSet * layerSet = [STCapturedImageSetAnimatableLayerSet setWithLayers:@[[STCapturedImageSetAnimatableLayer layerWithImageSet:imageSet]]];
-    STMultiSourcingImageProcessor * effect = nil;
-
-    if([LEIF isEqualToString:presetName]){
-        effect = [[STGIFFDisplayLayerLeifEffect alloc] init];
-    }
-    else if([JANNE isEqualToString:presetName]){
-        effect = [[STGIFFDisplayLayerJanneEffect alloc] init];
-    }
-
-    effect.uuid = presetName;
-    layerSet.effect = effect;
-    return layerSet;
-}
-
-- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerSet {
-    STCapturedImageSet * sourceSet = self.targetPhotoItem.sourceForCapturedImageSet;
-    /*
-     * chroma key
-     */
-    if([layerSet.effect.uuid isEqualToString:FUNNYMAN]){
-        NSData * gifData = [NSData dataWithContentsOfFile:[@"chrogif.gif" bundleFilePath]];
-
-        UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
-
-        NSArray * imagesToCreateImageSet = nil;
-        if(gifImages.images.count > sourceSet.images.count){
-            NSRange cuttingRange = NSMakeRange(0,sourceSet.images.count);
-            imagesToCreateImageSet = [gifImages.images subarrayWithRange:cuttingRange];
-        }else{
-            //TODO: 이 경우 gif가 imageSet보다 길이 짧은때 정지 화면 아이템을 넣던지 imageSet에서 이미지를 빼던지 보정 처리 필요
-        }
-
-        NSArray * capturedImagesFromGifData = [imagesToCreateImageSet mapWithIndex:^id(UIImage * image, NSInteger number) {
-            NSURL * url = [[@(number) stringValue] URLForTemp:@"giff_effect_adding_resource_f" extension:@"png"];
-            if([UIImagePNGRepresentation(image) writeToURL:url atomically:YES]){
-                return [STCapturedImage imageWithImageUrl:url];
-            }
-            NSAssert(NO, @"write failed");
-            return nil;
-        }];
-
-        STCapturedImageSetDisplayLayer * effectAppliedLayer = [STCapturedImageSetDisplayLayer layerWithImageSet:[STCapturedImageSet setWithImages: capturedImagesFromGifData]];
-        if(effectAppliedLayer){
-            layerSet.layers = [layerSet.layers arrayByAddingObjectsFromArray:@[effectAppliedLayer]];
-        }
-    }
-    else if([layerSet.effect.uuid isEqualToString:ONE_DIFF_FRAME]){
-        NSArray<STCapturedImage *> * preparedImages = nil;
-        STGIFFDisplayLayerFrameSwappingColorizeBlendEffect * _effect = (STGIFFDisplayLayerFrameSwappingColorizeBlendEffect *)layerSet.effect;
-
-        if(_effect.frameIndexOffset==0){
-            preparedImages = sourceSet.images;
-
-        }else{
-            //frame adjust
-            NSMutableArray<STCapturedImage *> *copiedSourceImages = [sourceSet.images mutableCopy];
-            NSUInteger indexAbsStep = (NSUInteger) ABS(_effect.frameIndexOffset);
-
-            if(_effect.frameIndexOffset>0){
-                NSArray * tail = [copiedSourceImages pop:indexAbsStep];
-                preparedImages = [tail arrayByAddingObjectsFromArray:copiedSourceImages];
-
-            }else if(_effect.frameIndexOffset<0){
-                NSArray * head = [copiedSourceImages shift:indexAbsStep];
-                preparedImages = [copiedSourceImages arrayByAddingObjectsFromArray:head];
-            }
-        }
-
-        layerSet.layers = [layerSet.layers arrayByAddingObjectsFromArray:@[
-                [STCapturedImageSetDisplayLayer layerWithImageSet:[STCapturedImageSet setWithImages:preparedImages]]
-        ]];
-
-    }
-}
-
-#pragma mark render Layers
-- (void)renderAfterImageSetWithFrameAt:(NSUInteger)index{
-    @autoreleasepool {
-        STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
-
-        if(!_afterImageView){
-            _afterImageView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSize:_previewView.size];
-        }
-
-        if(![[_previewView subviews] containsObject:_afterImageView]){
-            [_previewView insertSubview:_afterImageView aboveSubview:self.previewView.contentView];
-            [_afterImageView centerToParent];
-        }
-        //set default
-        //TODO: frameEditor에서 추가를 선택햇을 경우 말그대로 다시 layer를 추가적으로 append후 리 랜더링 해줘야 한다
-
-        if(imageSet.extensionObject){
-            //vaild check
-            NSAssert([imageSet.extensionObject isKindOfClass:NSArray.class], @"imageSet.extensionObject is not NSArray");
-
-            if(!_afterImageView.layers.count){ //from storage
-                for(STCapturedImageSetDisplayLayerSet * layerSet in (NSArray *)imageSet.extensionObject){
-                    BOOL valid = layerSet
-                            && [layerSet isKindOfClass:STCapturedImageSetDisplayLayerSet.class]
-                            && layerSet.layers.count;
-
-                    NSAssert(valid, @"elements of imageSet.extensionObject is invalid item");
-
-                    if(valid){
-                        //recreate effects
-                        if(layerSet.effect){
-                            [self prepareLayerEffect:layerSet];
-                        }
-
-                        [_afterImageView appendLayer:layerSet];
-                    }
-                }
-                //FIXME: 여기서 크래시 중
-                NSAssert(_afterImageView.layers.count, @"after image can't initialize");
-            }
-
-        }else{
-
-            //from capture
-            STCapturedImageSetAnimatableLayerSet * layerSet = [self createLayerFromCurrentImageSet];
-            if(layerSet.effect){
-                [self prepareLayerEffect:layerSet];
-            }
-            [_afterImageView appendLayer:layerSet];
-            [[STMainControl sharedInstance].editControlView.layersFrameEditView appendLayer:layerSet];
-
-            imageSet.extensionObject = _afterImageView.layers;
-        }
-
-        _afterImageView.currentIndex = index;
-    }
-}
-
-- (void)applyNeedsAfterImageSetWithFrameAt{
-    NSArray <STCapturedImage *> * images = self.targetPhotoItem.sourceForCapturedImageSet.images;
-    NSUInteger indexOfSlidingTargetImagesUrls = (NSUInteger) round((images.count-1) * _previewView.masterPositionSliderValue);
-
-    [self.targetPhotoItem setAssigningIndexFromCapturedImageSet:indexOfSlidingTargetImagesUrls];
-    [self.presenter beginAndAutomaticallyEndHighQualityContext];
-    [self reloadSmoothly];
-}
-
-- (void)exitAfterImageEditingMode{
-
-    [_afterImageView removeAllLayers];
-    [[STMainControl sharedInstance].editControlView.layersFrameEditView removeAllLayers];
-}
 
 - (void)reset {
     [self unlockUpdateZoomFromCurrentScrollOffset];
@@ -510,7 +302,6 @@ static NSString * JANNE = @"Janne";
 }
 
 - (void)finishAllResources; {
-    [self exitAfterImageEditingMode];
 
     [UIView setAnimationsEnabled:NO];
     [self reset];

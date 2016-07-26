@@ -14,7 +14,7 @@
 
     STStandardButton *_exportButton;
 
-    STEditControlFrameEditView * _layersFrameEditView;
+    STEditControlFrameEditView * _frameEditView;
 }
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -41,7 +41,7 @@
     _exportButton.right = self.width-padding;
     _exportButton.bottom = self.height-padding;
 
-    [self addSubview:_layersFrameEditView];
+    [self addSubview:_frameEditView];
 
 }
 
@@ -50,11 +50,11 @@
 }
 
 - (void)createEditControls {
-    [self layersFrameEditView];
+    [self frameEditView];
 }
 
-- (STEditControlFrameEditView *)layersFrameEditView {
-    return _layersFrameEditView ?: (_layersFrameEditView = [[STEditControlFrameEditView alloc] initWithSize:CGSizeMake(self.width, self.height/4)]);
+- (STEditControlFrameEditView *)frameEditView {
+    return _frameEditView ?: (_frameEditView = [[STEditControlFrameEditView alloc] initWithSize:CGSizeMake(self.width, self.height/4)]);
 }
 
 

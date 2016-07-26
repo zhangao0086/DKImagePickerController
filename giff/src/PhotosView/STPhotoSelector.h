@@ -47,8 +47,6 @@
 
 - (void)doChangePhotoViewType:(STPhotoViewType)type;
 
-- (void)doSlideUp:(BOOL)up;
-
 - (void)doScrollTop;
 
 - (void)doAfterCaptured:(STPhotoItemSource *)photoItemSource;
@@ -111,7 +109,7 @@
 
 - (void)doEnterEditAfterCaptureByItem:(STPhotoItem *)item transition:(STPreviewCollectorEnterTransitionContext)context;
 
-- (void)doExitEditAndCancelAfterCapture;
+- (void)doExitEditAfterCapture:(BOOL)suspend;
 
 - (void)doDirectlyEnterHome;
 
