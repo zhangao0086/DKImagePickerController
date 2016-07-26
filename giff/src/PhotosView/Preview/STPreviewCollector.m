@@ -25,7 +25,7 @@
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSet.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
-#import "STCapturedImageSetDisplayLayer.h"
+#import "STCapturedImageSetDisplayLayerSet.h"
 #import "STMultiSourcingImageProcessor.h"
 #import "STGIFFDisplayLayerChromakeyEffect.h"
 #import "STGIFFAnimatableLayerPresentingView.h"
@@ -33,7 +33,7 @@
 #import "NSData+STGIFUtil.h"
 #import "NSString+STUtil.h"
 #import "UIColor+BFPaperColors.h"
-#import "STCapturedImageSetAnimatableLayer.h"
+#import "STCapturedImageSetAnimatableLayerSet.h"
 #import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "STGIFFDisplayLayerLeifEffect.h"
 #import "STGIFFDisplayLayerJanneEffect.h"
@@ -315,12 +315,12 @@ static NSString * ONE_DIFF_FRAME = @"basicframe";
 static NSString * LEIF = @"leif";
 static NSString * JANNE = @"Janne";
 
-- (STCapturedImageSetAnimatableLayer *)createLayerFromCurrentImageSet{
+- (STCapturedImageSetAnimatableLayerSet *)createLayerFromCurrentImageSet{
     NSString * presetName = JANNE;
 
     //create
     STCapturedImageSet * imageSet = self.targetPhotoItem.sourceForCapturedImageSet;
-    STCapturedImageSetAnimatableLayer * layerItem = [STCapturedImageSetAnimatableLayer itemWithSourceImageSets:@[imageSet]];
+    STCapturedImageSetAnimatableLayerSet * layerItem = [STCapturedImageSetAnimatableLayerSet itemWithSourceImageSets:@[imageSet]];
     STMultiSourcingImageProcessor * effect = nil;
 
     if([LEIF isEqualToString:presetName]){
@@ -335,7 +335,7 @@ static NSString * JANNE = @"Janne";
     return layerItem;
 }
 
-- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayer *)layerItem {
+- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerItem {
     STCapturedImageSet * sourceSet = self.targetPhotoItem.sourceForCapturedImageSet;
     /*
      * chroma key
@@ -414,9 +414,9 @@ static NSString * JANNE = @"Janne";
             NSAssert([imageSet.extensionObject isKindOfClass:NSArray.class], @"imageSet.extensionObject is not NSArray");
 
             if(!_afterImageView.layers.count){ //from storage
-                for(STCapturedImageSetDisplayLayer * layerItem in (NSArray *)imageSet.extensionObject){
+                for(STCapturedImageSetDisplayLayerSet * layerItem in (NSArray *)imageSet.extensionObject){
                     BOOL valid = layerItem
-                            && [layerItem isKindOfClass:STCapturedImageSetDisplayLayer.class]
+                            && [layerItem isKindOfClass:STCapturedImageSetDisplayLayerSet.class]
                             && layerItem.sourceImageSets.count;
 
                     NSAssert(valid, @"elements of imageSet.extensionObject is invalid item");
@@ -437,7 +437,7 @@ static NSString * JANNE = @"Janne";
         }else{
 
             //from capture
-            STCapturedImageSetAnimatableLayer * layerItem = [self createLayerFromCurrentImageSet];
+            STCapturedImageSetAnimatableLayerSet * layerItem = [self createLayerFromCurrentImageSet];
             if(layerItem.effect){
                 [self prepareLayerEffect:layerItem];
             }

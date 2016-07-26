@@ -4,7 +4,7 @@
 //
 
 #import "STAfterImageLayerCollectionView.h"
-#import "STCapturedImageSetAnimatableLayer.h"
+#import "STCapturedImageSetAnimatableLayerSet.h"
 #import "UIView+STUtil.h"
 #import "STSelectableView.h"
 
@@ -43,7 +43,7 @@
     }
 }
 
-- (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem{
+- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerItem{
     [self initToAddLayersIfNeeded];
 
     [_layers addObject:layerItem];

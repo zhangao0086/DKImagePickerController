@@ -6,8 +6,8 @@
 #import "STEditControlFrameEditView.h"
 #import "STEditControlFrameEditItemView.h"
 #import "UIView+STUtil.h"
-#import "STCapturedImageSetDisplayLayer.h"
-#import "STCapturedImageSetAnimatableLayer.h"
+#import "STCapturedImageSetDisplayLayerSet.h"
+#import "STCapturedImageSetAnimatableLayerSet.h"
 #import "STStandardButton.h"
 #import "R.h"
 #import "NSArray+STUtil.h"
@@ -47,7 +47,7 @@
     return self.height/2;
 }
 
-- (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem {
+- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerItem {
     [super appendLayer:layerItem];
 
     //layer
@@ -78,7 +78,7 @@
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
 
-    STCapturedImageSetAnimatableLayer * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    STCapturedImageSetAnimatableLayerSet * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
     [self setNeedsLayersDisplayAndLayout];

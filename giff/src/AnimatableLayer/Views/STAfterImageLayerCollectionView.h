@@ -5,7 +5,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class STCapturedImageSetAnimatableLayer;
+@class STCapturedImageSetAnimatableLayerSet;
 
 @interface STAfterImageLayerCollectionView : STUIView{
 @protected
@@ -13,9 +13,9 @@
 }
 
 @property (nonatomic, assign) NSUInteger currentIndex;
-@property (nonatomic, readonly) NSArray<STCapturedImageSetAnimatableLayer *> * layers;
+@property (nonatomic, readonly) NSArray<STCapturedImageSetAnimatableLayerSet *> * layers;
 
-- (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem;
+- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerItem;
 
 - (void)removeAllLayers;
 

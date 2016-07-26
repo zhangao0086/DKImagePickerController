@@ -3,10 +3,10 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STCapturedImageSetAnimatableLayer.h"
+#import "STCapturedImageSetAnimatableLayerSet.h"
 
 
-@implementation STCapturedImageSetAnimatableLayer {
+@implementation STCapturedImageSetAnimatableLayerSet {
 
 }
 

@@ -4,9 +4,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STCapturedImageSetDisplayLayer.h"
+#import "STCapturedImageSetDisplayLayerSet.h"
 
 
-@interface STCapturedImageSetAnimatableLayer : STCapturedImageSetDisplayLayer
+@interface STCapturedImageSetAnimatableLayerSet : STCapturedImageSetDisplayLayerSet
 @property (nonatomic, assign) NSInteger frameIndexOffset;
 @end

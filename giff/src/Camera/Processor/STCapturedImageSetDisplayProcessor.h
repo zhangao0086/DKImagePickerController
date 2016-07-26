@@ -6,16 +6,16 @@
 #import <Foundation/Foundation.h>
 
 @class STCapturedImageSet;
-@class STCapturedImageSetDisplayLayer;
+@class STCapturedImageSetDisplayLayerSet;
 
 
 @interface STCapturedImageSetDisplayProcessor : NSObject
 //@property(nonatomic, readonly) STCapturedImageSetDisplayLayer * targetLayer;
 @property(nonatomic, assign) BOOL loselessImageEncoding;
 
-- (instancetype)initWithTargetLayer:(STCapturedImageSetDisplayLayer *)targetLayer;
+- (instancetype)initWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
-+ (instancetype)processorWithTargetLayer:(STCapturedImageSetDisplayLayer *)targetLayer;
++ (instancetype)processorWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
 - (NSArray *)processResources;
 

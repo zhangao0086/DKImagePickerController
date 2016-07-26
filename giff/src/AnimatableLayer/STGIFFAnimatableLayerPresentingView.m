@@ -5,7 +5,7 @@
 
 #import "STCapturedImageSet.h"
 #import "NSArray+STUtil.h"
-#import "STCapturedImageSetAnimatableLayer.h"
+#import "STCapturedImageSetAnimatableLayerSet.h"
 #import "UIView+STUtil.h"
 #import "STQueueManager.h"
 #import "STMultiSourcingImageProcessor.h"
@@ -26,7 +26,7 @@
 
     [_contentView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
-        STCapturedImageSetAnimatableLayer *layerItem = [self.layers st_objectOrNilAtIndex:index];
+        STCapturedImageSetAnimatableLayerSet *layerItem = [self.layers st_objectOrNilAtIndex:index];
 
         NSInteger layerIndex = self.currentIndex + layerItem.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
@@ -43,7 +43,7 @@
 
 }
 
-- (void)appendLayer:(STCapturedImageSetAnimatableLayer *)layerItem{
+- (void)appendLayer:(STCapturedImageSetAnimatableLayerSet *)layerItem{
     [super appendLayer:layerItem];
 
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayer:layerItem];
@@ -62,7 +62,7 @@
     }
 }
 
-- (void)appendLayerView:(STCapturedImageSetAnimatableLayer *)layerItem presentableObjects:(NSArray *)presentableObjects{
+- (void)appendLayerView:(STCapturedImageSetAnimatableLayerSet *)layerItem presentableObjects:(NSArray *)presentableObjects{
     //layer
     STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_contentView.size];
     layerView.fitViewsImageToBounds = YES;
@@ -79,7 +79,7 @@
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     NSInteger targetIndexOfLayer = timeSlider.tag;
-    STCapturedImageSetAnimatableLayer * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
+    STCapturedImageSetAnimatableLayerSet * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
 
     layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 

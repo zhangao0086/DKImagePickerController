@@ -7,8 +7,8 @@
 #import "STSegmentedSliderView.h"
 
 @class STCapturedImageSet;
-@class STCapturedImageSetDisplayLayer;
-@class STCapturedImageSetAnimatableLayer;
+@class STCapturedImageSetDisplayLayerSet;
+@class STCapturedImageSetAnimatableLayerSet;
 
 
 @interface STEditControlFrameEditItemView : STUIView
