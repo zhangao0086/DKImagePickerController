@@ -43,7 +43,7 @@
 }
 
 - (void)setDelegateSlider:(id <STSegmentedSliderControlDelegate>)delegateSlider; {
-    BOOL newCreating = [delegateSlider isEqual:_delegateSlider];
+    BOOL newCreating = ![delegateSlider isEqual:_delegateSlider];
      _delegateSlider = delegateSlider;
 
     [self setSliderContentViews:newCreating];
