@@ -6,22 +6,10 @@
 #import "STGIFFDisplayLayerJanneEffect.h"
 #import "GPUImageChromaKeyBlendFilter.h"
 #import "GPUImagePicture.h"
-#import "GPUImageDifferenceBlendFilter.h"
-#import "GPUImageSourceOverBlendFilter.h"
-#import "GPUImageOverlayBlendFilter.h"
-#import "GPUImageAlphaBlendFilter.h"
-#import "GPUImageMonochromeFilter.h"
 #import "UIColor+BFPaperColors.h"
 #import "Colours.h"
-#import "GPUImageColorBlendFilter.h"
-#import "GPUImageFalseColorFilter.h"
-#import "GPUImageHardLightBlendFilter.h"
-#import "GPUImageSubtractBlendFilter.h"
-#import "GPUImageDarkenBlendFilter.h"
 #import "GPUImageSoftLightBlendFilter.h"
 #import "GPUImageTransformFilter.h"
-#import "GPUImageZoomBlurFilter.h"
-#import "STGPUImageOffsetScalingFilter.h"
 #import "STFilter.h"
 #import "STFilterManager.h"
 #import "UIImage+STUtil.h"
@@ -31,6 +19,10 @@
 
 @implementation STGIFFDisplayLayerJanneEffect {
 
+}
+
+- (NSUInteger)supportedNumberOfSourceImages {
+    return 2;
 }
 
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
@@ -49,7 +41,8 @@
 
         //1
         STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
-        composeItem1.source = [[GPUImagePicture alloc] initWithImage:[UIImage imageBundled:@"input.jpg"] smoothlyScaleOutput:YES];
+        //TODO: 한개 들어올떼 대체 처리
+        composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages.count>1 ? sourceImages[0]: [UIImage imageBundled:@"input.jpg"] smoothlyScaleOutput:YES];
         composeItem1.composer = [[GPUImageLightenBlendFilter alloc] init];
 
         GPUImageSobelEdgeDetectionFilter * edgeDetectionFilter = [[GPUImageSobelEdgeDetectionFilter alloc] init];

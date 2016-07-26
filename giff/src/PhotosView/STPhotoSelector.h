@@ -75,6 +75,8 @@
 
 - (void)doExitLivePreview;
 
+- (void)refreshCurrentDisplayImageLayerSet;
+
 - (BOOL)requestEnterEditLastItemIfPossible;
 
 - (void)doEnterEditByItem:(STPhotoItem *)targetItem;

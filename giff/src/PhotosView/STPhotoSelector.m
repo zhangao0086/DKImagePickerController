@@ -280,7 +280,7 @@ static STPhotoSelector *_instance = nil;
         [_previewView st_removeKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding"];
         [_previewView st_addKeypathListener:@keypath(_previewView.masterPositionSliderSliding) id:@"postFocusSliding" newValueBlock:^(id value, id _weakSelf) {
             if(![value boolValue]){
-                [Wself applyNeedsAfterImageSetWithFrameAt];
+                [Wself applyNeedsDisplayImageLayerSetAt];
             }
         }];
 
@@ -385,14 +385,14 @@ static NSString * JANNE = @"Janne";
 
         STCapturedImageSet * imageSet = _previewCollector.targetPhotoItem.sourceForCapturedImageSet;
 
+        //TODO: iCarousel 에 필터 랜더링을 제거 한 후 그냥 static view 한장으로 깔끔하게 정리.
         if(!_layerSetPresentationView){
             _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSize:_previewView.size];
         }
 
-        if(![[_previewView subviews] containsObject:_layerSetPresentationView]){
-            [_previewView insertSubview:_layerSetPresentationView aboveSubview:self.previewView.contentView];
-            [_layerSetPresentationView centerToParent];
-        }
+        [_previewView insertSubview:_layerSetPresentationView aboveSubview:self.previewView.contentView];
+        [_layerSetPresentationView centerToParent];
+
 
         //set default
         //TODO: frameEditor에서 추가를 선택햇을 경우 말그대로 다시 layer를 추가적으로 append후 리 랜더링 해줘야 한다
@@ -423,7 +423,7 @@ static NSString * JANNE = @"Janne";
             }
 
         }else{
-
+            //TODO: layerSet Effect 팩토리 구성할때 이부분 생성하고 업데이트 하는 부분 좀 깔끔하게 정리
             STCapturedImageSetAnimatableLayerSet * layerSet = nil;
             if(!_layerSetPresentationView.layerSets.count){
                 //from capture
@@ -451,7 +451,7 @@ static NSString * JANNE = @"Janne";
     }
 }
 
-- (void)applyNeedsAfterImageSetWithFrameAt{
+- (void)applyNeedsDisplayImageLayerSetAt{
     STPreview * _previewView = _previewCollector.previewView;
 
     NSArray <STCapturedImage *> * images = _previewCollector.targetPhotoItem.sourceForCapturedImageSet.images;
@@ -462,12 +462,20 @@ static NSString * JANNE = @"Janne";
     [_previewCollector reloadSmoothly];
 }
 
-- (void)suspendAfterImageEditingMode{
+
+- (void)refreshCurrentDisplayImageLayerSet{
+    STCapturedImageSetAnimatableLayerSet * layerSet = [_layerSetPresentationView.layerSets firstObject];
+    [_layerSetPresentationView updateLayerSet:layerSet];
+
+    [STMainControl sharedInstance].editControlView.frameEditView.layerSet = layerSet;
+}
+
+- (void)suspendDisplayImageLayerSetEditingMode{
 
 //    [_afterImageView removeAllLayersSets];
 }
 
-- (void)exitAfterImageEditingMode{
+- (void)exitDisplayImageLayerSetEditingMode{
 
     [_layerSetPresentationView removeAllLayersSets];
     [STMainControl sharedInstance].editControlView.frameEditView.layerSet = nil;
@@ -746,9 +754,9 @@ UIImageView * BlurPreviewCoverView;
     [[STMainControl sharedInstance] exitEditAfterCapture];
 
     if(suspend){
-        [self suspendAfterImageEditingMode];
+        [self suspendDisplayImageLayerSetEditingMode];
     }else{
-        [self exitAfterImageEditingMode];
+        [self exitDisplayImageLayerSetEditingMode];
     }
 
     if([STMainControl sharedInstance].mode == STControlDisplayModeLivePreview){

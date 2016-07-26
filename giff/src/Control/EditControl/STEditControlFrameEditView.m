@@ -106,6 +106,9 @@
 
     if(self.layerSet.layers.count==0){
         [[STPhotoSelector sharedInstance] doExitEditAfterCapture:NO];
+    }else{
+
+        [[STPhotoSelector sharedInstance] refreshCurrentDisplayImageLayerSet];
     }
 }
 
