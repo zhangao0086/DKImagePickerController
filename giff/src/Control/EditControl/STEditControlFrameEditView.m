@@ -16,11 +16,15 @@
 
 @implementation STEditControlFrameEditView {
     STStandardButton * _frameAddButton;
+    STUIView * _contentView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        _contentView = [[STUIView alloc] initWithSize:self.size];
+        [self addSubview:_contentView];
+
         _frameAddButton = [[STStandardButton alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
         _frameAddButton.fitIconImageSizeToCenterSquare = YES;
         [self addSubview:_frameAddButton];
@@ -34,75 +38,80 @@
     return self;
 }
 
+- (CGFloat)heightForFrameItemView{
+    return self.height/self.maxNumberOfLayersOfLayerSet;
+}
 
 - (NSUInteger)maxNumberOfLayersOfLayerSet {
     return 2;
 }
 
-- (void)setNeedsLayersDisplayAndLayout {
-    [super setNeedsLayersDisplayAndLayout];
+- (void)setLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet {
+    if(layerSet.layers.count){
+        _layerSet = layerSet;
 
+        Weaks
+        for(STCapturedImageSetAnimatableLayer *layer in layerSet.layers){
+            if([_contentView viewWithTagName:layer.uuid]){
+                continue;
+            }
+            NSAssert([layer isKindOfClass:STCapturedImageSetAnimatableLayer.class],@"Only STCapturedImageSetAnimatableLayer is allowed");
+            STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+            editItemView.tagName = editItemView.frameOffsetSlider.tagName = layer.uuid;
+            editItemView.displayLayer = layer;
+            editItemView.backgroundColor = [UIColor orangeColor];
+            editItemView.frameOffsetSlider.delegateSlider = self;
+            [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
+                [Wself removeLayerTapped:editItemView];
+            }];
+            [_contentView addSubview:editItemView];
+        }
+
+        oo(_layerSet.layers);
+        oo(_contentView.subviews);
+
+    }else{
+        _layerSet = nil;
+
+        [_contentView st_eachSubviews:^(UIView *view, NSUInteger index) {
+            ((STEditControlFrameEditItemView *) view).displayLayer = nil;
+            [((STEditControlFrameEditItemView *) view) disposeContent];
+        }];
+        [_contentView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+    }
+
+    [self setNeedsLayersDisplayAndLayout];
+}
+
+- (void)setNeedsLayersDisplayAndLayout {
     [_contentView st_eachSubviews:^(UIView *view, NSUInteger index) {
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *)view;
         editItemView.y = index*editItemView.height;
     }];
 
     _frameAddButton.y = [_contentView lastSubview].bottom;
-    _frameAddButton.visible = _contentView.subviews.count<2;
+    _frameAddButton.visible = _contentView.subviews.count<self.maxNumberOfLayersOfLayerSet;
 }
 
-- (CGFloat)heightForFrameItemView{
-    return self.height/2;
-}
-
-- (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet {
-    [super appendLayerSet:layerSet];
-
-    //layer
-    Weaks
-    for(STCapturedImageSetAnimatableLayer *layer in layerSet.layers){
-        NSAssert([layer isKindOfClass:STCapturedImageSetAnimatableLayer.class],@"Only STCapturedImageSetAnimatableLayer is allowed");
-        STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width, self.heightForFrameItemView)];
-        editItemView.tagName = editItemView.frameOffsetSlider.tagName = layer.uuid;
-        editItemView.displayLayer = layer;
-        editItemView.backgroundColor = [UIColor orangeColor];
-        editItemView.frameOffsetSlider.delegateSlider = self;
-        [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-            [Wself removeLayerTapped:editItemView layerSet:layerSet];
-        }];
-        [_contentView addSubview:editItemView];
-    }
-
-    [self setNeedsLayersDisplayAndLayout];
-}
-
-- (UIView *)itemViewOfLayerSetAt:(STCapturedImageSetAnimatableLayerSet *)layerSet {
-    return [_contentView viewWithTagName:layerSet.uuid];
-}
-
-- (void)removeAllLayersSets {
-    [_contentView st_eachSubviews:^(UIView *view, NSUInteger index) {
-        ((STEditControlFrameEditItemView *)view).displayLayer = nil;
-    }];
-
-    [super removeAllLayersSets];
-}
-
-- (void)removeLayerTapped:(STEditControlFrameEditItemView *)editItemView layerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+- (void)removeLayerTapped:(STEditControlFrameEditItemView *)editItemView{
     NSAssert(editItemView.displayLayer, @"layerView.displayLayer does not existed");
 
-    NSMutableArray * layersOfLayerSet = [layerSet.layers mutableCopy];
+    oo(_layerSet.layers);
+    oo(_contentView.subviews);
+
+    NSMutableArray * layersOfLayerSet = [self.layerSet.layers mutableCopy];
     [layersOfLayerSet removeObject:editItemView.displayLayer];
-    layerSet.layers = layersOfLayerSet;
+    self.layerSet.layers = layersOfLayerSet;
 
     editItemView.displayLayer = nil;
     [editItemView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
 
-    NSAssert(layerSet.layers.count==_contentView.subviews.count, @"It is differ from the number of layers and the number of contentview's subviews.");
-
     [self setNeedsLayersDisplayAndLayout];
 
-    if(layerSet.layers.count==0){
+    oo(_layerSet.layers);
+    oo(_contentView.subviews);
+
+    if(self.layerSet.layers.count==0){
         [[STPhotoSelector sharedInstance] doExitEditAfterCapture:NO];
     }
 }

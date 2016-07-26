@@ -26,7 +26,7 @@
     return self;
 }
 
-+ (instancetype)processorWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer {
++ (instancetype)processorWithTargetLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer {
     return [[self alloc] initWithTargetLayer:targetLayer];
 }
 

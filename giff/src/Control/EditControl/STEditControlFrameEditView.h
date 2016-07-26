@@ -8,6 +8,7 @@
 #import "STSegmentedSliderView.h"
 
 
-@interface STEditControlFrameEditView : STCapturedImageSetAnimatableLayerSetCollectionView <STSegmentedSliderControlDelegate>
+@interface STEditControlFrameEditView : STUIView <STSegmentedSliderControlDelegate>
+@property (nonatomic, readwrite) STCapturedImageSetAnimatableLayerSet * layerSet;
 @property (nonatomic, readonly) NSUInteger maxNumberOfLayersOfLayerSet;
 @end

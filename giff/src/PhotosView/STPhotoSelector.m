@@ -393,6 +393,7 @@ static NSString * JANNE = @"Janne";
             [_previewView insertSubview:_afterImageView aboveSubview:self.previewView.contentView];
             [_afterImageView centerToParent];
         }
+
         //set default
         //TODO: frameEditor에서 추가를 선택햇을 경우 말그대로 다시 layer를 추가적으로 append후 리 랜더링 해줘야 한다
 
@@ -423,13 +424,23 @@ static NSString * JANNE = @"Janne";
 
         }else{
 
-            //from capture
-            STCapturedImageSetAnimatableLayerSet * layerSet = [self createLayerSetFromCurrentImageSet];
-            if(layerSet.effect){
-                [self prepareLayerEffect:layerSet];
+            STCapturedImageSetAnimatableLayerSet * layerSet = nil;
+            if(!_afterImageView.layerSets.count){
+                //from capture
+                layerSet = [self createLayerSetFromCurrentImageSet];
+                if(layerSet.effect){
+                    [self prepareLayerEffect:layerSet];
+                }
+                [_afterImageView appendLayerSet:layerSet];
+
+            }else{
+                //add a layer of layerset + update
+                layerSet = [_afterImageView.layerSets firstObject];
+                STCapturedImageSetAnimatableLayer * addingLayer = [STCapturedImageSetAnimatableLayer layerWithImageSet:_previewCollector.targetPhotoItem.sourceForCapturedImageSet];
+                layerSet.layers = [layerSet.layers arrayByAddingObject:addingLayer];
             }
-            [_afterImageView appendLayerSet:layerSet];
-            [[STMainControl sharedInstance].editControlView.frameEditView appendLayerSet:layerSet];
+
+            [STMainControl sharedInstance].editControlView.frameEditView.layerSet = layerSet;
 
             imageSet.extensionObject = _afterImageView.layerSets;
         }
@@ -451,13 +462,13 @@ static NSString * JANNE = @"Janne";
 
 - (void)suspendAfterImageEditingMode{
 
-    [_afterImageView removeAllLayersSets];
+//    [_afterImageView removeAllLayersSets];
 }
 
 - (void)exitAfterImageEditingMode{
 
     [_afterImageView removeAllLayersSets];
-    [[STMainControl sharedInstance].editControlView.frameEditView removeAllLayersSets];
+    [STMainControl sharedInstance].editControlView.frameEditView.layerSet = nil;
 }
 
 #pragma mark Edit

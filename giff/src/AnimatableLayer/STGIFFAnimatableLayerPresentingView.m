@@ -46,7 +46,7 @@
 - (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     [super appendLayerSet:layerSet];
 
-    STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayer:layerSet];
+    STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayerSet:layerSet];
     if(layerSet.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{

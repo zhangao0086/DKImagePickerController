@@ -16,7 +16,7 @@
 
 - (instancetype)initWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
-+ (instancetype)processorWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer;
++ (instancetype)processorWithTargetLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
 - (NSArray *)processResources;
 
