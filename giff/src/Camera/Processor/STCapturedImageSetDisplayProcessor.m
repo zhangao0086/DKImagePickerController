@@ -30,7 +30,7 @@
     return [[self alloc] initWithTargetLayer:targetLayer];
 }
 
-- (NSArray *)processResources {
+- (NSArray *)processResources:(BOOL)forceReprocess {
     NSAssert(_targetLayerSet.layers.count,@"_targetLayer.layers is empty.");
 
     Weaks
@@ -50,7 +50,7 @@
                                                                            indexOfResourceItemSet
                 ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
-                if([[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
+                if(!forceReprocess && [[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
                     //cached
                     return tempURLToApplyEffect;
 
@@ -67,7 +67,7 @@
                     BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
                     NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
                     if(!containsNullInImages){
-                        BOOL vailedLayerNumbers = imagesToProcessEffect.count== [Wself.targetLayerSet.effect supportedNumberOfSourceImages];
+                        BOOL vailedLayerNumbers = imagesToProcessEffect.count <= [Wself.targetLayerSet.effect supportedNumberOfSourceImages];
                         NSAssert(vailedLayerNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.targetLayerSet.effect.class), [Wself.targetLayerSet.effect supportedNumberOfSourceImages]]));
 
                         UIImage * processedImage = vailedLayerNumbers ?

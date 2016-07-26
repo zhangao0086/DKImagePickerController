@@ -18,7 +18,7 @@
 
 + (instancetype)processorWithTargetLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
-- (NSArray *)processResources;
+- (NSArray *)processResources:(BOOL)forceReprocess;
 
 - (NSArray<NSArray *> *)resourcesSetToProcessFromSourceLayers;
 

@@ -65,7 +65,7 @@
     STPhotoViewType _type;
     STPhotoViewType _lastPhotoType;
 
-    STGIFFAnimatableLayerPresentingView * _afterImageView;
+    STGIFFAnimatableLayerPresentingView * _layerSetPresentationView;
 
 }
 
@@ -385,13 +385,13 @@ static NSString * JANNE = @"Janne";
 
         STCapturedImageSet * imageSet = _previewCollector.targetPhotoItem.sourceForCapturedImageSet;
 
-        if(!_afterImageView){
-            _afterImageView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSize:_previewView.size];
+        if(!_layerSetPresentationView){
+            _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSize:_previewView.size];
         }
 
-        if(![[_previewView subviews] containsObject:_afterImageView]){
-            [_previewView insertSubview:_afterImageView aboveSubview:self.previewView.contentView];
-            [_afterImageView centerToParent];
+        if(![[_previewView subviews] containsObject:_layerSetPresentationView]){
+            [_previewView insertSubview:_layerSetPresentationView aboveSubview:self.previewView.contentView];
+            [_layerSetPresentationView centerToParent];
         }
 
         //set default
@@ -401,7 +401,7 @@ static NSString * JANNE = @"Janne";
             //vaild check
             NSAssert([imageSet.extensionObject isKindOfClass:NSArray.class], @"imageSet.extensionObject is not NSArray");
 
-            if(!_afterImageView.layerSets.count){ //from storage
+            if(!_layerSetPresentationView.layerSets.count){ //from storage
                 for(STCapturedImageSetDisplayLayerSet * layerSet in (NSArray *)imageSet.extensionObject){
                     BOOL valid = layerSet
                             && [layerSet isKindOfClass:STCapturedImageSetDisplayLayerSet.class]
@@ -415,39 +415,39 @@ static NSString * JANNE = @"Janne";
                             [self prepareLayerEffect:layerSet];
                         }
 
-                        [_afterImageView appendLayerSet:layerSet];
+                        [_layerSetPresentationView appendLayerSet:layerSet];
                     }
                 }
                 //FIXME: 여기서 크래시 중
-                NSAssert(_afterImageView.layerSets.count, @"after image can't initialize");
+                NSAssert(_layerSetPresentationView.layerSets.count, @"after image can't initialize");
             }
 
         }else{
 
             STCapturedImageSetAnimatableLayerSet * layerSet = nil;
-            if(!_afterImageView.layerSets.count){
+            if(!_layerSetPresentationView.layerSets.count){
                 //from capture
                 layerSet = [self createLayerSetFromCurrentImageSet];
                 if(layerSet.effect){
                     [self prepareLayerEffect:layerSet];
                 }
-                [_afterImageView appendLayerSet:layerSet];
+                [_layerSetPresentationView appendLayerSet:layerSet];
 
             }else{
                 //add a layer of layerset + update
-                layerSet = [_afterImageView.layerSets firstObject];
+                layerSet = [_layerSetPresentationView.layerSets firstObject];
                 STCapturedImageSetAnimatableLayer * addingLayer = [STCapturedImageSetAnimatableLayer layerWithImageSet:_previewCollector.targetPhotoItem.sourceForCapturedImageSet];
                 layerSet.layers = [layerSet.layers arrayByAddingObject:addingLayer];
 
-                [_afterImageView updateLayerSet:layerSet];
+                [_layerSetPresentationView updateLayerSet:layerSet];
             }
 
             [STMainControl sharedInstance].editControlView.frameEditView.layerSet = layerSet;
 
-            imageSet.extensionObject = _afterImageView.layerSets;
+            imageSet.extensionObject = _layerSetPresentationView.layerSets;
         }
 
-        _afterImageView.currentIndex = index;
+        _layerSetPresentationView.currentIndex = index;
     }
 }
 
@@ -469,7 +469,7 @@ static NSString * JANNE = @"Janne";
 
 - (void)exitAfterImageEditingMode{
 
-    [_afterImageView removeAllLayersSets];
+    [_layerSetPresentationView removeAllLayersSets];
     [STMainControl sharedInstance].editControlView.frameEditView.layerSet = nil;
 }
 

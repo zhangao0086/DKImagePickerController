@@ -44,21 +44,22 @@
 }
 
 - (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    NSParameterAssert(layerSet);
     [super appendLayerSet:layerSet];
-
-    [self processLayerSetAndSetNeedsView:layerSet forceAppend:YES];
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:YES forceReprocess:NO];
 }
 
 - (void)updateLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
-    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO];
+    NSParameterAssert(layerSet);
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES];
 }
 
-- (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet forceAppend:(BOOL)forceAppend{
+- (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet forceAppend:(BOOL)forceAppend forceReprocess:(BOOL)forceReprocess{
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayerSet:layerSet];
     if(layerSet.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-            NSArray * effectAppliedImageUrls = [processor processResources];
+            NSArray * effectAppliedImageUrls = [processor processResources:forceReprocess];
 
             dispatch_async(dispatch_get_main_queue(),^{
                 [Wself setLayerView:layerSet presentableObjects:effectAppliedImageUrls forceAppend:forceAppend];
@@ -79,6 +80,7 @@
         layerView.tagName = layerSet.uuid;
         [_contentView addSubview:layerView];
     }
+    oo(presentableObjects);
     [layerView setViews:presentableObjects];
 
     [self setNeedsLayersDisplayAndLayout];
