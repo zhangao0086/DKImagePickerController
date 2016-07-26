@@ -57,6 +57,7 @@
         STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width, self.heightForFrameItemView)];
         editItemView.displayLayer = layer;
         editItemView.frameOffsetSlider.delegateSlider = self;
+        editItemView.tagName = editItemView.frameOffsetSlider.tagName = layer.uuid;
         editItemView.backgroundColor = [UIColor orangeColor];
         [_contentView addSubview:editItemView];
     }
@@ -78,10 +79,9 @@
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-    NSInteger targetIndexOfLayer = timeSlider.tag;
+    STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_contentView viewWithTagName:timeSlider.tagName];
 
-    STCapturedImageSetAnimatableLayerSet * layerItem = [self.layers st_objectOrNilAtIndex:targetIndexOfLayer];
-    layerItem.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+    editItemView.displayLayer.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 
     [self setNeedsLayersDisplayAndLayout];
 }
