@@ -56,7 +56,7 @@
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderControlSize];
         offsetSlider.normalizedCenterPositionOfThumbView = .5;
         [self addSubview:offsetSlider];
-        _subFrameOffsetSlider = offsetSlider;
+        _frameOffsetSlider = offsetSlider;
 
         [self bringSubviewToFront:_removeButton];
 

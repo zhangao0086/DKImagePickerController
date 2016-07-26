@@ -54,7 +54,7 @@
     for(STCapturedImageSet *imageSet in layerItem.sourceImageSets){
         STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width, self.heightForFrameItemView)];
         editItemView.imageSet = imageSet;
-        editItemView.subFrameOffsetSlider.delegateSlider = self;
+        editItemView.frameOffsetSlider.delegateSlider = self;
         editItemView.backgroundColor = [UIColor orangeColor];
         [_contentView addSubview:editItemView];
     }

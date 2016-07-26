@@ -13,5 +13,5 @@
 
 @interface STEditControlFrameEditItemView : STUIView
 @property (nonatomic, readwrite) STCapturedImageSet * imageSet;
-@property (nonatomic, readonly) STSegmentedSliderView * subFrameOffsetSlider;
+@property (nonatomic, readonly) STSegmentedSliderView * frameOffsetSlider;
 @end
