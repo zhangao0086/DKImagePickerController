@@ -67,9 +67,6 @@
             [_contentView addSubview:editItemView];
         }
 
-        oo(_layerSet.layers);
-        oo(_contentView.subviews);
-
     }else{
         _layerSet = nil;
 
@@ -96,9 +93,6 @@
 - (void)removeLayerTapped:(STEditControlFrameEditItemView *)editItemView{
     NSAssert(editItemView.displayLayer, @"layerView.displayLayer does not existed");
 
-    oo(_layerSet.layers);
-    oo(_contentView.subviews);
-
     NSMutableArray * layersOfLayerSet = [self.layerSet.layers mutableCopy];
     [layersOfLayerSet removeObject:editItemView.displayLayer];
     self.layerSet.layers = layersOfLayerSet;
@@ -106,10 +100,9 @@
     editItemView.displayLayer = nil;
     [editItemView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
 
-    [self setNeedsLayersDisplayAndLayout];
+    NSAssert(_layerSet.layers.count==_contentView.subviews.count,@"_contentView's subviews count and layerSet.layer's count must be same.");
 
-    oo(_layerSet.layers);
-    oo(_contentView.subviews);
+    [self setNeedsLayersDisplayAndLayout];
 
     if(self.layerSet.layers.count==0){
         [[STPhotoSelector sharedInstance] doExitEditAfterCapture:NO];

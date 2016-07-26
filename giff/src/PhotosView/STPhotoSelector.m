@@ -438,6 +438,8 @@ static NSString * JANNE = @"Janne";
                 layerSet = [_afterImageView.layerSets firstObject];
                 STCapturedImageSetAnimatableLayer * addingLayer = [STCapturedImageSetAnimatableLayer layerWithImageSet:_previewCollector.targetPhotoItem.sourceForCapturedImageSet];
                 layerSet.layers = [layerSet.layers arrayByAddingObject:addingLayer];
+
+                [_afterImageView updateLayerSet:layerSet];
             }
 
             [STMainControl sharedInstance].editControlView.frameEditView.layerSet = layerSet;

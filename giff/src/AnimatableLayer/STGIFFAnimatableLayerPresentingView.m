@@ -46,6 +46,14 @@
 - (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     [super appendLayerSet:layerSet];
 
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:YES];
+}
+
+- (void)updateLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO];
+}
+
+- (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet forceAppend:(BOOL)forceAppend{
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayerSet:layerSet];
     if(layerSet.effect){
         Weaks
@@ -53,21 +61,24 @@
             NSArray * effectAppliedImageUrls = [processor processResources];
 
             dispatch_async(dispatch_get_main_queue(),^{
-                [Wself appendLayerView:layerSet presentableObjects:effectAppliedImageUrls];
+                [Wself setLayerView:layerSet presentableObjects:effectAppliedImageUrls forceAppend:forceAppend];
             });
         });
     }else{
         //set default 0 STCapturedImageSet
-        [self appendLayerView:layerSet presentableObjects:[processor resourcesToProcessFromSourceLayer:[layerSet.layers firstObject]]];
+        [self setLayerView:layerSet presentableObjects:[processor resourcesToProcessFromSourceLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];
     }
 }
 
-- (void)appendLayerView:(STCapturedImageSetAnimatableLayerSet *)layerSet presentableObjects:(NSArray *)presentableObjects{
+- (void)setLayerView:(STCapturedImageSetAnimatableLayerSet *)layerSet presentableObjects:(NSArray *)presentableObjects forceAppend:(BOOL)forceAppend{
     //layer
-    STSelectableView *layerView = [[STSelectableView alloc] initWithSize:_contentView.size];
-    layerView.fitViewsImageToBounds = YES;
-    layerView.tagName = layerSet.uuid;
-    [_contentView addSubview:layerView];
+    STSelectableView *layerView = (STSelectableView *)[_contentView viewWithTagName:layerSet.uuid];
+    if(forceAppend || !layerView){
+        layerView = [[STSelectableView alloc] initWithSize:_contentView.size];
+        layerView.fitViewsImageToBounds = YES;
+        layerView.tagName = layerSet.uuid;
+        [_contentView addSubview:layerView];
+    }
     [layerView setViews:presentableObjects];
 
     [self setNeedsLayersDisplayAndLayout];
