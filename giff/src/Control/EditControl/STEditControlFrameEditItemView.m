@@ -69,6 +69,9 @@
 
     [self clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 
+    _frameOffsetSlider = nil;
+    _removeButton = nil;
+
     [super disposeContent];
 }
 

@@ -11,7 +11,6 @@
 #import "STCapturedImageSetAnimatableLayer.h"
 #import "STStandardButton.h"
 #import "R.h"
-#import "NSArray+STUtil.h"
 
 
 @implementation STEditControlFrameEditView {
@@ -55,10 +54,11 @@
     for(STCapturedImageSetAnimatableLayer *layer in layerSet.layers){
         NSAssert([layer isKindOfClass:STCapturedImageSetAnimatableLayer.class],@"Only STCapturedImageSetAnimatableLayer is allowed");
         STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width, self.heightForFrameItemView)];
+        editItemView.tagName = editItemView.frameOffsetSlider.tagName
+                = layer.uuid;
         editItemView.displayLayer = layer;
-        editItemView.frameOffsetSlider.delegateSlider = self;
-        editItemView.tagName = editItemView.frameOffsetSlider.tagName = layer.uuid;
         editItemView.backgroundColor = [UIColor orangeColor];
+        editItemView.frameOffsetSlider.delegateSlider = self;
         [_contentView addSubview:editItemView];
     }
 
@@ -74,6 +74,17 @@
 }
 
 #pragma mark OffsetSlider
+- (UIView *)createThumbView {
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, self.heightForFrameItemView)];
+    thumbView.backgroundColor = [UIColor blackColor];
+    return thumbView;
+}
+
+- (UIView *)createBackgroundView:(CGRect)bounds {
+    return nil;
+}
+
+
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     [self doingSlide:timeSlider withSelectedIndex:index];
 }
