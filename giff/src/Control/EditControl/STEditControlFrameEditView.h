@@ -11,4 +11,5 @@
 @interface STEditControlFrameEditView : STUIView <STSegmentedSliderControlDelegate>
 @property (nonatomic, readwrite) STCapturedImageSetAnimatableLayerSet * layerSet;
 @property (nonatomic, readonly) NSUInteger maxNumberOfLayersOfLayerSet;
+@property (nonatomic, readonly) NSUInteger currentMasterFrameIndex;
 @end

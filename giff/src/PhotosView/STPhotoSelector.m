@@ -50,6 +50,7 @@
 #import "NSData+STGIFUtil.h"
 #import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "STGIFFAnimatableLayerPresentingView.h"
+#import "STEditControlFrameEditView.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -286,10 +287,7 @@ static STPhotoSelector *_instance = nil;
 
         [self renderAfterImageSetWithFrameAt:selectedIndex];
 
-        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
-            oo(value);
-            _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
-        }];
+
     }
 }
 
@@ -450,6 +448,12 @@ static NSString * JANNE = @"Janne";
 
             imageSet.extensionObject = _layerSetPresentationView.layerSets;
         }
+
+        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
+            _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
+
+
+        }];
 
         _layerSetPresentationView.currentIndex = index;
     }

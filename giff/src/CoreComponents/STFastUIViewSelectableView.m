@@ -4,6 +4,7 @@
 //
 
 #import "STFastUIViewSelectableView.h"
+#import "NSArray+STUtil.h"
 
 
 @interface STSelectableView ()
@@ -15,11 +16,18 @@
 }
 - (void)setButtonDrawable:(UIImageView *)view set:(id)object{
     if([object isKindOfClass:UIView.class]){
+
         if(![[view subviews] containsObject:object]){
             [view addSubview:object];
         }else{
-            [view bringSubviewToFront:object];
+//            [view bringSubviewToFront:object];
         }
+
+        [[view subviews] eachViewsWithIndex:^(UIView *v, NSUInteger index) {
+            v.alpha=[v isEqual:object] ?  1 : 0;
+        }];
+
+        ii([[view subviews] indexOfObject:object]);
     }else{
         [super setButtonDrawable:view set:object];
     }

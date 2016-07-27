@@ -12,11 +12,14 @@
 #import "STStandardButton.h"
 #import "R.h"
 #import "STPhotoSelector.h"
+#import "STCapturedImageSet.h"
 
 
 @implementation STEditControlFrameEditView {
     STStandardButton * _frameAddButton;
     STUIView * _frameEditItemViewContainer;
+
+    STSegmentedSliderView * _masterOffsetSlider;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -33,6 +36,11 @@
         [_frameAddButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
             [[STPhotoSelector sharedInstance] doExitEditAfterCapture:YES];
         }];
+
+        _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+//        _masterOffsetSlider.normalizedCenterPositionOfThumbView = .5;
+        _masterOffsetSlider.delegateSlider = self;
+        [self addSubview:_masterOffsetSlider];
     }
 
     return self;
@@ -81,12 +89,13 @@
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
+    _frameEditItemViewContainer.top = _masterOffsetSlider.bottom;
     [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *)view;
         editItemView.y = index*editItemView.height;
     }];
 
-    _frameAddButton.y = [_frameEditItemViewContainer lastSubview].bottom;
+    _frameAddButton.y = _frameEditItemViewContainer.top+[_frameEditItemViewContainer lastSubview].bottom;
     _frameAddButton.visible = _frameEditItemViewContainer.subviews.count<self.maxNumberOfLayersOfLayerSet;
 }
 
@@ -129,11 +138,24 @@
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-    STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:timeSlider.tagName];
 
-    editItemView.displayLayer.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+    if([timeSlider isEqual:_masterOffsetSlider]){
 
-    [self setNeedsLayersDisplayAndLayout];
+        STCapturedImageSetDisplayLayer * anyLayer = [self.layerSet.layers firstObject];
+        NSUInteger currentMasterFrameIndex = (NSUInteger) round(anyLayer.imageSet.count*timeSlider.normalizedCenterPositionOfThumbView);
+        if(currentMasterFrameIndex!=_currentMasterFrameIndex){
+            [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+            _currentMasterFrameIndex = currentMasterFrameIndex;
+            [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+        }
+
+    }else{
+        STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:timeSlider.tagName];
+
+        editItemView.displayLayer.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+
+        [self setNeedsLayersDisplayAndLayout];
+    }
 }
 
 @end
