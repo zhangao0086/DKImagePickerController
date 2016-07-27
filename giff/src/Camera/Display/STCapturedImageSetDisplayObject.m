@@ -12,8 +12,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.scale = 1;
-        self.alpha = 1;
+        self.scale = 1.f;
+        self.alpha = 1.f;
     }
     return self;
 }
