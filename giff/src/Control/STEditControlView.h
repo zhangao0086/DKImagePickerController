@@ -9,6 +9,7 @@
 
 @class STEditControlFrameEditView;
 
-@interface STEditControlView : STUIView
+@interface STEditControlView : STUIView <STSegmentedSliderControlDelegate>
 @property (nonatomic, readonly) STEditControlFrameEditView * frameEditView;
+@property (nonatomic, readonly) NSUInteger currentMasterFrameIndex;
 @end

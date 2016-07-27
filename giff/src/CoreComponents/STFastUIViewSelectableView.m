@@ -4,7 +4,6 @@
 //
 
 #import "STFastUIViewSelectableView.h"
-#import "UIView+STUtil.h"
 
 
 @interface STSelectableView ()
@@ -18,10 +17,9 @@
     if([object isKindOfClass:UIView.class]){
         if(![[view subviews] containsObject:object]){
             [view addSubview:object];
+        }else{
+            [view bringSubviewToFront:object];
         }
-        [view st_eachSubviews:^(UIView *_view, NSUInteger index) {
-            _view.visible = [object isEqual:_view];
-        }];
     }else{
         [super setButtonDrawable:view set:object];
     }

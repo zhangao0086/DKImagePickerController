@@ -7,6 +7,7 @@
 #import "STStandardButton.h"
 #import "R.h"
 #import "UIView+STUtil.h"
+#import "STCapturedImageSetAnimatableLayerSet.h"
 
 
 @implementation STEditControlView {
@@ -15,7 +16,10 @@
     STStandardButton *_exportButton;
 
     STEditControlFrameEditView * _frameEditView;
+
+    STSegmentedSliderView * _masterOffsetSlider;
 }
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -41,8 +45,13 @@
     _exportButton.right = self.width-padding;
     _exportButton.bottom = self.height-padding;
 
-    [self addSubview:_frameEditView];
+    _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width,20)];
+    _masterOffsetSlider.normalizedCenterPositionOfThumbView = .5;
+    _masterOffsetSlider.delegateSlider = self;
+    [self addSubview:_masterOffsetSlider];
 
+    [self addSubview:_frameEditView];
+    _frameEditView.top = _masterOffsetSlider.bottom;
 }
 
 - (void)createEffectSelector {
@@ -77,6 +86,31 @@
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
     }];
+}
+
+#pragma mark Slider
+- (void)didSlide:(STSegmentedSliderView *)slider withSelectedIndex:(int)index {
+    [self doingSlide:slider withSelectedIndex:index];
+
+//    [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+//    [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+}
+
+- (void)doingSlide:(STSegmentedSliderView *)slider withSelectedIndex:(int)index {
+
+    NSUInteger currentMasterFrameIndex = (NSUInteger) round(slider.normalizedCenterPositionOfThumbView*10) - 5;
+
+    if(_currentMasterFrameIndex!=index){
+        [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+        _currentMasterFrameIndex = (NSUInteger) index;
+        [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+    }
+}
+
+- (UIView *)createThumbView {
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, 20)];
+    thumbView.backgroundColor = [UIColor blackColor];
+    return thumbView;
 }
 
 @end

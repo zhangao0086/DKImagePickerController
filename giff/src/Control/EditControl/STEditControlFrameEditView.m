@@ -16,14 +16,14 @@
 
 @implementation STEditControlFrameEditView {
     STStandardButton * _frameAddButton;
-    STUIView * _contentView;
+    STUIView * _frameEditItemViewContainer;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _contentView = [[STUIView alloc] initWithSize:self.size];
-        [self addSubview:_contentView];
+        _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
+        [self addSubview:_frameEditItemViewContainer];
 
         _frameAddButton = [[STStandardButton alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
         _frameAddButton.fitIconImageSizeToCenterSquare = YES;
@@ -52,7 +52,7 @@
 
         Weaks
         for(STCapturedImageSetAnimatableLayer *layer in layerSet.layers){
-            if([_contentView viewWithTagName:layer.uuid]){
+            if([_frameEditItemViewContainer viewWithTagName:layer.uuid]){
                 continue;
             }
             NSAssert([layer isKindOfClass:STCapturedImageSetAnimatableLayer.class],@"Only STCapturedImageSetAnimatableLayer is allowed");
@@ -64,30 +64,30 @@
             [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
                 [Wself removeLayerTapped:editItemView];
             }];
-            [_contentView addSubview:editItemView];
+            [_frameEditItemViewContainer addSubview:editItemView];
         }
 
     }else{
         _layerSet = nil;
 
-        [_contentView st_eachSubviews:^(UIView *view, NSUInteger index) {
+        [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {
             ((STEditControlFrameEditItemView *) view).displayLayer = nil;
             [((STEditControlFrameEditItemView *) view) disposeContent];
         }];
-        [_contentView clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
+        [_frameEditItemViewContainer clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
     }
 
     [self setNeedsLayersDisplayAndLayout];
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
-    [_contentView st_eachSubviews:^(UIView *view, NSUInteger index) {
+    [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *)view;
         editItemView.y = index*editItemView.height;
     }];
 
-    _frameAddButton.y = [_contentView lastSubview].bottom;
-    _frameAddButton.visible = _contentView.subviews.count<self.maxNumberOfLayersOfLayerSet;
+    _frameAddButton.y = [_frameEditItemViewContainer lastSubview].bottom;
+    _frameAddButton.visible = _frameEditItemViewContainer.subviews.count<self.maxNumberOfLayersOfLayerSet;
 }
 
 - (void)removeLayerTapped:(STEditControlFrameEditItemView *)editItemView{
@@ -100,7 +100,7 @@
     editItemView.displayLayer = nil;
     [editItemView clearAllOwnedImagesIfNeededAndRemoveFromSuperview:YES];
 
-    NSAssert(_layerSet.layers.count==_contentView.subviews.count,@"_contentView's subviews count and layerSet.layer's count must be same.");
+    NSAssert(_layerSet.layers.count==_frameEditItemViewContainer.subviews.count,@"_contentView's subviews count and layerSet.layer's count must be same.");
 
     [self setNeedsLayersDisplayAndLayout];
 
@@ -129,7 +129,7 @@
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-    STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_contentView viewWithTagName:timeSlider.tagName];
+    STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:timeSlider.tagName];
 
     editItemView.displayLayer.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
 

@@ -285,6 +285,11 @@ static STPhotoSelector *_instance = nil;
         }];
 
         [self renderAfterImageSetWithFrameAt:selectedIndex];
+
+        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
+            oo(value);
+            _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
+        }];
     }
 }
 

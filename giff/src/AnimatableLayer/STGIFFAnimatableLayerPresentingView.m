@@ -30,7 +30,14 @@
 
     [_contentView.subviews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
         STSelectableView * layerView = (STSelectableView *) view;
-        STCapturedImageSetAnimatableLayerSet *layerSet = [self.layerSets st_objectOrNilAtIndex:index];
+
+        STCapturedImageSetAnimatableLayerSet *layerSet = nil;
+        for(STCapturedImageSetAnimatableLayerSet * set in self.layerSets){
+            if([set.uuid isEqualToString:layerView.tagName]){
+                layerSet = set;
+                break;
+            }
+        }
 
         NSInteger layerIndex = self.currentIndex + layerSet.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
@@ -41,7 +48,7 @@
             layerView.scaleXYValue = layerSet.scale;
             layerView.visible = YES;
             layerView.alpha = layerSet.alpha;
-            layerView.currentIndex = layerIndex;
+            layerView.currentIndex = (NSUInteger) layerIndex;
         }
     }];
 }
@@ -110,7 +117,7 @@
     }
     [layerView setViews:presentableObjects];
 
-//    [self setNeedsLayersDisplayAndLayout];
+    [self setNeedsLayersDisplayAndLayout];
 }
 
 - (UIView *)itemViewOfLayerSetAt:(STCapturedImageSetAnimatableLayerSet *)layerSet {
