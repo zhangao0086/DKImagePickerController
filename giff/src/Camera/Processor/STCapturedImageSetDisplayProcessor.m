@@ -14,26 +14,28 @@
 
 
 @implementation STCapturedImageSetDisplayProcessor {
+    NSArray<NSArray *> * _resourcesFromTargetLayerSet;
 }
-- (instancetype)initWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer {
+
+- (instancetype)initWithLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer {
     self = [super init];
     if (self) {
-        _targetLayerSet = targetLayer;
+        _layerSet = targetLayer;
     }
     return self;
 }
 
-+ (instancetype)processorWithTargetLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer {
-    return [[self alloc] initWithTargetLayer:targetLayer];
++ (instancetype)processorWithLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer {
+    return [[self alloc] initWithLayerSet:targetLayer];
 }
 
 - (NSArray<NSURL *> *)processForImageUrls:(BOOL)forceReprocess {
-    NSAssert(_targetLayerSet.layers.count,@"_targetLayer.layers is empty.");
+    NSAssert(_layerSet.layers.count,@"_targetLayer.layers is empty.");
 
     Weaks
     NSArray * processedResources = nil;
-    if(_targetLayerSet.effect){
-        processedResources = [self.resourcesSetToProcessFromSourceLayers mapWithIndex:^id(NSArray *resourceSet, NSInteger indexOfResourceItemSet) {
+    if(_layerSet.effect){
+        processedResources = [self.sourceSetOfImagesForLayerSet mapWithIndex:^id(NSArray *resourceSet, NSInteger indexOfResourceItemSet) {
             NSAssert([[resourceSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
 #if DEBUG
             [resourceSet eachWithIndex:^(NSURL * object, NSUInteger index) {
@@ -42,8 +44,8 @@
 #endif
             @autoreleasepool {
                 NSURL * tempURLToApplyEffect = [[NSString stringWithFormat:@"l_%@_e_%@_f_%d",
-                                                                           Wself.targetLayerSet.uuid,
-                                                                           Wself.targetLayerSet.effect.uuid,
+                                                                           Wself.layerSet.uuid,
+                                                                           Wself.layerSet.effect.uuid,
                                                                            indexOfResourceItemSet
                 ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
 
@@ -53,34 +55,19 @@
 
                 }else{
                     //newly create
-                    NSArray * imagesToProcessEffect = [resourceSet mapWithIndex:^id(NSURL * imageUrl, NSInteger index) {
-                        @autoreleasepool {
-                            NSAssert([imageUrl isKindOfClass:NSURL.class],@"resource type was supported only as NSURL");
-                            NSAssert([[NSFileManager defaultManager] fileExistsAtPath:imageUrl.path], @"file does not exists.");
-                            return [UIImage imageWithContentsOfFile:imageUrl.path];
-                        }
-                    }];
+                    NSArray<UIImage *> * imagesToProcessEffect = [self loadImagesFromSourceSet:resourceSet];
+                    UIImage * processedImage = [Wself.layerSet.effect processImages:imagesToProcessEffect];
 
-                    BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
-                    NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
+                    NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
 
-                    if(!containsNullInImages){
-                        BOOL vailedLayerNumbers = imagesToProcessEffect.count <= [Wself.targetLayerSet.effect supportedNumberOfSourceImages];
-                        NSAssert(vailedLayerNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.targetLayerSet.effect.class), [Wself.targetLayerSet.effect supportedNumberOfSourceImages]]));
+                    if([(self.loselessImageEncoding ?
+                            UIImagePNGRepresentation(processedImage) : UIImageJPEGRepresentation(processedImage, 1))
+                            writeToURL:tempURLToApplyEffect
+                            atomically:YES]){
 
-                        UIImage * processedImage = vailedLayerNumbers ?
-                                [Wself.targetLayerSet.effect processImages:imagesToProcessEffect] : [imagesToProcessEffect firstObject];
-
-                        NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
-
-                        if([(self.loselessImageEncoding ?
-                                UIImagePNGRepresentation(processedImage) : UIImageJPEGRepresentation(processedImage, 1))
-                                writeToURL:tempURLToApplyEffect
-                                atomically:YES]){
-                            return tempURLToApplyEffect;
-                        }else{
-                            NSAssert(NO, ([@"Write failed : " st_add:tempURLToApplyEffect.path]));
-                        }
+                        return tempURLToApplyEffect;
+                    }else{
+                        NSAssert(NO, ([@"Write failed : " st_add:tempURLToApplyEffect.path]));
                     }
                 }
                 return nil;
@@ -89,7 +76,7 @@
 
     }else{
         //TODO: effect가 없으면서.layers이 2이상 (즉 이미지 레벨에서 겹치길 원한다는 의미)일때는 기본 알파 블렌딩?
-        processedResources = [self resourcesToProcessFromSourceLayer:[_targetLayerSet.layers firstObject]];
+        processedResources = [self sourceOfImagesForLayer:[_layerSet.layers firstObject]];
     }
 
     NSAssert(processedResources.count, @"processedResources is empty");
@@ -97,7 +84,7 @@
     return processedResources;
 }
 
-- (NSArray<id> *)resourcesToProcessFromSourceLayer:(STCapturedImageSetDisplayLayer *)layer{
+- (NSArray<id> *)sourceOfImagesForLayer:(STCapturedImageSetDisplayLayer *)layer{
     NSAssert(layer.imageSet.images.count, @"imageSet's count of SourceImageSets is must be higer than 0 ");
     if(layer.imageSet.images.count){
         STCapturedImage * anyImage = [layer.imageSet.images firstObject];
@@ -107,9 +94,37 @@
     return nil;
 }
 
-- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceLayers{
-    NSArray * results = [_targetLayerSet.layers mapWithIndex:^id(STCapturedImageSetDisplayLayer * layer, NSInteger index) {
-        return [self resourcesToProcessFromSourceLayer:layer];
+- (NSArray<UIImage *> *)loadImagesFromSourceSet:(NSArray *)sourceSetOfImages{
+    NSArray<UIImage *> * images = [sourceSetOfImages mapWithIndex:^id(NSURL * imageUrl, NSInteger index) {
+        @autoreleasepool {
+            NSAssert([imageUrl isKindOfClass:NSURL.class],@"resource type was supported only as NSURL");
+            NSAssert([[NSFileManager defaultManager] fileExistsAtPath:imageUrl.path], @"file does not exists.");
+            return [UIImage imageWithContentsOfFile:imageUrl.path];
+        }
+    }];
+
+    BOOL containsNullInImages = [images containsNull]>0;
+    if(containsNullInImages){
+        NSAssert(NO, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
+        return nil;
+    }
+
+    BOOL invailedLayerNumbers = images.count==0 || images.count > [self.layerSet.effect supportedNumberOfSourceImages];
+    if(invailedLayerNumbers){
+        NSAssert(NO, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(self.layerSet.effect.class), [self.layerSet.effect supportedNumberOfSourceImages]]));
+        return nil;
+    }
+
+    return images;
+}
+
+- (NSArray<NSArray *> *)sourceSetOfImagesForLayerSet{
+    if(_resourcesFromTargetLayerSet){
+        return _resourcesFromTargetLayerSet;
+    }
+
+    NSArray * results = [_layerSet.layers mapWithIndex:^id(STCapturedImageSetDisplayLayer * layer, NSInteger index) {
+        return [self sourceOfImagesForLayer:layer];
     }];
 
     BOOL containsNull = [results containsNull]>0;
@@ -133,6 +148,6 @@
             rejoinResults[subindex][index] = object;
         }];
     }];
-    return rejoinResults;
+    return (_resourcesFromTargetLayerSet = rejoinResults);
 }
 @end

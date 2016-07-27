@@ -13,37 +13,27 @@
 @implementation STCapturedImageSetDisplayProcessor (GPUImage)
 
 - (BOOL)processForImageInput:(NSArray<id<GPUImageInput>> *)inputs {
-    NSAssert(self.targetLayerSet.layers.count,@"_targetLayer.layers is empty.");
-    NSAssert([self.targetLayerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class],@"self.targetLayerSet.effect must be implemented STMultiSourcingGPUImageProcessor");
+    NSAssert(self.layerSet.layers.count,@"_targetLayer.layers is empty.");
+    NSAssert([self.layerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class],@"self.targetLayerSet.effect must be implemented STMultiSourcingGPUImageProcessor");
 
-    STMultiSourcingGPUImageProcessor * effect = (STMultiSourcingGPUImageProcessor *) self.targetLayerSet.effect;
+    STMultiSourcingGPUImageProcessor * effect = (STMultiSourcingGPUImageProcessor *) self.layerSet.effect;
 
     Weaks
     if(effect){
-        for(NSArray *resourceSet in self.resourcesSetToProcessFromSourceLayers){
-            NSUInteger indexOfResourceItemSet = [self.resourcesSetToProcessFromSourceLayers indexOfObject:resourceSet];
+        NSAssert(self.sourceSetOfImagesForLayerSet.count==inputs.count,@"Count of resourcesSetToProcessFromSourceLayers and inputs must be same.");
+
+        for(NSArray *resourceSet in self.sourceSetOfImagesForLayerSet){
+            NSUInteger indexOfResourceItemSet = [self.sourceSetOfImagesForLayerSet indexOfObject:resourceSet];
             NSAssert([[resourceSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
             @autoreleasepool {
                 //newly create
-                NSArray * imagesToProcessEffect = [resourceSet mapWithIndex:^id(NSURL * imageUrl, NSInteger index) {
-                    @autoreleasepool {
-                        NSAssert([imageUrl isKindOfClass:NSURL.class],@"resource type was supported only as NSURL");
-                        NSAssert([[NSFileManager defaultManager] fileExistsAtPath:imageUrl.path], @"file does not exists.");
-                        return [UIImage imageWithContentsOfFile:imageUrl.path];
-                    }
-                }];
+                NSArray<UIImage *> * imagesToProcessEffect = [self loadImagesFromSourceSet:resourceSet];
 
-                BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
-                NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
-
-                if(!containsNullInImages){
-                    BOOL vailedLayerNumbers = imagesToProcessEffect.count <= [Wself.targetLayerSet.effect supportedNumberOfSourceImages];
-                    NSAssert(vailedLayerNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.targetLayerSet.effect.class), [Wself.targetLayerSet.effect supportedNumberOfSourceImages]]));
-
+                if(imagesToProcessEffect.count){
                     id<GPUImageInput> imageInput = [inputs st_objectOrNilAtIndex:indexOfResourceItemSet];
                     NSAssert(imageInput, @"not found imageInput in inputs, it's nil");
 
-                    if(vailedLayerNumbers && imageInput){
+                    if(imageInput){
                         [[effect outputToProcess:imagesToProcessEffect forImage:NO] addTarget:imageInput];
                         return YES;
                     }

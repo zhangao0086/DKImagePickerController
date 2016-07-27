@@ -57,7 +57,7 @@
 //TODO:GPUImageView로 직접 투사하는 부분 / export를 위해서 url을 추출하는 부분 따로.
 - (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet forceAppend:(BOOL)forceAppend forceReprocess:(BOOL)forceReprocess{
 
-    STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayerSet:layerSet];
+    STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithLayerSet:layerSet];
 
     if(layerSet.effect){
         Weaks
@@ -70,7 +70,7 @@
         });
     }else{
         //set default 0 STCapturedImageSet
-        [self setLayerView:layerSet presentableObjects:[processor resourcesToProcessFromSourceLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];
+        [self setLayerView:layerSet presentableObjects:[processor sourceOfImagesForLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];
     }
 }
 

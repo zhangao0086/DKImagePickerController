@@ -11,16 +11,18 @@
 
 
 @interface STCapturedImageSetDisplayProcessor : NSObject
-@property(nonatomic, readonly) STCapturedImageSetDisplayLayerSet * targetLayerSet;
+@property(nonatomic, readonly) STCapturedImageSetDisplayLayerSet * layerSet;
 @property(nonatomic, assign) BOOL loselessImageEncoding;
 
-- (instancetype)initWithTargetLayer:(STCapturedImageSetDisplayLayerSet *)targetLayer;
+- (instancetype)initWithLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
-+ (instancetype)processorWithTargetLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer;
++ (instancetype)processorWithLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
 - (NSArray<NSURL *> *)processForImageUrls:(BOOL)forceReprocess;
 
-- (NSArray<NSArray *> *)resourcesSetToProcessFromSourceLayers;
+- (NSArray<NSArray *> *)sourceSetOfImagesForLayerSet;
 
-- (NSArray<id> *)resourcesToProcessFromSourceLayer:(STCapturedImageSetDisplayLayer *)layer;
+- (NSArray<id> *)sourceOfImagesForLayer:(STCapturedImageSetDisplayLayer *)layer;
+
+- (NSArray<UIImage *> *)loadImagesFromSourceSet:(NSArray *)sourceSetOfImages;
 @end
