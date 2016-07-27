@@ -390,7 +390,7 @@ static NSString * JANNE = @"Janne";
             _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSize:_previewView.size];
         }
         [self addSubview:_layerSetPresentationView];
-//        [_layerSetPresentationView centerToParent];
+        _layerSetPresentationView.visible = YES;
 
 
         //set default
@@ -461,7 +461,6 @@ static NSString * JANNE = @"Janne";
     [_previewCollector reloadSmoothly];
 }
 
-
 - (void)refreshCurrentDisplayImageLayerSet{
     STCapturedImageSetAnimatableLayerSet * layerSet = [_layerSetPresentationView.layerSets firstObject];
     [_layerSetPresentationView updateLayerSet:layerSet];
@@ -472,10 +471,12 @@ static NSString * JANNE = @"Janne";
 - (void)suspendDisplayImageLayerSetEditingMode{
 
 //    [_afterImageView removeAllLayersSets];
+    _layerSetPresentationView.visible = NO;
 }
 
 - (void)exitDisplayImageLayerSetEditingMode{
 
+    _layerSetPresentationView.visible = NO;
     [_layerSetPresentationView removeAllLayersSets];
     [STMainControl sharedInstance].editControlView.frameEditView.layerSet = nil;
 }

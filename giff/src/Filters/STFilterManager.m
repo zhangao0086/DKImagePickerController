@@ -8,28 +8,19 @@
 
 #import <GPUImage/GPUImageOutput.h>
 #import <GPUImage/GPUImageFilterGroup.h>
-#import <ChameleonFramework/UIColor+Chameleon.h>
 #import "STFilterManager.h"
 #import "STFilterGroupItem.h"
 #import "UIColor+STColorUtil.h"
-#import "STFilter.h"
 #import "UIImage+STUtil.h"
 #import "STAppSetting.h"
 #import "BFAppLink.h"
 #import "NSObject+STUtil.h"
-#import "UIView+STUtil.h"
-#import "NSObject+STThreadUtil.h"
-#import "SFDYCIDebugMacro.h"
-#import "CAShapeLayer+STUtil.h"
-#import "STQueueManager.h"
-#import "STElieCamera.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "NSArray+BlocksKit.h"
 #import "NSArray+STUtil.h"
 #import "NSString+STUtil.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "M13OrderedDictionary.h"
-#import "STGPUImageOutputComposeItem.h"
 
 @interface STFilterManager ()
 
@@ -94,7 +85,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
 //    }];
 }
 
-- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(NSArray<STGPUImageOutputComposeItem *> *)items processForImage:(BOOL)processForImage{
+- (GPUImageOutput *)buildTerminalOutputToComposeMultiSource:(NSArray<STGPUImageOutputComposeItem *> *)items forInput:(id<GPUImageInput>)input{
 
     //init
     if (items.count) {
@@ -119,7 +110,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
         //process lastest blender
         for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
             if (currentItem.composer) {
-                !processForImage?:[currentItem.composer useNextFrameForImageCapture];
+                input ? [currentItem.composer addTarget:input] : [currentItem.composer useNextFrameForImageCapture];
                 break;
             }
         }
@@ -129,7 +120,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
             if ([currentItem.source isKindOfClass:GPUImagePicture.class]) {
                 [(GPUImagePicture *) currentItem.source processImage];
             }
-            !processForImage?:[currentItem.source useNextFrameForImageCapture];
+            input?:[currentItem.source useNextFrameForImageCapture];
         }
 
         //return lastest blender's output

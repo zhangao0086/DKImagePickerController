@@ -5,18 +5,19 @@
 
 #import "STMultiSourcingGPUImageProcessor.h"
 #import "GPUImageOutput.h"
+#import "GPUImageContext.h"
 
 
 @implementation STMultiSourcingGPUImageProcessor {
 
 }
 
-- (GPUImageOutput *)outputToProcess:(NSArray<UIImage *> *__nullable)sourceImages forImage:(BOOL)forImage {
+- (GPUImageOutput *)processImages:(NSArray<UIImage *> *__nullable)sourceImages forInput:(id<GPUImageInput> __nullable)input{
     return nil;
 }
 
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-    return [[self outputToProcess:sourceImages forImage:YES] imageFromCurrentFramebuffer];
+    return [[self processImages:sourceImages forInput:nil] imageFromCurrentFramebuffer];
 }
 
 @end

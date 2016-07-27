@@ -58,7 +58,7 @@
                 [STGPUImageOutputComposeItem itemWithSource:inputPicture],
                 composeItem1,
                 composeItem2
-        ] processForImage:YES] imageFromCurrentFramebuffer];
+        ] forInput:nil] imageFromCurrentFramebuffer];
 
     }
 }

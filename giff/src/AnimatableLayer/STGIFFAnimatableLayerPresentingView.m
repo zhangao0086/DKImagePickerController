@@ -11,6 +11,9 @@
 #import "STMultiSourcingImageProcessor.h"
 #import "STGIFFAnimatableLayerPresentingView.h"
 #import "STCapturedImageSetDisplayProcessor.h"
+#import "GPUImageView.h"
+#import "STMultiSourcingGPUImageProcessor.h"
+#import "STCapturedImageSetDisplayProcessor+GPUImage.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -40,7 +43,6 @@
             layerView.currentIndex = layerIndex;
         }
     }];
-
 }
 
 - (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
@@ -61,13 +63,35 @@
 
     if(layerSet.effect){
         Weaks
-        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-            NSArray<NSURL *> * effectAppliedImageUrls = [processor processForImageUrls:forceReprocess];
+//        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
 
+            NSArray<id> * presentableObjects = nil;
+            if([layerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class]){
+                //STMultiSourcingGPUImageProcessor
+                presentableObjects = [[processor sourceSetOfImagesForLayerSet] mapWithIndex:^id(id object, NSInteger index) {
+                    @autoreleasepool {
+                        return [[GPUImageView alloc] initWithSize:_contentView.size];
+                    }
+                }];
+                if(![processor processForImageInput:presentableObjects]){
+                    NSAssert(NO, @"STMultiSourcingGPUImageProcessor -> processForImageInput was failed.");
+                    presentableObjects = nil;
+                }
+
+            }else{
+                // STMultiSourcingImageProcessor
+                presentableObjects = [processor processForImageUrls:forceReprocess];
+            }
+
+            NSAssert(presentableObjects.count, @"presentableObjects's count is 0");
             dispatch_async(dispatch_get_main_queue(),^{
-                [Wself setLayerView:layerSet presentableObjects:effectAppliedImageUrls forceAppend:forceAppend];
+                if(presentableObjects.count){
+                    [Wself setLayerView:layerSet presentableObjects:presentableObjects forceAppend:forceAppend];
+                } else{
+                    [Wself setLayerView:layerSet presentableObjects:[processor sourceOfImagesForLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];
+                }
             });
-        });
+//        });
     }else{
         //set default 0 STCapturedImageSet
         [self setLayerView:layerSet presentableObjects:[processor sourceOfImagesForLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];
@@ -83,10 +107,9 @@
         layerView.tagName = layerSet.uuid;
         [_contentView addSubview:layerView];
     }
-    oo(presentableObjects);
     [layerView setViews:presentableObjects];
 
-    [self setNeedsLayersDisplayAndLayout];
+//    [self setNeedsLayersDisplayAndLayout];
 }
 
 - (UIView *)itemViewOfLayerSetAt:(STCapturedImageSetAnimatableLayerSet *)layerSet {

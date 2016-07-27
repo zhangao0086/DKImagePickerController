@@ -7,9 +7,10 @@
 #import "STMultiSourcingImageProcessor.h"
 
 @class GPUImageOutput;
+@protocol GPUImageInput;
 
 
 @interface STMultiSourcingGPUImageProcessor : STMultiSourcingImageProcessor
 
-- (GPUImageOutput *)outputToProcess:(NSArray<UIImage *> *__nullable)sourceImages forImage:(BOOL)forImage;
+- (GPUImageOutput * __nullable )processImages:(NSArray<UIImage *> *__nullable)sourceImages forInput:(id<GPUImageInput> __nullable)input;
 @end

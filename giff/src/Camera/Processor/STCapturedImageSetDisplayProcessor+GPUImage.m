@@ -34,7 +34,7 @@
                     NSAssert(imageInput, @"not found imageInput in inputs, it's nil");
 
                     if(imageInput){
-                        [[effect outputToProcess:imagesToProcessEffect forImage:NO] addTarget:imageInput];
+                        [effect processImages:imagesToProcessEffect forInput:imageInput];
                         return YES;
                     }
                 }

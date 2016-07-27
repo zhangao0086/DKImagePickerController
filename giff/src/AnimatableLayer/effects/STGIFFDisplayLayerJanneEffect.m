@@ -26,7 +26,7 @@
 }
 
 
-- (GPUImageOutput *)outputToProcess:(NSArray<UIImage *> *__nullable)sourceImages forImage:(BOOL)forImages {
+- (GPUImageOutput *)processImages:(NSArray<UIImage *> *__nullable)sourceImages forInput:(id<GPUImageInput> __nullable)input {
     @autoreleasepool {
         UIImage *inputImage = sourceImages[0];
 
@@ -70,10 +70,9 @@
         ];
 
         return [[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:@[
-                composeItem0
-                ,composeItem1
+                composeItem0, composeItem1
 //                ,composeItem2
-        ] processForImage:forImages];
+        ] forInput:input];
     }
 }
 
