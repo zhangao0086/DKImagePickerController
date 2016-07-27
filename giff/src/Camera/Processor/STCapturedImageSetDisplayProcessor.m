@@ -36,10 +36,10 @@
     Weaks
     NSArray * processedResources = nil;
     if(_targetLayerSet.effect){
-        processedResources = [self.resourcesSetToProcessFromSourceLayers mapWithIndex:^id(NSArray *resourceItemSet, NSInteger indexOfResourceItemSet) {
-            NSAssert([[resourceItemSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+        processedResources = [self.resourcesSetToProcessFromSourceLayers mapWithIndex:^id(NSArray *resourceSet, NSInteger indexOfResourceItemSet) {
+            NSAssert([[resourceSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
 #if DEBUG
-            [resourceItemSet eachWithIndex:^(NSURL * object, NSUInteger index) {
+            [resourceSet eachWithIndex:^(NSURL * object, NSUInteger index) {
                 oo([object path]);
             }];
 #endif
@@ -56,7 +56,7 @@
 
                 }else{
                     //newly create
-                    NSArray * imagesToProcessEffect = [resourceItemSet mapWithIndex:^id(NSURL * imageUrl, NSInteger index) {
+                    NSArray * imagesToProcessEffect = [resourceSet mapWithIndex:^id(NSURL * imageUrl, NSInteger index) {
                         @autoreleasepool {
                             NSAssert([imageUrl isKindOfClass:NSURL.class],@"resource type was supported only as NSURL");
                             NSAssert([[NSFileManager defaultManager] fileExistsAtPath:imageUrl.path], @"file does not exists.");
@@ -66,6 +66,7 @@
 
                     BOOL containsNullInImages = [imagesToProcessEffect containsNull]>0;
                     NSAssert(!containsNullInImages, @"imagesToProcessEffect contains null. check fileExistsAtPath.");
+
                     if(!containsNullInImages){
                         BOOL vailedLayerNumbers = imagesToProcessEffect.count <= [Wself.targetLayerSet.effect supportedNumberOfSourceImages];
                         NSAssert(vailedLayerNumbers, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(Wself.targetLayerSet.effect.class), [Wself.targetLayerSet.effect supportedNumberOfSourceImages]]));

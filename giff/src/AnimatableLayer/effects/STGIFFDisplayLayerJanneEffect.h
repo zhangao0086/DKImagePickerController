@@ -5,7 +5,8 @@
 
 #import <Foundation/Foundation.h>
 #import "STMultiSourcingImageProcessor.h"
+#import "STMultiSourcingGPUImageProcessor.h"
 
 
-@interface STGIFFDisplayLayerJanneEffect : STMultiSourcingImageProcessor
+@interface STGIFFDisplayLayerJanneEffect : STMultiSourcingGPUImageProcessor
 @end
