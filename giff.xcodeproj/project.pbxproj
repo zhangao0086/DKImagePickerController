@@ -18,6 +18,7 @@
 		4F71D1EF13DE5F86BB6ED684 /* STMultiSourcingGPUImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DEB4A666F8B52CAF157F /* STMultiSourcingGPUImageProcessor.m */; };
 		4F71D20B7ACA39A9FFFE1CFC /* STCapturedImageSetDisplayObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D22FBE4A1568E96A854D /* STCapturedImageSetDisplayObject.m */; };
 		4F71D26BE6233F0BB706E300 /* STAnimatableCaptureRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D97ECBA17982DC349D73 /* STAnimatableCaptureRequest.m */; };
+		4F71D2EB6E50FCA4CB0E9E69 /* STCapturedImageSetGPUDisplayProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DFB83CCF441755C097AE /* STCapturedImageSetGPUDisplayProcessor.m */; };
 		4F71D33095FD415B768BC8F6 /* STCapturedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D444A5AEF60E2281FFEF /* STCapturedImage.m */; };
 		4F71D35BD563596E85877F56 /* set_resolution_medium.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D0D2E259FCF2DB3A53C9 /* set_resolution_medium.svg */; };
 		4F71D3675E5A7C4F0C632D6D /* STMultiSourcingImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC608A8141B705DA42B3 /* STMultiSourcingImageProcessor.m */; };
@@ -507,6 +508,7 @@
 		4F71DC345A31992D6900FB11 /* set_postfocus_fullrange.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_postfocus_fullrange.svg; sourceTree = "<group>"; };
 		4F71DC608A8141B705DA42B3 /* STMultiSourcingImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STMultiSourcingImageProcessor.m; sourceTree = "<group>"; };
 		4F71DC7A5125F1640917C3C0 /* STCapturedImageSet+PostFocus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STCapturedImageSet+PostFocus.m"; sourceTree = "<group>"; };
+		4F71DCA8F6C4E5F3D784ED9E /* STCapturedImageSetGPUDisplayProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCapturedImageSetGPUDisplayProcessor.h; sourceTree = "<group>"; };
 		4F71DCA93BF646BFF8F2CED6 /* STGIFFDisplayLayerColorizeEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerColorizeEffect.m; sourceTree = "<group>"; };
 		4F71DCF660F8E7B8CAD9F53D /* STExporter+IOGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STExporter+IOGIF.h"; sourceTree = "<group>"; };
 		4F71DCFB3B83FD13A975B6B0 /* STCapturedImageSetDisplayProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageSetDisplayProcessor.m; sourceTree = "<group>"; };
@@ -532,6 +534,7 @@
 		4F71DFA4216BEAA2BF336D1B /* STGIFFDisplayLayerChromakeyEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFDisplayLayerChromakeyEffect.h; sourceTree = "<group>"; };
 		4F71DFA4BE0A87BBA6FC2B9B /* logo_elie.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = logo_elie.svg; sourceTree = "<group>"; };
 		4F71DFAE0866888CA00B48BE /* STMultiSourcingGPUImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STMultiSourcingGPUImageProcessor.h; sourceTree = "<group>"; };
+		4F71DFB83CCF441755C097AE /* STCapturedImageSetGPUDisplayProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageSetGPUDisplayProcessor.m; sourceTree = "<group>"; };
 		4F71DFC051942C2D1F506D81 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		4F71DFE02EEC9A7E4BD483EE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		523D14932897B1BC9F51F359 /* libPods-giff.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-giff.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1267,6 +1270,8 @@
 				4F71D648D36D764957CA9FFB /* STCapturedImageProcessor.h */,
 				4F71DCFB3B83FD13A975B6B0 /* STCapturedImageSetDisplayProcessor.m */,
 				4F71DDC3A77E08D2940B8A93 /* STCapturedImageSetDisplayProcessor.h */,
+				4F71DFB83CCF441755C097AE /* STCapturedImageSetGPUDisplayProcessor.m */,
+				4F71DCA8F6C4E5F3D784ED9E /* STCapturedImageSetGPUDisplayProcessor.h */,
 			);
 			path = Processor;
 			sourceTree = "<group>";
@@ -2762,6 +2767,7 @@
 				4F71D20B7ACA39A9FFFE1CFC /* STCapturedImageSetDisplayObject.m in Sources */,
 				4F71D46F102D1633D4315BCA /* STCapturedImageSetAnimatableLayerSetCollectionView.m in Sources */,
 				4F71D1EF13DE5F86BB6ED684 /* STMultiSourcingGPUImageProcessor.m in Sources */,
+				4F71D2EB6E50FCA4CB0E9E69 /* STCapturedImageSetGPUDisplayProcessor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

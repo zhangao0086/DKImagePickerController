@@ -56,7 +56,9 @@
 
 //TODO:GPUImageView로 직접 투사하는 부분 / export를 위해서 url을 추출하는 부분 따로.
 - (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet forceAppend:(BOOL)forceAppend forceReprocess:(BOOL)forceReprocess{
+
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayerSet:layerSet];
+
     if(layerSet.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{

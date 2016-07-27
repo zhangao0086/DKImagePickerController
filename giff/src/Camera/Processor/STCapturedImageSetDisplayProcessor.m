@@ -12,9 +12,6 @@
 #import "STCapturedImage.h"
 #import "STCapturedImageSetDisplayLayer.h"
 
-@interface STCapturedImageSetDisplayProcessor()
-@property(nonatomic, readwrite) STCapturedImageSetDisplayLayerSet * targetLayerSet;
-@end
 
 @implementation STCapturedImageSetDisplayProcessor {
 }
