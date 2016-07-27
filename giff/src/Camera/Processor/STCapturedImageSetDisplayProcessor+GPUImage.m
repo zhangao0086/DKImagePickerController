@@ -3,18 +3,14 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
+#import "STCapturedImageSetDisplayProcessor+GPUImage.h"
 #import <GPUImage/GPUImageOutput.h>
 #import "STCapturedImageSetDisplayLayerSet.h"
-#import "STCapturedImageSetGPUDisplayProcessor.h"
 #import "STMultiSourcingImageProcessor.h"
 #import "NSArray+STUtil.h"
-#import "STCapturedImageSet.h"
 #import "STMultiSourcingGPUImageProcessor.h"
 
-
-@implementation STCapturedImageSetGPUDisplayProcessor {
-
-}
+@implementation STCapturedImageSetDisplayProcessor (GPUImage)
 
 - (BOOL)processForImageInput:(NSArray<id<GPUImageInput>> *)inputs {
     NSAssert(self.targetLayerSet.layers.count,@"_targetLayer.layers is empty.");

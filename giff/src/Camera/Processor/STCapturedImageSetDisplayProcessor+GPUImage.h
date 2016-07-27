@@ -6,7 +6,8 @@
 #import <Foundation/Foundation.h>
 #import "STCapturedImageSetDisplayProcessor.h"
 
+@protocol GPUImageInput;
 
-@interface STCapturedImageSetGPUDisplayProcessor : STCapturedImageSetDisplayProcessor
+@interface STCapturedImageSetDisplayProcessor (GPUImage)
 - (BOOL)processForImageInput:(NSArray<id <GPUImageInput>> *)inputs;
 @end
