@@ -288,7 +288,7 @@ static STPhotoSelector *_instance = nil;
     }
 }
 
-#pragma mark create Layers / effects
+#pragma mark STCapturedImageSetAnimatableLayerSet
 //TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
 static NSString * FUNNYMAN = @"funnyman";
 static NSString * ONE_DIFF_FRAME = @"basicframe";
@@ -389,9 +389,8 @@ static NSString * JANNE = @"Janne";
         if(!_layerSetPresentationView){
             _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSize:_previewView.size];
         }
-
-        [_previewView insertSubview:_layerSetPresentationView aboveSubview:self.previewView.contentView];
-        [_layerSetPresentationView centerToParent];
+        [self addSubview:_layerSetPresentationView];
+//        [_layerSetPresentationView centerToParent];
 
 
         //set default
@@ -963,8 +962,8 @@ UIImageView * BlurPreviewCoverView;
     }else if(type == STPhotoViewTypeEditAfterCapture){
         [self setTouchInsidePolicy:STUIViewTouchInsidePolicyContentInside];
 
-        _previewCollector.previewView.visible = YES;
-        [_previewCollector start:type];
+        _previewCollector.previewView.visible = NO;
+//        [_previewCollector start:type];
 
         self.gridView.animatableVisible = NO;
 
@@ -2168,27 +2167,6 @@ static SVGKFastImageView *_nophotoView;
             [[NSNotificationCenter get] postNotificationName:STNotificationPhotosDidLoaded object:@(STPhotoSourceRoom)];
         }];
     });
-}
-
-- (void)_test_loadAndPutThumbnailsFromRoom{
-    NSMutableArray * items = [NSMutableArray array];
-
-    for(NSInteger i=0; i< STGIFFAppSetting.get.currentRoomSize; i++){
-        CGSize size = ST_XSIZE(CGSizeMake(319, 426) ,0.25);
-        NSString *fileName = NSStringWithFormat(@"sample_img%d.jpg",i);
-
-        NSURL * url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] bundlePath],fileName]];
-
-        STPhotoItem *photoItem = [[STPhotoItem alloc] initWithIndex:i];
-        [photoItem setSourceForFullResolutionFromURL:url];
-        [photoItem setSourceForFullScreenFromURL:url];
-        [photoItem setSourceForPreviewFromURL:url];
-
-//        [photoItem loadPreviewImage];
-
-        [items addObject:photoItem];
-    }
-    [self doPutPhotoItems:items];
 }
 
 #pragma mark Common - Elie Room's Image I/O Operations

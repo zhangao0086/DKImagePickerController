@@ -206,7 +206,7 @@ static ALAssetsLibrary * assetLibrary;
 
     //load photos
     STGIFFAppSetting.get.photoSource = STPhotoSourceCapturedImageStorage;
-    [[STPhotoSelector sharedInstance] initialLoadFromCurrentSource];
+//    [[STPhotoSelector sharedInstance] initialLoadFromCurrentSource];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
