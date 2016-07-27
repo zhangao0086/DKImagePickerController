@@ -1,7 +1,6 @@
 #import "UIView+STUtil.h"
 #import "UIImage+STUtil.h"
 #import "NSArray+STUtil.h"
-#import "STUIView.h"
 #import "STSelectableView.h"
 
 @interface STSelectableView ()
@@ -333,24 +332,31 @@
     @autoreleasepool {
         NSParameterAssert(object);
 
-        [self clearButtonDrawable:view disposeContents:NO];
-
         if([object isKindOfClass:UIImage.class]){
+            [self clearButtonDrawable:view disposeContents:YES];
+
             view.image = object;
             //TODO: detailed code review required for legacies - in this case setLayout needed?
 //        [self setNeedsLayoutOfContentViewsToFit:view];
 
         }else if([object isKindOfClass:NSString.class]){
+            [self clearButtonDrawable:view disposeContents:YES];
+
             view.image = [UIImage imageBundledCache:object];
             //TODO: detailed code review required for legacies - in this case setLayout needed?
 //        [self setNeedsLayoutOfContentViewsToFit:view];
 
         }else if([object isKindOfClass:NSURL.class]){
+            [self clearButtonDrawable:view disposeContents:YES];
+
             view.image = [UIImage imageWithContentsOfFile:((NSURL *)object).path];
 
             [self setNeedsLayoutOfContentViewsToFit:view];
 
         }else if([object isKindOfClass:CALayer.class]){
+//            view.layer.sublayers = nil;
+            [self clearButtonDrawable:view disposeContents:YES];
+
             CALayer * layerObject = object;
             [view.layer addSublayer:layerObject];
 
@@ -361,7 +367,14 @@
 
         }else if([object isKindOfClass:UIView.class]){
             UIView * viewObject = object;
-            [view addSubview:viewObject];
+            if([[view subviews] containsObject:viewObject]){
+                if(![[[view subviews] lastObject] isEqual:viewObject]){
+                    [view bringSubviewToFront:viewObject];
+                }
+            }else{
+                [self clearButtonDrawable:view disposeContents:YES];
+                [view addSubview:viewObject];
+            }
 
             [self setNeedsLayoutOfContentViewsToFit:viewObject];
 
@@ -381,7 +394,6 @@
     }else{
         [view st_removeAllSubviews];
     }
-//    view.layer.sublayers = nil;
 }
 
 - (void)setNeedsLayoutOfContentViewsToFit:(UIView *)targetView{

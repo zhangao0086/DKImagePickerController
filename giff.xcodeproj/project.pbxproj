@@ -75,6 +75,7 @@
 		4F71DE7E965B770B11D49C68 /* STExporter+IOGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D43A9F6FF6C3DED4ABD8 /* STExporter+IOGIF.m */; };
 		4F71DF0B277CCC20EFCA378A /* set_add.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D038C0CB9D8D41C47BF1 /* set_add.svg */; };
 		4F71DF2D95AFFE3823B727E6 /* STCapturedImageSet+PostFocus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC7A5125F1640917C3C0 /* STCapturedImageSet+PostFocus.m */; };
+		4F71DF89671C76CB37FF68DD /* STFastUIViewSelectableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D8DEBDD9961CF869A450 /* STFastUIViewSelectableView.m */; };
 		4F71DFA9092E237827E6FE2B /* STStandardPointableSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D47AA9D2960523FF1C1E /* STStandardPointableSlider.m */; };
 		4F71DFE97EE20596ECC8B7B3 /* STGPUImageOutputComposeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D3EADF65237E2B284141 /* STGPUImageOutputComposeItem.m */; };
 		4F71DFF0D08FD954FDF10058 /* STExportControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D5F64F6774523B061093 /* STExportControlView.m */; };
@@ -431,6 +432,7 @@
 		4F71D275C6945BE93A635BCB /* STCapturedImageSet+PostFocus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STCapturedImageSet+PostFocus.h"; sourceTree = "<group>"; };
 		4F71D2BD2D4871511173350E /* STGIFFDisplayLayerLeifEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerLeifEffect.m; sourceTree = "<group>"; };
 		4F71D31305141DC74503EE6E /* STMultiSourcingImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STMultiSourcingImageProcessor.h; sourceTree = "<group>"; };
+		4F71D332B4503F1377A58C6E /* STFastUIViewSelectableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STFastUIViewSelectableView.h; sourceTree = "<group>"; };
 		4F71D33E62373415D7393C86 /* STGIFFStandardColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFStandardColor.m; sourceTree = "<group>"; };
 		4F71D3401F5ECD85A0B7AEA8 /* set_resolution_4k.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_resolution_4k.svg; sourceTree = "<group>"; };
 		4F71D3616CB9036630E657C5 /* STGIFFDisplayLayerChromakeyEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerChromakeyEffect.m; sourceTree = "<group>"; };
@@ -488,6 +490,7 @@
 		4F71D89E504DE9FBDFEA873C /* STGIFFDisplayLayerJanneEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerJanneEffect.m; sourceTree = "<group>"; };
 		4F71D8AEF12644D342578130 /* RLMCapturedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLMCapturedImage.m; sourceTree = "<group>"; };
 		4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFAnimatableLogoView.m; sourceTree = "<group>"; };
+		4F71D8DEBDD9961CF869A450 /* STFastUIViewSelectableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STFastUIViewSelectableView.m; sourceTree = "<group>"; };
 		4F71D904B694231C157AC9B0 /* STGIFFDisplayLayerJanneEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFDisplayLayerJanneEffect.h; sourceTree = "<group>"; };
 		4F71D925ED72D1F4B3F395C5 /* STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.m; sourceTree = "<group>"; };
 		4F71D93A92156EDB9AE04202 /* STCapturedImageSetDisplayLayerSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCapturedImageSetDisplayLayerSet.h; sourceTree = "<group>"; };
@@ -1759,6 +1762,8 @@
 				4F71D24C93D4A92B99A914A6 /* NSDictionary+STUtil.h */,
 				4F71DC608A8141B705DA42B3 /* STMultiSourcingImageProcessor.m */,
 				4F71D31305141DC74503EE6E /* STMultiSourcingImageProcessor.h */,
+				4F71D8DEBDD9961CF869A450 /* STFastUIViewSelectableView.m */,
+				4F71D332B4503F1377A58C6E /* STFastUIViewSelectableView.h */,
 			);
 			path = CoreComponents;
 			sourceTree = "<group>";
@@ -2768,6 +2773,7 @@
 				4F71D46F102D1633D4315BCA /* STCapturedImageSetAnimatableLayerSetCollectionView.m in Sources */,
 				4F71D1EF13DE5F86BB6ED684 /* STMultiSourcingGPUImageProcessor.m in Sources */,
 				4F71D42E0773D49EC22B4C75 /* STCapturedImageSetDisplayProcessor+GPUImage.m in Sources */,
+				4F71DF89671C76CB37FF68DD /* STFastUIViewSelectableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

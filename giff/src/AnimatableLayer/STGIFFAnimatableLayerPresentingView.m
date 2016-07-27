@@ -14,6 +14,7 @@
 #import "GPUImageView.h"
 #import "STMultiSourcingGPUImageProcessor.h"
 #import "STCapturedImageSetDisplayProcessor+GPUImage.h"
+#import "STFastUIViewSelectableView.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -100,9 +101,9 @@
 
 - (void)setLayerView:(STCapturedImageSetAnimatableLayerSet *)layerSet presentableObjects:(NSArray *)presentableObjects forceAppend:(BOOL)forceAppend{
     //layer
-    STSelectableView *layerView = (STSelectableView *)[_contentView viewWithTagName:layerSet.uuid];
+    STFastUIViewSelectableView *layerView = (STFastUIViewSelectableView *)[_contentView viewWithTagName:layerSet.uuid];
     if(forceAppend || !layerView){
-        layerView = [[STSelectableView alloc] initWithSize:_contentView.size];
+        layerView = [[STFastUIViewSelectableView alloc] initWithSize:_contentView.size];
         layerView.fitViewsImageToBounds = YES;
         layerView.tagName = layerSet.uuid;
         [_contentView addSubview:layerView];

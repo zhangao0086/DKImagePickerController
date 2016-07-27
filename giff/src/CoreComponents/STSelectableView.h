@@ -15,6 +15,7 @@
 @interface STSelectableView : STUIView <UIGestureRecognizerDelegate>{
 @protected
     STUIView *_contentView;
+    NSArray<id> *_viewsPresentableObjects;
 }
 
 @property (nonatomic, weak) id <STSeletableViewDelegate> delegate;
