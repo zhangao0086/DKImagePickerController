@@ -30,7 +30,7 @@
     return [[self alloc] initWithTargetLayer:targetLayer];
 }
 
-- (NSArray *)processResources:(BOOL)forceReprocess {
+- (NSArray<NSURL *> *)processForImageUrls:(BOOL)forceReprocess {
     NSAssert(_targetLayerSet.layers.count,@"_targetLayer.layers is empty.");
 
     Weaks

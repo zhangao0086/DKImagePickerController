@@ -54,12 +54,13 @@
     [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES];
 }
 
+//TODO:GPUImageView로 직접 투사하는 부분 / export를 위해서 url을 추출하는 부분 따로.
 - (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet forceAppend:(BOOL)forceAppend forceReprocess:(BOOL)forceReprocess{
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithTargetLayerSet:layerSet];
     if(layerSet.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-            NSArray * effectAppliedImageUrls = [processor processResources:forceReprocess];
+            NSArray<NSURL *> * effectAppliedImageUrls = [processor processForImageUrls:forceReprocess];
 
             dispatch_async(dispatch_get_main_queue(),^{
                 [Wself setLayerView:layerSet presentableObjects:effectAppliedImageUrls forceAppend:forceAppend];
