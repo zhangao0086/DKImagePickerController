@@ -7,7 +7,6 @@
 #import "STStandardButton.h"
 #import "R.h"
 #import "UIView+STUtil.h"
-#import "STCapturedImageSetAnimatableLayerSet.h"
 
 
 @implementation STEditControlView {
@@ -29,37 +28,31 @@
 - (void)createContent {
     [super createContent];
 
-    [self createEditControls];
-    [self createEffectSelector];
-    [self createSourceControls];
+    [self addFrameEditControls];
+    [self addEffectSelector];
+    [self addSourceControls];
+}
 
-    CGFloat padding = [STStandardLayout widthBullet];
+- (void)addEffectSelector {
 
-    [self addSubview:_backButton];
-    _backButton.x = padding;
-    _backButton.bottom = self.height - padding;
+}
 
-    [self addSubview:_exportButton];
-    _exportButton.right = self.width-padding;
-    _exportButton.bottom = self.height-padding;
-
+- (void)addFrameEditControls {
+    [self frameEditView];
     [self addSubview:_frameEditView];
 }
 
-- (void)createEffectSelector {
-
-}
-
-- (void)createEditControls {
-    [self frameEditView];
-}
-
 - (STEditControlFrameEditView *)frameEditView {
-    return _frameEditView ?: (_frameEditView = [[STEditControlFrameEditView alloc] initWithSize:CGSizeMake(self.width, self.height/4)]);
+    if(!_frameEditView){
+        _frameEditView = [[STEditControlFrameEditView alloc] initWithSize:CGSizeMake(self.width, self.height)];
+    }
+
+
+    return _frameEditView;
 }
 
 
-- (void)createSourceControls {
+- (void)addSourceControls {
 
     //left button
     _backButton = [STStandardButton subSmallSize];
@@ -78,6 +71,15 @@
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
     }];
+
+    CGFloat padding = [STStandardLayout widthBullet];
+    [self addSubview:_backButton];
+    _backButton.x = padding;
+    _backButton.bottom = self.height - padding;
+
+    [self addSubview:_exportButton];
+    _exportButton.right = self.width-padding;
+    _exportButton.bottom = self.height-padding;
 }
 
 

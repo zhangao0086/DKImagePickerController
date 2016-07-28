@@ -47,7 +47,7 @@
 }
 
 - (CGFloat)heightForFrameItemView{
-    return self.height/self.maxNumberOfLayersOfLayerSet;
+    return 40;
 }
 
 - (NSUInteger)maxNumberOfLayersOfLayerSet {
