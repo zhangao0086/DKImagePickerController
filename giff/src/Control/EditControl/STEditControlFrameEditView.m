@@ -69,7 +69,7 @@
             editItemView.displayLayer = layer;
             editItemView.backgroundColor = [UIColor orangeColor];
             [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-                [Wself removeLayerTapped:editItemView];
+//                [Wself removeLayerTapped:editItemView];
             }];
             [_frameEditItemViewContainer addSubview:editItemView];
         }

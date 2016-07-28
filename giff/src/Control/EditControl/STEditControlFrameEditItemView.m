@@ -114,7 +114,7 @@
 }
 
 - (void)updateSliderPosition{
-    _frameOffsetSlider.normalizedPosition = CLAMP((self.displayLayer.frameIndexOffset+(self.displayLayer.frameCount/2))/self.displayLayer.frameCount,0,1);
+    _frameOffsetSlider.normalizedPosition = CLAMP((self.displayLayer.frameIndexOffset+((CGFloat)self.displayLayer.frameCount/2))/self.displayLayer.frameCount,0,1);
 }
 
 #pragma mark Slider Delegator
@@ -134,7 +134,7 @@
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
 
-    NSInteger frameIndexOffset = (NSInteger) ((timeSlider.normalizedPosition * self.displayLayer.frameCount) - round(self.displayLayer.frameCount/2));
+    NSInteger frameIndexOffset = (NSInteger) ((timeSlider.normalizedPosition * self.displayLayer.frameCount) - round((CGFloat)self.displayLayer.frameCount/2));
     if([self _setFrameIndexOffset:frameIndexOffset]){
         [self updateThumbnailsPosition];
     }
