@@ -59,9 +59,14 @@
     [self processLayerSetAndSetNeedsView:layerSet forceAppend:YES forceReprocess:NO];
 }
 
-- (void)updateLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+- (void)updateAllLayersOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     NSParameterAssert(layerSet);
     [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES];
+}
+
+- (void)updateCurrentLayerOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    NSParameterAssert(layerSet);
+
 }
 
 //TODO:GPUImageView로 직접 투사하는 부분 / export를 위해서 url을 추출하는 부분 따로.

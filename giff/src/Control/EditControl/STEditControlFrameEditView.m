@@ -52,6 +52,11 @@
     return 2;
 }
 
+- (STEditControlFrameEditItemView *)itemViewOfLayer:(STCapturedImageSetAnimatableLayer *)layer {
+    return (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:layer.uuid];
+}
+
+
 - (void)setLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet {
     if(layerSet.layers.count){
         _layerSet = layerSet;

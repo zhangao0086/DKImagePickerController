@@ -51,6 +51,7 @@
 #import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "STGIFFAnimatableLayerPresentingView.h"
 #import "STEditControlFrameEditView.h"
+#import "STEditControlFrameEditItemView.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -441,7 +442,7 @@ static NSString * JANNE = @"Janne";
                 STCapturedImageSetAnimatableLayer * addingLayer = [STCapturedImageSetAnimatableLayer layerWithImageSet:_previewCollector.targetPhotoItem.sourceForCapturedImageSet];
                 layerSet.layers = [layerSet.layers arrayByAddingObject:addingLayer];
 
-                [_layerSetPresentationView updateLayerSet:layerSet];
+                [_layerSetPresentationView updateAllLayersOfLayerSet:layerSet];
             }
 
             [STMainControl sharedInstance].editControlView.frameEditView.layerSet = layerSet;
@@ -453,13 +454,23 @@ static NSString * JANNE = @"Janne";
             imageSet.extensionObject = _layerSetPresentationView.layerSets;
         }
 
-        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
+
+        STEditControlFrameEditView * frameEditView = [STMainControl sharedInstance].editControlView.frameEditView;
+
+        [[STMainControl sharedInstance] st_addKeypathListener:@keypath(frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
             _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
         }];
 
-        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
-            _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
-        }];
+        for(STCapturedImageSetAnimatableLayer * layer in frameEditView.layerSet.layers){
+            STEditControlFrameEditItemView * itemView = [frameEditView itemViewOfLayer:layer];
+            [itemView whenValueOf:@keypath(itemView.frameIndexOffset) id:[@keypath(itemView.frameIndexOffset) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
+
+            }];
+
+            [itemView whenValueOf:@keypath(itemView.frameIndexOffsetHasChanging) id:[@keypath(itemView.frameIndexOffsetHasChanging) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
+                [value boolValue];
+            }];
+        }
 
         _layerSetPresentationView.currentIndex = index;
     }
@@ -478,7 +489,7 @@ static NSString * JANNE = @"Janne";
 
 - (void)refreshCurrentDisplayImageLayerSet{
     STCapturedImageSetAnimatableLayerSet * layerSet = [_layerSetPresentationView.layerSets firstObject];
-    [_layerSetPresentationView updateLayerSet:layerSet];
+    [_layerSetPresentationView updateAllLayersOfLayerSet:layerSet];
 
     [STMainControl sharedInstance].editControlView.frameEditView.layerSet = layerSet;
 }

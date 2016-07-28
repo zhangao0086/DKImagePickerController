@@ -7,9 +7,15 @@
 #import "STCapturedImageSetAnimatableLayerSetCollectionView.h"
 #import "STSegmentedSliderView.h"
 
+@class STEditControlFrameEditItemView;
+
+
+@class STCapturedImageSetAnimatableLayer;
 
 @interface STEditControlFrameEditView : STUIView <STSegmentedSliderControlDelegate>
 @property (nonatomic, readwrite) STCapturedImageSetAnimatableLayerSet * layerSet;
 @property (nonatomic, readonly) NSUInteger maxNumberOfLayersOfLayerSet;
 @property (nonatomic, readonly) NSUInteger currentMasterFrameIndex;
+
+- (STEditControlFrameEditItemView *)itemViewOfLayer:(STCapturedImageSetAnimatableLayer *)layer;
 @end
