@@ -69,7 +69,8 @@
         //control
         [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
             NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
-            UIImageView * thumbnailCellView = [[UIImageView alloc] initWithSizeWidth:self.minThumbnailWidth];
+
+            UIImageView * thumbnailCellView = [[UIImageView alloc] initWithSize:CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth)];
             thumbnailCellView.tag = index;
             thumbnailCellView.contentMode = UIViewContentModeCenter;
             thumbnailCellView.clipsToBounds = YES;
