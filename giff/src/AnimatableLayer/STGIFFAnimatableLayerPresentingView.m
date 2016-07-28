@@ -15,6 +15,7 @@
 #import "STMultiSourcingGPUImageProcessor.h"
 #import "STCapturedImageSetDisplayProcessor+GPUImage.h"
 #import "STFastUIViewSelectableView.h"
+#import "NSNumber+STUtil.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -67,44 +68,62 @@
 - (void)updateCurrentLayerOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     NSParameterAssert(layerSet);
 
+    STSelectableView * itemViewOfLayerSet = (STSelectableView *) [self itemViewOfLayerSet:layerSet];
+
+    itemViewOfLayerSet.currentPresentableObject;
 }
 
-//TODO:GPUImageView로 직접 투사하는 부분 / export를 위해서 url을 추출하는 부분 따로.
-- (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet forceAppend:(BOOL)forceAppend forceReprocess:(BOOL)forceReprocess{
+- (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet
+                           forceAppend:(BOOL)forceAppend
+                        forceReprocess:(BOOL)forceReprocess {
+
+    STSelectableView * itemViewOfLayerSet = (STSelectableView *) [self itemViewOfLayerSet:layerSet];
+    NSAssert(!itemViewOfLayerSet.count || itemViewOfLayerSet.count==layerSet.frameCount,@"itemViewOfLayerSet.count must be empty OR same as layerSet.frameCount");
 
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithLayerSet:layerSet];
 
     if(layerSet.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+            @autoreleasepool {
+                NSArray<id> * presentableObjects = nil;
+                /*
+                 * STMultiSourcingGPUImageProcessor
+                 */
+                if([layerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class]){
 
-            NSArray<id> * presentableObjects = nil;
-                //STMultiSourcingGPUImageProcessor
-            if([layerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class]){
-                presentableObjects = [[processor sourceSetOfImagesForLayerSet] mapWithIndex:^id(id object, NSInteger index) {
-                    @autoreleasepool {
-                        return [[GPUImageView alloc] initWithSize:_contentView.size];
+                    if(!itemViewOfLayerSet.count){
+                        presentableObjects = [[processor sourceSetOfImagesForLayerSet] mapWithIndex:^id(id object, NSInteger index) {
+                            @autoreleasepool {
+                                return [[GPUImageView alloc] initWithSize:_contentView.size];
+                            }
+                        }];
+                    }else{
+                        presentableObjects = [[@(itemViewOfLayerSet.count) st_intArray] mapWithIndex:^id(id object, NSInteger i) {
+                            return [itemViewOfLayerSet presentableObjectAtIndex:i];
+                        }];
                     }
-                }];
-                if(![processor processForImageInput:presentableObjects]){
-                    NSAssert(NO, @"STMultiSourcingGPUImageProcessor -> processForImageInput was failed.");
-                    presentableObjects = nil;
+
+                    if(![processor processForImageInput:presentableObjects]){
+                        NSAssert(NO, @"STMultiSourcingGPUImageProcessor -> processForImageInput was failed.");
+                        presentableObjects = nil;
+                    }
+                }
+                /*
+                 * STMultiSourcingImageProcessor
+                 */
+                else{
+                    presentableObjects = [processor processForImageUrls:forceReprocess];
                 }
 
-            }
-                // STMultiSourcingImageProcessor
-            else{
-                presentableObjects = [processor processForImageUrls:forceReprocess];
-            }
+                NSAssert(presentableObjects.count, @"presentableObjects's count is 0");
+                dispatch_async(dispatch_get_main_queue(),^{
+                    NSArray * presentableObjectsToApply = presentableObjects.count ?
+                            presentableObjects : [processor sourceOfImagesForLayer:[layerSet.layers firstObject]];
 
-            NSAssert(presentableObjects.count, @"presentableObjects's count is 0");
-            dispatch_async(dispatch_get_main_queue(),^{
-                if(presentableObjects.count){
-                    [Wself setLayerView:layerSet presentableObjects:presentableObjects forceAppend:forceAppend];
-                } else{
-                    [Wself setLayerView:layerSet presentableObjects:[processor sourceOfImagesForLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];
-                }
-            });
+                    [Wself setLayerView:layerSet presentableObjects:presentableObjectsToApply forceAppend:forceAppend];
+                });
+            }
         });
     }else{
         //set default 0 STCapturedImageSet
@@ -126,7 +145,7 @@
     [self setNeedsLayersDisplayAndLayout];
 }
 
-- (UIView *)itemViewOfLayerSetAt:(STCapturedImageSetAnimatableLayerSet *)layerSet {
+- (UIView *)itemViewOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet {
     return [_contentView viewWithTagName:layerSet.uuid];
 }
 

@@ -91,7 +91,7 @@
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
-    _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/[self.layerSet firstImageSet].count;
+    _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/self.layerSet.frameCount;
 
     _frameEditItemViewContainer.top = _masterOffsetSlider.bottom;
     [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {

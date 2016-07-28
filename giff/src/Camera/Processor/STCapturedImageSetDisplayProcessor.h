@@ -13,6 +13,7 @@
 @interface STCapturedImageSetDisplayProcessor : NSObject
 @property(nonatomic, readonly) STCapturedImageSetDisplayLayerSet * layerSet;
 @property(nonatomic, assign) BOOL loselessImageEncoding;
+@property(nonatomic, assign) NSRange rangeToProcessOfSourceSet;
 
 - (instancetype)initWithLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 

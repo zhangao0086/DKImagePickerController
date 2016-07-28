@@ -4,10 +4,15 @@
 //
 
 #import "STCapturedImageSetAnimatableLayerSet.h"
+#import "STCapturedImageSet.h"
 
 
 @implementation STCapturedImageSetAnimatableLayerSet {
 
+}
+
+- (NSInteger)frameCount {
+    return [[self firstImageSet] count];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

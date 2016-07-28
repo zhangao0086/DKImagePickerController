@@ -15,7 +15,7 @@
 @property (nonatomic, assign) NSUInteger currentIndex;
 @property (nonatomic, readonly) NSArray<STCapturedImageSetAnimatableLayerSet *> * layerSets;
 
-- (UIView *)itemViewOfLayerSetAt:(STCapturedImageSetAnimatableLayerSet *)layerSet;
+- (UIView *)itemViewOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;
 
 - (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;
 

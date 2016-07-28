@@ -44,7 +44,7 @@
     }
 }
 
-- (UIView *)itemViewOfLayerSetAt:(STCapturedImageSetAnimatableLayerSet *)layerSet {
+- (UIView *)itemViewOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet {
     NSUInteger index = [_layerSets indexOfObject:layerSet];
     NSAssert(index<NSUIntegerMax, @"given layerSet is not contained.");
     UIView * layersContentView = [[_contentView subviews] st_objectOrNilAtIndex:index];
@@ -64,7 +64,7 @@
 
     [_layerSets removeObject:layerSet];
 
-    UIView * layerItemView = [self itemViewOfLayerSetAt:layerSet];
+    UIView * layerItemView = [self itemViewOfLayerSet:layerSet];
     if([layerItemView isKindOfClass:STSelectableView.class]){
         [((STSelectableView *) layerItemView) clearViews];
     }else if([layerItemView isKindOfClass:STUIView.class]){
