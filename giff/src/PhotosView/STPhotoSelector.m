@@ -450,24 +450,26 @@ static NSString * JANNE = @"Janne";
             [STMainControl sharedInstance].editControlView.backgroundColor = [UIColor yellowColor];
             [STMainControl sharedInstance].backgroundColor = [UIColor blueColor];
 
-
             imageSet.extensionObject = _layerSetPresentationView.layerSets;
         }
 
-
+        /*
+         * add listeners
+         */
         STEditControlFrameEditView * frameEditView = [STMainControl sharedInstance].editControlView.frameEditView;
 
-        [[STMainControl sharedInstance] st_addKeypathListener:@keypath(frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
+        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
             _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
         }];
 
         for(STCapturedImageSetAnimatableLayer * layer in frameEditView.layerSet.layers){
             STEditControlFrameEditItemView * itemView = [frameEditView itemViewOfLayer:layer];
             [itemView whenValueOf:@keypath(itemView.frameIndexOffset) id:[@keypath(itemView.frameIndexOffset) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
-
+                oo(value);
             }];
 
             [itemView whenValueOf:@keypath(itemView.frameIndexOffsetHasChanging) id:[@keypath(itemView.frameIndexOffsetHasChanging) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
+                oo(value);
                 [value boolValue];
             }];
         }

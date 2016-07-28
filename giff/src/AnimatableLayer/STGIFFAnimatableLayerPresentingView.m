@@ -76,11 +76,11 @@
 
     if(layerSet.effect){
         Weaks
-//        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
 
             NSArray<id> * presentableObjects = nil;
-            if([layerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class]){
                 //STMultiSourcingGPUImageProcessor
+            if([layerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class]){
                 presentableObjects = [[processor sourceSetOfImagesForLayerSet] mapWithIndex:^id(id object, NSInteger index) {
                     @autoreleasepool {
                         return [[GPUImageView alloc] initWithSize:_contentView.size];
@@ -91,8 +91,9 @@
                     presentableObjects = nil;
                 }
 
-            }else{
+            }
                 // STMultiSourcingImageProcessor
+            else{
                 presentableObjects = [processor processForImageUrls:forceReprocess];
             }
 
@@ -104,7 +105,7 @@
                     [Wself setLayerView:layerSet presentableObjects:[processor sourceOfImagesForLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];
                 }
             });
-//        });
+        });
     }else{
         //set default 0 STCapturedImageSet
         [self setLayerView:layerSet presentableObjects:[processor sourceOfImagesForLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];

@@ -157,10 +157,10 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 }
 
 - (void)setFrameIndexOffsetHasChanging:(BOOL)frameIndexOffsetHasChanging {
-    if(_frameIndexOffsetHasChanging!=frameIndexOffsetHasChanging){
-        [self willChangeValueForKey:@keypath(self.frameIndexOffset)];
+    if(_frameIndexOffsetHasChanging != frameIndexOffsetHasChanging){
+        [self willChangeValueForKey:@keypath(self.frameIndexOffsetHasChanging)];
         _frameIndexOffsetHasChanging = frameIndexOffsetHasChanging;
-        [self didChangeValueForKey:@keypath(self.frameIndexOffset)];
+        [self didChangeValueForKey:@keypath(self.frameIndexOffsetHasChanging)];
     }
 }
 
