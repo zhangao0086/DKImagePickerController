@@ -207,7 +207,7 @@
         Weaks
         [NSObject animate:^{
             Strongs
-            Sself->_thumbView.easeInEaseOut.center = centerPoint;
+            Sself->_thumbView.easeInEaseOut.center = CGPointMake(centerPoint.x,_thumbView.y);
 
         } completion:^(BOOL finished) {
             Strongs
@@ -221,7 +221,7 @@
 //        if([[_thumbView pop_animationKeys] count])
 //            [_thumbView pop_removeAllAnimations];
 
-        _thumbView.center = centerPoint;
+        _thumbView.centerX = centerPoint.x;
 
         if(block) block();
     }
