@@ -121,7 +121,7 @@
 
     [presentableObjects eachWithIndex:^(id object, NSUInteger index) {
         UIView *itemView = [UIView st_createViewFromPresentableObject:object];
-        itemView.bounds = _thumbView.bounds;
+        itemView.size = _thumbView.size;
         itemView.center = [self.centerPositions[index] CGPointValue];
         [_segmentationViewContainer addSubview:itemView];
     }];

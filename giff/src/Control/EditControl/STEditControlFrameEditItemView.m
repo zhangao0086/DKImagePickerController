@@ -10,6 +10,7 @@
 #import "STCapturedImageSetAnimatableLayer.h"
 #import "STStandardButton.h"
 #import "R.h"
+#import "NSArray+STUtil.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -65,28 +66,27 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
     _displayLayer = displayLayer;
 
     if(_displayLayer.frameCount){
-        //control
-        [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
-            NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
-
-            UIImageView * thumbnailCellView = [[UIImageView alloc] initWithSize:CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth)];
-            thumbnailCellView.tagName = frameImage.uuid;
-            thumbnailCellView.tag = TagPrefixThumbImageView+index;
-            thumbnailCellView.contentMode = UIViewContentModeCenter;
-            thumbnailCellView.clipsToBounds = YES;
-            [self addSubview:thumbnailCellView];
-
-            //size : 414(6s plus)
-            UIImage * thumbnailImage = [UIImage imageWithContentsOfFile:frameImage.thumbnailUrl.path];
-            thumbnailCellView.image = thumbnailImage;
-        }];
-        [self updateThumbnailsPosition];
-
         if(!_frameOffsetSlider){
             _frameOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width-self.squareUnitWidth, self.squareUnitWidth)];
             _frameOffsetSlider.delegateSlider = self;
             [self addSubview:_frameOffsetSlider];
         }
+
+        [_frameOffsetSlider setSegmentationViewAsPresentableObject:[_displayLayer.imageSet.images mapWithIndex:^(STCapturedImage *frameImage, NSInteger index) {
+            @autoreleasepool {
+                NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
+                return [UIImage imageWithContentsOfFile:frameImage.thumbnailUrl.path];
+            }
+        }]];
+
+        [_frameOffsetSlider.segmentationViews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
+            view.tag = TagPrefixThumbImageView+index;
+            view.contentMode = UIViewContentModeScaleAspectFill;
+            view.clipsToBounds = YES;
+        }];
+
+        [self updateThumbnailsPosition];
+
         [self updateSliderPosition];
 
     }else{
@@ -108,7 +108,7 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 
 - (void)updateThumbnailsPosition{
     [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
-        UIImageView * thumbnailCellView = [self viewWithTag:TagPrefixThumbImageView+index];
+        UIImageView * thumbnailCellView = [_frameOffsetSlider viewWithTag:TagPrefixThumbImageView+index];
         NSInteger const offset = self.displayLayer.frameIndexOffset;
         NSInteger const count = self.displayLayer.frameCount;
 
@@ -130,7 +130,7 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 
 #pragma mark Slider Delegator
 - (UIView *)createThumbView {
-    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, self.height)];
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth)];
     thumbView.backgroundColor = [UIColor blackColor];
     return thumbView;
 }
