@@ -50,7 +50,7 @@
         //control
         CGSize sliderControlSize = CGSizeMake(self.width-squareWidth, squareWidth);
         STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderControlSize];
-        offsetSlider.normalizedCenterPositionOfThumbView = .5;
+        offsetSlider.normalizedPosition = .5;
         [self addSubview:offsetSlider];
         _frameOffsetSlider = offsetSlider;
 

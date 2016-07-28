@@ -133,7 +133,7 @@
     NSInteger targetIndexOfLayer = timeSlider.tag;
     STCapturedImageSetAnimatableLayerSet * layerSet = [self.layerSets st_objectOrNilAtIndex:targetIndexOfLayer];
 
-    layerSet.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+    layerSet.frameIndexOffset = (NSInteger) round(timeSlider.normalizedPosition*10) - 5;
 
     [self setNeedsLayersDisplayAndLayout];
 }

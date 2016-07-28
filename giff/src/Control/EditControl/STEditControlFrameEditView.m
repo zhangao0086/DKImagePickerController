@@ -13,6 +13,7 @@
 #import "R.h"
 #import "STPhotoSelector.h"
 #import "STCapturedImageSet.h"
+#import "STCapturedImageSetDisplayLayerSet+Util.h"
 
 
 @implementation STEditControlFrameEditView {
@@ -38,7 +39,6 @@
         }];
 
         _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
-//        _masterOffsetSlider.normalizedCenterPositionOfThumbView = .5;
         _masterOffsetSlider.delegateSlider = self;
         [self addSubview:_masterOffsetSlider];
     }
@@ -89,6 +89,8 @@
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
+    _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/[self.layerSet firstImageSet].count;
+
     _frameEditItemViewContainer.top = _masterOffsetSlider.bottom;
     [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *)view;
@@ -142,7 +144,7 @@
     if([timeSlider isEqual:_masterOffsetSlider]){
 
         STCapturedImageSetDisplayLayer * anyLayer = [self.layerSet.layers firstObject];
-        NSUInteger currentMasterFrameIndex = (NSUInteger) round(anyLayer.imageSet.count*timeSlider.normalizedCenterPositionOfThumbView);
+        NSUInteger currentMasterFrameIndex = (NSUInteger) round(anyLayer.imageSet.count*timeSlider.normalizedPosition);
         if(currentMasterFrameIndex!=_currentMasterFrameIndex){
             [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
             _currentMasterFrameIndex = currentMasterFrameIndex;
@@ -152,7 +154,7 @@
     }else{
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:timeSlider.tagName];
 
-        editItemView.displayLayer.frameIndexOffset = (NSInteger) round(timeSlider.normalizedCenterPositionOfThumbView*10) - 5;
+        editItemView.displayLayer.frameIndexOffset = (NSInteger) round(timeSlider.normalizedPosition*10) - 5;
 
         [self setNeedsLayersDisplayAndLayout];
     }

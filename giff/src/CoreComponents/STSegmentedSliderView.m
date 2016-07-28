@@ -198,9 +198,9 @@
     CGFloat padding = [self halfWidthSizeOfThumbView];
     CGFloat maxPosition = self.thumbBoundView.width-padding;
     centerPoint.x = CLAMP(centerPoint.x, padding, maxPosition);
-    _normalizedCenterPositionOfThumbView = (centerPoint.x-padding)/(maxPosition+padding);
+    _normalizedPosition = (centerPoint.x-padding)/(maxPosition+padding);
 
-    centerPoint.x = (_normalizedCenterPositionOfThumbView*(maxPosition+padding)) + padding;
+    centerPoint.x = (_normalizedPosition*(maxPosition+padding)) + padding;
 
 
     if(animation){
@@ -227,11 +227,11 @@
     }
 }
 
-- (void)setNormalizedCenterPositionOfThumbView:(CGFloat)normalizedCenterPositionOfThumbView {
-    _normalizedCenterPositionOfThumbView = CLAMP(normalizedCenterPositionOfThumbView, 0, 1);
+- (void)setNormalizedPosition:(CGFloat)normalizedPosition {
+    _normalizedPosition = CLAMP(normalizedPosition, 0, 1);
     CGFloat padding = [self halfWidthSizeOfThumbView];
     CGFloat maxPosition = self.thumbBoundView.width-padding;
-    CGFloat centerX = (_normalizedCenterPositionOfThumbView*(maxPosition+padding)) + padding;
+    CGFloat centerX = (_normalizedPosition*(maxPosition+padding)) + padding;
     [self setThumbViewCenter:CGPointMake(centerX,_thumbView.center.y) animation:NO completion:nil];
 }
 

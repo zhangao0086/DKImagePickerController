@@ -27,7 +27,7 @@
 @property (nonatomic, assign) BOOL allowMoveThumbAsSlide;
 @property (nonatomic, assign) BOOL allowMoveThumbAsTap;
 @property (nonatomic, readonly) UIView *thumbView;
-@property (nonatomic, assign) CGFloat normalizedCenterPositionOfThumbView;
+@property (nonatomic, assign) CGFloat normalizedPosition;
 @property (nonatomic, readonly) UIView *thumbBoundView;
 @property (nonatomic, readonly) UIView *backgroundView;
 @property (nonatomic, readonly) NSArray *centerPositions;
