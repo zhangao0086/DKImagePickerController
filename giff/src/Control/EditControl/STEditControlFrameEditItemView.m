@@ -10,10 +10,11 @@
 #import "STCapturedImageSetAnimatableLayer.h"
 #import "STStandardButton.h"
 #import "R.h"
+#import "STCapturedImageSetAnimatableLayer+Util.h"
 
 
 @implementation STEditControlFrameEditItemView {
-    UIView * _thumbnailCellContainerView;
+    STSegmentedSliderView * _frameOffsetSlider;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -30,47 +31,113 @@
     return self;
 }
 
+- (void)setFrameIndexOffset:(NSInteger)frameIndexOffset {
+    if([self _setFrameIndexOffset:frameIndexOffset]){
+        [self updateThumbnailsPosition];
+        [self updateSliderPosition];
+    }
+}
+
+- (BOOL)_setFrameIndexOffset:(NSInteger)frameIndexOffset {
+    BOOL changed = _displayLayer.frameIndexOffset!=frameIndexOffset;
+    if(changed){
+        [self willChangeValueForKey:@keypath(self.frameIndexOffset)];
+        _displayLayer.frameIndexOffset = frameIndexOffset;
+        [self didChangeValueForKey:@keypath(self.frameIndexOffset)];
+
+        ii(_displayLayer.frameIndexOffset);
+    }
+    return changed;
+}
+
+- (NSInteger)frameIndexOffset {
+    return _displayLayer.frameIndexOffset;
+}
+
+- (CGFloat)squareUnitWidth{
+    return self.height;
+}
+
+- (CGFloat)minThumbnailWidth{
+    return (self.width-self.squareUnitWidth)/_displayLayer.imageSet.count;
+}
+
 - (void)setDisplayLayer:(STCapturedImageSetAnimatableLayer *)displayLayer {
     _displayLayer = displayLayer;
 
-    if(_displayLayer.imageSet.count){
-        CGFloat squareWidth = self.height;
-        CGFloat maxThumbnailWidth = (self.width-squareWidth)/_displayLayer.imageSet.count;
-
+    if(_displayLayer.frameCount){
+        //control
         [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
             NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
-            UIImageView * thumbnailCellView = [[UIImageView alloc] initWithSizeWidth:squareWidth];
+            UIImageView * thumbnailCellView = [[UIImageView alloc] initWithSizeWidth:self.minThumbnailWidth];
+            thumbnailCellView.tag = index;
+            thumbnailCellView.contentMode = UIViewContentModeCenter;
+            thumbnailCellView.clipsToBounds = YES;
             [self addSubview:thumbnailCellView];
+
             //size : 414(6s plus)
             UIImage * thumbnailImage = [UIImage imageWithContentsOfFile:frameImage.thumbnailUrl.path];
             thumbnailCellView.image = thumbnailImage;
-            thumbnailCellView.x = maxThumbnailWidth * index;
         }];
+        [self updateThumbnailsPosition];
 
-        //control
-        CGSize sliderControlSize = CGSizeMake(self.width-squareWidth, squareWidth);
-        STSegmentedSliderView * offsetSlider = [[STSegmentedSliderView alloc] initWithSize:sliderControlSize];
-        offsetSlider.normalizedPosition = .5;
-        [self addSubview:offsetSlider];
-        _frameOffsetSlider = offsetSlider;
-
-        [self bringSubviewToFront:_removeButton];
+        if(!_frameOffsetSlider){
+            _frameOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width-self.squareUnitWidth, self.squareUnitWidth)];
+            _frameOffsetSlider.delegateSlider = self;
+            [self addSubview:_frameOffsetSlider];
+        }
+        ii(self.displayLayer.frameIndexOffset);
+        [self updateSliderPosition];
 
     }else{
         [self disposeContent];
     }
 }
 
-
 - (void)disposeContent {
     _displayLayer = nil;
 
+    [_frameOffsetSlider clearViews];
     [self clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
 
     _frameOffsetSlider = nil;
     _removeButton = nil;
 
     [super disposeContent];
+}
+
+- (void)updateThumbnailsPosition{
+    [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
+        UIImageView * thumbnailCellView = [self viewWithTag:index];
+        thumbnailCellView.x = self.minThumbnailWidth * index;
+    }];
+}
+
+- (void)updateSliderPosition{
+    _frameOffsetSlider.normalizedPosition = CLAMP((self.displayLayer.frameIndexOffset+(self.displayLayer.frameCount/2))/self.displayLayer.frameCount,0,1);
+}
+
+#pragma mark Slider Delegator
+- (UIView *)createThumbView {
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, self.height)];
+    thumbView.backgroundColor = [UIColor blackColor];
+    return thumbView;
+}
+
+- (UIView *)createBackgroundView:(CGRect)bounds {
+    return nil;
+}
+
+- (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+    [self doingSlide:timeSlider withSelectedIndex:index];
+}
+
+- (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
+
+    NSInteger frameIndexOffset = (NSInteger) ((timeSlider.normalizedPosition * self.displayLayer.frameCount) - round(self.displayLayer.frameCount/2));
+    if([self _setFrameIndexOffset:frameIndexOffset]){
+        [self updateThumbnailsPosition];
+    }
 }
 
 @end

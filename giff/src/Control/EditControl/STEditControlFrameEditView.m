@@ -65,10 +65,9 @@
             }
             NSAssert([layer isKindOfClass:STCapturedImageSetAnimatableLayer.class],@"Only STCapturedImageSetAnimatableLayer is allowed");
             STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
-            editItemView.tagName = editItemView.frameOffsetSlider.tagName = layer.uuid;
+            editItemView.tagName = layer.uuid;
             editItemView.displayLayer = layer;
             editItemView.backgroundColor = [UIColor orangeColor];
-            editItemView.frameOffsetSlider.delegateSlider = self;
             [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
                 [Wself removeLayerTapped:editItemView];
             }];
@@ -134,29 +133,18 @@
     return nil;
 }
 
-
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     [self doingSlide:timeSlider withSelectedIndex:index];
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
 
-    if([timeSlider isEqual:_masterOffsetSlider]){
-
-        STCapturedImageSetDisplayLayer * anyLayer = [self.layerSet.layers firstObject];
-        NSUInteger currentMasterFrameIndex = (NSUInteger) round(anyLayer.imageSet.count*timeSlider.normalizedPosition);
-        if(currentMasterFrameIndex!=_currentMasterFrameIndex){
-            [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
-            _currentMasterFrameIndex = currentMasterFrameIndex;
-            [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
-        }
-
-    }else{
-        STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:timeSlider.tagName];
-
-        editItemView.displayLayer.frameIndexOffset = (NSInteger) round(timeSlider.normalizedPosition*10) - 5;
-
-        [self setNeedsLayersDisplayAndLayout];
+    STCapturedImageSetDisplayLayer * anyLayer = [self.layerSet.layers firstObject];
+    NSUInteger currentMasterFrameIndex = (NSUInteger) round(anyLayer.imageSet.count*timeSlider.normalizedPosition);
+    if(currentMasterFrameIndex!=_currentMasterFrameIndex){
+        [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+        _currentMasterFrameIndex = currentMasterFrameIndex;
+        [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
     }
 }
 

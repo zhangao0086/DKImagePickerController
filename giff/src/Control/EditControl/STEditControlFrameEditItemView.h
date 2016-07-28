@@ -12,8 +12,9 @@
 @class STCapturedImageSetAnimatableLayer;
 
 
-@interface STEditControlFrameEditItemView : STUIView
+@interface STEditControlFrameEditItemView : STUIView <STSegmentedSliderControlDelegate>
 @property (nonatomic, readwrite) STCapturedImageSetAnimatableLayer * displayLayer;
-@property (nonatomic, readonly) STSegmentedSliderView * frameOffsetSlider;
+@property (nonatomic, assign) NSInteger frameIndexOffset;
+@property (nonatomic, assign) BOOL frameIndexOffsetHasChanging;
 @property (nonatomic, readonly) STStandardButton * removeButton;
 @end
