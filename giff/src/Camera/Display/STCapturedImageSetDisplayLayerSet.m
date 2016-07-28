@@ -41,6 +41,10 @@
     }
 }
 
+- (STCapturedImageSet *)firstImageSet {
+    return [[[self layers] firstObject] imageSet];
+}
+
 - (id)initWithCoder:(NSCoder *)decoder {
     if (self = [super initWithCoder:decoder]) {
         self.layers = [decoder decodeObjectForKey:@keypath(self.layers)];

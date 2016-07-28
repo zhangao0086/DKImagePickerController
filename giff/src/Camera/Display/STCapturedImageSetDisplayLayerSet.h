@@ -12,6 +12,7 @@
 @class STCapturedImageSetDisplayLayer;
 
 @interface STCapturedImageSetDisplayLayerSet : STCapturedImageSetDisplayObject
+@property (nullable, nonatomic, readonly) STCapturedImageSet * firstImageSet;
 //storing attributes
 @property (nonatomic, readwrite) NSArray<STCapturedImageSetDisplayLayer *> * layers;
 @property (nonatomic, readwrite) STMultiSourcingImageProcessor * effect;

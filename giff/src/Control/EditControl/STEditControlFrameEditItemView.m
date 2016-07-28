@@ -10,7 +10,6 @@
 #import "STCapturedImageSetAnimatableLayer.h"
 #import "STStandardButton.h"
 #import "R.h"
-#import "STCapturedImageSetAnimatableLayer+Util.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -44,8 +43,6 @@
         [self willChangeValueForKey:@keypath(self.frameIndexOffset)];
         _displayLayer.frameIndexOffset = frameIndexOffset;
         [self didChangeValueForKey:@keypath(self.frameIndexOffset)];
-
-        ii(_displayLayer.frameIndexOffset);
     }
     return changed;
 }
@@ -62,6 +59,8 @@
     return (self.width-self.squareUnitWidth)/_displayLayer.imageSet.count;
 }
 
+static NSUInteger const TagPrefixThumbImageView = 1000;
+
 - (void)setDisplayLayer:(STCapturedImageSetAnimatableLayer *)displayLayer {
     _displayLayer = displayLayer;
 
@@ -71,7 +70,8 @@
             NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
 
             UIImageView * thumbnailCellView = [[UIImageView alloc] initWithSize:CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth)];
-            thumbnailCellView.tag = index;
+            thumbnailCellView.tagName = frameImage.uuid;
+            thumbnailCellView.tag = TagPrefixThumbImageView+index;
             thumbnailCellView.contentMode = UIViewContentModeCenter;
             thumbnailCellView.clipsToBounds = YES;
             [self addSubview:thumbnailCellView];
@@ -87,7 +87,6 @@
             _frameOffsetSlider.delegateSlider = self;
             [self addSubview:_frameOffsetSlider];
         }
-        ii(self.displayLayer.frameIndexOffset);
         [self updateSliderPosition];
 
     }else{
@@ -109,8 +108,19 @@
 
 - (void)updateThumbnailsPosition{
     [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
-        UIImageView * thumbnailCellView = [self viewWithTag:index];
-        thumbnailCellView.x = self.minThumbnailWidth * index;
+        UIImageView * thumbnailCellView = [self viewWithTag:TagPrefixThumbImageView+index];
+        NSInteger const offset = self.displayLayer.frameIndexOffset;
+        NSInteger const count = self.displayLayer.frameCount;
+
+        NSUInteger indexOfDisplay = index;
+        if(offset>0){
+            indexOfDisplay = index >= offset ? (index - offset) : count - (offset - index);
+        }else if(offset<0) {
+            indexOfDisplay = index >= (count + offset) ? (index - offset) - count : (NSUInteger) -(offset - index);
+        }
+
+        NSAssert(indexOfDisplay<self.displayLayer.frameCount,@"indexOfDisplay is wrong.");
+        thumbnailCellView.x = self.minThumbnailWidth * indexOfDisplay;
     }];
 }
 

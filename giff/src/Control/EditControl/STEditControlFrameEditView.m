@@ -13,8 +13,6 @@
 #import "R.h"
 #import "STPhotoSelector.h"
 #import "STCapturedImageSet.h"
-#import "STCapturedImageSetDisplayLayerSet+Util.h"
-
 
 @implementation STEditControlFrameEditView {
     STStandardButton * _frameAddButton;
