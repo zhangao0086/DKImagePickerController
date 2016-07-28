@@ -57,72 +57,83 @@
 - (void)appendLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     NSParameterAssert(layerSet);
     [super appendLayerSet:layerSet];
-    [self processLayerSetAndSetNeedsView:layerSet forceAppend:YES forceReprocess:NO];
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:YES forceReprocess:NO preferredRange:NSRangeNull];
 }
 
 - (void)updateAllLayersOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     NSParameterAssert(layerSet);
-    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES];
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES preferredRange:NSRangeNull];
 }
 
 - (void)updateCurrentLayerOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     NSParameterAssert(layerSet);
-
-    STSelectableView * itemViewOfLayerSet = (STSelectableView *) [self itemViewOfLayerSet:layerSet];
-
-    itemViewOfLayerSet.currentPresentableObject;
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES preferredRange:NSMakeRange(self.currentIndex, 1)];
 }
 
 - (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet
                            forceAppend:(BOOL)forceAppend
-                        forceReprocess:(BOOL)forceReprocess {
+                        forceReprocess:(BOOL)forceReprocess
+                        preferredRange:(NSRange)range{
 
     STSelectableView * itemViewOfLayerSet = (STSelectableView *) [self itemViewOfLayerSet:layerSet];
     NSAssert(!itemViewOfLayerSet.count || itemViewOfLayerSet.count==layerSet.frameCount,@"itemViewOfLayerSet.count must be empty OR same as layerSet.frameCount");
 
+    NSArray * existedAllPresentableObjects = [[@(itemViewOfLayerSet.count) st_intArray] mapWithIndex:^id(id object, NSInteger i) {
+        return [itemViewOfLayerSet presentableObjectAtIndex:i];
+    }];
+
     STCapturedImageSetDisplayProcessor * processor = [STCapturedImageSetDisplayProcessor processorWithLayerSet:layerSet];
+    processor.preferredRangeOfSourceSet = range;
 
     if(layerSet.effect){
         Weaks
         dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
             @autoreleasepool {
+                BOOL _needsSetViews = YES;
+
                 NSArray<id> * presentableObjects = nil;
                 /*
                  * STMultiSourcingGPUImageProcessor
                  */
                 if([layerSet.effect isKindOfClass:STMultiSourcingGPUImageProcessor.class]){
 
-                    if(!itemViewOfLayerSet.count){
+                    if(!existedAllPresentableObjects.count){
                         presentableObjects = [[processor sourceSetOfImagesForLayerSet] mapWithIndex:^id(id object, NSInteger index) {
                             @autoreleasepool {
                                 return [[GPUImageView alloc] initWithSize:_contentView.size];
                             }
                         }];
                     }else{
-                        presentableObjects = [[@(itemViewOfLayerSet.count) st_intArray] mapWithIndex:^id(id object, NSInteger i) {
-                            return [itemViewOfLayerSet presentableObjectAtIndex:i];
-                        }];
+                        presentableObjects = existedAllPresentableObjects;
+                        _needsSetViews = NO;
                     }
 
                     if(![processor processForImageInput:presentableObjects]){
                         NSAssert(NO, @"STMultiSourcingGPUImageProcessor -> processForImageInput was failed.");
                         presentableObjects = nil;
                     }
+
                 }
                 /*
                  * STMultiSourcingImageProcessor
                  */
                 else{
                     presentableObjects = [processor processForImageUrls:forceReprocess];
+
+                    if(existedAllPresentableObjects.count && !isNSRangeNull(processor.preferredRangeOfSourceSet)){
+                        presentableObjects = [existedAllPresentableObjects replaceFromOtherArray:presentableObjects inRange:processor.preferredRangeOfSourceSet];
+                    }
                 }
 
                 NSAssert(presentableObjects.count, @"presentableObjects's count is 0");
-                dispatch_async(dispatch_get_main_queue(),^{
-                    NSArray * presentableObjectsToApply = presentableObjects.count ?
-                            presentableObjects : [processor sourceOfImagesForLayer:[layerSet.layers firstObject]];
+                if(_needsSetViews){
+                    dispatch_async(dispatch_get_main_queue(),^{
+                        NSArray * presentableObjectsToApply = presentableObjects.count ?
+                                presentableObjects : [processor sourceOfImagesForLayer:[layerSet.layers firstObject]];
 
-                    [Wself setLayerView:layerSet presentableObjects:presentableObjectsToApply forceAppend:forceAppend];
-                });
+                        [Wself setLayerView:layerSet presentableObjects:presentableObjectsToApply forceAppend:forceAppend];
+                    });
+                }
             }
         });
     }else{

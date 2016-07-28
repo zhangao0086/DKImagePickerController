@@ -140,9 +140,12 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 }
 
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-    [self doingSlide:timeSlider withSelectedIndex:index];
+//    [self doingSlide:timeSlider withSelectedIndex:index];
 
-    [self setFrameIndexOffsetHasChanging:NO];
+    [self _setFrameIndexOffsetHasChanging:NO];
+
+    //FIXME: didSlide 날라오지 않음.
+    oo(@"didSlide");
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
@@ -153,13 +156,14 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
         [self updateThumbnailsPosition];
     }
 
-    [self setFrameIndexOffsetHasChanging:YES];
+    [self _setFrameIndexOffsetHasChanging:YES];
 }
 
-- (void)setFrameIndexOffsetHasChanging:(BOOL)frameIndexOffsetHasChanging {
+- (void)_setFrameIndexOffsetHasChanging:(BOOL)frameIndexOffsetHasChanging {
     if(_frameIndexOffsetHasChanging != frameIndexOffsetHasChanging){
         [self willChangeValueForKey:@keypath(self.frameIndexOffsetHasChanging)];
         _frameIndexOffsetHasChanging = frameIndexOffsetHasChanging;
+        bb(_frameIndexOffsetHasChanging);
         [self didChangeValueForKey:@keypath(self.frameIndexOffsetHasChanging)];
     }
 }

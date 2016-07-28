@@ -22,7 +22,7 @@
     if(effect){
         NSAssert(self.sourceSetOfImagesForLayerSet.count==inputs.count,@"Count of resourcesSetToProcessFromSourceLayers and inputs must be same.");
 
-        for(NSArray *resourceSet in self.sourceSetOfImagesForLayerSet){
+        for(NSArray *resourceSet in self.sourceSetOfImagesForLayerSetApplyingRangeIfNeeded){
             NSUInteger indexOfResourceItemSet = [self.sourceSetOfImagesForLayerSet indexOfObject:resourceSet];
             NSAssert([[resourceSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
             @autoreleasepool {

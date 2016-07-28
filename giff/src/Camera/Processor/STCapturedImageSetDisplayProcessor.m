@@ -35,7 +35,8 @@
     Weaks
     NSArray * processedResources = nil;
     if(_layerSet.effect){
-        processedResources = [self.sourceSetOfImagesForLayerSet mapWithIndex:^id(NSArray *resourceSet, NSInteger indexOfResourceItemSet) {
+
+        processedResources = [self.sourceSetOfImagesForLayerSetApplyingRangeIfNeeded mapWithIndex:^id(NSArray *resourceSet, NSInteger indexOfResourceItemSet) {
             NSAssert([[resourceSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
 #if DEBUG
             [resourceSet eachWithIndex:^(NSURL * object, NSUInteger index) {
@@ -58,7 +59,7 @@
                     NSArray<UIImage *> * imagesToProcessEffect = [self loadImagesFromSourceSet:resourceSet];
                     UIImage * processedImage = [Wself.layerSet.effect processImages:imagesToProcessEffect];
 
-                    NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
+                    NSAssert(processedImage, ([@"Processed Imag1e is nil: " st_add:tempURLToApplyEffect.path]));
 
                     if([(self.loselessImageEncoding ?
                             UIImagePNGRepresentation(processedImage) : UIImageJPEGRepresentation(processedImage, 1))
@@ -150,4 +151,10 @@
     }];
     return (_resourcesFromTargetLayerSet = rejoinResults);
 }
+
+- (NSArray<NSArray *> *)sourceSetOfImagesForLayerSetApplyingRangeIfNeeded{
+    return isNSRangeNull(_preferredRangeOfSourceSet) ?
+            self.sourceSetOfImagesForLayerSet : [self.sourceSetOfImagesForLayerSet subarrayWithRange:_preferredRangeOfSourceSet];
+}
+
 @end

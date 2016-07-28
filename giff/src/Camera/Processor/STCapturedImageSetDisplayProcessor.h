@@ -13,7 +13,7 @@
 @interface STCapturedImageSetDisplayProcessor : NSObject
 @property(nonatomic, readonly) STCapturedImageSetDisplayLayerSet * layerSet;
 @property(nonatomic, assign) BOOL loselessImageEncoding;
-@property(nonatomic, assign) NSRange rangeToProcessOfSourceSet;
+@property(nonatomic, assign) NSRange preferredRangeOfSourceSet;
 
 - (instancetype)initWithLayerSet:(STCapturedImageSetDisplayLayerSet *)targetLayer;
 
@@ -22,6 +22,8 @@
 - (NSArray<NSURL *> *)processForImageUrls:(BOOL)forceReprocess;
 
 - (NSArray<NSArray *> *)sourceSetOfImagesForLayerSet;
+
+- (NSArray<NSArray *> *)sourceSetOfImagesForLayerSetApplyingRangeIfNeeded;
 
 - (NSArray<id> *)sourceOfImagesForLayer:(STCapturedImageSetDisplayLayer *)layer;
 

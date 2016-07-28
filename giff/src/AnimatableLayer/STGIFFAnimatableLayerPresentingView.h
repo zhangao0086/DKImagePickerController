@@ -13,4 +13,6 @@
 
 @interface STGIFFAnimatableLayerPresentingView : STCapturedImageSetAnimatableLayerSetCollectionView <STSegmentedSliderControlDelegate>
 - (void)updateAllLayersOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;
+
+- (void)updateCurrentLayerOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;
 @end
