@@ -186,4 +186,17 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
 - (BOOL)containsAllItemsNull{
     return self.count == [self containsNull];
 }
+
+- (NSArray *)replaceFromOtherArray:(NSArray *)otherArray inRange:(NSRange)range{
+    NSMutableArray * replacedArray = [NSMutableArray arrayWithCapacity:self.count];
+    for(id object in self){
+        NSUInteger index = [self indexOfObject:object];
+        if(NSLocationInRange(index, range)){
+            [replacedArray addObject:[[otherArray objectEnumerator] nextObject]];
+        }else{
+            [replacedArray addObject:object];
+        }
+    }
+    return replacedArray;
+}
 @end
