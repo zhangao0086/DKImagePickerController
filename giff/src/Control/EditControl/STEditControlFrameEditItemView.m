@@ -141,14 +141,28 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     [self doingSlide:timeSlider withSelectedIndex:index];
+
+    [self setFrameIndexOffsetHasChanging:NO];
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
 
+    //TODO:normalizedPosition 말고 index로 대체하는게 좋을 듯
     NSInteger frameIndexOffset = (NSInteger) ((timeSlider.normalizedPosition * self.displayLayer.frameCount) - round((CGFloat)self.displayLayer.frameCount/2));
     if([self _setFrameIndexOffset:frameIndexOffset]){
         [self updateThumbnailsPosition];
     }
+
+    [self setFrameIndexOffsetHasChanging:YES];
 }
+
+- (void)setFrameIndexOffsetHasChanging:(BOOL)frameIndexOffsetHasChanging {
+    if(_frameIndexOffsetHasChanging!=frameIndexOffsetHasChanging){
+        [self willChangeValueForKey:@keypath(self.frameIndexOffset)];
+        _frameIndexOffsetHasChanging = frameIndexOffsetHasChanging;
+        [self didChangeValueForKey:@keypath(self.frameIndexOffset)];
+    }
+}
+
 
 @end

@@ -455,8 +455,10 @@ static NSString * JANNE = @"Janne";
 
         [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
             _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
+        }];
 
-
+        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
+            _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
         }];
 
         _layerSetPresentationView.currentIndex = index;
