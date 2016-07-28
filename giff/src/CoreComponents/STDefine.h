@@ -345,6 +345,15 @@ CGPointEqualToPointByNearest2Decimal(CGPoint p1, CGPoint p2)
             && CGFloatNearestMax2DecimalPosition(p1.y) == CGFloatNearestMax2DecimalPosition(p2.y);
 }
 
+#pragma mark NSRange
+#define NSRangeNull NSMakeRange(NSNotFound,0)
+CG_INLINE BOOL
+isNSRangeNull(NSRange range)
+{
+    return range.location==NSNotFound && range.length==0;
+}
+
+
 #define BEGIN_DEALLOC_CATEGORY + (void)load {\
         SEL originalSelector = NSSelectorFromString(@"dealloc");\
         SEL overrideSelector = @selector(__dealloc__);\
@@ -413,3 +422,4 @@ isInstanceMethodOverridden(Class cls, SEL selector)
     }
     return overridden;
 }
+
