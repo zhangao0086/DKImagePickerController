@@ -10,26 +10,26 @@ import Photos
 
 public class DKBaseManager: NSObject {
 
-	private let observers = NSHashTable.weakObjectsHashTable()
+	private let observers = HashTable<AnyObject>.weakObjects()
 	
-	public func addObserver(object: AnyObject) {
-		self.observers.addObject(object)
+	public func addObserver(_ object: AnyObject) {
+		self.observers.add(object)
 	}
 	
-	public func removeObserver(object: AnyObject) {
-		self.observers.removeObject(object)
+	public func removeObserver(_ object: AnyObject) {
+		self.observers.remove(object)
 	}
 	
-	public func notifyObserversWithSelector(selector: Selector, object: AnyObject?) {
+	public func notifyObserversWithSelector(_ selector: Selector, object: AnyObject?) {
 		self.notifyObserversWithSelector(selector, object: object, objectTwo: nil)
 	}
 	
-	public func notifyObserversWithSelector(selector: Selector, object: AnyObject?, objectTwo: AnyObject?) {
+	public func notifyObserversWithSelector(_ selector: Selector, object: AnyObject?, objectTwo: AnyObject?) {
 		if self.observers.count > 0 {
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+			DispatchQueue.main.async(execute: { () -> Void in
 				for observer in self.observers.objectEnumerator() {
-					if observer.respondsToSelector(selector) {
-						observer.performSelector(selector, withObject: object, withObject: objectTwo)
+					if observer.responds(to: selector) {
+						observer.perform(selector, with: object, with: objectTwo)
 					}
 				}
 			})
@@ -44,18 +44,18 @@ public func getImageManager() -> DKImageManager {
 
 public class DKImageManager: DKBaseManager {
 	
-	public class func checkPhotoPermission(handler: (granted: Bool) -> Void) {
+	public class func checkPhotoPermission(_ handler: (granted: Bool) -> Void) {
 		func hasPhotoPermission() -> Bool {
-			return PHPhotoLibrary.authorizationStatus() == .Authorized
+			return PHPhotoLibrary.authorizationStatus() == .authorized
 		}
 		
 		func needsToRequestPhotoPermission() -> Bool {
-			return PHPhotoLibrary.authorizationStatus() == .NotDetermined
+			return PHPhotoLibrary.authorizationStatus() == .notDetermined
 		}
 		
 		hasPhotoPermission() ? handler(granted: true) : (needsToRequestPhotoPermission() ?
 			PHPhotoLibrary.requestAuthorization({ status in
-				dispatch_async(dispatch_get_main_queue(), { () in
+				DispatchQueue.main.async(execute: { () in
 					hasPhotoPermission() ? handler(granted: true) : handler(granted: false)
 				})
 			}) : handler(granted: false))
@@ -63,19 +63,19 @@ public class DKImageManager: DKBaseManager {
 	
 	static let sharedInstance = DKImageManager()
 	
-	private let manager = PHCachingImageManager.defaultManager()
+	private let manager = PHCachingImageManager.default()
 	
 	private lazy var defaultImageRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
-		options.deliveryMode = .HighQualityFormat
-		options.resizeMode = .Exact
+		options.deliveryMode = .highQualityFormat
+		options.resizeMode = .exact
 		
 		return options
 	}()
 	
 	private lazy var defaultVideoRequestOptions: PHVideoRequestOptions = {
 		let options = PHVideoRequestOptions()
-		options.deliveryMode = .MediumQualityFormat
+		options.deliveryMode = .mediumQualityFormat
 		
 		return options
 	}()
@@ -88,31 +88,31 @@ public class DKImageManager: DKBaseManager {
 		self.groupDataManager.invalidate()
 	}
 	
-	public func fetchImageForAsset(asset: DKAsset, size: CGSize, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchImageForAsset(_ asset: DKAsset, size: CGSize, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchImageForAsset(asset, size: size, options: nil, completeBlock: completeBlock)
 	}
 	
-	public func fetchImageForAsset(asset: DKAsset, size: CGSize, contentMode: PHImageContentMode, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchImageForAsset(_ asset: DKAsset, size: CGSize, contentMode: PHImageContentMode, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 			self.fetchImageForAsset(asset, size: size, options: nil, contentMode: contentMode, completeBlock: completeBlock)
 	}
 
-	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
-		self.fetchImageForAsset(asset, size: size, options: options, contentMode: .AspectFill, completeBlock: completeBlock)
+	public func fetchImageForAsset(_ asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+		self.fetchImageForAsset(asset, size: size, options: options, contentMode: .aspectFill, completeBlock: completeBlock)
 	}
 	
-	public func fetchImageForAsset(asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode,
+	public func fetchImageForAsset(_ asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode,
 	                               completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		let options = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
-		self.manager.requestImageForAsset(asset.originalAsset!,
+		self.manager.requestImage(for: asset.originalAsset!,
 		                                  targetSize: size,
 		                                  contentMode: contentMode,
 		                                  options: options,
 		                                  resultHandler: { image, info in
 											if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
-												where image == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+												, image == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
 //												var requestCloudOptions = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
 //												requestCloudOptions.networkAccessAllowed = true
-												options.networkAccessAllowed = true
+												options.isNetworkAccessAllowed = true
 												self.fetchImageForAsset(asset, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
 											} else {
 												completeBlock(image: image, info: info)
@@ -120,13 +120,13 @@ public class DKImageManager: DKBaseManager {
 		})
 	}
 	
-	public func fetchImageDataForAsset(asset: DKAsset, options: PHImageRequestOptions?, completeBlock: (data: NSData?, info: [NSObject : AnyObject]?) -> Void) {
-		self.manager.requestImageDataForAsset(asset.originalAsset!,
+	public func fetchImageDataForAsset(_ asset: DKAsset, options: PHImageRequestOptions?, completeBlock: (data: Data?, info: [NSObject : AnyObject]?) -> Void) {
+		self.manager.requestImageData(for: asset.originalAsset!,
 		                                      options: options ?? self.defaultImageRequestOptions) { (data, dataUTI, orientation, info) in
 												if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
-													where data == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+													, data == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
 													let requestCloudOptions = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
-													requestCloudOptions.networkAccessAllowed = true
+													requestCloudOptions.isNetworkAccessAllowed = true
 													self.fetchImageDataForAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
 												} else {
 													completeBlock(data: data, info: info)
@@ -134,17 +134,17 @@ public class DKImageManager: DKBaseManager {
 		}
 	}
 	
-	public func fetchAVAsset(asset: DKAsset, completeBlock: (avAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchAVAsset(_ asset: DKAsset, completeBlock: (avAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(asset, options: nil, completeBlock: completeBlock)
 	}
 	
-	public func fetchAVAsset(asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
-		self.manager.requestAVAssetForVideo(asset.originalAsset!,
+	public func fetchAVAsset(_ asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: (avAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
+		self.manager.requestAVAsset(forVideo: asset.originalAsset!,
 			options: options ?? self.defaultVideoRequestOptions) { avAsset, audioMix, info in
 				if let isInCloud = info?[PHImageResultIsInCloudKey]?.boolValue
-					where avAsset == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+					, avAsset == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
 					let requestCloudOptions = (options ?? self.defaultVideoRequestOptions).copy() as! PHVideoRequestOptions
-					requestCloudOptions.networkAccessAllowed = true
+					requestCloudOptions.isNetworkAccessAllowed = true
 					self.fetchAVAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
 				} else {
 					completeBlock(avAsset: avAsset, info: info)
