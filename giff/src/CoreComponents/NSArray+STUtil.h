@@ -47,4 +47,6 @@
 - (BOOL)containsAllItemsNull;
 
 - (NSArray *)replaceFromOtherArray:(NSArray *)otherArray inRange:(NSRange)range;
+
+- (NSArray *)replaceFromOtherArray:(NSArray *)otherArray locationFrom:(NSUInteger)location;
 @end
