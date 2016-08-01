@@ -52,6 +52,7 @@
 #import "STGIFFAnimatableLayerPresentingView.h"
 #import "STEditControlFrameEditView.h"
 #import "STEditControlFrameEditItemView.h"
+#import "STGIFFDisplayLayerEffectsManager.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -293,94 +294,6 @@ static STPhotoSelector *_instance = nil;
 }
 
 #pragma mark STCapturedImageSetAnimatableLayerSet
-//TODO: 어딘가 팩토리 쪽으로 옮김 : test : funnyman
-static NSString * FUNNYMAN = @"funnyman";
-static NSString * ONE_DIFF_FRAME = @"basicframe";
-static NSString * LEIF = @"leif";
-static NSString * JANNE = @"Janne";
-
-- (STCapturedImageSetAnimatableLayerSet *)createLayerSetFromCurrentImageSet{
-    NSString * presetName = JANNE;
-
-    //create
-    STCapturedImageSet * imageSet = _previewCollector.targetPhotoItem.sourceForCapturedImageSet;
-
-
-    STCapturedImageSetAnimatableLayerSet * layerSet = [STCapturedImageSetAnimatableLayerSet setWithLayers:@[[STCapturedImageSetAnimatableLayer layerWithImageSet:imageSet]]];
-    STMultiSourcingImageProcessor * effect = nil;
-
-    if([LEIF isEqualToString:presetName]){
-        effect = [[STGIFFDisplayLayerLeifEffect alloc] init];
-    }
-    else if([JANNE isEqualToString:presetName]){
-        effect = [[STGIFFDisplayLayerJanneEffect alloc] init];
-    }
-
-    effect.uuid = presetName;
-    layerSet.effect = effect;
-    return layerSet;
-}
-
-- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerSet {
-    STCapturedImageSet * sourceSet = _previewCollector.targetPhotoItem.sourceForCapturedImageSet;
-    /*
-     * chroma key
-     */
-    if([layerSet.effect.uuid isEqualToString:FUNNYMAN]){
-        NSData * gifData = [NSData dataWithContentsOfFile:[@"chrogif.gif" bundleFilePath]];
-
-        UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
-
-        NSArray * imagesToCreateImageSet = nil;
-        if(gifImages.images.count > sourceSet.images.count){
-            NSRange cuttingRange = NSMakeRange(0,sourceSet.images.count);
-            imagesToCreateImageSet = [gifImages.images subarrayWithRange:cuttingRange];
-        }else{
-            //TODO: 이 경우 gif가 imageSet보다 길이 짧은때 정지 화면 아이템을 넣던지 imageSet에서 이미지를 빼던지 보정 처리 필요
-        }
-
-        NSArray * capturedImagesFromGifData = [imagesToCreateImageSet mapWithIndex:^id(UIImage * image, NSInteger number) {
-            NSURL * url = [[@(number) stringValue] URLForTemp:@"giff_effect_adding_resource_f" extension:@"png"];
-            if([UIImagePNGRepresentation(image) writeToURL:url atomically:YES]){
-                return [STCapturedImage imageWithImageUrl:url];
-            }
-            NSAssert(NO, @"write failed");
-            return nil;
-        }];
-
-        STCapturedImageSetDisplayLayer * effectAppliedLayer = [STCapturedImageSetDisplayLayer layerWithImageSet:[STCapturedImageSet setWithImages: capturedImagesFromGifData]];
-        if(effectAppliedLayer){
-            layerSet.layers = [layerSet.layers arrayByAddingObjectsFromArray:@[effectAppliedLayer]];
-        }
-    }
-    else if([layerSet.effect.uuid isEqualToString:ONE_DIFF_FRAME]){
-        NSArray<STCapturedImage *> * preparedImages = nil;
-        STGIFFDisplayLayerFrameSwappingColorizeBlendEffect * _effect = (STGIFFDisplayLayerFrameSwappingColorizeBlendEffect *)layerSet.effect;
-
-        if(_effect.frameIndexOffset==0){
-            preparedImages = sourceSet.images;
-
-        }else{
-            //frame adjust
-            NSMutableArray<STCapturedImage *> *copiedSourceImages = [sourceSet.images mutableCopy];
-            NSUInteger indexAbsStep = (NSUInteger) ABS(_effect.frameIndexOffset);
-
-            if(_effect.frameIndexOffset>0){
-                NSArray * tail = [copiedSourceImages pop:indexAbsStep];
-                preparedImages = [tail arrayByAddingObjectsFromArray:copiedSourceImages];
-
-            }else if(_effect.frameIndexOffset<0){
-                NSArray * head = [copiedSourceImages shift:indexAbsStep];
-                preparedImages = [copiedSourceImages arrayByAddingObjectsFromArray:head];
-            }
-        }
-
-        layerSet.layers = [layerSet.layers arrayByAddingObjectsFromArray:@[
-                [STCapturedImageSetDisplayLayer layerWithImageSet:[STCapturedImageSet setWithImages:preparedImages]]
-        ]];
-
-    }
-}
 
 #pragma mark render Layers
 - (void)renderAfterImageSetWithFrameAt:(NSUInteger)index{
@@ -415,7 +328,7 @@ static NSString * JANNE = @"Janne";
                     if(valid){
                         //recreate effects
                         if(layerSet.effect){
-                            [self prepareLayerEffect:layerSet];
+                            [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffect:layerSet sourceSet:imageSet];
                         }
 
                         [_layerSetPresentationView appendLayerSet:layerSet];
@@ -430,9 +343,11 @@ static NSString * JANNE = @"Janne";
             STCapturedImageSetAnimatableLayerSet * layerSet = nil;
             if(!_layerSetPresentationView.layerSets.count){
                 //from capture
-                layerSet = [self createLayerSetFromCurrentImageSet];
+                //TODO: 선택된 이펙트들이 여기에 꽂힘
+
+                layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:imageSet effectClass:NSStringFromClass(STGIFFDisplayLayerLeifEffect.class)];
                 if(layerSet.effect){
-                    [self prepareLayerEffect:layerSet];
+                    [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffect:layerSet sourceSet:imageSet];
                 }
                 [_layerSetPresentationView appendLayerSet:layerSet];
 
