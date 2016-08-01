@@ -21,7 +21,21 @@
 - (void)setViewsDisplay;
 @end
 
-@implementation STGIFFAnimatableLayerPresentingView
+@implementation STGIFFAnimatableLayerPresentingView{
+    NSOperationQueue * _processingQueue;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        _processingQueue = [[NSOperationQueue alloc] init];
+        _processingQueue.maxConcurrentOperationCount = 1;
+        _processingQueue.qualityOfService = NSQualityOfServiceDefault;
+    }
+
+    return self;
+}
+
 
 - (void)setNeedsLayersDisplayAndLayout {
 
@@ -87,7 +101,11 @@
 
     if(layerSet.effect){
         Weaks
-        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+//        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
+//
+//        });
+        [_processingQueue cancelAllOperations];
+        [_processingQueue addOperationWithBlock:^{
             @autoreleasepool {
                 BOOL _needsSetViews = YES;
 
@@ -114,9 +132,9 @@
                     }
 
                 }
-                /*
-                 * STMultiSourcingImageProcessor
-                 */
+                    /*
+                     * STMultiSourcingImageProcessor
+                     */
                 else{
                     presentableObjects = [processor processForImageUrls:forceReprocess];
 
@@ -135,7 +153,8 @@
                     });
                 }
             }
-        });
+        }];
+
     }else{
         //set default 0 STCapturedImageSet
         [self setLayerView:layerSet presentableObjects:[processor sourceOfImagesForLayer:[layerSet.layers firstObject]] forceAppend:forceAppend];

@@ -52,6 +52,7 @@
 
                 if(!forceReprocess && [[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
                     //cached
+                    oo([@"Cached Processing" st_add:tempURLToApplyEffect.path]);
                     return tempURLToApplyEffect;
 
                 }else{

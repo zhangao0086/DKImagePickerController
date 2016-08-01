@@ -300,7 +300,7 @@ static NSString * LEIF = @"leif";
 static NSString * JANNE = @"Janne";
 
 - (STCapturedImageSetAnimatableLayerSet *)createLayerSetFromCurrentImageSet{
-    NSString * presetName = JANNE;
+    NSString * presetName = LEIF;
 
     //create
     STCapturedImageSet * imageSet = _previewCollector.targetPhotoItem.sourceForCapturedImageSet;
@@ -469,7 +469,6 @@ static NSString * JANNE = @"Janne";
                 [_layerSetPresentationView updateCurrentLayerOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];
             }];
 
-            //FIXME: 뭔가 엉뚱한 곳에서 날라오고 있음(slider드래그 할떄마다 계속 날라옴)
             [itemView whenValueOf:@keypath(itemView.frameIndexOffsetHasChanging) id:[@keypath(itemView.frameIndexOffsetHasChanging) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
                 if(![value boolValue]){
                     [_layerSetPresentationView updateAllLayersOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];

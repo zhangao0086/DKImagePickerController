@@ -5,7 +5,6 @@
 
 #import "STMultiSourcingGPUImageProcessor.h"
 #import "GPUImageOutput.h"
-#import "GPUImageContext.h"
 
 
 @implementation STMultiSourcingGPUImageProcessor {
