@@ -11,4 +11,6 @@
 @property (nonatomic, readonly) NSUInteger frameCount;
 //storing attributes
 @property (nonatomic, assign) NSInteger frameIndexOffset;
+
+- (NSUInteger)indexByFrameIndexOffset:(NSUInteger)index;
 @end

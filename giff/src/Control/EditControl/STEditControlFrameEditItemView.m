@@ -109,16 +109,7 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 - (void)updateThumbnailsPosition{
     [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
         UIImageView * thumbnailCellView = [_frameOffsetSlider viewWithTag:TagPrefixThumbImageView+index];
-        NSInteger const offset = self.displayLayer.frameIndexOffset;
-        NSInteger const count = self.displayLayer.frameCount;
-
-        NSUInteger indexOfDisplay = index;
-        if(offset>0){
-            indexOfDisplay = index >= offset ? (index - offset) : count - (offset - index);
-        }else if(offset<0) {
-            indexOfDisplay = index >= (count + offset) ? (index - offset) - count : (NSUInteger) -(offset - index);
-        }
-
+        NSUInteger indexOfDisplay = [self.displayLayer indexByFrameIndexOffset:index];
         NSAssert(indexOfDisplay<self.displayLayer.frameCount,@"indexOfDisplay is wrong.");
         thumbnailCellView.x = self.minThumbnailWidth * indexOfDisplay;
     }];

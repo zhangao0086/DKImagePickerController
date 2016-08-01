@@ -20,4 +20,17 @@
     return self.imageSet.count;
 }
 
+- (NSUInteger)indexByFrameIndexOffset:(NSUInteger)index{
+    NSInteger const offset = self.frameIndexOffset;
+    NSInteger const count = self.frameCount;
+
+    NSUInteger indexOfDisplay = index;
+    if(offset>0){
+        indexOfDisplay = index >= offset ? (index - offset) : count - (offset - index);
+    }else if(offset<0) {
+        indexOfDisplay = index >= (count + offset) ? (index - offset) - count : (NSUInteger) -(offset - index);
+    }
+    return indexOfDisplay;
+}
+
 @end
