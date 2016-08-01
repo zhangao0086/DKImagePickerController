@@ -35,4 +35,8 @@
 @property (copy) id (^blockForCreateBackgroundPresentableObject)(CGRect);
 
 - (void)setSegmentationViewAsPresentableObject:(NSArray *)presentableObjects;
+
+- (void)whenDidSlide:(void (^)(STSegmentedSliderView * view))slideBlock;
+
+- (void)whenSliding:(void (^)(STSegmentedSliderView * view))slideBlock;
 @end

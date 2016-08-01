@@ -16,6 +16,14 @@
     UIView *_segmentationViewContainer;
     NSMutableArray *_centerPositions;
     NSInteger _numberOfPoints;
+
+    void (^_whenDidSlide)(STSegmentedSliderView * view);
+    void (^_whenSliding)(STSegmentedSliderView * view);
+}
+
+- (void)dealloc {
+    _whenSliding = nil;
+    _whenDidSlide = nil;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -40,6 +48,14 @@
         self.touchInsidePolicy = STUIViewTouchInsidePolicyContentInside;
     }
     return self;
+}
+
+- (void)whenDidSlide:(void (^)(STSegmentedSliderView * view))slideBlock {
+    _whenDidSlide = slideBlock;
+}
+
+- (void)whenSliding:(void (^)(STSegmentedSliderView *view))slideBlock {
+    _whenSliding = slideBlock;
 }
 
 - (void)setDelegateSlider:(id <STSegmentedSliderControlDelegate>)delegateSlider; {
@@ -270,6 +286,8 @@
             if ([_delegateSlider respondsToSelector:@selector(doingSlide:withSelectedIndex:)]) {
                 [_delegateSlider doingSlide:self withSelectedIndex:changedIndex];
             }
+
+            !_whenSliding?:_whenSliding(self);
         }
 
         if ([sender state] == UIGestureRecognizerStateEnded) {
@@ -278,6 +296,9 @@
             if ([_delegateSlider respondsToSelector:@selector(didSlide:withSelectedIndex:)]) {
                 [_delegateSlider didSlide:self withSelectedIndex:self.currentIndex];
             }
+
+            !_whenDidSlide?:_whenDidSlide(self);
+            
             [self dispatchSelected];
             [self setNeedsDisplay];
             offset = 0;
