@@ -19,4 +19,5 @@
 @property (copy) UIView * (^blockForItemView)(iCarousel * carousel, NSInteger index, UIView * view, id item);
 @property (copy) CGFloat (^blockForiCarouselOption)(iCarousel * carousel, iCarouselOption option, CGFloat defaultValue);
 @property (copy) CATransform3D (^blockForiCarouselCustomTransfrom)(iCarousel * carousel, CGFloat offset, CATransform3D baseTransform);
+
 @end

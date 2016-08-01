@@ -7,6 +7,9 @@
 #import "STStandardButton.h"
 #import "R.h"
 #import "UIView+STUtil.h"
+#import "iCarousel.h"
+#import "STCarouselController.h"
+#import "STEditControlEffectSelectorView.h"
 
 
 @implementation STEditControlView {
@@ -29,12 +32,20 @@
     [super createContent];
 
     [self addFrameEditControls];
-    [self addEffectSelector];
     [self addSourceControls];
+    [self addEffectSelector];
 }
 
 - (void)addEffectSelector {
+    CGFloat padding = [STStandardLayout widthBullet];
+    CGFloat sizeHeight = self.height - (_frameEditView.height + padding) - ((_backButton.height+padding*2) +padding);
 
+    ss(self.size);
+
+    STEditControlEffectSelectorView * selectorView = [[STEditControlEffectSelectorView alloc] initWithSize:CGSizeMake(self.width, sizeHeight)];
+    [self addSubview:selectorView];
+
+    [selectorView centerToParentVertical];
 }
 
 - (void)addFrameEditControls {
@@ -46,11 +57,8 @@
     if(!_frameEditView){
         _frameEditView = [[STEditControlFrameEditView alloc] initWithSize:CGSizeMake(self.width, self.height)];
     }
-
-
     return _frameEditView;
 }
-
 
 - (void)addSourceControls {
 

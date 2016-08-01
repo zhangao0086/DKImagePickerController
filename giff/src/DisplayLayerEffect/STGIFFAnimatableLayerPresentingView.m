@@ -7,7 +7,6 @@
 #import "NSArray+STUtil.h"
 #import "STCapturedImageSetAnimatableLayerSet.h"
 #import "UIView+STUtil.h"
-#import "STQueueManager.h"
 #import "STMultiSourcingImageProcessor.h"
 #import "STGIFFAnimatableLayerPresentingView.h"
 #import "STCapturedImageSetDisplayProcessor.h"
