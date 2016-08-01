@@ -274,6 +274,10 @@
 
         if ([sender state] == UIGestureRecognizerStateEnded) {
             self.currentIndex = (NSUInteger) [self currentNeedsIndex:offset];
+
+            if ([_delegateSlider respondsToSelector:@selector(didSlide:withSelectedIndex:)]) {
+                [_delegateSlider didSlide:self withSelectedIndex:self.currentIndex];
+            }
             [self dispatchSelected];
             [self setNeedsDisplay];
             offset = 0;
@@ -315,17 +319,11 @@
     [super setCurrentIndex:index];
 
     if([_centerPositions count]==0){
-        if ([_delegateSlider respondsToSelector:@selector(didSlide:withSelectedIndex:)]) {
-            [_delegateSlider didSlide:self withSelectedIndex:index];
-        }
 
     } else if ([_centerPositions count] > index) {
         Weaks
         [self setThumbViewCenter:[[_centerPositions st_objectOrNilAtIndex:index] CGPointValue] completion:^{
-            Strongs
-            if (changed && [Sself->_delegateSlider respondsToSelector:@selector(didSlide:withSelectedIndex:)]) {
-                [Sself->_delegateSlider didSlide:Sself withSelectedIndex:index];
-            }
+
         }];
         [self setNeedsDisplay];
     }
