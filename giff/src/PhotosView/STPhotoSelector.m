@@ -300,7 +300,7 @@ static NSString * LEIF = @"leif";
 static NSString * JANNE = @"Janne";
 
 - (STCapturedImageSetAnimatableLayerSet *)createLayerSetFromCurrentImageSet{
-    NSString * presetName = LEIF;
+    NSString * presetName = JANNE;
 
     //create
     STCapturedImageSet * imageSet = _previewCollector.targetPhotoItem.sourceForCapturedImageSet;

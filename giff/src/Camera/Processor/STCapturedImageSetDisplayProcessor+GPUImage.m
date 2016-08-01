@@ -22,10 +22,12 @@
     if(effect){
         NSAssert(self.sourceSetOfImagesForLayerSet.count==inputs.count,@"Count of resourcesSetToProcessFromSourceLayers and inputs must be same.");
 
+        NSUInteger countSucceed = 0;
         for(NSArray *resourceSet in self.sourceSetOfImagesForLayerSetApplyingRangeIfNeeded){
-            NSUInteger indexOfResourceItemSet = [self.sourceSetOfImagesForLayerSet indexOfObject:resourceSet];
-            NSAssert([[resourceSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
             @autoreleasepool {
+                NSUInteger indexOfResourceItemSet = [self.sourceSetOfImagesForLayerSet indexOfObject:resourceSet];
+                NSAssert([[resourceSet firstObject] isKindOfClass:NSURL.class], @"only NSURL was allowed.");
+
                 //newly create
                 NSArray<UIImage *> * imagesToProcessEffect = [self loadImagesFromSourceSet:resourceSet];
 
@@ -33,16 +35,16 @@
                     id<GPUImageInput> imageInput = [inputs st_objectOrNilAtIndex:indexOfResourceItemSet];
                     NSAssert(imageInput, @"not found imageInput in inputs, it's nil");
 
-                    if(imageInput){
-                        [effect processImages:imagesToProcessEffect forInput:imageInput];
-                    }else{
-                        return NO;
+                    if(imageInput && [effect processImages:imagesToProcessEffect forInput:imageInput]){
+                        countSucceed++;
                     }
                 }
             }
         }
 
-        return YES;
+        NSAssert(countSucceed == self.sourceSetOfImagesForLayerSet.count || countSucceed==0,
+                ([NSString stringWithFormat:@"Exceptionally failed count is %d",self.sourceSetOfImagesForLayerSet.count-countSucceed]));
+        return countSucceed == self.sourceSetOfImagesForLayerSet.count;
     }
 
     return NO;

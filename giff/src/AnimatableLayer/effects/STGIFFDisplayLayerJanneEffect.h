@@ -8,5 +8,5 @@
 #import "STMultiSourcingGPUImageProcessor.h"
 
 
-@interface STGIFFDisplayLayerJanneEffect : STMultiSourcingGPUImageProcessor
+@interface STGIFFDisplayLayerJanneEffect : STMultiSourcingImageProcessor
 @end
