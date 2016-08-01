@@ -18,7 +18,7 @@
 
 
 @implementation STEditControlEffectSelectorView {
-    STCarouselHolderController * _carouselController;
+
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

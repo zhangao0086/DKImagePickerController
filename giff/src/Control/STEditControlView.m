@@ -11,6 +11,7 @@
 #import "STCarouselController.h"
 #import "STEditControlEffectSelectorView.h"
 #import "STPhotoSelector.h"
+#import "STCarouselHolderController.h"
 
 
 @implementation STEditControlView {
@@ -49,6 +50,10 @@
     [self addSubview:selectorView];
 
     selectorView.bottom = _backButton.top - padding;
+
+    [selectorView.carouselController whenDidSelected:^(NSInteger i) {
+
+    }];
 }
 
 - (void)addFrameEditControls {

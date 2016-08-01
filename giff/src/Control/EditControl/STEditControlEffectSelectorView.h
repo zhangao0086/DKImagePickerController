@@ -5,6 +5,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class STCarouselHolderController;
+
 
 @interface STEditControlEffectSelectorView : STUIView
+@property (nonatomic, readonly) STCarouselHolderController * carouselController;
+
 @end
