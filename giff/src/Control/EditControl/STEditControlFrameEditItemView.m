@@ -11,6 +11,7 @@
 #import "STStandardButton.h"
 #import "R.h"
 #import "NSArray+STUtil.h"
+#import "NSArray+BlocksKit.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -60,8 +61,6 @@
     return (self.width-self.squareUnitWidth)/_displayLayer.imageSet.count;
 }
 
-static NSUInteger const TagPrefixThumbImageView = 1000;
-
 - (void)setDisplayLayer:(STCapturedImageSetAnimatableLayer *)displayLayer {
     _displayLayer = displayLayer;
 
@@ -72,7 +71,8 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
             [self addSubview:_frameOffsetSlider];
         }
 
-        [_frameOffsetSlider setSegmentationViewAsPresentableObject:[_displayLayer.imageSet.images mapWithIndex:^(STCapturedImage *frameImage, NSInteger index) {
+        NSArray *images = _displayLayer.imageSet.images;
+        [_frameOffsetSlider setSegmentationViewAsPresentableObject:[images mapWithIndex:^(STCapturedImage *frameImage, NSInteger index) {
             @autoreleasepool {
                 NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
                 return [UIImage imageWithContentsOfFile:frameImage.thumbnailUrl.path];
@@ -80,7 +80,8 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
         }]];
 
         [_frameOffsetSlider.segmentationViews eachViewsWithIndex:^(UIView *view, NSUInteger index) {
-            view.tag = TagPrefixThumbImageView+index;
+            STCapturedImage * image = images[index];
+            view.tagName = image.uuid;
             view.contentMode = UIViewContentModeScaleAspectFill;
             view.clipsToBounds = YES;
         }];
@@ -108,10 +109,10 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 
 - (void)updateThumbnailsPosition{
     [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
-        UIImageView * thumbnailCellView = [_frameOffsetSlider viewWithTag:TagPrefixThumbImageView+index];
-        NSUInteger indexOfDisplay = [self.displayLayer indexByFrameIndexOffset:index];
-        NSAssert(indexOfDisplay<self.displayLayer.frameCount,@"indexOfDisplay is wrong.");
-        thumbnailCellView.x = self.minThumbnailWidth * indexOfDisplay;
+        UIView * thumbnailCellView = [_frameOffsetSlider.segmentationViews bk_match:^BOOL(UIView * view) {
+            return [view.tagName isEqualToString:frameImage.uuid];
+        }];
+        thumbnailCellView.x = self.minThumbnailWidth * index;
     }];
 }
 
