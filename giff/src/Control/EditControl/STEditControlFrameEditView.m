@@ -70,7 +70,7 @@
             STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
             editItemView.tagName = layer.uuid;
             editItemView.displayLayer = layer;
-            editItemView.backgroundColor = [UIColor orangeColor];
+//            editItemView.backgroundColor = [UIColor orangeColor];
             [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
                 [Wself removeLayerTapped:editItemView];
             }];
@@ -128,7 +128,7 @@
 #pragma mark OffsetSlider
 - (UIView *)createThumbView {
     UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, self.heightForFrameItemView)];
-    thumbView.backgroundColor = [UIColor blackColor];
+    thumbView.backgroundColor = [UIColor whiteColor];
     return thumbView;
 }
 

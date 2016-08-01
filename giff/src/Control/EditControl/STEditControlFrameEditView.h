@@ -17,5 +17,7 @@
 @property (nonatomic, readonly) NSUInteger maxNumberOfLayersOfLayerSet;
 @property (nonatomic, readonly) NSUInteger currentMasterFrameIndex;
 
+- (CGFloat)heightForFrameItemView;
+
 - (STEditControlFrameEditItemView *)itemViewOfLayer:(STCapturedImageSetAnimatableLayer *)layer;
 @end

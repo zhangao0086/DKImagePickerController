@@ -53,11 +53,28 @@
         return view;
     };
 
+//    carouselHolder.blockForiCarouselCustomTransfrom = ^CATransform3D(iCarousel *carousel, CGFloat offset, CATransform3D baseTransform) {
+////        [carousel.delegate carousel:carousel valueForOption:iCarouselOptionSpacing withDefault:0]
+//        return CATransform3DMakeTranslation(offset * itemWidth - offset, 0, 0);
+//    };
+
+    carouselHolder.blockForiCarouselOption = ^CGFloat(iCarousel *carousel, iCarouselOption option, CGFloat defaultValue) {
+        switch (option){
+            case iCarouselOptionSpacing:
+                return defaultValue * 1.15f;
+            default:
+                return defaultValue;
+        }
+    };
+
     _carouselController.holder = carouselHolder;
 
     [self addSubview:_carouselController.carousel];
 
-    [_carouselController.carousel centerToParent];
+
+    _carouselController.carousel.x = 0;
+    //FIXME: 왜 이렇게 해야 맞는지 모르겠음 projection때문인가
+//    _carouselController.carousel.y = -itemWidth;
 }
 
 

@@ -403,132 +403,135 @@
     }
     else if(_mode == STControlDisplayModeEditAfterCapture){
         Weaks
-        if(_previousMode==STControlDisplayModeHome){
-            //from grid
-            [_left setButtons:@[[R go_back]] colors:nil style:defaultStyle];
+        _left.visible = NO;
+        _right.visible = NO;
 
-            [_left setCollectables:@[[R set_reset],R.go_remove] colors:@[[NSNull null], [STStandardUI negativeColor]] bgColors:nil size:[STStandardLayout sizeSubAssistance] style:STStandardButtonStylePTBT backgroundStyle:STStandardButtonStyleSkipImageInvertNormalDimmed];
-            [_left whenCollectableSelected:^(STStandardButton *button, NSUInteger index) {
-                Strongs
-                if(index==0){
-                    [[STPhotoSelector sharedInstance] doResetPreview];
-                }else{
-                    [[STPhotoSelector sharedInstance] deletePhotos:[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] completion:^(BOOL succeed) {
-                        if(succeed){
-                            [_left dispatchSelected];
-                        }
-                    }];
-                }
-            }];
-            //hide reset
-            [_left expand:YES];
-            [_left.collectableView itemViewAtIndex:0].visible = NO;
-
-        }else{
-            //from camera
-            [_left setButtons:@[R.go_x] colors:nil style:defaultStyle];
-
-            [self _setDefaultCollectableButtons:_left imageNames:@[[R set_reset]]];
-            [_left whenCollectableSelected:^(STStandardButton *button, NSUInteger index) {
-                Strongs
-                [Sself->_left retract:YES];
-                [[STPhotoSelector sharedInstance] doResetPreview];
-            }];
-        }
-        [_left whenSelected:^(STSelectableView *button, NSInteger index) {
-            [[STPhotoSelector sharedInstance] doExitEditAfterCapture:NO];
-        }];
-        //reset
-        _left.collectablesSelectAsIndependent = NO;
-
-        /*
-         * right
-         */
-        if([STPhotoSelector sharedInstance].previewTargetPhotoItem.sourceForCapturedImageSet){
-            //stop if change main mode
-            [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:@"STSubControl_[STMainControl sharedInstance].mode" changed:^(id value, id _weakSelf) {
-                [[STPhotoSelector sharedInstance].previewView stopLoopingSliderValue];
-            }];
-
-            //start loop
-//            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
-
-            [_right setButtons:@[[R ico_animatable]] colors:nil style:defaultStyle];
-            _right.toggleEnabled = YES;
-            _right.selectedState = NO;
-
-            [_right whenToggled:^(STStandardButton *selectedView, BOOL selected) {
-
-                if(selected){
-
-                    NSArray * photoItems = [[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] mapWithIndex:^id(STPhotoItem * item, NSInteger index) {
-                        item.exportGIFRequest = [[NSGIFRequest alloc] init];
-                        item.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(index) stringValue]] URLForTemp:@"gif"];
-                        item.exportGIFRequest.maxDuration = 2;
-                        return item;
-                    }];
-
-                    [_right retract];
-                    [_right startAlert];
-                    _right.selectedState = NO;
-
-                    [[STElieStatusBar sharedInstance] message:NSLocalizedString(@"Please wait for a moment.",nil) showLogoAfterDelay:NO];
-
-                    [STApp logUnique:@"StartExportGIF"];
-
-                    [STExporter exportGIFsFromPhotoItems:YES photoItems:photoItems progress:^(CGFloat d) {
-
-                    } completion:^(NSArray *gifURLs, NSArray *succeedItems, NSArray *errorItems) {
-                        [_right stopAlert];
-
-//                        FLAnimatedImageView * imageView = [[FLAnimatedImageView alloc] initWithSize:[STPhotoSelector sharedInstance].previewView.size];
-//                        [[self st_rootUVC].view addSubview:imageView];
-//                        imageView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:((NSURL *)[gifURLs firstObject]).path options:NSDataReadingUncached error:NULL]];;
-
-                        if(gifURLs.count){
-                            _right.selectedState = YES;
-
-                            [[NSNotificationCenter defaultCenter] st_addObserverWithMainQueueOnlyOnce:self forName:STPreviewCollectorNotificationPreviewBeginDragging usingBlock:^(NSNotification *note, id observer) {
-                                selectedView.selectedState = NO;
-                                [selectedView dispatchToggled];
-                            }];
-
-                            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
-
-                            [[STElieStatusBar sharedInstance] success];
-                        }else{
-
-                            [STStandardUX expressDenied:_right];
-                            _right.selectedState = NO;
-                            [_right expand];
-
-                            [[STElieStatusBar sharedInstance] fail];
-                        }
-                    }];
-
-                }else{
-                    [_right expand];
-
-                    [[STPhotoSelector sharedInstance].previewView stopLoopingSliderValue];
-                }
-            }];
-
-            _right.titleLabelPositionedGapFromButton = [STStandardLayout gapForButtonBottomToTitleLabel]/2;
-            _right.titleText = @"GIF";
-
-        }else{
-            [_right setButtons:@[[R go_transform], [R go_transform_undo]] colors:nil style:defaultStyle];
-            [_right whenSelected:^(STSelectableView *button, NSInteger index) {
-                if(index==1){
-                    [[STPhotoSelector sharedInstance] doEnterTool];
-                }else{
-                    [[STPhotoSelector sharedInstance] doUndoTool];
-                }
-            }];
-        }
-
-        [self _setNeedsCollectablesForAutoEnhanceInEditMode:_right];
-        [_right expand];
+//        if(_previousMode==STControlDisplayModeHome){
+//            //from grid
+//            [_left setButtons:@[[R go_back]] colors:nil style:defaultStyle];
+//
+//            [_left setCollectables:@[[R set_reset],R.go_remove] colors:@[[NSNull null], [STStandardUI negativeColor]] bgColors:nil size:[STStandardLayout sizeSubAssistance] style:STStandardButtonStylePTBT backgroundStyle:STStandardButtonStyleSkipImageInvertNormalDimmed];
+//            [_left whenCollectableSelected:^(STStandardButton *button, NSUInteger index) {
+//                Strongs
+//                if(index==0){
+//                    [[STPhotoSelector sharedInstance] doResetPreview];
+//                }else{
+//                    [[STPhotoSelector sharedInstance] deletePhotos:[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] completion:^(BOOL succeed) {
+//                        if(succeed){
+//                            [_left dispatchSelected];
+//                        }
+//                    }];
+//                }
+//            }];
+//            //hide reset
+//            [_left expand:YES];
+//            [_left.collectableView itemViewAtIndex:0].visible = NO;
+//
+//        }else{
+//            //from camera
+//            [_left setButtons:@[R.go_x] colors:nil style:defaultStyle];
+//
+//            [self _setDefaultCollectableButtons:_left imageNames:@[[R set_reset]]];
+//            [_left whenCollectableSelected:^(STStandardButton *button, NSUInteger index) {
+//                Strongs
+//                [Sself->_left retract:YES];
+//                [[STPhotoSelector sharedInstance] doResetPreview];
+//            }];
+//        }
+//        [_left whenSelected:^(STSelectableView *button, NSInteger index) {
+//            [[STPhotoSelector sharedInstance] doExitEditAfterCapture:NO];
+//        }];
+//        //reset
+//        _left.collectablesSelectAsIndependent = NO;
+//
+//        /*
+//         * right
+//         */
+//        if([STPhotoSelector sharedInstance].previewTargetPhotoItem.sourceForCapturedImageSet){
+//            //stop if change main mode
+//            [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:@"STSubControl_[STMainControl sharedInstance].mode" changed:^(id value, id _weakSelf) {
+//                [[STPhotoSelector sharedInstance].previewView stopLoopingSliderValue];
+//            }];
+//
+//            //start loop
+////            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
+//
+//            [_right setButtons:@[[R ico_animatable]] colors:nil style:defaultStyle];
+//            _right.toggleEnabled = YES;
+//            _right.selectedState = NO;
+//
+//            [_right whenToggled:^(STStandardButton *selectedView, BOOL selected) {
+//
+//                if(selected){
+//
+//                    NSArray * photoItems = [[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] mapWithIndex:^id(STPhotoItem * item, NSInteger index) {
+//                        item.exportGIFRequest = [[NSGIFRequest alloc] init];
+//                        item.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(index) stringValue]] URLForTemp:@"gif"];
+//                        item.exportGIFRequest.maxDuration = 2;
+//                        return item;
+//                    }];
+//
+//                    [_right retract];
+//                    [_right startAlert];
+//                    _right.selectedState = NO;
+//
+//                    [[STElieStatusBar sharedInstance] message:NSLocalizedString(@"Please wait for a moment.",nil) showLogoAfterDelay:NO];
+//
+//                    [STApp logUnique:@"StartExportGIF"];
+//
+//                    [STExporter exportGIFsFromPhotoItems:YES photoItems:photoItems progress:^(CGFloat d) {
+//
+//                    } completion:^(NSArray *gifURLs, NSArray *succeedItems, NSArray *errorItems) {
+//                        [_right stopAlert];
+//
+////                        FLAnimatedImageView * imageView = [[FLAnimatedImageView alloc] initWithSize:[STPhotoSelector sharedInstance].previewView.size];
+////                        [[self st_rootUVC].view addSubview:imageView];
+////                        imageView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:((NSURL *)[gifURLs firstObject]).path options:NSDataReadingUncached error:NULL]];;
+//
+//                        if(gifURLs.count){
+//                            _right.selectedState = YES;
+//
+//                            [[NSNotificationCenter defaultCenter] st_addObserverWithMainQueueOnlyOnce:self forName:STPreviewCollectorNotificationPreviewBeginDragging usingBlock:^(NSNotification *note, id observer) {
+//                                selectedView.selectedState = NO;
+//                                [selectedView dispatchToggled];
+//                            }];
+//
+//                            [[STPhotoSelector sharedInstance].previewView startLoopingSliderValue:YES];
+//
+//                            [[STElieStatusBar sharedInstance] success];
+//                        }else{
+//
+//                            [STStandardUX expressDenied:_right];
+//                            _right.selectedState = NO;
+//                            [_right expand];
+//
+//                            [[STElieStatusBar sharedInstance] fail];
+//                        }
+//                    }];
+//
+//                }else{
+//                    [_right expand];
+//
+//                    [[STPhotoSelector sharedInstance].previewView stopLoopingSliderValue];
+//                }
+//            }];
+//
+//            _right.titleLabelPositionedGapFromButton = [STStandardLayout gapForButtonBottomToTitleLabel]/2;
+//            _right.titleText = @"GIF";
+//
+//        }else{
+//            [_right setButtons:@[[R go_transform], [R go_transform_undo]] colors:nil style:defaultStyle];
+//            [_right whenSelected:^(STSelectableView *button, NSInteger index) {
+//                if(index==1){
+//                    [[STPhotoSelector sharedInstance] doEnterTool];
+//                }else{
+//                    [[STPhotoSelector sharedInstance] doUndoTool];
+//                }
+//            }];
+//        }
+//
+//        [self _setNeedsCollectablesForAutoEnhanceInEditMode:_right];
+//        [_right expand];
 
     }
     else if(_mode == STControlDisplayModeReviewAfterAnimatableCapture){

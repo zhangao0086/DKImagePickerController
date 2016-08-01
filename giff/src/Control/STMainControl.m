@@ -1183,6 +1183,7 @@ STExportSelectView * exportSelectView;
 
 - (void)_setEditAfterCaptured {
     [self __setToDefaultWithAnimation:YES];
+    _home.visible = NO;
 }
 
 - (void)_setReviewAfterAnimatableCaptured {

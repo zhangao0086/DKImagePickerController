@@ -10,6 +10,7 @@
 #import "iCarousel.h"
 #import "STCarouselController.h"
 #import "STEditControlEffectSelectorView.h"
+#import "STPhotoSelector.h"
 
 
 @implementation STEditControlView {
@@ -36,16 +37,18 @@
     [self addEffectSelector];
 }
 
+
 - (void)addEffectSelector {
     CGFloat padding = [STStandardLayout widthBullet];
-    CGFloat sizeHeight = self.height - (_frameEditView.height + padding) - ((_backButton.height+padding*2) +padding);
 
-    ss(self.size);
+    CGFloat frameEditViewHeight = (self.frameEditView.maxNumberOfLayersOfLayerSet+1)*self.frameEditView.heightForFrameItemView;
+
+    CGFloat sizeHeight = self.height - (frameEditViewHeight + padding) - (_backButton.height+(padding*2));
 
     STEditControlEffectSelectorView * selectorView = [[STEditControlEffectSelectorView alloc] initWithSize:CGSizeMake(self.width, sizeHeight)];
     [self addSubview:selectorView];
 
-    [selectorView centerToParentVertical];
+    selectorView.bottom = _backButton.top - padding;
 }
 
 - (void)addFrameEditControls {
@@ -67,7 +70,7 @@
     _backButton.preferredIconImagePadding = _backButton.height/4;
     [_backButton setButtons:@[[R go_back]] style:STStandardButtonStylePTTP];
     [_backButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-
+        [[STPhotoSelector sharedInstance] doExitEditAfterCapture:NO];
     }];
 
     //right button
@@ -75,7 +78,7 @@
     _exportButton.allowSelectAsTap = YES;
     _exportButton.preferredIconImagePadding = _exportButton.height/4;
 
-    [_exportButton setButtons:@[R.export.share] style:STStandardButtonStylePTTP];
+    [_exportButton setButtons:@[R.export.share_fit] style:STStandardButtonStylePTTP];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
     }];

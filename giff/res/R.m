@@ -41,6 +41,10 @@
     return @"share.svg";
 }
 
+- (NSString *)share_fit; {
+    return @"share_fit.svg";
+}
+
 - (NSString *)transfer; {
     return @"transfer.svg";
 }

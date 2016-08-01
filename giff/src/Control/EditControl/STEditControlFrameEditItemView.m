@@ -22,6 +22,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _removeButton = [[STStandardButton alloc] initWithSizeWidth:self.height];
+        _removeButton.preferredIconImagePadding = _removeButton.width/4;
         [self addSubview:_removeButton];
         _removeButton.backgroundColor = [UIColor grayColor];
         _removeButton.fitIconImageSizeToCenterSquare = YES;
@@ -123,7 +124,7 @@
 #pragma mark Slider Delegator
 - (UIView *)createThumbView {
     UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth)];
-    thumbView.backgroundColor = [UIColor blackColor];
+    thumbView.backgroundColor = [UIColor whiteColor];
     return thumbView;
 }
 

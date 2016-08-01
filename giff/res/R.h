@@ -21,6 +21,8 @@
 
 - (NSString *)share;
 
+- (NSString *)share_fit;
+
 - (NSString *)transfer;
 
 - (NSString *)tumblr;

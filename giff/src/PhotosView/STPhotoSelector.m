@@ -361,8 +361,8 @@ static STPhotoSelector *_instance = nil;
             }
 
             [STMainControl sharedInstance].editControlView.frameEditView.layerSet = layerSet;
-            [STMainControl sharedInstance].editControlView.frameEditView.backgroundColor = [UIColor redColor];
-            [STMainControl sharedInstance].editControlView.backgroundColor = [UIColor yellowColor];
+//            [STMainControl sharedInstance].editControlView.frameEditView.backgroundColor = [UIColor redColor];
+//            [STMainControl sharedInstance].editControlView.backgroundColor = [UIColor yellowColor];
             [STMainControl sharedInstance].backgroundColor = [UIColor blueColor];
 
             imageSet.extensionObject = _layerSetPresentationView.layerSets;
