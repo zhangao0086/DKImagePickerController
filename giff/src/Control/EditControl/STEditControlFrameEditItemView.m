@@ -32,13 +32,13 @@
 }
 
 - (void)setFrameIndexOffset:(NSInteger)frameIndexOffset {
-    if([self _setFrameIndexOffset:frameIndexOffset]){
+    if([self set_FrameIndexOffset:frameIndexOffset]){
         [self updateThumbnailsPosition];
         [self updateSliderPosition];
     }
 }
 
-- (BOOL)_setFrameIndexOffset:(NSInteger)frameIndexOffset {
+- (BOOL)set_FrameIndexOffset:(NSInteger)frameIndexOffset {
     BOOL changed = _displayLayer.frameIndexOffset!=frameIndexOffset;
     if(changed){
         [self willChangeValueForKey:@keypath(self.frameIndexOffset)];
@@ -140,19 +140,19 @@ static NSUInteger const TagPrefixThumbImageView = 1000;
 }
 
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
-    [self _setFrameIndexOffsetHasChanging:NO];
+    [self set_FrameIndexOffsetHasChanging:NO];
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     //TODO:normalizedPosition 말고 index로 대체하는게 좋을 듯
     NSInteger frameIndexOffset = (NSInteger) ((timeSlider.normalizedPosition * self.displayLayer.frameCount) - round((CGFloat)self.displayLayer.frameCount/2));
-    if([self _setFrameIndexOffset:frameIndexOffset]){
+    if([self set_FrameIndexOffset:frameIndexOffset]){
         [self updateThumbnailsPosition];
+        [self set_FrameIndexOffsetHasChanging:YES];
     }
-    [self _setFrameIndexOffsetHasChanging:YES];
 }
 
-- (void)_setFrameIndexOffsetHasChanging:(BOOL)frameIndexOffsetHasChanging {
+- (void)set_FrameIndexOffsetHasChanging:(BOOL)frameIndexOffsetHasChanging {
     if(_frameIndexOffsetHasChanging != frameIndexOffsetHasChanging){
         [self willChangeValueForKey:@keypath(self.frameIndexOffsetHasChanging)];
         _frameIndexOffsetHasChanging = frameIndexOffsetHasChanging;

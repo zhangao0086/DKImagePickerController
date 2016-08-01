@@ -464,16 +464,14 @@ static NSString * JANNE = @"Janne";
 
         for(STCapturedImageSetAnimatableLayer * layer in frameEditView.layerSet.layers){
             STEditControlFrameEditItemView * itemView = [frameEditView itemViewOfLayer:layer];
+
             [itemView whenValueOf:@keypath(itemView.frameIndexOffset) id:[@keypath(itemView.frameIndexOffset) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
                 [_layerSetPresentationView updateCurrentLayerOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];
             }];
 
             //FIXME: 뭔가 엉뚱한 곳에서 날라오고 있음(slider드래그 할떄마다 계속 날라옴)
             [itemView whenValueOf:@keypath(itemView.frameIndexOffsetHasChanging) id:[@keypath(itemView.frameIndexOffsetHasChanging) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
-                bb([value boolValue]);
-                oo(_weakSelf);
                 if(![value boolValue]){
-                    oo(@"AAAAAAADDDDDD");
                     [_layerSetPresentationView updateAllLayersOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];
                 }
             }];
