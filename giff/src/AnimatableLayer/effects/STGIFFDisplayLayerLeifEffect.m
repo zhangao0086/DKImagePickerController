@@ -31,14 +31,18 @@
     //Standard method of multi blending : https://github.com/BradLarson/GPUImage/issues/269
 }
 
+- (NSUInteger)supportedNumberOfSourceImages {
+    return 2;
+}
+
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
 
-        UIImage *inputImage = sourceImages[0];
-        GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO];
+        UIImage *firstSourceImage = sourceImages[0];
+        GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:firstSourceImage smoothlyScaleOutput:NO];
 
 
-        STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO]
+        STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:sourceImages.count==2 ? sourceImages[1] : firstSourceImage smoothlyScaleOutput:NO]
                                            composer:[[GPUImageSoftLightBlendFilter alloc] init]];
         GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
         scaleFilter1.affineTransform = CGAffineTransformMakeScale(.7,.7);
@@ -46,7 +50,7 @@
                 scaleFilter1
         ];
 
-        STGPUImageOutputComposeItem * composeItem2 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO]
+        STGPUImageOutputComposeItem * composeItem2 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:firstSourceImage smoothlyScaleOutput:NO]
                                                                                         composer:[[GPUImageSoftLightBlendFilter alloc] init]];
         GPUImageTransformFilter * scaleFilter2 = [[GPUImageTransformFilter alloc] init];
         scaleFilter2.affineTransform = CGAffineTransformMakeScale(.4,.4);

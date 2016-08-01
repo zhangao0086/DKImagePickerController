@@ -127,8 +127,10 @@
                     }
 
                     if(![processor processForImageInput:presentableObjects]){
-                        NSAssert(NO, @"STMultiSourcingGPUImageProcessor -> processForImageInput was failed.");
-                        presentableObjects = nil;
+                        oo(@"WARNING : processForImageInput is nil fallback method processForImageUrls activated.");
+                        presentableObjects = [processor processForImageUrls:forceReprocess];
+                        NSAssert(presentableObjects.count, @"STMultiSourcingGPUImageProcessor -> processForImageInput -> processForImageUrls was failed.");
+                        _needsSetViews = YES;
                     }
 
                 }
