@@ -86,7 +86,7 @@
 }
 
 - (void)updateEffectToAllLayersOfCurrentLayerSet:(STGIFFDisplayLayerEffectItem *)effectItem{
-    [[STGIFFDisplayLayerEffectsManager sharedManager] acquireEffect:effectItem.className to:[self currentLayerSet]];
+    [[STGIFFDisplayLayerEffectsManager sharedManager] acquireLayerEffect:effectItem.className forLayerSet:[self currentLayerSet]];
     [self updateAllLayersOfLayerSet:[self currentLayerSet]];
 }
 

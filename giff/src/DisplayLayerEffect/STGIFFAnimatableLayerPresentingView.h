@@ -18,6 +18,5 @@
 
 - (void)updateCurrentLayerOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;
 
-
 - (void)updateEffectToAllLayersOfCurrentLayerSet:(STGIFFDisplayLayerEffectItem *)effectItem;
 @end

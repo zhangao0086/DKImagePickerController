@@ -11,15 +11,17 @@
 #import "NSString+STUtil.h"
 #import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "STCapturedImage.h"
+#import "STGIFFDisplayLayerEffectItem.h"
 #import "NSArray+STUtil.h"
 #import "NSData+STGIFUtil.h"
 #import "STGIFFDisplayLayerChromakeyEffect.h"
-#import "STMultiSourcingImageProcessor.h"
 #import "NSObject+STUtil.h"
+#import "STGIFFDisplayLayerColorizeEffect.h"
+#import "STGIFFDisplayLayerJanneEffect.h"
 
 
 @implementation STGIFFDisplayLayerEffectsManager {
-
+    NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
 }
 
 + (STGIFFDisplayLayerEffectsManager *)sharedManager {
@@ -34,13 +36,26 @@
     return _instance;
 }
 
-- (STCapturedImageSetAnimatableLayerSet *)createLayerSetFrom:(STCapturedImageSet *)imageSet effectClass:(NSString *)classString{
+- (NSArray <STGIFFDisplayLayerEffectItem *> *)effects{
+    return _effects ?: (_effects = @[
+            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class imageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJanneEffect.class imageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class imageName:@"effect_thumb.png"]
+    ]);
+}
+
+- (STCapturedImageSetAnimatableLayerSet *)createLayerSetFrom:(STCapturedImageSet *)imageSet withEffect:(NSString *)classString{
     STCapturedImageSetAnimatableLayerSet * layerSet = [STCapturedImageSetAnimatableLayerSet setWithLayers:@[[STCapturedImageSetAnimatableLayer layerWithImageSet:imageSet]]];
-    [self acquireEffect:classString to:layerSet];
+    [self acquireLayerEffect:classString forLayerSet:layerSet];
     return layerSet;
 }
 
-- (STMultiSourcingImageProcessor *)acquireEffect:(NSString *)classString to:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+- (STMultiSourcingImageProcessor *)acquireLayerEffect:(NSString *)classString forLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    NSParameterAssert(classString);
+    NSParameterAssert(layerSet);
+
     NSString * effect_uuid = [layerSet.uuid st_add:classString];
     STMultiSourcingImageProcessor * effect = (STMultiSourcingImageProcessor *)[self st_cachedObject:effect_uuid init:^id {
         STMultiSourcingImageProcessor * created_effect = (STMultiSourcingImageProcessor *)[[NSClassFromString(classString) alloc] init];
@@ -52,7 +67,7 @@
     return effect;
 }
 
-- (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerSet sourceSet:(STCapturedImageSet *)sourceSet{
+- (void)prepareLayerEffectFrom:(STCapturedImageSet *)sourceImageSet forLayerSet:(STCapturedImageSetDisplayLayerSet *)layerSet{
 
     if([layerSet.effect isKindOfClass:STGIFFDisplayLayerChromakeyEffect.class]){
         NSData * gifData = [NSData dataWithContentsOfFile:[@"chrogif.gif" bundleFilePath]];
@@ -60,8 +75,8 @@
         UIImage * gifImages = UIImageWithAnimatedGIFData(gifData);
 
         NSArray * imagesToCreateImageSet = nil;
-        if(gifImages.images.count > sourceSet.images.count){
-            NSRange cuttingRange = NSMakeRange(0,sourceSet.images.count);
+        if(gifImages.images.count > sourceImageSet.images.count){
+            NSRange cuttingRange = NSMakeRange(0,sourceImageSet.images.count);
             imagesToCreateImageSet = [gifImages.images subarrayWithRange:cuttingRange];
         }else{
             //TODO: 이 경우 gif가 imageSet보다 길이 짧은때 정지 화면 아이템을 넣던지 imageSet에서 이미지를 빼던지 보정 처리 필요
@@ -87,11 +102,11 @@
         STGIFFDisplayLayerFrameSwappingColorizeBlendEffect * _effect = (STGIFFDisplayLayerFrameSwappingColorizeBlendEffect *)layerSet.effect;
 
         if(_effect.frameIndexOffset==0){
-            preparedImages = sourceSet.images;
+            preparedImages = sourceImageSet.images;
 
         }else{
             //frame adjust
-            NSMutableArray<STCapturedImage *> *copiedSourceImages = [sourceSet.images mutableCopy];
+            NSMutableArray<STCapturedImage *> *copiedSourceImages = [sourceImageSet.images mutableCopy];
             NSUInteger indexAbsStep = (NSUInteger) ABS(_effect.frameIndexOffset);
 
             if(_effect.frameIndexOffset>0){

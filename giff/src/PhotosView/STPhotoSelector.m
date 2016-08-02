@@ -322,7 +322,7 @@ static STPhotoSelector *_instance = nil;
                     if(valid){
                         //recreate effects
                         if(layerSet.effect){
-                            [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffect:layerSet sourceSet:imageSet];
+                            [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:imageSet forLayerSet:layerSet];
                         }
 
                         [_layerSetPresentationView appendLayerSet:layerSet];
@@ -337,11 +337,11 @@ static STPhotoSelector *_instance = nil;
             STCapturedImageSetAnimatableLayerSet * layerSet = nil;
             if(!_layerSetPresentationView.layerSets.count){
                 //from capture
-                //TODO: 선택된 이펙트들이 여기에 꽂힘
+                STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STMainControl sharedInstance].editControlView.effectSelectorView.currentSelectedEffectItem;
 
-                layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:imageSet effectClass:NSStringFromClass(STGIFFDisplayLayerLeifEffect.class)];
+                layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:imageSet withEffect:currentSelectedEffect.className];
                 if(layerSet.effect){
-                    [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffect:layerSet sourceSet:imageSet];
+                    [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:imageSet forLayerSet:layerSet];
                 }
                 [_layerSetPresentationView appendLayerSet:layerSet];
 

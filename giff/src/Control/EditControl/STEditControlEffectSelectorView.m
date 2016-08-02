@@ -10,11 +10,9 @@
 #import "STCarouselHolderController.h"
 #import "STGIFFDisplayLayerEffectItem.h"
 #import "STGIFFDisplayLayerChromakeyEffect.h"
-#import "STGIFFDisplayLayerJanneEffect.h"
-#import "STGIFFDisplayLayerLeifEffect.h"
-#import "STGIFFDisplayLayerColorizeEffect.h"
 #import "UIImage+STUtil.h"
 #import "NSArray+STUtil.h"
+#import "STGIFFDisplayLayerEffectsManager.h"
 
 
 @implementation STEditControlEffectSelectorView {
@@ -25,6 +23,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _carouselController = [[STCarouselHolderController alloc] initWithCarousel:[[iCarousel alloc] initWithSize:self.size]];
+        _currentSelectedEffectItem = [[STGIFFDisplayLayerEffectsManager sharedManager].effects st_objectOrNilAtIndex:_carouselController.scrolledIndex];
     }
     return self;
 }
@@ -36,13 +35,7 @@
     STCarouselHolder * carouselHolder = [[STCarouselHolder alloc] init];
     carouselHolder.itemWidth = self.height;
     carouselHolder.centerItemWhenSelected = YES;
-    [carouselHolder.items addObjectsFromArray:@[
-            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class imageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJanneEffect.class imageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class imageName:@"effect_thumb.png"]
-    ]];
+    [carouselHolder.items addObjectsFromArray:[STGIFFDisplayLayerEffectsManager sharedManager].effects];
 
     carouselHolder.blockForItemView = ^UIView *(iCarousel *carousel, NSInteger index, UIView *view, STGIFFDisplayLayerEffectItem * item) {
         if(!view){
@@ -72,6 +65,7 @@
     _carouselController.carousel.bounceDistance = .5f;
 
     _carouselController.holder = carouselHolder;
+
     [_carouselController whenDidSelected:^(NSInteger i) {
 
         STGIFFDisplayLayerEffectItem * effectItem = [_carouselController.items st_objectOrNilAtIndex:i];
