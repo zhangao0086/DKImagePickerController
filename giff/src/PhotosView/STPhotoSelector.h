@@ -77,7 +77,7 @@
 
 - (void)refreshCurrentDisplayImageLayerSet;
 
-- (void)startExportDisplayImageLayer:(void (^)(BOOL succeed))completion;
+- (void)exportDisplayImageLayer:(void (^)(BOOL succeed))completion;
 
 - (BOOL)requestEnterEditLastItemIfPossible;
 

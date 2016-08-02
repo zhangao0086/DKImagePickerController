@@ -94,10 +94,10 @@
     [_exportButton setButtons:@[R.export.share_fit] style:STStandardButtonStylePTTP];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
-        [[STPhotoSelector sharedInstance] startExportDisplayImageLayer:^(BOOL succeed) {
-            if(succeed){
+        [[STPhotoSelector sharedInstance] exportDisplayImageLayer:^(BOOL succeed) {
+            if (succeed) {
                 [[STMainControl sharedInstance] export];
-            }else{
+            } else {
                 [STStandardUX expressDenied:_exportButton];
             }
         }];
