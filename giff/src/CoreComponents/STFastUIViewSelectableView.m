@@ -21,7 +21,7 @@
             [view addSubview:object];
         }
         [[view subviews] eachViewsWithIndex:^(UIView *v, NSUInteger index) {
-            v.visible = [v isEqual:object];
+            [v isEqual:object] ? [v unlockVisible] : [v lockVisibleToHide];
         }];
     }else{
         [super setButtonDrawable:view set:object];
