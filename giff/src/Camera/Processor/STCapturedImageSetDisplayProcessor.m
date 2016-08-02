@@ -48,7 +48,7 @@
                                                                            Wself.layerSet.uuid,
                                                                            Wself.layerSet.effect.uuid,
                                                                            indexOfResourceItemSet
-                ] URLForTemp:@"filter_applied_after_image" extension:@"jpg"];
+                ] URLForTemp:@"filter_applied_after_image" extension:self.loselessImageEncoding ? @"png" : @"jpg"];
 
                 if(!forceReprocess && [[NSFileManager defaultManager] fileExistsAtPath:tempURLToApplyEffect.path]){
                     //cached
@@ -60,7 +60,7 @@
                     NSArray<UIImage *> * imagesToProcessEffect = [self loadImagesFromSourceSet:resourceSet];
                     UIImage * processedImage = [Wself.layerSet.effect processImages:imagesToProcessEffect];
 
-                    NSAssert(processedImage, ([@"Processed Imag1e is nil: " st_add:tempURLToApplyEffect.path]));
+                    NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
 
                     if([(self.loselessImageEncoding ?
                             UIImagePNGRepresentation(processedImage) : UIImageJPEGRepresentation(processedImage, 1))
