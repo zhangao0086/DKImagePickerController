@@ -24,7 +24,7 @@
 - (instancetype)initWithCarousel:(iCarousel *)carousel;{
     self = [super init];
     if (self) {
-        _carousel = carousel;
+        self.carousel = carousel;
     }
     return self;
 }
