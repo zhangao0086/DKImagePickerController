@@ -11,7 +11,6 @@
 #import "STCarouselController.h"
 #import "STEditControlEffectSelectorView.h"
 #import "STPhotoSelector.h"
-#import "STCarouselHolderController.h"
 
 
 @implementation STEditControlView {
