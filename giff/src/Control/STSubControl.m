@@ -334,47 +334,50 @@
 
     }
     else if(_mode == STControlDisplayModeExport){
-        Weaks
-        [_left setButtons:@[R.go_back] colors:nil style:defaultStyle];
-        [_left whenSelected:^(STSelectableView *button, NSInteger index) {
-            [[STPhotoSelector sharedInstance] deselectAllCurrentSelected];
-            [[STMainControl sharedInstance] back];
-        }];
-//        _left.shadowEnabled = YES;
+        _left.visible = NO;
+        _right.visible = NO;
 
-        //right
-//        _right.shadowEnabled = YES;
-        switch (_previousMode){
-            case STControlDisplayModeEditAfterCapture:
-                _right.animatableVisible = NO;
-                break;
-            case STControlDisplayModeReviewAfterAnimatableCapture:
-                break;
-            default:{
-                [_right setButtons:@[[R go_remove]] colors:@[[STStandardUI negativeColor]] style:defaultStyle];
-                [_right whenSelected:^(STSelectableView *button, NSInteger index) {
-
-                    switch (_previousMode){
-                        case STControlDisplayModeEdit:
-                            [[STPhotoSelector sharedInstance] deletePhotos:[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] completion:^(BOOL succeed) {
-                                if(succeed){
-                                    [[STPhotoSelector sharedInstance] doCancelEdit:STPhotoViewTypeGrid transition:STPreviewCollectorExitTransitionContextDeletingInExport];
-                                    [[STMainControl sharedInstance] home];
-                                }else{
-                                    [[STMainControl sharedInstance] back];
-                                }
-                            }];
-                            break;
-                        case STControlDisplayModeHome:
-                            [[STPhotoSelector sharedInstance] deleteAllSelectedPhotos:nil];
-                            break;
-                        default:
-                            break;
-                    }
-                }];
-                break;
-            }
-        }
+//        Weaks
+//        [_left setButtons:@[R.go_back] colors:nil style:defaultStyle];
+//        [_left whenSelected:^(STSelectableView *button, NSInteger index) {
+//            [[STPhotoSelector sharedInstance] deselectAllCurrentSelected];
+//            [[STMainControl sharedInstance] back];
+//        }];
+////        _left.shadowEnabled = YES;
+//
+//        //right
+////        _right.shadowEnabled = YES;
+//        switch (_previousMode){
+//            case STControlDisplayModeEditAfterCapture:
+//                _right.animatableVisible = NO;
+//                break;
+//            case STControlDisplayModeReviewAfterAnimatableCapture:
+//                break;
+//            default:{
+//                [_right setButtons:@[[R go_remove]] colors:@[[STStandardUI negativeColor]] style:defaultStyle];
+//                [_right whenSelected:^(STSelectableView *button, NSInteger index) {
+//
+//                    switch (_previousMode){
+//                        case STControlDisplayModeEdit:
+//                            [[STPhotoSelector sharedInstance] deletePhotos:[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] completion:^(BOOL succeed) {
+//                                if(succeed){
+//                                    [[STPhotoSelector sharedInstance] doCancelEdit:STPhotoViewTypeGrid transition:STPreviewCollectorExitTransitionContextDeletingInExport];
+//                                    [[STMainControl sharedInstance] home];
+//                                }else{
+//                                    [[STMainControl sharedInstance] back];
+//                                }
+//                            }];
+//                            break;
+//                        case STControlDisplayModeHome:
+//                            [[STPhotoSelector sharedInstance] deleteAllSelectedPhotos:nil];
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                }];
+//                break;
+//            }
+//        }
     }
     else if(_mode == STControlDisplayModeEdit){
 

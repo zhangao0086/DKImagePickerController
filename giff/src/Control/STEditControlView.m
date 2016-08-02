@@ -11,11 +11,11 @@
 #import "STCarouselController.h"
 #import "STEditControlEffectSelectorView.h"
 #import "STPhotoSelector.h"
+#import "STMainControl.h"
 
 
 @implementation STEditControlView {
     STStandardButton *_backButton;
-
     STStandardButton *_exportButton;
 
     STEditControlFrameEditView * _frameEditView;
@@ -86,7 +86,7 @@
 
     [_exportButton setButtons:@[R.export.share_fit] style:STStandardButtonStylePTTP];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-
+        [[STMainControl sharedInstance] export];
     }];
 
     CGFloat padding = [STStandardLayout widthBullet];

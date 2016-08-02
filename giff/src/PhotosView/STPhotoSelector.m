@@ -189,7 +189,7 @@ static STPhotoSelector *_instance = nil;
 }
 
 - (NSArray<STPhotoItem *> *)currentFocusedPhotoItems {
-    return [_previewCollector isStarted] ? (_previewCollector.targetPhotoItem ? @[_previewCollector.targetPhotoItem] : nil) : self.selectedPhotoItems;
+    return _previewCollector.targetPhotoItem ? @[_previewCollector.targetPhotoItem] : nil;
 }
 
 - (NSArray<STPhotoItem *> *)allAvailablePhotoItems {
