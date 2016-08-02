@@ -93,7 +93,14 @@
 
     [_exportButton setButtons:@[R.export.share_fit] style:STStandardButtonStylePTTP];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-        [[STMainControl sharedInstance] export];
+
+        [[STPhotoSelector sharedInstance] startExportDisplayImageLayer:^(BOOL succeed) {
+            if(succeed){
+                [[STMainControl sharedInstance] export];
+            }else{
+                [STStandardUX expressDenied:_exportButton];
+            }
+        }];
     }];
 
     CGFloat padding = [STStandardLayout widthBullet];
@@ -106,35 +113,7 @@
     _exportButton.bottom = self.height-padding;
 }
 
-- (void)export{
-    NSArray * photoItems = [[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] mapWithIndex:^id(STPhotoItem * item, NSInteger index) {
-        item.exportGIFRequest = [[NSGIFRequest alloc] init];
-        item.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(index) stringValue]] URLForTemp:@"gif"];
-        item.exportGIFRequest.maxDuration = 2;
-        return item;
-    }];
 
-    [_exportButton startAlert];
-
-    [STApp logUnique:@"StartExportGIF"];
-
-    [STExporter exportGIFsFromPhotoItems:YES photoItems:photoItems progress:^(CGFloat d) {
-
-    } completion:^(NSArray *gifURLs, NSArray *succeedItems, NSArray *errorItems) {
-        [_exportButton stopAlert];
-
-
-        if(gifURLs.count){
-
-
-        }else{
-
-            [STStandardUX expressDenied:_exportButton];
-
-        }
-    }];
-
-}
 
 
 

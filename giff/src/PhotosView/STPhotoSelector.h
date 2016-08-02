@@ -77,6 +77,8 @@
 
 - (void)refreshCurrentDisplayImageLayerSet;
 
+- (void)startExportDisplayImageLayer:(void (^)(BOOL succeed))completion;
+
 - (BOOL)requestEnterEditLastItemIfPossible;
 
 - (void)doEnterEditByItem:(STPhotoItem *)targetItem;

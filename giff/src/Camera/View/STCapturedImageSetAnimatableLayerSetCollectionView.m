@@ -31,6 +31,10 @@
     return [[self layerSets] st_objectOrNilAtIndex:self.currentLayerSetIndex];
 }
 
+- (UIView *)currentItemViewOfLayerSet {
+    return [self itemViewOfLayerSet:self.currentLayerSet];
+}
+
 
 - (NSArray *)layerSets {
     return _layerSets;

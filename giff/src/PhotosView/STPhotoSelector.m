@@ -47,6 +47,9 @@
 #import "STEditControlFrameEditItemView.h"
 #import "STGIFFDisplayLayerEffectsManager.h"
 #import "STGIFFDisplayLayerEffectItem.h"
+#import "NSGIF.h"
+#import "STPhotoItem+STExporterIOGIF.h"
+#import "STExporter+IOGIF.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -425,6 +428,32 @@ static STPhotoSelector *_instance = nil;
     _layerSetPresentationView.visible = NO;
     [_layerSetPresentationView removeAllLayersSets];
     [STMainControl sharedInstance].editControlView.frameEditView.layerSet = nil;
+}
+
+- (void)startExportDisplayImageLayer:(void(^)(BOOL succeed))completion{
+
+    STPhotoItem * photoItem = [[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] firstObject];
+
+//    [((STSelectableView *) [_layerSetPresentationView currentItemViewOfLayerSet]) presentableObjectAtIndex:<#(NSUInteger)index#>];
+
+
+    NSArray * photoItems;
+    photoItems = [[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] mapWithIndex:^id(STPhotoItem * item, NSInteger index) {
+        item.exportGIFRequest = [[NSGIFRequest alloc] init];
+        item.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(index) stringValue]] URLForTemp:@"gif"];
+        item.exportGIFRequest.maxDuration = 2;
+        return item;
+    }];
+
+    [STApp logUnique:@"StartExportGIF"];
+
+    [STExporter exportGIFsFromPhotoItems:YES photoItems:photoItems progress:^(CGFloat d) {
+
+    } completion:^(NSArray *gifURLs, NSArray *succeedItems, NSArray *errorItems) {
+
+        !completion?: completion(gifURLs.count==succeedItems.count);
+    }];
+
 }
 
 #pragma mark Edit
