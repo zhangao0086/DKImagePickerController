@@ -43,8 +43,8 @@
 
 - (void)addEffectSelector {
     CGFloat padding = [STStandardLayout widthBullet];
-    [self addSubview:_effectSelectorView];
-    _effectSelectorView.bottom = _backButton.top - padding;
+    [self addSubview:self.effectSelectorView];
+    self.effectSelectorView.bottom = _backButton.top - padding;
 }
 
 - (STEditControlEffectSelectorView *)effectSelectorView {
