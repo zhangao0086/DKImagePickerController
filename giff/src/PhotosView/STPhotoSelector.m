@@ -366,8 +366,7 @@ static STPhotoSelector *_instance = nil;
          * Add Listeners - FrameEditView
          */
         STEditControlFrameEditView * frameEditView = [STMainControl sharedInstance].editControlView.frameEditView;
-
-        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
+        [frameEditView st_addKeypathListener:@keypath(frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
             _layerSetPresentationView.currentFrameIndex = [value unsignedIntegerValue];
         }];
 
