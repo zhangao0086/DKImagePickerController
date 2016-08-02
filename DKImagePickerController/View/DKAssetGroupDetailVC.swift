@@ -56,9 +56,9 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         
         class DKImageCheckView: UIView {
             
-            static var numberColor = UIColor.white()
+            static var numberColor = UIColor.white
             static var numberFont = UIFont.boldSystemFont(ofSize: 14)
-            static var checkedBackgroundColor = UIColor.blue()
+            static var checkedBackgroundColor = UIColor.blue
 
             internal lazy var checkImageView: UIImageView = {
                 let imageView = UIImageView(image: DKImageResource.checkedImage().withRenderingMode(.alwaysTemplate))
@@ -167,7 +167,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             videoDurationLabel.tag = -1
             videoDurationLabel.textAlignment = .right
             videoDurationLabel.font = UIFont.systemFont(ofSize: 12)
-            videoDurationLabel.textColor = UIColor.white()
+            videoDurationLabel.textColor = UIColor.white
             videoInfoView.addSubview(videoDurationLabel)
             videoDurationLabel.frame = CGRect(x: 0, y: 0, width: videoInfoView.bounds.width - 7, height: videoInfoView.bounds.height)
             videoDurationLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -199,7 +199,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         let button = UIButton()
 		
 		let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSForegroundColorAttributeName] as? UIColor
-		button.setTitleColor(globalTitleColor ?? UIColor.black(), for: UIControlState())
+		button.setTitleColor(globalTitleColor ?? UIColor.black, for: UIControlState())
 		
 		let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSFontAttributeName] as? UIFont
 		button.titleLabel!.font = globalTitleFont ?? UIFont.boldSystemFont(ofSize: 18.0)
@@ -217,7 +217,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     private var hidesCamera: Bool = false
 	
 	internal var collectionView: UICollectionView!
-    static var backgroundCollectionViewColor: UIColor! = UIColor.white()
+    static var backgroundCollectionViewColor: UIColor! = UIColor.white
 	private var footerView: UIView?
 	
 	private var currentViewSize: CGSize!
@@ -279,7 +279,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 	internal func checkPhotoPermission() {
 		func photoDenied() {
 			self.view.addSubview(DKPermissionView.permissionView(.photo))
-			self.view.backgroundColor = UIColor.black()
+			self.view.backgroundColor = UIColor.black
 			self.collectionView?.isHidden = true
 		}
 		
@@ -428,8 +428,8 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 			let removedIndex = self.imagePickerController.selectedAssets.index(of: removedAsset)!
 			
 			/// Minimize the number of cycles.
-			let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems() as [IndexPath]!
-			let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems()
+			let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems as [IndexPath]!
+			let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems
 			
 			let intersect = Set(indexPathsForVisibleItems).intersection(Set(indexPathsForSelectedItems!))
 			

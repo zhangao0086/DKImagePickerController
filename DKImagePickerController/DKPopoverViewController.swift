@@ -11,7 +11,7 @@ import UIKit
 public class DKPopoverViewController: UIViewController {
     
     public class func popoverViewController(_ viewController: UIViewController, fromView: UIView) {
-        let window = UIApplication.shared().keyWindow!
+        let window = UIApplication.shared.keyWindow!
         
         let popoverViewController = DKPopoverViewController()
         
@@ -23,7 +23,7 @@ public class DKPopoverViewController: UIViewController {
     }
     
     public class func dismissPopoverViewController() {
-        let window = UIApplication.shared().keyWindow!
+        let window = UIApplication.shared.keyWindow!
 
         for vc in window.rootViewController!.childViewControllers {
             if vc is DKPopoverViewController {
@@ -72,10 +72,10 @@ public class DKPopoverViewController: UIViewController {
         }
         
         func arrowImage() -> UIImage {
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: arrowWidth, height: arrowHeight), false, UIScreen.main().scale)
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: arrowWidth, height: arrowHeight), false, UIScreen.main.scale)
             
             let context = UIGraphicsGetCurrentContext()
-            UIColor.clear().setFill()
+            UIColor.clear.setFill()
             context?.fill(CGRect(x: 0, y: 0, width: arrowWidth, height: arrowHeight))
             
             let arrowPath = CGMutablePath()
@@ -87,7 +87,7 @@ public class DKPopoverViewController: UIViewController {
 
             context?.addPath(arrowPath)
             
-            context?.setFillColor(UIColor.white().cgColor)
+            context?.setFillColor(UIColor.white.cgColor)
             context?.drawPath(using: CGPathDrawingMode.fill)
 
             let arrowImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -105,7 +105,7 @@ public class DKPopoverViewController: UIViewController {
         super.loadView()
         
         let backgroundView = UIControl(frame: self.view.frame)
-        backgroundView.backgroundColor = UIColor.clear()
+        backgroundView.backgroundColor = UIColor.clear
         backgroundView.addTarget(self, action: #selector(DKPopoverViewController.dismissPopOver), for: .touchUpInside)
         backgroundView.autoresizingMask = self.view.autoresizingMask
         self.view = backgroundView
@@ -132,7 +132,7 @@ public class DKPopoverViewController: UIViewController {
 		self.popoverView.contentView = self.contentViewController.view
         self.popoverView.frame = self.calculatePopoverViewFrame()
 		
-        self.popoverView.transform = self.popoverView.transform.translateBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaleBy(x: 0.1, y: 0.1)
+        self.popoverView.transform = self.popoverView.transform.translatedBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaledBy(x: 0.1, y: 0.1)
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: [.curveEaseInOut, .allowUserInteraction], animations: {
             self.popoverView.transform = CGAffineTransform.identity
             self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
@@ -141,8 +141,8 @@ public class DKPopoverViewController: UIViewController {
     
     func dismissPopOver() {
         UIView.animate(withDuration: 0.2, animations: {
-            self.popoverView.transform = self.popoverView.transform.translateBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaleBy(x: 0.01, y: 0.01)
-            self.view.backgroundColor = UIColor.clear()
+            self.popoverView.transform = self.popoverView.transform.translatedBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaledBy(x: 0.01, y: 0.01)
+            self.view.backgroundColor = UIColor.clear
         }) { result in
             self.view.removeFromSuperview()
             self.removeFromParentViewController()

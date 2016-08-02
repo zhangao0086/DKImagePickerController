@@ -11,7 +11,7 @@ import Photos
 public extension CGSize {
 	
 	public func toPixel() -> CGSize {
-		let scale = UIScreen.main().scale
+		let scale = UIScreen.main.scale
 		return CGSize(width: self.width * scale, height: self.height * scale)
 	}
 }
@@ -92,7 +92,7 @@ public class DKAsset: NSObject {
 		if let (image, info) = self.fullScreenImage {
 			completeBlock(image: image, info: info)
 		} else {
-			let screenSize = UIScreen.main().bounds.size
+			let screenSize = UIScreen.main.bounds.size
 			
 			let options = PHImageRequestOptions()
 			options.deliveryMode = .highQualityFormat

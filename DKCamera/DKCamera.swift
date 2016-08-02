@@ -146,9 +146,9 @@ public class DKCamera: UIViewController {
 		// Dispose of any resources that can be recreated.
 	}
 	
-	public override func prefersStatusBarHidden() -> Bool {
-		return true
-	}
+  public override var prefersStatusBarHidden: Bool {
+    return true
+  }
 	
 	public func setupDevices() {
 		let devices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) as! [AVCaptureDevice]
@@ -169,9 +169,9 @@ public class DKCamera: UIViewController {
     let bottomView = UIView()
     
 	public func setupUI() {
-		self.view.backgroundColor = UIColor.black()
+		self.view.backgroundColor = UIColor.black
 		self.view.addSubview(self.contentView)
-		self.contentView.backgroundColor = UIColor.clear()
+		self.contentView.backgroundColor = UIColor.clear
 		self.contentView.frame = self.view.bounds
 		
 		let bottomViewHeight: CGFloat = 70
@@ -202,12 +202,12 @@ public class DKCamera: UIViewController {
 			
 			class DKCaptureButton: UIButton {
 				private override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-					self.backgroundColor = UIColor.white()
+					self.backgroundColor = UIColor.white
 					return true
 				}
 				
 				private override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-					self.backgroundColor = UIColor.white()
+					self.backgroundColor = UIColor.white
 					return true
 				}
 				
@@ -223,9 +223,9 @@ public class DKCamera: UIViewController {
 			let captureButton = DKCaptureButton()
 			captureButton.addTarget(self, action: #selector(DKCamera.takePicture), for: .touchUpInside)
 			captureButton.bounds.size = CGSize(width: bottomViewHeight,
-				height: bottomViewHeight).apply(transform: CGAffineTransform(scaleX: 0.9, y: 0.9))
+				height: bottomViewHeight).applying(CGAffineTransform(scaleX: 0.9, y: 0.9))
 			captureButton.layer.cornerRadius = captureButton.bounds.height / 2
-			captureButton.layer.borderColor = UIColor.white().cgColor
+			captureButton.layer.borderColor = UIColor.white.cgColor
 			captureButton.layer.borderWidth = 2
 			captureButton.layer.masksToBounds = true
 			
@@ -270,7 +270,7 @@ public class DKCamera: UIViewController {
 		}
 		
 		if let stillImageOutput = self.stillImageOutput {
-			DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes(rawValue: UInt64(0))).async(execute: {
+			DispatchQueue.global().async(execute: {
 				let connection = stillImageOutput.connection(withMediaType: AVMediaTypeVideo)
 				if connection == nil {
 					return
@@ -278,8 +278,8 @@ public class DKCamera: UIViewController {
 				
 				connection?.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
 				connection?.videoScaleAndCropFactor = self.zoomScale
-				
-				stillImageOutput.captureStillImageAsynchronously(from: connection, completionHandler: { (imageDataSampleBuffer, error: NSError?) -> Void in
+
+				stillImageOutput.captureStillImageAsynchronously(from: connection, completionHandler: { (imageDataSampleBuffer, error: Error?) -> Void in
 					
 					if error == nil {
 						let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
@@ -440,7 +440,7 @@ public class DKCamera: UIViewController {
 					focusView.bounds.size = CGSize(width: diameter, height: diameter)
 					focusView.layer.borderWidth = 2
 					focusView.layer.cornerRadius = diameter / 2
-					focusView.layer.borderColor = UIColor.white().cgColor
+					focusView.layer.borderColor = UIColor.white.cgColor
 					
 					return focusView
 				}()
@@ -450,7 +450,7 @@ public class DKCamera: UIViewController {
 			self.view.addSubview(FocusView.focusView)
 			UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.1,
 				options: UIViewAnimationOptions(), animations: { () -> Void in
-					FocusView.focusView.transform = CGAffineTransform.identity.scaleBy(x: 0.6, y: 0.6)
+					FocusView.focusView.transform = CGAffineTransform.identity.scaledBy(x: 0.6, y: 0.6)
 				}) { (Bool) -> Void in
 					FocusView.focusView.removeFromSuperview()
 			}
@@ -482,7 +482,7 @@ public class DKCamera: UIViewController {
 	
 	// MARK: - Handles Orientation
 	
-	public override func shouldAutorotate() -> Bool {
+  public override var shouldAutorotate: Bool {
 		return false
 	}
 	
@@ -492,7 +492,7 @@ public class DKCamera: UIViewController {
 	}
 	
 	public func initialOriginalOrientationForOrientation() {
-		self.originalOrientation = UIApplication.shared().statusBarOrientation.toDeviceOrientation()
+		self.originalOrientation = UIApplication.shared.statusBarOrientation.toDeviceOrientation()
 		if let connection = self.previewLayer.connection {
 			connection.videoOrientation = self.originalOrientation.toAVCaptureVideoOrientation()
 		}
@@ -516,7 +516,7 @@ public class DKCamera: UIViewController {
 				self.contentView.transform = CGAffineTransform(rotationAngle: newAngle)
 			}
 		} else {
-			let rotateAffineTransform = CGAffineTransform.identity.rotate(newAngle)
+      let rotateAffineTransform = CGAffineTransform.identity.rotated(by: newAngle)
 			
 			UIView.animate(withDuration: 0.2) {
 				self.flashButton.transform = rotateAffineTransform
@@ -627,7 +627,7 @@ public class DKCameraResource {
 	
 	public class func imageForResource(_ name: String) -> UIImage {
 		let bundle = Bundle.cameraBundle()
-		let imagePath = bundle.pathForResource(name, ofType: "png", inDirectory: "Images")
+		let imagePath = bundle.path(forResource: name, ofType: "png", inDirectory: "Images")
 		let image = UIImage(contentsOfFile: imagePath!)
 		return image!
 	}

@@ -19,7 +19,7 @@ class DKAssetGroupCell: UITableViewCell {
                 return super.backgroundColor
             }
             set {
-                if newValue != UIColor.clear() {
+                if newValue != UIColor.clear {
                     super.backgroundColor = newValue
                 }
             }
@@ -43,7 +43,7 @@ class DKAssetGroupCell: UITableViewCell {
     var totalCountLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
-        label.textColor = UIColor.gray()
+        label.textColor = UIColor.gray
         return label
     }()
     
@@ -63,7 +63,7 @@ class DKAssetGroupCell: UITableViewCell {
     lazy var customSeparator: DKAssetGroupSeparator = {
         let separator = DKAssetGroupSeparator(frame: CGRect(x: 10, y: self.bounds.height - 1, width: self.bounds.width, height: 0.5))
         
-        separator.backgroundColor = UIColor.lightGray()
+        separator.backgroundColor = UIColor.lightGray
         separator.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         return separator
     }()

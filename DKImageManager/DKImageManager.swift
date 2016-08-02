@@ -10,7 +10,7 @@ import Photos
 
 public class DKBaseManager: NSObject {
 
-	private let observers = HashTable<AnyObject>.weakObjects()
+	private let observers = NSHashTable<AnyObject>.weakObjects()
 	
 	public func addObserver(_ object: AnyObject) {
 		self.observers.add(object)

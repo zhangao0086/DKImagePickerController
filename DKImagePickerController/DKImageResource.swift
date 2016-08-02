@@ -21,7 +21,7 @@ public class DKImageResource {
 
     private class func imageForResource(_ name: String) -> UIImage {
         let bundle = Bundle.imagePickerControllerBundle()
-        let imagePath = bundle.pathForResource(name, ofType: "png", inDirectory: "Images")
+        let imagePath = bundle.path(forResource: name, ofType: "png", inDirectory: "Images")
         let image = UIImage(contentsOfFile: imagePath!)
         return image!
     }

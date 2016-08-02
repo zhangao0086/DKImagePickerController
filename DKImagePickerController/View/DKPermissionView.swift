@@ -21,9 +21,9 @@ internal class DKPermissionView: UIView {
 		
 		if style == .photo {
 			permissionView.titleLabel.text = DKImageLocalizedStringWithKey("permissionPhoto")
-			permissionView.titleLabel.textColor = UIColor.gray()
+			permissionView.titleLabel.textColor = UIColor.gray
 		} else {
-			permissionView.titleLabel.textColor = UIColor.white()
+			permissionView.titleLabel.textColor = UIColor.white
 			permissionView.titleLabel.text = DKImageLocalizedStringWithKey("permissionCamera")
 		}
 		permissionView.titleLabel.sizeToFit()
@@ -50,7 +50,7 @@ internal class DKPermissionView: UIView {
 	
 	internal func gotoSettings() {
 		if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
-			UIApplication.shared().openURL(appSettings)
+			UIApplication.shared.openURL(appSettings)
 		}
 	}
 	

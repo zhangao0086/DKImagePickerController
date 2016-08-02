@@ -140,14 +140,14 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
 	/// The predicate applies to images only.
-	public var imageFetchPredicate: Predicate? {
+	public var imageFetchPredicate: NSPredicate? {
 		didSet {
 			getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
 		}
 	}
 	
 	/// The predicate applies to videos only.
-	public var videoFetchPredicate: Predicate? {
+	public var videoFetchPredicate: NSPredicate? {
 		didSet {
 			getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
 		}
@@ -287,34 +287,34 @@ public class DKImagePickerController : UINavigationController {
 	
 	private lazy var assetFetchOptions: PHFetchOptions = {
 		let assetFetchOptions = PHFetchOptions()
-		assetFetchOptions.sortDescriptors = [SortDescriptor(key: "creationDate", ascending: false)]
+		assetFetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 		return assetFetchOptions
 	}()
 	
 	private func createAssetFetchOptions() -> PHFetchOptions? {
 		
-		let createImagePredicate = { () -> Predicate in
-			var imagePredicate = Predicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+		let createImagePredicate = { () -> NSPredicate in
+			var imagePredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
 			if let imageFetchPredicate = self.imageFetchPredicate {
-				imagePredicate = CompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, imageFetchPredicate])
+				imagePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [imagePredicate, imageFetchPredicate])
 			}
 	
 			return imagePredicate
 		}
 		
-		let createVideoPredicate = { () -> Predicate in
-			var videoPredicate = Predicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+		let createVideoPredicate = { () -> NSPredicate in
+			var videoPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
 			if let videoFetchPredicate = self.videoFetchPredicate {
-				videoPredicate = CompoundPredicate(andPredicateWithSubpredicates: [videoPredicate, videoFetchPredicate])
+				videoPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [videoPredicate, videoFetchPredicate])
 			}
 			
 			return videoPredicate
 		}
 		
-		var predicate: Predicate?
+		var predicate: NSPredicate?
 		switch self.assetType {
 		case .allAssets:
-			predicate = CompoundPredicate(orPredicateWithSubpredicates: [createImagePredicate(), createVideoPredicate()])
+			predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [createImagePredicate(), createVideoPredicate()])
 		case .allPhotos:
 			predicate = createImagePredicate()
 		case .allVideos:
@@ -433,15 +433,16 @@ public class DKImagePickerController : UINavigationController {
 	
     // MARK: - Handles Orientation
 
-    public override func shouldAutorotate() -> Bool {
+  public override var shouldAutorotate: Bool {
 		return self.allowsLandscape ? true : false
+  }
+  
+  public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    if self.allowsLandscape {
+      return super.supportedInterfaceOrientations
+    } else {
+      return UIInterfaceOrientationMask.portrait
     }
-    
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-		if self.allowsLandscape {
-			return super.supportedInterfaceOrientations()
-		} else {
-			return UIInterfaceOrientationMask.portrait
-		}
-    }
+
+  }
 }
