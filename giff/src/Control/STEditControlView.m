@@ -12,6 +12,13 @@
 #import "STEditControlEffectSelectorView.h"
 #import "STPhotoSelector.h"
 #import "STMainControl.h"
+#import "NSString+STUtil.h"
+#import "NSGIF.h"
+#import "STElieStatusBar.h"
+#import "STApp+Logger.h"
+#import "STExporter+IOGIF.h"
+#import "STPhotoItem+STExporterIOGIF.h"
+#import "NSArray+STUtil.h"
 
 
 @implementation STEditControlView {
@@ -98,6 +105,37 @@
     _exportButton.right = self.width-padding;
     _exportButton.bottom = self.height-padding;
 }
+
+- (void)export{
+    NSArray * photoItems = [[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] mapWithIndex:^id(STPhotoItem * item, NSInteger index) {
+        item.exportGIFRequest = [[NSGIFRequest alloc] init];
+        item.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(index) stringValue]] URLForTemp:@"gif"];
+        item.exportGIFRequest.maxDuration = 2;
+        return item;
+    }];
+
+    [_exportButton startAlert];
+
+    [STApp logUnique:@"StartExportGIF"];
+
+    [STExporter exportGIFsFromPhotoItems:YES photoItems:photoItems progress:^(CGFloat d) {
+
+    } completion:^(NSArray *gifURLs, NSArray *succeedItems, NSArray *errorItems) {
+        [_exportButton stopAlert];
+
+
+        if(gifURLs.count){
+
+
+        }else{
+
+            [STStandardUX expressDenied:_exportButton];
+
+        }
+    }];
+
+}
+
 
 
 @end
