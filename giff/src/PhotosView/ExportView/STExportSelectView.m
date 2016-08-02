@@ -67,7 +67,7 @@ CGFloat const AlphaForSelected = .8;
     STUIContentAlignmentView * cellView = [[STUIContentAlignmentView alloc] initWithSize:cellSize];
     cellView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     cellView.touchInsidePolicy = STUIViewTouchInsidePolicyNone;
-    cellView.contentView = [SVGKFastImageView viewWithImageNamed:[STExporter iconImageName:exportType] sizeWidth:CGSizeMinSide(cellSize)/1.5f];
+    cellView.contentView = [SVGKFastImageView viewWithImageNamed:[STExporter iconImageName:exportType] sizeWidth:CGSizeMinSide(cellSize)/1.3f];
     cellView.backgroundColor = [[STExporter iconImageBackgroundColor:exportType] colorWithAlphaComponent:AlphaForUnselected];
 
     UIColor * iconBackgroundColor = [STExporter iconImageBackgroundColor:exportType];

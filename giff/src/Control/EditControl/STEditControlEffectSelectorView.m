@@ -60,7 +60,6 @@
         }
     };
 
-    _carouselController.carousel.pagingEnabled = YES;
     _carouselController.carousel.decelerationRate = 0.8f;
     _carouselController.carousel.bounceDistance = .5f;
 
