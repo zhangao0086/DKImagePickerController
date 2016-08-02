@@ -14,6 +14,8 @@
 #import "NSArray+STUtil.h"
 #import "NSData+STGIFUtil.h"
 #import "STGIFFDisplayLayerChromakeyEffect.h"
+#import "STMultiSourcingImageProcessor.h"
+#import "NSObject+STUtil.h"
 
 
 @implementation STGIFFDisplayLayerEffectsManager {
@@ -34,11 +36,20 @@
 
 - (STCapturedImageSetAnimatableLayerSet *)createLayerSetFrom:(STCapturedImageSet *)imageSet effectClass:(NSString *)classString{
     STCapturedImageSetAnimatableLayerSet * layerSet = [STCapturedImageSetAnimatableLayerSet setWithLayers:@[[STCapturedImageSetAnimatableLayer layerWithImageSet:imageSet]]];
-    STMultiSourcingImageProcessor * effect = (STMultiSourcingImageProcessor *)[[NSClassFromString(classString) alloc] init];
-    NSAssert(effect, @"Not found effect");
-    effect.uuid = [layerSet.uuid st_add:classString];
-    layerSet.effect = effect;
+    [self acquireEffect:classString to:layerSet];
     return layerSet;
+}
+
+- (STMultiSourcingImageProcessor *)acquireEffect:(NSString *)classString to:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    NSString * effect_uuid = [layerSet.uuid st_add:classString];
+    STMultiSourcingImageProcessor * effect = (STMultiSourcingImageProcessor *)[self st_cachedObject:effect_uuid init:^id {
+        STMultiSourcingImageProcessor * created_effect = (STMultiSourcingImageProcessor *)[[NSClassFromString(classString) alloc] init];
+        created_effect.uuid = effect_uuid;
+        return created_effect;
+    }];
+    NSAssert(effect, @"Not found effect");
+    layerSet.effect = effect;
+    return effect;
 }
 
 - (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerSet sourceSet:(STCapturedImageSet *)sourceSet{

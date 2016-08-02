@@ -2,6 +2,7 @@
 // Created by BLACKGENE on 2014. 8. 25..
 // Copyright (c) 2014 Eliecam. All rights reserved.
 //
+#import "STEditControlEffectSelectorView.h"
 #import "NSArray+BlocksKit.h"
 #import <Photos/Photos.h>
 #import "STPhotoSelector.h"
@@ -20,12 +21,10 @@
 #import "STEditorCommand.h"
 #import "NSObject+STUtil.h"
 #import "UIAlertController+STGIFFApp.h"
-#import "UIScrollView+AGK+Properties.h"
 #import "STElieStatusBar.h"
 #import "STPhotoItemSource.h"
 #import "STStandardButton.h"
 #import "PHAsset+Utility.h"
-#import "STThumbnailGridViewCell.h"
 #import "R.h"
 #import "STQueueManager.h"
 #import "STPermissionManager.h"
@@ -39,20 +38,15 @@
 #import "RLMCapturedImage.h"
 #import "NSNumber+STUtil.h"
 #import "STFilterPresenterBase.h"
-#import "STPhotoItem+STExporterIO.h"
-#import "STUIApplication.h"
 #import "STApp+Logger.h"
 #import "STCapturedImageSetAnimatableLayerSet.h"
 #import "STGIFFDisplayLayerLeifEffect.h"
 #import "STCapturedImageSetAnimatableLayer.h"
-#import "STGIFFDisplayLayerJanneEffect.h"
 #import "NSString+STUtil.h"
-#import "NSData+STGIFUtil.h"
-#import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "STGIFFAnimatableLayerPresentingView.h"
-#import "STEditControlFrameEditView.h"
 #import "STEditControlFrameEditItemView.h"
 #import "STGIFFDisplayLayerEffectsManager.h"
+#import "STGIFFDisplayLayerEffectItem.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -369,12 +363,12 @@ static STPhotoSelector *_instance = nil;
         }
 
         /*
-         * add listeners
+         * Add Listeners - FrameEditView
          */
         STEditControlFrameEditView * frameEditView = [STMainControl sharedInstance].editControlView.frameEditView;
 
         [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.frameEditView.currentMasterFrameIndex) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(id value, id _weakSelf) {
-            _layerSetPresentationView.currentIndex = [value unsignedIntegerValue];
+            _layerSetPresentationView.currentFrameIndex = [value unsignedIntegerValue];
         }];
 
         for(STCapturedImageSetAnimatableLayer * layer in frameEditView.layerSet.layers){
@@ -391,7 +385,15 @@ static STPhotoSelector *_instance = nil;
             }];
         }
 
-        _layerSetPresentationView.currentIndex = index;
+        _layerSetPresentationView.currentFrameIndex = index;
+
+
+        /*
+         * Add Listeners - Effect Selector
+         */
+        [[STMainControl sharedInstance] st_addKeypathListener:@keypath([STMainControl sharedInstance].editControlView.effectSelectorView.currentSelectedEffectItem) id:@"editControlView.currentMasterFrameIndex" newValueBlock:^(STGIFFDisplayLayerEffectItem * item, id _weakSelf) {
+            [_layerSetPresentationView updateEffectToAllLayersOfCurrentLayerSet:item];
+        }];
     }
 }
 

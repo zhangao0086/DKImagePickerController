@@ -15,6 +15,8 @@
 #import "STCapturedImageSetDisplayProcessor+GPUImage.h"
 #import "STFastUIViewSelectableView.h"
 #import "NSNumber+STUtil.h"
+#import "STGIFFDisplayLayerEffectItem.h"
+#import "STGIFFDisplayLayerEffectsManager.h"
 
 @interface STSelectableView(Protected)
 - (void)setViewsDisplay;
@@ -53,7 +55,7 @@
             }
         }
 
-        NSInteger layerIndex = self.currentIndex + layerSet.frameIndexOffset;
+        NSInteger layerIndex = self.currentFrameIndex + layerSet.frameIndexOffset;
         BOOL overRanged = layerIndex<0 || layerIndex>=layerView.count;
 
         if(overRanged){
@@ -80,7 +82,12 @@
 
 - (void)updateCurrentLayerOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
     NSParameterAssert(layerSet);
-    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES preferredRange:NSMakeRange(self.currentIndex, 1)];
+    [self processLayerSetAndSetNeedsView:layerSet forceAppend:NO forceReprocess:YES preferredRange:NSMakeRange(self.currentFrameIndex, 1)];
+}
+
+- (void)updateEffectToAllLayersOfCurrentLayerSet:(STGIFFDisplayLayerEffectItem *)effectItem{
+    [[STGIFFDisplayLayerEffectsManager sharedManager] acquireEffect:effectItem.className to:[self currentLayerSet]];
+    [self updateAllLayersOfLayerSet:[self currentLayerSet]];
 }
 
 - (void)processLayerSetAndSetNeedsView:(STCapturedImageSetAnimatableLayerSet *)layerSet

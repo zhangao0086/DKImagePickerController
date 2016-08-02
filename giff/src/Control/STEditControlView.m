@@ -20,6 +20,8 @@
     STStandardButton *_exportButton;
 
     STEditControlFrameEditView * _frameEditView;
+
+    STEditControlEffectSelectorView * _effectSelectorView;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -41,20 +43,20 @@
 
 - (void)addEffectSelector {
     CGFloat padding = [STStandardLayout widthBullet];
-
-    CGFloat frameEditViewHeight = (self.frameEditView.maxNumberOfLayersOfLayerSet+1)*self.frameEditView.heightForFrameItemView;
-
-    CGFloat sizeHeight = self.height - (frameEditViewHeight + padding) - (_backButton.height+(padding*2));
-
-    STEditControlEffectSelectorView * selectorView = [[STEditControlEffectSelectorView alloc] initWithSize:CGSizeMake(self.width, sizeHeight)];
-    [self addSubview:selectorView];
-
-    selectorView.bottom = _backButton.top - padding;
-
-    [selectorView.carouselController whenDidSelected:^(NSInteger i) {
-
-    }];
+    [self addSubview:_effectSelectorView];
+    _effectSelectorView.bottom = _backButton.top - padding;
 }
+
+- (STEditControlEffectSelectorView *)effectSelectorView {
+    if(!_effectSelectorView){
+        CGFloat padding = [STStandardLayout widthBullet];
+        CGFloat frameEditViewHeight = (self.frameEditView.maxNumberOfLayersOfLayerSet+1)*self.frameEditView.heightForFrameItemView;
+        CGFloat sizeHeight = self.height - (frameEditViewHeight + padding) - (_backButton.height+(padding*2));
+        _effectSelectorView = [[STEditControlEffectSelectorView alloc] initWithSize:CGSizeMake(self.width, sizeHeight)];
+    }
+    return _effectSelectorView;
+}
+
 
 - (void)addFrameEditControls {
     [self frameEditView];

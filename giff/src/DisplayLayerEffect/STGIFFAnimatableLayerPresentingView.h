@@ -10,9 +10,14 @@
 #import "STCapturedImageSetAnimatableLayerSetCollectionView.h"
 
 @class STCapturedImageSetAnimatableLayerSet;
+@class STGIFFDisplayLayerEffectItem;
 
 @interface STGIFFAnimatableLayerPresentingView : STCapturedImageSetAnimatableLayerSetCollectionView <STSegmentedSliderControlDelegate>
+
 - (void)updateAllLayersOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;
 
 - (void)updateCurrentLayerOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;
+
+
+- (void)updateEffectToAllLayersOfCurrentLayerSet:(STGIFFDisplayLayerEffectItem *)effectItem;
 @end

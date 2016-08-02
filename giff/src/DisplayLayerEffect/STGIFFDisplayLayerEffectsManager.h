@@ -8,12 +8,15 @@
 @class STCapturedImageSetDisplayLayerSet;
 @class STCapturedImageSet;
 @class STCapturedImageSetAnimatableLayerSet;
+@class STMultiSourcingImageProcessor;
 
 
 @interface STGIFFDisplayLayerEffectsManager : NSObject
 + (STGIFFDisplayLayerEffectsManager *)sharedManager;
 
 - (STCapturedImageSetAnimatableLayerSet *)createLayerSetFrom:(STCapturedImageSet *)imageSet effectClass:(NSString *)classString;
+
+- (STMultiSourcingImageProcessor *)acquireEffect:(NSString *)classString to:(STCapturedImageSetAnimatableLayerSet *)layerSet;
 
 - (void)prepareLayerEffect:(STCapturedImageSetDisplayLayerSet *)layerSet sourceSet:(STCapturedImageSet *)sourceSet;
 @end

@@ -21,11 +21,16 @@
 
 }
 
-- (void)setCurrentIndex:(NSUInteger)currentIndex {
-    _currentIndex = currentIndex;
+- (void)setCurrentFrameIndex:(NSUInteger)currentFrameIndex {
+    _currentFrameIndex = currentFrameIndex;
 
     [self setNeedsLayersDisplayAndLayout];
 }
+
+- (STCapturedImageSetAnimatableLayerSet *)currentLayerSet {
+    return [[self layerSets] st_objectOrNilAtIndex:self.currentLayerSetIndex];
+}
+
 
 - (NSArray *)layerSets {
     return _layerSets;

@@ -8,7 +8,9 @@
 #import "STEditControlFrameEditView.h"
 
 @class STEditControlFrameEditView;
+@class STEditControlEffectSelectorView;
 
 @interface STEditControlView : STUIView <STSegmentedSliderControlDelegate>
 @property (nonatomic, readonly) STEditControlFrameEditView * frameEditView;
+@property (nonatomic, readonly) STEditControlEffectSelectorView * effectSelectorView;
 @end

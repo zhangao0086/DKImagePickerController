@@ -13,12 +13,12 @@
 #import "STGIFFDisplayLayerJanneEffect.h"
 #import "STGIFFDisplayLayerLeifEffect.h"
 #import "STGIFFDisplayLayerColorizeEffect.h"
-#import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "UIImage+STUtil.h"
+#import "NSArray+STUtil.h"
 
 
 @implementation STEditControlEffectSelectorView {
-
+    STCarouselHolderController * _carouselController;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -38,10 +38,10 @@
     carouselHolder.centerItemWhenSelected = YES;
     [carouselHolder.items addObjectsFromArray:@[
             [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerChromakeyEffect.class imageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJanneEffect.class imageName:@"effect_thumb.png"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class imageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.class imageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJanneEffect.class imageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class imageName:@"effect_thumb.png"]
     ]];
 
     carouselHolder.blockForItemView = ^UIView *(iCarousel *carousel, NSInteger index, UIView *view, STGIFFDisplayLayerEffectItem * item) {
@@ -68,6 +68,23 @@
     };
 
     _carouselController.holder = carouselHolder;
+    [_carouselController whenDidSelected:^(NSInteger i) {
+
+        STGIFFDisplayLayerEffectItem * effectItem = [_carouselController.items st_objectOrNilAtIndex:i];
+        if(![effectItem isEqual:_currentSelectedEffectItem]){
+            [self willChangeValueForKey:@keypath(self.currentSelectedEffectItem)];
+            _currentSelectedEffectItem = [_carouselController.items st_objectOrNilAtIndex:i];
+            [self didChangeValueForKey:@keypath(self.currentSelectedEffectItem)];
+        }
+    }];
+
+    [_carouselController whenChangedScrolledIndex:^(NSInteger i) {
+
+    }];
+
+    [_carouselController whenDidEndScroll:^(NSInteger i) {
+
+    }];
 
     [self addSubview:_carouselController.carousel];
 

@@ -12,7 +12,10 @@
     UIView * _contentView;
 }
 
-@property (nonatomic, assign) NSUInteger currentIndex;
+@property (nonatomic, assign) NSUInteger currentFrameIndex;
+@property (nonatomic, assign) NSUInteger currentLayerSetIndex;
+@property (nonatomic, readonly) STCapturedImageSetAnimatableLayerSet * currentLayerSet;
+
 @property (nonatomic, readonly) NSArray<STCapturedImageSetAnimatableLayerSet *> * layerSets;
 
 - (UIView *)itemViewOfLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet;

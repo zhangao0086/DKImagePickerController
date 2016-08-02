@@ -6,9 +6,10 @@
 #import <Foundation/Foundation.h>
 
 @class STCarouselHolderController;
+@class STGIFFDisplayLayerEffectItem;
 
 
 @interface STEditControlEffectSelectorView : STUIView
-@property (nonatomic, readonly) STCarouselHolderController * carouselController;
-
+@property (nonatomic, readonly) STGIFFDisplayLayerEffectItem * currentSelectedEffectItem;
+@property (nonatomic, readonly) BOOL selectedEffectItemHasChanging;
 @end
