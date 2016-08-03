@@ -24,7 +24,7 @@
 @property (nonatomic, readwrite) NSURL *sourceForFullScreenFromURL;
 @property (nonatomic, readwrite) NSURL *sourceForPreviewFromURL;
 //captured image
-@property (nonatomic, readwrite) STCapturedImageSet *sourceForCapturedImageSet;
+@property (nonatomic, readonly) STCapturedImageSet *sourceForCapturedImageSet;
 @property (nonatomic, assign) NSUInteger assigningIndexFromCapturedImageSet;
 //photos
 @property (nonatomic, readonly) PHAsset *sourceForAsset;
@@ -54,9 +54,13 @@
 
 @property (nonatomic, assign) BOOL needsEnhance;
 
-- (instancetype)initWithSourceForAsset:(PHAsset *)sourceForAsset;
+- (instancetype)initWithCapturedImageSet:(STCapturedImageSet *)sourceForCapturedImageSet;
 
-+ (instancetype)itemWithSourceForAsset:(PHAsset *)sourceForAsset;
++ (instancetype)itemWithCapturedImageSet:(STCapturedImageSet *)sourceForCapturedImageSet;
+
+- (instancetype)initWithAsset:(PHAsset *)sourceForAsset;
+
++ (instancetype)itemWithAsset:(PHAsset *)sourceForAsset;
 
 + (PHAssetResourceType)primaryAssetResourceTypeByPhotoItem:(STPhotoItem *)photoItem;
 

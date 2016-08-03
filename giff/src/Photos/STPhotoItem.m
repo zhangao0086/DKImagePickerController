@@ -28,7 +28,7 @@
 }
 
 #pragma mark Source
-- (instancetype)initWithSourceForAsset:(PHAsset *)sourceForAsset{
+- (instancetype)initWithAsset:(PHAsset *)sourceForAsset{
     self = [super init];
     if (self) {
         _sourceForAsset = sourceForAsset;
@@ -37,8 +37,22 @@
     return self;
 }
 
-+ (instancetype)itemWithSourceForAsset:(PHAsset *)sourceForAsset {
-    return [[self alloc] initWithSourceForAsset:sourceForAsset];
+- (instancetype)initWithCapturedImageSet:(STCapturedImageSet *)sourceForCapturedImageSet {
+    self = [super init];
+    if (self) {
+        _sourceForCapturedImageSet = sourceForCapturedImageSet;
+    }
+
+    return self;
+}
+
++ (instancetype)itemWithCapturedImageSet:(STCapturedImageSet *)sourceForCapturedImageSet {
+    return [[self alloc] initWithCapturedImageSet:sourceForCapturedImageSet];
+}
+
+
++ (instancetype)itemWithAsset:(PHAsset *)sourceForAsset {
+    return [[self alloc] initWithAsset:sourceForAsset];
 }
 
 - (void)setSourceForPreviewFromURL:(NSURL *)sourceForPreviewFromURL {

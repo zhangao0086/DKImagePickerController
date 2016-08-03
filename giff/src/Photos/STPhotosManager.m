@@ -30,44 +30,56 @@
 }
 
 - (STPhotoItem *)generatePhotoItem:(STPhotoItemSource *)photoSource{
-    STPhotoItem *item = [STPhotoItem new];
-    item.orientationOriginated = photoSource.orientation;
+    STPhotoItem *item = nil;
 
-    //TODO: 현재는 imageSet전용이지만 추후 전체를 통합
-    if(photoSource.imageSet.defaultImage){
-        item.sourceForCapturedImageSet = photoSource.imageSet;
-        item.metadataFromCamera = photoSource.metaData;
+    switch(photoSource.type){
+        case STPhotoSourceTypeCapturedImageSet:
+        {
+            item = [STPhotoItem itemWithCapturedImageSet:photoSource.imageSet];
+            item.metadataFromCamera = photoSource.metaData;
 
-        for(STCapturedImage * image in item.sourceForCapturedImageSet.images){
-            [image createThumbnail:nil];
-            [image createFullScreenImage:nil];
+            for(STCapturedImage * image in item.sourceForCapturedImageSet.images){
+                [image createThumbnail:nil];
+                [image createFullScreenImage:nil];
+            }
         }
+            break;
+        case STPhotoSourceTypeAsset:
+        {
+            item = [STPhotoItem itemWithAsset:photoSource.asset];
+        }
+            break;
+        case STPhotoSourceTypeImage:{
+            item = [STPhotoItem new];
+            UIImage *defaultImage = photoSource.image;
 
-    }else{
-        UIImage *defaultImage = photoSource.image;
+            NSURL *originalUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_OrigianlImage];
+            NSURL *fullscreenUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_Fullscreen];
 
-        NSURL *originalUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_OrigianlImage];
-        NSURL *fullscreenUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_Fullscreen];
+            //original
+            CGSize optimizedSizeToFit = [STApp memorySafetyRasterSize:[self previewImageSizeByType:STPhotoViewTypeDetail originalSize:defaultImage.size]];
+            [[STPhotosManager sharedManager] saveImageToUrl:[defaultImage scaleToFitSize:optimizedSizeToFit] fileUrl:fullscreenUrl quality:.8 background:NO];
 
-        //original
-        CGSize optimizedSizeToFit = [STApp memorySafetyRasterSize:[self previewImageSizeByType:STPhotoViewTypeDetail originalSize:defaultImage.size]];
-        [[STPhotosManager sharedManager] saveImageToUrl:[defaultImage scaleToFitSize:optimizedSizeToFit] fileUrl:fullscreenUrl quality:.8 background:NO];
+            //preview
+            NSURL *previewUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_PreviewImage];
+            CGSize optimizedSizeToFitForPreview = [STGIFFApp memorySafetyRasterSize:[self previewImageSizeByType:STPhotoViewTypeGridHigh originalSize:defaultImage.size]];
+            UIImage *previewImage = [defaultImage scaleToFitSize:optimizedSizeToFitForPreview];
+            [item initializePreviewImage:previewImage];
 
-        //preview
-        NSURL *previewUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_PreviewImage];
-        CGSize optimizedSizeToFitForPreview = [STGIFFApp memorySafetyRasterSize:[self previewImageSizeByType:STPhotoViewTypeGridHigh originalSize:defaultImage.size]];
-        UIImage *previewImage = [defaultImage scaleToFitSize:optimizedSizeToFitForPreview];
-        [item initializePreviewImage:previewImage];
+            [[STPhotosManager sharedManager] saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
+            [[STPhotosManager sharedManager] saveImageToUrl:defaultImage fileUrl:originalUrl quality:1.0];
 
-        [[STPhotosManager sharedManager] saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
-        [[STPhotosManager sharedManager] saveImageToUrl:defaultImage fileUrl:originalUrl quality:1.0];
-
-        item.sourceForFullResolutionFromURL = originalUrl;
-        item.sourceForFullScreenFromURL = fullscreenUrl;
-        item.sourceForPreviewFromURL = previewUrl;
-        item.metadataFromCamera = photoSource.metaData;
-        item.origin = photoSource.origin;
+            item.sourceForFullResolutionFromURL = originalUrl;
+            item.sourceForFullScreenFromURL = fullscreenUrl;
+            item.sourceForPreviewFromURL = previewUrl;
+            item.metadataFromCamera = photoSource.metaData;
+            item.origin = photoSource.origin;
+        }
+            break;
     }
+
+    //common
+    item.orientationOriginated = photoSource.orientation;
 
     [photoSource dispose];
     return item;

@@ -40,6 +40,7 @@
         NSParameterAssert(image);
         NSAssert(!orientation || image.imageOrientation==orientation.imageOrientation,@"MUST BE SAME with image.imageOrientation, orientation.imageOrientation");
 
+        _type = STPhotoSourceTypeImage;
         _image = image;
         _metaData = metaData;
         self.orientation = orientation;
@@ -48,11 +49,10 @@
 }
 
 - (instancetype)initWithResponse:(STCaptureResponse *)response {
-    self = [super init];
+    self = [self initWithImageSet:response.imageSet];
     if (self) {
         NSAssert(response.imageSet,@"STCaptureResponse's imageSet is nil");
         _image = response.imageSet.defaultImage.image;
-        _imageSet = response.imageSet;
         _origin = response.request.origin;
         _orientation = response.orientation;
         _metaData = response.metaData;
@@ -68,6 +68,8 @@
     self = [super init];
     if (self) {
         NSParameterAssert(imageSet);
+        NSAssert(imageSet.defaultImage,@"Any image was not found");
+        _type = STPhotoSourceTypeCapturedImageSet;
         _imageSet = imageSet;
     }
     return self;
@@ -76,6 +78,7 @@
 - (instancetype)initWithAsset:(PHAsset *)asset {
     self = [super init];
     if (self) {
+        _type = STPhotoSourceTypeAsset;
         _asset = asset;
     }
 

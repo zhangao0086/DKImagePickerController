@@ -42,5 +42,11 @@ typedef NS_ENUM(NSInteger, STPhotoSource) {
     STPhotoSource_count
 };
 
+typedef NS_ENUM(NSInteger, STPhotoSourceType) {
+    STPhotoSourceTypeCapturedImageSet,
+    STPhotoSourceTypeImage,
+    STPhotoSourceTypeAsset
+};
+
 @interface STPhotos : NSObject
 @end

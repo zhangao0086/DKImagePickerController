@@ -1736,8 +1736,7 @@ static SVGKFastImageView *_nophotoView;
                     STCapturedImageSet * savedAndLoadedImageSet = [[STCapturedImageStorageManager sharedManager] loadSet:uuid];
                     NSAssert(savedAndLoadedImageSet, @"write + load failed - STCapturedImageSet");
                     if(savedAndLoadedImageSet){
-                        newItemToAdd = STPhotoItem.new;
-                        newItemToAdd.sourceForCapturedImageSet = savedAndLoadedImageSet;
+                        newItemToAdd = [STPhotoItem itemWithCapturedImageSet:savedAndLoadedImageSet];
                     }
                 }else{
                     NSAssert(NO, @"saving failed - STCapturedImageSet");
@@ -1913,7 +1912,7 @@ static SVGKFastImageView *_nophotoView;
     __block NSMutableArray *_photos = [NSMutableArray array];
 
     [allPhotos enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        STPhotoItem * photoItem = [STPhotoItem itemWithSourceForAsset:obj];
+        STPhotoItem * photoItem = [STPhotoItem itemWithAsset:obj];
         photoItem.index = idx;
         [_photos addObject:photoItem];
     }];
@@ -1938,8 +1937,8 @@ static SVGKFastImageView *_nophotoView;
         dispatch_async(dispatch_get_main_queue(),^{
             //convert STCapturedImageSet -> STPhotoItem
             NSArray * loadedPhotoItems = [images mapWithIndex:^id(STCapturedImageSet * imageSet, NSInteger index) {
-                STPhotoItem *photoItem = [STPhotoItem itemWithIndex:index];
-                photoItem.sourceForCapturedImageSet = imageSet;
+                STPhotoItem *photoItem = [STPhotoItem itemWithCapturedImageSet:imageSet];
+                photoItem.index = (NSUInteger) index;
                 return photoItem;
             }];
 

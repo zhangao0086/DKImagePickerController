@@ -12,6 +12,7 @@
 
 @interface STPhotoItemSource : NSObject
 
+@property (nonatomic, readonly) STPhotoSourceType type;
 //source for image
 @property (nonatomic, readonly, nullable) UIImage * image;
 @property (nonatomic, readonly, nullable) STCapturedImageSet * imageSet;
