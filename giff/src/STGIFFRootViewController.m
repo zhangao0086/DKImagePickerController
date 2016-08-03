@@ -1,4 +1,3 @@
-#import <AssetsLibrary/AssetsLibrary.h>
 #import <GPUImage.h>
 #import <ImageIO/ImageIO.h>
 #import <BlocksKit/NSArray+BlocksKit.h>
@@ -30,8 +29,6 @@
 #import "STFilterPresenterBase.h"
 #import "STFilterManager.h"
 #import "STFilter.h"
-
-#import "giff-Swift.h"
 
 @interface STGIFFRootViewController (){
     //Device Control
@@ -74,18 +71,12 @@
 @property (assign, nonatomic) CGAffineTransform texelToPixelTransform;
 @end
 
-static ALAssetsLibrary * assetLibrary;
-
 @implementation STGIFFRootViewController
 
 - (id)init; {
     self = [super init];
     if (self) {
         _needsFaceDetectionLoop = YES;
-
-        if(!assetLibrary){
-            assetLibrary = [ALAssetsLibrary new];
-        }
     }
     return self;
 }

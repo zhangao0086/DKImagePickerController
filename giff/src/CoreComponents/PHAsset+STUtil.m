@@ -7,9 +7,45 @@
 #import "PHAsset+STUtil.h"
 #import "NSString+STUtil.h"
 #import "NSObject+STThreadUtil.h"
+#import "PHImageRequestOptions+STUtil.h"
 
 
 @implementation PHAsset (STUtil)
+
+- (UIImage *)fullResolutionImage{
+    __block UIImage * image = nil;
+    [[PHImageManager defaultManager] requestImageForAsset:self
+                                               targetSize:PHImageManagerMaximumSize
+                                              contentMode:PHImageContentModeDefault
+                                                  options:[PHImageRequestOptions fullResolutionOptions:YES]
+                                            resultHandler:^(UIImage *result, NSDictionary *info) {
+        image = result;
+    }];
+    return image;
+}
+
+- (NSData *)fullResolutionData{
+    __block NSData * data = nil;
+    [[PHImageManager defaultManager] requestImageDataForAsset:self
+                                                      options:[PHImageRequestOptions fullResolutionOptions:YES]
+                                                resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                                                    data = imageData;
+                                                }];
+
+    return data;
+}
+
+- (UIImage *)fullScreenImage{
+    __block UIImage * image = nil;
+    [[PHImageManager defaultManager] requestImageForAsset:self
+                                               targetSize:[UIScreen mainScreen].bounds.size
+                                              contentMode:PHImageContentModeAspectFit
+                                                  options:[PHImageRequestOptions fullScreenOptions:YES]
+                                            resultHandler:^(UIImage *result, NSDictionary *info) {
+                                                image = result;
+                                            }];
+    return image;
+}
 
 - (BOOL)isLivePhoto{
     return self.mediaSubtypes & PHAssetMediaSubtypePhotoLive;

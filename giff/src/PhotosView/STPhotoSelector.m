@@ -8,7 +8,6 @@
 #import "STPhotoSelector.h"
 #import "STFilterItem.h"
 #import "NSIndexPath+STIndexPathForSingleSection.h"
-#import "STAssetsLibraryManager.h"
 #import "NSObject+STThreadUtil.h"
 #import "STMainControl.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
@@ -48,7 +47,7 @@
 #import "STGIFFDisplayLayerEffectsManager.h"
 #import "STGIFFDisplayLayerEffectItem.h"
 #import "NSGIF.h"
-#import "STPhotoItem+STExporterIOGIF.h"
+#import "STPhotoItem+ExporterIOGIF.h"
 #import "STExporter+IOGIF.h"
 #import "STCapturedImage+STExporterIOGIF.h"
 
@@ -555,11 +554,11 @@ static STPhotoSelector *_instance = nil;
     [[STMainControl sharedInstance] enterEdit];
 }
 
-- (void)doExitEditAndApply:(void(^)(NSURL *))block {
+- (void)doExitEditAndApply:(void(^)(STPhotoItem *))block {
     [self doExitEditAndApplyAndType:_lastPhotoType completion:block];
 }
 
-- (void)doExitEditAndApplyAndType:(STPhotoViewType) type completion:(void(^)(NSURL *))block{
+- (void)doExitEditAndApplyAndType:(STPhotoViewType) type completion:(void(^)(STPhotoItem *))block{
     NSAssert(_previewCollector.type == STPhotoViewTypeEdit, @"should filter editor's type was 'STPhotoViewTypeFilter' before call 'doExitFilterAndSetType'");
 
     if([_previewCollector isStarted]){
@@ -575,7 +574,13 @@ static STPhotoSelector *_instance = nil;
             [[STMainControl sharedInstance] exitEdit];
 
             Weaks
-            [self exportItemToAssetLibrary:photoItem completion:block];
+            [self exportItemToAssetLibrary:photoItem completion:^(BOOL succeed) {
+                !block?:block(succeed ? photoItem : nil);
+
+                if(succeed){
+                    [Wself updateExportedStateIfNeeded:photoItem.imageId];
+                }
+            }];
 
         }
         else if(self.source == STPhotoSourceAssetLibrary){
@@ -583,7 +588,7 @@ static STPhotoSelector *_instance = nil;
             [_previewCollector apply];
 
             [self exportItemToSourceAndAdd:STPhotoSourceAssetLibrary item:photoItem completion:^(STPhotoItem *createdItem) {
-                !block?:block(createdItem.fullResolutionURL);
+                !block?:block(createdItem);
             }];
 
             Weaks
@@ -747,7 +752,7 @@ UIImageView * BlurPreviewCoverView;
     }
 }
 
-- (void)doExportAndExitEditAfterCapture:(void(^)(NSURL *url))block{
+- (void)doExportAndExitEditAfterCapture:(void(^)(STPhotoItem *item))block{
     NSAssert(_previewCollector.type == STPhotoViewTypeEditAfterCapture, @"should filter editor's type was 'STPhotoViewTypeFilter' before call 'doExitFilterAndSetType'");
 
     if([_previewCollector isStarted]){
@@ -760,7 +765,7 @@ UIImageView * BlurPreviewCoverView;
             Strongs
             [Sself->_previewCollector.targetPhotoItem clearCurrentEditedAndReloadPreviewImage];
             Sself->_previewCollector.targetPhotoItem = nil;
-            !block?:block(createdItem.fullResolutionURL);
+            !block?:block(createdItem);
         }];
 
         self.putItemCompletedCallback = ^{
@@ -930,8 +935,8 @@ UIImageView * BlurPreviewCoverView;
     }else if(type == STPhotoViewTypeEdit){
         [self setTouchInsidePolicy:STUIViewTouchInsidePolicyContentInside];
 
-        _previewCollector.previewView.visible = YES;
-        [_previewCollector start:type];
+        _previewCollector.previewView.visible = NO;
+//        [_previewCollector start:type];
 
         self.gridView.animatableVisible = NO;
 
@@ -944,8 +949,8 @@ UIImageView * BlurPreviewCoverView;
     }else if(type == STPhotoViewTypeEditAfterCapture){
         [self setTouchInsidePolicy:STUIViewTouchInsidePolicyContentInside];
 
-        _previewCollector.previewView.visible = NO;
-//        [_previewCollector start:type];
+        _previewCollector.previewView.visible = YES;
+        [_previewCollector start:type];
 
         self.gridView.animatableVisible = NO;
 
@@ -1192,7 +1197,7 @@ UIImageView * BlurPreviewCoverView;
         [self loadAndPutThumbnails];
 
     }else if(source==STPhotoSourceAssetLibrary){
-        [STAssetsLibraryManager resetPhotosEnumerater];
+//        [STAssetsLibraryManager resetPhotosEnumerater];
 
         [self loadAndPutThumbnails];
     }else if(source==STPhotoSourceCapturedImageStorage){
@@ -1324,7 +1329,7 @@ static BOOL _lockedRegisteredChangeObserver;
 }
 
 - (BOOL)isCurrentTypePhotoAndHasMoreAppendingPhotos; {
-    return [self isCurrentTypePhoto] && [[STPhotoSelector sharedInstance] source] == STPhotoSourceAssetLibrary && [STAssetsLibraryManager hasNextPhotos];
+    return [self isCurrentTypePhoto] && [[STPhotoSelector sharedInstance] source] == STPhotoSourceAssetLibrary && NO/*[STAssetsLibraryManager hasNextPhotos]*/;
 }
 
 #pragma mark Thumbnail and Image putting
@@ -1627,41 +1632,44 @@ static SVGKFastImageView *_nophotoView;
     switch(source){
         case STPhotoSourceAssetLibrary:
         {
-            [self _writeToAssetLibrary:photoSource completion:^(NSURL *url) {
-                if(!url){
+            [self _writeToAssetLibrary:photoSource completion:^(BOOL succeed) {
+                if(!succeed){
                     !block?:block(nil);
                     return;
                 }
                 //to save current photo origin
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                [[STAssetsLibraryManager sharedManager] assetForURL:url resultBlock:^(ALAsset *asset) {
-                    [Wself st_runAsMainQueueAsyncWithoutDeadlocking:^{
-                        Strongs
-                        STPhotoItem *item = [[STPhotoItem alloc] init];
-                        item.sourceForALAsset = asset;
-                        //[item loadPreviewImage];
-
-                        if(photoSource.metaData && [photoSource.metaData count]>0){
-                            item.metadataFromCamera = photoSource.metaData;
-                        }
-                        item.origin = photoSource.origin;
-                        [Sself _putPhotoItemsFromAssetLibrary:@[item] addToLast:NO];
-
-                        [photoSource dispose];
-
-                        if(block){
-                            block(item);
-                        }
-
-                        [[NSNotificationCenter get] st_postNotificationName:STNotificationPhotosDidLocalSaved];
-                    }];
-                } failureBlock:^(NSError *error) {
-                    if(block){
-                        block(nil);
-                    }
-                }];
+                //FIXME: STPhotoItem 생성
+//                [[STAssetsLibraryManager sharedManager] assetForURL:url resultBlock:^(ALAsset *asset) {
+//                    [Wself st_runAsMainQueueAsyncWithoutDeadlocking:^{
+//                        Strongs
+//                        STPhotoItem *item = [[STPhotoItem alloc] init];
+//                        item.sourceForALAsset = asset;
+//                        //[item loadPreviewImage];
+//
+//                        if(photoSource.metaData && [photoSource.metaData count]>0){
+//                            item.metadataFromCamera = photoSource.metaData;
+//                        }
+//                        item.origin = photoSource.origin;
+//                        [Sself _putPhotoItemsFromAssetLibrary:@[item] addToLast:NO];
+//
+//                        [photoSource dispose];
+//
+//                        if(block){
+//                            block(item);
+//                        }
+//
+//                        [[NSNotificationCenter get] st_postNotificationName:STNotificationPhotosDidLocalSaved];
+//                    }];
+//                } failureBlock:^(NSError *error) {
+//                    if(block){
+//                        block(nil);
+//                    }
+//                }];
 #pragma clang diagnostic pop
+
             }];
 
         }
@@ -1737,23 +1745,20 @@ static SVGKFastImageView *_nophotoView;
                 [photoSource.imageSet reindexingDefaultImage];
 
                 if([[STCapturedImageStorageManager sharedManager] saveSet:photoSource.imageSet]){
-                    newItemToAdd = STPhotoItem.new;
-                    newItemToAdd.sourceForCapturedImageSet = photoSource.imageSet;
-#if DEBUG
                     STCapturedImageSet * savedAndLoadedImageSet = [[STCapturedImageStorageManager sharedManager] loadSet:uuid];
-                    NSAssert(savedAndLoadedImageSet, @"load failed - STCapturedImageSet");
-#endif
+                    NSAssert(savedAndLoadedImageSet, @"write + load failed - STCapturedImageSet");
+                    if(savedAndLoadedImageSet){
+                        newItemToAdd = STPhotoItem.new;
+                        newItemToAdd.sourceForCapturedImageSet = savedAndLoadedImageSet;
+                    }
                 }else{
                     NSAssert(NO, @"saving failed - STCapturedImageSet");
                 }
 
                 dispatch_async(dispatch_get_main_queue(), ^{
-
-                    if(newItemToAdd){
-                        [Wself _putPhotoItemsFromCapturedImageStorage:@[newItemToAdd] addToLast:NO];
-                    }
-
                     [photoSource dispose];
+
+                    [Wself _putPhotoItemsFromCapturedImageStorage:@[newItemToAdd] addToLast:NO];
 
                     !block ?: block(newItemToAdd);
 
@@ -1835,15 +1840,10 @@ static SVGKFastImageView *_nophotoView;
     [self lockOnceObservingPhotoLibraryChange];
 
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        NSMutableArray *deleteTargetALAssetUrls = [NSMutableArray array];
-        for(STPhotoItem * photoItem in photoItems){
-            id value = [[photoItem sourceForALAsset] valueForProperty:ALAssetPropertyAssetURL];
-            if(value && ![value isEqual:[NSNull null]]){
-                [deleteTargetALAssetUrls addObject:value];
-            }
-        }
-        PHFetchResult * fecthResult = [PHAsset fetchAssetsWithALAssetURLs:deleteTargetALAssetUrls options:nil];
-        [PHAssetChangeRequest deleteAssets:fecthResult];
+
+        [PHAssetChangeRequest deleteAssets:[photoItems mapWithIndex:^id(STPhotoItem * photoItem, NSInteger index) {
+            return photoItem.sourceForAsset;
+        }]];
 
     } completionHandler:^(BOOL success, NSError *error) {
         [Wself st_runAsMainQueueAsync:^{
@@ -1860,7 +1860,7 @@ static SVGKFastImageView *_nophotoView;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-- (void)_writeToAssetLibrary:(STPhotoItemSource *)photo completion:(void(^)(NSURL *))block;{
+- (void)_writeToAssetLibrary:(STPhotoItemSource *)photo completion:(void(^)(BOOL))block;{
 
     Weaks
 //    if([STApp osVersion].majorVersion>=9){
@@ -1893,22 +1893,23 @@ static SVGKFastImageView *_nophotoView;
             }
 
             [Wself st_runAsMainQueueAsync:^{
-                !block ?: block(photo.imageSet.defaultImage.imageUrl);
+                !block ?: block(!!photo.imageSet.defaultImage.imageUrl);
             }];
 
         }else{
 
             //legacy
-            [[STAssetsLibraryManager sharedManager] writeImageToSavedPhotosAlbum:photo.image.CGImage metadata:photo.metaData completionBlock:^(NSURL *assetURL, NSError *error) {
-                if (error) {
-                    NSLog(@"ERROR: the image failed to be written");
-                }else {
-                    oo(([NSString stringWithFormat:@"PHOTO SAVED - assetURL: %@", assetURL]));
-                }
-                [Wself st_runAsMainQueueAsync:^{
-                    !block?:block(error ? nil : assetURL);
-                }];
-            }];
+            //TODO: metadata를 함께 저장해야함.
+//            [[STAssetsLibraryManager sharedManager] writeImageToSavedPhotosAlbum:photo.image.CGImage metadata:photo.metaData completionBlock:^(NSURL *assetURL, NSError *error) {
+//                if (error) {
+//                    NSLog(@"ERROR: the image failed to be written");
+//                }else {
+//                    oo(([NSString stringWithFormat:@"PHOTO SAVED - assetURL: %@", assetURL]));
+//                }
+//                [Wself st_runAsMainQueueAsync:^{
+//                    !block?:block(!!assetURL);
+//                }];
+//            }];
         }
 
     }
@@ -1916,35 +1917,33 @@ static SVGKFastImageView *_nophotoView;
 #pragma clang diagnostic pop
 
 - (void)_loadAndAddThumbnailsFromAssetLibrary; {
-    WeakSelf weakSelf = self;
+    PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
+    allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+    allPhotosOptions.fetchLimit = 50;
+    PHFetchResult *allPhotos = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
+
     __block NSMutableArray *_photos = [NSMutableArray array];
 
-    [STAssetsLibraryManager enumerateNextGroupSavedPhotos:^(ALAsset *result, NSUInteger index, BOOL *stop) {
-        STPhotoItem *photoItem = [[STPhotoItem alloc] init];
-        photoItem.sourceForALAsset = result;
+    [allPhotos enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        STPhotoItem * photoItem = [STPhotoItem itemWithSourceForAsset:obj];
+        photoItem.index = idx;
         [_photos addObject:photoItem];
-
-    } completion:^{
-
-        [weakSelf st_runAsMainQueueAsync:^{
-            [weakSelf _putPhotoItemsFromAssetLibrary:_photos addToLast:YES];
-
-            [[NSNotificationCenter get] postNotificationName:STNotificationPhotosDidLoaded object:@(STPhotoSourceAssetLibrary)];
-
-            [[STElieStatusBar sharedInstance] stopProgress];
-
-            _photos = nil;
-        }];
-
     }];
+
+    [self _putPhotoItemsFromAssetLibrary:_photos addToLast:YES];
+
+    [[NSNotificationCenter get] postNotificationName:STNotificationPhotosDidLoaded object:@(STPhotoSourceAssetLibrary)];
+
+    [[STElieStatusBar sharedInstance] stopProgress];
+
+    _photos = nil;
 }
 
 #pragma mark STPhotoSourceCapturedImageStorage
 
 - (void)_loadAndAddThumbnailsFromCapturedImageStorage{
     dispatch_async([STQueueManager sharedQueue].readingIO, ^{
-        NSArray<STCapturedImageSet *> * images = [[STCapturedImageStorageManager sharedManager] loadAllSets];
-        images = [[[images copy] mapWithIndex:^id(RLMCapturedImageSet *imageSet, NSInteger index) {
+        NSArray<STCapturedImageSet *> * images = [[[[STCapturedImageStorageManager sharedManager] loadAllSets] mapWithIndex:^id(RLMCapturedImageSet *imageSet, NSInteger index) {
             return [imageSet fetchImageSet];
         }] reverse];
 
@@ -2236,7 +2235,7 @@ static SVGKFastImageView *_nophotoView;
             item.currentFilterItem = nil;
             [item loadPreviewImage];
 
-            [Wself updateExportedStateIfNeeded:[createdItem fullResolutionURL]];
+            [Wself updateExportedStateIfNeeded:[createdItem imageId]];
         }
 
         !block?:block(createdItem);
@@ -2246,7 +2245,7 @@ static SVGKFastImageView *_nophotoView;
     [self _writeAndAdd:source image:imageSource completion:completionBlock];
 }
 
-- (void)exportItemToAssetLibrary:(STPhotoItem *)item completion:(void(^)(NSURL *))block {
+- (void)exportItemToAssetLibrary:(STPhotoItem *)item completion:(void(^)(BOOL))block {
     Weaks
 
     [[STElieStatusBar sharedInstance] startProgress:nil];
@@ -2255,53 +2254,37 @@ static SVGKFastImageView *_nophotoView;
     dispatch_async([STQueueManager sharedQueue].writingIOHigh, ^{
         STPhotoItemSource * photoItemSource = [STExporter createPhotoItemSourceToExport:item];
         
-        [Wself _writeToAssetLibrary:photoItemSource completion:^(NSURL *_url) {
+        [Wself _writeToAssetLibrary:photoItemSource completion:^(BOOL succeed) {
             Strongs
             [[STElieStatusBar sharedInstance] stopProgress];
 
-            [Sself updateExportedStateIfNeeded:_url];
-
-            !block?:block(_url);
+            !block?:block(succeed);
         }];
     });
 }
 
-static BOOL test = NO;
-- (void)exportItemsToAssetLibrary:(NSArray *)photoItems blockForAllFinished:(void(^)(NSArray *))block {
-    //check photos permission
-    if(!STPermissionManager.photos.isAuthorized){
-        NSArray * targetPhotoItems = [photoItems copy];
-        [STPermissionManager.photos promptOrStatusIfNeeded:^(STPermissionStatus _status) {
-            if (_status == STPermissionStatusAuthorized) {
-                [self exportItemsToAssetLibrary:targetPhotoItems blockForAllFinished:block];
-
-            }else{
-                [STApp logUnique:@"PhotosPermissionUserDenied"];
-                !block?:block(nil);
-            }
-        }];
-        return;
-    }
-
+- (void)exportItemsToAssetLibrary:(NSArray *)photoItems blockForAllFinished:(void(^)(NSArray<STPhotoItem *> *))block {
     __block NSUInteger progressCount = 0;
-    __block NSMutableArray * succeedUrls = [NSMutableArray array];
+    __block NSMutableArray<STPhotoItem *> * succeedItems = [NSMutableArray array];
 
     for(STPhotoItem * photoItem in photoItems){
         Weaks
-        [self exportItemToAssetLibrary:photoItem completion:^(NSURL *url) {
+        [self exportItemToAssetLibrary:photoItem completion:^(BOOL succeed) {
             progressCount++;
             NSAssert(progressCount <= photoItems.count, @"doExportAllCurrentSelectedToPhotoLibrary : must export target's count and finished count are same.");
 
-            if (url) {
-                [succeedUrls addObject:url];
+            if (succeed) {
+                [succeedItems addObject:photoItem];
+
+                [Wself updateExportedStateIfNeeded:photoItem.imageId];
             }
 
             if (progressCount == photoItems.count) {
 
                 if (block) {
-                    block(succeedUrls);
+                    block(succeedItems);
                 }
-                succeedUrls = nil;
+                succeedItems = nil;
 
                 // all complete
             }
@@ -2315,28 +2298,28 @@ static BOOL test = NO;
 //FIXME: SaveToLocal + Room Export 의 경우, 성공이 아니더라도 뱃지 카운트가 중가한다.
 //FIXME: (Export상태와 연동이 되지 않는다.추후 사진 저장부분을 Export에 통합)
 
-- (void)updateExportedStateIfNeeded:(NSURL *)assetUrl{
-    NSParameterAssert(assetUrl);
-    if(!assetUrl){
+- (void)updateExportedStateIfNeeded:(NSString *)imageIdentifier{
+    NSParameterAssert(imageIdentifier);
+    if(!imageIdentifier){
         return;
     }
 
     if(STPhotoSourceRoom==self.source){
-        [[STGIFFAppSetting get] savePhotosOrigin:assetUrl origin:STPhotoItemOriginExportedFromRoom];
+        [STPhotoItem savePhotosOrigin:imageIdentifier origin:STPhotoItemOriginExportedFromRoom];
         [[STMainControl sharedInstance].subControl incrementBadgeNumberToRight:STControlDisplayModeHome];
     }
 }
 
 - (void)loadExportedStateIfNeededWhenChangedSource {
     if(STPhotoSourceRoom==self.source){
-        NSArray * photoUrls = [[STGIFFAppSetting get] photoUrlsByOrigin:STPhotoItemOriginExportedFromRoom];
+        NSArray * photoUrls = [STPhotoItem photoIdentifiersByOrigin:STPhotoItemOriginExportedFromRoom];
         if(photoUrls.count){
             [[STMainControl sharedInstance].subControl setBadgeToRight:[@(photoUrls.count) stringValue] mode:STControlDisplayModeHome];
         }
 
     }else if(STPhotoSourceAssetLibrary==self.source){
         [[STMainControl sharedInstance].subControl resetBadgeNumberToRight];
-        [[STGIFFAppSetting get] clearPhotosOrigins];
+        [STPhotoItem clearPhotosOrigins];
     }
 }
 

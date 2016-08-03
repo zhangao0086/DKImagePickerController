@@ -39,9 +39,6 @@ typedef NS_ENUM(NSInteger, STApplicationMode) {
 #define kSTImageFilePrefix_TempToEdit_Fullscreen @"elie_editimg_f"
 #define kSTImageFilePrefix_TempToEdit_PreviewImage @"elie_editimg_p"
 
-#define kSTImageFilePrefix_TempToShare_OriginalImage @"elie_tmpimg_share"
-#define kSTImageFilePrefix_TempToALAsset_OriginalImage @"elie_tmpimg_alasset"
-
 #define MAX_ALLOWED_EXPORT_COUNT 20
 
 /*

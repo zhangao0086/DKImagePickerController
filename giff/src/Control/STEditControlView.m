@@ -17,7 +17,7 @@
 #import "STElieStatusBar.h"
 #import "STApp+Logger.h"
 #import "STExporter+IOGIF.h"
-#import "STPhotoItem+STExporterIOGIF.h"
+#import "STPhotoItem+ExporterIOGIF.h"
 #import "NSArray+STUtil.h"
 
 

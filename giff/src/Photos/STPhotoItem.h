@@ -11,7 +11,6 @@
 #import "STElieCamera.h"
 
 @class STFilterItem;
-@class ALAsset;
 @class STEditorResult;
 @class STEditorCommand;
 @class STOrientationItem;
@@ -29,9 +28,7 @@
 @property (nonatomic, assign) NSUInteger assigningIndexFromCapturedImageSet;
 //photos
 @property (nonatomic, readonly) PHAsset *sourceForAsset;
-@property (nonatomic, readwrite) ALAsset *sourceForALAsset;
-@property (nonatomic, readonly) NSURL *fullResolutionURL;
-
+//common properties
 @property (nonatomic, readonly) UIImage *previewImage;
 @property (nonatomic, readonly) CGSize pixelSizeOfPreviewImage;
 @property (nonatomic, readonly) NSString *imageId;
@@ -57,6 +54,10 @@
 
 @property (nonatomic, assign) BOOL needsEnhance;
 
+- (instancetype)initWithSourceForAsset:(PHAsset *)sourceForAsset;
+
++ (instancetype)itemWithSourceForAsset:(PHAsset *)sourceForAsset;
+
 + (PHAssetResourceType)primaryAssetResourceTypeByPhotoItem:(STPhotoItem *)photoItem;
 
 - (PHAssetMediaSubtype)mediaSubtypesForAsset;
@@ -78,6 +79,14 @@
 + (UIImage *)createBlankImage:(CGSize)size;
 
 + (STPhotoItemOrigin)originFromCameraMode:(STCameraMode)mode;
+
++ (void)savePhotosOrigin:(NSString *)identifier origin:(STPhotoItemOrigin)origin;
+
++ (STPhotoItemOrigin)photosOrigin:(NSString *)identifier;
+
++ (NSArray *)photoIdentifiersByOrigin:(STPhotoItemOrigin)origin;
+
++ (void)clearPhotosOrigins;
 
 - (void)initializePreviewImage:(UIImage *)image;
 

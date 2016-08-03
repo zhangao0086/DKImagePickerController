@@ -3,14 +3,14 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STPhotoItem+STExporterIOGIF.h"
+#import "STPhotoItem+ExporterIOGIF.h"
 #import "NSGIF.h"
 #import "BlocksKit.h"
-#import "STPhotoItem+STExporterIO.h"
+#import "STPhotoItem+ExporterIO.h"
 
 NSString * const STPhotoItemsGIFsFileNamePrefix = @"com_stells_exported_gif_";
 
-@implementation STPhotoItem (STExporterIOGIF)
+@implementation STPhotoItem (ExporterIOGIF)
 
 - (BOOL)isExportedTempFileGIF{
     return self.exportedTempFileURL && [self.exportedTempFileURL.lastPathComponent hasPrefix:STPhotoItemsGIFsFileNamePrefix];

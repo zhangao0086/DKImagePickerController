@@ -10,7 +10,7 @@ extern NSString * const STPhotoItemsGIFsFileNamePrefix;
 
 @class NSGIFRequest;
 
-@interface STPhotoItem (STExporterIOGIF)
+@interface STPhotoItem (ExporterIOGIF)
 @property (nonatomic, readwrite, nullable) NSGIFRequest *exportGIFRequest;
 + (NSURL *)exportingTempFileGIF:(NSURL *)originalURL extension:(NSString *)extension;
 - (BOOL)isExportedTempFileGIF;

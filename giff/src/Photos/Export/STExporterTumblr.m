@@ -17,12 +17,12 @@
 #import "R.h"
 #import "UIAlertController+STGIFFApp.h"
 #import "STPhotoItem.h"
-#import "STPhotoItem+STExporterIO.h"
+#import "STPhotoItem+ExporterIO.h"
 #import "NSURL+STUtil.h"
 #import "STExporter+View.h"
 #import "JXHTTPOperation+Convenience.h"
 #import "NSObject+STThreadUtil.h"
-#import "STPhotoItem+STExporterIOGIF.h"
+#import "STPhotoItem+ExporterIOGIF.h"
 
 /*
  * info

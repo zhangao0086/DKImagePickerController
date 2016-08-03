@@ -7,6 +7,12 @@
 #import <Photos/Photos.h>
 
 @interface PHAsset (STUtil)
+- (UIImage *)fullResolutionImage;
+
+- (NSData *)fullResolutionData;
+
+- (UIImage *)fullScreenImage;
+
 - (BOOL)isLivePhoto;
 
 - (BOOL)exportLivePhotoVideoFile:(void (^)(NSURL *tempFileURL))block;

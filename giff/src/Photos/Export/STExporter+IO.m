@@ -14,10 +14,10 @@
 #import "STPhotoItemSource.h"
 #import "STQueueManager.h"
 #import "NSGIF.h"
-#import "STPhotoItem+STExporterIO.h"
+#import "STPhotoItem+ExporterIO.h"
 #import "STCapturedImageSet.h"
 #import "STExporter+ConfigGIF.h"
-#import "STPhotoItem+STExporterIOGIF.h"
+#import "STPhotoItem+ExporterIOGIF.h"
 #import "STCapturedImage.h"
 
 @implementation STExporter (IO)

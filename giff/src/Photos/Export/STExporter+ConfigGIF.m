@@ -8,7 +8,7 @@
 #import "BlocksKit.h"
 #import "NSGIF.h"
 #import "NSString+STUtil.h"
-#import "STPhotoItem+STExporterIOGIF.h"
+#import "STPhotoItem+ExporterIOGIF.h"
 
 @implementation STExporter (ConfigGIF)
 

@@ -6,7 +6,6 @@
 #import "STPreviewPresenterAnimatableImage.h"
 #import "STFilterGroupItem.h"
 #import "STFilterPresenterItemView.h"
-#import "NSData+STGIFUtil.h"
 #import "NSArray+STUtil.h"
 #import "FLAnimatedImageView.h"
 #import "FLAnimatedImage.h"
@@ -112,8 +111,7 @@ static NSString * const GIFImageViewTagName = @"GIFImageViewTagName";
 - (void)presentView:(STFilterPresenterItemView *)targetView filter:(STFilterItem *)filter carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reused:(BOOL)reusing; {
     @autoreleasepool {
         if(!_sourceImageData){
-//            _sourceImageData = [[FLAnimatedImage alloc] initWithAnimatedGIFData:[NSData dataWithContentsOfFile:self.organizer.targetPhotoItem.fullResolutionURL.path options:NSDataReadingUncached error:NULL] optimalFrameCacheSize:10000 predrawingEnabled:YES];
-            _sourceImageData = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfFile:self.organizer.targetPhotoItem.fullResolutionURL.path options:NSDataReadingUncached error:NULL]];
+            _sourceImageData = [FLAnimatedImage animatedImageWithGIFData:[self.organizer.targetPhotoItem loadFullResolutionData]];
         }
         ((FLAnimatedImageView *)[targetView viewWithTagName:GIFImageViewTagName]).animatedImage = _sourceImageData;
     }

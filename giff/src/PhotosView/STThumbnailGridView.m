@@ -274,7 +274,7 @@ static CGFloat const QuickPreviewDecoBaseGap = 20;
 
 - (void)attachQuickPreviewViewContent:(STPhotoItem *)photoItem view:(STMotionScrollView *)view{
     //set media
-    if(photoItem.sourceForALAsset && (photoItem.mediaSubtypesForAsset & PHAssetMediaSubtypePhotoLive) && [self quickPreviewLivePhotoViewOrNil]){
+    if(photoItem.sourceForAsset && (photoItem.mediaSubtypesForAsset & PHAssetMediaSubtypePhotoLive) && [self quickPreviewLivePhotoViewOrNil]){
         STMotionScrollLivePhotoView * scrollView = [self quickPreviewLivePhotoViewOrNil];
         if(!scrollView){
             return;

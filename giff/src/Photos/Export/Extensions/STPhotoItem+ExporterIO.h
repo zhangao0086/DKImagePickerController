@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "STPhotoItem.h"
 
-@interface STPhotoItem (STExporterIO)
+@interface STPhotoItem (ExporterIO)
 @property (nonatomic, assign) BOOL exporting;
 @property (nonatomic, assign) BOOL exportAsOnlyDefaultImageOfImageSet;
 @property (nonatomic, readwrite, nullable) NSURL *exportedTempFileURL;

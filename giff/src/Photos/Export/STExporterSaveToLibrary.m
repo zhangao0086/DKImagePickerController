@@ -22,14 +22,14 @@
     _orientedSource = [STPhotoSelector sharedInstance].source;
 
     if(type==STPhotoViewTypeEdit){
-        [[STPhotoSelector sharedInstance] doExitEditAndApply:^(NSURL *url) {
-            [self dispatchFinshed: url ? STExportResultSucceed : STExportResultFailed];
+        [[STPhotoSelector sharedInstance] doExitEditAndApply:^(STPhotoItem *item) {
+            [self dispatchFinshed: item ? STExportResultSucceed : STExportResultFailed];
         }];
         return YES;
     }
     else if(type==STPhotoViewTypeEditAfterCapture){
-        [[STPhotoSelector sharedInstance] doExportAndExitEditAfterCapture:^(NSURL *url) {
-            [self dispatchFinshed: url ? STExportResultSucceed : STExportResultFailed];
+        [[STPhotoSelector sharedInstance] doExportAndExitEditAfterCapture:^(STPhotoItem *item) {
+            [self dispatchFinshed: item ? STExportResultSucceed : STExportResultFailed];
         }];
         return YES;
     }

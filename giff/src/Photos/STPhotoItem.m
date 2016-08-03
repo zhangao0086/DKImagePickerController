@@ -3,24 +3,21 @@
 // Copyright (c) 2014 Eliecam. All rights reserved.
 //
 
-#import <AssetsLibrary/AssetsLibrary.h>
 #import <BlocksKit/NSArray+BlocksKit.h>
 #import "STPhotoItem.h"
-#import "ALAsset+STALAsset.h"
 #import "STFilter.h"
 #import "UIImage+STUtil.h"
 #import "STEditorResult.h"
 #import "STEditorCommand.h"
 #import "STExporter.h"
 #import "STExporter+IO.h"
-#import "STGIFFAppSetting.h"
 #import "NSObject+STUtil.h"
 #import "NSString+STUtil.h"
 #import "NSArray+STUtil.h"
 #import "STCapturedImage.h"
 #import "STCapturedImageSet.h"
 #import "STCapturedImageSetProtected.h"
-#import "SDImageCache.h"
+#import "PHAsset+STUtil.h"
 
 @implementation STPhotoItem {
     GPUImagePicture * _imageAsGPUImagePicture;
@@ -31,25 +28,17 @@
 }
 
 #pragma mark Source
-- (PHAsset *)sourceForAsset{
-    if(!_sourceForAsset && _sourceForALAsset){
-        
-        //TODO: 여기가 ALAsset과 종속되는 출발점
-        //https://fabric.io/jessi/ios/apps/com.stells.eliew/issues/56e5bb24ffcdc04250ce9b04
-        id assetURL = [_sourceForALAsset valueForProperty:ALAssetPropertyAssetURL];
-        if(assetURL){
-            PHFetchResult * result = [PHAsset fetchAssetsWithALAssetURLs:@[assetURL] options:nil];
-            if(result.count==1){
-                _sourceForAsset = ((PHAsset *)result.firstObject);
-            }
-        }
+- (instancetype)initWithSourceForAsset:(PHAsset *)sourceForAsset{
+    self = [super init];
+    if (self) {
+        _sourceForAsset = sourceForAsset;
+        _lastTouchedDate = _sourceForAsset.modificationDate;
     }
-    return _sourceForAsset;
+    return self;
 }
 
-- (void)setSourceForALAsset:(ALAsset *)sourceForALAsset {
-    _sourceForALAsset = sourceForALAsset;
-    _lastTouchedDate = [_sourceForALAsset valueForProperty:ALAssetPropertyDate];
++ (instancetype)itemWithSourceForAsset:(PHAsset *)sourceForAsset {
+    return [[self alloc] initWithSourceForAsset:sourceForAsset];
 }
 
 - (void)setSourceForPreviewFromURL:(NSURL *)sourceForPreviewFromURL {
@@ -58,20 +47,6 @@
     @try {
         _lastTouchedDate = [[[NSFileManager defaultManager] attributesOfItemAtPath:[_sourceForPreviewFromURL path] error:nil] fileModificationDate];
     }@finally {}
-}
-
-- (NSURL *)fullResolutionURL; {
-    if(_sourceForALAsset){
-        NSURL * url = _sourceForALAsset.defaultRepresentation.url;
-        return url;
-
-    }else if(_sourceForFullResolutionFromURL){
-        return _sourceForFullResolutionFromURL;
-
-    }else if(_sourceForCapturedImageSet){
-        return _sourceForCapturedImageSet.defaultImage.NSURL;
-    }
-    return nil;
 }
 
 #pragma mark CapturedImageStorage
@@ -132,10 +107,20 @@
             return [Wself.class createBlankImage:CGSizeByScale([STElieCamera.sharedInstance outputScreenSize], .5)];
         }];
 
-    }else if(self.sourceForALAsset){
-        //TODO: 사이즈 별로 다른 크기의 이미지를 얻어야한다.
-//        loadedImage = [_sourceFromAsset imageByMaxSizedScreenScale:[@(CGSizeMaxSide(_presentedSize)) unsignedIntegerValue]];
-        loadedImage = [UIImage imageWithCGImage:_sourceForALAsset.aspectRatioThumbnail];
+    }else if(self.sourceForAsset){
+        PHImageRequestOptions * options = [PHImageRequestOptions alloc];
+//        options.resizeMode = PHImageRequestOptionsResizeModeFast;
+        options.synchronous = YES;
+
+        __block UIImage * resultImage = nil;
+        [[PHImageManager defaultManager] requestImageForAsset:self.sourceForAsset
+                                                   targetSize:CGSizeByScale([UIScreen mainScreen].bounds.size, .5)
+                                                  contentMode:PHImageContentModeAspectFit
+                                                      options:options
+                                                resultHandler:^(UIImage *result, NSDictionary *info) {
+            resultImage = result;
+        }];
+        loadedImage = resultImage;
 
     }else if(self.sourceForPreviewFromURL){
         loadedImage = [UIImage imageWithContentsOfFile:self.sourceForPreviewFromURL.path];
@@ -143,8 +128,9 @@
     }else if(self.sourceForCapturedImageSet){
         if([self.sourceForCapturedImageSet defaultImage].thumbnailUrl){
             loadedImage = [UIImage imageWithContentsOfFile:[self.sourceForCapturedImageSet defaultImage].thumbnailUrl.path];
-        }else{
-            loadedImage = [self loadFullScreenImage];
+        }
+        if(!loadedImage){
+            loadedImage = [self.sourceForCapturedImageSet.defaultImage UIImage];
         }
     }
 
@@ -154,36 +140,28 @@
 
 - (UIImage *)loadFullScreenImage {
     UIImage * fullscreenImage = nil;
-    if(self.sourceForAsset){
+    if(_sourceForAsset){
 
-        if([STGIFFApp isCurrentScreenScaleMemorySafe]){
-            fullscreenImage = [UIImage imageWithCGImage:_sourceForALAsset.defaultRepresentation.fullScreenImage];
+        if([STApp isCurrentScreenScaleMemorySafe]){
+            fullscreenImage = [_sourceForAsset fullScreenImage];
 
         }else{
             CGSize fullScreenImageSize = CGSizeMakeToFitScreenAsRasterByMinScale(
                     self.sourceForAsset.pixelWidth,
                     self.sourceForAsset.pixelHeight,
                     TwiceMaxScreenScale(),
-                    ![STGIFFApp isCurrentScreenScaleMemorySafe]
+                    ![STApp isCurrentScreenScaleMemorySafe]
             );
 
-            if(self.origin == STPhotoItemOriginAssetVideo){
-                //new way to fetch fullscreen : image (considering to update)
-
-                //FIXME : possible to fire a crash when apply a filter. if stability of image filter processing is higher than now, appliy this.
-                PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
-                options.resizeMode = PHImageRequestOptionsResizeModeFast;
-                options.synchronous = YES;
-                __block UIImage * resultImage = nil;
-                [[PHImageManager defaultManager] requestImageForAsset:self.sourceForAsset targetSize:fullScreenImageSize contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage *result, NSDictionary *info) {
-                    resultImage = result;
-                }];
-                fullscreenImage = resultImage;
-
-            }else{
-                //use legacy
-                fullscreenImage = [_sourceForALAsset imageBySized:CGSizeMaxSide(fullScreenImageSize)];
-            }
+            //FIXME : possible to fire a crash when apply a filter. if stability of image filter processing is higher than now, appliy this.
+            PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
+            options.resizeMode = PHImageRequestOptionsResizeModeFast;
+            options.synchronous = YES;
+            __block UIImage * resultImage = nil;
+            [[PHImageManager defaultManager] requestImageForAsset:self.sourceForAsset targetSize:fullScreenImageSize contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage *result, NSDictionary *info) {
+                resultImage = result;
+            }];
+            fullscreenImage = resultImage;
         }
     }else if(_sourceForFullScreenFromURL){
         fullscreenImage = [UIImage imageWithContentsOfFile:_sourceForFullScreenFromURL.path];
@@ -191,19 +169,17 @@
             fullscreenImage = self.previewImage;
         }
     }else if(_sourceForCapturedImageSet){
-
-        if([self.sourceForCapturedImageSet defaultImage].fullScreenUrl){
-            fullscreenImage = [UIImage imageWithContentsOfFile:[self.sourceForCapturedImageSet defaultImage].fullScreenUrl.path];
-        }
-        else{
-            fullscreenImage = [self.sourceForCapturedImageSet.defaultImage UIImage];
+        fullscreenImage = [self.sourceForCapturedImageSet.defaultImage UIImage];
+        if(!fullscreenImage){
+            fullscreenImage = self.previewImage;
         }
     }
+
     return fullscreenImage;
 }
 
 - (NSData *)loadFullScreenData {
-    if(_sourceForALAsset){
+    if(_sourceForAsset){
         //TODO: huh,,, fast way to full screen DATA??
         return UIImageJPEGRepresentation([self loadFullScreenImage], .8);
 
@@ -225,42 +201,30 @@
 }
 
 - (UIImage *)loadFullResolutionImage {
-    UIImage * originalImage = nil;
-
-    if(_sourceForALAsset){
-        if(self.mediaTypeForAsset == PHAssetMediaTypeVideo){
-            originalImage = [UIImage imageWithCGImage:_sourceForALAsset.defaultRepresentation.fullResolutionImage];
-        }else{
-            originalImage = [UIImage imageWithData:[self loadFullResolutionData]];
-        }
+    if(_sourceForAsset){
+        return [_sourceForAsset fullResolutionImage];
 
     }else if(_sourceForFullResolutionFromURL){
-        originalImage = [UIImage imageWithContentsOfFile:_sourceForFullResolutionFromURL.path];
+        return [UIImage imageWithContentsOfFile:_sourceForFullResolutionFromURL.path];
 
     }else if(_sourceForCapturedImageSet){
-        originalImage = _sourceForCapturedImageSet.defaultImage.UIImage;
+        return _sourceForCapturedImageSet.defaultImage.UIImage;
     }
 
-    return originalImage;
+    return nil;
 }
 
 - (NSData *)loadFullResolutionData; {
-    NSData * data = nil;
-
-    if(_sourceForALAsset){
-        if(self.mediaTypeForAsset == PHAssetMediaTypeVideo){
-            data = UIImageJPEGRepresentation(self.loadFullResolutionImage, .8);
-        }else{
-            data = _sourceForALAsset.fullResolutionData;
-        }
+    if(_sourceForAsset){
+        return [_sourceForAsset fullResolutionData];
 
     }else if(_sourceForFullResolutionFromURL){
-        data = [NSData dataWithContentsOfURL:_sourceForFullResolutionFromURL];
+        return [NSData dataWithContentsOfURL:_sourceForFullResolutionFromURL];
 
     }else if(_sourceForCapturedImageSet){
-        data = _sourceForCapturedImageSet.defaultImage.NSData;
+        return _sourceForCapturedImageSet.defaultImage.NSData;
     }
-    return data;
+    return nil;
 }
 
 #pragma mark Load/Set Preview Image
@@ -285,8 +249,7 @@
 }
 
 - (CGSize)pixelSizeOfPreviewImage {
-    if(_sourceForALAsset){
-        //TODO: 잘되는 확인
+    if(_sourceForAsset){
         if(self.sourceForAsset.pixelWidth){
             return CGSizeMake(self.sourceForAsset.pixelWidth,self.sourceForAsset.pixelHeight);
         }else{
@@ -416,9 +379,8 @@
 }
 
 - (NSString *)imageId; {
-    if(_sourceForALAsset){
-        return _sourceForALAsset.defaultRepresentation.filename;
-
+    if(_sourceForAsset){
+        return _sourceForAsset.localIdentifier;
     }else if(_sourceForPreviewFromURL){
         return [_sourceForPreviewFromURL lastPathComponent];
     }else if(_sourceForCapturedImageSet){
@@ -503,10 +465,38 @@
     }
 }
 
+NSString * const PhotosOriginPersistantKey = @"STPhotosOriginKey";
++ (void)savePhotosOrigin:(NSString *)identifier origin:(STPhotoItemOrigin)origin{
+    NSParameterAssert(identifier);
+    NSString * key = identifier;
+    if(key){
+        NSDictionary * originsDict = [[NSUserDefaults standardUserDefaults] dictionaryForKey:PhotosOriginPersistantKey];
+        NSMutableDictionary * origins = originsDict ? [originsDict mutableCopy] : [NSMutableDictionary dictionary];
+        origins[key] = @(origin);
+        [[NSUserDefaults standardUserDefaults] setValue:origins forKey:PhotosOriginPersistantKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
++ (STPhotoItemOrigin)photosOrigin:(NSString *)identifier {
+    NSDictionary * dictionary = [[NSUserDefaults standardUserDefaults] dictionaryForKey:PhotosOriginPersistantKey];
+    return dictionary && [dictionary hasKey:identifier] ? (STPhotoItemOrigin)[dictionary[identifier] integerValue] : STPhotoItemOriginUndefined;
+}
+
++ (NSArray *)photoIdentifiersByOrigin:(STPhotoItemOrigin)origin{
+    NSDictionary * dictionary = [[NSUserDefaults standardUserDefaults] dictionaryForKey:PhotosOriginPersistantKey];
+    return [dictionary allKeysForObject:@(origin)];
+}
+
++ (void)clearPhotosOrigins{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:PhotosOriginPersistantKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (STPhotoItemOrigin)origin {
     if(_origin == STPhotoItemOriginUndefined){
         // 1st : from Setting._photosOrigins
-        _origin = [[STGIFFAppSetting get] photosOrigin:[self fullResolutionURL]];
+        _origin = [self.class photosOrigin:[self imageId]];
 
         // 2nd : if it has not found, fetch from file format
         if(_origin == STPhotoItemOriginUndefined){

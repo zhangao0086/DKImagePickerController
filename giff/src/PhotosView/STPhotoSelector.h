@@ -53,9 +53,9 @@
 
 - (NSArray *)savedPreviewImageFileURLsInRoom;
 
-- (void)exportItemToAssetLibrary:(STPhotoItem *)item completion:(void (^)(NSURL *))block;
+- (void)exportItemToAssetLibrary:(STPhotoItem *)item completion:(void (^)(BOOL succeed))block;
 
-- (void)exportItemsToAssetLibrary:(NSArray *)photoItems blockForAllFinished:(void (^)(NSArray *))block;
+- (void)exportItemsToAssetLibrary:(NSArray *)photoItems blockForAllFinished:(void (^)(NSArray<STPhotoItem *> *))block;
 
 - (void)deselectAllCurrentSelected;
 
@@ -107,9 +107,9 @@
 
 - (void)doApplyTool;
 
-- (void)doExitEditAndApply:(void(^)(NSURL *))block;
+- (void)doExitEditAndApply:(void(^)(STPhotoItem *))block;
 
-- (void)doExitEditAndApplyAndType:(STPhotoViewType)type completion:(void(^)(NSURL *))block;
+- (void)doExitEditAndApplyAndType:(STPhotoViewType)type completion:(void(^)(STPhotoItem *))block;
 
 - (void)doEnterEditAfterCaptureByItem:(STPhotoItem *)item transition:(STPreviewCollectorEnterTransitionContext)context;
 
@@ -117,15 +117,9 @@
 
 - (void)doDirectlyEnterHome;
 
-- (void)doExportAndExitEditAfterCapture:(void(^)(NSURL *url))block;
+- (void)doExportAndExitEditAfterCapture:(void(^)(STPhotoItem *item))block;
 
 - (void)doExitAnimatableReviewAfterCapture;
-
-- (void)beganPullingGrid;
-
-- (void)performPullingGrid:(CGFloat)scrollViewY;
-
-- (void)cancelPullingGrid;
 
 - (void)finishPullingGrid;
 

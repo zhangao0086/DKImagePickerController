@@ -24,10 +24,10 @@
 #import "DFAnimatedImageView.h"
 #import "STQueueManager.h"
 #import "DFAnimatedImageView+Loader.h"
-#import "STPhotoItem+STExporterIO.h"
+#import "STPhotoItem+ExporterIO.h"
 #import "CALayer+STUtil.h"
 #import "STPhotoItem+UIAccessory.h"
-#import "STPhotoItem+STExporterIOGIF.h"
+#import "STPhotoItem+ExporterIOGIF.h"
 
 NSString * const RenderedImageCacheKeyPrefix = @"STExportPhotosContentView_RenderedImageCacheKeyPrefix";
 
