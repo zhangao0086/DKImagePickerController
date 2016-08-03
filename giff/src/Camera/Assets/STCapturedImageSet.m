@@ -81,6 +81,12 @@
     return [self setWithImages:[otherSet compactedImagesByLensPosition] transferByOtherSet:otherSet];
 }
 
++ (instancetype)setWithImageURLs:(NSArray<NSURL *> *)urls {
+    return [self setWithImages:[urls mapWithIndex:^id(NSURL * url, NSInteger index) {
+        return [STCapturedImage imageWithImageUrl:url];
+    }]];
+}
+
 - (NSUInteger)count {
     return _images.count;
 }

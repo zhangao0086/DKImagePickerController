@@ -182,4 +182,8 @@
     return _mimeType;
 }
 
+- (NSString *)extensionFromUTI:(CFStringRef)uti{
+    return (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
+}
+
 @end

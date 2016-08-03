@@ -108,7 +108,7 @@ PODS:
   - MustOverride (1.1)
   - NGAParallaxMotion (1.1.0)
   - NHBalancedFlowLayout (0.2)
-  - NSGIF2 (1.3.1)
+  - NSGIF2 (1.4)
   - NYXImagesKit (2.5)
   - ObjectiveSugar (1.1.0)
   - PAPreferences (0.5)
@@ -336,7 +336,7 @@ SPEC CHECKSUMS:
   MustOverride: feccf16d11e574a814a03d940b9f4d7b4a759ce0
   NGAParallaxMotion: 8772f51f75e5177840053229bbf32bf6f7687e52
   NHBalancedFlowLayout: fd253023c6754e605acdb180d50123e582cc62bb
-  NSGIF2: 77d3ebedb2632910ad4e2793845b889dc84b5058
+  NSGIF2: 9ca890fb8f85b1d9809492339f256c1309fc964e
   NYXImagesKit: d8159393e1b0c6e900574b737d42db8d7d1a0d4c
   ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
   PAPreferences: 9f0ffb1e67174a0df001af9d3320166ceb9ee6f5

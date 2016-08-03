@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger, STCapturedImageSetType) {
 
 + (instancetype)setWithCompactedImagesFrom:(STCapturedImageSet *)otherSet;
 
++ (instancetype)setWithImageURLs:(NSArray<NSURL *> *)urls;
+
 - (BOOL)reindexingDefaultImage;
 
 - (NSArray<STCapturedImage *> *)sortedImagesByCreatedTime:(BOOL)recentImageFirst;

@@ -74,4 +74,6 @@
 - (NSString *)escapeForQuery;
 
 - (NSString *)mimeTypeFromPathExtension;
+
+- (NSString *)extensionFromUTI:(CFStringRef)uti;
 @end

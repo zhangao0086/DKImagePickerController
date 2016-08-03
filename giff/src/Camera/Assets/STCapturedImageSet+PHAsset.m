@@ -7,6 +7,7 @@
 #import "STCapturedImageSet+PHAsset.h"
 #import "PHAsset+STUtil.h"
 #import "STCapturedImage.h"
+#import "NSGIF.h"
 
 
 @implementation STCapturedImageSet (PHAsset)
@@ -15,9 +16,15 @@
 + (BOOL)createFromAsset:(PHAsset *)asset completion:(void(^)(STCapturedImageSet * imageSet))block{
     NSParameterAssert(block);
 
+    NSFrameExtractingFromVideoRequest * request = [NSFrameExtractingFromVideoRequest new];
+    request.framesPerSecond = 4;
+
     if(asset.isVideo){
         [asset exportFileByResourceType:PHAssetResourceTypeVideo completion:^(NSURL *tempFileURL) {
-
+            request.destinationDirectory = tempFileURL;
+            [NSGIF extract:request completion:^(NSArray *array) {
+                block([STCapturedImageSet setWithImageURLs:array]);
+            }];
         }];
         return YES;
     }
@@ -25,7 +32,10 @@
     if(asset.mediaType==PHAssetMediaTypeImage){
         if(asset.isLivePhoto){
             [asset exportLivePhotoVideoFile:^(NSURL *tempFileURL) {
-
+                request.destinationDirectory = tempFileURL;
+                [NSGIF extract:request completion:^(NSArray *array) {
+                    block([STCapturedImageSet setWithImageURLs:array]);
+                }];
             }];
 
         }else{
@@ -40,5 +50,6 @@
     !block?:block(nil);
     return NO;
 }
+
 
 @end
