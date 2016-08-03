@@ -12,6 +12,30 @@
 
 @implementation STCapturedImageSet (PHAsset)
 
++ (void)createFromAssets:(NSArray<PHAsset *> *)assets completion:(void(^)(NSArray<STCapturedImageSet *>* imageSets))block{
+    NSParameterAssert(assets.count);
+    NSParameterAssert(block);
+
+    NSMutableArray<STCapturedImageSet *> * imageSets = [NSMutableArray<STCapturedImageSet *> array];
+    NSUInteger totalCount = assets.count;
+    for(PHAsset * asset in assets){
+        if([self createFromAsset:asset completion:^(STCapturedImageSet *imageSet) {
+            [imageSets addObject:imageSet];
+
+            if(imageSets.count==totalCount){
+                block(imageSets);
+            }
+        }]){
+            totalCount--;
+            continue;
+        }
+    }
+    
+    if(totalCount==0){
+        block(nil);
+    }
+}
+
 
 + (BOOL)createFromAsset:(PHAsset *)asset completion:(void(^)(STCapturedImageSet * imageSet))block{
     NSParameterAssert(block);
@@ -21,7 +45,7 @@
 
     if(asset.isVideo){
         [asset exportFileByResourceType:PHAssetResourceTypeVideo completion:^(NSURL *tempFileURL) {
-            request.destinationDirectory = tempFileURL;
+            request.sourceVideoFile = tempFileURL;
             [NSGIF extract:request completion:^(NSArray *array) {
                 block([STCapturedImageSet setWithImageURLs:array]);
             }];
@@ -32,7 +56,7 @@
     if(asset.mediaType==PHAssetMediaTypeImage){
         if(asset.isLivePhoto){
             [asset exportLivePhotoVideoFile:^(NSURL *tempFileURL) {
-                request.destinationDirectory = tempFileURL;
+                request.sourceVideoFile = tempFileURL;
                 [NSGIF extract:request completion:^(NSArray *array) {
                     block([STCapturedImageSet setWithImageURLs:array]);
                 }];

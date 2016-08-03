@@ -16,6 +16,11 @@
 #import "STUserActor.h"
 #import "STPhotoSelector.h"
 #import "giff-Swift.h"
+#import "STCapturedImageSet+PHAsset.h"
+#import "NSArray+STUtil.h"
+#import "STPhotoItemSource.h"
+#import "STPhotosManager.h"
+#import "PHAsset+STUtil.h"
 
 
 @implementation STCameraControlView {
@@ -111,6 +116,16 @@
         pickerController.sourceType = DKImagePickerControllerSourceTypePhoto;
 
         [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
+
+            [STCapturedImageSet createFromAssets:[assets mapWithItemsKeyPath:@"originalAsset"] completion:^(NSArray *imageSets) {
+
+                for(STCapturedImageSet * imageSet in imageSets){
+                    [[STPhotoSelector sharedInstance] doAfterCaptured:[STPhotoItemSource sourceWithImageSet:imageSet]];
+
+//                    oo([[STPhotosManager sharedManager] generatePhotoItem:[STPhotoItemSource sourceWithImageSet:imageSet]]);
+                }
+
+            }];
             NSLog(@"didSelectAssets");
         }];
 
