@@ -8,12 +8,14 @@
 @class STOrientationItem;
 @class STCaptureResponse;
 @class STCapturedImageSet;
+@class PHAsset;
 
 @interface STPhotoItemSource : NSObject
 
 //source for image
 @property (nonatomic, readonly, nullable) UIImage * image;
 @property (nonatomic, readonly, nullable) STCapturedImageSet * imageSet;
+@property (nonatomic, readonly, nullable) PHAsset * asset;
 //attr
 @property (nonatomic, readwrite, nullable) STOrientationItem * orientation;
 @property (nonatomic, assign) STPhotoItemOrigin origin;
@@ -36,5 +38,10 @@
 + (instancetype)sourceWithImage:(UIImage *)image metaData:(NSDictionary *)metaData;
 
 + (instancetype)sourceWithImage:(UIImage *)image;
+
+- (instancetype)initWithAsset:(PHAsset *)asset;
+
++ (instancetype)sourceWithAsset:(PHAsset *)asset;
+
 
 @end

@@ -2,6 +2,7 @@
 // Copyright (c) 2015 stells. All rights reserved.
 //
 
+#import <Photos/Photos.h>
 #import "STPhotoItemSource.h"
 #import "STCaptureResponse.h"
 #import "STOrientationItem.h"
@@ -71,6 +72,20 @@
     }
     return self;
 }
+
+- (instancetype)initWithAsset:(PHAsset *)asset {
+    self = [super init];
+    if (self) {
+        _asset = asset;
+    }
+
+    return self;
+}
+
++ (instancetype)sourceWithAsset:(PHAsset *)asset {
+    return [[self alloc] initWithAsset:asset];
+}
+
 
 + (instancetype)sourceWithImageSet:(STCapturedImageSet *)imageSet {
     return [[self alloc] initWithImageSet:imageSet];
