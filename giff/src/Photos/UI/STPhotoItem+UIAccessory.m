@@ -9,8 +9,6 @@
 #import "R.h"
 #import "SVGKImage+STUtil.h"
 #import "UIView+STUtil.h"
-#import "CAShapeLayer+STUtil.h"
-#import "CALayer+STUtil.h"
 #import "BlocksKit.h"
 #import "STCapturedImageSet+PostFocus.h"
 

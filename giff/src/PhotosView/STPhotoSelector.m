@@ -50,6 +50,7 @@
 #import "STPhotoItem+ExporterIOGIF.h"
 #import "STExporter+IOGIF.h"
 #import "STCapturedImage+STExporterIOGIF.h"
+#import "STPhotosManager.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -1687,11 +1688,11 @@ static SVGKFastImageView *_nophotoView;
                 UIImage * photo = photoSource.image;
                 NSDictionary * data = photoSource.metaData;
 
-                NSURL *originalUrl = [_self makeImagesSaveUrl:kSTImageFilePrefix_OrigianlImage index:index];
-                NSURL *fullscreenUrl = [_self makeImagesSaveUrl:kSTImageFilePrefix_Fullscreen index:index];
-                NSURL *previewUrl = [_self makeImagesSaveUrl:kSTImageFilePrefix_PreviewImage index:index];
+                NSURL *originalUrl = [[STPhotosManager sharedManager] makeImagesSaveUrl:kSTImageFilePrefix_OrigianlImage index:index];
+                NSURL *fullscreenUrl = [[STPhotosManager sharedManager] makeImagesSaveUrl:kSTImageFilePrefix_Fullscreen index:index];
+                NSURL *previewUrl = [[STPhotosManager sharedManager] makeImagesSaveUrl:kSTImageFilePrefix_PreviewImage index:index];
                 UIImage * previewImage = [photo scaleToFitSize:CGSizeByScale([_self previewImageSizeByType:STPhotoViewTypeGridHigh], TwiceMaxScreenScale())];
-                [_self saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
+                [[STPhotosManager sharedManager] saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
 
                 __block WeakObject(previewImage) weakPreviewImage = previewImage;
                 [_self st_runAsMainQueueAsyncWithSelf:^(id selfObject) {
@@ -1719,8 +1720,8 @@ static SVGKFastImageView *_nophotoView;
 
                     [[NSNotificationCenter get] st_postNotificationName:STNotificationPhotosDidLocalSaved];
                 }];
-                [_self saveImageToUrl:[photo scaleToFitSize:[STGIFFApp memorySafetyRasterSize:[_self previewImageSizeByType:STPhotoViewTypeDetail]]] fileUrl:fullscreenUrl quality:.8];
-                [_self saveImageToUrl:photo fileUrl:originalUrl quality:1.0];
+                [[STPhotosManager sharedManager] saveImageToUrl:[photo scaleToFitSize:[STGIFFApp memorySafetyRasterSize:[_self previewImageSizeByType:STPhotoViewTypeDetail]]] fileUrl:fullscreenUrl quality:.8];
+                [[STPhotosManager sharedManager] saveImageToUrl:photo fileUrl:originalUrl quality:1.0];
             });
 
         }
@@ -1833,7 +1834,7 @@ static SVGKFastImageView *_nophotoView;
 # pragma mark AssetLibrary's I/O Operations
 - (void)_deleteToAssetLibrary:(NSArray *)photoItems completion:(void(^)(BOOL success, NSError *error))block{
     NSParameterAssert(photoItems.count);
-    
+
     //pause observing
     Weaks
     //TODO FIXME: didBecomeActive를 홈버튼클릭 해서 온 건지 내 앱내에서 uiviewcontroller를 통해 온건지 식별하는게 가장 완벽
@@ -2009,9 +2010,9 @@ static SVGKFastImageView *_nophotoView;
     dispatch_async([STQueueManager sharedQueue].writingIO, ^{
         for(STPhotoItem * photoItem in photoItems){
             photoItem.blanked = YES;
-            [Wself deleteImageToUrl:photoItem.sourceForFullScreenFromURL];
-            [Wself deleteImageToUrl:photoItem.sourceForFullResolutionFromURL];
-            [Wself deleteImageToUrl:photoItem.sourceForPreviewFromURL];
+            [[STPhotosManager sharedManager] deleteImageToUrl:photoItem.sourceForFullScreenFromURL];
+            [[STPhotosManager sharedManager] deleteImageToUrl:photoItem.sourceForFullResolutionFromURL];
+            [[STPhotosManager sharedManager] deleteImageToUrl:photoItem.sourceForPreviewFromURL];
         }
 
         runOnMainQueueWithoutDeadlocking(^{
@@ -2026,10 +2027,10 @@ static SVGKFastImageView *_nophotoView;
 - (void)_deleteAllImageFilesInRoom:(void(^)(void))completion{
     Weaks
     dispatch_async([STQueueManager sharedQueue].writingIO, ^{
-        for(NSURL *previewUrl in [Wself savedPreviewImageFileURLsInRoom]){
-            [Wself deleteImageToUrl:[Wself makeSavedImageUrlFromOtherPreifx:previewUrl prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_OrigianlImage]];
-            [Wself deleteImageToUrl:[Wself makeSavedImageUrlFromOtherPreifx:previewUrl prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_Fullscreen]];
-            [Wself deleteImageToUrl:previewUrl];
+        for(NSURL *previewUrl in [[STPhotosManager sharedManager] savedPreviewImageFileURLsInRoom]){
+            [[STPhotosManager sharedManager] deleteImageToUrl:[[STPhotosManager sharedManager] makeSavedImageUrlFromOtherPreifx:previewUrl prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_OrigianlImage]];
+            [[STPhotosManager sharedManager] deleteImageToUrl:[[STPhotosManager sharedManager] makeSavedImageUrlFromOtherPreifx:previewUrl prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_Fullscreen]];
+            [[STPhotosManager sharedManager] deleteImageToUrl:previewUrl];
         }
         [Wself st_runAsMainQueueAsync:^{
             !completion?:completion();
@@ -2076,11 +2077,11 @@ static SVGKFastImageView *_nophotoView;
 
         UIImage *defaultImage = photoSource.image;
 
-        NSURL *originalUrl = [_self makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_OrigianlImage];
-        NSURL *fullscreenUrl = [_self makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_Fullscreen];
-        [_self saveImageToUrl:[defaultImage scaleToFitSize:[STGIFFApp memorySafetyRasterSize:[_self previewImageSizeByType:STPhotoViewTypeDetail]]] fileUrl:fullscreenUrl quality:.8 background:NO];
+        NSURL *originalUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_OrigianlImage];
+        NSURL *fullscreenUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_Fullscreen];
+        [[STPhotosManager sharedManager] saveImageToUrl:[defaultImage scaleToFitSize:[STGIFFApp memorySafetyRasterSize:[_self previewImageSizeByType:STPhotoViewTypeDetail]]] fileUrl:fullscreenUrl quality:.8 background:NO];
 
-        NSURL *previewUrl = [_self makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_PreviewImage];
+        NSURL *previewUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_PreviewImage];
         UIImage *previewImage = [defaultImage scaleToFitSize:[STGIFFApp memorySafetyRasterSize:[_self previewImageSizeByType:STPhotoViewTypeGridHigh]]];
         [item initializePreviewImage:previewImage];
 
@@ -2100,23 +2101,18 @@ static SVGKFastImageView *_nophotoView;
             }
         });
 
-        [_self saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
-        [_self saveImageToUrl:defaultImage fileUrl:originalUrl quality:1.0];
+        [[STPhotosManager sharedManager] saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
+        [[STPhotosManager sharedManager] saveImageToUrl:defaultImage fileUrl:originalUrl quality:1.0];
     });
 }
 
 - (void)_loadAndPutThumbnailsFromRoom {
-//    if([Elie isInSimulator]){
-//        [self _test_loadAndPutThumbnailsFromRoom];
-//        return;
-//    }
-
     Weaks
     dispatch_async([STQueueManager sharedQueue].readingIO, ^{
-        NSArray * savedPreviewImageFileURLs = [self savedPreviewImageFileURLsInRoom];
+        NSArray * savedPreviewImageFileURLs = [[STPhotosManager sharedManager] savedPreviewImageFileURLsInRoom];
         NSMutableDictionary * availablePreviewImageURLs = [NSMutableDictionary dictionaryWithCapacity:savedPreviewImageFileURLs.count];
         for(NSURL * url in savedPreviewImageFileURLs){
-            availablePreviewImageURLs[@([self indexFromSaveUrl:url prefix:kSTImageFilePrefix_PreviewImage])] = url;
+            availablePreviewImageURLs[@([[STPhotosManager sharedManager] indexFromSaveUrl:url prefix:kSTImageFilePrefix_PreviewImage])] = url;
         }
 
         //make photo items
@@ -2127,8 +2123,8 @@ static SVGKFastImageView *_nophotoView;
             if([availablePreviewImageURLs hasKey:@(index)]){
             // available
                 NSURL * previewURL = availablePreviewImageURLs[@(index)];
-                photoItem.sourceForFullResolutionFromURL = [Wself makeSavedImageUrlFromOtherPreifx:previewURL prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_OrigianlImage];
-                photoItem.sourceForFullScreenFromURL = [Wself makeSavedImageUrlFromOtherPreifx:previewURL prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_Fullscreen];
+                photoItem.sourceForFullResolutionFromURL = [[STPhotosManager sharedManager] makeSavedImageUrlFromOtherPreifx:previewURL prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_OrigianlImage];
+                photoItem.sourceForFullScreenFromURL = [[STPhotosManager sharedManager] makeSavedImageUrlFromOtherPreifx:previewURL prefix:kSTImageFilePrefix_PreviewImage prefixConvertTo:kSTImageFilePrefix_Fullscreen];
                 photoItem.sourceForPreviewFromURL = previewURL;
 
                 //check file
@@ -2150,73 +2146,6 @@ static SVGKFastImageView *_nophotoView;
     });
 }
 
-#pragma mark Common - Elie Room's Image I/O Operations
-- (void)saveImageToUrl:(UIImage *)image fileUrl:(NSURL *)url quality:(CGFloat)quality {
-    [self saveImageToUrl:image fileUrl:url quality:quality background:YES];
-}
-
-- (void)saveImageToUrl:(UIImage *)image fileUrl:(NSURL *)url quality:(CGFloat)quality background:(BOOL)background{
-    if(background){
-        dispatch_async([STQueueManager sharedQueue].writingIO, ^{
-            [[NSFileManager defaultManager] createFileAtPath:[url path] contents:UIImageJPEGRepresentation(image, quality ? quality : 1.f) attributes:nil];
-        });
-    }else{
-        [[NSFileManager defaultManager] createFileAtPath:[url path] contents:UIImageJPEGRepresentation(image, quality ? quality : 1.f) attributes:nil];
-    }
-}
-
-- (void)deleteImageToUrl:(NSURL *)url{
-    if([[NSFileManager defaultManager] fileExistsAtPath:[url path]] && [[NSFileManager defaultManager] isDeletableFileAtPath:[url path]]){
-        [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
-    }
-}
-
-- (NSURL *)makeTempImageSaveUrl:(NSString *)prefixName {
-    return [[NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:prefixName]] URLByAppendingPathExtension:@"jpg"];
-}
-
-- (NSURL *)makeImagesSaveUrl:(NSString *)prefixName index:(NSInteger)index {
-    return [self makeImagesSaveUrl:[self saveTargetDir] prefix:prefixName index:index];
-}
-
-- (NSURL *)makeImagesSaveUrl:(NSString *)dirPath prefix:(NSString *)prefix index:(NSInteger)index {
-    NSString *fileName = [prefix stringByAppendingFormat:@"%d", index];
-    return [[NSURL fileURLWithPath:[dirPath stringByAppendingPathComponent:fileName]] URLByAppendingPathExtension:@"jpg"];
-}
-
-- (NSURL *)makeSavedImageUrlFromOtherPreifx:(NSURL *)url prefix:(NSString *)prefix prefixConvertTo:(NSString *)prefixConvertTo {
-    return [self makeImagesSaveUrl:prefixConvertTo index:[self indexFromSaveUrl:url prefix:prefix]];
-}
-
-- (NSInteger)indexFromSaveUrl:(NSURL *)url prefix:(NSString *)prefix {
-    NSString *filename = [[url URLByDeletingPathExtension] lastPathComponent];
-
-    if(![filename matchesRegex:[prefix stringByAppendingString:@"[0-9]{1,}$"]]){
-        NSLog(@"* WARN : filename must be match with prefix");
-        return 0;
-    }
-
-    return [[[filename split:prefix] lastObject] integerValue];
-}
-
-- (NSString *)saveTargetDir{
-    NSString *dir = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
-    if(!dir){
-        dir = NSTemporaryDirectory();
-    }
-    return dir;
-}
-
-- (NSArray *)savedPreviewImageFileURLsInRoom {
-    NSURL *fileDir = [NSURL fileURLWithPath:[self saveTargetDir] isDirectory:YES];
-    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:fileDir
-                                                      includingPropertiesForKeys:@[]
-                                                                         options:NSDirectoryEnumerationSkipsHiddenFiles
-                                                                           error:nil];
-
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"pathExtension == 'jpg' AND lastPathComponent CONTAINS %@", kSTImageFilePrefix_PreviewImage];
-    return [contents filteredArrayUsingPredicate:predicate];
-}
 
 #pragma mark Export
 //TODO: export original 계열들은 인터럽트 구현
