@@ -11,6 +11,7 @@
 #import "STPhotoItemSource.h"
 #import "BGUtilities.h"
 #import "STQueueManager.h"
+#import "NYXImagesKit.h"
 
 @implementation STPhotosManager {
 
@@ -28,7 +29,7 @@
     return _instance;
 }
 
-- (STPhotoItem *)createPhotoItem:(STPhotoItemSource *)photoSource{
+- (STPhotoItem *)generatePhotoItem:(STPhotoItemSource *)photoSource{
     STPhotoItem *item = [STPhotoItem new];
     item.orientationOriginated = photoSource.orientation;
 
@@ -41,10 +42,56 @@
             [image createThumbnail:nil];
             [image createFullScreenImage:nil];
         }
+
+    }else{
+        UIImage *defaultImage = photoSource.image;
+
+        NSURL *originalUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_OrigianlImage];
+        NSURL *fullscreenUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_Fullscreen];
+
+        //original
+        CGSize optimizedSizeToFit = [STApp memorySafetyRasterSize:[self previewImageSizeByType:STPhotoViewTypeDetail originalSize:defaultImage.size]];
+        [[STPhotosManager sharedManager] saveImageToUrl:[defaultImage scaleToFitSize:optimizedSizeToFit] fileUrl:fullscreenUrl quality:.8 background:NO];
+
+        //preview
+        NSURL *previewUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_PreviewImage];
+        CGSize optimizedSizeToFitForPreview = [STGIFFApp memorySafetyRasterSize:[self previewImageSizeByType:STPhotoViewTypeGridHigh originalSize:defaultImage.size]];
+        UIImage *previewImage = [defaultImage scaleToFitSize:optimizedSizeToFitForPreview];
+        [item initializePreviewImage:previewImage];
+
+        [[STPhotosManager sharedManager] saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
+        [[STPhotosManager sharedManager] saveImageToUrl:defaultImage fileUrl:originalUrl quality:1.0];
+
+        item.sourceForFullResolutionFromURL = originalUrl;
+        item.sourceForFullScreenFromURL = fullscreenUrl;
+        item.sourceForPreviewFromURL = previewUrl;
+        item.metadataFromCamera = photoSource.metaData;
+        item.origin = photoSource.origin;
     }
 
     [photoSource dispose];
     return item;
+}
+
+- (CGSize)previewImageSizeByType:(STPhotoViewType)type ratio:(CGFloat)ratio{
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    CGFloat sizeWidth = 0;
+    if(type == STPhotoViewTypeGrid){
+        sizeWidth = screenSize.width / 3.3f;
+    }
+    else if(type == STPhotoViewTypeGridHigh){
+        sizeWidth = screenSize.width / 1.5f;
+    }
+    else if(type == STPhotoViewTypeMinimum){
+        sizeWidth = screenSize.width / kSTBuffPhotosGridCol / 1.9f;
+    }else{
+        sizeWidth = screenSize.width;
+    }
+    return CGSizeMake(sizeWidth, sizeWidth * ratio);
+}
+
+- (CGSize)previewImageSizeByType:(STPhotoViewType)type originalSize:(CGSize)size{
+    return [self previewImageSizeByType:type ratio:(size.width/size.height)];
 }
 
 - (void)saveImageToUrl:(UIImage *)image fileUrl:(NSURL *)url quality:(CGFloat)quality {

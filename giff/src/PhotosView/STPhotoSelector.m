@@ -1335,20 +1335,7 @@ static BOOL _lockedRegisteredChangeObserver;
 
 #pragma mark Thumbnail and Image putting
 - (CGSize)previewImageSizeByType:(STPhotoViewType) type {
-
-    CGFloat sizeWidth = 0;
-    if(type == STPhotoViewTypeGrid){
-        sizeWidth = self.bounds.size.width / 3.3f;
-    }
-    else if(type == STPhotoViewTypeGridHigh){
-        sizeWidth = self.bounds.size.width / 1.5f;
-    }
-    else if(type == STPhotoViewTypeMinimum){
-        sizeWidth = self.bounds.size.width / kSTBuffPhotosGridCol / 1.9f;
-    }else{
-        sizeWidth = self.bounds.size.width;
-    }
-    return CGSizeMake(sizeWidth, sizeWidth * [[STElieCamera sharedInstance] outputVerticalRatio]);
+    return [[STPhotosManager sharedManager] previewImageSizeByType:type ratio:[[STElieCamera sharedInstance] outputVerticalRatio]];
 }
 
 - (CGSize)previewImageSize {
@@ -2040,69 +2027,14 @@ static SVGKFastImageView *_nophotoView;
 
 #pragma mark Temp
 - (void)_writeToTempAndCreateItem:(STPhotoItemSource *)photoSource completion:(void(^)(STPhotoItem *))block{
-    __weak STPhotoSelector *weakSelf = self;
-
-    /*
-     * new - preheated image set
-     */
-    STPhotoItem *item = [STPhotoItem itemWithIndex:self.gridView.items.count];
-    item.orientationOriginated = photoSource.orientation;
-
-    //TODO: 현재는 imageSet전용이지만 추후 전체를 통합
-    if(photoSource.imageSet.defaultImage){
-        item.sourceForCapturedImageSet = photoSource.imageSet;
-        item.metadataFromCamera = photoSource.metaData;
-
-        [photoSource dispose];
-
-        dispatch_async([STQueueManager sharedQueue].writingIO, ^{
-            for(STCapturedImage * image in item.sourceForCapturedImageSet.images){
-                [image createThumbnail:nil];
-                [image createFullScreenImage:nil];
-            }
-
-            dispatch_async(dispatch_get_main_queue(),^{
-                !block?:block(item);
-            });
-
-        });
-        return;
-    }
-
-    /*
-     * legacy
-     */
+    NSUInteger nextIndex = self.gridView.items.count;
     dispatch_async([STQueueManager sharedQueue].writingIO, ^{
-        STPhotoSelector *_self = weakSelf;
+        STPhotoItem * photoItem = [[STPhotosManager sharedManager] generatePhotoItem:photoSource];
+        photoItem.index = nextIndex;
 
-        UIImage *defaultImage = photoSource.image;
-
-        NSURL *originalUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_OrigianlImage];
-        NSURL *fullscreenUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_Fullscreen];
-        [[STPhotosManager sharedManager] saveImageToUrl:[defaultImage scaleToFitSize:[STGIFFApp memorySafetyRasterSize:[_self previewImageSizeByType:STPhotoViewTypeDetail]]] fileUrl:fullscreenUrl quality:.8 background:NO];
-
-        NSURL *previewUrl = [[STPhotosManager sharedManager] makeTempImageSaveUrl:kSTImageFilePrefix_TempToEdit_PreviewImage];
-        UIImage *previewImage = [defaultImage scaleToFitSize:[STGIFFApp memorySafetyRasterSize:[_self previewImageSizeByType:STPhotoViewTypeGridHigh]]];
-        [item initializePreviewImage:previewImage];
-
-        item.sourceForFullResolutionFromURL = originalUrl;
-        item.sourceForFullScreenFromURL = fullscreenUrl;
-        item.sourceForPreviewFromURL = previewUrl;
-
-        runOnMainQueueWithoutDeadlocking(^{
-            //metadata
-            item.metadataFromCamera = photoSource.metaData;
-            item.origin = photoSource.origin;
-
-            [photoSource dispose];
-
-            if(block){
-                block(item);
-            }
+        dispatch_async(dispatch_get_main_queue(),^{
+            !block?:block(photoItem);
         });
-
-        [[STPhotosManager sharedManager] saveImageToUrl:previewImage fileUrl:previewUrl quality:.7];
-        [[STPhotosManager sharedManager] saveImageToUrl:defaultImage fileUrl:originalUrl quality:1.0];
     });
 }
 

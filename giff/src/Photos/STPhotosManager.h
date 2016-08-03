@@ -12,7 +12,11 @@
 @interface STPhotosManager : NSObject
 + (STPhotosManager *)sharedManager;
 
-- (STPhotoItem *)createPhotoItem:(STPhotoItemSource *)photoSource;
+- (STPhotoItem *)generatePhotoItem:(STPhotoItemSource *)photoSource;
+
+- (CGSize)previewImageSizeByType:(STPhotoViewType)type ratio:(CGFloat)ratio;
+
+- (CGSize)previewImageSizeByType:(STPhotoViewType)type originalSize:(CGSize)size;
 
 - (void)saveImageToUrl:(UIImage *)image fileUrl:(NSURL *)url quality:(CGFloat)quality;
 
