@@ -15,6 +15,7 @@
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STUserActor.h"
 #import "STPhotoSelector.h"
+#import "giff-Swift.h"
 
 
 @implementation STCameraControlView {
@@ -100,22 +101,37 @@
 //            [[[STPhotoSelector sharedInstance] collectionView] representPhotoItemOfAllVisibleCells:YES];
 //        }
 
-        if(STElieCamera.mode==STCameraModeManualExitAndPause){
-            [[STMainControl sharedInstance] backToHome];
-        }else {
+        DKImagePickerController *pickerController = [DKImagePickerController new];
+        pickerController.maxSelectableCount = 1;
+        pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
+        pickerController.showsCancelButton = YES;
+        pickerController.showsEmptyAlbums = YES;
+        pickerController.allowMultipleTypes = YES;
+        pickerController.defaultSelectedAssets = @[];
+        pickerController.sourceType = DKImagePickerControllerSourceTypePhoto;
 
-            if ([STMainControl sharedInstance].mode == STControlDisplayModeLivePreview) {
+        [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
+            NSLog(@"didSelectAssets");
+        }];
 
-                UIImageView *coveredView = [_sourceLibraryButton coverAndUncoverBegin:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance]];
-                [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManualExitAndPause)];
-                [_sourceLibraryButton coverAndUncoverEnd:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance] beforeCoverView:coveredView comletion:nil];
+        [[self st_rootUVC] presentViewController:pickerController animated:YES completion:nil];
 
-            } else {
-                [[STPhotoSelector sharedInstance] doDirectlyEnterHome];
-
-                [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManualExitAndPause)];
-            }
-        }
+//        if(STElieCamera.mode==STCameraModeManualExitAndPause){
+//            [[STMainControl sharedInstance] backToHome];
+//        }else {
+//
+//            if ([STMainControl sharedInstance].mode == STControlDisplayModeLivePreview) {
+//
+//                UIImageView *coveredView = [_sourceLibraryButton coverAndUncoverBegin:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance]];
+//                [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManualExitAndPause)];
+//                [_sourceLibraryButton coverAndUncoverEnd:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance] beforeCoverView:coveredView comletion:nil];
+//
+//            } else {
+//                [[STPhotoSelector sharedInstance] doDirectlyEnterHome];
+//
+//                [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManualExitAndPause)];
+//            }
+//        }
     }];
 
     [[NSNotificationCenter get] st_addObserverWithMainQueue:self forName:STNotificationPhotosDidLocalSaved usingBlock:^(NSNotification *note, id observer) {

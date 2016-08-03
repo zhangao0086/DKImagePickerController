@@ -31,6 +31,8 @@
 #import "STFilterManager.h"
 #import "STFilter.h"
 
+#import "giff-Swift.h"
+
 @interface STGIFFRootViewController (){
     //Device Control
     BOOL _initialRequestFocusWhenFaceIn;
@@ -212,6 +214,14 @@ static ALAssetsLibrary * assetLibrary;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+
+
+}
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];

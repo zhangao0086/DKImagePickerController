@@ -86,6 +86,21 @@
 		4F71DFF0D08FD954FDF10058 /* STExportControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D5F64F6774523B061093 /* STExportControlView.m */; };
 		4F71DFFC82C582EC8E97AC65 /* set_torchlight_strong.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D992355DC6EA0659B392 /* set_torchlight_strong.svg */; };
 		4F71DFFFC48E318ADC182B42 /* down_triangle_rounded.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D6938BF3F2425E1E163F /* down_triangle_rounded.svg */; };
+		A028DB251D519B0C00983BE8 /* DKCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB111D519B0C00983BE8 /* DKCamera.swift */; };
+		A028DB271D519B0C00983BE8 /* DKGroupDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB151D519B0C00983BE8 /* DKGroupDataManager.swift */; };
+		A028DB281D519B0C00983BE8 /* DKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB171D519B0C00983BE8 /* DKAsset.swift */; };
+		A028DB291D519B0C00983BE8 /* DKAssetGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB181D519B0C00983BE8 /* DKAssetGroup.swift */; };
+		A028DB2A1D519B0C00983BE8 /* DKImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB191D519B0C00983BE8 /* DKImageManager.swift */; };
+		A028DB2B1D519B0C00983BE8 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A028DB1B1D519B0C00983BE8 /* DKImagePickerController.bundle */; };
+		A028DB2C1D519B0C00983BE8 /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB1C1D519B0C00983BE8 /* DKImagePickerController.swift */; };
+		A028DB2D1D519B0C00983BE8 /* DKImagePickerControllerDefaultCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB1D1D519B0C00983BE8 /* DKImagePickerControllerDefaultCamera.swift */; };
+		A028DB2E1D519B0C00983BE8 /* DKImageResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB1E1D519B0C00983BE8 /* DKImageResource.swift */; };
+		A028DB2F1D519B0C00983BE8 /* DKPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB1F1D519B0C00983BE8 /* DKPopoverViewController.swift */; };
+		A028DB301D519B0C00983BE8 /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB211D519B0C00983BE8 /* DKAssetGroupDetailVC.swift */; };
+		A028DB311D519B0C00983BE8 /* DKAssetGroupGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB221D519B0C00983BE8 /* DKAssetGroupGridLayout.swift */; };
+		A028DB321D519B0C00983BE8 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB231D519B0C00983BE8 /* DKAssetGroupListVC.swift */; };
+		A028DB331D519B0C00983BE8 /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB241D519B0C00983BE8 /* DKPermissionView.swift */; };
+		A028DB351D519DA500983BE8 /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A028DB341D519DA500983BE8 /* DKCameraResource.bundle */; };
 		A050D0E51CC5DD0D00628C2F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CDE91CC5DD0C00628C2F /* AppDelegate.m */; };
 		A050D0E71CC5DD0D00628C2F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CDEC1CC5DD0C00628C2F /* main.m */; };
 		A050D0E91CC5DD0D00628C2F /* color_names.json in Resources */ = {isa = PBXBuildFile; fileRef = A050CDF01CC5DD0C00628C2F /* color_names.json */; };
@@ -554,6 +569,21 @@
 		4F71DFC051942C2D1F506D81 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		4F71DFE02EEC9A7E4BD483EE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		523D14932897B1BC9F51F359 /* libPods-giff.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-giff.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A028DB111D519B0C00983BE8 /* DKCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCamera.swift; sourceTree = "<group>"; };
+		A028DB151D519B0C00983BE8 /* DKGroupDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKGroupDataManager.swift; sourceTree = "<group>"; };
+		A028DB171D519B0C00983BE8 /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
+		A028DB181D519B0C00983BE8 /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
+		A028DB191D519B0C00983BE8 /* DKImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageManager.swift; sourceTree = "<group>"; };
+		A028DB1B1D519B0C00983BE8 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKImagePickerController.bundle; sourceTree = "<group>"; };
+		A028DB1C1D519B0C00983BE8 /* DKImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerController.swift; sourceTree = "<group>"; };
+		A028DB1D1D519B0C00983BE8 /* DKImagePickerControllerDefaultCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerDefaultCamera.swift; sourceTree = "<group>"; };
+		A028DB1E1D519B0C00983BE8 /* DKImageResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageResource.swift; sourceTree = "<group>"; };
+		A028DB1F1D519B0C00983BE8 /* DKPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPopoverViewController.swift; sourceTree = "<group>"; };
+		A028DB211D519B0C00983BE8 /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
+		A028DB221D519B0C00983BE8 /* DKAssetGroupGridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupGridLayout.swift; sourceTree = "<group>"; };
+		A028DB231D519B0C00983BE8 /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
+		A028DB241D519B0C00983BE8 /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
+		A028DB341D519DA500983BE8 /* DKCameraResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKCameraResource.bundle; sourceTree = "<group>"; };
 		A050CDE81CC5DD0C00628C2F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A050CDE91CC5DD0C00628C2F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A050CDEA1CC5DD0C00628C2F /* giff-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "giff-Prefix.pch"; sourceTree = "<group>"; };
@@ -1328,6 +1358,77 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
+		A028DB0F1D519B0C00983BE8 /* DKImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				A028DB101D519B0C00983BE8 /* DKCamera */,
+				A028DB131D519B0C00983BE8 /* DKImageManager */,
+				A028DB1A1D519B0C00983BE8 /* DKImagePickerController */,
+			);
+			name = DKImagePicker;
+			path = ../../../../gifc/gifc/src/External/DKImagePicker;
+			sourceTree = "<group>";
+		};
+		A028DB101D519B0C00983BE8 /* DKCamera */ = {
+			isa = PBXGroup;
+			children = (
+				A028DB341D519DA500983BE8 /* DKCameraResource.bundle */,
+				A028DB111D519B0C00983BE8 /* DKCamera.swift */,
+			);
+			path = DKCamera;
+			sourceTree = "<group>";
+		};
+		A028DB131D519B0C00983BE8 /* DKImageManager */ = {
+			isa = PBXGroup;
+			children = (
+				A028DB141D519B0C00983BE8 /* Data */,
+				A028DB191D519B0C00983BE8 /* DKImageManager.swift */,
+			);
+			path = DKImageManager;
+			sourceTree = "<group>";
+		};
+		A028DB141D519B0C00983BE8 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				A028DB151D519B0C00983BE8 /* DKGroupDataManager.swift */,
+				A028DB161D519B0C00983BE8 /* Model */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		A028DB161D519B0C00983BE8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A028DB171D519B0C00983BE8 /* DKAsset.swift */,
+				A028DB181D519B0C00983BE8 /* DKAssetGroup.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A028DB1A1D519B0C00983BE8 /* DKImagePickerController */ = {
+			isa = PBXGroup;
+			children = (
+				A028DB1B1D519B0C00983BE8 /* DKImagePickerController.bundle */,
+				A028DB1C1D519B0C00983BE8 /* DKImagePickerController.swift */,
+				A028DB1D1D519B0C00983BE8 /* DKImagePickerControllerDefaultCamera.swift */,
+				A028DB1E1D519B0C00983BE8 /* DKImageResource.swift */,
+				A028DB1F1D519B0C00983BE8 /* DKPopoverViewController.swift */,
+				A028DB201D519B0C00983BE8 /* View */,
+			);
+			path = DKImagePickerController;
+			sourceTree = "<group>";
+		};
+		A028DB201D519B0C00983BE8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A028DB211D519B0C00983BE8 /* DKAssetGroupDetailVC.swift */,
+				A028DB221D519B0C00983BE8 /* DKAssetGroupGridLayout.swift */,
+				A028DB231D519B0C00983BE8 /* DKAssetGroupListVC.swift */,
+				A028DB241D519B0C00983BE8 /* DKPermissionView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		A050CDE71CC5DD0C00628C2F /* giff */ = {
 			isa = PBXGroup;
 			children = (
@@ -1792,6 +1893,7 @@
 		A050CFC11CC5DD0D00628C2F /* External */ = {
 			isa = PBXGroup;
 			children = (
+				A028DB0F1D519B0C00983BE8 /* DKImagePicker */,
 				A050CFC21CC5DD0D00628C2F /* BCMeshTransform */,
 				A050CFC51CC5DD0D00628C2F /* ColorArt */,
 				A050CFCC1CC5DD0D00628C2F /* LEColorPicker */,
@@ -2355,6 +2457,7 @@
 				A050D0F21CC5DD0D00628C2F /* 00007_938c88_ba75b4280eeb4f2ba856b2e46ad9ee4d_2_starpretprism.png in Resources */,
 				A050D19B1CC5DD0D00628C2F /* set_manual_single.svg in Resources */,
 				A050D0F71CC5DD0D00628C2F /* 00012_747162_23d86a62ee2e423fae0fa79c22dc4230_2_starpretprism.png in Resources */,
+				A028DB2B1D519B0C00983BE8 /* DKImagePickerController.bundle in Resources */,
 				A050D1821CC5DD0D00628C2F /* set_logout.svg in Resources */,
 				A050D2591CC5DD0D00628C2F /* FXPhotoEditGrid@2x.png in Resources */,
 				A050D1451CC5DD0D00628C2F /* ico_cell_origin_manual.svg in Resources */,
@@ -2391,6 +2494,7 @@
 				A050D1071CC5DD0D00628C2F /* 00028_9c7779_09714e4d0ff144c588dd142fbe8a0dbe_2_starpretprism.png in Resources */,
 				A050D1731CC5DD0D00628C2F /* set_done.svg in Resources */,
 				A050D1A11CC5DD0D00628C2F /* set_star.svg in Resources */,
+				A028DB351D519DA500983BE8 /* DKCameraResource.bundle in Resources */,
 				A050D1761CC5DD0D00628C2F /* set_flash_off.svg in Resources */,
 				A050D1241CC5DD0D00628C2F /* line.svg in Resources */,
 				A050D0ED1CC5DD0D00628C2F /* 00002_a59f9d_86be6bbdc0864825b158c8762bd77e01_1_starpretprism.png in Resources */,
@@ -2573,6 +2677,7 @@
 				A050D27F1CC5DD0D00628C2F /* M13ProgressViewBorderedCenterBar.m in Sources */,
 				A050D1E81CC5DD0D00628C2F /* STMeshTransformView.m in Sources */,
 				A050D23C1CC5DD0D00628C2F /* STTransformEditor.m in Sources */,
+				A028DB291D519B0C00983BE8 /* DKAssetGroup.swift in Sources */,
 				A050D1F91CC5DD0D00628C2F /* STZoomScrollView.m in Sources */,
 				A050D1C31CC5DD0D00628C2F /* FCFileManager+STUtil.m in Sources */,
 				A050D1E51CC5DD0D00628C2F /* STExpandableView.m in Sources */,
@@ -2589,6 +2694,7 @@
 				A050D1E61CC5DD0D00628C2F /* STItem.m in Sources */,
 				A050D2501CC5DD0D00628C2F /* STExporterWhatsApp.m in Sources */,
 				A050D28C1CC5DD0D00628C2F /* STStandardUX.m in Sources */,
+				A028DB2D1D519B0C00983BE8 /* DKImagePickerControllerDefaultCamera.swift in Sources */,
 				A050D1BB1CC5DD0D00628C2F /* STHome.m in Sources */,
 				A050D2871CC5DD0D00628C2F /* STStandardReachableButton.m in Sources */,
 				A050D2531CC5DD0D00628C2F /* STAssetsLibraryManager.m in Sources */,
@@ -2600,6 +2706,7 @@
 				A050D2281CC5DD0D00628C2F /* STFilterPresenterProductItemView.m in Sources */,
 				A050D28A1CC5DD0D00628C2F /* STStandardUI.m in Sources */,
 				A050D20B1CC5DD0D00628C2F /* UIImage+Scale.m in Sources */,
+				A028DB271D519B0C00983BE8 /* DKGroupDataManager.swift in Sources */,
 				A050D27C1CC5DD0D00628C2F /* STUserActor.m in Sources */,
 				A050D1F51CC5DD0D00628C2F /* STTimeOperator.m in Sources */,
 				A050D2891CC5DD0D00628C2F /* STStandardSimpleSlider.m in Sources */,
@@ -2628,12 +2735,14 @@
 				A050D28D1CC5DD0D00628C2F /* UIViewController+STStandard.m in Sources */,
 				A050D1E11CC5DD0D00628C2F /* STCollectableView.m in Sources */,
 				A050D1DE1CC5DD0D00628C2F /* STCarouselController.m in Sources */,
+				A028DB2C1D519B0C00983BE8 /* DKImagePickerController.swift in Sources */,
 				A050D2141CC5DD0D00628C2F /* SCPageView.m in Sources */,
 				A050D2181CC5DD0D00628C2F /* SCViewRecycler.m in Sources */,
 				A050D26E1CC5DD0D00628C2F /* STAppInfoView.m in Sources */,
 				A050D2411CC5DD0D00628C2F /* STExporter+IO.m in Sources */,
 				A050D2221CC5DD0D00628C2F /* STFilterGroupItem.m in Sources */,
 				A050D1F21CC5DD0D00628C2F /* STReachabilityManager.m in Sources */,
+				A028DB2F1D519B0C00983BE8 /* DKPopoverViewController.swift in Sources */,
 				A050D2841CC5DD0D00628C2F /* STStandardCollectableButton.m in Sources */,
 				A050D1C61CC5DD0D00628C2F /* MFMailComposeViewController+URL.m in Sources */,
 				A050D21F1CC5DD0D00628C2F /* STFilterPresenterBase.m in Sources */,
@@ -2660,6 +2769,7 @@
 				A050D1CD1CC5DD0D00628C2F /* NSObject+BNRTimeBlock.m in Sources */,
 				A050D2031CC5DD0D00628C2F /* UIView+STUtil.m in Sources */,
 				A050D1E41CC5DD0D00628C2F /* STDrawableLayer.m in Sources */,
+				A028DB301D519B0C00983BE8 /* DKAssetGroupDetailVC.swift in Sources */,
 				A050D0E51CC5DD0D00628C2F /* AppDelegate.m in Sources */,
 				A050D2861CC5DD0D00628C2F /* STStandardNavigationButton.m in Sources */,
 				A050D1D01CC5DD0D00628C2F /* NSObject+STThreadUtil.m in Sources */,
@@ -2690,6 +2800,7 @@
 				A050D24D1CC5DD0D00628C2F /* STExporterTumblr.m in Sources */,
 				A050D2641CC5DD0D00628C2F /* STPreview.m in Sources */,
 				A050D21C1CC5DD0D00628C2F /* TABFileMonitor.m in Sources */,
+				A028DB281D519B0C00983BE8 /* DKAsset.swift in Sources */,
 				A050D2421CC5DD0D00628C2F /* STExporter+URL.m in Sources */,
 				A050D1D91CC5DD0D00628C2F /* STApp+Logger.m in Sources */,
 				A050D1DB1CC5DD0D00628C2F /* STApp.m in Sources */,
@@ -2699,6 +2810,7 @@
 				A050D1BD1CC5DD0D00628C2F /* STSubControl.m in Sources */,
 				A050D1EA1CC5DD0D00628C2F /* STMotionScrollLivePhotoView.m in Sources */,
 				A050D2401CC5DD0D00628C2F /* STExporter+Handle.m in Sources */,
+				A028DB2A1D519B0C00983BE8 /* DKImageManager.swift in Sources */,
 				A050D2801CC5DD0D00628C2F /* M13ProgressViewBorderedSlider.m in Sources */,
 				A050D2011CC5DD0D00628C2F /* UITouchLongPressGestureRecognizer.m in Sources */,
 				A050D23B1CC5DD0D00628C2F /* STEditorResult.m in Sources */,
@@ -2713,6 +2825,7 @@
 				A050D28B1CC5DD0D00628C2F /* STStandardUIFactory.m in Sources */,
 				A050D1E31CC5DD0D00628C2F /* STCoreLocationWhenInUsePermission.m in Sources */,
 				A050D2691CC5DD0D00628C2F /* STProductCatalogContentView.m in Sources */,
+				A028DB311D519B0C00983BE8 /* DKAssetGroupGridLayout.swift in Sources */,
 				A050D2211CC5DD0D00628C2F /* STFilter.m in Sources */,
 				A050D2731CC5DD0D00628C2F /* STGIFFAppSetting.m in Sources */,
 				A050D2661CC5DD0D00628C2F /* STPhotoSelector.m in Sources */,
@@ -2732,6 +2845,7 @@
 				A050D23A1CC5DD0D00628C2F /* STEditorCommand.m in Sources */,
 				A050D1D21CC5DD0D00628C2F /* NSSet+STUtil.m in Sources */,
 				A050D1ED1CC5DD0D00628C2F /* STPermission.m in Sources */,
+				A028DB2E1D519B0C00983BE8 /* DKImageResource.swift in Sources */,
 				A050D1FD1CC5DD0D00628C2F /* UIColor+STUtil.m in Sources */,
 				A050D27A1CC5DD0D00628C2F /* STUIApplication+QuickAction.m in Sources */,
 				A050D1D71CC5DD0D00628C2F /* PHAsset+Utility.m in Sources */,
@@ -2758,6 +2872,7 @@
 				4F71D5DA6F60BFBDD1F5A619 /* STGIFFAnimatableLogoView.m in Sources */,
 				4F71DB45A122E17B8700A1AB /* STExportSelectView.m in Sources */,
 				4F71DB3B234AC2A2B288B155 /* STExporter+ConfigGIF.m in Sources */,
+				A028DB331D519B0C00983BE8 /* DKPermissionView.swift in Sources */,
 				4F71DE7E965B770B11D49C68 /* STExporter+IOGIF.m in Sources */,
 				4F71D6A26E908715BE42D285 /* STExporterSaveToPhotos.m in Sources */,
 				4F71D1AAC7F3BE1B0297FF1D /* STGIFFAnimatableLayerPresentingView.m in Sources */,
@@ -2782,11 +2897,13 @@
 				4F71DD4169B0EB846D00BD80 /* STGIFFDisplayLayerJanneEffect.m in Sources */,
 				4F71D3675E5A7C4F0C632D6D /* STMultiSourcingImageProcessor.m in Sources */,
 				4F71DB6C1FC6CCE7BAA68671 /* STCapturedImageProcessor.m in Sources */,
+				A028DB321D519B0C00983BE8 /* DKAssetGroupListVC.swift in Sources */,
 				4F71D196341FACB753247AB8 /* STCapturedImageSetDisplayProcessor.m in Sources */,
 				4F71DFE97EE20596ECC8B7B3 /* STGPUImageOutputComposeItem.m in Sources */,
 				4F71D99376FACB5D4CDD1ACA /* STCameraControlView.m in Sources */,
 				4F71DD6AF698FE25457C614F /* STEditControlView.m in Sources */,
 				4F71DFF0D08FD954FDF10058 /* STExportControlView.m in Sources */,
+				A028DB251D519B0C00983BE8 /* DKCamera.swift in Sources */,
 				4F71DD4BBAE3E4F4FDBC3CED /* STEditControlFrameEditItemView.m in Sources */,
 				4F71DCA502848B0D8F2ECF90 /* STEditControlFrameEditView.m in Sources */,
 				4F71DD5942486F2B0F9E7EE5 /* STCapturedImageSetDisplayLayer.m in Sources */,
