@@ -15,6 +15,8 @@
 
 - (BOOL)isLivePhoto;
 
+- (BOOL)isVideo;
+
 - (BOOL)exportLivePhotoVideoFile:(void (^)(NSURL *tempFileURL))block;
 
 - (void)exportFileByResourceType:(PHAssetResourceType)type completion:(void (^)(NSURL *tempFileURL))block;

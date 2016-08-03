@@ -51,6 +51,10 @@
     return self.mediaSubtypes & PHAssetMediaSubtypePhotoLive;
 }
 
+- (BOOL)isVideo{
+    return self.mediaType==PHAssetMediaTypeVideo;
+}
+
 - (void)exportFileTo:(NSURL *)url completion:(void(^)(NSURL * tempFileURL))block{
     //automatic detect by own mediaType and subtype, resource type
 }
