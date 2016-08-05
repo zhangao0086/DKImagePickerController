@@ -15,5 +15,5 @@
 @property(nonatomic, readonly) NSArray * focusPointsInOutputSize;
 @property(nonatomic, assign) CGSize outputSizeForFocusPoints;
 
-+ (CaptureOutputSizePreset)restrictCaptureOutputSizePresetByPostFocusMode:(STPostFocusMode)mode targetPreset:(CaptureOutputSizePreset)preset circulate:(BOOL)circulate;
++ (CaptureOutputPixelSizePreset)restrictCaptureOutputPixelSizePresetByPostFocusMode:(STPostFocusMode)mode targetPreset:(CaptureOutputPixelSizePreset)preset circulate:(BOOL)circulate;
 @end

@@ -52,17 +52,17 @@
     }
 }
 
-+ (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset {
++ (CGFloat)captureOutputPixelSizeFromPreset:(CaptureOutputPixelSizePreset)preset {
     switch(preset){
-        case CaptureOutputSizePresetLarge:
-            return CaptureOutputPixelDimension1024;
-        case CaptureOutputSizePresetMedium:
-            return CaptureOutputPixelDimension800;
-        case CaptureOutputSizePresetSmall:
-            return CaptureOutputPixelDimension640;
+        case CaptureOutputPixelSizePresetLarge:
+            return CaptureOutputPixelSize1024;
+        case CaptureOutputPixelSizePresetMedium:
+            return CaptureOutputPixelSize800;
+        case CaptureOutputPixelSizePresetSmall:
+            return CaptureOutputPixelSize640;
         default:
             NSAssert(NO, @"Not supported presets at this request");
-            return [self CaptureOutputSizePresetsPixelSize:CaptureOutputSizePresetSmall];
+            return [self captureOutputPixelSizeFromPreset:CaptureOutputPixelSizePresetSmall];
     }
 }
 @end

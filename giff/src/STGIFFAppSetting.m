@@ -149,7 +149,7 @@ STAppSettingCorePropertiesImplementation
     else if([key isEqual:@keypath(self.enabledISOAutoBoost)]) (self.enabledISOAutoBoost = YES);
     else if([key isEqual:@keypath(self.enabledBacklightCare)]) (self.enabledBacklightCare = NO);
     else if([key isEqual:@keypath(self.afterManualCaptureAction)]) (self.afterManualCaptureAction = STAfterManualCaptureActionEnterEdit);
-    else if([key isEqual:@keypath(self.captureOutputSizePreset)]) (self.captureOutputSizePreset = [[STCaptureRequest supportedPresets] containsObject:@(CaptureOutputSizePresetMedium)] ? CaptureOutputSizePresetMedium : CaptureOutputSizePresetSmall);
+    else if([key isEqual:@keypath(self.captureOutputSizePreset)]) (self.captureOutputSizePreset = [[STCaptureRequest supportedPresets] containsObject:@(CaptureOutputPixelSizePresetMedium)] ? CaptureOutputPixelSizePresetMedium : CaptureOutputPixelSizePresetSmall);
 
     else if([key isEqual:@keypath(self.motionSensitive)]) (self.motionSensitive = ElieMotionDetectingSensitivityNormal);
     else if([key isEqual:@keypath(self.curtainType)]) (self.curtainType = ElieCurtainTypeBubble);

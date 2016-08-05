@@ -55,9 +55,9 @@ CGPointOfInterestInBound(CGSize bounds, CGPoint pointOfInterestFromCamera)
     return CGPointNearestMax2DecimalPosition(CGPointMake(pointInBound.x/bounds.width,pointInBound.y/bounds.height));
 }
 
-extern CGFloat const STElieCameraCurrentImageMaxSidePixelSize_FullDimension;
-extern CGFloat const STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen;
-extern CGFloat const STElieCameraCurrentImageMaxSidePixelSize_ThumbnailPreview;
+extern CGFloat const CaptureOutputPixelSizeConstFullDimension;
+extern CGFloat const CaptureOutputPixelSizeConstOptimalFullScreen;
+extern CGFloat const CaptureOutputPixelSizeConstSmallPreview;
 
 @interface STElieCamera : SMKDetectionCamera
 //camera func
@@ -195,11 +195,7 @@ extern CGFloat const STElieCameraCurrentImageMaxSidePixelSize_ThumbnailPreview;
 
 - (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput;
 
-- (UIImage *)currentImageAsFullResolution:(GPUImageOutput <GPUImageInput> *)needsOutput;
-
-- (UIImage *)currentImageAsThumbnailPreview;
-
-- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSidePixelSizeOfOutput:(CGFloat)maxSidePixelSizeOfOutput;
+- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput;
 
 - (BOOL)isPositionBack;
 

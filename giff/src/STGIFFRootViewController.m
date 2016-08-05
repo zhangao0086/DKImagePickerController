@@ -866,7 +866,7 @@
     NSDate * startDate = [NSDate date];
 #endif
     request.origin = STPhotoItemOriginAnimatable;
-    request.captureOutputSizePreset = CaptureOutputSizePresetSmall;
+    request.captureOutputPixelSizePreset = CaptureOutputPixelSizePresetSmall;
     request.autoReverseFrames = YES;
     request.responseHandler = ^(STCaptureResponse *result) {
         [[NSNotificationCenter defaultCenter] st_postNotificationName:STNotificationManualCaptureFinished];
@@ -946,7 +946,7 @@
     };
 
     //image size
-    request.captureOutputSizePreset = (CaptureOutputSizePreset) STGIFFAppSetting.get.captureOutputSizePreset;
+    request.captureOutputPixelSizePreset = (CaptureOutputPixelSizePreset) STGIFFAppSetting.get.captureOutputSizePreset;
 
 #if DEBUG
     NSDate * startDate = [NSDate date];

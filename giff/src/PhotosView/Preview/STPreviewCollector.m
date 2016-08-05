@@ -691,18 +691,6 @@ static NSString * observerToken = nil;
         _trasitionImageView.contentMode = UIViewContentModeScaleToFill;
     }
 
-    Weaks
-//    dispatch_async([STQueueManager sharedQueue].uiProcessing, ^{
-//        UIImage * currentImage = [Wself st_cachedImage:kBlurredImageKey useDisk:YES storeWhenLoad:NO init:^UIImage * {
-//            return [[STElieCamera sharedInstance] currentImageAsThumbnailPreview];
-//        }];
-//
-//        [Wself st_runAsMainQueueAsync: ^{
-//            Strongs
-//            Sself->_trasitionImageView.image = currentImage;
-//        }];
-//    });
-
     [_previewView addSubview:_trasitionImageView];
     [_trasitionImageView st_coverBlur:NO styleDark:YES completion:nil];
 }
@@ -928,10 +916,6 @@ static NSString * observerToken = nil;
 #pragma mark exit Live
 - (void)_exitTransitionLive:(void (^)(BOOL finished))completion {
     [self _dropTransitionView];
-
-//    [self st_cachedImage:kBlurredImageKey useDisk:YES init:^UIImage * {
-//        return [STElieCamera sharedInstance].currentImageAsThumbnailPreview;
-//    }];
 
     !completion?:completion(YES);
 }

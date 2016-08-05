@@ -50,26 +50,26 @@
     static NSArray * _supportedPresets;
     @synchronized (self) {
         if(!_supportedPresets){
-            _supportedPresets = [@(CaptureOutputSizePreset_count) st_intArray];
+            _supportedPresets = [@(CaptureOutputPixelSizePreset_count) st_intArray];
         }
     }
     return _supportedPresets;
 }
 
-- (CGFloat)captureOutputPixelSizeForCurrentPreset {
-    return [self.class CaptureOutputSizePresetsPixelSize:self.captureOutputSizePreset];
+- (void)setCaptureOutputPixelSizePreset:(CaptureOutputPixelSizePreset)captureOutputPixelSizePreset {
+    _captureOutputPixelSize = [self.class captureOutputPixelSizeFromPreset:captureOutputPixelSizePreset];
 }
 
-+ (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset {
++ (CGFloat)captureOutputPixelSizeFromPreset:(CaptureOutputPixelSizePreset)preset {
     switch(preset){
-        case CaptureOutputSizePreset4K:
-            return STElieCameraCurrentImageMaxSidePixelSize_FullDimension;
-        case CaptureOutputSizePresetLarge:
-            return CaptureOutputPixelDimension3072_3K;
-        case CaptureOutputSizePresetMedium:
-            return CaptureOutputPixelDimension2048_2K;
+        case CaptureOutputPixelSizePreset4K:
+            return CaptureOutputPixelSizeConstFullDimension;
+        case CaptureOutputPixelSizePresetLarge:
+            return CaptureOutputPixelSize3072_3K;
+        case CaptureOutputPixelSizePresetMedium:
+            return CaptureOutputPixelSize2048_2K;
         default:
-            return STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen;
+            return CaptureOutputPixelSizeConstOptimalFullScreen;
     }
 }
 

@@ -44,8 +44,8 @@
             switch ([STApp deviceModelFamily]){
                 case STDeviceModelFamilyNotHandled:
                     _supportedPresets = @[
-                            @(CaptureOutputSizePresetSmall),
-                            @(CaptureOutputSizePresetLarge)
+                            @(CaptureOutputPixelSizePresetSmall),
+                            @(CaptureOutputPixelSizePresetLarge)
                     ];
                     break;
 
@@ -54,18 +54,18 @@
                 case STDeviceModelFamilyIPhoneSE:
                 case STDeviceModelFamilyUpComming:
                     _supportedPresets = @[
-                            @(CaptureOutputSizePresetSmall),
-                            @(CaptureOutputSizePresetMedium),
-                            @(CaptureOutputSizePresetLarge),
-                            @(CaptureOutputSizePreset4K)
+                            @(CaptureOutputPixelSizePresetSmall),
+                            @(CaptureOutputPixelSizePresetMedium),
+                            @(CaptureOutputPixelSizePresetLarge),
+                            @(CaptureOutputPixelSizePreset4K)
                     ];
                     break;
 
                 default:
                     _supportedPresets = @[
-                            @(CaptureOutputSizePresetSmall),
-                            @(CaptureOutputSizePresetMedium),
-                            @(CaptureOutputSizePresetLarge)
+                            @(CaptureOutputPixelSizePresetSmall),
+                            @(CaptureOutputPixelSizePresetMedium),
+                            @(CaptureOutputPixelSizePresetLarge)
                     ];
                     break;
             }
@@ -74,53 +74,53 @@
     return _supportedPresets;
 }
 
-+ (CGFloat)CaptureOutputSizePresetsPixelSize:(CaptureOutputSizePreset)preset {
++ (CGFloat)captureOutputPixelSizeFromPreset:(CaptureOutputPixelSizePreset)preset {
     switch ([STApp deviceModelFamily]){
         case STDeviceModelFamilyNotHandled:
             switch(preset){
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension1920_HD;
+                case CaptureOutputPixelSizePresetLarge:
+                    return CaptureOutputPixelSize1920_HD;
                 default:
-                    return CaptureOutputPixelDimension1024;
+                    return CaptureOutputPixelSize1024;
             }
         case STDeviceModelFamilyIPadPro:
         case STDeviceModelFamilyIPhone6s:
         case STDeviceModelFamilyIPhoneSE:
         case STDeviceModelFamilyUpComming:
             switch(preset){
-                case CaptureOutputSizePreset4K:
-                    return STElieCameraCurrentImageMaxSidePixelSize_FullDimension;
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension3072_3K;
-                case CaptureOutputSizePresetMedium:
-                    return CaptureOutputPixelDimension2048_2K;
+                case CaptureOutputPixelSizePreset4K:
+                    return CaptureOutputPixelSizeConstFullDimension;
+                case CaptureOutputPixelSizePresetLarge:
+                    return CaptureOutputPixelSize3072_3K;
+                case CaptureOutputPixelSizePresetMedium:
+                    return CaptureOutputPixelSize2048_2K;
                 default:
-                    return STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen;
+                    return CaptureOutputPixelSizeConstOptimalFullScreen;
             }
         case STDeviceModelFamilyIPhone6:
         case STDeviceModelFamilyCurrentIPad:
             switch(preset){
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension3072_3K;
-                case CaptureOutputSizePresetMedium:
-                    return CaptureOutputPixelDimension1920_HD;
+                case CaptureOutputPixelSizePresetLarge:
+                    return CaptureOutputPixelSize3072_3K;
+                case CaptureOutputPixelSizePresetMedium:
+                    return CaptureOutputPixelSize1920_HD;
                 default:
-                    return CaptureOutputPixelDimension1280;
+                    return CaptureOutputPixelSize1280;
             }
         default:
             switch(preset){
-                case CaptureOutputSizePresetLarge:
-                    return CaptureOutputPixelDimension2480;
-                case CaptureOutputSizePresetMedium:
-                    return CaptureOutputPixelDimension1920_HD;
+                case CaptureOutputPixelSizePresetLarge:
+                    return CaptureOutputPixelSize2480;
+                case CaptureOutputPixelSizePresetMedium:
+                    return CaptureOutputPixelSize1920_HD;
                 default:
-                    return CaptureOutputPixelDimension1280;
+                    return CaptureOutputPixelSize1280;
             }
     }
 }
 
-#pragma mark Definition Of Restrict CaptureOutputSizePreset
-+ (CaptureOutputSizePreset)restrictCaptureOutputSizePresetByPostFocusMode:(STPostFocusMode)mode targetPreset:(CaptureOutputSizePreset)preset circulate:(BOOL)circulate {
+#pragma mark Definition Of Restrict CaptureOutputPixelSizePreset
++ (CaptureOutputPixelSizePreset)restrictCaptureOutputPixelSizePresetByPostFocusMode:(STPostFocusMode)mode targetPreset:(CaptureOutputPixelSizePreset)preset circulate:(BOOL)circulate {
     NSArray * const supportedPresets = [self supportedPresets];
 
     switch ([STApp deviceModelFamily]) {
@@ -140,7 +140,7 @@
                         targetIndex = circulate ? 0 : maxSupportedTargetIndex;
                     }
                     // 2nd last preset.
-                    preset = (CaptureOutputSizePreset) [[supportedPresets st_objectOrNilAtIndex:targetIndex] integerValue];
+                    preset = (CaptureOutputPixelSizePreset) [[supportedPresets st_objectOrNilAtIndex:targetIndex] integerValue];
                 }
                     break;
 

@@ -352,7 +352,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     captureDelayTimer = [NSTimer bk_scheduledTimerWithTimeInterval:request.frameCaptureInterval block:^(NSTimer *timer) {
         @autoreleasepool {
             //get image
-            UIImage * capturedImage = [self currentImage:targetOutput maxSidePixelSizeOfOutput:request.captureOutputPixelSizeForCurrentPreset];
+            UIImage * capturedImage = [self currentImage:targetOutput maxSideOutputPixelSize:request.captureOutputPixelSize];
             STCapturedImage * responseImage = [STCapturedImage new];
             responseImage.index = count;
 
@@ -462,7 +462,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
                     [responseImage setOrientationsByCurrent];
 
                     NSLog(@"LensPos : R %f -> A %f",nextLensPosition, self.inputCamera.lensPosition);
-                    UIImage * image = [self currentImage:targetOutput maxSidePixelSizeOfOutput:request.captureOutputPixelSizeForCurrentPreset];
+                    UIImage * image = [self currentImage:targetOutput maxSideOutputPixelSize:request.captureOutputPixelSize];
 
                     if(NeedsLoadImages){
                         responseImage.image = image;
@@ -690,7 +690,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
 
         //new capture
         GPUImageOutput <GPUImageInput> * targetOutput = request.needsFilter;
-        UIImage * image = [self currentImage:targetOutput maxSidePixelSizeOfOutput:request.captureOutputPixelSizeForCurrentPreset];
+        UIImage * image = [self currentImage:targetOutput maxSideOutputPixelSize:request.captureOutputPixelSize];
 
         if(request.needsLoadAnimatableImagesToMemory){
             responseImage.image = image;
@@ -1591,27 +1591,19 @@ static AVCaptureExposureMode _exposureModeBeforeLocked = AVCaptureExposureModeLo
 }
 
 #pragma mark Measure Image From Current FrameBuffer
-CGFloat const STElieCameraCurrentImageMaxSidePixelSize_FullDimension = 4032.5; // 4032를 넣을 경우 실제 이미지는 4031로 나옴.
-CGFloat const STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen = 1440;
-CGFloat const STElieCameraCurrentImageMaxSidePixelSize_ThumbnailPreview = 800;
+CGFloat const CaptureOutputPixelSizeConstFullDimension = 4032.5; // 4032를 넣을 경우 실제 이미지는 4031로 나옴.
+CGFloat const CaptureOutputPixelSizeConstOptimalFullScreen = 1440;
+CGFloat const CaptureOutputPixelSizeConstSmallPreview = 800;
 
 - (UIImage *)currentImage{
     return [self currentImage:nil];
 }
 
 - (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput{
-    return [self currentImage:needsOutput maxSidePixelSizeOfOutput:STElieCameraCurrentImageMaxSidePixelSize_OptimalFullScreen];
+    return [self currentImage:needsOutput maxSideOutputPixelSize:CaptureOutputPixelSizeConstOptimalFullScreen];
 }
 
-- (UIImage *)currentImageAsFullResolution:(GPUImageOutput <GPUImageInput> *)needsOutput{
-    return [self currentImage:needsOutput maxSidePixelSizeOfOutput:STElieCameraCurrentImageMaxSidePixelSize_FullDimension];
-}
-
-- (UIImage *)currentImageAsThumbnailPreview{
-    return [self currentImage:nil maxSidePixelSizeOfOutput:STElieCameraCurrentImageMaxSidePixelSize_ThumbnailPreview];
-}
-
-- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSidePixelSizeOfOutput:(CGFloat)maxSidePixelSizeOfOutput{
+- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput {
     @synchronized (self) {
         UIImage * image = nil;
         if(self.targets.count){

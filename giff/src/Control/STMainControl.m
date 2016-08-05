@@ -561,18 +561,18 @@ BOOL _scrollStopped = YES;
     STStandardButton *resolutionCollectable = [STStandardButton subAssistanceSize];
     resolutionCollectable.allowSelectedStateFromTouchingOutside = YES;
     [resolutionCollectable setButtons:[supportedPresets mapWithIndex:^id(id object, NSInteger index) {
-        switch((CaptureOutputSizePreset)[object integerValue]){
-            case CaptureOutputSizePresetSmall: return [R set_resolution_small];
-            case CaptureOutputSizePresetMedium: return [R set_resolution_medium];
-            case CaptureOutputSizePresetLarge: return [R set_resolution_full];
-            case CaptureOutputSizePreset4K: return [R set_resolution_4k];
+        switch((CaptureOutputPixelSizePreset)[object integerValue]){
+            case CaptureOutputPixelSizePresetSmall: return [R set_resolution_small];
+            case CaptureOutputPixelSizePresetMedium: return [R set_resolution_medium];
+            case CaptureOutputPixelSizePresetLarge: return [R set_resolution_full];
+            case CaptureOutputPixelSizePreset4K: return [R set_resolution_4k];
             default:
                 return [NSNull null];
         }
         return nil;
     }] colors:[supportedPresets mapWithIndex:^id(id object, NSInteger index) {
-        switch((CaptureOutputSizePreset)[object integerValue]){
-            case CaptureOutputSizePreset4K:
+        switch((CaptureOutputPixelSizePreset)[object integerValue]){
+            case CaptureOutputPixelSizePreset4K:
                 return [STStandardUI pointColor];
             default:
                 return [UIColor whiteColor];
@@ -580,14 +580,14 @@ BOOL _scrollStopped = YES;
     }] bgColors:nil style:STStandardButtonStylePTBT];
 
     resolutionCollectable.valuesMap = supportedPresets;
-    resolutionCollectable.currentMappedValue = @([self setCaptureSizePreset:(CaptureOutputSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO]);
+    resolutionCollectable.currentMappedValue = @([self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO]);
 
     [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].postFocusMode) id:@"postFocusMode_maincontrol" changed:^(id value, id _weakSelf) {
-        [self setCaptureSizePreset:(CaptureOutputSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO];
+        [self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO];
     }];
 
     [resolutionCollectable whenSelectedWithMappedValue:^(STSelectableView *button, NSInteger index, id value) {
-        [self setCaptureSizePreset:(CaptureOutputSizePreset) [value integerValue] userTapped:YES];
+        [self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [value integerValue] userTapped:YES];
     }];
 
     [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].captureOutputSizePreset) id:@"captureOutputSizePreset_maincontrol" changed:^(id value, id _weakSelf) {
@@ -621,28 +621,28 @@ BOOL _scrollStopped = YES;
     }];
 }
 
-- (CaptureOutputSizePreset)setCaptureSizePreset:(CaptureOutputSizePreset)preset userTapped:(BOOL)userTapped {
+- (CaptureOutputPixelSizePreset)setCaptureSizePreset:(CaptureOutputPixelSizePreset)preset userTapped:(BOOL)userTapped {
     _homeCollectable.alpha = 1;
     [UIView animateWithDuration:.4 delay:1 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         _homeCollectable.alpha = [STStandardUI alphaForDimmingWeak];
     } completion:nil];
 
-    [STGIFFAppSetting get].captureOutputSizePreset = [STPostFocusCaptureRequest restrictCaptureOutputSizePresetByPostFocusMode:(STPostFocusMode) [STGIFFAppSetting get].postFocusMode
+    [STGIFFAppSetting get].captureOutputSizePreset = [STPostFocusCaptureRequest restrictCaptureOutputPixelSizePresetByPostFocusMode:(STPostFocusMode) [STGIFFAppSetting get].postFocusMode
                                                                                                                   targetPreset:preset
                                                                                                                      circulate:userTapped];
 
     if(userTapped){
         switch (preset){
-            case CaptureOutputSizePresetMedium:
+            case CaptureOutputPixelSizePresetMedium:
                 [[STElieStatusBar sharedInstance] message:[NSString stringWithFormat:NSLocalizedString(@"Image Size: ",nil),NSLocalizedString(@"Medium",nil)]];
                 break;
-            case CaptureOutputSizePresetSmall:
+            case CaptureOutputPixelSizePresetSmall:
                 [[STElieStatusBar sharedInstance] message:[NSString stringWithFormat:NSLocalizedString(@"Image Size: ",nil),NSLocalizedString(@"Small",nil)]];
                 break;
-            case CaptureOutputSizePresetLarge:
+            case CaptureOutputPixelSizePresetLarge:
                 [[STElieStatusBar sharedInstance] message:[NSString stringWithFormat:NSLocalizedString(@"Image Size: ",nil),NSLocalizedString(@"Large",nil)]];
                 break;
-            case CaptureOutputSizePreset4K:
+            case CaptureOutputPixelSizePreset4K:
                 [[STElieStatusBar sharedInstance] message:[NSString stringWithFormat:NSLocalizedString(@"Image Size: ",nil),@"4K"]];
                 break;
             default:
