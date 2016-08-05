@@ -864,7 +864,7 @@
         request = [STAnimatableCaptureRequest request];
     }
     request.origin = STPhotoItemOriginAnimatable;
-    request.captureOutputAspectTransform = CaptureOutputAspectTransformFillCropAsCenterSquare;
+    request.captureOutputAspectFillRatio = CGSizeMake(1,1);
     request.captureOutputPixelSizePreset = CaptureOutputPixelSizePresetSmall;
     request.autoReverseFrames = YES;
     request.responseHandler = ^(STCaptureResponse *result) {

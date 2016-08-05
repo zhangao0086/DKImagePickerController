@@ -25,9 +25,15 @@
 }
 
 - (NSData *)fullResolutionData{
+    return [self fullResolutionData:nil];
+}
+
+- (NSData *)fullResolutionData:(PHImageRequestOptions *(^)(PHImageRequestOptions * defaultOptions))getOptionBlock{
+    PHImageRequestOptions * defaultOption = [PHImageRequestOptions fullResolutionOptions:YES];
+
     __block NSData * data = nil;
     [[PHImageManager defaultManager] requestImageDataForAsset:self
-                                                      options:[PHImageRequestOptions fullResolutionOptions:YES]
+                                                      options:getOptionBlock ? getOptionBlock(defaultOption) : defaultOption
                                                 resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
                                                     data = imageData;
                                                 }];

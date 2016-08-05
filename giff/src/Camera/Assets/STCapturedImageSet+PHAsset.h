@@ -10,6 +10,8 @@
 
 @interface STCapturedImageSet (PHAsset)
 
++ (void)setDefaultAspectFillRatioForAssets:(CGSize)aspectRatio;
+
 + (void)createFromAssets:(NSArray<PHAsset *> *)assets completion:(void (^)(NSArray<STCapturedImageSet *> *imageSets))block;
 
 + (BOOL)createFromAsset:(PHAsset *)asset completion:(void (^)(STCapturedImageSet *imageSet))block;

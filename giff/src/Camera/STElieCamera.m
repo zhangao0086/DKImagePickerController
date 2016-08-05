@@ -364,19 +364,12 @@ static STCameraMode _mode = STCameraModeNotInitialized;
 };
 
 - (UIImage *)currentImageForRequest:(STCaptureRequest *)request{
-    /*
-     * crop region
-     */
-    CGRect cropRegion = CGRectNull;
-    switch (request.captureOutputAspectTransform){
-        case CaptureOutputAspectTransformFillCropAsCenterSquare:
-            cropRegion = CGRectCenterSquareNormalizedRegionAspectFill(self.deviceOutputScreenSize);
-            break;
-        default:
-            break;
+    CGRect normalizedCropRegion = CGRectNull;
+    if(!CGSizeEqualToSize(CGSizeZero, request.captureOutputAspectFillRatio)){
+        normalizedCropRegion = CGRectNormalizedCropRegionAspectFill(self.deviceOutputScreenSize,request.captureOutputAspectFillRatio);
     }
 
-    return [self currentImage:request.needsFilter maxSideOutputPixelSize:request.captureOutputPixelSize cropRegion:cropRegion];
+    return [self currentImage:request.needsFilter maxSideOutputPixelSize:request.captureOutputPixelSize cropRegion:normalizedCropRegion];
 }
 
 #pragma mark Capture Animatable

@@ -117,6 +117,7 @@
 
         [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
 
+            [STCapturedImageSet setDefaultAspectFillRatioForAssets:CGSizeMake(1, 1)];
             [STCapturedImageSet createFromAssets:[assets mapWithItemsKeyPath:@"originalAsset"] completion:^(NSArray *imageSets) {
 
                 for(STCapturedImageSet * imageSet in imageSets){

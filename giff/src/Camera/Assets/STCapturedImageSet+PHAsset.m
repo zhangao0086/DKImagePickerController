@@ -12,6 +12,11 @@
 
 @implementation STCapturedImageSet (PHAsset)
 
+static CGSize defaultAspectFillRatio;
++ (void)setDefaultAspectFillRatioForAssets:(CGSize)aspectRatio {
+    defaultAspectFillRatio = aspectRatio;
+}
+
 + (void)createFromAssets:(NSArray<PHAsset *> *)assets completion:(void(^)(NSArray<STCapturedImageSet *>* imageSets))block{
     NSParameterAssert(assets.count);
     NSParameterAssert(block);
@@ -46,6 +51,7 @@
     if(asset.isVideo){
         [asset exportFileByResourceType:PHAssetResourceTypeVideo completion:^(NSURL *tempFileURL) {
             request.sourceVideoFile = tempFileURL;
+            request.aspectRatioToCrop = defaultAspectFillRatio;
             [NSGIF extract:request completion:^(NSArray *array) {
                 block([STCapturedImageSet setWithImageURLs:array]);
             }];
@@ -57,13 +63,20 @@
         if(asset.isLivePhoto){
             [asset exportLivePhotoVideoFile:^(NSURL *tempFileURL) {
                 request.sourceVideoFile = tempFileURL;
+                request.aspectRatioToCrop = defaultAspectFillRatio;
                 [NSGIF extract:request completion:^(NSArray *array) {
                     block([STCapturedImageSet setWithImageURLs:array]);
                 }];
             }];
 
         }else{
+//            [[asset fullResolutionData:^PHImageRequestOptions *(PHImageRequestOptions *options) {
+//                options.normalizedCropRect = CGRectNormalizedCropRegionAspectFill(CGSizeMake(asset.pixelWidth, asset.pixelHeight), defaultAspectFillRatio);
+//                return options;
+//            }] writeToURL:<#(NSURL *)url#> atomically:<#(BOOL)atomically#>]
+//            [asset fullResolutionData];
             [asset exportFileByResourceType:PHAssetResourceTypePhoto completion:^(NSURL *tempFileURL) {
+                //TODO defaultAspectFillRatio으로 이미지 한장 크롭
                 !block?:block([STCapturedImageSet setWithImages:@[[STCapturedImage imageWithImageUrl:tempFileURL]]]);
             }];
         }

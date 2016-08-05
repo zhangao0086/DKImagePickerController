@@ -11,6 +11,8 @@
 
 - (NSData *)fullResolutionData;
 
+- (NSData *)fullResolutionData:(PHImageRequestOptions *(^)(PHImageRequestOptions * defaultOptions))getOptionBlock;
+
 - (UIImage *)fullScreenImage;
 
 - (BOOL)isLivePhoto;
