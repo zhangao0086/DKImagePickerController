@@ -1208,14 +1208,14 @@
 		4F71D0766BB957A1E7E231BD /* IO */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D79B0CF8EFED758EFEE7 /* STCaptureResponse.m */,
+				4F71D70B9598BAB3AAEB3275 /* STAnimatableCaptureRequest.h */,
 				4F71D97ECBA17982DC349D73 /* STAnimatableCaptureRequest.m */,
 				4F71D039CCF111F211377117 /* STCaptureRequest.h */,
 				4F71D4CE33205F28C6D789C2 /* STCaptureRequest.m */,
 				4F71D466B6EC403B7728CB4C /* STCaptureResponse.h */,
-				4F71D70B9598BAB3AAEB3275 /* STAnimatableCaptureRequest.h */,
-				4F71D07AD32D8DF864503295 /* STPostFocusCaptureRequest.m */,
+				4F71D79B0CF8EFED758EFEE7 /* STCaptureResponse.m */,
 				4F71D3E9F4FAC964B1B40097 /* STPostFocusCaptureRequest.h */,
+				4F71D07AD32D8DF864503295 /* STPostFocusCaptureRequest.m */,
 			);
 			path = IO;
 			sourceTree = "<group>";
@@ -1223,14 +1223,14 @@
 		4F71D22655E6CD9B6A78C847 /* DisplayLayerEffect */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D5488E5274FE85378609 /* STGIFFAnimatableLayerPresentingView.m */,
-				4F71D235C550801764F0BB9F /* STGIFFAnimatableLayerPresentingView.h */,
 				4F71D24697EE7563F4F7673F /* Effects */,
 				4F71D41C4299C3CCC1F5713D /* Filters */,
-				4F71D4D1AF1B65F922E48304 /* STGIFFDisplayLayerEffectsManager.m */,
-				4F71DABC61E122CA2D5828AE /* STGIFFDisplayLayerEffectsManager.h */,
-				4F71DC01C7A4AE5AB1102D95 /* STGIFFDisplayLayerEffectItem.m */,
+				4F71D235C550801764F0BB9F /* STGIFFAnimatableLayerPresentingView.h */,
+				4F71D5488E5274FE85378609 /* STGIFFAnimatableLayerPresentingView.m */,
 				4F71D4B231845FFE5DAE6441 /* STGIFFDisplayLayerEffectItem.h */,
+				4F71DC01C7A4AE5AB1102D95 /* STGIFFDisplayLayerEffectItem.m */,
+				4F71DABC61E122CA2D5828AE /* STGIFFDisplayLayerEffectsManager.h */,
+				4F71D4D1AF1B65F922E48304 /* STGIFFDisplayLayerEffectsManager.m */,
 			);
 			path = DisplayLayerEffect;
 			sourceTree = "<group>";
@@ -1238,18 +1238,18 @@
 		4F71D24697EE7563F4F7673F /* Effects */ = {
 			isa = PBXGroup;
 			children = (
-				4F71DCA93BF646BFF8F2CED6 /* STGIFFDisplayLayerColorizeEffect.m */,
-				4F71D1F8B417DE141A847589 /* STGIFFDisplayLayerColorizeEffect.h */,
-				4F71D3616CB9036630E657C5 /* STGIFFDisplayLayerChromakeyEffect.m */,
 				4F71DFA4216BEAA2BF336D1B /* STGIFFDisplayLayerChromakeyEffect.h */,
-				4F71D925ED72D1F4B3F395C5 /* STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.m */,
+				4F71D3616CB9036630E657C5 /* STGIFFDisplayLayerChromakeyEffect.m */,
+				4F71D1F8B417DE141A847589 /* STGIFFDisplayLayerColorizeEffect.h */,
+				4F71DCA93BF646BFF8F2CED6 /* STGIFFDisplayLayerColorizeEffect.m */,
 				4F71DE0D0C2500D009D33053 /* STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h */,
-				4F71D2BD2D4871511173350E /* STGIFFDisplayLayerLeifEffect.m */,
-				4F71D053182C227A2C05AC89 /* STGIFFDisplayLayerLeifEffect.h */,
-				4F71D89E504DE9FBDFEA873C /* STGIFFDisplayLayerJanneEffect.m */,
+				4F71D925ED72D1F4B3F395C5 /* STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.m */,
 				4F71D904B694231C157AC9B0 /* STGIFFDisplayLayerJanneEffect.h */,
-				4F71DEB4A666F8B52CAF157F /* STMultiSourcingGPUImageProcessor.m */,
+				4F71D89E504DE9FBDFEA873C /* STGIFFDisplayLayerJanneEffect.m */,
+				4F71D053182C227A2C05AC89 /* STGIFFDisplayLayerLeifEffect.h */,
+				4F71D2BD2D4871511173350E /* STGIFFDisplayLayerLeifEffect.m */,
 				4F71DFAE0866888CA00B48BE /* STMultiSourcingGPUImageProcessor.h */,
+				4F71DEB4A666F8B52CAF157F /* STMultiSourcingGPUImageProcessor.m */,
 			);
 			path = Effects;
 			sourceTree = "<group>";
@@ -1257,8 +1257,8 @@
 		4F71D41C4299C3CCC1F5713D /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D526C3DDF2138863954D /* STGPUImageOffsetScalingFilter.m */,
 				4F71D0E809959AE9BEC986D1 /* STGPUImageOffsetScalingFilter.h */,
+				4F71D526C3DDF2138863954D /* STGPUImageOffsetScalingFilter.m */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -1266,10 +1266,10 @@
 		4F71D51C28CA76297AF042C5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				4F71DB8023A7A63E6825587F /* STSelectableCapturedImageSetView.h */,
-				4F71D7117F4477D308F77E3C /* STSelectableCapturedImageSetView.m */,
 				4F71D4334B1B15E20B70319C /* STCapturedImageSetAnimatableLayerSetCollectionView.h */,
 				4F71DD5D3E403CEFBB0462EA /* STCapturedImageSetAnimatableLayerSetCollectionView.m */,
+				4F71DB8023A7A63E6825587F /* STSelectableCapturedImageSetView.h */,
+				4F71D7117F4477D308F77E3C /* STSelectableCapturedImageSetView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1277,16 +1277,16 @@
 		4F71D8282AC69FDE91BD231D /* Display */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D17BBB89D5F918547429 /* STCapturedImageSetDisplayLayerSet.m */,
-				4F71D93A92156EDB9AE04202 /* STCapturedImageSetDisplayLayerSet.h */,
-				4F71D7F93681FAF61DEB0D9B /* STCapturedImageSetAnimatableLayerSet.m */,
+				4F71D4C1B24C30226367340A /* STCapturedImageSetAnimatableLayer.h */,
+				4F71DE13232605B8697535E2 /* STCapturedImageSetAnimatableLayer.m */,
 				4F71D7F35C9CD0C0BC48C967 /* STCapturedImageSetAnimatableLayerSet.h */,
+				4F71D7F93681FAF61DEB0D9B /* STCapturedImageSetAnimatableLayerSet.m */,
 				4F71DF844DCFA4C84194B887 /* STCapturedImageSetDisplayLayer.h */,
 				4F71D71B0A3A15D6AD3C5D5C /* STCapturedImageSetDisplayLayer.m */,
-				4F71DE13232605B8697535E2 /* STCapturedImageSetAnimatableLayer.m */,
-				4F71D4C1B24C30226367340A /* STCapturedImageSetAnimatableLayer.h */,
-				4F71D22FBE4A1568E96A854D /* STCapturedImageSetDisplayObject.m */,
+				4F71D93A92156EDB9AE04202 /* STCapturedImageSetDisplayLayerSet.h */,
+				4F71D17BBB89D5F918547429 /* STCapturedImageSetDisplayLayerSet.m */,
 				4F71D57B819C69FCB5913CEB /* STCapturedImageSetDisplayObject.h */,
+				4F71D22FBE4A1568E96A854D /* STCapturedImageSetDisplayObject.m */,
 			);
 			path = Display;
 			sourceTree = "<group>";
@@ -1294,12 +1294,12 @@
 		4F71D84C469FF098A3B3278D /* EditControl */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D5FB7577665DA4E2829D /* STEditControlFrameEditItemView.m */,
-				4F71DC2EE0E6FEAA0455D09A /* STEditControlFrameEditView.m */,
-				4F71D58E934531167AB856B0 /* STEditControlFrameEditItemView.h */,
-				4F71D26FBC1C61D9038E818F /* STEditControlFrameEditView.h */,
-				4F71D09EE7A6407DEC9E2B71 /* STEditControlEffectSelectorView.m */,
 				4F71D86A566AC4B7DAF6CF94 /* STEditControlEffectSelectorView.h */,
+				4F71D09EE7A6407DEC9E2B71 /* STEditControlEffectSelectorView.m */,
+				4F71D58E934531167AB856B0 /* STEditControlFrameEditItemView.h */,
+				4F71D5FB7577665DA4E2829D /* STEditControlFrameEditItemView.m */,
+				4F71D26FBC1C61D9038E818F /* STEditControlFrameEditView.h */,
+				4F71DC2EE0E6FEAA0455D09A /* STEditControlFrameEditView.m */,
 			);
 			path = EditControl;
 			sourceTree = "<group>";
@@ -1307,10 +1307,10 @@
 		4F71D9AD9769E25020914586 /* Save */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D787EF3B162A2D72AADD /* STCapturedImageStorageManager.m */,
-				4F71DF0914C86FA24209123E /* STCapturedImageStorageManager.h */,
-				4F71D8AEF12644D342578130 /* RLMCapturedImage.m */,
 				4F71DA8B37FE7246C9917A24 /* RLMCapturedImage.h */,
+				4F71D8AEF12644D342578130 /* RLMCapturedImage.m */,
+				4F71DF0914C86FA24209123E /* STCapturedImageStorageManager.h */,
+				4F71D787EF3B162A2D72AADD /* STCapturedImageStorageManager.m */,
 				4F71D59BF022B0B57752944B /* STRLMFileWritable.h */,
 			);
 			path = Save;
@@ -1319,8 +1319,8 @@
 		4F71DAE1031DA15DFDDB49B3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D87E02CE010CB0948FFA /* STPhotoItem+UIAccessory.m */,
 				4F71DCD6DF5CBAFB1C097E52 /* STPhotoItem+UIAccessory.h */,
+				4F71D87E02CE010CB0948FFA /* STPhotoItem+UIAccessory.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1328,12 +1328,12 @@
 		4F71DCF6FD5AD486E52CF0CD /* Processor */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D6F20FFE4468CBC1EE63 /* STCapturedImageProcessor.m */,
 				4F71D648D36D764957CA9FFB /* STCapturedImageProcessor.h */,
-				4F71DCFB3B83FD13A975B6B0 /* STCapturedImageSetDisplayProcessor.m */,
-				4F71DDC3A77E08D2940B8A93 /* STCapturedImageSetDisplayProcessor.h */,
-				4F71D989115D498551BD11DE /* STCapturedImageSetDisplayProcessor+GPUImage.m */,
+				4F71D6F20FFE4468CBC1EE63 /* STCapturedImageProcessor.m */,
 				4F71D6B2E5049BA5BC2A9F57 /* STCapturedImageSetDisplayProcessor+GPUImage.h */,
+				4F71D989115D498551BD11DE /* STCapturedImageSetDisplayProcessor+GPUImage.m */,
+				4F71DDC3A77E08D2940B8A93 /* STCapturedImageSetDisplayProcessor.h */,
+				4F71DCFB3B83FD13A975B6B0 /* STCapturedImageSetDisplayProcessor.m */,
 			);
 			path = Processor;
 			sourceTree = "<group>";
@@ -1343,10 +1343,10 @@
 			children = (
 				4F71DA9BB0683F9B1C8C62A0 /* STCapturedImage+STExporterIOGIF.h */,
 				4F71D5273FC8E8536340AFC5 /* STCapturedImage+STExporterIOGIF.m */,
-				4F71D1FA683A45CFB46D64C0 /* STPhotoItem+ExporterIOGIF.m */,
-				4F71DBDFD3656A18A585947F /* STPhotoItem+ExporterIOGIF.h */,
-				4F71DE9BA46776E4E9FEAEA6 /* STPhotoItem+ExporterIO.m */,
 				4F71DF06EBA031F7C16D41D2 /* STPhotoItem+ExporterIO.h */,
+				4F71DE9BA46776E4E9FEAEA6 /* STPhotoItem+ExporterIO.m */,
+				4F71DBDFD3656A18A585947F /* STPhotoItem+ExporterIOGIF.h */,
+				4F71D1FA683A45CFB46D64C0 /* STPhotoItem+ExporterIOGIF.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1354,18 +1354,18 @@
 		4F71DF8B4D8BC83DC897C11B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				4F71D444A5AEF60E2281FFEF /* STCapturedImage.m */,
-				4F71DC7A5125F1640917C3C0 /* STCapturedImageSet+PostFocus.m */,
-				4F71D57F0B3B7F4C7E264734 /* STCapturedImageSetProtected.h */,
-				4F71DE813EC8B771388C4B3E /* STCapturedImageSet.h */,
 				4F71D80A861BC2ED5B6E645F /* STCapturedImage.h */,
+				4F71D444A5AEF60E2281FFEF /* STCapturedImage.m */,
 				4F71D71EE18EC7245AE21044 /* STCapturedImageProtected.h */,
+				4F71D6A91C7E9FAA5BBE9DDE /* STCapturedImageSet+PHAsset.h */,
+				4F71D5C6473929F338354735 /* STCapturedImageSet+PHAsset.m */,
 				4F71D275C6945BE93A635BCB /* STCapturedImageSet+PostFocus.h */,
+				4F71DC7A5125F1640917C3C0 /* STCapturedImageSet+PostFocus.m */,
+				4F71DE813EC8B771388C4B3E /* STCapturedImageSet.h */,
 				4F71DC031155C096639A58EA /* STCapturedImageSet.m */,
+				4F71D57F0B3B7F4C7E264734 /* STCapturedImageSetProtected.h */,
 				4F71DE1F93AF506D3617FA7B /* STCapturedResource.h */,
 				4F71D3CBB55856F6B7D88267 /* STCapturedResource.m */,
-				4F71D5C6473929F338354735 /* STCapturedImageSet+PHAsset.m */,
-				4F71D6A91C7E9FAA5BBE9DDE /* STCapturedImageSet+PHAsset.h */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1377,15 +1377,14 @@
 				A028DB131D519B0C00983BE8 /* DKImageManager */,
 				A028DB1A1D519B0C00983BE8 /* DKImagePickerController */,
 			);
-			name = DKImagePicker;
-			path = ../../../../gifc/gifc/src/External/DKImagePicker;
+			path = DKImagePicker;
 			sourceTree = "<group>";
 		};
 		A028DB101D519B0C00983BE8 /* DKCamera */ = {
 			isa = PBXGroup;
 			children = (
-				A028DB341D519DA500983BE8 /* DKCameraResource.bundle */,
 				A028DB111D519B0C00983BE8 /* DKCamera.swift */,
+				A028DB341D519DA500983BE8 /* DKCameraResource.bundle */,
 			);
 			path = DKCamera;
 			sourceTree = "<group>";
@@ -1402,8 +1401,8 @@
 		A028DB141D519B0C00983BE8 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				A028DB151D519B0C00983BE8 /* DKGroupDataManager.swift */,
 				A028DB161D519B0C00983BE8 /* Model */,
+				A028DB151D519B0C00983BE8 /* DKGroupDataManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1420,12 +1419,12 @@
 		A028DB1A1D519B0C00983BE8 /* DKImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
+				A028DB201D519B0C00983BE8 /* View */,
 				A028DB1B1D519B0C00983BE8 /* DKImagePickerController.bundle */,
 				A028DB1C1D519B0C00983BE8 /* DKImagePickerController.swift */,
 				A028DB1D1D519B0C00983BE8 /* DKImagePickerControllerDefaultCamera.swift */,
 				A028DB1E1D519B0C00983BE8 /* DKImageResource.swift */,
 				A028DB1F1D519B0C00983BE8 /* DKPopoverViewController.swift */,
-				A028DB201D519B0C00983BE8 /* View */,
 			);
 			path = DKImagePickerController;
 			sourceTree = "<group>";
@@ -1444,13 +1443,13 @@
 		A050CDE71CC5DD0C00628C2F /* giff */ = {
 			isa = PBXGroup;
 			children = (
-				A050CDE81CC5DD0C00628C2F /* AppDelegate.h */,
-				A050CDE91CC5DD0C00628C2F /* AppDelegate.m */,
-				A050CDEA1CC5DD0C00628C2F /* giff-Prefix.pch */,
-				A050CDEB1CC5DD0C00628C2F /* Info.plist */,
-				A050CDEC1CC5DD0C00628C2F /* main.m */,
 				A050CDED1CC5DD0C00628C2F /* res */,
 				A050CF0C1CC5DD0D00628C2F /* src */,
+				A050CDE81CC5DD0C00628C2F /* AppDelegate.h */,
+				A050CDE91CC5DD0C00628C2F /* AppDelegate.m */,
+				A050CDEB1CC5DD0C00628C2F /* Info.plist */,
+				A050CDEA1CC5DD0C00628C2F /* giff-Prefix.pch */,
+				A050CDEC1CC5DD0C00628C2F /* main.m */,
 			);
 			path = giff;
 			sourceTree = "<group>";
@@ -1460,14 +1459,14 @@
 			children = (
 				A050CDEE1CC5DD0C00628C2F /* filter */,
 				A050CE171CC5DD0C00628C2F /* l10n */,
+				A050CE6E1CC5DD0C00628C2F /* svg */,
 				A050CE681CC5DD0C00628C2F /* LaunchScreen.xib */,
-				A050CE691CC5DD0C00628C2F /* marketingAppIcon.png */,
 				A050CE6C1CC5DD0C00628C2F /* R.h */,
 				A050CE6D1CC5DD0C00628C2F /* R.m */,
-				A050CE6E1CC5DD0C00628C2F /* svg */,
 				A050CF0B1CC5DD0D00628C2F /* SystemImage.xcassets */,
-				4F71DDB7D9DB2BAF229D9C49 /* input.jpg */,
 				4F71D3205654F2EBF441B317 /* effect_thumb.png */,
+				4F71DDB7D9DB2BAF229D9C49 /* input.jpg */,
+				A050CE691CC5DD0C00628C2F /* marketingAppIcon.png */,
 			);
 			path = res;
 			sourceTree = "<group>";
@@ -1475,9 +1474,9 @@
 		A050CDEE1CC5DD0C00628C2F /* filter */ = {
 			isa = PBXGroup;
 			children = (
+				A050CDF21CC5DD0C00628C2F /* lookups */,
 				A050CDF01CC5DD0C00628C2F /* color_names.json */,
 				A050CDF11CC5DD0C00628C2F /* lookup_enhance1.png */,
-				A050CDF21CC5DD0C00628C2F /* lookups */,
 				A050CE121CC5DD0C00628C2F /* prismeta.json */,
 				A050CE131CC5DD0C00628C2F /* readme */,
 				A050CE141CC5DD0C00628C2F /* sample50@2x.jpg */,
@@ -1535,8 +1534,8 @@
 			isa = PBXGroup;
 			children = (
 				A050CE181CC5DD0C00628C2F /* InfoPlist.strings */,
-				A050CE1A1CC5DD0C00628C2F /* Localizable.strings */,
 				A050CE441CC5DD0C00628C2F /* LICENSE */,
+				A050CE1A1CC5DD0C00628C2F /* Localizable.strings */,
 				A050CE511CC5DD0C00628C2F /* README.md */,
 			);
 			path = l10n;
@@ -1545,12 +1544,13 @@
 		A050CE6E1CC5DD0C00628C2F /* svg */ = {
 			isa = PBXGroup;
 			children = (
+				A050CE781CC5DD0C00628C2F /* export */,
 				A050CE6F1CC5DD0C00628C2F /* camera_front.svg */,
 				A050CE701CC5DD0C00628C2F /* camera_rear.svg */,
 				A050CE711CC5DD0C00628C2F /* check_circle.svg */,
 				A050CE721CC5DD0C00628C2F /* circle.svg */,
 				A050CE731CC5DD0C00628C2F /* dotdotdot.svg */,
-				A050CE781CC5DD0C00628C2F /* export */,
+				4F71D6938BF3F2425E1E163F /* down_triangle_rounded.svg */,
 				A050CE891CC5DD0C00628C2F /* go_back.svg */,
 				A050CE8A1CC5DD0C00628C2F /* go_edit.svg */,
 				A050CE8B1CC5DD0C00628C2F /* go_elie.svg */,
@@ -1558,6 +1558,7 @@
 				A050CE911CC5DD0C00628C2F /* go_remove.svg */,
 				A050CE921CC5DD0C00628C2F /* go_roll.svg */,
 				A050CE951CC5DD0C00628C2F /* go_scroll_top=ico_direction=ico_play.svg */,
+				4F71D6E47674B33F45BBC26E /* go_take.svg */,
 				A050CE961CC5DD0C00628C2F /* go_transform.svg */,
 				A050CE971CC5DD0C00628C2F /* go_transform_undo.svg */,
 				A050CE981CC5DD0C00628C2F /* go_x=x_circle.svg */,
@@ -1565,18 +1566,29 @@
 				A050CE9A1CC5DD0C00628C2F /* ico_animatable.svg */,
 				A050CE9B1CC5DD0C00628C2F /* ico_camera.svg */,
 				A050CE9C1CC5DD0C00628C2F /* ico_cart.svg */,
+				4F71D3FF7F23C8E777423D71 /* ico_cell_blank.svg */,
 				A050CE9E1CC5DD0C00628C2F /* ico_cell_origin_elie.svg */,
 				A050CE9F1CC5DD0C00628C2F /* ico_cell_origin_manual.svg */,
+				4F71D3B2DAC753B62FD305B4 /* ico_cell_origin_postfocus_point.svg */,
 				A050CEA01CC5DD0C00628C2F /* ico_cell_origin_quick.svg */,
+				4F71DA2FACA4D38B13669625 /* ico_cell_origin_room=go_room.svg */,
 				A050CEA11CC5DD0C00628C2F /* ico_exposure_max.svg */,
 				A050CEA21CC5DD0C00628C2F /* ico_exposure_min.svg */,
 				A050CEA31CC5DD0C00628C2F /* ico_flash_auto.svg */,
 				A050CEA41CC5DD0C00628C2F /* ico_flash_off.svg */,
+				4F71DE825C1AC21D72AB6CB9 /* ico_landscape.svg */,
+				4F71DE9A5569D456EA33A09C /* ico_macro.svg */,
 				A050CEA71CC5DD0C00628C2F /* ico_manual_af_lock.svg */,
 				A050CEA81CC5DD0C00628C2F /* ico_no_photo.svg */,
 				A050CEC51CC5DD0D00628C2F /* ico_video.svg */,
+				4F71D26714BAB7552F773108 /* icon.svg */,
 				A050CEC71CC5DD0D00628C2F /* icon_fit.svg */,
 				A050CEC81CC5DD0D00628C2F /* logo.svg */,
+				4F71DFA4BE0A87BBA6FC2B9B /* logo_elie.svg */,
+				4F71D6406D30CCA3B8ACF7D8 /* logo_part_0.svg */,
+				4F71D0B83249614D69708FEC /* logo_part_1.svg */,
+				4F71D265AAEDAAC78DD97E1D /* logo_part_2.svg */,
+				4F71D038C0CB9D8D41C47BF1 /* set_add.svg */,
 				A050CECD1CC5DD0D00628C2F /* set_done.svg */,
 				A050CECE1CC5DD0D00628C2F /* set_edit_autoenhance.svg */,
 				A050CECF1CC5DD0D00628C2F /* set_flash_auto.svg */,
@@ -1596,35 +1608,22 @@
 				A050CEF31CC5DD0D00628C2F /* set_manual_front.svg */,
 				A050CEF41CC5DD0D00628C2F /* set_manual_rear.svg */,
 				A050CEF51CC5DD0D00628C2F /* set_manual_single.svg */,
-				A050CEF61CC5DD0D00628C2F /* set_reset.svg */,
-				A050CEFB1CC5DD0D00628C2F /* set_star.svg */,
-				A050CEFC1CC5DD0D00628C2F /* set_transform_rotate90.svg */,
-				A050CEFD1CC5DD0D00628C2F /* set_transform_square.svg */,
-				A050CEFE1CC5DD0D00628C2F /* slide_arrow_down.svg */,
-				A050CEFF1CC5DD0D00628C2F /* slide_arrow_down_ios.svg */,
-				4F71DE825C1AC21D72AB6CB9 /* ico_landscape.svg */,
-				4F71DE9A5569D456EA33A09C /* ico_macro.svg */,
-				4F71DA20030C611C8BC69FDC /* set_torchlight_on.svg */,
-				4F71D371759A4C435CABAAE3 /* set_torchlight_off.svg */,
-				4F71D6406D30CCA3B8ACF7D8 /* logo_part_0.svg */,
-				4F71D0B83249614D69708FEC /* logo_part_1.svg */,
-				4F71D265AAEDAAC78DD97E1D /* logo_part_2.svg */,
-				4F71D6E47674B33F45BBC26E /* go_take.svg */,
-				4F71DA2FACA4D38B13669625 /* ico_cell_origin_room=go_room.svg */,
-				4F71D3FF7F23C8E777423D71 /* ico_cell_blank.svg */,
-				4F71D26714BAB7552F773108 /* icon.svg */,
 				4F71DC345A31992D6900FB11 /* set_postfocus_fullrange.svg */,
 				4F71D6703E85613489D2C738 /* set_postfocus_point.svg */,
-				4F71D992355DC6EA0659B392 /* set_torchlight_strong.svg */,
-				4F71DFA4BE0A87BBA6FC2B9B /* logo_elie.svg */,
-				4F71D3B2DAC753B62FD305B4 /* ico_cell_origin_postfocus_point.svg */,
-				4F71D6938BF3F2425E1E163F /* down_triangle_rounded.svg */,
 				4F71D5EB3BF4F313CAEB5EC9 /* set_postfocus_vertical_3point.svg */,
+				A050CEF61CC5DD0D00628C2F /* set_reset.svg */,
 				4F71D3401F5ECD85A0B7AEA8 /* set_resolution_4k.svg */,
 				4F71D41BF339D7E2D2A7A2E3 /* set_resolution_full.svg */,
 				4F71D0D2E259FCF2DB3A53C9 /* set_resolution_medium.svg */,
 				4F71D84002885E18053166DA /* set_resolution_small.svg */,
-				4F71D038C0CB9D8D41C47BF1 /* set_add.svg */,
+				A050CEFB1CC5DD0D00628C2F /* set_star.svg */,
+				4F71D371759A4C435CABAAE3 /* set_torchlight_off.svg */,
+				4F71DA20030C611C8BC69FDC /* set_torchlight_on.svg */,
+				4F71D992355DC6EA0659B392 /* set_torchlight_strong.svg */,
+				A050CEFC1CC5DD0D00628C2F /* set_transform_rotate90.svg */,
+				A050CEFD1CC5DD0D00628C2F /* set_transform_square.svg */,
+				A050CEFE1CC5DD0D00628C2F /* slide_arrow_down.svg */,
+				A050CEFF1CC5DD0D00628C2F /* slide_arrow_down_ios.svg */,
 			);
 			path = svg;
 			sourceTree = "<group>";
@@ -1635,19 +1634,19 @@
 				A050CE791CC5DD0C00628C2F /* facebook.svg */,
 				A050CE7A1CC5DD0C00628C2F /* fbm.svg */,
 				A050CE7B1CC5DD0C00628C2F /* instagram.svg */,
+				4F71DDCC6F60F70FBDE346FE /* ios_photos.svg */,
 				A050CE7D1CC5DD0C00628C2F /* kik.svg */,
 				A050CE7E1CC5DD0C00628C2F /* line.svg */,
 				A050CE7F1CC5DD0C00628C2F /* openin.svg */,
 				A050CE801CC5DD0C00628C2F /* save.svg */,
 				A050CE811CC5DD0C00628C2F /* share.svg */,
+				4F71D07579EE88BAF30A646D /* share_fit.svg */,
 				A050CE821CC5DD0C00628C2F /* transfer.svg */,
 				A050CE831CC5DD0C00628C2F /* tumblr.svg */,
 				A050CE841CC5DD0C00628C2F /* tumblr_logo.svg */,
 				A050CE851CC5DD0C00628C2F /* twitter.svg */,
 				A050CE871CC5DD0C00628C2F /* wechat.svg */,
 				A050CE881CC5DD0C00628C2F /* whatsapp.svg */,
-				4F71DDCC6F60F70FBDE346FE /* ios_photos.svg */,
-				4F71D07579EE88BAF30A646D /* share_fit.svg */,
 			);
 			path = export;
 			sourceTree = "<group>";
@@ -1658,6 +1657,7 @@
 				A050CF0D1CC5DD0D00628C2F /* Camera */,
 				A050CF211CC5DD0D00628C2F /* Control */,
 				A050CF2D1CC5DD0D00628C2F /* CoreComponents */,
+				4F71D22655E6CD9B6A78C847 /* DisplayLayerEffect */,
 				A050CFC11CC5DD0D00628C2F /* External */,
 				A050CFFC1CC5DD0D00628C2F /* Filters */,
 				A050D00A1CC5DD0D00628C2F /* FiltersView */,
@@ -1666,12 +1666,17 @@
 				A050D0961CC5DD0D00628C2F /* Products */,
 				A050D0A21CC5DD0D00628C2F /* Setting */,
 				A050D0A91CC5DD0D00628C2F /* StatusBar */,
+				A050D0C41CC5DD0D00628C2F /* UXComponents */,
+				4F71D5DB487DA3FA6434CB72 /* STGIFFAnimatableLogoView.h */,
+				4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */,
 				A050D0AC1CC5DD0D00628C2F /* STGIFFApp.h */,
 				A050D0AD1CC5DD0D00628C2F /* STGIFFApp.m */,
 				A050D0AE1CC5DD0D00628C2F /* STGIFFAppSetting.h */,
 				A050D0AF1CC5DD0D00628C2F /* STGIFFAppSetting.m */,
 				A050D0BA1CC5DD0D00628C2F /* STGIFFRootViewController.h */,
 				A050D0BB1CC5DD0D00628C2F /* STGIFFRootViewController.m */,
+				4F71D703126510249FD53F07 /* STGIFFStandardColor.h */,
+				4F71D33E62373415D7393C86 /* STGIFFStandardColor.m */,
 				A050D0BC1CC5DD0D00628C2F /* STUIApplication+QuickAction.h */,
 				A050D0BD1CC5DD0D00628C2F /* STUIApplication+QuickAction.m */,
 				A050D0BE1CC5DD0D00628C2F /* STUIApplication+SpotlightSearch.h */,
@@ -1680,12 +1685,6 @@
 				A050D0C11CC5DD0D00628C2F /* STUserActor.m */,
 				A050D0C21CC5DD0D00628C2F /* UIAlertController+STGIFFApp.h */,
 				A050D0C31CC5DD0D00628C2F /* UIAlertController+STGIFFApp.m */,
-				A050D0C41CC5DD0D00628C2F /* UXComponents */,
-				4F71D33E62373415D7393C86 /* STGIFFStandardColor.m */,
-				4F71D703126510249FD53F07 /* STGIFFStandardColor.h */,
-				4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */,
-				4F71D5DB487DA3FA6434CB72 /* STGIFFAnimatableLogoView.h */,
-				4F71D22655E6CD9B6A78C847 /* DisplayLayerEffect */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1693,14 +1692,14 @@
 		A050CF0D1CC5DD0D00628C2F /* Camera */ = {
 			isa = PBXGroup;
 			children = (
-				A050CF0E1CC5DD0D00628C2F /* Smerk */,
-				A050CF1F1CC5DD0D00628C2F /* STElieCamera.h */,
-				A050CF201CC5DD0D00628C2F /* STElieCamera.m */,
-				4F71D8282AC69FDE91BD231D /* Display */,
 				4F71DF8B4D8BC83DC897C11B /* Assets */,
+				4F71D8282AC69FDE91BD231D /* Display */,
 				4F71D0766BB957A1E7E231BD /* IO */,
 				4F71DCF6FD5AD486E52CF0CD /* Processor */,
+				A050CF0E1CC5DD0D00628C2F /* Smerk */,
 				4F71D51C28CA76297AF042C5 /* View */,
+				A050CF1F1CC5DD0D00628C2F /* STElieCamera.h */,
+				A050CF201CC5DD0D00628C2F /* STElieCamera.m */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -1732,19 +1731,19 @@
 		A050CF211CC5DD0D00628C2F /* Control */ = {
 			isa = PBXGroup;
 			children = (
+				4F71D84C469FF098A3B3278D /* EditControl */,
+				4F71DD5529C041B5829065CC /* STCameraControlView.h */,
+				4F71DC29CD832E0B3C39E7F7 /* STCameraControlView.m */,
+				4F71D5D40F49D5371F223BD4 /* STEditControlView.h */,
+				4F71D13086633362632D4CB5 /* STEditControlView.m */,
+				4F71DEB2159D686E3F871394 /* STExportControlView.h */,
+				4F71D5F64F6774523B061093 /* STExportControlView.m */,
 				A050CF271CC5DD0D00628C2F /* STHome.h */,
 				A050CF281CC5DD0D00628C2F /* STHome.m */,
 				A050CF291CC5DD0D00628C2F /* STMainControl.h */,
 				A050CF2A1CC5DD0D00628C2F /* STMainControl.m */,
 				A050CF2B1CC5DD0D00628C2F /* STSubControl.h */,
 				A050CF2C1CC5DD0D00628C2F /* STSubControl.m */,
-				4F71DC29CD832E0B3C39E7F7 /* STCameraControlView.m */,
-				4F71DD5529C041B5829065CC /* STCameraControlView.h */,
-				4F71D13086633362632D4CB5 /* STEditControlView.m */,
-				4F71D5D40F49D5371F223BD4 /* STEditControlView.h */,
-				4F71D5F64F6774523B061093 /* STExportControlView.m */,
-				4F71DEB2159D686E3F871394 /* STExportControlView.h */,
-				4F71D84C469FF098A3B3278D /* EditControl */,
 			);
 			path = Control;
 			sourceTree = "<group>";
@@ -1774,6 +1773,8 @@
 				A050CF411CC5DD0D00628C2F /* NSArray+STUtil.m */,
 				A050CF421CC5DD0D00628C2F /* NSData+STGIFUtil.h */,
 				A050CF431CC5DD0D00628C2F /* NSData+STGIFUtil.m */,
+				4F71D24C93D4A92B99A914A6 /* NSDictionary+STUtil.h */,
+				4F71D1D7235A2F354A834B0D /* NSDictionary+STUtil.m */,
 				A050CF441CC5DD0D00628C2F /* NSIndexPath+STIndexPathForSingleSection.h */,
 				A050CF451CC5DD0D00628C2F /* NSIndexPath+STIndexPathForSingleSection.m */,
 				A050CF461CC5DD0D00628C2F /* NSNotificationCenter+STFXNotificationsShortHand.h */,
@@ -1802,6 +1803,8 @@
 				A050CF5D1CC5DD0D00628C2F /* PHAsset+STUtil.m */,
 				A050CF5E1CC5DD0D00628C2F /* PHAsset+Utility.h */,
 				A050CF5F1CC5DD0D00628C2F /* PHAsset+Utility.m */,
+				4F71D5E6D25D8A0823DF71C2 /* PHImageRequestOptions+STUtil.h */,
+				4F71DE2E8EB29DB40A60C5FF /* PHImageRequestOptions+STUtil.m */,
 				A050CF601CC5DD0D00628C2F /* README.md */,
 				A050CF611CC5DD0D00628C2F /* STApp+Logger.h */,
 				A050CF621CC5DD0D00628C2F /* STApp+Logger.m */,
@@ -1830,6 +1833,8 @@
 				A050CF791CC5DD0D00628C2F /* STDrawableLayer.m */,
 				A050CF7A1CC5DD0D00628C2F /* STExpandableView.h */,
 				A050CF7B1CC5DD0D00628C2F /* STExpandableView.m */,
+				4F71D332B4503F1377A58C6E /* STFastUIViewSelectableView.h */,
+				4F71D8DEBDD9961CF869A450 /* STFastUIViewSelectableView.m */,
 				A050CF7C1CC5DD0D00628C2F /* STItem.h */,
 				A050CF7D1CC5DD0D00628C2F /* STItem.m */,
 				A050CF7E1CC5DD0D00628C2F /* STLivePhotoView.h */,
@@ -1842,6 +1847,8 @@
 				A050CF851CC5DD0D00628C2F /* STMotionScrollLivePhotoView.m */,
 				A050CF861CC5DD0D00628C2F /* STMotionScrollView.h */,
 				A050CF871CC5DD0D00628C2F /* STMotionScrollView.m */,
+				4F71D31305141DC74503EE6E /* STMultiSourcingImageProcessor.h */,
+				4F71DC608A8141B705DA42B3 /* STMultiSourcingImageProcessor.m */,
 				A050CF881CC5DD0D00628C2F /* STOrientationItem.h */,
 				A050CF891CC5DD0D00628C2F /* STOrientationItem.m */,
 				A050CF8A1CC5DD0D00628C2F /* STPermission.h */,
@@ -1892,14 +1899,6 @@
 				A050CFB71CC5DD0D00628C2F /* UIView+STUtil.m */,
 				A050CFB81CC5DD0D00628C2F /* UIViewController+STUtil.h */,
 				A050CFB91CC5DD0D00628C2F /* UIViewController+STUtil.m */,
-				4F71D1D7235A2F354A834B0D /* NSDictionary+STUtil.m */,
-				4F71D24C93D4A92B99A914A6 /* NSDictionary+STUtil.h */,
-				4F71DC608A8141B705DA42B3 /* STMultiSourcingImageProcessor.m */,
-				4F71D31305141DC74503EE6E /* STMultiSourcingImageProcessor.h */,
-				4F71D8DEBDD9961CF869A450 /* STFastUIViewSelectableView.m */,
-				4F71D332B4503F1377A58C6E /* STFastUIViewSelectableView.h */,
-				4F71D5E6D25D8A0823DF71C2 /* PHImageRequestOptions+STUtil.h */,
-				4F71DE2E8EB29DB40A60C5FF /* PHImageRequestOptions+STUtil.m */,
 			);
 			path = CoreComponents;
 			sourceTree = "<group>";
@@ -1907,22 +1906,22 @@
 		A050CFC11CC5DD0D00628C2F /* External */ = {
 			isa = PBXGroup;
 			children = (
-				A028DB0F1D519B0C00983BE8 /* DKImagePicker */,
 				A050CFC21CC5DD0D00628C2F /* BCMeshTransform */,
 				A050CFC51CC5DD0D00628C2F /* ColorArt */,
+				A028DB0F1D519B0C00983BE8 /* DKImagePicker */,
 				A050CFCC1CC5DD0D00628C2F /* LEColorPicker */,
-				A050CFD11CC5DD0D00628C2F /* MMPlaceHolder.h */,
-				A050CFD21CC5DD0D00628C2F /* MMPlaceHolder.m */,
 				A050CFD31CC5DD0D00628C2F /* PARStore */,
 				A050CFD61CC5DD0D00628C2F /* SCPagingGridView */,
 				A050CFED1CC5DD0D00628C2F /* STTimeSlider */,
+				A050CFF81CC5DD0D00628C2F /* WeChatSDK */,
+				A050CFD11CC5DD0D00628C2F /* MMPlaceHolder.h */,
+				A050CFD21CC5DD0D00628C2F /* MMPlaceHolder.m */,
 				A050CFF21CC5DD0D00628C2F /* SVGKFastImageView+STUtil.h */,
 				A050CFF31CC5DD0D00628C2F /* SVGKFastImageView+STUtil.m */,
 				A050CFF41CC5DD0D00628C2F /* TABFileMonitor.h */,
 				A050CFF51CC5DD0D00628C2F /* TABFileMonitor.m */,
 				A050CFF61CC5DD0D00628C2F /* VIMDeeplink.h */,
 				A050CFF71CC5DD0D00628C2F /* VIMDeeplink.m */,
-				A050CFF81CC5DD0D00628C2F /* WeChatSDK */,
 			);
 			path = External;
 			sourceTree = "<group>";
@@ -2019,9 +2018,9 @@
 		A050CFF81CC5DD0D00628C2F /* WeChatSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A050CFF91CC5DD0D00628C2F /* libWeChatSDK.a */,
 				A050CFFA1CC5DD0D00628C2F /* WXApi.h */,
 				A050CFFB1CC5DD0D00628C2F /* WXApiObject.h */,
+				A050CFF91CC5DD0D00628C2F /* libWeChatSDK.a */,
 			);
 			path = WeChatSDK;
 			sourceTree = "<group>";
@@ -2038,8 +2037,8 @@
 				A050D0071CC5DD0D00628C2F /* STFilterItem.m */,
 				A050D0081CC5DD0D00628C2F /* STFilterManager.h */,
 				A050D0091CC5DD0D00628C2F /* STFilterManager.m */,
-				4F71D3EADF65237E2B284141 /* STGPUImageOutputComposeItem.m */,
 				4F71D0397DE166D0D98DEB88 /* STGPUImageOutputComposeItem.h */,
+				4F71D3EADF65237E2B284141 /* STGPUImageOutputComposeItem.m */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -2075,15 +2074,15 @@
 			children = (
 				A050D0311CC5DD0D00628C2F /* Editor */,
 				A050D03D1CC5DD0D00628C2F /* Export */,
+				4F71D9AD9769E25020914586 /* Save */,
+				4F71DAE1031DA15DFDDB49B3 /* UI */,
 				A050D06C1CC5DD0D00628C2F /* STPhotoItem.h */,
 				A050D06D1CC5DD0D00628C2F /* STPhotoItem.m */,
 				A050D06E1CC5DD0D00628C2F /* STPhotoItemSource.h */,
 				A050D06F1CC5DD0D00628C2F /* STPhotoItemSource.m */,
 				A050D0701CC5DD0D00628C2F /* STPhotos.h */,
-				4F71D9AD9769E25020914586 /* Save */,
-				4F71DE59146C5D88FBC55984 /* STPhotosManager.m */,
 				4F71DBD7DD7B3F0053E232E9 /* STPhotosManager.h */,
-				4F71DAE1031DA15DFDDB49B3 /* UI */,
+				4F71DE59146C5D88FBC55984 /* STPhotosManager.m */,
 			);
 			path = Photos;
 			sourceTree = "<group>";
@@ -2109,12 +2108,19 @@
 		A050D03D1CC5DD0D00628C2F /* Export */ = {
 			isa = PBXGroup;
 			children = (
+				4F71DD8E80FC6FEE608157E7 /* Extensions */,
+				A050D0621CC5DD0D00628C2F /* STExportManager.h */,
+				A050D0631CC5DD0D00628C2F /* STExportManager.m */,
 				A050D03E1CC5DD0D00628C2F /* STExporter+Config.h */,
 				A050D03F1CC5DD0D00628C2F /* STExporter+Config.m */,
+				4F71D138C0E19D47C015CFF5 /* STExporter+ConfigGIF.h */,
+				4F71D161041DCBEE3F38A043 /* STExporter+ConfigGIF.m */,
 				A050D0401CC5DD0D00628C2F /* STExporter+Handle.h */,
 				A050D0411CC5DD0D00628C2F /* STExporter+Handle.m */,
 				A050D0421CC5DD0D00628C2F /* STExporter+IO.h */,
 				A050D0431CC5DD0D00628C2F /* STExporter+IO.m */,
+				4F71DCF660F8E7B8CAD9F53D /* STExporter+IOGIF.h */,
+				4F71D43A9F6FF6C3DED4ABD8 /* STExporter+IOGIF.m */,
 				A050D0441CC5DD0D00628C2F /* STExporter+URL.h */,
 				A050D0451CC5DD0D00628C2F /* STExporter+URL.m */,
 				A050D0461CC5DD0D00628C2F /* STExporter.h */,
@@ -2135,6 +2141,8 @@
 				A050D0551CC5DD0D00628C2F /* STExporterOpenIn.m */,
 				A050D0561CC5DD0D00628C2F /* STExporterSaveToLibrary.h */,
 				A050D0571CC5DD0D00628C2F /* STExporterSaveToLibrary.m */,
+				4F71D058B456F27E483B3118 /* STExporterSaveToPhotos.h */,
+				4F71D7CC5477AFB3529D50A4 /* STExporterSaveToPhotos.m */,
 				A050D0581CC5DD0D00628C2F /* STExporterShare.h */,
 				A050D0591CC5DD0D00628C2F /* STExporterShare.m */,
 				A050D05A1CC5DD0D00628C2F /* STExporterTumblr.h */,
@@ -2145,17 +2153,8 @@
 				A050D05F1CC5DD0D00628C2F /* STExporterWeChat.m */,
 				A050D0601CC5DD0D00628C2F /* STExporterWhatsApp.h */,
 				A050D0611CC5DD0D00628C2F /* STExporterWhatsApp.m */,
-				A050D0621CC5DD0D00628C2F /* STExportManager.h */,
-				A050D0631CC5DD0D00628C2F /* STExportManager.m */,
 				A050D0641CC5DD0D00628C2F /* STSLComposeViewExporter.h */,
 				A050D0651CC5DD0D00628C2F /* STSLComposeViewExporter.m */,
-				4F71D161041DCBEE3F38A043 /* STExporter+ConfigGIF.m */,
-				4F71D138C0E19D47C015CFF5 /* STExporter+ConfigGIF.h */,
-				4F71D43A9F6FF6C3DED4ABD8 /* STExporter+IOGIF.m */,
-				4F71DCF660F8E7B8CAD9F53D /* STExporter+IOGIF.h */,
-				4F71D7CC5477AFB3529D50A4 /* STExporterSaveToPhotos.m */,
-				4F71D058B456F27E483B3118 /* STExporterSaveToPhotos.h */,
-				4F71DD8E80FC6FEE608157E7 /* Extensions */,
 			);
 			path = Export;
 			sourceTree = "<group>";
@@ -2192,16 +2191,16 @@
 			children = (
 				A050D0781CC5DD0D00628C2F /* STExportContentView.h */,
 				A050D0791CC5DD0D00628C2F /* STExportContentView.m */,
-				A050D07A1CC5DD0D00628C2F /* STExporter+View.h */,
-				A050D07B1CC5DD0D00628C2F /* STExporter+View.m */,
 				A050D07C1CC5DD0D00628C2F /* STExportLoginContentView.h */,
 				A050D07D1CC5DD0D00628C2F /* STExportLoginContentView.m */,
 				A050D07E1CC5DD0D00628C2F /* STExportPhotosContentView.h */,
 				A050D07F1CC5DD0D00628C2F /* STExportPhotosContentView.m */,
+				4F71D37DA8ED66E260CAB455 /* STExportSelectView.h */,
+				4F71D771DBF54CD30A0F803E /* STExportSelectView.m */,
 				A050D0801CC5DD0D00628C2F /* STExportView.h */,
 				A050D0811CC5DD0D00628C2F /* STExportView.m */,
-				4F71D771DBF54CD30A0F803E /* STExportSelectView.m */,
-				4F71D37DA8ED66E260CAB455 /* STExportSelectView.h */,
+				A050D07A1CC5DD0D00628C2F /* STExporter+View.h */,
+				A050D07B1CC5DD0D00628C2F /* STExporter+View.m */,
 			);
 			path = ExportView;
 			sourceTree = "<group>";
@@ -2226,8 +2225,8 @@
 				A050D08D1CC5DD0D00628C2F /* STPreview.m */,
 				A050D08E1CC5DD0D00628C2F /* STPreviewCollector.h */,
 				A050D08F1CC5DD0D00628C2F /* STPreviewCollector.m */,
-				4F71DD9519C73B5BEEF14313 /* STPreviewPresenterAnimatableImage.m */,
 				4F71DA1A687CAE3DAC506D38 /* STPreviewPresenterAnimatableImage.h */,
+				4F71DD9519C73B5BEEF14313 /* STPreviewPresenterAnimatableImage.m */,
 			);
 			path = Preview;
 			sourceTree = "<group>";
@@ -2266,8 +2265,8 @@
 		A050D0C41CC5DD0D00628C2F /* UXComponents */ = {
 			isa = PBXGroup;
 			children = (
-				A050D0C51CC5DD0D00628C2F /* .gitignore */,
 				A050D0C61CC5DD0D00628C2F /* External */,
+				A050D0C51CC5DD0D00628C2F /* .gitignore */,
 				A050D0CB1CC5DD0D00628C2F /* LICENSE */,
 				A050D0CC1CC5DD0D00628C2F /* README.md */,
 				A050D0CD1CC5DD0D00628C2F /* STStandardButton.h */,
@@ -2278,6 +2277,8 @@
 				A050D0D21CC5DD0D00628C2F /* STStandardLayout.m */,
 				A050D0D31CC5DD0D00628C2F /* STStandardNavigationButton.h */,
 				A050D0D41CC5DD0D00628C2F /* STStandardNavigationButton.m */,
+				4F71DEA4B2A3D79580C74A6A /* STStandardPointableSlider.h */,
+				4F71D47AA9D2960523FF1C1E /* STStandardPointableSlider.m */,
 				A050D0D51CC5DD0D00628C2F /* STStandardReachableButton.h */,
 				A050D0D61CC5DD0D00628C2F /* STStandardReachableButton.m */,
 				A050D0D71CC5DD0D00628C2F /* STStandardSegmentationSelector.h */,
@@ -2294,8 +2295,6 @@
 				A050D0E21CC5DD0D00628C2F /* UIViewController+STStandard.m */,
 				A050D0E31CC5DD0D00628C2F /* UIViewController+URL.h */,
 				A050D0E41CC5DD0D00628C2F /* UIViewController+URL.m */,
-				4F71DEA4B2A3D79580C74A6A /* STStandardPointableSlider.h */,
-				4F71D47AA9D2960523FF1C1E /* STStandardPointableSlider.m */,
 			);
 			path = UXComponents;
 			sourceTree = "<group>";
@@ -2314,10 +2313,10 @@
 		A0951E861A45B71D0023CF83 = {
 			isa = PBXGroup;
 			children = (
-				A050CDE71CC5DD0C00628C2F /* giff */,
-				A0951E901A45B71D0023CF83 /* Products */,
-				0256CB554B7DE438E703CF16 /* Pods */,
 				FA4FB0AC419A4F7957089488 /* Frameworks */,
+				0256CB554B7DE438E703CF16 /* Pods */,
+				A0951E901A45B71D0023CF83 /* Products */,
+				A050CDE71CC5DD0C00628C2F /* giff */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2936,8 +2935,8 @@
 		A050CE181CC5DD0C00628C2F /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A050CE191CC5DD0C00628C2F /* ar */,
 				A050CE1C1CC5DD0C00628C2F /* Base */,
+				A050CE191CC5DD0C00628C2F /* ar */,
 				A050CE1E1CC5DD0C00628C2F /* ca */,
 				A050CE201CC5DD0C00628C2F /* cs */,
 				A050CE221CC5DD0C00628C2F /* da */,
@@ -2976,13 +2975,14 @@
 				A050CE661CC5DD0C00628C2F /* zh_TW */,
 			);
 			name = InfoPlist.strings;
+			path = .;
 			sourceTree = "<group>";
 		};
 		A050CE1A1CC5DD0C00628C2F /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A050CE1B1CC5DD0C00628C2F /* ar */,
 				A050CE1D1CC5DD0C00628C2F /* Base */,
+				A050CE1B1CC5DD0C00628C2F /* ar */,
 				A050CE1F1CC5DD0C00628C2F /* ca */,
 				A050CE211CC5DD0C00628C2F /* cs */,
 				A050CE231CC5DD0C00628C2F /* da */,
@@ -3021,6 +3021,7 @@
 				A050CE671CC5DD0C00628C2F /* zh_TW */,
 			);
 			name = Localizable.strings;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
