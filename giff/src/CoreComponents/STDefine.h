@@ -423,9 +423,38 @@ isInstanceMethodOverridden(Class cls, SEL selector)
     return overridden;
 }
 
+CG_INLINE double
+GetPrecisionRestrictedNumber(double number, int numberOfDigits, BOOL rounded){
+    double const P = pow(10, numberOfDigits);
+    return floor(number * P + (rounded ? .5 : 0.)) / P;
+}
+
+#pragma mark CropRect AspectRatio
+
+CG_INLINE CGRect
+CGRectNormalizedCropRegionAspectFill(CGSize containerSize, CGSize sizeValueOfAspectRatio){
+    BOOL portrait = containerSize.height >= containerSize.width;
+    CGFloat ratio = CGSizeMinSide(containerSize)/CGSizeMaxSide(containerSize);
+    CGFloat aspectRatio = sizeValueOfAspectRatio.width/sizeValueOfAspectRatio.height;
+    ratio *= portrait ? 1/aspectRatio : aspectRatio;
+    //wrap for infinity overflow of floating point. (ex 1.7777777)
+    ratio = (CGFloat) (ratio>1 ? floor(ratio) : ratio);
+//	ratio = ratio>1 ? 1+(1-ratio) : ratio;
+    return portrait ? CGRectMake(0,(1-ratio)/2.f, 1,ratio) : CGRectMake((1-ratio)/2.f, 0, ratio, 1);
+}
+
+CG_INLINE CGRect
+CGRectCropRegionAspectFill(CGSize targetSize, CGSize sizeValueOfAspectRatio){
+    CGRect normalizedCropRect = CGRectNormalizedCropRegionAspectFill(targetSize,sizeValueOfAspectRatio);
+    return CGRectMake(
+            (CGFloat)floor(normalizedCropRect.origin.x * targetSize.width),
+            (CGFloat)floor(normalizedCropRect.origin.y * targetSize.height),
+            (CGFloat)floor(normalizedCropRect.size.width * targetSize.width),
+            (CGFloat)floor(normalizedCropRect.size.height * targetSize.height)
+    );
+}
+
 CG_INLINE CGRect
 CGRectCenterSquareNormalizedRegionAspectFill(CGSize containerSize){
-    CGFloat ratio = CGSizeMinSide(containerSize)/CGSizeMaxSide(containerSize);
-    return containerSize.height >= containerSize.width ?
-            CGRectMake(0,1-ratio,1,ratio) : CGRectMake(1-ratio, 0, ratio, 1);
+    return CGRectNormalizedCropRegionAspectFill(containerSize,CGSizeMake(1,1));
 }
