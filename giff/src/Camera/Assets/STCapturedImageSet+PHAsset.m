@@ -40,7 +40,7 @@
 + (BOOL)createFromAsset:(PHAsset *)asset completion:(void(^)(STCapturedImageSet * imageSet))block{
     NSParameterAssert(block);
 
-    NSFrameExtractingFromVideoRequest * request = [NSFrameExtractingFromVideoRequest new];
+    NSFrameExtractingRequest * request = [NSFrameExtractingRequest new];
     request.framesPerSecond = 4;
 
     if(asset.isVideo){
