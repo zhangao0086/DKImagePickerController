@@ -423,3 +423,9 @@ isInstanceMethodOverridden(Class cls, SEL selector)
     return overridden;
 }
 
+CG_INLINE CGRect
+CGRectCenterSquareNormalizedRegionAspectFill(CGSize containerSize){
+    CGFloat ratio = CGSizeMinSide(containerSize)/CGSizeMaxSide(containerSize);
+    return containerSize.height >= containerSize.width ?
+            CGRectMake(0,1-ratio,1,ratio) : CGRectMake(1-ratio, 0, ratio, 1);
+}

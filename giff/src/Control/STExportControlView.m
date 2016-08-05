@@ -43,6 +43,9 @@
 
 - (void)setExporterTypes:(NSArray *)exporterTypes {
     _exportSelectView.exporterTypes = exporterTypes;
+
+    
+    [[STMainControl sharedInstance] tryExportByType:STExportTypeShare];
 }
 
 - (NSArray *)exporterTypes {

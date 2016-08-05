@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger, CaptureOutputPixelDimension) {
 @property (nonatomic, readwrite) NSDictionary * geoTagMedataData;
 @property (nonatomic, assign) BOOL autoEnhanceEnabled;
 @property (nonatomic, assign) BOOL tiltShiftEnabled;
+@property (nonatomic, assign) BOOL cropAsCenterSquare;
 
 - (void)dispose;
 

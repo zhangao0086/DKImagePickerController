@@ -855,7 +855,9 @@
 
 - (void)captureAnimatable:(STAnimatableCaptureRequest *)request {
     if(!request){
-        request = [STAnimatableCaptureRequest requestWithNeedsFilter:[[GPUImageCropFilter alloc] initWithCropRegion:CGRectMake(0.f, 0.125f, 1.f, .75f)]];
+        request = [STAnimatableCaptureRequest requestWithNeedsFilter:
+                (GPUImageOutput <GPUImageInput> *) [[GPUImageCropFilter alloc] initWithCropRegion:
+                        CGRectCenterSquareNormalizedRegionAspectFill([[STElieCamera sharedInstance] outputScreenSize])]];
     }
 
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
