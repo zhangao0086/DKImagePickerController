@@ -99,7 +99,7 @@
     if([STApp isInSimulator]){
         _cameraFrame = CGRectMakeWithSize_AGK(CGSizeMake(self.view.boundsWidth, self.view.boundsWidth*1));
     }else{
-        _cameraFrame = [[STElieCamera sharedInstance] outputRect:self.view.st_originClearedBounds];
+        _cameraFrame = [[STElieCamera sharedInstance] preferredOutputRect:self.view.st_originClearedBounds];
     }
 
     /*
@@ -854,18 +854,17 @@
 }
 
 - (void)captureAnimatable:(STAnimatableCaptureRequest *)request {
-    if(!request){
-        request = [STAnimatableCaptureRequest requestWithNeedsFilter:
-                (GPUImageOutput <GPUImageInput> *) [[GPUImageCropFilter alloc] initWithCropRegion:
-                        CGRectCenterSquareNormalizedRegionAspectFill([[STElieCamera sharedInstance] outputScreenSize])]];
-    }
-
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
 #if DEBUG
     NSDate * startDate = [NSDate date];
 #endif
+
+    if(!request){
+        request = [STAnimatableCaptureRequest request];
+    }
     request.origin = STPhotoItemOriginAnimatable;
+    request.captureOutputAspectTransform = CaptureOutputAspectTransformFillCropAsCenterSquare;
     request.captureOutputPixelSizePreset = CaptureOutputPixelSizePresetSmall;
     request.autoReverseFrames = YES;
     request.responseHandler = ^(STCaptureResponse *result) {
@@ -972,7 +971,7 @@
     //focal point
     switch((STPostFocusMode)[STGIFFAppSetting get].postFocusMode){
         case STPostFocusModeVertical3Points:{
-            request.outputSizeForFocusPoints = [[STElieCamera sharedInstance] outputScreenSize];
+            request.outputSizeForFocusPoints = [[STElieCamera sharedInstance] preferredOutputScreenSize];
             request.focusPointsOfInterestSet = @[
                     [NSValue valueWithCGPoint:CGPointMake(.5f,.5f)]
                     //top - bottom
@@ -982,7 +981,7 @@
         }
             break;
         case STPostFocusMode5Points:{
-            request.outputSizeForFocusPoints = [[STElieCamera sharedInstance] outputScreenSize];
+            request.outputSizeForFocusPoints = [[STElieCamera sharedInstance] preferredOutputScreenSize];
             request.focusPointsOfInterestSet = @[
                     [NSValue valueWithCGPoint:CGPointMake(.5f,.5f)]
                     //left - right

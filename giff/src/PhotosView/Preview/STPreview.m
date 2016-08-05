@@ -280,9 +280,9 @@
     //FIXME:위치 씨발 뭣데문에 그런지 모르겠네
     
     CGFloat downScaleRatio = 2;
-    CGFloat verticalRatio = ceil([STPhotoSelector sharedInstance].height/[STElieCamera sharedInstance].outputScreenSize.height);
+    CGFloat verticalRatio = ceil([STPhotoSelector sharedInstance].height/[STElieCamera sharedInstance].preferredOutputScreenSize.height);
     if(!_backgroundView){
-        GPUImageView * activeBackgroundView = [[GPUImageView alloc] initWithSize:CGSizeByScale([STElieCamera sharedInstance].outputScreenSize,1/downScaleRatio)];
+        GPUImageView * activeBackgroundView = [[GPUImageView alloc] initWithSize:CGSizeByScale([STElieCamera sharedInstance].preferredOutputScreenSize,1/downScaleRatio)];
         activeBackgroundView.contentMode = UIViewContentModeScaleToFill;
 //        [self insertSubview:activeBackgroundView atIndex:0];
         [activeBackgroundView centerToParent];
@@ -305,7 +305,7 @@
 
         //overlay image
         if(!_backgroundImageOverlayView){
-            _backgroundImageOverlayView = [[UIImageView alloc] initWithSize:CGSizeByScale([STElieCamera sharedInstance].outputScreenSize,1/downScaleRatio)];
+            _backgroundImageOverlayView = [[UIImageView alloc] initWithSize:CGSizeByScale([STElieCamera sharedInstance].preferredOutputScreenSize,1/downScaleRatio)];
             _backgroundImageOverlayView.contentMode = UIViewContentModeScaleToFill;
         }
         _backgroundImageOverlayView.image = [[[STPhotoSelector sharedInstance].previewTargetPhotoItem previewImage] brightenWithValue:-60];

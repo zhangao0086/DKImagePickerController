@@ -89,7 +89,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
         if([STApp isInSimulator]){
             _previewView = [[STPreview alloc] initWithFrame:CGRectMakeWithSize_AGK(CGSizeMake(frame.size.width, frame.size.width*[STElieCamera outputVerticalRatioDefault]))];
         }else{
-            _previewView = [[STPreview alloc] initWithFrame:[STElieCamera.sharedInstance outputRect:frame]];
+            _previewView = [[STPreview alloc] initWithFrame:[STElieCamera.sharedInstance preferredOutputRect:frame]];
         }
         _previewView.contentMode = UIViewContentModeScaleAspectFill;
         _previewView.hidden = YES;
@@ -483,7 +483,7 @@ static NSString * observerToken = nil;
     }else {
         sizeWidth = _previewView.boundsWidth;
     }
-    return CGSizeMake(sizeWidth, sizeWidth * [[STElieCamera sharedInstance] outputVerticalRatio]);
+    return CGSizeMake(sizeWidth, sizeWidth * [[STElieCamera sharedInstance] preferredOutputVerticalRatio]);
 }
 
 - (CGSize)thumbnailImageSize {

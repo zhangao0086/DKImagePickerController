@@ -60,6 +60,7 @@ extern CGFloat const CaptureOutputPixelSizeConstOptimalFullScreen;
 extern CGFloat const CaptureOutputPixelSizeConstSmallPreview;
 
 @interface STElieCamera : SMKDetectionCamera
+
 //camera func
 @property(nonatomic, getter=isFocusAdjusted, readonly) BOOL focusAdjusted;
 @property(nonatomic, getter=isFocusLocked, readonly) BOOL focusRequestLocked;
@@ -73,8 +74,17 @@ extern CGFloat const CaptureOutputPixelSizeConstSmallPreview;
 @property(nonatomic, assign) CGFloat maxZoomFactor;
 @property(atomic, readonly) BOOL changingFacingCamera;
 @property(nonatomic, getter=isCapturing, readonly) BOOL capturing;
-@property(nonatomic, readonly) CGFloat outputVerticalRatio;
 @property(nonatomic, assign) float torchLight;
+
+//geometry
+@property(nonatomic, readonly) CGFloat preferredOutputVerticalRatio;
+@property(nonatomic, readonly) CGSize preferredOutputScreenSize;
+@property(nonatomic, readonly) CGRect preferredOutputScreenRect;
+
+@property(nonatomic, readonly) CGSize deviceOutputSize;
+@property(nonatomic, readonly) CGFloat deviceOutputVerticalRatio;
+@property(nonatomic, readonly) CGSize deviceOutputScreenSize;
+@property(nonatomic, readonly) CGRect deviceOutputScreenRect;
 
 //detection
 @property(atomic, readonly) BOOL faceDetectionStarted;
@@ -83,7 +93,7 @@ extern CGFloat const CaptureOutputPixelSizeConstSmallPreview;
 @property(nonatomic, assign) CGFloat preferredIntensityOfMotionDetection;
 @property(nonatomic, readonly) CGFloat intensityOfMotionDetection;
 
-//Abilities
+//abilities
 @property(nonatomic, assign) BOOL enabledBacklightCare;
 
 //utility
@@ -99,11 +109,9 @@ extern CGFloat const CaptureOutputPixelSizeConstSmallPreview;
 
 + (STCameraMode)mode;
 
-- (CGSize)outputScreenSize;
+- (CGRect)preferredOutputRect:(CGRect)rect;
 
-- (CGRect)outputScreenRect;
-
-- (CGRect)outputRect:(CGRect)rect;
+- (CGRect)deviceOutputRect:(CGRect)rect;
 
 + (CGFloat)outputVerticalRatioDefault;
 

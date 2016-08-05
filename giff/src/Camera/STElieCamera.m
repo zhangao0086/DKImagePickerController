@@ -40,7 +40,7 @@
 
     GPUImageMotionDetector *gpuImageMotionDetector;
 
-    CGFloat _outputVerticalRatio;
+    CGFloat _preferredOutputVerticalRatio;
     NSObject *_autoCenterSpotExposureObserver;
 
     BOOL _frameRenderingLocked;
@@ -104,7 +104,7 @@ static STElieCamera *_instance = nil;
         focusCompleteOperations = [NSMutableArray array];
 
         if(ratio){
-            _outputVerticalRatio = ratio;
+            _preferredOutputVerticalRatio = ratio;
         }else{
             [self setOptimizedDefaultsOutputRatio];
             [self st_observe:@keypath(self.captureSession.sessionPreset) block:^(id value, __weak id _weakSelf) {
@@ -131,25 +131,52 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     }
 }
 
-- (CGSize)outputScreenSize; {
-    return [self outputScreenRect].size;
+#pragma Output Geometry - Preferred
+
+- (CGSize)preferredOutputScreenSize; {
+    return [self preferredOutputScreenRect].size;
 }
 
-- (CGRect)outputScreenRect {
-    return [self outputRect:[UIScreen mainScreen].bounds];
+- (CGRect)preferredOutputScreenRect {
+    return [self preferredOutputRect:[UIScreen mainScreen].bounds];
 }
 
-- (CGRect)outputRect:(CGRect)rect; {
+- (CGRect)preferredOutputRect:(CGRect)rect; {
     CGRect newRect = rect;
-    newRect.size.height = newRect.size.width* [self outputVerticalRatio];
+    newRect.size.height = newRect.size.width* [self preferredOutputVerticalRatio];
     return newRect;
 }
 
-- (CGFloat)outputVerticalRatio; {
+- (CGFloat)preferredOutputVerticalRatio; {
     if([STApp isInSimulator]){
         return [self.class outputVerticalRatioDefault];
     }
-    return _outputVerticalRatio ?: self.class.outputVerticalRatioDefault;
+    return _preferredOutputVerticalRatio ?: self.class.outputVerticalRatioDefault;
+}
+
+#pragma Output Geometry - Device
+- (CGSize)deviceOutputSize{
+    NSDictionary *dict = [self.captureSession.outputs[0] videoSettings];
+    return CGSizeMake([dict[@"Width"] floatValue], [dict[@"Height"] floatValue]);
+}
+
+- (CGSize)deviceOutputScreenSize; {
+    return [self deviceOutputScreenRect].size;
+}
+
+- (CGRect)deviceOutputScreenRect {
+    return [self deviceOutputRect:[UIScreen mainScreen].bounds];
+}
+
+- (CGRect)deviceOutputRect:(CGRect)rect; {
+    CGRect newRect = rect;
+    newRect.size.height = newRect.size.width* self.deviceOutputVerticalRatio;
+    return newRect;
+}
+
+- (CGFloat)deviceOutputVerticalRatio {
+    CGSize outputSize = self.deviceOutputSize;
+    return outputSize.width/outputSize.height;
 }
 
 + (CGFloat)outputVerticalRatioDefault; {
@@ -162,12 +189,12 @@ static STCameraMode _mode = STCameraModeNotInitialized;
 
 - (void)setOptimizedDefaultsOutputRatio{
     //0.002406s
-    NSDictionary *dict = [self.captureSession.outputs[0] videoSettings];
-    CGSize outputSize = CGSizeMake([dict[@"Width"] floatValue], [dict[@"Height"] floatValue]);
+    CGSize outputSize = self.deviceOutputSize;
+
     if(CGSizeEqualToSize(outputSize, CGSizeZero)){
-        _outputVerticalRatio = [self.class outputVerticalRatioDefault];
+        _preferredOutputVerticalRatio = [self.class outputVerticalRatioDefault];
     }else{
-        _outputVerticalRatio = outputSize.width/outputSize.height;
+        _preferredOutputVerticalRatio = outputSize.width/outputSize.height;
     }
 }
 
@@ -336,6 +363,22 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     }];
 };
 
+- (UIImage *)currentImageForRequest:(STCaptureRequest *)request{
+    /*
+     * crop region
+     */
+    CGRect cropRegion = CGRectNull;
+    switch (request.captureOutputAspectTransform){
+        case CaptureOutputAspectTransformFillCropAsCenterSquare:
+            cropRegion = CGRectCenterSquareNormalizedRegionAspectFill(self.deviceOutputScreenSize);
+            break;
+        default:
+            break;
+    }
+
+    return [self currentImage:request.needsFilter maxSideOutputPixelSize:request.captureOutputPixelSize cropRegion:cropRegion];
+}
+
 #pragma mark Capture Animatable
 - (void)captureAnimatable:(STAnimatableCaptureRequest *)request;{
     NSParameterAssert(request.responseHandler);
@@ -347,12 +390,11 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     __block NSTimer * captureDelayTimer = nil;
     __block NSMutableArray<STCapturedImage *> * images = [NSMutableArray arrayWithCapacity:(NSUInteger) frameCount];
 
-    GPUImageOutput <GPUImageInput> * targetOutput = request.needsFilter;
-
+    Weaks
     captureDelayTimer = [NSTimer bk_scheduledTimerWithTimeInterval:request.frameCaptureInterval block:^(NSTimer *timer) {
         @autoreleasepool {
             //get image
-            UIImage * capturedImage = [self currentImage:targetOutput maxSideOutputPixelSize:request.captureOutputPixelSize];
+            UIImage * capturedImage = [Wself currentImageForRequest:request];
             STCapturedImage * responseImage = [STCapturedImage new];
             responseImage.index = count;
 
@@ -395,7 +437,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
                 images = nil;
                 count = 0;
 
-                [self st_runAsMainQueueAsyncWithoutDeadlocking:^{
+                [Wself st_runAsMainQueueAsyncWithoutDeadlocking:^{
                     STCaptureResponse * response = [STCaptureResponse responseWithRequest:request];
                     response.imageSet = [STCapturedImageSet setWithImages:reverseArray];
                     [response response];
@@ -426,8 +468,6 @@ static STCameraMode _mode = STCameraModeNotInitialized;
     __block NSUInteger count = 0;
 
     __block NSMutableArray<STCapturedImage *> * images = [NSMutableArray arrayWithCapacity:(NSUInteger) frameCount];
-
-    GPUImageOutput <GPUImageInput> * targetOutput = request.needsFilter;
 
     CGFloat const StartingLensPosition = self.inputCamera.lensPosition;
     CGPoint const StartingFocusPoint = CGPointOfInterestInBound(request.outputSizeForFocusPoints, self.inputCamera.focusPointOfInterest);
@@ -462,7 +502,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
                     [responseImage setOrientationsByCurrent];
 
                     NSLog(@"LensPos : R %f -> A %f",nextLensPosition, self.inputCamera.lensPosition);
-                    UIImage * image = [self currentImage:targetOutput maxSideOutputPixelSize:request.captureOutputPixelSize];
+                    UIImage * image = [self currentImageForRequest:request];
 
                     if(NeedsLoadImages){
                         responseImage.image = image;
@@ -689,8 +729,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
         [responseImage setOrientationsByCurrent];
 
         //new capture
-        GPUImageOutput <GPUImageInput> * targetOutput = request.needsFilter;
-        UIImage * image = [self currentImage:targetOutput maxSideOutputPixelSize:request.captureOutputPixelSize];
+        UIImage * image = [self currentImageForRequest:request];
 
         if(request.needsLoadAnimatableImagesToMemory){
             responseImage.image = image;
@@ -1349,7 +1388,7 @@ NSString *ObserveOrientationId = @"_startCenterSpotExposureViaOrientation";
 
 #pragma mark Exposure
 - (BOOL)requestExposureToVirtualCenterFace:(BOOL)continuous completion:(void (^)(void))block{
-    CGRect totalBound = [self outputScreenRect];
+    CGRect totalBound = [self preferredOutputScreenRect];
     CGFloat virtualFaceFrameWidth = totalBound.size.width/3.5f;
     CGRect virtualFaceFrame = CGRectInset(CGRectMake(CGRectGetMid_AGK(totalBound).x, CGRectGetMid_AGK(totalBound).y, 0, 0), -virtualFaceFrameWidth/2, -virtualFaceFrameWidth/2);
     CGPoint virtualFacePoint = CGRectGetMid_AGK(virtualFaceFrame);
@@ -1603,7 +1642,11 @@ CGFloat const CaptureOutputPixelSizeConstSmallPreview = 800;
     return [self currentImage:needsOutput maxSideOutputPixelSize:CaptureOutputPixelSizeConstOptimalFullScreen];
 }
 
-- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput {
+- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput{
+    return [self currentImage:needsOutput maxSideOutputPixelSize:maxSidePixelSizeOfOutput cropRegion:CGRectNull];
+}
+
+- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput cropRegion:(CGRect)cropRegion{
     @synchronized (self) {
         UIImage * image = nil;
         if(self.targets.count){
@@ -1623,17 +1666,24 @@ CGFloat const CaptureOutputPixelSizeConstSmallPreview = 800;
                 case UIImageOrientationDown:
                 case UIImageOrientationUpMirrored:
                 case UIImageOrientationDownMirrored:
-                    maxOutputSizeRespectingAspectRatio = CGSizeMake(maxSidePixelSizeOfOutput/self.outputVerticalRatio, maxSidePixelSizeOfOutput);
+                    maxOutputSizeRespectingAspectRatio = CGSizeMake(maxSidePixelSizeOfOutput/self.preferredOutputVerticalRatio, maxSidePixelSizeOfOutput);
                     break;
                 case UIImageOrientationLeft:
                 case UIImageOrientationRight:
                 case UIImageOrientationLeftMirrored:
                 case UIImageOrientationRightMirrored:
-                    maxOutputSizeRespectingAspectRatio = CGSizeMake(maxSidePixelSizeOfOutput, maxSidePixelSizeOfOutput/self.outputVerticalRatio);
+                    maxOutputSizeRespectingAspectRatio = CGSizeMake(maxSidePixelSizeOfOutput, maxSidePixelSizeOfOutput/self.preferredOutputVerticalRatio);
                     break;
             }
 
             if(imageOutput){
+                //crop
+                if(!CGRectIsEmpty(cropRegion)){
+                    GPUImageCropFilter * imageCropOutput = [[GPUImageCropFilter alloc] initWithCropRegion:cropRegion];
+                    [imageOutput addTarget:imageCropOutput];
+                    imageOutput = imageCropOutput;
+                }
+
                 [self _setMaxOutputFrameSize:imageOutput maxSizeRespectingAspectRatio:maxOutputSizeRespectingAspectRatio];
 
                 [imageOutput useNextFrameForImageCapture];
@@ -1645,6 +1695,14 @@ CGFloat const CaptureOutputPixelSizeConstSmallPreview = 800;
             }else{
                 //insert -> get image -> remove
                 GPUImageOutput <GPUImageInput> * targetOutput = needsOutput ?:[[GPUImageFilter alloc] init];
+
+                //crop
+                if(!CGRectIsEmpty(cropRegion)){
+                    GPUImageCropFilter * imageCropOutput = [[GPUImageCropFilter alloc] initWithCropRegion:cropRegion];
+                    [targetOutput addTarget:imageCropOutput];
+                    targetOutput = imageCropOutput;
+                }
+
                 [self _setMaxOutputFrameSize:targetOutput maxSizeRespectingAspectRatio:maxOutputSizeRespectingAspectRatio];
 
                 [targetOutput useNextFrameForImageCapture];

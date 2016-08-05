@@ -118,7 +118,7 @@
     if(self.blanked){
         Weaks
         loadedImage = [self st_cachedImage:@"stphotoitem.blankimage" useDisk:YES init:^UIImage * {
-            return [Wself.class createBlankImage:CGSizeByScale([STElieCamera.sharedInstance outputScreenSize], .5)];
+            return [Wself.class createBlankImage:CGSizeByScale([STElieCamera.sharedInstance preferredOutputScreenSize], .5)];
         }];
 
     }else if(self.sourceForAsset){

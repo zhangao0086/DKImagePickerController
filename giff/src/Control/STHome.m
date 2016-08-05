@@ -63,7 +63,7 @@
 - (void) createContent;{
 
     // preview
-    _preview = [[GPUImageView alloc] initWithFrame:[STElieCamera.sharedInstance outputRect:self.bounds]];
+    _preview = [[GPUImageView alloc] initWithFrame:[STElieCamera.sharedInstance preferredOutputRect:self.bounds]];
     _preview.fillMode = kGPUImageFillModePreserveAspectRatio;
     _preview.contentMode = UIViewContentModeScaleAspectFill;
     _preview.centerY = self.height/2;

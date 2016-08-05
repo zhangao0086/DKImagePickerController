@@ -1335,7 +1335,7 @@ static BOOL _lockedRegisteredChangeObserver;
 
 #pragma mark Thumbnail and Image putting
 - (CGSize)previewImageSizeByType:(STPhotoViewType) type {
-    return [[STPhotosManager sharedManager] previewImageSizeByType:type ratio:[[STElieCamera sharedInstance] outputVerticalRatio]];
+    return [[STPhotosManager sharedManager] previewImageSizeByType:type ratio:[[STElieCamera sharedInstance] preferredOutputVerticalRatio]];
 }
 
 - (CGSize)previewImageSize {

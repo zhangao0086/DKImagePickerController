@@ -45,6 +45,11 @@ typedef NS_ENUM(NSInteger, CaptureOutputPixelSize) {
     CaptureOutputPixelSize3840_4K = 3840
 };
 
+typedef NS_ENUM(NSInteger, CaptureOutputAspectTransform) {
+    CaptureOutputAspectTransformNone,
+    CaptureOutputAspectTransformFillCropAsCenterSquare
+};
+
 @interface STCaptureRequest : STItem
 
 @property (copy) STCaptureResponseHandler responseHandler;
@@ -53,6 +58,9 @@ typedef NS_ENUM(NSInteger, CaptureOutputPixelSize) {
 @property (nonatomic, assign) CGRect faceRect;
 @property (nonatomic, assign) CGRect faceRectBounds;
 @property (nonatomic, assign) AfterCaptureProcessingPriority afterCaptureProcessingPriority;
+
+@property (nonatomic, assign) CaptureOutputAspectTransform captureOutputAspectTransform;
+
 @property (nonatomic, assign) CaptureOutputPixelSizePreset captureOutputPixelSizePreset;
 @property (nonatomic, assign) CGFloat captureOutputPixelSize;
 @property (nonatomic, readwrite) GPUImageOutput <GPUImageInput> * needsFilter;
