@@ -49,4 +49,6 @@
 - (NSArray *)replaceFromOtherArray:(NSArray *)otherArray inRange:(NSRange)range;
 
 - (NSArray *)replaceFromOtherArray:(NSArray *)otherArray locationFrom:(NSUInteger)location;
+
+- (NSArray *)arrayByInterpolatingRemappedCount:(NSUInteger)newCount;
 @end

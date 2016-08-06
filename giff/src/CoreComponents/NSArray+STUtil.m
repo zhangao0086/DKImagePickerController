@@ -208,4 +208,28 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
     NSAssert(location+otherArray.count < self.count, @"Total length of given location and otherArray must be lower than self.count");
     return [self replaceFromOtherArray:otherArray inRange:NSMakeRange(location, otherArray.count)];
 }
+
+#pragma mark Interpolated Remap
+
+- (NSArray *)arrayByInterpolatingRemappedCount:(NSUInteger)newCount {
+    NSMutableArray *newArray = [NSMutableArray arrayWithCapacity:newCount];
+    for(id item in self){
+        NSUInteger index = [self indexOfObject:item];
+        CGFloat nextIndex = index+1;
+
+        NSRange oldArrRange = NSMakeRange(0,self.count);
+        NSRange newArrRange = NSMakeRange(0,newCount);
+
+        CGFloat diff = oldArrRange.length - oldArrRange.location;
+        CGFloat progress = !diff ?: (nextIndex - oldArrRange.location) / diff;
+        CGFloat position = newArrRange.location + ((newArrRange.length - newArrRange.location) * progress);
+
+        NSUInteger interpolatedIndex = (NSUInteger)round(position);
+
+        for(NSUInteger indexOfSection=newArray.count; indexOfSection < interpolatedIndex; indexOfSection++){
+            [newArray addObject:[item copy]];
+        }
+    }
+    return newArray;
+}
 @end
