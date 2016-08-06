@@ -227,7 +227,11 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
         NSUInteger interpolatedIndex = (NSUInteger)round(position);
 
         for(NSUInteger indexOfSection=newArray.count; indexOfSection < interpolatedIndex; indexOfSection++){
-            [newArray addObject:[item copy]];
+            if([item conformsToProtocol:@protocol(NSCopying)]){
+                [newArray addObject:[item copy]];
+            }else{
+                [newArray addObject:item];
+            }
         }
     }
     return newArray;
