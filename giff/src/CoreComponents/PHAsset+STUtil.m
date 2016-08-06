@@ -81,6 +81,33 @@
     return NO;
 }
 
+- (void)exportPhotoFileCropIfNeeded:(CGRect)rectToCrop completion:(void(^)(NSURL * tempFileURL))block{
+    BOOL croppingRequired = !CGSizeEqualToSize(self.pixelSize, rectToCrop.size);
+    if(croppingRequired){
+        [self exportFileByResourceType:PHAssetResourceTypePhoto completion:block];
+    }else{
+        [self exportFileByResourceType:PHAssetResourceTypePhoto completion:^(NSURL *tempFileURL) {
+            UIImage * image = [UIImage imageWithContentsOfFile:tempFileURL.path];
+            CGImageRef croppedImage = CGImageCreateWithImageInRect([image CGImage], rectToCrop);
+            UIImage * resultImage = [UIImage imageWithCGImage:croppedImage scale:image.scale orientation:image.imageOrientation];
+            CGImageRelease(croppedImage);
+
+            NSData * imageData = nil;
+            if([@"image/png" isEqualToString:[[tempFileURL path] mimeTypeFromPathExtension]]){
+                imageData = UIImagePNGRepresentation(resultImage);
+            }else{
+                imageData = UIImageJPEGRepresentation(resultImage, 1);
+            }
+
+            if([imageData writeToURL:tempFileURL atomically:YES]){
+                !block?:block(tempFileURL);
+            }else{
+                !block?:block(nil);
+            }
+        }];
+    }
+}
+
 - (void)exportFileByResourceType:(PHAssetResourceType)type completion:(void(^)(NSURL * tempFileURL))block{
     return [self exportFileByResourceType:type to:nil completion:block];
 }

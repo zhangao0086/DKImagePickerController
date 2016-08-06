@@ -72,32 +72,8 @@ static CGSize defaultAspectFillRatio;
             }];
 
         }else{
-            CGRect const rectRegionToCrop = CGRectCropRegionAspectFill([asset pixelSize], defaultAspectFillRatio);
-            BOOL croppingRequired = !CGSizeEqualToSize(asset.pixelSize, rectRegionToCrop.size);
-
-            [asset exportFileByResourceType:PHAssetResourceTypePhoto completion:^(NSURL *tempFileURL) {
-                if(croppingRequired){
-                    UIImage * image = [UIImage imageWithContentsOfFile:tempFileURL.path];
-
-                    CGImageRef croppedImage = CGImageCreateWithImageInRect([image CGImage], rectRegionToCrop);
-                    UIImage * resultImage = [UIImage imageWithCGImage:croppedImage scale:image.scale orientation:image.imageOrientation];
-                    CGImageRelease(croppedImage);
-
-                    NSData * imageData = nil;
-                    if([@"image/png" isEqualToString:[[tempFileURL path] mimeTypeFromPathExtension]]){
-                        imageData = UIImagePNGRepresentation(resultImage);
-                    }else{
-                        imageData = UIImageJPEGRepresentation(resultImage, 1);
-                    }
-
-                    if([imageData writeToURL:tempFileURL atomically:YES]){
-                        !block?:block([STCapturedImageSet setWithImages:@[[STCapturedImage imageWithImageUrl:tempFileURL]]]);
-                    }else{
-                        !block?:block(nil);
-                    }
-                }else{
-                    !block?:block([STCapturedImageSet setWithImages:@[[STCapturedImage imageWithImageUrl:tempFileURL]]]);
-                }
+            [asset exportPhotoFileCropIfNeeded:CGRectCropRegionAspectFill([asset pixelSize], defaultAspectFillRatio) completion:^(NSURL *tempFileURL) {
+                !block ?: block([STCapturedImageSet setWithImages:@[[STCapturedImage imageWithImageUrl:tempFileURL]]]);
             }];
         }
 

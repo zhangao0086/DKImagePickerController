@@ -25,6 +25,8 @@
 
 - (BOOL)exportLivePhotoVideoFile:(void (^)(NSURL *tempFileURL))block;
 
+- (void)exportPhotoFileCropIfNeeded:(CGRect)rectToCrop completion:(void (^)(NSURL *tempFileURL))block;
+
 - (void)exportFileByResourceType:(PHAssetResourceType)type completion:(void (^)(NSURL *tempFileURL))block;
 
 - (void)exportFileByResourceType:(PHAssetResourceType)type to:(NSURL *)fileURL completion:(void (^)(NSURL *tempFileURL))block;
