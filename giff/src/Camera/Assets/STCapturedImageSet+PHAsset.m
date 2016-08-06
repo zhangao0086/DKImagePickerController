@@ -8,8 +8,6 @@
 #import "PHAsset+STUtil.h"
 #import "STCapturedImage.h"
 #import "NSGIF.h"
-#import "NSURL+STUtil.h"
-#import "NSString+STUtil.h"
 
 
 @implementation STCapturedImageSet (PHAsset)

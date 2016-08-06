@@ -11,5 +11,5 @@
 
 - (UIImage * __nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages;
 
-- (NSUInteger)supportedNumberOfSourceImages;
+- (NSUInteger)maxSupportedNumberOfSourceImages;
 @end

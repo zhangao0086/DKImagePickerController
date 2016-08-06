@@ -31,10 +31,6 @@
     //Standard method of multi blending : https://github.com/BradLarson/GPUImage/issues/269
 }
 
-- (NSUInteger)supportedNumberOfSourceImages {
-    return 2;
-}
-
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
 

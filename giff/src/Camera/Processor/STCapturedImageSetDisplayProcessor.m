@@ -111,9 +111,10 @@
         return nil;
     }
 
-    BOOL invailedLayerNumbers = images.count==0 || images.count > [self.layerSet.effect supportedNumberOfSourceImages];
+    BOOL invailedLayerNumbers = images.count==0;// || images.count > [self.layerSet.effect supportedNumberOfSourceImages];
     if(invailedLayerNumbers){
-        NSAssert(NO, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(self.layerSet.effect.class), [self.layerSet.effect supportedNumberOfSourceImages]]));
+//        NSAssert(NO, ([NSString stringWithFormat:@"%@ - Only %d source image sets supported",NSStringFromClass(self.layerSet.effect.class), [self.layerSet.effect supportedNumberOfSourceImages]]));
+        NSAssert(NO, ([NSString stringWithFormat:@"%@ - sourceSetOfImages is empty. Only %d source image sets supported",NSStringFromClass(self.layerSet.effect.class), [self.layerSet.effect maxSupportedNumberOfSourceImages]]));
         return nil;
     }
 

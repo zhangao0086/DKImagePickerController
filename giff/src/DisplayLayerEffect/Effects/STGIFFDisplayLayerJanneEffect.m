@@ -21,11 +21,6 @@
 
 }
 
-- (NSUInteger)supportedNumberOfSourceImages {
-    return 2;
-}
-
-
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
         UIImage *inputImage = sourceImages[0];

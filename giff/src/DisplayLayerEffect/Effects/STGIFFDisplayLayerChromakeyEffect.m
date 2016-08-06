@@ -44,10 +44,6 @@ GPUImageFilter : addTargets-> forceProcessingAtSize -> useNextFrameForImageCaptu
 
 }
 
-- (NSUInteger)supportedNumberOfSourceImages {
-    return 2;
-}
-
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     @autoreleasepool {
         

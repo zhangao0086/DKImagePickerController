@@ -10,8 +10,8 @@
 
 #pragma mark Process
 
-- (NSUInteger)supportedNumberOfSourceImages {
-    return 1;
+- (NSUInteger)maxSupportedNumberOfSourceImages {
+    return 2;
 }
 
 - (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
