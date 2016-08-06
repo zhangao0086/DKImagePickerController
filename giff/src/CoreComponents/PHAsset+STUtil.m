@@ -12,6 +12,14 @@
 
 @implementation PHAsset (STUtil)
 
+- (NSString *)localIdentifierClearingPathSeparator {
+    return [[self.localIdentifier componentsSeparatedByString:@"/"] firstObject];
+}
+
+- (CGSize)pixelSize {
+    return CGSizeMake(self.pixelWidth, self.pixelHeight);
+}
+
 - (UIImage *)fullResolutionImage{
     __block UIImage * image = nil;
     [[PHImageManager defaultManager] requestImageForAsset:self
@@ -30,14 +38,13 @@
 
 - (NSData *)fullResolutionData:(PHImageRequestOptions *(^)(PHImageRequestOptions * defaultOptions))getOptionBlock{
     PHImageRequestOptions * defaultOption = [PHImageRequestOptions fullResolutionOptions:YES];
+    NSMutableData * data = [NSMutableData data];
 
-    __block NSData * data = nil;
     [[PHImageManager defaultManager] requestImageDataForAsset:self
                                                       options:getOptionBlock ? getOptionBlock(defaultOption) : defaultOption
                                                 resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-                                                    data = imageData;
+                                                    [data setData:imageData];
                                                 }];
-
     return data;
 }
 
@@ -90,7 +97,7 @@
         return r.type == type;
     }];
 
-    NSURL * targetURL = fileURL?:[targetResource.originalFilename URLForTemp];
+    NSURL * targetURL = fileURL?:[targetResource.originalFilename URLForTemp:@"PHAsset_STUtil_" extension:nil];
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:[targetURL path]];
     BOOL existsButForcefullyNeededWrite = reload && exists && [[NSFileManager defaultManager] removeItemAtURL:targetURL error:nil];
 

@@ -186,4 +186,10 @@
     return (__bridge_transfer NSString *)UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension);
 }
 
+- (NSString *)UTIFromMimetype{
+    CFStringRef MIMEType = (__bridge CFStringRef)self;
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, MIMEType, NULL);
+    NSString *UTIString = (__bridge_transfer NSString *)UTI;
+    return UTIString;
+}
 @end

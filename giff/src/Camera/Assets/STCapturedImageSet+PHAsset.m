@@ -8,6 +8,8 @@
 #import "PHAsset+STUtil.h"
 #import "STCapturedImage.h"
 #import "NSGIF.h"
+#import "NSURL+STUtil.h"
+#import "NSString+STUtil.h"
 
 
 @implementation STCapturedImageSet (PHAsset)
@@ -70,14 +72,32 @@ static CGSize defaultAspectFillRatio;
             }];
 
         }else{
-//            [[asset fullResolutionData:^PHImageRequestOptions *(PHImageRequestOptions *options) {
-//                options.normalizedCropRect = CGRectNormalizedCropRegionAspectFill(CGSizeMake(asset.pixelWidth, asset.pixelHeight), defaultAspectFillRatio);
-//                return options;
-//            }] writeToURL:<#(NSURL *)url#> atomically:<#(BOOL)atomically#>]
-//            [asset fullResolutionData];
+            CGRect const rectRegionToCrop = CGRectCropRegionAspectFill([asset pixelSize], defaultAspectFillRatio);
+            BOOL croppingRequired = !CGSizeEqualToSize(asset.pixelSize, rectRegionToCrop.size);
+
             [asset exportFileByResourceType:PHAssetResourceTypePhoto completion:^(NSURL *tempFileURL) {
-                //TODO defaultAspectFillRatio으로 이미지 한장 크롭
-                !block?:block([STCapturedImageSet setWithImages:@[[STCapturedImage imageWithImageUrl:tempFileURL]]]);
+                if(croppingRequired){
+                    UIImage * image = [UIImage imageWithContentsOfFile:tempFileURL.path];
+
+                    CGImageRef croppedImage = CGImageCreateWithImageInRect([image CGImage], rectRegionToCrop);
+                    UIImage * resultImage = [UIImage imageWithCGImage:croppedImage scale:image.scale orientation:image.imageOrientation];
+                    CGImageRelease(croppedImage);
+
+                    NSData * imageData = nil;
+                    if([@"image/png" isEqualToString:[[tempFileURL path] mimeTypeFromPathExtension]]){
+                        imageData = UIImagePNGRepresentation(resultImage);
+                    }else{
+                        imageData = UIImageJPEGRepresentation(resultImage, 1);
+                    }
+
+                    if([imageData writeToURL:tempFileURL atomically:YES]){
+                        !block?:block([STCapturedImageSet setWithImages:@[[STCapturedImage imageWithImageUrl:tempFileURL]]]);
+                    }else{
+                        !block?:block(nil);
+                    }
+                }else{
+                    !block?:block([STCapturedImageSet setWithImages:@[[STCapturedImage imageWithImageUrl:tempFileURL]]]);
+                }
             }];
         }
 

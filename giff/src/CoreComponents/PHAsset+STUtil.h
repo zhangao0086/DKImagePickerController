@@ -7,6 +7,10 @@
 #import <Photos/Photos.h>
 
 @interface PHAsset (STUtil)
+- (NSString *)localIdentifierClearingPathSeparator;
+
+- (CGSize)pixelSize;
+
 - (UIImage *)fullResolutionImage;
 
 - (NSData *)fullResolutionData;
