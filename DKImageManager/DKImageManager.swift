@@ -29,7 +29,7 @@ public class DKBaseManager: NSObject {
 			DispatchQueue.main.async(execute: { () -> Void in
 				for observer in self.observers.objectEnumerator() {
 					if observer.responds(to: selector) {
-						observer.perform(selector, with: object, with: objectTwo)
+						_ = observer.perform(selector, with: object, with: objectTwo)
 					}
 				}
 			})

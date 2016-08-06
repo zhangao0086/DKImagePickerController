@@ -153,7 +153,7 @@ public class DKAsset: NSObject {
 				completeBlock(AVAsset: AVAsset, info:info)
 				semaphore.signal()
 			})
-			semaphore.wait(timeout: DispatchTime.distantFuture)
+			_ = semaphore.wait(timeout: DispatchTime.distantFuture)
 		} else {
 			self.fetchAVAsset(options, completeBlock: completeBlock)
 		}
