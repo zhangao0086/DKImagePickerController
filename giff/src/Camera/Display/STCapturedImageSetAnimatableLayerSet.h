@@ -9,5 +9,5 @@
 
 @interface STCapturedImageSetAnimatableLayerSet : STCapturedImageSetDisplayLayerSet
 @property (nonatomic, assign) NSInteger frameIndexOffset;
-@property (nonatomic, readonly) NSInteger frameCount;
+@property (nonatomic, readonly) NSUInteger frameCount;
 @end

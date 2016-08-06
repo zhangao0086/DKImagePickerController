@@ -11,7 +11,7 @@
 
 }
 
-- (NSInteger)frameCount {
+- (NSUInteger)frameCount {
     return [[self firstImageSet] count];
 }
 

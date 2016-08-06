@@ -51,6 +51,8 @@
 #import "STExporter+IOGIF.h"
 #import "STCapturedImage+STExporterIOGIF.h"
 #import "STPhotosManager.h"
+#import "STExportManager.h"
+#import "STPhotoItem+ExporterIO.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -431,8 +433,12 @@ static STPhotoSelector *_instance = nil;
     [STMainControl sharedInstance].editControlView.frameEditView.layerSet = nil;
 }
 
+#pragma Exrpot DisplayImageLayer
 - (void)exportDisplayImageLayer:(void(^)(BOOL succeed))completion{
     STCapturedImageSetAnimatableLayerSet * layerSet = [STMainControl sharedInstance].editControlView.frameEditView.layerSet;
+
+    NSUInteger frameCount = [[_layerSetPresentationView currentLayerSet] frameCount];
+    BOOL needsPrepareGIF = frameCount>1;
 
     NSArray * processedImageUrlsToExport = [[@([[_layerSetPresentationView currentLayerSet] frameCount]) st_intArray] mapWithIndex:^id(id object, NSInteger index) {
         id presentableObject = [((STSelectableView *) [_layerSetPresentationView currentItemViewOfLayerSet]) presentableObjectAtIndex:index];
@@ -444,22 +450,30 @@ static STPhotoSelector *_instance = nil;
     STPhotoItem * photoItem = [[[STPhotoSelector sharedInstance] currentFocusedPhotoItems] firstObject];
     NSAssert(photoItem.sourceForCapturedImageSet.count==processedImageUrlsToExport.count,@"photoItem.sourceForCapturedImageSet.count == processedImageUrlsToExport.count");
 
-    //insert processed image url to frameImageURLToExportGIF
-    [photoItem.sourceForCapturedImageSet.images eachWithIndex:^(STCapturedImage * image, NSUInteger index) {
-        image.frameImageURLToExportGIF = [processedImageUrlsToExport st_objectOrNilAtIndex:index];
-    }];
-    photoItem.exportGIFRequest = [[NSGIFRequest alloc] init];
-    photoItem.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(0) stringValue]] URLForTemp:@"gif"];
-    photoItem.exportGIFRequest.maxDuration = 2;
+        //GIF - Process GIF -> frameImageURLToExportGIF -> MainControl export
+    if(needsPrepareGIF){
+        [photoItem.sourceForCapturedImageSet.images eachWithIndex:^(STCapturedImage * image, NSUInteger index) {
+            image.frameImageURLToExportGIF = [processedImageUrlsToExport st_objectOrNilAtIndex:index];
+        }];
+        photoItem.exportGIFRequest = [[NSGIFRequest alloc] init];
+        photoItem.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(0) stringValue]] URLForTemp:@"gif"];
+        photoItem.exportGIFRequest.maxDuration = 2;
 
-    [STApp logUnique:@"StartExportGIF"];
+        [STApp logUnique:@"StartExportGIF"];
 
-    [STExporter exportGIFsFromPhotoItems:YES photoItems:@[photoItem] progress:^(CGFloat d) {
+        [STExporter exportGIFsFromPhotoItems:YES photoItems:@[photoItem] progress:^(CGFloat d) {
 
-    } completion:^(NSArray *gifURLs, NSArray *succeedItems, NSArray *errorItems) {
+        } completion:^(NSArray *gifURLs, NSArray *succeedItems, NSArray *errorItems) {
 
-        !completion?: completion(gifURLs.count==succeedItems.count);
-    }];
+            !completion?: completion(gifURLs.count==succeedItems.count);
+        }];
+    }
+        //Single Photo - exportedTempFileURL -> MainControl export
+    else{
+        photoItem.exportedTempFileURL = [processedImageUrlsToExport firstObject];
+
+        !completion?: completion((BOOL)photoItem.exportedTempFileURL);
+    }
 }
 
 #pragma mark Edit
