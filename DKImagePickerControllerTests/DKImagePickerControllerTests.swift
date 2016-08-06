@@ -1,15 +1,15 @@
 //
-//  DKImagePickerControllerDemoTests.swift
-//  DKImagePickerControllerDemoTests
+//  DKImagePickerControllerTests.swift
+//  DKImagePickerControllerTests
 //
-//  Created by ZhangAo on 15/8/27.
-//  Copyright (c) 2015年 ZhangAo. All rights reserved.
+//  Created by Julian Shen on 2016/6/27.
+//  Copyright © 2016年 ZhangAo. All rights reserved.
 //
 
-import UIKit
 import XCTest
+@testable import DKImagePickerController
 
-class DKImagePickerControllerDemoTests: XCTestCase {
+class DKImagePickerControllerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -23,12 +23,12 @@ class DKImagePickerControllerDemoTests: XCTestCase {
     
     func testExample() {
         // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measure() {
+        self.measureBlock {
             // Put the code you want to measure the time of here.
         }
     }
