@@ -329,11 +329,13 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		cell.setCameraImage(self.imagePickerController.UIDelegate.imagePickerControllerCameraImage())
         
         cell.didCameraButtonClicked = { [unowned self] in
-            if UIImagePickerController.isSourceTypeAvailable(.Camera) && self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount  {
-                self.imagePickerController.presentCamera()
-			} else {
-				self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
-			}
+            if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+                if self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount  {
+                    self.imagePickerController.presentCamera()
+                } else {
+                    self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
+                }
+            }
         }
 
         return cell
