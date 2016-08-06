@@ -434,7 +434,7 @@ public class DKImagePickerController : UINavigationController {
     // MARK: - Handles Orientation
 
   public override var shouldAutorotate: Bool {
-		return self.allowsLandscape ? true : false
+		return self.allowsLandscape && self.sourceType != .camera ? true : false
   }
   
   public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -443,6 +443,5 @@ public class DKImagePickerController : UINavigationController {
     } else {
       return UIInterfaceOrientationMask.portrait
     }
-
   }
 }
