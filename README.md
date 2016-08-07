@@ -152,7 +152,7 @@ pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
 
-##### Customize footer view
+##### Customize footer view and UI color
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
 
 #### Create a custom camera
@@ -260,6 +260,9 @@ It has been supported languages so far:
 * hu.lproj
 * ru.lproj
 * es.lproj
+* tr.lproj
+* de.lproj
+* ur.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -268,12 +271,33 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
-> In `3.2.1`, I've replaced all  `AVURLAsset` to `AVAsset` in order to support Slow Motion.
+## [3.3.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.3) (2016-08-08)
 
-> In `3.2.0`
-> * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
-> * I've also updated the `fetchAVAsset...` interface:  
-> the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.2...3.3.3)
+
+- Added Carthage support
+
+- Added Urdu lozalization
+
+- Added German localization
+
+- Added `deselectAssetAtIndex` and `deselectAsset`.
+
+- Added `deselectAllAssets`.
+
+- Fixed an issue may cause `takePicture` is incorrect.
+
+- If a camera is not available, don't pops-up "Max photos limit reached".
+
+- The `didCancel` and `didSelectAssets` are executed after completion.
+
+- Updated DKImagePickerControllerDefaultUIDelegate interface.
+
+- Rename `unselectedImage` to `deselectImage`.
+
+- Rename `selectedImage` to `selectImage`. 
+
+- Replace tags with spaces.
 
 ## [3.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.0) (2016-06-17)
 
@@ -291,26 +315,10 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 - Updated DKImagePickerControllerDefaultUIDelegate.
 
-## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
-
-**Merged pull requests:**
-
-- Add Russian translation.
-
-- Fixed an issue may cause popoverView show in incorrect position.
-
-- Optimized memory usage with large files.
-
-- Added support for Slow Motion.
-
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
 ## Special Thanks
-Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
-Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!  
-Thanks for [AnthonyMDev][AnthonyMDev]'s [contribution][scottdellyCon]!
+Big thanks to all the [contributors][contributors] so far!
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
@@ -318,9 +326,4 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
-[scottdelly]:https://github.com/scottdellyDKImagePickerController
-[scottdellyCon]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
-[scottdellyCon1]:https://github.com/zhangao0086/DKImagePickerController/pull/24/commits
-[LucidityDesign]:https://github.com/LucidityDesign
-[LucidityDesignCon]:https://github.com/zhangao0086/DKImagePickerController/pull/19/commits
-[AnthonyMDev]:https://github.com/AnthonyMDev
+[contributors]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
