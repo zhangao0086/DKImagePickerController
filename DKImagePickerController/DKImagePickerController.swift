@@ -408,12 +408,12 @@ public class DKImagePickerController : UINavigationController {
     
     // MARK: - Selection
     
-    public func deselectAssetAtIndex(index: Int){
+    public func deselectAssetAtIndex(index: Int) {
         let asset = self.selectedAssets[index]
         self.deselectAsset(asset)
     }
     
-    public func deselectAsset(asset: DKAsset){
+    public func deselectAsset(asset: DKAsset) {
         self.deselectImage(asset)
         if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
             rootVC.collectionView?.reloadData()

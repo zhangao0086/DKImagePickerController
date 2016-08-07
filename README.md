@@ -110,6 +110,12 @@ public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
 
+public func deselectAssetAtIndex(index: Int)
+
+public func deselectAsset(asset: DKAsset)
+
+public func deselectAllAssets()
+
 ```
 
 ##### Exporting to file
@@ -262,6 +268,7 @@ It has been supported languages so far:
 * es.lproj
 * tr.lproj
 * de.lproj
+* ur.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -318,3 +325,4 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
+[contributors]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
