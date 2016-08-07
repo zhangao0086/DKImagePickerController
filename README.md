@@ -110,12 +110,6 @@ public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
 
-public func deselectAssetAtIndex(index: Int)
-
-public func deselectAsset(asset: DKAsset)
-
-public func deselectAllAssets()
-
 ```
 
 ##### Exporting to file
@@ -277,12 +271,29 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
-> In `3.2.1`, I've replaced all  `AVURLAsset` to `AVAsset` in order to support Slow Motion.
+## [3.3.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.3) (2016-08-08)
 
-> In `3.2.0`
-> * I changed the `sourceType` type to `enum` in order to access the property in Objective-C. You can use `.Both` instead of `[.Camera, .Photo]`.
-> * I've also updated the `fetchAVAsset...` interface:  
-> the `completeBlock: (avAsset: AVURLAsset?` was changed to `completeBlock: (avAsset: AVURLAsset?, info: [NSObject : AnyObject]?`.
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.2...3.3.3)
+
+- If a camera is not available, don't pops-up "Max photos limit reached".
+
+- Updated DKImagePickerControllerDefaultUIDelegate interface.
+
+- The `didCancel` and `didSelectAssets` are executed after completion.
+
+- Updated DKCamera.
+
+- Replace tags with spaces.
+
+- Rename `unselectedImage` to `deselectImage`.
+
+- Rename `selectedImage` to `selectImage`. 
+
+- Added `deselectAssetAtIndex` and `deselectAsset`.
+
+- Added `deselectAllAssets`.
+
+- Fixed an issue may cause `takePicture` is incorrect.
 
 ## [3.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.0) (2016-06-17)
 
@@ -299,20 +310,6 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 - Removed picker singleton.
 
 - Updated DKImagePickerControllerDefaultUIDelegate.
-
-## [3.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.2.1) (2016-05-23)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.2.0...3.2.1)
-
-**Merged pull requests:**
-
-- Add Russian translation.
-
-- Fixed an issue may cause popoverView show in incorrect position.
-
-- Optimized memory usage with large files.
-
-- Added support for Slow Motion.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
