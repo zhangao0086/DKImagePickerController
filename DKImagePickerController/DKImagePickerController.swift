@@ -52,12 +52,14 @@ public protocol DKImagePickerControllerUIDelegate {
 	/**
      Called after the user changes the selection.
 	*/
-	func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset)
+	@available(*, deprecated=1.0, message="Use imagePickerController(_:didSelectAssets:) instead.") func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset)
+    func imagePickerController(imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset])
 	
 	/**
      Called after the user changes the selection.
 	*/
-	func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset)
+	@available(*, deprecated=1.0, message="Use imagePickerController(_:didDeselectAssets:) instead.") func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset)
+    func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset])
 	
 	/**
      Called when the count of the selectedAssets did reach `maxSelectableCount`.
@@ -270,7 +272,7 @@ public class DKImagePickerController : UINavigationController {
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
 				if self.defaultSelectedAssets?.count > 0 {
-					self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
+					self.UIDelegate.imagePickerController(self, didSelectAssets: [self.defaultSelectedAssets!.last!])
 				}
 			}
 		}
@@ -417,6 +419,17 @@ public class DKImagePickerController : UINavigationController {
             rootVC.collectionView?.reloadData()
         }
     }
+    
+    public func deselectAllAssets() {
+        if self.selectedAssets.count > 0 {
+            let assets = self.selectedAssets
+            self.selectedAssets.removeAll()
+            self.UIDelegate.imagePickerController(self, didDeselectAssets: assets)
+            if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+                rootVC.collectionView?.reloadData()
+            }
+        }
+    }
 	
 	internal func selectImage(asset: DKAsset) {
 		selectedAssets.append(asset)
@@ -426,13 +439,13 @@ public class DKImagePickerController : UINavigationController {
 		} else if self.singleSelect {
 			self.done()
 		} else {
-			self.UIDelegate.imagePickerController(self, didSelectAsset: asset)
+			self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
 		}
 	}
 	
 	internal func deselectImage(asset: DKAsset) {
-		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
-		self.UIDelegate.imagePickerController(self, didDeselectAsset: asset)
+		self.selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
+		self.UIDelegate.imagePickerController(self, didDeselectAssets: [asset])
 	}
     
     // MARK: - Handles Orientation

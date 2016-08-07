@@ -72,10 +72,18 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	public func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset) {
 		self.updateDoneButtonTitle(self.doneButton)
 	}
+    
+    public func imagePickerController(imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
+        self.updateDoneButtonTitle(self.doneButton)
+    }
 	
 	public func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset) {
 		self.updateDoneButtonTitle(self.doneButton)
 	}
+    
+    public func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset]) {
+        self.updateDoneButtonTitle(self.doneButton)
+    }
 	
 	public func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController) {
 		UIAlertView(title: DKImageLocalizedStringWithKey("maxLimitReached"),
