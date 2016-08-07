@@ -4,25 +4,29 @@
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.2...3.3.3)
 
-- If a camera is not available, don't pops-up "Max photos limit reached".
+- Added Carthage support
 
-- Updated DKImagePickerControllerDefaultUIDelegate interface.
+- Added Urdu lozalization
 
-- The `didCancel` and `didSelectAssets` are executed after completion.
-
-- Updated DKCamera.
-
-- Replace tags with spaces.
-
-- Rename `unselectedImage` to `deselectImage`.
-
-- Rename `selectedImage` to `selectImage`. 
+- Added German localization
 
 - Added `deselectAssetAtIndex` and `deselectAsset`.
 
 - Added `deselectAllAssets`.
 
 - Fixed an issue may cause `takePicture` is incorrect.
+
+- If a camera is not available, don't pops-up "Max photos limit reached".
+
+- The `didCancel` and `didSelectAssets` are executed after completion.
+
+- Updated DKImagePickerControllerDefaultUIDelegate interface.
+
+- Rename `unselectedImage` to `deselectImage`.
+
+- Rename `selectedImage` to `selectImage`. 
+
+- Replace tags with spaces.
 
 ## [3.3.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.2) (2016-06-20)
 
