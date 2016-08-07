@@ -86,7 +86,7 @@ public class DKCamera: UIViewController {
 		return flashButton
 	}()
 	public var cameraSwitchButton: UIButton!
-	
+    public var captureButton: UIButton!
 	
 	override public func viewDidLoad() {
 		super.viewDidLoad()
@@ -235,7 +235,7 @@ public class DKCamera: UIViewController {
 		captureButton.center = CGPoint(x: bottomView.bounds.width / 2, y: bottomView.bounds.height / 2)
 		captureButton.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
 		bottomView.addSubview(captureButton)
-		
+		self.captureButton = captureButton
 		// cancel button
 		let cancelButton: UIButton = {
 			let cancelButton = UIButton()
@@ -268,7 +268,7 @@ public class DKCamera: UIViewController {
 		if authStatus == .Denied {
 			return
 		}
-		
+		captureButton.userInteractionEnabled = false
 		if let stillImageOutput = self.stillImageOutput {
 			dispatch_async(dispatch_get_global_queue(0, 0), {
 				let connection = stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
