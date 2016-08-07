@@ -442,7 +442,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 				}
 			}
 			
-			self.imagePickerController.unselectedImage(removedAsset)
+			self.imagePickerController.deselectedImage(removedAsset)
 		}
     }
 	
@@ -458,7 +458,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		for (_, selectedAsset) in self.imagePickerController.selectedAssets.enumerate() {
 			for removedAsset in assets {
 				if selectedAsset.isEqual(removedAsset) {
-					self.imagePickerController.unselectedImage(selectedAsset)
+					self.imagePickerController.deselectedImage(selectedAsset)
 				}
 			}
 		}

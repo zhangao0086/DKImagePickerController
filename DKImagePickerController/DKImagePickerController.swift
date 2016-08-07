@@ -419,14 +419,14 @@ public class DKImagePickerController : UINavigationController {
 		}
 	}
 	
-	internal func unselectedImage(asset: DKAsset) {
+	internal func deselectedImage(asset: DKAsset) {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
 		self.UIDelegate.imagePickerController(self, didDeselectAsset: asset)
 	}
     
     public func removeAsset(index: Int){
         let asset = self.selectedAssets[index]
-        self.unselectedImage(asset)
+        self.deselectedImage(asset)
         if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
             rootVC.collectionView?.reloadData()
         }
