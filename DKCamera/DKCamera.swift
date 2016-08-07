@@ -270,6 +270,8 @@ public class DKCamera: UIViewController {
         }
         
         if let stillImageOutput = self.stillImageOutput {
+            self.stillImageOutput = nil // Just taking only one image.
+            
             dispatch_async(dispatch_get_global_queue(0, 0), {
                 let connection = stillImageOutput.connectionWithMediaType(AVMediaTypeVideo)
                 if connection == nil {
