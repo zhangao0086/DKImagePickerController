@@ -416,7 +416,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		let selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
-		self.imagePickerController.selectedImage(selectedAsset!)
+		self.imagePickerController.selectImage(selectedAsset!)
         
 		let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
 		cell.checkView.checkLabel.text = "\(self.imagePickerController.selectedAssets.count)"
@@ -442,7 +442,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 				}
 			}
 			
-			self.imagePickerController.deselectedImage(removedAsset)
+			self.imagePickerController.deselectImage(removedAsset)
 		}
     }
 	
@@ -458,7 +458,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		for (_, selectedAsset) in self.imagePickerController.selectedAssets.enumerate() {
 			for removedAsset in assets {
 				if selectedAsset.isEqual(removedAsset) {
-					self.imagePickerController.deselectedImage(selectedAsset)
+					self.imagePickerController.deselectImage(selectedAsset)
 				}
 			}
 		}

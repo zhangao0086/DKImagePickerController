@@ -347,13 +347,13 @@ public class DKImagePickerController : UINavigationController {
 							if self.sourceType != .Camera || self.viewControllers.count == 0 {
 								self.dismissViewControllerAnimated(true, completion: nil)
 							}
-							self.selectedImage(DKAsset(originalAsset: newAsset))
+							self.selectImage(DKAsset(originalAsset: newAsset))
 						}
 					} else {
 						if self.sourceType != .Camera {
 							self.dismissViewControllerAnimated(true, completion: nil)
 						}
-						self.selectedImage(DKAsset(image: image))
+						self.selectImage(DKAsset(image: image))
 					}
 				})
 			})
@@ -371,9 +371,8 @@ public class DKImagePickerController : UINavigationController {
 							if self.sourceType != .Camera || self.viewControllers.count == 0 {
 								self.dismissViewControllerAnimated(true, completion: nil)
 							}
-							self.selectedImage(DKAsset(originalAsset: newAsset))
+							self.selectImage(DKAsset(originalAsset: newAsset))
 						}
-
 					} else {
 						self.dismissViewControllerAnimated(true, completion: nil)
 					}
@@ -419,19 +418,11 @@ public class DKImagePickerController : UINavigationController {
 		}
 	}
 	
-	internal func deselectedImage(asset: DKAsset) {
+	internal func deselectImage(asset: DKAsset) {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
 		self.UIDelegate.imagePickerController(self, didDeselectAsset: asset)
 	}
     
-    public func removeAsset(index: Int){
-        let asset = self.selectedAssets[index]
-        self.deselectedImage(asset)
-        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-            rootVC.collectionView?.reloadData()
-        }
-    }
-	
     // MARK: - Handles Orientation
 
     public override func shouldAutorotate() -> Bool {
