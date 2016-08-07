@@ -1,15 +1,15 @@
 //
-//  DKImagePickerControllerDemoTests.swift
-//  DKImagePickerControllerDemoTests
+//  DKImagePickerControllerTests.swift
+//  DKImagePickerControllerTests
 //
-//  Created by ZhangAo on 15/8/27.
-//  Copyright (c) 2015年 ZhangAo. All rights reserved.
+//  Created by Julian Shen on 2016/6/27.
+//  Copyright © 2016年 ZhangAo. All rights reserved.
 //
 
 import UIKit
 import XCTest
 
-class DKImagePickerControllerDemoTests: XCTestCase {
+class DKImagePickerControllerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

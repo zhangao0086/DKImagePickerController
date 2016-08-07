@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -49,6 +49,16 @@
                BlueprintIdentifier = "9CF72B101B8F073400238B9A"
                BuildableName = "DKImagePickerControllerDemoTests.xctest"
                BlueprintName = "DKImagePickerControllerDemoTests"
+               ReferencedContainer = "container:DKImagePickerControllerDemo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B9EFB96B1D20FB7D006CDCAA"
+               BuildableName = "DKImagePickerControllerTests.xctest"
+               BlueprintName = "DKImagePickerControllerTests"
                ReferencedContainer = "container:DKImagePickerControllerDemo.xcodeproj">
             </BuildableReference>
          </TestableReference>
