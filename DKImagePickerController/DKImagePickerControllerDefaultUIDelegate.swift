@@ -1,5 +1,5 @@
 //
-//  DKImagePickerControllerDefaultCamera.swift
+//  DKImagePickerControllerDefaultUIDelegate.swift
 //  DKImagePickerControllerDemo
 //
 //  Created by ZhangAo on 16/3/7.
@@ -57,10 +57,6 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 		return DKAssetGroupGridLayout.self
 	}
 	
-	public func imagePickerControllerCameraImage() -> UIImage {
-		return DKImageResource.cameraImage()
-	}
-	
 	public func imagePickerController(imagePickerController: DKImagePickerController,
 	                                  showsCancelButtonForVC vc: UIViewController) {
 		vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
@@ -92,6 +88,26 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	public func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView? {
 		return nil
 	}
+    
+    public func imagePickerControllerCameraImage() -> UIImage {
+        return DKImageResource.cameraImage()
+    }
+    
+    public func imagePickerControllerCheckedNumberColor() -> UIColor {
+        return UIColor.whiteColor()
+    }
+    
+    public func imagePickerControllerCheckedNumberFont() -> UIFont {
+        return UIFont.boldSystemFontOfSize(14)
+    }
+    
+    public func imagePickerControllerCheckedImageTintColor() -> UIColor? {
+        return nil
+    }
+    
+    public func imagePickerControllerCollectionViewBackgroundColor() -> UIColor {
+        return UIColor.whiteColor()
+    }
 	
 	// Internal
 	
