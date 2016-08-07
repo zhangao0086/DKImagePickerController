@@ -1,6 +1,7 @@
-osx_image: xcode8
-
 language: objective-c
 
+osx_image: xcode8
+xcode_sdk: iphonesimulator10.0
+
 script:
-- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator10.0
+- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo
