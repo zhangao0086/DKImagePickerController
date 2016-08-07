@@ -13,21 +13,21 @@ import Photos
 public protocol DKImagePickerControllerUIDelegate {
 	
 	/**
-		The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
+     The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
 	*/
 	func prepareLayout(imagePickerController: DKImagePickerController, vc: UIViewController)
 	
 	/**
-		Returns a custom camera.
+     Returns a custom camera.
 
-		**Note**
+     **Note**
 
-		If you are using a UINavigationController as the custom camera,
-		you should also set the picker's modalPresentationStyle to .OverCurrentContext, like this:
-		
-		```
-		pickerController.modalPresentationStyle = .OverCurrentContext
-		```
+     If you are using a UINavigationController as the custom camera,
+     you should also set the picker's modalPresentationStyle to .OverCurrentContext, like this:
+
+     ```
+     pickerController.modalPresentationStyle = .OverCurrentContext
+     ```
 	*/
 	func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
 	                                       didCancel: (() -> Void),
@@ -35,47 +35,65 @@ public protocol DKImagePickerControllerUIDelegate {
 	                                       didFinishCapturingVideo: ((videoURL: NSURL) -> Void)) -> UIViewController
 	
 	/**
-		The camera image to be displayed in the album's first cell.
-	*/
-	func imagePickerControllerCameraImage() -> UIImage
-	
-	/**
-		The layout is to provide information about the position and visual state of items in the collection view.
+     The layout is to provide information about the position and visual state of items in the collection view.
 	*/
 	func layoutForImagePickerController(imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type
 	
 	/**
-		Called when the user needs to show the cancel button.
+     Called when the user needs to show the cancel button.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, showsCancelButtonForVC vc: UIViewController)
 	
 	/**
-		Called when the user needs to hide the cancel button.
+     Called when the user needs to hide the cancel button.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, hidesCancelButtonForVC vc: UIViewController)
 	
 	/**
-		Called after the user changes the selection.
+     Called after the user changes the selection.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset)
 	
 	/**
-		Called after the user changes the selection.
+     Called after the user changes the selection.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset)
 	
 	/**
-		Called when the selectedAssets'count did reach `maxSelectableCount`.
+     Called when the count of the selectedAssets did reach `maxSelectableCount`.
 	*/
 	func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController)
 	
 	/**
-		Accessory view below content. default is nil.
+     Accessory view below content. default is nil.
 	*/
 	func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView?
+    
+    /**
+     The camera image to be displayed in the album's first cell.
+     */
+    func imagePickerControllerCameraImage() -> UIImage
+    
+    /**
+     Set the color of the number when object is selected.
+     */
+    func imagePickerControllerCheckedNumberColor() -> UIColor
+    
+    /**
+     Set the font of the number when object is selected.
+     */
+    func imagePickerControllerCheckedNumberFont() -> UIFont
+    
+    /**
+     Set the color of the object outline when object is selected.
+     */
+    func imagePickerControllerCheckedImageTintColor() -> UIColor?
+    
+    /**
+     Set the color of the background of the collection view.
+     */
+    func imagePickerControllerCollectionViewBackgroundColor() -> UIColor
 
-    
-    
 }
 
 /**
@@ -200,34 +218,7 @@ public class DKImagePickerController : UINavigationController {
 			}
         }
     }
-    
-    //Set the color of the number when object is selected
-    public var numberColor: UIColor? {
-        didSet {
-            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.numberColor = self.numberColor!
-        }
-    }
-    
-    //Set the font of the number when object is selected
-    public var numberFont: UIFont? {
-        didSet {
-            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.numberFont = self.numberFont!
-        }
-    }
-    
-    //Set the color of the object outline when object is selected
-    public var checkedBackgroundImgColor: UIColor? {
-        didSet {
-            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.checkedBackgroundColor = self.checkedBackgroundImgColor!
-        }
-    }
-    
-    public var backgroundCollectionViewColor: UIColor? {
-        didSet {
-            DKAssetGroupDetailVC.backgroundCollectionViewColor = self.backgroundCollectionViewColor
-        }
-    }
-    
+        
     public var selectedAssets = [DKAsset]()
 	
     public convenience init() {
