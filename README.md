@@ -152,7 +152,7 @@ pickerController.sourceType = .Camera
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
 
-##### Customize footer view
+##### Customize footer view and UI color
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
 
 #### Create a custom camera
@@ -260,6 +260,8 @@ It has been supported languages so far:
 * hu.lproj
 * ru.lproj
 * es.lproj
+* tr.lproj
+* de.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -308,9 +310,7 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 
 ## Special Thanks
-Thanks for [scottdelly][scottdelly]'s [contribution][scottdellyCon] and [performance improvement][scottdellyCon1]!  
-Thanks for [LucidityDesign][LucidityDesign]'s [contribution][LucidityDesignCon]!  
-Thanks for [AnthonyMDev][AnthonyMDev]'s [contribution][scottdellyCon]!
+Big thanks to all the [contributors][contributors] so far!
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
@@ -318,9 +318,3 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
-[scottdelly]:https://github.com/scottdellyDKImagePickerController
-[scottdellyCon]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
-[scottdellyCon1]:https://github.com/zhangao0086/DKImagePickerController/pull/24/commits
-[LucidityDesign]:https://github.com/LucidityDesign
-[LucidityDesignCon]:https://github.com/zhangao0086/DKImagePickerController/pull/19/commits
-[AnthonyMDev]:https://github.com/AnthonyMDev
