@@ -73,6 +73,9 @@ public protocol DKImagePickerControllerUIDelegate {
 		Accessory view below content. default is nil.
 	*/
 	func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView?
+
+    
+    
 }
 
 /**
@@ -90,6 +93,7 @@ public enum DKImagePickerControllerSourceType : Int {
 	case Camera, Photo, Both
 }
 
+
 // MARK: - Public DKImagePickerController
 
 /**
@@ -100,7 +104,7 @@ public class DKImagePickerController : UINavigationController {
 	public var UIDelegate: DKImagePickerControllerUIDelegate = {
 		return DKImagePickerControllerDefaultUIDelegate()
 	}()
-	
+
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
 		
@@ -197,6 +201,33 @@ public class DKImagePickerController : UINavigationController {
         }
     }
     
+    //Set the color of the number when object is selected
+    public var numberColor: UIColor? {
+        didSet {
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.numberColor = self.numberColor!
+        }
+    }
+    
+    //Set the font of the number when object is selected
+    public var numberFont: UIFont? {
+        didSet {
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.numberFont = self.numberFont!
+        }
+    }
+    
+    //Set the color of the object outline when object is selected
+    public var checkedBackgroundImgColor: UIColor? {
+        didSet {
+            DKAssetGroupDetailVC.DKAssetCell.DKImageCheckView.checkedBackgroundColor = self.checkedBackgroundImgColor!
+        }
+    }
+    
+    public var backgroundCollectionViewColor: UIColor? {
+        didSet {
+            DKAssetGroupDetailVC.backgroundCollectionViewColor = self.backgroundCollectionViewColor
+        }
+    }
+    
     public var selectedAssets = [DKAsset]()
 	
     public convenience init() {
@@ -243,6 +274,7 @@ public class DKImagePickerController : UINavigationController {
                 self.navigationBarHidden = false
 				let rootVC = DKAssetGroupDetailVC()
 				rootVC.imagePickerController = self
+                
 				self.UIDelegate.prepareLayout(self, vc: rootVC)
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
@@ -398,11 +430,19 @@ public class DKImagePickerController : UINavigationController {
 		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
 		self.UIDelegate.imagePickerController(self, didDeselectAsset: asset)
 	}
+    
+    public func removeAsset(index: Int){
+        let asset = self.selectedAssets[index]
+        self.unselectedImage(asset)
+        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            rootVC.collectionView?.reloadData()
+        }
+    }
 	
     // MARK: - Handles Orientation
 
     public override func shouldAutorotate() -> Bool {
-		return self.allowsLandscape ? true : false
+		return self.allowsLandscape && self.sourceType != .Camera ? true : false
     }
     
     public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
