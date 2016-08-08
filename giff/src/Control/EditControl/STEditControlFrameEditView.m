@@ -13,6 +13,9 @@
 #import "R.h"
 #import "STPhotoSelector.h"
 #import "STCapturedImageSet.h"
+#import "STMainControl.h"
+#import "NSObject+STUtil.h"
+#import "BlocksKit.h"
 
 @implementation STEditControlFrameEditView {
     STUIView * _masterOffsetSliderContainer;
@@ -42,9 +45,6 @@
         [_playButton setButtons:@[R.go_play] colors:nil style:STStandardButtonStylePTBT];
         _playButton.right = self.right;
         [_masterOffsetSliderContainer addSubview:_playButton];
-        [_playButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-
-        }];
 
         //frame edit items
         _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
@@ -108,6 +108,46 @@
     }
 
     [self setNeedsLayersDisplayAndLayout];
+
+    [self setNeedsPlayAction:_masterOffsetSliderContainer.visible];
+}
+
+- (void)setNeedsPlayAction:(BOOL)activate{
+    static NSTimer * TimerForGIFPlayer;
+    static void(^BlockToResetGIFPlay)(void) = ^{
+        [STPhotoSelector sharedInstance].previewView.visibleControl = YES;
+        [TimerForGIFPlayer invalidate];
+        TimerForGIFPlayer = nil;
+    };
+    static NSString * const IdForMainControlModeChanged = @"STEditControlFrameEditView_IdForMainControlModeChanged";
+
+    if(activate){
+        //stop if change main mode
+        [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:^(id value, id _weakSelf) {
+            BlockToResetGIFPlay();
+        }];
+
+        Weaks
+        [_playButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
+            __block CGFloat progressPostFocusSliderValue = self.layerSet.frameIndexOffset;
+            __block CGFloat progressPostFocusSliderValueDirection = 1;
+            TimerForGIFPlayer = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
+                Strongs
+                progressPostFocusSliderValue = Sself->_masterOffsetSlider.normalizedPosition = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
+                if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
+                    progressPostFocusSliderValueDirection *= -1;
+                }
+
+                [Sself doingSlide:Sself->_masterOffsetSlider withSelectedIndex:0];
+            } repeats:YES];
+        }];
+    }else{
+        BlockToResetGIFPlay();
+
+        [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:nil];
+        [_playButton whenSelected:nil];
+    }
+
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
