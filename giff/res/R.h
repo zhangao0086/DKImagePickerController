@@ -59,6 +59,8 @@
 
 + (NSString *)go_manual;
 
++ (NSString *)go_pause;
+
 + (NSString *)go_play;
 
 + (NSString *)go_remove;

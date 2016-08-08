@@ -42,7 +42,7 @@
         _playButton.preferredIconImagePadding = _playButton.width/4;
         _playButton.backgroundColor = [UIColor grayColor];
         _playButton.fitIconImageSizeToCenterSquare = YES;
-        [_playButton setButtons:@[R.go_play] colors:nil style:STStandardButtonStylePTBT];
+        [_playButton setButtons:@[R.go_play, [R go_pause]] colors:nil style:STStandardButtonStylePTBT];
         _playButton.right = self.right;
         [_masterOffsetSliderContainer addSubview:_playButton];
 
@@ -113,11 +113,10 @@
 }
 
 - (void)setNeedsPlayAction:(BOOL)activate{
-    static NSTimer * TimerForGIFPlayer;
+    static NSTimer * TimerForPlaying;
     static void(^BlockToResetGIFPlay)(void) = ^{
-        [STPhotoSelector sharedInstance].previewView.visibleControl = YES;
-        [TimerForGIFPlayer invalidate];
-        TimerForGIFPlayer = nil;
+        [TimerForPlaying invalidate];
+        TimerForPlaying = nil;
     };
     static NSString * const IdForMainControlModeChanged = @"STEditControlFrameEditView_IdForMainControlModeChanged";
 
@@ -129,23 +128,29 @@
 
         Weaks
         [_playButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-            __block CGFloat progressPostFocusSliderValue = self.layerSet.frameIndexOffset;
-            __block CGFloat progressPostFocusSliderValueDirection = 1;
-            TimerForGIFPlayer = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
-                Strongs
-                progressPostFocusSliderValue = Sself->_masterOffsetSlider.normalizedPosition = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
-                if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
-                    progressPostFocusSliderValueDirection *= -1;
-                }
+            if(index==1){
+                __block CGFloat progressPostFocusSliderValue = _masterOffsetSlider.normalizedPosition;
+                __block CGFloat progressPostFocusSliderValueDirection = 1;
+                TimerForPlaying = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
+                    Strongs
+                    progressPostFocusSliderValue = Sself->_masterOffsetSlider.normalizedPosition = CLAMP(progressPostFocusSliderValue += (0.05f * progressPostFocusSliderValueDirection), 0, 1);
+                    if (progressPostFocusSliderValue <= 0 || progressPostFocusSliderValue >= 1) {
+                        progressPostFocusSliderValueDirection *= -1;
+                    }
 
-                [Sself doingSlide:Sself->_masterOffsetSlider withSelectedIndex:0];
-            } repeats:YES];
+                    [Sself doingSlide:Sself->_masterOffsetSlider withSelectedIndex:0];
+                } repeats:YES];
+            }else{
+                BlockToResetGIFPlay();
+            }
         }];
     }else{
-        BlockToResetGIFPlay();
+        if(TimerForPlaying){
+            BlockToResetGIFPlay();
 
-        [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:nil];
-        [_playButton whenSelected:nil];
+            [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:nil];
+            [_playButton whenSelected:nil];
+        }
     }
 
 }
@@ -215,6 +220,8 @@
         [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
         _currentMasterFrameIndex = currentMasterFrameIndex;
         [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
+
+        [self setNeedsPlayAction:NO];
     }
 }
 

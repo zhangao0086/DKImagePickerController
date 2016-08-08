@@ -113,6 +113,10 @@
     return @"go_manual.svg";
 }
 
++ (NSString *)go_pause; {
+    return @"go_pause.svg";
+}
+
 + (NSString *)go_play; {
     return @"go_play.svg";
 }
