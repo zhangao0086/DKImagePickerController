@@ -120,6 +120,16 @@
     };
     static NSString * const IdForMainControlModeChanged = @"STEditControlFrameEditView_IdForMainControlModeChanged";
 
+    //TODO: frameEditorView에 어떤 액션이 있으면 스탑
+    _playButton.currentIndex = 0;
+
+    if(TimerForPlaying){
+        BlockToResetGIFPlay();
+
+        [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:nil];
+        [_playButton whenSelected:nil];
+    }
+
     if(activate){
         //stop if change main mode
         [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:^(id value, id _weakSelf) {
@@ -129,7 +139,7 @@
         Weaks
         [_playButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
             if(index==1){
-                __block CGFloat progressPostFocusSliderValue = 0;//_masterOffsetSlider.normalizedPosition;
+                __block CGFloat progressPostFocusSliderValue = _masterOffsetSlider.normalizedPosition;
                 __block CGFloat progressPostFocusSliderValueDirection = 1;
                 TimerForPlaying = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
                     Strongs
@@ -144,14 +154,6 @@
                 BlockToResetGIFPlay();
             }
         }];
-    }else{
-        if(TimerForPlaying){
-            BlockToResetGIFPlay();
-            _playButton.currentIndex = 0;
-
-            [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:nil];
-            [_playButton whenSelected:nil];
-        }
     }
 
 }
@@ -221,8 +223,6 @@
         [self willChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
         _currentMasterFrameIndex = currentMasterFrameIndex;
         [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
-
-        [self setNeedsPlayAction:NO];
     }
 }
 
