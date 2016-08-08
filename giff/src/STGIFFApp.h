@@ -282,4 +282,5 @@ typedef NS_ENUM(NSInteger, STSubControlVisibleEffect) {
 
 + (BOOL)tryProductSavePostFocus:(void (^)(BOOL purchased))block interactionButton:(STStandardButton *)button;
 
++ (NSTimeInterval)defaultMaxDurationForAnimatableContent;
 @end

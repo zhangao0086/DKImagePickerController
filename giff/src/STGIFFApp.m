@@ -308,4 +308,10 @@
 }
 
 #pragma mark Product - Warter Mark
+
+#pragma mark Animatable
+
++ (NSTimeInterval)defaultMaxDurationForAnimatableContent{
+    return 3;
+}
 @end

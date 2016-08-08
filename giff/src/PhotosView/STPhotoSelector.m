@@ -457,7 +457,7 @@ static STPhotoSelector *_instance = nil;
         }];
         photoItem.exportGIFRequest = [[NSGIFRequest alloc] init];
         photoItem.exportGIFRequest.destinationVideoFile = [[@"STExporter_exportGIFsFromPhotoItems" st_add:[@(0) stringValue]] URLForTemp:@"gif"];
-        photoItem.exportGIFRequest.maxDuration = 2;
+        photoItem.exportGIFRequest.maxDuration = [STGIFFApp defaultMaxDurationForAnimatableContent];
 
         [STApp logUnique:@"StartExportGIF"];
 
