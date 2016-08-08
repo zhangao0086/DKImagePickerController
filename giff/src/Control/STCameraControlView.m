@@ -116,14 +116,12 @@
         pickerController.sourceType = DKImagePickerControllerSourceTypePhoto;
 
         [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
-
             [STCapturedImageSet setDefaultAspectFillRatioForAssets:CGSizeMake(1, 1)];
+            [STCapturedImageSet setMaxFrameDurationIfAssetHadAnimatableContents:3];
             [STCapturedImageSet createFromAssets:[assets mapWithItemsKeyPath:@"originalAsset"] completion:^(NSArray *imageSets) {
 
                 for(STCapturedImageSet * imageSet in imageSets){
                     [[STPhotoSelector sharedInstance] doAfterCaptured:[STPhotoItemSource sourceWithImageSet:imageSet]];
-
-//                    oo([[STPhotosManager sharedManager] generatePhotoItem:[STPhotoItemSource sourceWithImageSet:imageSet]]);
                 }
 
             }];

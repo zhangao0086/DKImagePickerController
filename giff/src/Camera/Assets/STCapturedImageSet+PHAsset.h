@@ -12,6 +12,8 @@
 
 + (void)setDefaultAspectFillRatioForAssets:(CGSize)aspectRatio;
 
++ (void)setMaxFrameDurationIfAssetHadAnimatableContents:(NSTimeInterval)duration;
+
 + (void)createFromAssets:(NSArray<PHAsset *> *)assets completion:(void (^)(NSArray<STCapturedImageSet *> *imageSets))block;
 
 + (BOOL)createFromAsset:(PHAsset *)asset completion:(void (^)(STCapturedImageSet *imageSet))block;

@@ -17,6 +17,11 @@ static CGSize defaultAspectFillRatio;
     defaultAspectFillRatio = aspectRatio;
 }
 
+static NSTimeInterval maxFrameDurationIfAssetHadAnimatableContents;
++ (void)setMaxFrameDurationIfAssetHadAnimatableContents:(NSTimeInterval)count {
+    maxFrameDurationIfAssetHadAnimatableContents = count;
+}
+
 + (void)createFromAssets:(NSArray<PHAsset *> *)assets completion:(void(^)(NSArray<STCapturedImageSet *>* imageSets))block{
     NSParameterAssert(assets.count);
     NSParameterAssert(block);
@@ -47,6 +52,7 @@ static CGSize defaultAspectFillRatio;
 
     NSFrameExtractingRequest * request = [NSFrameExtractingRequest new];
     request.framesPerSecond = 4;
+    request.maxDuration = maxFrameDurationIfAssetHadAnimatableContents;
 
     if(asset.isVideo){
         [asset exportFileByResourceType:PHAssetResourceTypeVideo completion:^(NSURL *tempFileURL) {

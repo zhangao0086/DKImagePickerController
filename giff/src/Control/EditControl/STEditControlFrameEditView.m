@@ -63,18 +63,18 @@
 
         Weaks
         for(STCapturedImageSetAnimatableLayer *layer in layerSet.layers){
-            if([_frameEditItemViewContainer viewWithTagName:layer.uuid]){
-                continue;
-            }
             NSAssert([layer isKindOfClass:STCapturedImageSetAnimatableLayer.class],@"Only STCapturedImageSetAnimatableLayer is allowed");
-            STEditControlFrameEditItemView * editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+
+            STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:layer.uuid];
+            if(!editItemView){
+                editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+                [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
+                    [Wself removeLayerTapped:editItemView];
+                }];
+                [_frameEditItemViewContainer addSubview:editItemView];
+            }
             editItemView.tagName = layer.uuid;
             editItemView.displayLayer = layer;
-//            editItemView.backgroundColor = [UIColor orangeColor];
-            [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-                [Wself removeLayerTapped:editItemView];
-            }];
-            [_frameEditItemViewContainer addSubview:editItemView];
         }
 
     }else{
@@ -108,6 +108,7 @@
 
     NSMutableArray * layersOfLayerSet = [self.layerSet.layers mutableCopy];
     [layersOfLayerSet removeObject:editItemView.displayLayer];
+    //reset layers
     self.layerSet.layers = layersOfLayerSet;
 
     editItemView.displayLayer = nil;

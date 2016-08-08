@@ -5,16 +5,30 @@
 
 #import "STCapturedImageSetAnimatableLayerSet.h"
 #import "STCapturedImageSet.h"
-#import "STCaptureResponse.h"
 #import "STCapturedImageSetDisplayLayer.h"
+#import "NSArray+STUtil.h"
+#import "STCapturedImageSetAnimatableLayer.h"
 
+@implementation STCapturedImageSetAnimatableLayerSet
 
-@implementation STCapturedImageSetAnimatableLayerSet {
-
+- (void)setLayers:(NSArray *)layers {
+    [self updateFrameCountAndRemapLayers:layers];
+    super.layers = layers;
 }
 
-- (NSUInteger)frameCount {
-    return [[[[self layers] firstObject] imageSet] count];
+- (void)updateFrameCountAndRemapLayers:(NSArray *)layers{
+    NSArray * sortedLayers = [layers sortedArrayWithOptions:NSSortStable usingComparator:^NSComparisonResult(STCapturedImageSetDisplayLayer * layer1, STCapturedImageSetDisplayLayer * layer2) {
+        return layer1.imageSet.count > layer2.imageSet.count ? NSOrderedDescending : NSOrderedSame;
+    }];
+
+    _frameCount = [[sortedLayers lastObject] imageSet].count;
+
+    for(STCapturedImageSetAnimatableLayer * layer in sortedLayers){
+        //perform remap
+        NSArray * remappedArray = [[layer imageSet].images arrayByInterpolatingRemappedCount:_frameCount];
+        [[layer imageSet].images removeAllObjects];
+        [[layer imageSet].images addObjectsFromArray:remappedArray];
+    }
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

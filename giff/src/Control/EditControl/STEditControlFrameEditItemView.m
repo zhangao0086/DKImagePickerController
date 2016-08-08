@@ -85,6 +85,7 @@
             view.tagName = image.uuid;
             view.contentMode = UIViewContentModeScaleAspectFill;
             view.clipsToBounds = YES;
+            view.size = CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth);
         }];
 
         [self updateThumbnailsPosition];
@@ -109,6 +110,11 @@
 }
 
 - (void)updateThumbnailsPosition{
+    _frameOffsetSlider.thumbView.visible = _displayLayer.frameCount>1;
+    if(_frameOffsetSlider.thumbView.visible){
+        _frameOffsetSlider.thumbView.size = CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth);
+    }
+
     [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
         UIView * thumbnailCellView = [_frameOffsetSlider.segmentationViews bk_match:^BOOL(UIView * view) {
             return [view.tagName isEqualToString:frameImage.uuid];
@@ -118,7 +124,9 @@
 }
 
 - (void)updateSliderPosition{
-    _frameOffsetSlider.normalizedPosition = CLAMP((self.displayLayer.frameIndexOffset+((CGFloat)self.displayLayer.frameCount/2))/self.displayLayer.frameCount,0,1);
+    if(_frameOffsetSlider.thumbView.visible){
+        _frameOffsetSlider.normalizedPosition = CLAMP((self.displayLayer.frameIndexOffset+((CGFloat)self.displayLayer.frameCount/2))/self.displayLayer.frameCount,0,1);
+    }
 }
 
 #pragma mark Slider Delegator

@@ -96,7 +96,6 @@
                         preferredRange:(NSRange)range{
 
     STSelectableView * itemViewOfLayerSet = (STSelectableView *) [self itemViewOfLayerSet:layerSet];
-    NSAssert(!itemViewOfLayerSet.count || itemViewOfLayerSet.count==layerSet.frameCount,@"itemViewOfLayerSet.count must be empty OR same as layerSet.frameCount");
 
     NSArray * existedAllPresentableObjects = [[@(itemViewOfLayerSet.count) st_intArray] mapWithIndex:^id(id object, NSInteger i) {
         return [itemViewOfLayerSet presentableObjectAtIndex:i];
@@ -107,9 +106,6 @@
 
     if(layerSet.effect){
         Weaks
-//        dispatch_async([STQueueManager sharedQueue].uiProcessing,^{
-//
-//        });
         [_processingQueue cancelAllOperations];
         [_processingQueue addOperationWithBlock:^{
             @autoreleasepool {
