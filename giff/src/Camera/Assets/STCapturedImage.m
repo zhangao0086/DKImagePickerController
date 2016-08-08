@@ -152,7 +152,8 @@ static UIImage *(^ProcessingBlockBeforeSave)(UIImage *);
         oo(@"[!] WARNING : self.thumbnailUrl already exists, but tried create thumbnail.");
     }
 
-    _fullScreenUrl = [[self _createResizedImage:path suffix:STCapturedImageFileNameSuffix_FullScreen sizeInScreen:[self _screenSizeForResizedImage:1] quality:.7] fileURL];
+    CGSize sizeToResize = CGSizeEqualToSize(CGSizeZero,self.preferredFullScreenSize) ? [self _screenSizeForResizedImage:1] : self.preferredFullScreenSize;
+    _fullScreenUrl = [[self _createResizedImage:path suffix:STCapturedImageFileNameSuffix_FullScreen sizeInScreen:sizeToResize quality:.7] fileURL];
     return _fullScreenUrl != nil;
 }
 
@@ -161,7 +162,8 @@ static UIImage *(^ProcessingBlockBeforeSave)(UIImage *);
         oo(@"[!] WARNING : self.thumbnailUrl already exists, but tried create thumbnail.");
     }
 
-    _thumbnailUrl = [[self _createResizedImage:path suffix:STCapturedImageFileNameSuffix_Thumbnail sizeInScreen:[self _screenSizeForResizedImage:.5f] quality:.6] fileURL];
+    CGSize sizeToResize = CGSizeEqualToSize(CGSizeZero,self.preferredThumbnailSize) ? [self _screenSizeForResizedImage:.5f] : self.preferredThumbnailSize;
+    _thumbnailUrl = [[self _createResizedImage:path suffix:STCapturedImageFileNameSuffix_Thumbnail sizeInScreen:sizeToResize quality:.6] fileURL];
     return _thumbnailUrl != nil;
 }
 

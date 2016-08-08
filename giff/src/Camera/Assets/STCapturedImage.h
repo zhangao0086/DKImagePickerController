@@ -21,7 +21,9 @@ extern NSString * const STCapturedImageSetDirectory;
 @property (nonatomic, readwrite) NSData * imageData;
 //assistant resource
 @property (nonatomic, readonly) NSURL * thumbnailUrl;
+@property (nonatomic, assign) CGSize preferredThumbnailSize;
 @property (nonatomic, readonly) NSURL * fullScreenUrl;
+@property (nonatomic, assign) CGSize preferredFullScreenSize;
 //attr
 @property (nonatomic, readonly) CGSize pixelSize;
 //focus

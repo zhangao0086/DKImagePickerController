@@ -108,7 +108,10 @@
 
     NSMutableArray * layersOfLayerSet = [self.layerSet.layers mutableCopy];
     [layersOfLayerSet removeObject:editItemView.displayLayer];
-    //reset layers
+
+    /*
+     * set new layers
+     */
     self.layerSet.layers = layersOfLayerSet;
 
     editItemView.displayLayer = nil;
