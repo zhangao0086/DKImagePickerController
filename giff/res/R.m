@@ -113,6 +113,10 @@
     return @"go_manual.svg";
 }
 
++ (NSString *)go_play; {
+    return @"go_play.svg";
+}
+
 + (NSString *)go_remove; {
     return @"go_remove.svg";
 }
@@ -122,15 +126,11 @@
 }
 
 + (NSString *)go_scroll_top; {
-    return @"go_scroll_top=ico_direction=ico_play.svg";
+    return @"go_scroll_top=ico_direction.svg";
 }
 
 + (NSString *)ico_direction; {
-    return @"go_scroll_top=ico_direction=ico_play.svg";
-}
-
-+ (NSString *)ico_play; {
-    return @"go_scroll_top=ico_direction=ico_play.svg";
+    return @"go_scroll_top=ico_direction.svg";
 }
 
 + (NSString *)go_take; {

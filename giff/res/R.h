@@ -59,6 +59,8 @@
 
 + (NSString *)go_manual;
 
++ (NSString *)go_play;
+
 + (NSString *)go_remove;
 
 + (NSString *)go_roll;
@@ -66,8 +68,6 @@
 + (NSString *)go_scroll_top;
 
 + (NSString *)ico_direction;
-
-+ (NSString *)ico_play;
 
 + (NSString *)go_take;
 

@@ -12,6 +12,7 @@
 		4F71D0CA757E4B99A9CF2298 /* STPreviewPresenterAnimatableImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DD9519C73B5BEEF14313 /* STPreviewPresenterAnimatableImage.m */; };
 		4F71D12B6A9068F2F946610F /* STEditControlEffectSelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D09EE7A6407DEC9E2B71 /* STEditControlEffectSelectorView.m */; };
 		4F71D17570EB6BFF5525EB8E /* set_torchlight_on.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DA20030C611C8BC69FDC /* set_torchlight_on.svg */; };
+		4F71D183C777C061536E1EE7 /* go_play.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DB4986A8A5DBBD75E686 /* go_play.svg */; };
 		4F71D196341FACB753247AB8 /* STCapturedImageSetDisplayProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DCFB3B83FD13A975B6B0 /* STCapturedImageSetDisplayProcessor.m */; };
 		4F71D1AAC7F3BE1B0297FF1D /* STGIFFAnimatableLayerPresentingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D5488E5274FE85378609 /* STGIFFAnimatableLayerPresentingView.m */; };
 		4F71D1AF85F22A91D4776E20 /* STGPUImageOffsetScalingFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D526C3DDF2138863954D /* STGPUImageOffsetScalingFilter.m */; };
@@ -176,7 +177,7 @@
 		A050D1331CC5DD0D00628C2F /* go_manual.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE8D1CC5DD0C00628C2F /* go_manual.svg */; };
 		A050D1371CC5DD0D00628C2F /* go_remove.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE911CC5DD0C00628C2F /* go_remove.svg */; };
 		A050D1381CC5DD0D00628C2F /* go_roll.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE921CC5DD0C00628C2F /* go_roll.svg */; };
-		A050D13B1CC5DD0D00628C2F /* go_scroll_top=ico_direction=ico_play.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE951CC5DD0C00628C2F /* go_scroll_top=ico_direction=ico_play.svg */; };
+		A050D13B1CC5DD0D00628C2F /* go_scroll_top=ico_direction.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE951CC5DD0C00628C2F /* go_scroll_top=ico_direction.svg */; };
 		A050D13C1CC5DD0D00628C2F /* go_transform.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE961CC5DD0C00628C2F /* go_transform.svg */; };
 		A050D13D1CC5DD0D00628C2F /* go_transform_undo.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE971CC5DD0C00628C2F /* go_transform_undo.svg */; };
 		A050D13E1CC5DD0D00628C2F /* go_x=x_circle.svg in Resources */ = {isa = PBXBuildFile; fileRef = A050CE981CC5DD0C00628C2F /* go_x=x_circle.svg */; };
@@ -537,6 +538,7 @@
 		4F71DA8B37FE7246C9917A24 /* RLMCapturedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLMCapturedImage.h; sourceTree = "<group>"; };
 		4F71DA9BB0683F9B1C8C62A0 /* STCapturedImage+STExporterIOGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STCapturedImage+STExporterIOGIF.h"; sourceTree = "<group>"; };
 		4F71DABC61E122CA2D5828AE /* STGIFFDisplayLayerEffectsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFDisplayLayerEffectsManager.h; sourceTree = "<group>"; };
+		4F71DB4986A8A5DBBD75E686 /* go_play.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = go_play.svg; sourceTree = "<group>"; };
 		4F71DB590D5094AD238A9224 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		4F71DB8023A7A63E6825587F /* STSelectableCapturedImageSetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STSelectableCapturedImageSetView.h; sourceTree = "<group>"; };
 		4F71DBD7DD7B3F0053E232E9 /* STPhotosManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPhotosManager.h; sourceTree = "<group>"; };
@@ -743,7 +745,7 @@
 		A050CE8D1CC5DD0C00628C2F /* go_manual.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = go_manual.svg; sourceTree = "<group>"; };
 		A050CE911CC5DD0C00628C2F /* go_remove.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = go_remove.svg; sourceTree = "<group>"; };
 		A050CE921CC5DD0C00628C2F /* go_roll.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = go_roll.svg; sourceTree = "<group>"; };
-		A050CE951CC5DD0C00628C2F /* go_scroll_top=ico_direction=ico_play.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "go_scroll_top=ico_direction=ico_play.svg"; sourceTree = "<group>"; };
+		A050CE951CC5DD0C00628C2F /* go_scroll_top=ico_direction.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.svg; path = "go_scroll_top=ico_direction.svg"; sourceTree = "<group>"; };
 		A050CE961CC5DD0C00628C2F /* go_transform.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = go_transform.svg; sourceTree = "<group>"; };
 		A050CE971CC5DD0C00628C2F /* go_transform_undo.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = go_transform_undo.svg; sourceTree = "<group>"; };
 		A050CE981CC5DD0C00628C2F /* go_x=x_circle.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.svg; path = "go_x=x_circle.svg"; sourceTree = "<group>"; };
@@ -1562,7 +1564,7 @@
 				A050CE8D1CC5DD0C00628C2F /* go_manual.svg */,
 				A050CE911CC5DD0C00628C2F /* go_remove.svg */,
 				A050CE921CC5DD0C00628C2F /* go_roll.svg */,
-				A050CE951CC5DD0C00628C2F /* go_scroll_top=ico_direction=ico_play.svg */,
+				A050CE951CC5DD0C00628C2F /* go_scroll_top=ico_direction.svg */,
 				4F71D6E47674B33F45BBC26E /* go_take.svg */,
 				A050CE961CC5DD0C00628C2F /* go_transform.svg */,
 				A050CE971CC5DD0C00628C2F /* go_transform_undo.svg */,
@@ -1629,6 +1631,7 @@
 				A050CEFD1CC5DD0D00628C2F /* set_transform_square.svg */,
 				A050CEFE1CC5DD0D00628C2F /* slide_arrow_down.svg */,
 				A050CEFF1CC5DD0D00628C2F /* slide_arrow_down_ios.svg */,
+				4F71DB4986A8A5DBBD75E686 /* go_play.svg */,
 			);
 			path = svg;
 			sourceTree = "<group>";
@@ -2512,7 +2515,7 @@
 				A050D1761CC5DD0D00628C2F /* set_flash_off.svg in Resources */,
 				A050D1241CC5DD0D00628C2F /* line.svg in Resources */,
 				A050D0ED1CC5DD0D00628C2F /* 00002_a59f9d_86be6bbdc0864825b158c8762bd77e01_1_starpretprism.png in Resources */,
-				A050D13B1CC5DD0D00628C2F /* go_scroll_top=ico_direction=ico_play.svg in Resources */,
+				A050D13B1CC5DD0D00628C2F /* go_scroll_top=ico_direction.svg in Resources */,
 				A050D1A21CC5DD0D00628C2F /* set_transform_rotate90.svg in Resources */,
 				A050D11A1CC5DD0D00628C2F /* dotdotdot.svg in Resources */,
 				A050D13F1CC5DD0D00628C2F /* ico_360_rotate.svg in Resources */,
@@ -2611,6 +2614,7 @@
 				4F71DF0B277CCC20EFCA378A /* set_add.svg in Resources */,
 				4F71D6383B6F2ED8F6BA27C7 /* effect_thumb.png in Resources */,
 				4F71D954187078907FE55569 /* share_fit.svg in Resources */,
+				4F71D183C777C061536E1EE7 /* go_play.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,18 +15,42 @@
 #import "STCapturedImageSet.h"
 
 @implementation STEditControlFrameEditView {
-    STStandardButton * _frameAddButton;
+    STUIView * _masterOffsetSliderContainer;
+    STSegmentedSliderView * _masterOffsetSlider;
+    STStandardButton * _playButton;
+
     STUIView * _frameEditItemViewContainer;
 
-    STSegmentedSliderView * _masterOffsetSlider;
+    STStandardButton * _frameAddButton;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        //master frame offset slider
+        _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+        [self addSubview:_masterOffsetSliderContainer];
+
+        _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width-self.heightForFrameItemView,self.heightForFrameItemView)];
+        _masterOffsetSlider.delegateSlider = self;
+        [_masterOffsetSliderContainer addSubview:_masterOffsetSlider];
+
+        _playButton = [[STStandardButton alloc] initWithSizeWidth:self.heightForFrameItemView];
+        _playButton.preferredIconImagePadding = _playButton.width/4;
+        _playButton.backgroundColor = [UIColor grayColor];
+        _playButton.fitIconImageSizeToCenterSquare = YES;
+        [_playButton setButtons:@[R.go_play] colors:nil style:STStandardButtonStylePTBT];
+        _playButton.right = self.right;
+        [_masterOffsetSliderContainer addSubview:_playButton];
+        [_playButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
+
+        }];
+
+        //frame edit items
         _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
         [self addSubview:_frameEditItemViewContainer];
 
+        //frame add button
         _frameAddButton = [[STStandardButton alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
         _frameAddButton.fitIconImageSizeToCenterSquare = YES;
         [self addSubview:_frameAddButton];
@@ -35,10 +59,6 @@
         [_frameAddButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
             [[STPhotoSelector sharedInstance] doExitEditAfterCapture:YES];
         }];
-
-        _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
-        _masterOffsetSlider.delegateSlider = self;
-        [self addSubview:_masterOffsetSlider];
     }
 
     return self;
@@ -91,12 +111,12 @@
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
-    _masterOffsetSlider.visible = self.layerSet.frameCount>1;
-    if(_masterOffsetSlider.visible){
+    _masterOffsetSliderContainer.visible = self.layerSet.frameCount>1;
+    if(_masterOffsetSliderContainer.visible){
         _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/self.layerSet.frameCount;
     }
 
-    _frameEditItemViewContainer.top = _masterOffsetSlider.visible ? _masterOffsetSlider.bottom : 0;
+    _frameEditItemViewContainer.top = _masterOffsetSliderContainer.visible ? _masterOffsetSliderContainer.bottom : 0;
     [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *)view;
         editItemView.y = index*editItemView.height;
