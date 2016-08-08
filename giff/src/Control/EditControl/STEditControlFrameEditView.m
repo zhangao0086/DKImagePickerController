@@ -91,9 +91,12 @@
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
-    _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/self.layerSet.frameCount;
+    _masterOffsetSlider.visible = self.layerSet.frameCount>1;
+    if(_masterOffsetSlider.visible){
+        _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/self.layerSet.frameCount;
+    }
 
-    _frameEditItemViewContainer.top = _masterOffsetSlider.bottom;
+    _frameEditItemViewContainer.top = _masterOffsetSlider.visible ? _masterOffsetSlider.bottom : 0;
     [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *)view;
         editItemView.y = index*editItemView.height;

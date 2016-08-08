@@ -526,99 +526,99 @@ BOOL _scrollStopped = YES;
             @(STControlDisplayModeExport)
     ];
 
-    /*
-     * home collectable
-     */
-    STStandardButton *manualAfterCaptureCollectable = [STStandardButton subAssistanceSize];
-    manualAfterCaptureCollectable.allowSelectedStateFromTouchingOutside = YES;
-    [manualAfterCaptureCollectable setButtons:@[[R set_manual_continue], [R set_manual_single]] colors:@[[UIColor whiteColor],[UIColor whiteColor]] bgColors:@[[STStandardUI pointColor],[STStandardUI pointColor]] style:STStandardButtonStylePTBT];
-    manualAfterCaptureCollectable.valuesMap = @[@(STAfterManualCaptureActionSaveToLocalAndContinue), @(STAfterManualCaptureActionEnterEdit)];
-    manualAfterCaptureCollectable.currentMappedValue = @(STGIFFAppSetting.get.afterManualCaptureAction);
-    [manualAfterCaptureCollectable whenSelectedWithMappedValue:^(STSelectableView *button, NSInteger index, id value) {
-        _homeCollectable.alpha = 1;
-        [UIView animateWithDuration:.4 delay:1 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-            _homeCollectable.alpha = [STStandardUI alphaForDimmingWeak];
-        } completion:nil];
-
-        switch ([STGIFFAppSetting get].afterManualCaptureAction = [value integerValue]){
-            case STAfterManualCaptureActionSaveToLocalAndContinue:
-                [[STElieStatusBar sharedInstance] message:NSLocalizedString(@"Shoot And Autosave",nil)];
-                break;
-            case STAfterManualCaptureActionEnterEdit:
-                [[STElieStatusBar sharedInstance] message:NSLocalizedString(@"Shoot And Review",nil)];
-                break;
-            default:
-                break;
-        }
-    }];
-
-    /*
-     * resolution
-     */
-
-    NSArray * const supportedPresets = [STCaptureRequest supportedPresets];
-
-    STStandardButton *resolutionCollectable = [STStandardButton subAssistanceSize];
-    resolutionCollectable.allowSelectedStateFromTouchingOutside = YES;
-    [resolutionCollectable setButtons:[supportedPresets mapWithIndex:^id(id object, NSInteger index) {
-        switch((CaptureOutputPixelSizePreset)[object integerValue]){
-            case CaptureOutputPixelSizePresetSmall: return [R set_resolution_small];
-            case CaptureOutputPixelSizePresetMedium: return [R set_resolution_medium];
-            case CaptureOutputPixelSizePresetLarge: return [R set_resolution_full];
-            case CaptureOutputPixelSizePreset4K: return [R set_resolution_4k];
-            default:
-                return [NSNull null];
-        }
-        return nil;
-    }] colors:[supportedPresets mapWithIndex:^id(id object, NSInteger index) {
-        switch((CaptureOutputPixelSizePreset)[object integerValue]){
-            case CaptureOutputPixelSizePreset4K:
-                return [STStandardUI pointColor];
-            default:
-                return [UIColor whiteColor];
-        }
-    }] bgColors:nil style:STStandardButtonStylePTBT];
-
-    resolutionCollectable.valuesMap = supportedPresets;
-    resolutionCollectable.currentMappedValue = @([self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO]);
-
-    [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].postFocusMode) id:@"postFocusMode_maincontrol" changed:^(id value, id _weakSelf) {
-        [self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO];
-    }];
-
-    [resolutionCollectable whenSelectedWithMappedValue:^(STSelectableView *button, NSInteger index, id value) {
-        [self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [value integerValue] userTapped:YES];
-    }];
-
-    [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].captureOutputSizePreset) id:@"captureOutputSizePreset_maincontrol" changed:^(id value, id _weakSelf) {
-        resolutionCollectable.currentMappedValue = value;
-    }];
-
-    /*
-     * config home collectable
-     */
-    _homeCollectable = [[STStandardNavigationButton alloc] initWithSizeWidth:[STStandardLayout widthMainSmall]+6];
-    _homeCollectable.synchronizeCollectableSelection = NO;
-    _homeCollectable.autoRetractWhenSelectCollectableItem = NO;
-    _homeCollectable.autoUXLayoutWhenExpanding = YES;
-    _homeCollectable.invertMaskInButtonAreaForCollectableBackground = YES;
-
-    _homeCollectable.collectablesSelectAsIndependent = NO;
-    _homeCollectable.collectableToggleEnabled = YES;
-    [_homeCollectable setCollectablesAsButtons:@[manualAfterCaptureCollectable,resolutionCollectable] backgroundStyle:STStandardButtonStylePTBT];
-    _homeCollectable.collectableView.startDegree = 90;
-    [_homeCollectable setCollectablesUserInteractionEnabled:YES];
-    [self insertSubview:_homeCollectable belowSubview:_home];
-    [_homeCollectable centerToParent];
-    [_homeCollectable expand:NO];
-
-    [UIView animateWithDuration:.4 delay:1 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-        _homeCollectable.alpha = [STStandardUI alphaForDimmingWeak];
-    } completion:nil];
-
-    [[NSNotificationCenter get] st_addObserverWithMainQueue:self forName:STNotificationPhotosDidLocalSaved usingBlock:^(NSNotification *note, id observer) {
-        [self setNeededToShowOrHideHomeCollectable];
-    }];
+//    /*
+//     * home collectable
+//     */
+//    STStandardButton *manualAfterCaptureCollectable = [STStandardButton subAssistanceSize];
+//    manualAfterCaptureCollectable.allowSelectedStateFromTouchingOutside = YES;
+//    [manualAfterCaptureCollectable setButtons:@[[R set_manual_continue], [R set_manual_single]] colors:@[[UIColor whiteColor],[UIColor whiteColor]] bgColors:@[[STStandardUI pointColor],[STStandardUI pointColor]] style:STStandardButtonStylePTBT];
+//    manualAfterCaptureCollectable.valuesMap = @[@(STAfterManualCaptureActionSaveToLocalAndContinue), @(STAfterManualCaptureActionEnterEdit)];
+//    manualAfterCaptureCollectable.currentMappedValue = @(STGIFFAppSetting.get.afterManualCaptureAction);
+//    [manualAfterCaptureCollectable whenSelectedWithMappedValue:^(STSelectableView *button, NSInteger index, id value) {
+//        _homeCollectable.alpha = 1;
+//        [UIView animateWithDuration:.4 delay:1 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//            _homeCollectable.alpha = [STStandardUI alphaForDimmingWeak];
+//        } completion:nil];
+//
+//        switch ([STGIFFAppSetting get].afterManualCaptureAction = [value integerValue]){
+//            case STAfterManualCaptureActionSaveToLocalAndContinue:
+//                [[STElieStatusBar sharedInstance] message:NSLocalizedString(@"Shoot And Autosave",nil)];
+//                break;
+//            case STAfterManualCaptureActionEnterEdit:
+//                [[STElieStatusBar sharedInstance] message:NSLocalizedString(@"Shoot And Review",nil)];
+//                break;
+//            default:
+//                break;
+//        }
+//    }];
+//
+//    /*
+//     * resolution
+//     */
+//
+//    NSArray * const supportedPresets = [STCaptureRequest supportedPresets];
+//
+//    STStandardButton *resolutionCollectable = [STStandardButton subAssistanceSize];
+//    resolutionCollectable.allowSelectedStateFromTouchingOutside = YES;
+//    [resolutionCollectable setButtons:[supportedPresets mapWithIndex:^id(id object, NSInteger index) {
+//        switch((CaptureOutputPixelSizePreset)[object integerValue]){
+//            case CaptureOutputPixelSizePresetSmall: return [R set_resolution_small];
+//            case CaptureOutputPixelSizePresetMedium: return [R set_resolution_medium];
+//            case CaptureOutputPixelSizePresetLarge: return [R set_resolution_full];
+//            case CaptureOutputPixelSizePreset4K: return [R set_resolution_4k];
+//            default:
+//                return [NSNull null];
+//        }
+//        return nil;
+//    }] colors:[supportedPresets mapWithIndex:^id(id object, NSInteger index) {
+//        switch((CaptureOutputPixelSizePreset)[object integerValue]){
+//            case CaptureOutputPixelSizePreset4K:
+//                return [STStandardUI pointColor];
+//            default:
+//                return [UIColor whiteColor];
+//        }
+//    }] bgColors:nil style:STStandardButtonStylePTBT];
+//
+//    resolutionCollectable.valuesMap = supportedPresets;
+//    resolutionCollectable.currentMappedValue = @([self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO]);
+//
+//    [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].postFocusMode) id:@"postFocusMode_maincontrol" changed:^(id value, id _weakSelf) {
+//        [self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [[STGIFFAppSetting.get read:@keypath([STGIFFAppSetting get].captureOutputSizePreset)] integerValue] userTapped:NO];
+//    }];
+//
+//    [resolutionCollectable whenSelectedWithMappedValue:^(STSelectableView *button, NSInteger index, id value) {
+//        [self setCaptureSizePreset:(CaptureOutputPixelSizePreset) [value integerValue] userTapped:YES];
+//    }];
+//
+//    [[STGIFFAppSetting get] whenValueOf:@keypath([STGIFFAppSetting get].captureOutputSizePreset) id:@"captureOutputSizePreset_maincontrol" changed:^(id value, id _weakSelf) {
+//        resolutionCollectable.currentMappedValue = value;
+//    }];
+//
+//    /*
+//     * config home collectable
+//     */
+//    _homeCollectable = [[STStandardNavigationButton alloc] initWithSizeWidth:[STStandardLayout widthMainSmall]+6];
+//    _homeCollectable.synchronizeCollectableSelection = NO;
+//    _homeCollectable.autoRetractWhenSelectCollectableItem = NO;
+//    _homeCollectable.autoUXLayoutWhenExpanding = YES;
+//    _homeCollectable.invertMaskInButtonAreaForCollectableBackground = YES;
+//
+//    _homeCollectable.collectablesSelectAsIndependent = NO;
+//    _homeCollectable.collectableToggleEnabled = YES;
+//    [_homeCollectable setCollectablesAsButtons:@[manualAfterCaptureCollectable,resolutionCollectable] backgroundStyle:STStandardButtonStylePTBT];
+//    _homeCollectable.collectableView.startDegree = 90;
+//    [_homeCollectable setCollectablesUserInteractionEnabled:YES];
+//    [self insertSubview:_homeCollectable belowSubview:_home];
+//    [_homeCollectable centerToParent];
+//    [_homeCollectable expand:NO];
+//
+//    [UIView animateWithDuration:.4 delay:1 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//        _homeCollectable.alpha = [STStandardUI alphaForDimmingWeak];
+//    } completion:nil];
+//
+//    [[NSNotificationCenter get] st_addObserverWithMainQueue:self forName:STNotificationPhotosDidLocalSaved usingBlock:^(NSNotification *note, id observer) {
+//        [self setNeededToShowOrHideHomeCollectable];
+//    }];
 }
 
 - (CaptureOutputPixelSizePreset)setCaptureSizePreset:(CaptureOutputPixelSizePreset)preset userTapped:(BOOL)userTapped {
