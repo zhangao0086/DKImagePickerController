@@ -78,7 +78,12 @@
         [_frameOffsetSlider setSegmentationViewAsPresentableObject:[images mapWithIndex:^(STCapturedImage *frameImage, NSInteger index) {
             @autoreleasepool {
                 NSAssert(frameImage.tempImageUrl,@"frameImage.tempImageUrl");
-                NSURL * thumbnailUrl = frameImage.tempImageUrl ?: frameImage.thumbnailUrl;
+                NSURL * thumbnailUrl = frameImage.tempImageUrl;
+
+                //use thumbnailUrl instead of the smallest thumbnail(tempImageUrl) image for size optimization
+                if(self.minThumbnailWidth >= self.squareUnitWidth*2 || !frameImage.tempImageUrl){
+                    thumbnailUrl = frameImage.thumbnailUrl;
+                }
                 UIImage * thumbnailImage = [UIImage imageWithContentsOfFile:thumbnailUrl.path];
                 return thumbnailImage;
             }

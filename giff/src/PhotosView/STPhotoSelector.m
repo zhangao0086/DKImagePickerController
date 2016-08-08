@@ -2047,7 +2047,7 @@ static SVGKFastImageView *_nophotoView;
 
         //using frameEditView's thumbnail
         for(STCapturedImage * image in photoItem.sourceForCapturedImageSet.images){
-            [image createTempImage:CGSizeMakeValue([[STMainControl sharedInstance] editControlView].frameEditView.heightForFrameItemView) caching:NO];
+            [image createTempImage:CGSizeMakeValue([[STMainControl sharedInstance] editControlView].frameEditView.heightForFrameItemView*1.5f) caching:NO];
         }
 
         photoItem.index = nextIndex;
