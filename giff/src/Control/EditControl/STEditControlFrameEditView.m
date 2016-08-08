@@ -129,7 +129,7 @@
         Weaks
         [_playButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
             if(index==1){
-                __block CGFloat progressPostFocusSliderValue = _masterOffsetSlider.normalizedPosition;
+                __block CGFloat progressPostFocusSliderValue = 0;//_masterOffsetSlider.normalizedPosition;
                 __block CGFloat progressPostFocusSliderValueDirection = 1;
                 TimerForPlaying = [NSTimer bk_scheduledTimerWithTimeInterval:.05 block:^(NSTimer *timer) {
                     Strongs
@@ -147,6 +147,7 @@
     }else{
         if(TimerForPlaying){
             BlockToResetGIFPlay();
+            _playButton.currentIndex = 0;
 
             [[STMainControl sharedInstance] whenNewValueOnceOf:@keypath([STMainControl sharedInstance].mode) id:IdForMainControlModeChanged changed:nil];
             [_playButton whenSelected:nil];
