@@ -12,6 +12,8 @@
 #import "R.h"
 #import "NSArray+STUtil.h"
 #import "NSArray+BlocksKit.h"
+#import "STCapturedImageProtected.h"
+#import "STCapturedImage+Extension.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -75,8 +77,10 @@
         NSArray *images = _displayLayer.imageSet.images;
         [_frameOffsetSlider setSegmentationViewAsPresentableObject:[images mapWithIndex:^(STCapturedImage *frameImage, NSInteger index) {
             @autoreleasepool {
-                NSAssert(frameImage.thumbnailUrl,@"frameImage.thumbnailUrl");
-                return [UIImage imageWithContentsOfFile:frameImage.thumbnailUrl.path];
+                NSAssert(frameImage.tempImageUrl,@"frameImage.tempImageUrl");
+                NSURL * thumbnailUrl = frameImage.tempImageUrl ?: frameImage.thumbnailUrl;
+                UIImage * thumbnailImage = [UIImage imageWithContentsOfFile:thumbnailUrl.path];
+                return thumbnailImage;
             }
         }]];
 

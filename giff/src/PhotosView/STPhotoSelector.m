@@ -53,6 +53,7 @@
 #import "STPhotosManager.h"
 #import "STExportManager.h"
 #import "STPhotoItem+ExporterIO.h"
+#import "STCapturedImage+Extension.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -2043,6 +2044,12 @@ static SVGKFastImageView *_nophotoView;
     NSUInteger nextIndex = self.gridView.items.count;
     dispatch_async([STQueueManager sharedQueue].writingIO, ^{
         STPhotoItem * photoItem = [[STPhotosManager sharedManager] generatePhotoItem:photoSource];
+
+        //using frameEditView's thumbnail
+        for(STCapturedImage * image in photoItem.sourceForCapturedImageSet.images){
+            [image createTempImage:CGSizeMakeValue([[STMainControl sharedInstance] editControlView].frameEditView.heightForFrameItemView) caching:NO];
+        }
+
         photoItem.index = nextIndex;
 
         dispatch_async(dispatch_get_main_queue(),^{

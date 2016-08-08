@@ -27,6 +27,7 @@
 		4F71D40234A066096F3BA2AC /* STCapturedImageSetAnimatableLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DE13232605B8697535E2 /* STCapturedImageSetAnimatableLayer.m */; };
 		4F71D426590E9FDE3C420D8D /* STPhotoItem+ExporterIOGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D1FA683A45CFB46D64C0 /* STPhotoItem+ExporterIOGIF.m */; };
 		4F71D42E0773D49EC22B4C75 /* STCapturedImageSetDisplayProcessor+GPUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D989115D498551BD11DE /* STCapturedImageSetDisplayProcessor+GPUImage.m */; };
+		4F71D43B5AF3AA3F1606D584 /* STCapturedImage+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC11A33B4B2CB5079DE8 /* STCapturedImage+Extension.m */; };
 		4F71D459100C93DC46385EF0 /* icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D26714BAB7552F773108 /* icon.svg */; };
 		4F71D46F102D1633D4315BCA /* STCapturedImageSetAnimatableLayerSetCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DD5D3E403CEFBB0462EA /* STCapturedImageSetAnimatableLayerSetCollectionView.m */; };
 		4F71D4951E2293DDB84B45BD /* STGIFFDisplayLayerLeifEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D2BD2D4871511173350E /* STGIFFDisplayLayerLeifEffect.m */; };
@@ -490,6 +491,7 @@
 		4F71D5EB3BF4F313CAEB5EC9 /* set_postfocus_vertical_3point.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_postfocus_vertical_3point.svg; sourceTree = "<group>"; };
 		4F71D5F64F6774523B061093 /* STExportControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STExportControlView.m; sourceTree = "<group>"; };
 		4F71D5FB7577665DA4E2829D /* STEditControlFrameEditItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STEditControlFrameEditItemView.m; sourceTree = "<group>"; };
+		4F71D626375175350EFA34A0 /* STCapturedImage+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STCapturedImage+Extension.h"; sourceTree = "<group>"; };
 		4F71D6406D30CCA3B8ACF7D8 /* logo_part_0.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = logo_part_0.svg; sourceTree = "<group>"; };
 		4F71D648D36D764957CA9FFB /* STCapturedImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCapturedImageProcessor.h; sourceTree = "<group>"; };
 		4F71D6703E85613489D2C738 /* set_postfocus_point.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_postfocus_point.svg; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 		4F71DBDFD3656A18A585947F /* STPhotoItem+ExporterIOGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STPhotoItem+ExporterIOGIF.h"; sourceTree = "<group>"; };
 		4F71DC01C7A4AE5AB1102D95 /* STGIFFDisplayLayerEffectItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerEffectItem.m; sourceTree = "<group>"; };
 		4F71DC031155C096639A58EA /* STCapturedImageSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageSet.m; sourceTree = "<group>"; };
+		4F71DC11A33B4B2CB5079DE8 /* STCapturedImage+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STCapturedImage+Extension.m"; sourceTree = "<group>"; };
 		4F71DC29CD832E0B3C39E7F7 /* STCameraControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCameraControlView.m; sourceTree = "<group>"; };
 		4F71DC2EE0E6FEAA0455D09A /* STEditControlFrameEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STEditControlFrameEditView.m; sourceTree = "<group>"; };
 		4F71DC345A31992D6900FB11 /* set_postfocus_fullrange.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_postfocus_fullrange.svg; sourceTree = "<group>"; };
@@ -1366,6 +1369,8 @@
 				4F71D57F0B3B7F4C7E264734 /* STCapturedImageSetProtected.h */,
 				4F71DE1F93AF506D3617FA7B /* STCapturedResource.h */,
 				4F71D3CBB55856F6B7D88267 /* STCapturedResource.m */,
+				4F71DC11A33B4B2CB5079DE8 /* STCapturedImage+Extension.m */,
+				4F71D626375175350EFA34A0 /* STCapturedImage+Extension.h */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -2926,6 +2931,7 @@
 				4F71D8102D05BAE4AE85211B /* STPhotosManager.m in Sources */,
 				4F71DAF6F30755FA58E359ED /* STPhotoItem+UIAccessory.m in Sources */,
 				4F71DE3EBE04604A5EB2138C /* STCapturedImageSet+PHAsset.m in Sources */,
+				4F71D43B5AF3AA3F1606D584 /* STCapturedImage+Extension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
