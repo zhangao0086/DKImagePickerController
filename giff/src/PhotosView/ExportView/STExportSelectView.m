@@ -41,8 +41,8 @@
     _exporterTypes = exporterTypes;
     [_gridView reloadData];
 
-    [[STExportManager sharedManager] whenValueOf:@keypath([STExportManager sharedManager].currentExporter) id:@"STExportSelectView_currentExporter" changed:^(STExporter * currentExporter, id _weakSelf) {
-        if(currentExporter){
+    [[STExportManager sharedManager] whenValueOf:@keypath([STExportManager sharedManager].currentExporter) id:@"STExportSelectView_currentExporter" changed: !exporterTypes.count ? nil : ^(STExporter * currentExporter, id _weakSelf) {
+        if([currentExporter isKindOfClass:STExporter.class]){
             [self showExporterIcon:currentExporter.type];
         }else{
             [self removeExportIcon];

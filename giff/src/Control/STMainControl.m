@@ -747,7 +747,7 @@ STExportSelectView * exportSelectView;
         }
 
     } finished:^(STExportResult result) {
-        
+
         if(result == STExportResultSucceed){
             STGIFFAppSetting.get.exportedType = exportType;
         }
