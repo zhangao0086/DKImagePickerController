@@ -29,7 +29,7 @@
     [self.imageSet.images sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         return [self indexByFrameIndexOffset:[_originalImagesOfImageSet indexOfObject:obj1]]
                 > [self indexByFrameIndexOffset:[_originalImagesOfImageSet indexOfObject:obj2]]
-                ? NSOrderedAscending : NSOrderedDescending;
+                ? NSOrderedDescending : NSOrderedSame;
     }];
     NSAssert(_frameIndexOffset!=0 || (_frameIndexOffset==0 && ((STCapturedImage *)self.imageSet.images[0]).index==0),@"frame indexOffset was wrongly mapped.");
 }
@@ -39,7 +39,7 @@
 }
 
 - (NSUInteger)indexByFrameIndexOffset:(NSUInteger)index{
-    NSInteger const offset = self.frameIndexOffset;
+    NSInteger const offset = self.frameIndexOffset /*invert direction*/* -1;
     NSInteger const count = self.frameCount;
 
     NSUInteger indexOfDisplay = index;

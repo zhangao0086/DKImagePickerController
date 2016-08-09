@@ -51,7 +51,7 @@ static NSTimeInterval maxFrameDurationIfAssetHadAnimatableContents;
     NSParameterAssert(block);
 
     NSFrameExtractingRequest * request = [NSFrameExtractingRequest new];
-    request.framesPerSecond = 4;
+    request.framesPerSecond = 6;
     request.maxDuration = maxFrameDurationIfAssetHadAnimatableContents;
 
     if(asset.isVideo){
