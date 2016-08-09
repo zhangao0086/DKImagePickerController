@@ -34,10 +34,10 @@ typedef NS_ENUM(NSInteger, STExportType) {
             STExportTypeOpenIn,
     STExportTypeShare,
     STExportTypeSaveToLibrary,
-    STExportTypeSaveToPhotos,
     STExportType_count,
     STExportType_blank,
-    STExportTypeWeChat
+    STExportTypeWeChat,
+    STExportTypeSaveToPhotos,
 };
 
 typedef NS_ENUM(NSInteger, STExportQuality) {
