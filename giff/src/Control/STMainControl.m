@@ -103,47 +103,47 @@ static STMainControl *_instance = nil;
 }
 
 #pragma mark STMainControl HitTest
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event; {
-    UIView * hittedView = [super hitTest:point withEvent:event];
-
-    /*
-     * if not initialized elie camera yet.
-     */
-    if(![[STElieCamera sharedInstance] captureSession].isRunning && STElieCamera.mode == STCameraModeNotInitialized){
-        [self st_runAsMainQueueAsyncWithoutDeadlocking:^{
-            [STStandardUX expressDenied:hittedView];
-        }];
-        return nil;
-    }
-
-    /*
-     * if touch point over half of MainControl's bound / if hit test target is available, test it or return through.
-     */
-    BOOL testHitOnControl = NO;
-    switch (_mode){
-        case STControlDisplayModeHome:
-        case STControlDisplayModeExport:
-            testHitOnControl = point.y < self.height/2;
-            break;
-
-        default:
-            break;
-    }
-    if(testHitOnControl){
-        return [self hitOnControls:point withEvent:event] ? hittedView : nil;
-    }
-
-    /*
-     * return default target;
-     */
-    return hittedView;
-}
-
-- (BOOL)hitOnControls:(CGPoint)point withEvent:(UIEvent *)event;{
-    return [_subControl.leftButton hitTest:[self convertPoint:point toView:_subControl.leftButton] withEvent:event] ||
-            [_subControl.rightButton hitTest:[self convertPoint:point toView:_subControl.rightButton] withEvent:event] ||
-            [_home pointInside:[self convertPoint:point toView:_home] withEvent:event];
-}
+//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event; {
+//    UIView * hittedView = [super hitTest:point withEvent:event];
+//
+//    /*
+//     * if not initialized elie camera yet.
+//     */
+//    if(![[STElieCamera sharedInstance] captureSession].isRunning && STElieCamera.mode == STCameraModeNotInitialized){
+//        [self st_runAsMainQueueAsyncWithoutDeadlocking:^{
+//            [STStandardUX expressDenied:hittedView];
+//        }];
+//        return nil;
+//    }
+//
+//    /*
+//     * if touch point over half of MainControl's bound / if hit test target is available, test it or return through.
+//     */
+//    BOOL testHitOnControl = NO;
+//    switch (_mode){
+//        case STControlDisplayModeHome:
+//        case STControlDisplayModeExport:
+//            testHitOnControl = point.y < self.height/2;
+//            break;
+//
+//        default:
+//            break;
+//    }
+//    if(testHitOnControl){
+//        return [self hitOnControls:point withEvent:event] ? hittedView : nil;
+//    }
+//
+//    /*
+//     * return default target;
+//     */
+//    return hittedView;
+//}
+//
+//- (BOOL)hitOnControls:(CGPoint)point withEvent:(UIEvent *)event;{
+//    return [_subControl.leftButton hitTest:[self convertPoint:point toView:_subControl.leftButton] withEvent:event] ||
+//            [_subControl.rightButton hitTest:[self convertPoint:point toView:_subControl.rightButton] withEvent:event] ||
+//            [_home pointInside:[self convertPoint:point toView:_home] withEvent:event];
+//}
 
 #pragma mark ViewState while app starting
 - (void)saveStates {
