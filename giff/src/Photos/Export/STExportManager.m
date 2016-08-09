@@ -141,7 +141,11 @@ static NSArray *_avaliableExporterTypes;
     }];
 
     _targetPhotoItems = targetExporterTypes.count ? photoItems : nil;
+
+    [self willChangeValueForKey:@keypath(self.acquiredTypes)];
     _acquiredTypes = targetExporterTypes;
+    [self didChangeValueForKey:@keypath(self.acquiredTypes)];
+
     return targetExporterTypes;
 }
 
@@ -159,12 +163,17 @@ static NSArray *_avaliableExporterTypes;
     [_createdExporters removeAllObjects];
 
     //clear global properties
+    [self willChangeValueForKey:@keypath(self.acquiredTypes)];
     _acquiredTypes = nil;
+    [self didChangeValueForKey:@keypath(self.acquiredTypes)];
 
     _targetPhotoItems = nil;
 
     [_currentExporter whenValueOf:@keypath(_currentExporter.processing) id:@keypath(_currentExporter.processing) changed:nil];
+
+    [self willChangeValueForKey:@keypath(self.currentExporter)];
     _currentExporter = nil;
+    [self didChangeValueForKey:@keypath(self.currentExporter)];
 }
 
 #pragma mark Export
@@ -193,7 +202,9 @@ static NSArray *_avaliableExporterTypes;
         Weaks
 
         //setup
+        [self willChangeValueForKey:@keypath(self.currentExporter)];
         _currentExporter = _createdExporters[@(type)];
+        [self didChangeValueForKey:@keypath(self.currentExporter)];
 
         !willBlock?:willBlock(_currentExporter);
 

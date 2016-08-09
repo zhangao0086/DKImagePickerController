@@ -698,8 +698,6 @@ STExportSelectView * exportSelectView;
     [exportSelectView removeFromSuperview];
 
 
-    [self displayExporterIcon:exportType attach:YES];
-
     /*
      * isMustBackToHomeAfterFinished NO : export -> back -> processing
      *
@@ -749,9 +747,7 @@ STExportSelectView * exportSelectView;
         }
 
     } finished:^(STExportResult result) {
-
-        [self displayExporterIcon:exportType attach:NO];
-
+        
         if(result == STExportResultSucceed){
             STGIFFAppSetting.get.exportedType = exportType;
         }
@@ -780,26 +776,6 @@ STExportSelectView * exportSelectView;
     [STGIFFApp logEvent:@"ExportTryType" key:[@(exportType) stringValue]];
 }
 
-- (void)displayExporterIcon:(STExportType)exportType attach:(BOOL)attach{
-    _exportControlView.visible = !attach;
-
-    NSString * TagNameForExporterIcon = @"TagNameForExporterIcon";
-    if(attach){
-        SVGKFastImageView * iconView = [SVGKFastImageView viewWithImageNamed:[STExporter iconImageName:exportType] sizeWidth:[STStandardLayout widthMainSmall]];
-        iconView.tagName = TagNameForExporterIcon;
-        [self addSubview:iconView];
-        [iconView centerToParent];
-
-        self.backgroundColor = [UIColor clearColor];
-        [UIView animateWithDuration:.3 animations:^{
-            self.backgroundColor = [[STExporter iconImageBackgroundColor:exportType] colorWithAlphaComponent:.6];
-        }];
-    }else{
-
-        [[self viewWithTagName:TagNameForExporterIcon] removeFromSuperview];
-        self.backgroundColor =nil;
-    }
-}
 
 - (STExportType)targetExportType{
     NSArray * types = [STExportManager sharedManager].acquiredTypes;

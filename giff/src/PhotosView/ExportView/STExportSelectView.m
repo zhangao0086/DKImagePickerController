@@ -14,6 +14,8 @@
 #import "STMainControl.h"
 #import "SVGKFastImageView.h"
 #import "SVGKFastImageView+STUtil.h"
+#import "STExportManager.h"
+#import "NSObject+STUtil.h"
 
 @implementation STExportSelectView {
     SCGridView * _gridView;
@@ -37,7 +39,15 @@
     }
 
     _exporterTypes = exporterTypes;
-    [_gridView reloadData]; 
+    [_gridView reloadData];
+
+    [[STExportManager sharedManager] whenValueOf:@keypath([STExportManager sharedManager].currentExporter) id:@"STExportSelectView_currentExporter" changed:^(STExporter * currentExporter, id _weakSelf) {
+        if(currentExporter){
+            [self showExporterIcon:currentExporter.type];
+        }else{
+            [self removeExportIcon];
+        }
+    }];
 }
 
 CGFloat const BackgroundAlphaForUnselected = .7;
@@ -89,5 +99,25 @@ CGFloat const BackgroundAlphaForSelected = 1;
     return cellView;
 }
 
+#pragma mark DisplayIcon
+NSString * TagNameForExporterIcon = @"TagNameForExporterIcon";
+- (void)showExporterIcon:(STExportType)exportType {
+    _gridView.visible = NO;
+
+    SVGKFastImageView * iconView = [SVGKFastImageView viewWithImageNamed:[STExporter iconImageName:exportType] sizeWidth:[STStandardLayout widthMainSmall]];
+    iconView.tagName = TagNameForExporterIcon;
+    [self addSubview:iconView];
+    [iconView centerToParent];
+
+    self.backgroundColor = [UIColor clearColor];
+    [UIView animateWithDuration:.3 animations:^{
+        self.backgroundColor = [[STExporter iconImageBackgroundColor:exportType] colorWithAlphaComponent:.6];
+    }];
+}
+
+- (void)removeExportIcon{
+    [[self viewWithTagName:TagNameForExporterIcon] removeFromSuperview];
+    self.backgroundColor =nil;
+}
 
 @end
