@@ -5,7 +5,6 @@
 
 #import "STStandardSimpleSlider.h"
 #import "CAShapeLayer+STUtil.h"
-#import "STStandardUX.h"
 #import "UIView+STUtil.h"
 
 @interface M13ProgressViewBorderedBar()
@@ -46,6 +45,9 @@
 
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:cornerRadius];
 
+    if(self.thumbColor){
+        self.progressLayer.fillColor = [self.thumbColor CGColor];
+    }
     self.progressLayer.path = path.CGPath;
 }
 
@@ -63,7 +65,7 @@
 
     }else{
         self.backgroundLayer.lineWidth = 0;
-        self.backgroundLayer.fillColor = self.backgroundLayer.strokeColor;
+        self.backgroundLayer.fillColor = self.trackColor ? [self.trackColor CGColor] : self.backgroundLayer.strokeColor;
 
         CGFloat paddingH = 2*self.borderWidth;
 

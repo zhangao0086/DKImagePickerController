@@ -9,4 +9,5 @@
 
 @interface STStandardPointableSlider : STStandardSimpleSlider
 @property (nonatomic, assign) CGFloat progressOfPointer;
+@property (nonatomic, readwrite, nullable) UIColor * pointColor;
 @end

@@ -8,6 +8,8 @@
 #import "iCarousel.h"
 #import "STUIView.h"
 
+@class STViewFinderPointLayer;
+
 typedef NS_ENUM(NSInteger, STViewFinderType) {
     STViewFinderTypeNone,
     STViewFinderTypePostFocusModeVertical3Points,
@@ -22,6 +24,8 @@ typedef NS_ENUM(NSInteger, STViewFinderType) {
 @property (nonatomic, readonly) BOOL lockAFAE;
 
 @property (nonatomic, assign) BOOL visibleControl;
+
+@property(nonatomic, readonly) STViewFinderPointLayer *pointerLayer;
 
 //post focus - lens position
 @property (nonatomic, assign) CGFloat masterPositionSliderValue;

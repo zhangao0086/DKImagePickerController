@@ -46,4 +46,10 @@
     _centerMaker.hidden = !active;
 }
 
+- (void)setPointColor:(UIColor *)pointColor {
+    _pointColor = pointColor;
+    _centerMaker.fillColor = [_pointColor CGColor];
+}
+
+
 @end

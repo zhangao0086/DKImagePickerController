@@ -598,68 +598,70 @@
         /*
          * left
          */
-        // torchlight
-        [self.class torchLightSwitcher:_left setButtonsBlock:^(__weak STStandardButton *Self, NSArray *imageNames, NSArray *colors) {
-            [Self setButtons:imageNames colors:nil style:defaultStyle];
-        }];
-        _left.collectablesSelectAsIndependent = YES;
-
-        //reset
-        Weaks
-        [self _setNeedsCollectablesForReset:_left whenReset:^(STStandardButton *button, NSUInteger index) {
-            Strongs
-            [Sself->_left retract:YES];
-            [[STPhotoSelector sharedInstance] doResetPreview];
-        }];
-
-        /*
-         * right
-         */
-        NSArray * valuesForPostFocus = @[
-                @(STPostFocusModeFullRange),
-                @(STPostFocusModeVertical3Points),
-                @(STPostFocusMode5Points)
-        ];
-
-        [_right setButtons:[valuesForPostFocus bk_map:^id(id obj) {
-            switch ((STPostFocusMode)[obj integerValue]){
-                case STPostFocusModeVertical3Points:
-                    return [R set_postfocus_vertical_3point];
-                case STPostFocusMode5Points:
-                    return [R set_postfocus_point];
-                case STPostFocusModeFullRange:
-                    return [R set_postfocus_fullrange];
-                case STPostFocusModeNone:
-                    return [R ico_camera];
-                default:
-                    NSParameterAssert(NO);
-                    return nil;
-            }
-        }] colors:nil style:defaultStyle];
-        _right.valuesMap = valuesForPostFocus;
-        _right.currentMappedValue = @(STGIFFAppSetting.get.postFocusMode);
-        [_right whenSelectedWithMappedValue:^(STSelectableView *_button, NSInteger index, id value) {
-            STGIFFAppSetting.get.postFocusMode = [value integerValue];
-
-//            [self.class setExtractRetractForPostFocusMode:_right postFocusMode:[_right.currentMappedValue integerValue] animation:YES];
-
-            if([value integerValue]!=STPostFocusModeNone && [_right.valuesMap[_right.lastSelectedIndex] integerValue]==STPostFocusModeNone){
-                //reset preview
-                [[STPhotoSelector sharedInstance].previewView resetAFAE];
-                [[STPhotoSelector sharedInstance].previewView resetExposure];
-
-                //change facing camera
-                if([[_right currentCollectableButton].currentMappedValue boolValue]){
-                    [_right currentCollectableButton].currentMappedValue = @(NO);
-                    [[_right currentCollectableButton] dispatchSelected];
-                }
-            }
-
-            NSString * labelPostFocusMode = [STGIFFAppSetting.get labelForPostFocusMode:(STPostFocusMode) [value integerValue]];
-            if(labelPostFocusMode){
-                [[STElieStatusBar sharedInstance] message:labelPostFocusMode];
-            }
-        }];
+        _left.visible = NO;
+        _right.visible = NO;
+//        // torchlight
+//        [self.class torchLightSwitcher:_left setButtonsBlock:^(__weak STStandardButton *Self, NSArray *imageNames, NSArray *colors) {
+//            [Self setButtons:imageNames colors:nil style:defaultStyle];
+//        }];
+//        _left.collectablesSelectAsIndependent = YES;
+//
+//        //reset
+//        Weaks
+//        [self _setNeedsCollectablesForReset:_left whenReset:^(STStandardButton *button, NSUInteger index) {
+//            Strongs
+//            [Sself->_left retract:YES];
+//            [[STPhotoSelector sharedInstance] doResetPreview];
+//        }];
+//
+//        /*
+//         * right
+//         */
+//        NSArray * valuesForPostFocus = @[
+//                @(STPostFocusModeFullRange),
+//                @(STPostFocusModeVertical3Points),
+//                @(STPostFocusMode5Points)
+//        ];
+//
+//        [_right setButtons:[valuesForPostFocus bk_map:^id(id obj) {
+//            switch ((STPostFocusMode)[obj integerValue]){
+//                case STPostFocusModeVertical3Points:
+//                    return [R set_postfocus_vertical_3point];
+//                case STPostFocusMode5Points:
+//                    return [R set_postfocus_point];
+//                case STPostFocusModeFullRange:
+//                    return [R set_postfocus_fullrange];
+//                case STPostFocusModeNone:
+//                    return [R ico_camera];
+//                default:
+//                    NSParameterAssert(NO);
+//                    return nil;
+//            }
+//        }] colors:nil style:defaultStyle];
+//        _right.valuesMap = valuesForPostFocus;
+//        _right.currentMappedValue = @(STGIFFAppSetting.get.postFocusMode);
+//        [_right whenSelectedWithMappedValue:^(STSelectableView *_button, NSInteger index, id value) {
+//            STGIFFAppSetting.get.postFocusMode = [value integerValue];
+//
+////            [self.class setExtractRetractForPostFocusMode:_right postFocusMode:[_right.currentMappedValue integerValue] animation:YES];
+//
+//            if([value integerValue]!=STPostFocusModeNone && [_right.valuesMap[_right.lastSelectedIndex] integerValue]==STPostFocusModeNone){
+//                //reset preview
+//                [[STPhotoSelector sharedInstance].previewView resetAFAE];
+//                [[STPhotoSelector sharedInstance].previewView resetExposure];
+//
+//                //change facing camera
+//                if([[_right currentCollectableButton].currentMappedValue boolValue]){
+//                    [_right currentCollectableButton].currentMappedValue = @(NO);
+//                    [[_right currentCollectableButton] dispatchSelected];
+//                }
+//            }
+//
+//            NSString * labelPostFocusMode = [STGIFFAppSetting.get labelForPostFocusMode:(STPostFocusMode) [value integerValue]];
+//            if(labelPostFocusMode){
+//                [[STElieStatusBar sharedInstance] message:labelPostFocusMode];
+//            }
+//        }];
 
         //front/back - collectable
 //        STStandardButton *facingCameraSwitcherCollectable = [STStandardButton subAssistanceSize];
@@ -705,12 +707,6 @@
 //
 //        [_right expand:NO];
 //        [self.class setExtractRetractForPostFocusMode:_right postFocusMode:[_right.currentMappedValue integerValue] animation:NO];
-
-    }
-    else if(_mode == STControlDisplayModeMain){
-
-
-    }else{
 
     }
 

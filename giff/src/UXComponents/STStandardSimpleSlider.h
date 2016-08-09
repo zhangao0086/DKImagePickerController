@@ -11,5 +11,7 @@
 @property (nonatomic, assign) BOOL shouldSwitchDisplayWhenActivated;
 @property (nonatomic, readwrite, nullable) UIView * iconViewOfMinimumSide;
 @property (nonatomic, readwrite, nullable) UIView * iconViewOfMaximumSide;
+@property (nonatomic, readwrite, nullable) UIColor * trackColor;
+@property (nonatomic, readwrite, nullable) UIColor * thumbColor;
 @property (copy) void(^whenChangeActiveState)(STStandardSimpleSlider * __weak weakSelf, BOOL active);
 @end

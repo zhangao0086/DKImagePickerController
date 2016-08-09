@@ -58,8 +58,8 @@
 @property(nonatomic, strong) M13ProgressViewBorderedCenterBar * zoomProgressBar;
 @property(nonatomic, strong) UILabel * zoomProgressLabel;
 //exposure
-@property(nonatomic, strong) STStandardPointableSlider * exposureSlider;
-@property(nonatomic, strong) UIVisualEffectView * exposureSliderView;
+//@property(nonatomic, strong) STStandardPointableSlider * exposureSlider;
+//@property(nonatomic, strong) UIVisualEffectView * exposureSliderView;
 
 @property (nonatomic, readonly) STUIView *cameraControlView;
 
@@ -656,54 +656,54 @@ static NSTimer * TimerForLoopingSliderValue;
     self.zoomProgressBarEffectView.y = padding;
 
     //Exposure Control
-    self.exposureSlider = [[STStandardPointableSlider alloc] initWithSize:CGSizeMake(self.width/2,STStandardLayout.heightOverlayHorizontal)];
-    [self.exposureSlider setProgress:.5 animated:NO];
-    [self.exposureSlider.layer setRasterize];
-    self.exposureSlider.iconViewOfMinimumSide = [SVGKFastImageView viewWithImageNamed:[R ico_exposure_min] sizeValue:15];
-    self.exposureSlider.iconViewOfMaximumSide = [SVGKFastImageView viewWithImageNamed:[R ico_exposure_max] sizeValue:16];
-    self.exposureSlider.progressOfPointer = .5;
-
-    self.exposureSliderView = [_cameraControlView addMaskedEffectView:self.exposureSlider style:UIBlurEffectStyleLight subviewsForVibrancy:nil];
-    self.exposureSliderView.frame = CGRectInset(self.exposureSliderView.frame, -30, -10);
-    [self.exposureSliderView centerToParent];
-    self.exposureSlider.layer.position = self.exposureSliderView.boundsCenter;
-
-    self.exposureSliderView.centerY = self.boundsHeight-padding-self.exposureSlider.boundsHeightHalf;
-
-    //pan slider
-    [self.exposureSliderView whenPanAsSlide:nil direction:STSlideAllowedDirectionHorizontal started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
-        Strongs
-        [Sself setAFAELock:YES];
-
-        [Wself st_clearPerformOnceAfterDelay:@"finish_exposure_layer"];
-
-        [Wself.pointerLayer finishFocusing];
-        [Wself.pointerLayer startExposure];
-
-    } changed:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, CGFloat distance, CGPoint movedOffset, CGFloat distanceReachRatio, STSlideDirection direction, BOOL confirmed) {
-        CGFloat progress = CLAMP(Wself.exposureSlider.progress+(movedOffset.x/self.exposureSlider.boundsWidth), 0, 1);
-        if(fabs(distanceReachRatio)<=.06){
-            progress = .5;
-        }
-
-        [Wself.exposureSlider setProgress:progress animated:NO];
-
-        Wself.pointerLayer.exposureIntensityValue = 1-progress;
-
-        CGFloat bias = progress>=.5f ? AGKRemap(progress, .5f, 1, 0, [STElieCamera sharedInstance].maxAdjustingExposureBias) : AGKRemap(progress, 0, .5f, [STElieCamera sharedInstance].minAdjustingExposureBias, 0);
-
-        [STElieCamera sharedInstance].exposureBias = bias;
-
-    } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
-        [STStandardUX revertStateAfterShortDelay:@"finish_exposure_layer" block:^{
-            Strongs
-            [Sself setAFAELock:NO];
-            [Sself.pointerLayer finishExposure];
-        }];
-    }];
-
-
-    [self.exposureSliderView.layer setRasterize];
+//    self.exposureSlider = [[STStandardPointableSlider alloc] initWithSize:CGSizeMake(self.width/2,STStandardLayout.heightOverlayHorizontal)];
+//    [self.exposureSlider setProgress:.5 animated:NO];
+//    [self.exposureSlider.layer setRasterize];
+//    self.exposureSlider.iconViewOfMinimumSide = [SVGKFastImageView viewWithImageNamed:[R ico_exposure_min] sizeValue:15];
+//    self.exposureSlider.iconViewOfMaximumSide = [SVGKFastImageView viewWithImageNamed:[R ico_exposure_max] sizeValue:16];
+//    self.exposureSlider.progressOfPointer = .5;
+//
+//    self.exposureSliderView = [_cameraControlView addMaskedEffectView:self.exposureSlider style:UIBlurEffectStyleLight subviewsForVibrancy:nil];
+//    self.exposureSliderView.frame = CGRectInset(self.exposureSliderView.frame, -30, -10);
+//    [self.exposureSliderView centerToParent];
+//    self.exposureSlider.layer.position = self.exposureSliderView.boundsCenter;
+//
+//    self.exposureSliderView.centerY = self.boundsHeight-padding-self.exposureSlider.boundsHeightHalf;
+//
+//    //pan slider
+//    [self.exposureSliderView whenPanAsSlide:nil direction:STSlideAllowedDirectionHorizontal started:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf) {
+//        Strongs
+//        [Sself setAFAELock:YES];
+//
+//        [Wself st_clearPerformOnceAfterDelay:@"finish_exposure_layer"];
+//
+//        [Wself.pointerLayer finishFocusing];
+//        [Wself.pointerLayer startExposure];
+//
+//    } changed:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, CGFloat distance, CGPoint movedOffset, CGFloat distanceReachRatio, STSlideDirection direction, BOOL confirmed) {
+//        CGFloat progress = CLAMP(Wself.exposureSlider.progress+(movedOffset.x/self.exposureSlider.boundsWidth), 0, 1);
+//        if(fabs(distanceReachRatio)<=.06){
+//            progress = .5;
+//        }
+//
+//        [Wself.exposureSlider setProgress:progress animated:NO];
+//
+//        Wself.pointerLayer.exposureIntensityValue = 1-progress;
+//
+//        CGFloat bias = progress>=.5f ? AGKRemap(progress, .5f, 1, 0, [STElieCamera sharedInstance].maxAdjustingExposureBias) : AGKRemap(progress, 0, .5f, [STElieCamera sharedInstance].minAdjustingExposureBias, 0);
+//
+//        [STElieCamera sharedInstance].exposureBias = bias;
+//
+//    } ended:^(UIPanGestureRecognizer *sender, CGPoint locationInSelf, STSlideDirection direction, BOOL confirmed) {
+//        [STStandardUX revertStateAfterShortDelay:@"finish_exposure_layer" block:^{
+//            Strongs
+//            [Sself setAFAELock:NO];
+//            [Sself.pointerLayer finishExposure];
+//        }];
+//    }];
+//
+//
+//    [self.exposureSliderView.layer setRasterize];
 
     [self disableExposure];
 }
@@ -1059,18 +1059,18 @@ static NSTimer * TimerForLoopingSliderValue;
 
 // exposure
 - (void)enableExposure{
-    self.exposureSliderView.animatableVisible = YES;
+//    self.exposureSliderView.animatableVisible = YES;
     [self resetExposure];
 }
 
 - (void)disableExposure{
-    self.exposureSliderView.visible = NO;
+//    self.exposureSliderView.visible = NO;
     [self resetExposure];
 }
 
 - (void)resetExposure{
     [self.pointerLayer finishExposure];
-    [self.exposureSlider setProgress:.5 animated:YES];
+//    [self.exposureSlider setProgress:.5 animated:YES];
     [STElieCamera sharedInstance].exposureBias = 0;
 }
 
