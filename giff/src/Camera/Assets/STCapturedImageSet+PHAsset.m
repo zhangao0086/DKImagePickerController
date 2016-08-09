@@ -8,6 +8,7 @@
 #import "PHAsset+STUtil.h"
 #import "STCapturedImage.h"
 #import "NSGIF.h"
+#import "STCapturedImageSetProtected.h"
 
 
 @implementation STCapturedImageSet (PHAsset)
@@ -59,7 +60,9 @@ static NSTimeInterval maxFrameDurationIfAssetHadAnimatableContents;
             request.sourceVideoFile = tempFileURL;
             request.aspectRatioToCrop = defaultAspectFillRatio;
             [NSGIF extract:request completion:^(NSArray *array) {
-                block([STCapturedImageSet setWithImageURLs:array]);
+                STCapturedImageSet * imageSet = [STCapturedImageSet setWithImageURLs:array];
+                imageSet.type = STCapturedImageSetTypeAnimatable;
+                block(imageSet);
             }];
         }];
         return YES;
@@ -71,7 +74,9 @@ static NSTimeInterval maxFrameDurationIfAssetHadAnimatableContents;
                 request.sourceVideoFile = tempFileURL;
                 request.aspectRatioToCrop = defaultAspectFillRatio;
                 [NSGIF extract:request completion:^(NSArray *array) {
-                    block([STCapturedImageSet setWithImageURLs:array]);
+                    STCapturedImageSet * imageSet = [STCapturedImageSet setWithImageURLs:array];
+                    imageSet.type = STCapturedImageSetTypeAnimatable;
+                    block(imageSet);
                 }];
             }];
 
