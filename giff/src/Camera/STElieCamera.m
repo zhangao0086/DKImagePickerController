@@ -369,7 +369,7 @@ static STCameraMode _mode = STCameraModeNotInitialized;
         normalizedCropRegion = CGRectNormalizedCropRegionAspectFill(self.deviceOutputScreenSize,request.captureOutputAspectFillRatio);
     }
 
-    return [self currentImage:request.needsFilter maxSideOutputPixelSize:request.captureOutputPixelSize cropRegion:normalizedCropRegion];
+    return [self currentImage:request.needsFilter maxSideOutputPixelSize:request.captureOutputPixelSize normalizedCropRegion:normalizedCropRegion];
 }
 
 #pragma mark Capture Animatable
@@ -1636,10 +1636,10 @@ CGFloat const CaptureOutputPixelSizeConstSmallPreview = 800;
 }
 
 - (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput{
-    return [self currentImage:needsOutput maxSideOutputPixelSize:maxSidePixelSizeOfOutput cropRegion:CGRectNull];
+    return [self currentImage:needsOutput maxSideOutputPixelSize:maxSidePixelSizeOfOutput normalizedCropRegion:CGRectNull];
 }
 
-- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput cropRegion:(CGRect)cropRegion{
+- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput normalizedCropRegion:(CGRect)cropRegion{
     @synchronized (self) {
         UIImage * image = nil;
         if(self.targets.count){

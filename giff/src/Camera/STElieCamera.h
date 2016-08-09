@@ -205,6 +205,8 @@ extern CGFloat const CaptureOutputPixelSizeConstSmallPreview;
 
 - (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput;
 
+- (UIImage *)currentImage:(GPUImageOutput <GPUImageInput> *)needsOutput maxSideOutputPixelSize:(CGFloat)maxSidePixelSizeOfOutput normalizedCropRegion:(CGRect)cropRegion;
+
 - (BOOL)isPositionBack;
 
 - (BOOL)isPositionFront;

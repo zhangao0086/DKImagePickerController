@@ -626,4 +626,27 @@
     UIGraphicsEndImageContext();
     return newImage;
 }
+
+#pragma mark Quick Crop
+- (UIImage *)imageByCroppingNormalizedRect:(CGRect)normalizedRect {
+    CGSize imageSize = CGSizeMake(CGImageGetWidth(self.CGImage), CGImageGetHeight(self.CGImage));
+    CGRect imageCropRect = CGRectMake((CGFloat)floor(normalizedRect.origin.x * imageSize.width),
+            (CGFloat)floor(normalizedRect.origin.y * imageSize.height),
+            (CGFloat)floor(normalizedRect.size.width * imageSize.width),
+            (CGFloat)floor(normalizedRect.size.height * imageSize.height));
+    return [self imageByCroppingRect:imageCropRect];
+}
+
+- (UIImage *)imageByCroppingRect:(CGRect)rect {
+    CGImageRef croppedImageRef = CGImageCreateWithImageInRect([self CGImage], rect);
+    UIImage *croppedImage = [UIImage imageWithCGImage:croppedImageRef scale:self.scale orientation:self.imageOrientation];
+    if (croppedImageRef) {
+        CGImageRelease(croppedImageRef);
+    }
+    return croppedImage;
+}
+
+- (UIImage *)imageByCroppingAspectFillRatio:(CGSize)sizeOfAspectRatio {
+    return [self imageByCroppingNormalizedRect:CGRectCropRegionAspectFill(self.size, sizeOfAspectRatio)];
+}
 @end

@@ -54,6 +54,7 @@
 #import "STExportManager.h"
 #import "STPhotoItem+ExporterIO.h"
 #import "STCapturedImage+Extension.h"
+#import "UIImage+STUtil.h"
 
 @interface STPhotoSelector ()
 @property(copy) void (^putItemCompletedCallback)(void);
@@ -658,9 +659,14 @@ UIImageView * BlurPreviewCoverView;
     if(!BlurPreviewCoverView){
         BlurPreviewCoverView = [[UIImageView alloc] initWithSize:blurTarget.size];
     }
-    BlurPreviewCoverView.image = [[STElieCamera sharedInstance] currentImage];
-    [blurTarget addSubview:BlurPreviewCoverView];
-    [blurTarget st_coverBlur:YES styleDark:YES completion:nil];
+
+    @autoreleasepool {
+        UIImage * currentCameraImage = [[STElieCamera sharedInstance] currentImage];
+        BlurPreviewCoverView.image = [currentCameraImage imageByCroppingAspectFillRatio:CGSizeMake(1, 1)];
+
+        [blurTarget addSubview:BlurPreviewCoverView];
+        [blurTarget st_coverBlur:YES styleDark:YES completion:nil];
+    }
 }
 
 - (void)doBlurPreviewEnd{
@@ -965,7 +971,8 @@ UIImageView * BlurPreviewCoverView;
     }else if(type == STPhotoViewTypeEditAfterCapture){
         [self setTouchInsidePolicy:STUIViewTouchInsidePolicyContentInside];
 
-        _previewCollector.previewView.visible = YES;
+        _previewCollector.previewView.visible = NO;
+
         [_previewCollector start:type];
 
         self.gridView.animatableVisible = NO;

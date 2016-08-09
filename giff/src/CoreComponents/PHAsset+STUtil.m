@@ -8,6 +8,7 @@
 #import "NSString+STUtil.h"
 #import "NSObject+STThreadUtil.h"
 #import "PHImageRequestOptions+STUtil.h"
+#import "UIImage+STUtil.h"
 
 
 @implementation PHAsset (STUtil)
@@ -87,10 +88,7 @@
         [self exportFileByResourceType:PHAssetResourceTypePhoto completion:block];
     }else{
         [self exportFileByResourceType:PHAssetResourceTypePhoto completion:^(NSURL *tempFileURL) {
-            UIImage * image = [UIImage imageWithContentsOfFile:tempFileURL.path];
-            CGImageRef croppedImage = CGImageCreateWithImageInRect([image CGImage], rectToCrop);
-            UIImage * resultImage = [UIImage imageWithCGImage:croppedImage scale:image.scale orientation:image.imageOrientation];
-            CGImageRelease(croppedImage);
+            UIImage * resultImage = [[UIImage imageWithContentsOfFile:tempFileURL.path] imageByCroppingRect:rectToCrop];
 
             NSData * imageData = nil;
             if([@"image/png" isEqualToString:[[tempFileURL path] mimeTypeFromPathExtension]]){
