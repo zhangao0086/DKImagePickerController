@@ -36,15 +36,15 @@
 }
 
 - (void)setFrameIndexOffset:(NSInteger)frameIndexOffset {
-    if([self set_FrameIndexOffset:frameIndexOffset]){
+    if([self set_FrameIndexOffset:frameIndexOffset init:NO]){
         [self updateThumbnailsPosition];
         [self updateSliderPosition];
     }
 }
 
-- (BOOL)set_FrameIndexOffset:(NSInteger)frameIndexOffset {
+- (BOOL)set_FrameIndexOffset:(NSInteger)frameIndexOffset init:(BOOL)init {
     BOOL changed = _displayLayer.frameIndexOffset!=frameIndexOffset;
-    if(changed){
+    if(init || changed){
         [self willChangeValueForKey:@keypath(self.frameIndexOffset)];
         _displayLayer.frameIndexOffset = frameIndexOffset;
         [self didChangeValueForKey:@keypath(self.frameIndexOffset)];
@@ -73,6 +73,9 @@
             _frameOffsetSlider.delegateSlider = self;
             [self addSubview:_frameOffsetSlider];
         }
+
+
+        [self set_FrameIndexOffset:0 init:YES];
 
         NSArray *images = _displayLayer.imageSet.images;
         [_frameOffsetSlider setSegmentationViewAsPresentableObject:[images mapWithIndex:^(STCapturedImage *frameImage, NSInteger index) {
@@ -156,7 +159,7 @@
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     //TODO:normalizedPosition 말고 index로 대체하는게 좋을 듯
     NSInteger frameIndexOffset = (NSInteger) ((timeSlider.normalizedPosition * self.displayLayer.frameCount) - round((CGFloat)self.displayLayer.frameCount/2));
-    if([self set_FrameIndexOffset:frameIndexOffset]){
+    if([self set_FrameIndexOffset:frameIndexOffset init:NO]){
         [self updateThumbnailsPosition];
         [self set_FrameIndexOffsetHasChanging:YES];
     }
