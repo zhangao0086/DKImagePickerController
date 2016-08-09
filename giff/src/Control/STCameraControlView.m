@@ -231,8 +231,8 @@ CGFloat padding;
         [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
             [STCapturedImageSet setDefaultAspectFillRatioForAssets:CGSizeMake(1, 1)];
             [STCapturedImageSet setMaxFrameDurationIfAssetHadAnimatableContents:[STGIFFApp defaultMaxDurationForAnimatableContent]];
-            [STCapturedImageSet createFromAssets:[assets mapWithItemsKeyPath:@"originalAsset"] completion:^(NSArray *imageSets) {
-
+            NSArray<PHAsset *> * importedAssets = [assets mapWithItemsKeyPath:@"originalAsset"];
+            [STCapturedImageSet createFromAssets:importedAssets completion:^(NSArray *imageSets) {
                 for(STCapturedImageSet * imageSet in imageSets){
                     [[STPhotoSelector sharedInstance] doAfterCaptured:[STPhotoItemSource sourceWithImageSet:imageSet]];
                 }

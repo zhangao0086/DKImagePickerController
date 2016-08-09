@@ -73,13 +73,13 @@
             item.sourceForFullScreenFromURL = fullscreenUrl;
             item.sourceForPreviewFromURL = previewUrl;
             item.metadataFromCamera = photoSource.metaData;
-            item.origin = photoSource.origin;
         }
             break;
     }
 
     //common
     item.orientationOriginated = photoSource.orientation;
+    item.origin = photoSource.origin;
 
     [photoSource dispose];
     return item;
