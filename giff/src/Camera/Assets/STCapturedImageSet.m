@@ -17,6 +17,7 @@
 
 - (void)dealloc {
     _images = nil;
+    _initialImages = nil;
 }
 
 - (instancetype)initWithImages:(NSArray<STCapturedImage *> *)images {
@@ -24,6 +25,7 @@
     if (self) {
         NSAssert(images.count,@"Empty images is not allowed");
         NSAssert(![images containsNull],@"Null contained images is not allowed");
+        _initialImages = images;
         _images = [NSMutableArray<STCapturedImage *> arrayWithArray:images];
 #if DEBUG
         for(STCapturedImage * image in _images){
