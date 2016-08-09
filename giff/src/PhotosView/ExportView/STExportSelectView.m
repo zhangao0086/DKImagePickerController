@@ -37,20 +37,11 @@
     }
 
     _exporterTypes = exporterTypes;
-    [_gridView reloadData];
-
-    _gridView.alpha = 0;
-    [UIView animateWithDuration:.3 animations:^{
-        _gridView.alpha=1;
-    } completion:^(BOOL finished) {
-        [_gridView.cells eachViewsWithIndex:^(UIView *view, NSUInteger index) {
-            [view animateWithReverse:@keypath(view.alpha) to:.3 duration:.3 delay:.1*index completion:nil];
-        }];
-    }];
+    [_gridView reloadData]; 
 }
 
-CGFloat const AlphaForUnselected = .47;
-CGFloat const AlphaForSelected = .8;
+CGFloat const BackgroundAlphaForUnselected = .7;
+CGFloat const BackgroundAlphaForSelected = 1;
 
 - (UIView *)viewAtPosition:(NSUInteger)position inGridView:(SCGridView *)gridView coordinates:(CGPoint)coordinates size:(CGSize)size {
     id typeObject = [self.exporterTypes st_objectOrNilAtIndex:position];
@@ -68,11 +59,11 @@ CGFloat const AlphaForSelected = .8;
     cellView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     cellView.touchInsidePolicy = STUIViewTouchInsidePolicyNone;
     cellView.contentView = [SVGKFastImageView viewWithImageNamed:[STExporter iconImageName:exportType] sizeWidth:CGSizeMinSide(cellSize)/1.3f];
-    cellView.backgroundColor = [[STExporter iconImageBackgroundColor:exportType] colorWithAlphaComponent:AlphaForUnselected];
+    cellView.backgroundColor = [[STExporter iconImageBackgroundColor:exportType] colorWithAlphaComponent:BackgroundAlphaForUnselected];
 
     UIColor * iconBackgroundColor = [STExporter iconImageBackgroundColor:exportType];
-    UIColor * iconBackgroundColorSelected = [iconBackgroundColor colorWithAlphaComponent:AlphaForSelected];
-    UIColor * iconBackgroundColorUnSelected = [iconBackgroundColor colorWithAlphaComponent:AlphaForUnselected];
+    UIColor * iconBackgroundColorSelected = [iconBackgroundColor colorWithAlphaComponent:BackgroundAlphaForSelected];
+    UIColor * iconBackgroundColorUnSelected = [iconBackgroundColor colorWithAlphaComponent:BackgroundAlphaForUnselected];
 
     Weaks
     [cellView whenLongTapAsTapDownUp:^(UILongPressGestureRecognizer *sender, CGPoint location) {

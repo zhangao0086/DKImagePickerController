@@ -781,6 +781,8 @@ STExportSelectView * exportSelectView;
 }
 
 - (void)displayExporterIcon:(STExportType)exportType attach:(BOOL)attach{
+    _exportControlView.visible = !attach;
+
     NSString * TagNameForExporterIcon = @"TagNameForExporterIcon";
     if(attach){
         SVGKFastImageView * iconView = [SVGKFastImageView viewWithImageNamed:[STExporter iconImageName:exportType] sizeWidth:[STStandardLayout widthMainSmall]];
