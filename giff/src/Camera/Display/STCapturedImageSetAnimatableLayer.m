@@ -26,23 +26,12 @@
     NSAssert(valid,@"ABS frameIndexOffset is lower than frameCount");
     _frameIndexOffset = valid ? frameIndexOffset : 0;
 
-    ii(_frameIndexOffset);
-    oo(@"original")
-    [_originalImagesOfImageSet eachWithIndex:^(STItem * object, NSUInteger index) {
-        ii(object.index);
-    }];
-
     [self.imageSet.images sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         return [self indexByFrameIndexOffset:[_originalImagesOfImageSet indexOfObject:obj1]]
                 > [self indexByFrameIndexOffset:[_originalImagesOfImageSet indexOfObject:obj2]]
-                ? NSOrderedDescending : NSOrderedAscending;
+                ? NSOrderedAscending : NSOrderedDescending;
     }];
     NSAssert(_frameIndexOffset!=0 || (_frameIndexOffset==0 && ((STCapturedImage *)self.imageSet.images[0]).index==0),@"frame indexOffset was wrongly mapped.");
-
-    oo(@"mapped")
-    [self.imageSet.images eachWithIndex:^(STItem * object, NSUInteger index) {
-        ii(object.index);
-    }];
 }
 
 - (NSUInteger)frameCount {
