@@ -15,7 +15,7 @@
 
 + (instancetype)itemWithClassName:(NSString *)className imageName:(NSString *)imageName;
 
-+ (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName;
++ (instancetype)itemWithClass:(Class)classObj titleImageName:(NSString *)imageName;
 
 
 @end

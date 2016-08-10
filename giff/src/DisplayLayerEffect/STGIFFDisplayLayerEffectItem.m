@@ -23,7 +23,7 @@
     return [[self alloc] initWithClassName:className imageName:imageName];
 }
 
-+ (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName {
++ (instancetype)itemWithClass:(Class)classObj titleImageName:(NSString *)imageName {
     return [self itemWithClassName:NSStringFromClass(classObj) imageName:imageName];
 }
 

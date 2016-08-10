@@ -5,8 +5,8 @@
 //  Copyright (c) 2014 STELLS. All rights reserved.
 //
 
-#import "AppDelegate.h"
 #import "STUIApplication.h"
+#import "AppDelegateEB.h"
 
 #if DEBUG
 void uncaughtExceptionHandler(NSException *exception) {
@@ -20,7 +20,12 @@ int main(int argc, char * argv[]) {
 #if DEBUG
         NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 #endif
+
+#if GIFFE
+        return UIApplicationMain(argc, argv, NSStringFromClass([STUIApplication class]), NSStringFromClass([AppDelegateEB class]));
+#else
         return UIApplicationMain(argc, argv, NSStringFromClass([STUIApplication class]), NSStringFromClass([AppDelegate class]));
+#endif
     }
 }
 

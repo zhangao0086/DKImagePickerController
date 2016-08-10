@@ -27,6 +27,8 @@
 
 - (NSUInteger)st_numberOfNewLines;
 
+- (NSURL *)bundleFileURL;
+
 - (NSString *)bundleFilePath;
 
 - (NSString *)bundleFileAbsolutePath;

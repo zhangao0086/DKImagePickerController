@@ -52,6 +52,10 @@
     return [[self componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] count];
 }
 
+- (NSURL *)bundleFileURL{
+    return [NSURL fileURLWithPath:self.bundleFilePath];
+}
+
 - (NSString *)bundleFilePath{
     return [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] bundlePath], self];
 }
