@@ -658,6 +658,6 @@
 }
 
 - (UIImage *)imageByCroppingAspectFillRatio:(CGSize)sizeOfAspectRatio {
-    return [self imageByCroppingNormalizedRect:CGRectCropRegionAspectFill(self.size, sizeOfAspectRatio)];
+    return [self imageByCroppingRect:CGRectCropRegionAspectFill(self.size, sizeOfAspectRatio)];
 }
 @end
