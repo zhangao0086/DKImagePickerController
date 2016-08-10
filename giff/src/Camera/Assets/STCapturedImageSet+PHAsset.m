@@ -51,19 +51,9 @@ static NSTimeInterval maxFrameDurationIfAssetHadAnimatableContents;
 + (BOOL)createFromAsset:(PHAsset *)asset completion:(void(^)(STCapturedImageSet * imageSet))block{
     NSParameterAssert(block);
 
-    NSFrameExtractingRequest * request = [NSFrameExtractingRequest new];
-    request.framesPerSecond = 6;
-    request.maxDuration = maxFrameDurationIfAssetHadAnimatableContents;
-
     if(asset.isVideo){
         [asset exportFileByResourceType:PHAssetResourceTypeVideo completion:^(NSURL *tempFileURL) {
-            request.sourceVideoFile = tempFileURL;
-            request.aspectRatioToCrop = defaultAspectFillRatio;
-            [NSGIF extract:request completion:^(NSArray *array) {
-                STCapturedImageSet * imageSet = [STCapturedImageSet setWithImageURLs:array];
-                imageSet.type = STCapturedImageSetTypeAnimatable;
-                block(imageSet);
-            }];
+            [self createFromVideo:tempFileURL completion:block];
         }];
         return YES;
     }
@@ -71,13 +61,7 @@ static NSTimeInterval maxFrameDurationIfAssetHadAnimatableContents;
     if(asset.mediaType==PHAssetMediaTypeImage){
         if(asset.isLivePhoto){
             [asset exportLivePhotoVideoFile:^(NSURL *tempFileURL) {
-                request.sourceVideoFile = tempFileURL;
-                request.aspectRatioToCrop = defaultAspectFillRatio;
-                [NSGIF extract:request completion:^(NSArray *array) {
-                    STCapturedImageSet * imageSet = [STCapturedImageSet setWithImageURLs:array];
-                    imageSet.type = STCapturedImageSetTypeAnimatable;
-                    block(imageSet);
-                }];
+                [self createFromVideo:tempFileURL completion:block];
             }];
 
         }else{
@@ -93,5 +77,18 @@ static NSTimeInterval maxFrameDurationIfAssetHadAnimatableContents;
     return NO;
 }
 
++ (void)createFromVideo:(NSURL *)url completion:(void(^)(STCapturedImageSet * imageSet))block{
+    NSFrameExtractingRequest * request = [NSFrameExtractingRequest new];
+    request.framesPerSecond = 6;
+    request.maxDuration = maxFrameDurationIfAssetHadAnimatableContents;
+    request.sourceVideoFile = url;
+    request.aspectRatioToCrop = defaultAspectFillRatio;
+
+    [NSGIF extract:request completion:^(NSArray *array) {
+        STCapturedImageSet * imageSet = [STCapturedImageSet setWithImageURLs:array];
+        imageSet.type = STCapturedImageSetTypeAnimatable;
+        block(imageSet);
+    }];
+}
 
 @end

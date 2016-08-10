@@ -17,4 +17,6 @@
 + (void)createFromAssets:(NSArray<PHAsset *> *)assets completion:(void (^)(NSArray<STCapturedImageSet *> *imageSets))block;
 
 + (BOOL)createFromAsset:(PHAsset *)asset completion:(void (^)(STCapturedImageSet *imageSet))block;
+
++ (void)createFromVideo:(NSURL *)url completion:(void (^)(STCapturedImageSet *imageSet))block;
 @end

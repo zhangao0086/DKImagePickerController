@@ -384,12 +384,12 @@ static STPhotoSelector *_instance = nil;
             STEditControlFrameEditItemView * itemView = [frameEditView itemViewOfLayer:layer];
 
             [itemView whenValueOf:@keypath(itemView.frameIndexOffset) id:[@keypath(itemView.frameIndexOffset) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
-//                [_layerSetPresentationView updateCurrentLayerOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];
+                [_layerSetPresentationView updateCurrentLayerOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];
             }];
 
             [itemView whenValueOf:@keypath(itemView.frameIndexOffsetHasChanging) id:[@keypath(itemView.frameIndexOffsetHasChanging) st_add:layer.uuid] changed:^(id value, id _weakSelf) {
                 if(![value boolValue]){
-//                    [_layerSetPresentationView updateAllLayersOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];
+                    [_layerSetPresentationView updateAllLayersOfLayerSet:[STMainControl sharedInstance].editControlView.frameEditView.layerSet];
                 }
             }];
         }
