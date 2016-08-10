@@ -90,14 +90,7 @@
         [self exportFileByResourceType:PHAssetResourceTypePhoto completion:^(NSURL *tempFileURL) {
             UIImage * resultImage = [[UIImage imageWithContentsOfFile:tempFileURL.path] imageByCroppingRect:rectToCrop];
 
-            NSData * imageData = nil;
-            if([@"image/png" isEqualToString:[[tempFileURL path] mimeTypeFromPathExtension]]){
-                imageData = UIImagePNGRepresentation(resultImage);
-            }else{
-                imageData = UIImageJPEGRepresentation(resultImage, 1);
-            }
-
-            if([imageData writeToURL:tempFileURL atomically:YES]){
+            if([resultImage writeDataToURL:tempFileURL]){
                 !block?:block(tempFileURL);
             }else{
                 !block?:block(nil);

@@ -194,6 +194,17 @@
     return [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
 }
 
+- (BOOL)writeDataToURL:(NSURL *)filePathURL{
+    NSData * imageData = nil;
+    if([@"image/png" isEqualToString:[[filePathURL path] mimeTypeFromPathExtension]]){
+        imageData = UIImagePNGRepresentation(self);
+    }else{
+        imageData = UIImageJPEGRepresentation(self, 1);
+    }
+    return [imageData writeToURL:filePathURL atomically:YES];
+}
+
+#pragma mark Colorize
 + (UIImage *)imageAsColor:(UIColor *)color
 {
     CGRect rect=CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);

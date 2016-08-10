@@ -16,6 +16,8 @@
 
 + (UIImage *)imageWithURL:(NSURL *)url;
 
+- (BOOL)writeDataToURL:(NSURL *)filePathURL;
+
 + (UIImage *)imageAsColor:(UIColor *)color;
 
 + (UIImage *)imageAsColor:(UIColor *)color withSize:(CGSize)size;
