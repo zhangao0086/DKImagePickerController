@@ -15,6 +15,9 @@
 #import "NSString+STUtil.h"
 #import "STGIFFDisplayLayerColorizeEffect.h"
 #import "BlocksKit.h"
+#import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
+#import "UIImage+STUtil.h"
+#import "NSArray+STUtil.h"
 
 @implementation EBRootViewController {
 
@@ -23,13 +26,22 @@
 - (void)loadView; {
     [super loadView];
 
-    NSMutableArray<STCapturedImageSet *> * images = [NSMutableArray arrayWithCapacity:2];
-    [images addObject:[STCapturedImageSet setWithImageURLs:@[[@"effect_thumb.png" bundleFileURL]]]];
+    NSArray<STCapturedImageSet *> * images = [@[
+            @[@"face1.jpg"]
+            , @[@"face2.jpg"]
+
+    ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
+        return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
+            NSURL * tempUrl = [bundleFileName URLForTemp];
+            [[[UIImage imageBundled:bundleFileName] imageByCroppingAspectFillRatio:CGSizeMake(1, 1)] writeDataToURL:tempUrl];
+            return tempUrl;
+        }]];
+    }];
 
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class titleImageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:nil];
 
     STCapturedImageSetAnimatableLayerSet * layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:images[0] withEffect:currentSelectedEffect.className];
     [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:images[0] forLayerSet:layerSet];
@@ -39,7 +51,7 @@
         [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:images[1] forLayerSet:layerSet];
     }
     [_layerSetPresentationView appendLayerSet:layerSet];
-
+    
 
     //play animation
     if(_layerSetPresentationView.currentLayerSet.frameCount>1){
