@@ -146,7 +146,7 @@
 
 #pragma mark image I/O
 + (UIImage *)imageBundled:(NSString*)aFileName {
-    NSString* stringPath = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] bundlePath], aFileName];
+    NSString* stringPath = [aFileName bundleFilePath];
     UIImage * image = [UIImage imageWithContentsOfFile:stringPath];
     NSAssert(image && !CGSizeEqualToSize(image.size, CGSizeZero), ([NSString stringWithFormat:@"Error : empty image : '%@'", stringPath]));
     return image;
@@ -166,9 +166,8 @@
 }
 
 + (UIImage *)imageBundledCache:(NSString*)aFileName {
-    NSString* stringPath = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] bundlePath], aFileName];
     Weaks
-    return [self st_cachedImage:stringPath init:^UIImage * {
+    return [self st_cachedImage:[aFileName bundleFilePath] init:^UIImage * {
         return [Wself imageBundled:aFileName];
     }];
 }
