@@ -18,6 +18,7 @@
 #import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
 #import "UIImage+STUtil.h"
 #import "NSArray+STUtil.h"
+#import "UIColor+BFPaperColors.h"
 
 @implementation EBRootViewController {
 
@@ -42,6 +43,9 @@
     [self.view addSubview:_layerSetPresentationView];
 
     STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:nil];
+    currentSelectedEffect.valuesForKeysToApply = @{
+            @"colors": @[UIColorFromRGB(0x00B6AD)]
+    };
 
     STCapturedImageSetAnimatableLayerSet * layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:images[0] withEffect:currentSelectedEffect];
     [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:images[0] forLayerSet:layerSet];

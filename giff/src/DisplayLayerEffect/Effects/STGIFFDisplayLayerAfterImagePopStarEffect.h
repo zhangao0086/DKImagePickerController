@@ -8,4 +8,5 @@
 
 
 @interface STGIFFDisplayLayerAfterImagePopStarEffect : STMultiSourcingImageProcessor
+@property (nonatomic, readwrite) NSArray<UIColor *> * colors;
 @end

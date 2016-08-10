@@ -27,26 +27,28 @@
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     UIImage *inputImage = sourceImages[0];
 
-//    GPUImageMonochromeFilter * sourceFilter = [[GPUImageMonochromeFilter alloc] init];
-//    sourceFilter.intensity = self.intensity;
-//    NSArray* colors = [self.color rgbaArray];
-//    [sourceFilter setColorRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
-
-    //0
+    //original
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
     composeItem0.source = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO];
 
     GPUImageBrightnessFilter * brightnessFilter = [[GPUImageBrightnessFilter alloc] init];
-    brightnessFilter.brightness = -.5f;
+//    brightnessFilter.brightness = -.5f;
     composeItem0.filters = @[
-            brightnessFilter
+//            brightnessFilter
     ];
 
     //1
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
     //TODO: 한개 들어올떼 대체 처리
-    composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages.count>1 ? sourceImages[0]: [UIImage imageBundled:@"input.jpg"] smoothlyScaleOutput:YES];
+    composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages.count>1 ? sourceImages[1] : sourceImages[0] smoothlyScaleOutput:YES];
     composeItem1.composer = [[GPUImageLightenBlendFilter alloc] init];
+
+    if(self.colors.count){
+//        GPUImageMonochromeFilter * colorizeFilter = [[GPUImageMonochromeFilter alloc] init];
+//        colorizeFilter.intensity = 1;
+//        NSArray* colors = [UIColorFromRGB(0x00B6AD) rgbaArray];
+//        [colorizeFilter setColorRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
+    }
 
     GPUImageSobelEdgeDetectionFilter * edgeDetectionFilter = [[GPUImageSobelEdgeDetectionFilter alloc] init];
     edgeDetectionFilter.edgeStrength = 4;
