@@ -13,7 +13,11 @@
 #import "STAppSetting.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STPhotoSelector.h"
+#if GIFFE
+#import "giffe-Swift.h"
+#else
 #import "giff-Swift.h"
+#endif
 #import "STCapturedImageSet+PHAsset.h"
 #import "NSArray+STUtil.h"
 #import "STPhotoItemSource.h"
