@@ -19,7 +19,6 @@
 #import "STGIFFDisplayLayerColorizeEffect.h"
 #import "STGIFFDisplayLayerJanneEffect.h"
 
-
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
 }
@@ -46,22 +45,25 @@
     ]);
 }
 
-- (STCapturedImageSetAnimatableLayerSet *)createLayerSetFrom:(STCapturedImageSet *)imageSet withEffect:(NSString *)classString{
+- (STCapturedImageSetAnimatableLayerSet *)createLayerSetFrom:(STCapturedImageSet *)imageSet withEffect:(STGIFFDisplayLayerEffectItem *)effectItem{
     STCapturedImageSetAnimatableLayerSet * layerSet = [STCapturedImageSetAnimatableLayerSet setWithLayers:@[[STCapturedImageSetAnimatableLayer layerWithImageSet:imageSet]]];
-    [self acquireLayerEffect:classString forLayerSet:layerSet];
+    [self acquireLayerEffect:effectItem forLayerSet:layerSet];
     return layerSet;
 }
 
-- (STMultiSourcingImageProcessor *)acquireLayerEffect:(NSString *)classString forLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
-    NSParameterAssert(classString);
+- (STMultiSourcingImageProcessor *)acquireLayerEffect:(STGIFFDisplayLayerEffectItem *)effectItem forLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet{
+    NSParameterAssert(effectItem);
     NSParameterAssert(layerSet);
 
-    NSString * effect_uuid = [layerSet.uuid st_add:classString];
+    NSString * effect_uuid = [layerSet.uuid st_add:effectItem.uuid];
     STMultiSourcingImageProcessor * effect = (STMultiSourcingImageProcessor *)[self st_cachedObject:effect_uuid init:^id {
-        STMultiSourcingImageProcessor * created_effect = (STMultiSourcingImageProcessor *)[[NSClassFromString(classString) alloc] init];
+        STMultiSourcingImageProcessor * created_effect = (STMultiSourcingImageProcessor *)[[NSClassFromString(effectItem.className) alloc] init];
         created_effect.uuid = effect_uuid;
         return created_effect;
     }];
+    if(effectItem.valuesForKeysToApply){
+        [effect setValuesForKeysWithDictionary:effectItem.valuesForKeysToApply];
+    }
     NSAssert(effect, @"Not found effect");
     layerSet.effect = effect;
     return effect;

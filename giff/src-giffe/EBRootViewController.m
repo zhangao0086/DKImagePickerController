@@ -28,7 +28,7 @@
 
     NSArray<STCapturedImageSet *> * images = [@[
             @[@"face1.jpg"]
-            , @[@"face2.jpg"]
+//            , @[@"face2.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -43,7 +43,7 @@
 
     STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:nil];
 
-    STCapturedImageSetAnimatableLayerSet * layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:images[0] withEffect:currentSelectedEffect.className];
+    STCapturedImageSetAnimatableLayerSet * layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:images[0] withEffect:currentSelectedEffect];
     [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:images[0] forLayerSet:layerSet];
 
     if(images.count==2){
@@ -51,7 +51,7 @@
         [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:images[1] forLayerSet:layerSet];
     }
     [_layerSetPresentationView appendLayerSet:layerSet];
-    
+
 
     //play animation
     if(_layerSetPresentationView.currentLayerSet.frameCount>1){

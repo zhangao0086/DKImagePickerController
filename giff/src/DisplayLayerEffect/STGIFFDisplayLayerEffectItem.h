@@ -10,8 +10,13 @@
 @interface STGIFFDisplayLayerEffectItem : STItem
 @property (nonatomic, readwrite) NSString * className;
 @property (nonatomic, readwrite) NSString * imageName;
+@property (nonatomic, readwrite) NSDictionary * valuesForKeysToApply;
 
 - (instancetype)initWithClassName:(NSString *)className imageName:(NSString *)imageName;
+
+- (instancetype)initWithClassName:(NSString *)className imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply;
+
++ (instancetype)itemWithClassName:(NSString *)className imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply;
 
 + (instancetype)itemWithClassName:(NSString *)className imageName:(NSString *)imageName;
 
