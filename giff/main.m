@@ -6,7 +6,9 @@
 //
 
 #import "STUIApplication.h"
+#if GIFFE
 #import "AppDelegateEB.h"
+#endif
 
 #if DEBUG
 void uncaughtExceptionHandler(NSException *exception) {
