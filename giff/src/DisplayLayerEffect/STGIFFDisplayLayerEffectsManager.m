@@ -61,8 +61,14 @@
         created_effect.uuid = effect_uuid;
         return created_effect;
     }];
+
+    //set effect values
     if(effectItem.valuesForKeysToApply){
-        [effect setValuesForKeysWithDictionary:effectItem.valuesForKeysToApply];
+        for(NSString * key in effectItem.valuesForKeysToApply){
+            if([effect respondsToSelector:NSSelectorFromString(key)]){
+                [effect setValue:effectItem.valuesForKeysToApply[key] forKey:key];
+            }
+        }
     }
     NSAssert(effect, @"Not found effect");
     layerSet.effect = effect;

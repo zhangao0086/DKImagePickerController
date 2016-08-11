@@ -19,65 +19,60 @@
 #import "GPUImageLightenBlendFilter.h"
 #import "GPUImageRGBFilter.h"
 #import "GPUImageSobelEdgeDetectionFilter.h"
+#import "GPUImageMonochromeFilter+STGPUImage.h"
 
 @implementation STGIFFDisplayLayerAfterImagePopStarEffect {
 
 }
 
-- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-    UIImage *inputImage = sourceImages[0];
-
-    //original
-    STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
-    composeItem0.source = [[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO];
-
-    GPUImageBrightnessFilter * brightnessFilter = [[GPUImageBrightnessFilter alloc] init];
-//    brightnessFilter.brightness = -.5f;
-    composeItem0.filters = @[
-//            brightnessFilter
-    ];
-
-    //1
-    STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
-    //TODO: 한개 들어올떼 대체 처리
-    composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages.count>1 ? sourceImages[1] : sourceImages[0] smoothlyScaleOutput:YES];
-    composeItem1.composer = [[GPUImageLightenBlendFilter alloc] init];
-
-    if(self.colors.count){
-//        GPUImageMonochromeFilter * colorizeFilter = [[GPUImageMonochromeFilter alloc] init];
-//        colorizeFilter.intensity = 1;
-//        NSArray* colors = [UIColorFromRGB(0x00B6AD) rgbaArray];
-//        [colorizeFilter setColorRed:[colors[0] floatValue] green:[colors[1] floatValue] blue:[colors[2] floatValue]];
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.colors = @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)];
     }
 
-    GPUImageSobelEdgeDetectionFilter * edgeDetectionFilter = [[GPUImageSobelEdgeDetectionFilter alloc] init];
-    edgeDetectionFilter.edgeStrength = 4;
+    return self;
+}
 
-    GPUImageRGBFilter * colorFilter_add = [[GPUImageRGBFilter alloc] init];
-    NSArray* colors_add = [UIColorFromRGB(0xff0000) rgbaArray];
-    colorFilter_add.red = 1;
-    colorFilter_add.green = 0;
-    colorFilter_add.blue = 0;
+- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+    NSMutableArray * composers = [NSMutableArray array];
 
-    composeItem1.filters = @[
-            edgeDetectionFilter,
-            colorFilter_add
+    //1
+    STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
+    composeItem0.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
+    composeItem0.filters = @[
+            [GPUImageMonochromeFilter filterWithColor:[self colors][0]]
     ];
+    composeItem0.composer = [[GPUImageOverlayBlendFilter alloc] init];
+    [composers addObject:composeItem0];
 
-    //2
-    STGPUImageOutputComposeItem * composeItem2 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:inputImage smoothlyScaleOutput:NO]
-                                                                                    composer:[[GPUImageSoftLightBlendFilter alloc] init]];
-    GPUImageTransformFilter * scaleFilter2 = [[GPUImageTransformFilter alloc] init];
-    scaleFilter2.affineTransform = CGAffineTransformMakeScale(.4,.4);
-    composeItem2.filters = @[
-            scaleFilter2
-    ];
+//    //2
+//    if(sourceImages.count>1){
+//        STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
+//        composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:YES];
+//        composeItem1.composer = [[GPUImageLightenBlendFilter alloc] init];
+//        [composers addObject:composeItem1];
+//    }
+//
+//    //3
+//    STGPUImageOutputComposeItem * composeItem3 = [STGPUImageOutputComposeItem new];
+//    composeItem3.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
+//    composeItem3.composer = [[GPUImageDarkenBlendFilter alloc] init];
+//    composeItem3.filters = @[
+//            GPUImageFilter.new
+//    ];
+//    [composers addObject:composeItem3];
+//
+//    //4
+//    STGPUImageOutputComposeItem * composeItem4 = [STGPUImageOutputComposeItem new];
+//    composeItem4.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
+//    composeItem4.composer = [[GPUImageDarkenBlendFilter alloc] init];
+//    composeItem4.filters = @[
+//            [GPUImageMonochromeFilter filterWithColor:[self colors][1]]
+//    ];
+//    [composers addObject:composeItem4];
 
-    return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:@[
-            composeItem0
-            , composeItem1
-
-    ] forInput:nil] imageFromCurrentFramebuffer];
+    return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:composers forInput:nil] imageFromCurrentFramebuffer];
 }
 
 @end

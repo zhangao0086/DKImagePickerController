@@ -37,6 +37,7 @@
         UIImage *firstSourceImage = sourceImages[0];
         GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:firstSourceImage smoothlyScaleOutput:NO];
 
+        STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem itemWithSource:inputPicture];
 
         STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:sourceImages.count==2 ? sourceImages[1] : firstSourceImage smoothlyScaleOutput:NO]
                                            composer:[[GPUImageSoftLightBlendFilter alloc] init]];
@@ -55,7 +56,7 @@
         ];
 
         return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:@[
-                [STGPUImageOutputComposeItem itemWithSource:inputPicture],
+                composeItem0,
                 composeItem1,
                 composeItem2
         ] forInput:nil] imageFromCurrentFramebuffer];
