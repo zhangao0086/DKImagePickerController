@@ -72,6 +72,7 @@
 		4F71D954187078907FE55569 /* share_fit.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D07579EE88BAF30A646D /* share_fit.svg */; };
 		4F71D99376FACB5D4CDD1ACA /* STCameraControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC29CD832E0B3C39E7F7 /* STCameraControlView.m */; };
 		4F71DA4244F5234BCD5495CF /* set_postfocus_fullrange.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DC345A31992D6900FB11 /* set_postfocus_fullrange.svg */; };
+		4F71DA6BB43088DDC05E1025 /* bird1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D296976906860D5081DD /* bird1.jpg */; };
 		4F71DA6BB722267CA362DFFB /* set_resolution_small.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D84002885E18053166DA /* set_resolution_small.svg */; };
 		4F71DAF6F30755FA58E359ED /* STPhotoItem+UIAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D87E02CE010CB0948FFA /* STPhotoItem+UIAccessory.m */; };
 		4F71DB16059C856B0F28E79C /* ico_landscape.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DE825C1AC21D72AB6CB9 /* ico_landscape.svg */; };
@@ -886,6 +887,7 @@
 		4F71D26714BAB7552F773108 /* icon.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = icon.svg; sourceTree = "<group>"; };
 		4F71D26FBC1C61D9038E818F /* STEditControlFrameEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STEditControlFrameEditView.h; sourceTree = "<group>"; };
 		4F71D275C6945BE93A635BCB /* STCapturedImageSet+PostFocus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STCapturedImageSet+PostFocus.h"; sourceTree = "<group>"; };
+		4F71D296976906860D5081DD /* bird1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bird1.jpg; sourceTree = "<group>"; };
 		4F71D2BD2D4871511173350E /* STGIFFDisplayLayerLeifEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerLeifEffect.m; sourceTree = "<group>"; };
 		4F71D31305141DC74503EE6E /* STMultiSourcingImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STMultiSourcingImageProcessor.h; sourceTree = "<group>"; };
 		4F71D3205654F2EBF441B317 /* effect_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = effect_thumb.png; sourceTree = "<group>"; };
@@ -1704,6 +1706,7 @@
 				4F71D5489FA9ED064D115461 /* face1.jpg */,
 				4F71DE7A13EB7115B61EAD2B /* face2.jpg */,
 				4F71DB9C8BD99FB8D14B8801 /* face3.jpg */,
+				4F71D296976906860D5081DD /* bird1.jpg */,
 			);
 			path = samples;
 			sourceTree = "<group>";
@@ -3311,6 +3314,7 @@
 				4F71DBEC67C470E0C3FC2A18 /* face1.jpg in Resources */,
 				4F71DC4E1F7FC41032D9482C /* face2.jpg in Resources */,
 				4F71D6901ADC329B56E5326D /* face3.jpg in Resources */,
+				4F71DA6BB43088DDC05E1025 /* bird1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
