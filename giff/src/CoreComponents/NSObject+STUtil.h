@@ -18,6 +18,8 @@
 
 + (BOOL)isPropertySetterOverridden:(NSString *)keypath3;
 
+- (void)setValuesForMatchedKeysWithDictionary:(NSDictionary<NSString *, id> *)keyedValues;
+
 - (void)st_observeFrom:(id)object keypath:(NSString *)keyPath block:(void (^)(id value, __weak id _weakSelf))block;
 
 - (void)st_observeWithInitialFrom:(id)object keypath:(NSString *)keyPath block:(void (^)(id value, __weak id _weakSelf))block;

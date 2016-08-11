@@ -440,4 +440,12 @@ DEFINE_ASSOCIATOIN_KEY(kObjectUid)
     return isInstanceMethodOverridden(self, [self propertySetterSelectorForKeyPath:keypath]);
 }
 
+- (void)setValuesForMatchedKeysWithDictionary:(NSDictionary<NSString *, id> *)keyedValues;{
+    for(NSString * key in keyedValues){
+        if([self respondsToSelector:NSSelectorFromString(key)]){
+            [self setValue:keyedValues[key] forKey:key];
+        }
+    }
+}
+
 @end

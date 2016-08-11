@@ -64,11 +64,7 @@
 
     //set effect values
     if(effectItem.valuesForKeysToApply){
-        for(NSString * key in effectItem.valuesForKeysToApply){
-            if([effect respondsToSelector:NSSelectorFromString(key)]){
-                [effect setValue:effectItem.valuesForKeysToApply[key] forKey:key];
-            }
-        }
+        [effect setValuesForMatchedKeysWithDictionary:effectItem.valuesForKeysToApply];
     }
     NSAssert(effect, @"Not found effect");
     layerSet.effect = effect;
