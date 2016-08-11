@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "GPUImageMonochromeFilter.h"
 
-@interface GPUImageMonochromeFilter (STGPUImage)
+@interface GPUImageMonochromeFilter (STGPUImageFilter)
 
 + (instancetype)filterWithColor:(UIColor *)color;
 @end

@@ -4,10 +4,10 @@
 //
 
 #import <Colours/Colours.h>
-#import "GPUImageMonochromeFilter+STGPUImage.h"
+#import "GPUImageMonochromeFilter+STGPUImageFilter.h"
 
 
-@implementation GPUImageMonochromeFilter (STGPUImage)
+@implementation GPUImageMonochromeFilter (STGPUImageFilter)
 
 + (instancetype)filterWithColor:(UIColor *)color{
     GPUImageMonochromeFilter * colorFilter = [[GPUImageMonochromeFilter alloc] init];

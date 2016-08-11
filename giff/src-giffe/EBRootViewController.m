@@ -20,6 +20,7 @@
 #import "NSArray+STUtil.h"
 #import "UIColor+BFPaperColors.h"
 #import "STGIFFDisplayLayerLeifEffect.h"
+#import "STGIFFDisplayLayerJanneEffect.h"
 
 @implementation EBRootViewController {
 
@@ -43,10 +44,10 @@
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class titleImageName:nil];
-    currentSelectedEffect.valuesForKeysToApply = @{
-            @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
-    };
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:nil];
+//    currentSelectedEffect.valuesForKeysToApply = @{
+//            @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
+//    };
 
     STCapturedImageSetAnimatableLayerSet * layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:images[0] withEffect:currentSelectedEffect];
     [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:images[0] forLayerSet:layerSet];
