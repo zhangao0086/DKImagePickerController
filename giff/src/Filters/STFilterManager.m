@@ -108,12 +108,9 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
         }
 
         //process lastest blender
-        for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
-            if (currentItem.composer) {
-                input ? [currentItem.composer addTarget:input] : [currentItem.composer useNextFrameForImageCapture];
-                break;
-            }
-        }
+        STGPUImageOutputComposeItem *lastItem = [items lastObject];
+        GPUImageOutput * terminalOutput = /*1*/lastItem.composer ?: (/*2*/[[lastItem filters] lastObject] ?: /*3*/lastItem.source);
+        input ? [terminalOutput addTarget:input] : [terminalOutput useNextFrameForImageCapture];
 
         //process outputs
         for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
@@ -123,12 +120,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
             input?:[currentItem.source useNextFrameForImageCapture];
         }
 
-        //return lastest blender's output
-        for (STGPUImageOutputComposeItem *currentItem in [items reverse]) {
-            if (currentItem.composer) {
-                return currentItem.composer;
-            }
-        }
+        return terminalOutput;
     }
 
     return nil;
