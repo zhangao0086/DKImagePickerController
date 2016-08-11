@@ -22,6 +22,7 @@
 		4F71D1EF13DE5F86BB6ED684 /* STMultiSourcingGPUImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DEB4A666F8B52CAF157F /* STMultiSourcingGPUImageProcessor.m */; };
 		4F71D20B7ACA39A9FFFE1CFC /* STCapturedImageSetDisplayObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D22FBE4A1568E96A854D /* STCapturedImageSetDisplayObject.m */; };
 		4F71D20F600DD023CC390AD3 /* GPUImageRGBFilter+STGPUImageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DB65720DED6620FA3746 /* GPUImageRGBFilter+STGPUImageFilter.m */; };
+		4F71D213CFDCE13E73459508 /* STGIFFDisplayLayerSeparatedProcessingEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D0775B47D7F32909CB21 /* STGIFFDisplayLayerSeparatedProcessingEffect.m */; };
 		4F71D26BE6233F0BB706E300 /* STAnimatableCaptureRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D97ECBA17982DC349D73 /* STAnimatableCaptureRequest.m */; };
 		4F71D2D111735099736CB91A /* GPUImageMotionBlurFilter+STGPUImageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D597486BE1FEF42FDFB3 /* GPUImageMotionBlurFilter+STGPUImageFilter.m */; };
 		4F71D2FDE30E30CA72AA0C83 /* STGIFFDisplayLayerAfterImagePopStarEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DFE3DBA7EAC9EBC270F8 /* STGIFFDisplayLayerAfterImagePopStarEffect.m */; };
@@ -541,7 +542,6 @@
 		A0FA6F7E1D5ACF430040AC3F /* UIView+STUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CFB71CC5DD0D00628C2F /* UIView+STUtil.m */; };
 		A0FA6F7F1D5ACF430040AC3F /* STDrawableLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF791CC5DD0D00628C2F /* STDrawableLayer.m */; };
 		A0FA6F801D5ACF430040AC3F /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB211D519B0C00983BE8 /* DKAssetGroupDetailVC.swift */; };
-		A0FA6F811D5ACF430040AC3F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CDE91CC5DD0C00628C2F /* AppDelegate.m */; };
 		A0FA6F821D5ACF430040AC3F /* STStandardNavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A050D0D41CC5DD0D00628C2F /* STStandardNavigationButton.m */; };
 		A0FA6F831D5ACF430040AC3F /* NSObject+STThreadUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF511CC5DD0D00628C2F /* NSObject+STThreadUtil.m */; };
 		A0FA6F841D5ACF430040AC3F /* STQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CF911CC5DD0D00628C2F /* STQueueManager.m */; };
@@ -3715,6 +3715,7 @@
 				4F71DEEE9E1C269C16F61669 /* GPUImageMotionBlurFilter+STGPUImageFilter.m in Sources */,
 				4F71D7FA4D5C79EE3911BE18 /* GPUImageMonochromeFilter+STGPUImageFilter.m in Sources */,
 				4F71DE97EF08AA988AD5FAB9 /* STGIFFDisplayLayerAfterImagePopStarEffect.m in Sources */,
+				4F71D213CFDCE13E73459508 /* STGIFFDisplayLayerSeparatedProcessingEffect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3821,7 +3822,6 @@
 				A0FA6F7E1D5ACF430040AC3F /* UIView+STUtil.m in Sources */,
 				A0FA6F7F1D5ACF430040AC3F /* STDrawableLayer.m in Sources */,
 				A0FA6F801D5ACF430040AC3F /* DKAssetGroupDetailVC.swift in Sources */,
-				A0FA6F811D5ACF430040AC3F /* AppDelegate.m in Sources */,
 				A0FA6F821D5ACF430040AC3F /* STStandardNavigationButton.m in Sources */,
 				A0FA6F831D5ACF430040AC3F /* NSObject+STThreadUtil.m in Sources */,
 				A0FA6F841D5ACF430040AC3F /* STQueueManager.m in Sources */,

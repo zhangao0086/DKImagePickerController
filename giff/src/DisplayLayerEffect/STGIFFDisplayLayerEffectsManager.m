@@ -18,6 +18,7 @@
 #import "NSObject+STUtil.h"
 #import "STGIFFDisplayLayerColorizeEffect.h"
 #import "STGIFFDisplayLayerJanneEffect.h"
+#import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -37,10 +38,9 @@
 
 - (NSArray <STGIFFDisplayLayerEffectItem *> *)effects{
     return _effects ?: (_effects = @[
-            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class titleImageName:@"effect_thumb.png"]
+            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:@"effect_thumb.png"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class titleImageName:@"effect_thumb.png"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJanneEffect.class titleImageName:@"effect_thumb.png"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class titleImageName:@"effect_thumb.png"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class titleImageName:@"effect_thumb.png"]
     ]);
 }

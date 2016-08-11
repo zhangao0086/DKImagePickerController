@@ -8,6 +8,8 @@
 #import "STUIApplication.h"
 #if GIFFE
 #import "AppDelegateEB.h"
+#else
+#import "AppDelegate.h"
 #endif
 
 #if DEBUG
