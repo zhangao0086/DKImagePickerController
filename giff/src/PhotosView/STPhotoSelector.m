@@ -347,7 +347,7 @@ static STPhotoSelector *_instance = nil;
                 //from capture
                 STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STMainControl sharedInstance].editControlView.effectSelectorView.currentSelectedEffectItem;
 
-                layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:imageSet withEffect:currentSelectedEffect.className];
+                layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:imageSet withEffect:currentSelectedEffect];
                 if(layerSet.effect){
                     [[STGIFFDisplayLayerEffectsManager sharedManager] prepareLayerEffectFrom:imageSet forLayerSet:layerSet];
                 }
