@@ -97,6 +97,11 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
 
             GPUImageTwoInputFilter * targetComposer = currentItem.composer ?: nextItem.composer;
 
+            //insert blank filter if it hasn't
+            if(!currentItem.filters.count){
+                currentItem.filters = @[GPUImageFilter.new];
+            }
+
             [self buildOutputChain:currentItem.source filters:currentItem.filters to:targetComposer enhance:NO];
 
             if (nextItem) {
@@ -109,7 +114,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
 
         //process lastest blender
         STGPUImageOutputComposeItem *lastItem = [items lastObject];
-        GPUImageOutput * terminalOutput = /*1*/lastItem.composer ?: (/*2*/[[lastItem filters] lastObject] ?: /*3*/lastItem.source);
+        GPUImageOutput * terminalOutput = /*1*/lastItem.composer ?: /*2*/[[lastItem filters] lastObject];
         input ? [terminalOutput addTarget:input] : [terminalOutput useNextFrameForImageCapture];
 
         //process outputs
