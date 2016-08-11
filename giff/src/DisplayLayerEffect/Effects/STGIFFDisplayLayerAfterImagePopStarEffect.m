@@ -30,7 +30,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.colors = @[UIColorFromRGB(0xff46c0), UIColorFromRGB(0x3c5cff)];
+        self.colors = @[UIColorFromRGB(0xff46c0), UIColorFromRGB(0x83F5F8)];
     }
 
     return self;
@@ -43,14 +43,14 @@
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
     composeItem0.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
     GPUImageSaturationFilter * saturationFilter0 = GPUImageSaturationFilter.new;
-    saturationFilter0.saturation = 1.3;
+    saturationFilter0.saturation = 1.2;
 
     GPUImageTransformFilter * transformFilter1 = [[GPUImageTransformFilter alloc] init];
     transformFilter1.affineTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(.015f,0),CGAffineTransformMakeScale(1.04,1.04));
 
     //[GPUImageMonochromeFilter filterWithColor:[self colors][0]]
     composeItem0.filters = @[
-            [GPUImageRGBFilter filterWithColor:[self colors][0]]
+            [GPUImageRGBFilter filterWithColor:[self colors][1]]
 //            , saturationFilter0
             ,transformFilter1
     ];
@@ -68,25 +68,23 @@
     //3
     STGPUImageOutputComposeItem * composeItem3 = [STGPUImageOutputComposeItem new];
     composeItem3.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
-    composeItem3.composer = [[GPUImageLightenBlendFilter alloc] init];
+    composeItem3.composer = [[GPUImageScreenBlendFilter alloc] init];
     [composers addObject:composeItem3];
 
     //4
     STGPUImageOutputComposeItem * composeItem4 = [STGPUImageOutputComposeItem new];
     composeItem4.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
     GPUImageSaturationFilter * saturationFilter4 = GPUImageSaturationFilter.new;
-    saturationFilter4.saturation = 1.3;
+    saturationFilter4.saturation = 1.2;
     GPUImageTransformFilter * transformFilter4 = [[GPUImageTransformFilter alloc] init];
     transformFilter4.affineTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(-.015f,0),CGAffineTransformMakeScale(1.04,1.04));
     composeItem4.filters = @[
-            [GPUImageMonochromeFilter filterWithColor:[self colors][1]]
+            [GPUImageRGBFilter filterWithColor:[self colors][0]]
             , saturationFilter4
             ,transformFilter4
     ];
 
     [composers addObject:composeItem4];
-
-
 
     return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:[composers reverse] forInput:nil] imageFromCurrentFramebuffer];
 }
