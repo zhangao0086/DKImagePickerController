@@ -30,8 +30,8 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"face1.jpg"]
-            , @[@"bird1.jpg"]
+            @[@"land.jpg"]
+//            , @[@"face2.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -44,7 +44,7 @@
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class titleImageName:nil];
 //    currentSelectedEffect.valuesForKeysToApply = @{
 //            @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
 //    };

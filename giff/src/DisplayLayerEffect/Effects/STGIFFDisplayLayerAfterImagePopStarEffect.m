@@ -36,13 +36,7 @@
     return self;
 }
 
-- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-    NSArray * composers = sourceImages.count==1 ? [self composersToProcessSingle:sourceImages] : [self composersToProcessTwo:sourceImages];
-
-    return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:[composers reverse] forInput:nil] imageFromCurrentFramebuffer];
-}
-
-- (NSArray *)composersToProcessTwo:(NSArray<UIImage *> *__nullable)sourceImages {
+- (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
     NSMutableArray * composers = [NSMutableArray array];
     //1
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
@@ -83,14 +77,14 @@
 
     [composers addObject:composeItem4];
 
-    return composers;
+    return [composers reverse];
 }
 
-- (NSArray *)composersToProcessSingle:(NSArray<UIImage *> *__nullable)sourceImages {
+- (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
     NSMutableArray * composers = [NSMutableArray array];
     //1
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
-    composeItem0.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
+    composeItem0.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
 //    GPUImageSaturationFilter * saturationFilter0 = GPUImageSaturationFilter.new;
 //    saturationFilter0.saturation = 1.2;
     GPUImageTransformFilter * transformFilter1 = [[GPUImageTransformFilter alloc] init];
@@ -107,13 +101,13 @@
 
     //3
     STGPUImageOutputComposeItem * composeItem3 = [STGPUImageOutputComposeItem new];
-    composeItem3.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
+    composeItem3.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
     composeItem3.composer = [[GPUImageScreenBlendFilter alloc] init];
     [composers addObject:composeItem3];
 
     //4
     STGPUImageOutputComposeItem * composeItem4 = [STGPUImageOutputComposeItem new];
-    composeItem4.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
+    composeItem4.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
     GPUImageSaturationFilter * saturationFilter4 = GPUImageSaturationFilter.new;
     saturationFilter4.saturation = 1.2;
     GPUImageTransformFilter * transformFilter4 = [[GPUImageTransformFilter alloc] init];
@@ -126,7 +120,7 @@
 
     [composers addObject:composeItem4];
 
-    return composers;
+    return [composers reverse];
 }
 
 @end

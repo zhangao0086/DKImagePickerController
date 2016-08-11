@@ -25,43 +25,55 @@
 #import "STFilter.h"
 #import "STFilterManager.h"
 #import "STGPUImageOutputComposeItem.h"
+#import "NSNumber+STUtil.h"
+#import "NSArray+STUtil.h"
 
 
 @implementation STGIFFDisplayLayerLeifEffect {
     //Standard method of multi blending : https://github.com/BradLarson/GPUImage/issues/269
 }
 
-- (UIImage *)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-    @autoreleasepool {
+- (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
+    NSUInteger composeCount = 6;
 
-        UIImage *firstSourceImage = sourceImages[0];
-        GPUImagePicture *inputPicture = [[GPUImagePicture alloc] initWithImage:firstSourceImage smoothlyScaleOutput:NO];
+    return [[@(composeCount) st_intArray] mapWithIndex:^id(id object, NSInteger index) {
+        CGFloat scaleValue = AGKRemap([object floatValue],0,composeCount-1,.2,1);
+        STGPUImageOutputComposeItem * composeItem1 = STGPUImageOutputComposeItem.new;
+        composeItem1.source = [[GPUImagePicture alloc] initWithImage:/*[object integerValue] == 0 ||*/ [object integerValue]==composeCount-1 ? sourceImages[1] : sourceImages[0] smoothlyScaleOutput:NO];
 
-        STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem itemWithSource:inputPicture];
+        if(index>0){
+            composeItem1.composer = GPUImageSoftLightBlendFilter.new;
+        }
 
-        STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:sourceImages.count==2 ? sourceImages[1] : firstSourceImage smoothlyScaleOutput:NO]
-                                           composer:[[GPUImageSoftLightBlendFilter alloc] init]];
         GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
-        scaleFilter1.affineTransform = CGAffineTransformMakeScale(.7,.7);
+        scaleFilter1.affineTransform = CGAffineTransformMakeScale(scaleValue,scaleValue);
         composeItem1.filters = @[
                 scaleFilter1
         ];
 
-        STGPUImageOutputComposeItem * composeItem2 = [STGPUImageOutputComposeItem itemWithSource:[[GPUImagePicture alloc] initWithImage:firstSourceImage smoothlyScaleOutput:NO]
-                                                                                        composer:[[GPUImageSoftLightBlendFilter alloc] init]];
-        GPUImageTransformFilter * scaleFilter2 = [[GPUImageTransformFilter alloc] init];
-        scaleFilter2.affineTransform = CGAffineTransformMakeScale(.4,.4);
-        composeItem2.filters = @[
-                scaleFilter2
+        return composeItem1;
+    }];
+}
+
+- (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
+    NSUInteger composeCount = 7;
+    return [[@(composeCount) st_intArray] mapWithIndex:^id(id object, NSInteger index) {
+
+        CGFloat scaleValue = AGKRemap([object floatValue],0,composeCount-1,.1,1);
+        STGPUImageOutputComposeItem * composeItem1 = STGPUImageOutputComposeItem.new;
+        composeItem1.source = [[GPUImagePicture alloc] initWithImage: sourceImage smoothlyScaleOutput:NO];
+
+        if(index>0){
+            composeItem1.composer = GPUImageSoftLightBlendFilter.new;
+        }
+
+        GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
+        scaleFilter1.affineTransform = CGAffineTransformMakeScale(scaleValue,scaleValue);
+        composeItem1.filters = @[
+                scaleFilter1
         ];
-
-        return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:@[
-                composeItem0,
-                composeItem1,
-                composeItem2
-        ] forInput:nil] imageFromCurrentFramebuffer];
-
-    }
+        return composeItem1;
+    }];
 }
 
 @end
