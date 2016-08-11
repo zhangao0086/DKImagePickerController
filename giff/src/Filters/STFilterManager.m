@@ -92,7 +92,7 @@ static NSString * filterCacheKeyPrefix = @"elie.filter.";
         for (STGPUImageOutputComposeItem *currentItem in items) {
             NSParameterAssert(currentItem.source);
             NSUInteger index = [items indexOfObject:currentItem];
-            NSAssert(index==0 || currentItem.composer,@"composer is must offer excluding first item");
+            NSAssert(index>0 || !currentItem.composer,@"first item can't provide composer");
             STGPUImageOutputComposeItem *nextItem = [items st_objectOrNilAtIndex:index + 1];
 
             GPUImageTwoInputFilter * targetComposer = currentItem.composer ?: nextItem.composer;
