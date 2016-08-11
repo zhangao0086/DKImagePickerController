@@ -188,7 +188,7 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
 }
 
 - (NSArray *)replaceFromOtherArray:(NSArray *)otherArray inRange:(NSRange)range{
-    NSAssert(range.location+range.length < self.count, @"Given range must be lower than self.count");
+    NSAssert(otherArray.count==1 || range.location+range.length < self.count, @"Given range must be lower than self.count");
     NSAssert(otherArray.count == range.length, @"Given range.length must be same as otherArray.count");
 
     NSMutableArray * replacedArray = [NSMutableArray arrayWithCapacity:self.count];
