@@ -462,3 +462,15 @@ CG_INLINE CGRect
 CGRectSquareCropRegionAspectFill(CGSize containerSize){
     return CGRectCropRegionAspectFill(containerSize,CGSizeMake(1,1));
 }
+
+#pragma mark Random
+
+CG_INLINE double
+randomdzto(){
+    return (double)arc4random() / 0x100000000;
+}
+
+CG_INLINE NSUInteger
+randomir(NSUInteger min, NSUInteger max){
+    return min + arc4random_uniform(max - min + 1);
+}
