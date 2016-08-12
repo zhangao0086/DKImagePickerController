@@ -219,13 +219,13 @@ public extension AVAsset {
 	
 	public func calculateFileSize() -> Float {
 		if let URLAsset = self as? AVURLAsset {
-			var size: AnyObject?
-			try! (URLAsset.url as NSURL).getResourceValue(&size, forKey: URLResourceKey.fileSizeKey)
-			if let size = size as? NSNumber {
-				return size.floatValue
-			} else {
-				return 0
-			}
+            let resourceValues = try! URLAsset.url.resourceValues(forKeys: [URLResourceKey.fileSizeKey])
+            let size = resourceValues.allValues[URLResourceKey.fileSizeKey]
+            if let size = size as? NSNumber {
+                return size.floatValue
+            } else {
+                return 0
+            }
 		} else if let _ = self as? AVComposition {
 			var estimatedSize: Float = 0.0
 			var duration: Float = 0.0
