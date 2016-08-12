@@ -19,6 +19,7 @@
 #import "STGIFFDisplayLayerColorizeEffect.h"
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
+#import "STGIFFDisplayLayerPepVentosaEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -39,8 +40,9 @@
 - (NSArray <STGIFFDisplayLayerEffectItem *> *)effects{
     return _effects ?: (_effects = @[
             [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:@"STGIFFDisplayLayerAfterImagePopStarEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPepVentosaEffect.class titleImageName:@"STGIFFDisplayLayerPepVentosaEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class titleImageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class titleImageName:@"effect_thumb.png"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class titleImageName:@"STGIFFDisplayLayerFluorEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class titleImageName:@"effect_thumb.png"]
     ]);
 }

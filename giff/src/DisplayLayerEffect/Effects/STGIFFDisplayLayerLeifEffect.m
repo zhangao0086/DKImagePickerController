@@ -27,6 +27,7 @@
 #import "STGPUImageOutputComposeItem.h"
 #import "NSNumber+STUtil.h"
 #import "NSArray+STUtil.h"
+#import "GPUImageAlphaBlendFilter+STGPUImageFilter.h"
 
 
 @implementation STGIFFDisplayLayerLeifEffect {
@@ -42,7 +43,7 @@
         scaleValue *= AGKEaseOutWithOverShoot([object floatValue]/composeCount, 1.5f);
 
         STGPUImageOutputComposeItem * composeItem1 = STGPUImageOutputComposeItem.new;
-        composeItem1.source = [[GPUImagePicture alloc] initWithImage:index== 2 /*|| [object integerValue]==composeCount-1 */ ? sourceImages[1] : sourceImages[0] smoothlyScaleOutput:NO];
+        composeItem1.source = [[GPUImagePicture alloc] initWithImage:index== 1 /*|| [object integerValue]==composeCount-1 */ ? sourceImages[1] : sourceImages[0] smoothlyScaleOutput:NO];
 
         if(index>0){
             composeItem1.composer = GPUImageSoftLightBlendFilter.new;
