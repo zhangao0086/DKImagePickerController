@@ -1,11 +1,12 @@
 //
-// Created by BLACKGENE on 8/12/16.
+// Created by BLACKGENE on 7/20/16.
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "STGIFFDisplayLayerSeparatedProcessingEffect.h"
+#import "STMultiSourcingImageProcessor.h"
+#import "STMultiSourcingGPUImageProcessor.h"
 
 
-@interface STGIFFDisplayLayerFluorEffect : STGIFFDisplayLayerSeparatedProcessingEffect
+@interface STGIFFDisplayLayerFluorEffect : STMultiSourcingImageProcessor
 @end

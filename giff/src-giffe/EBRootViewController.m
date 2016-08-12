@@ -20,7 +20,8 @@
 #import "NSArray+STUtil.h"
 #import "UIColor+BFPaperColors.h"
 #import "STGIFFDisplayLayerLeifEffect.h"
-#import "STGIFFDisplayLayerJanneEffect.h"
+#import "STGIFFDisplayLayerFluorEffect.h"
+#import "STGIFFDisplayLayerFluorEffect.h"
 
 @implementation EBRootViewController {
 
@@ -30,8 +31,7 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"land2.jpg"]
-            , @[@"face3.jpg"]
+            @[@"face3.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -44,7 +44,7 @@
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class titleImageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class titleImageName:nil];
 //    currentSelectedEffect.valuesForKeysToApply = @{
 //            @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
 //    };

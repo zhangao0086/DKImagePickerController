@@ -36,7 +36,7 @@
 #import "STCapturedImageSetAnimatableLayerSet.h"
 #import "STGIFFDisplayLayerFrameSwappingColorizeBlendEffect.h"
 #import "STGIFFDisplayLayerLeifEffect.h"
-#import "STGIFFDisplayLayerJanneEffect.h"
+#import "STGIFFDisplayLayerFluorEffect.h"
 #import "STEditControlView.h"
 #import "STCapturedImageSetAnimatableLayer.h"
 

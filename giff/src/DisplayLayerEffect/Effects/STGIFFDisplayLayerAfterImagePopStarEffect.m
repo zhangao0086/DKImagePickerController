@@ -4,7 +4,7 @@
 //
 
 #import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
-#import "STGIFFDisplayLayerJanneEffect.h"
+#import "STGIFFDisplayLayerFluorEffect.h"
 #import "GPUImageChromaKeyBlendFilter.h"
 #import "GPUImagePicture.h"
 #import "UIColor+BFPaperColors.h"
