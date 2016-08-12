@@ -38,6 +38,7 @@
 
     return [[@(composeCount) st_intArray] mapWithIndex:^id(id object, NSInteger index) {
         CGFloat scaleValue = AGKRemap([object floatValue],0,composeCount-1,.2,1);
+
         STGPUImageOutputComposeItem * composeItem1 = STGPUImageOutputComposeItem.new;
         composeItem1.source = [[GPUImagePicture alloc] initWithImage:/*[object integerValue] == 0 ||*/ [object integerValue]==composeCount-1 ? sourceImages[1] : sourceImages[0] smoothlyScaleOutput:NO];
 
@@ -56,10 +57,17 @@
 }
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
-    NSUInteger composeCount = 7;
-    return [[@(composeCount) st_intArray] mapWithIndex:^id(id object, NSInteger index) {
+    NSUInteger composeCount = 6;
 
-        CGFloat scaleValue = AGKRemap([object floatValue],0,composeCount-1,.1,1);
+    NSArray * composeIndexes = [@(composeCount) st_intArray];
+//    composeIndexes = [composeIndexes reverse];
+
+    return [composeIndexes mapWithIndex:^id(id object, NSInteger index) {
+
+        CGFloat scaleValue = AGKRemap(index,0,composeCount-1,.2,1);
+
+        scaleValue *= AGKEaseOutWithOverShoot([object floatValue]/composeCount, 1.8f);
+
         STGPUImageOutputComposeItem * composeItem1 = STGPUImageOutputComposeItem.new;
         composeItem1.source = [[GPUImagePicture alloc] initWithImage: sourceImage smoothlyScaleOutput:NO];
 
@@ -67,11 +75,14 @@
             composeItem1.composer = GPUImageSoftLightBlendFilter.new;
         }
 
-        GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
-        scaleFilter1.affineTransform = CGAffineTransformMakeScale(scaleValue,scaleValue);
-        composeItem1.filters = @[
-                scaleFilter1
-        ];
+        if(scaleValue!=1){
+            GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
+            scaleFilter1.affineTransform = CGAffineTransformMakeScale(scaleValue,scaleValue);
+            composeItem1.filters = @[
+                    scaleFilter1
+            ];
+        }
+
         return composeItem1;
     }];
 }
