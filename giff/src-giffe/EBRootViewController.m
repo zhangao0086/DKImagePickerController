@@ -22,6 +22,7 @@
 #import "STGIFFDisplayLayerLeifEffect.h"
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerFluorEffect.h"
+#import "STGIFFDisplayLayerPepVentosaEffect.h"
 
 @implementation EBRootViewController {
 
@@ -31,8 +32,8 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"land1.jpg"]
-            ,@[@"face1.jpg"]
+            @[@"building1.jpg"]
+//            ,@[@"face1.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -45,7 +46,7 @@
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class titleImageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPepVentosaEffect.class titleImageName:nil];
 //    currentSelectedEffect.valuesForKeysToApply = @{
 //            @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
 //    };
