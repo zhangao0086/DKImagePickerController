@@ -173,9 +173,6 @@
 }
 
 - (NSString *)mimeTypeFromPathExtension {
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self]) {
-        return nil;
-    }
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[self pathExtension], NULL);
     CFStringRef mimeType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
     CFRelease(UTI);
