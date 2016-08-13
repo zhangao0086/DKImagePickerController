@@ -23,7 +23,7 @@
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
-#import "STGIFFDisplayLayerCrossFadeEffect.h"
+#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
 
 @implementation EBRootViewController {
 
@@ -33,8 +33,8 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"aniface1.jpg"]
-//            ,@[@"land.jpg"]
+            @[@"face1.jpg"]
+            ,@[@"face3.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -47,10 +47,11 @@
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeEffect.class titleImageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPatternizedCrossFadeEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
-            , @"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt1.svg"
+            , @"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"
+            , @"scaleOfFadingImage" : @1
     };
 
     STCapturedImageSetAnimatableLayerSet * layerSet = [[STGIFFDisplayLayerEffectsManager sharedManager] createLayerSetFrom:images[0] withEffect:currentSelectedEffect];

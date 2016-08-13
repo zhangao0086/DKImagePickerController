@@ -7,7 +7,7 @@
 #import "STGIFFDisplayLayerSeparatedProcessingEffect.h"
 
 
-@interface STGIFFDisplayLayerCrossFadeEffect : STGIFFDisplayLayerSeparatedProcessingEffect
+@interface STGIFFDisplayLayerPatternizedCrossFadeEffect : STGIFFDisplayLayerSeparatedProcessingEffect
 @property (nonatomic, readwrite) NSString * patternImageName;
 @property (nonatomic, assign) CGFloat scaleOfFadingImage;
 @end

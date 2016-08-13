@@ -20,6 +20,7 @@
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
+#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -39,11 +40,11 @@
 
 - (NSArray <STGIFFDisplayLayerEffectItem *> *)effects{
     return _effects ?: (_effects = @[
-            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class titleImageName:@"STGIFFDisplayLayerAfterImagePopStarEffect.jpg"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPepVentosaEffect.class titleImageName:@"STGIFFDisplayLayerPepVentosaEffect.jpg"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class titleImageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class titleImageName:@"STGIFFDisplayLayerFluorEffect.jpg"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColorizeEffect.class titleImageName:@"effect_thumb.png"]
+            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class imageName:@"STGIFFDisplayLayerAfterImagePopStarEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPepVentosaEffect.class imageName:@"STGIFFDisplayLayerPepVentosaEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class imageName:@"STGIFFDisplayLayerFluorEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPatternizedCrossFadeEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg" valuesForKeysToApply:@{@"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"}]
     ]);
 }
 

@@ -9,15 +9,6 @@
 @implementation STGIFFDisplayLayerEffectItem {
 
 }
-- (instancetype)initWithClassName:(NSString *)className imageName:(NSString *)imageName {
-    self = [super init];
-    if (self) {
-        self.className = className;
-        self.imageName = imageName;
-    }
-
-    return self;
-}
 
 - (instancetype)initWithClassName:(NSString *)className imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply {
     self = [super init];
@@ -35,12 +26,12 @@
 }
 
 
-+ (instancetype)itemWithClassName:(NSString *)className imageName:(NSString *)imageName {
-    return [[self alloc] initWithClassName:className imageName:imageName];
++ (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName {
+    return [self itemWithClass:classObj imageName:imageName valuesForKeysToApply:nil];
 }
 
-+ (instancetype)itemWithClass:(Class)classObj titleImageName:(NSString *)imageName {
-    return [self itemWithClassName:NSStringFromClass(classObj) imageName:imageName];
++ (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply{
+    return [self itemWithClassName:NSStringFromClass(classObj) imageName:imageName valuesForKeysToApply:valuesForKeysToApply];
 }
 
 

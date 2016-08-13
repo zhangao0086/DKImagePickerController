@@ -12,15 +12,7 @@
 @property (nonatomic, readwrite) NSString * imageName;
 @property (nonatomic, readwrite) NSDictionary * valuesForKeysToApply;
 
-- (instancetype)initWithClassName:(NSString *)className imageName:(NSString *)imageName;
++ (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName;
 
-- (instancetype)initWithClassName:(NSString *)className imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply;
-
-+ (instancetype)itemWithClassName:(NSString *)className imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply;
-
-+ (instancetype)itemWithClassName:(NSString *)className imageName:(NSString *)imageName;
-
-+ (instancetype)itemWithClass:(Class)classObj titleImageName:(NSString *)imageName;
-
-
++ (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply;
 @end
