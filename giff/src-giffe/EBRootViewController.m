@@ -33,8 +33,8 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"face1.jpg"]
-            ,@[@"land.jpg"]
+            @[@"aniface1.jpg"]
+//            ,@[@"land.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {

@@ -9,4 +9,5 @@
 
 @interface STGIFFDisplayLayerCrossFadeEffect : STGIFFDisplayLayerSeparatedProcessingEffect
 @property (nonatomic, readwrite) NSString * patternImageName;
+@property (nonatomic, assign) CGFloat scaleOfFadingImage;
 @end

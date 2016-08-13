@@ -13,11 +13,22 @@
 #import "SVGKImage+STUtil.h"
 #import "NSString+STUtil.h"
 #import "UIImage+STUtil.h"
+#import "GPUImageTransformFilter+STGPUImageFilter.h"
 
 
 @implementation STGIFFDisplayLayerCrossFadeEffect {
 
 }
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _scaleOfFadingImage = 1.03f;
+    }
+
+    return self;
+}
+
 
 - (UIImage *)patternImage:(CGSize)imageSize{
 
@@ -65,6 +76,11 @@
 
     STGPUImageOutputComposeItem * composeItemB = [STGPUImageOutputComposeItem new];
     composeItemB.source = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:NO];
+    if(_scaleOfFadingImage!=1){
+        composeItemB.filters = @[
+                [GPUImageTransformFilter.new addScaleScalar:_scaleOfFadingImage]
+        ];
+    }
     [composers addObject:composeItemB];
 
     return [composers reverse];
@@ -74,21 +90,43 @@
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
     NSMutableArray * composers = [NSMutableArray array];
 
-    //patt 1
+    /*
+     * masking image
+     */
+    UIImage * sourceImageForMask = [self patternImage:sourceImage.size];
+
+    //patt
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
-    composeItem0.source = [[GPUImagePicture alloc] initWithImage:[self patternImage:sourceImage.size] smoothlyScaleOutput:NO];
+    composeItem0.source = [[GPUImagePicture alloc] initWithImage:sourceImageForMask smoothlyScaleOutput:NO];
     composeItem0.composer = GPUImageMaskFilter.new;
-    composeItem0.filters = @[
-            GPUImageColorInvertFilter.new
-    ];
     [composers addObject:composeItem0];
 
-    //image 1
+    //image
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
-    composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:YES];
-    composeItem1.filters = @[
-    ];
+    composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
     [composers addObject:composeItem1];
+
+    UIImage * maskedImage = [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:[composers reverse] forInput:nil] imageFromCurrentFramebuffer];
+
+    /*
+     * source[1] + masked
+     */
+    composers = [NSMutableArray array];
+
+    STGPUImageOutputComposeItem * composeItemA = [STGPUImageOutputComposeItem new];
+    composeItemA.source = [[GPUImagePicture alloc] initWithImage:maskedImage smoothlyScaleOutput:NO];
+    composeItemA.composer = GPUImageNormalBlendFilter.new;
+    [composers addObject:composeItemA];
+
+    STGPUImageOutputComposeItem * composeItemB = [STGPUImageOutputComposeItem new];
+    composeItemB.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
+    if(_scaleOfFadingImage!=1){
+        composeItemB.filters = @[
+                [GPUImageTransformFilter.new addScaleScalar:_scaleOfFadingImage]
+        ];
+    }
+
+    [composers addObject:composeItemB];
 
     return [composers reverse];
 }
