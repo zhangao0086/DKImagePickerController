@@ -12,6 +12,8 @@
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
 #import "GPUImageVibranceFilter.h"
 #import "GPUImageFalseColorFilter+STGPUImageFilter.h"
+#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "STGIFFDisplayLayerPepVentosaEffect.h"
 
 @implementation STGIFFDisplayLayerDarkenMaskEffect {
 
@@ -57,10 +59,16 @@
     NSMutableArray * composers = [NSMutableArray array];
 
     //soure image
+//    STGIFFDisplayLayerPatternizedCrossFadeEffect * effect = STGIFFDisplayLayerPatternizedCrossFadeEffect.new;
+//    effect.patternImageName = @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg";
+//    UIImage * effectAppliedImage = [effect processImages:@[sourceImage]];
+
+//    STGIFFDisplayLayerPepVentosaEffect * effect = STGIFFDisplayLayerPepVentosaEffect.new;
+//    UIImage * effectAppliedImage = [effect processImages:@[sourceImage]];
+
     STGPUImageOutputComposeItem * composeItemPrimary = [STGPUImageOutputComposeItem new];
     composeItemPrimary.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
     composeItemPrimary.composer = [GPUImageLightenBlendFilter new];
-
     composeItemPrimary.filters = @[
 //            GPUImageColorInvertFilter.new
     ];
@@ -88,7 +96,7 @@
 
     composeItemA.filters = @[
             GPUImageFalseColorFilter.new
-//            ,[GPUImageTransformFilter filterByTransform:CGAffineTransformMakeRotation(AGKDegreesToRadians(1))]
+            ,[GPUImageTransformFilter filterByTransform:CGAffineTransformMakeRotation(AGKDegreesToRadians(90*randomir(1,3)))]
     ];
 
 
