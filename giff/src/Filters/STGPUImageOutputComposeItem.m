@@ -26,6 +26,17 @@
     return self;
 }
 
+- (void)setFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)filters {
+#if DEBUG
+    for(id filter in filters){
+        NSAssert(![filter isKindOfClass:GPUImageTwoInputFilter.class],@"GPUImageTwoInputFilter does not allowed.");
+    }
+#endif
+    _filters = filters;
+
+}
+
+
 + (instancetype)itemWithSource:(GPUImageOutput *)source {
     return [[self alloc] initWithSource:source];
 }
