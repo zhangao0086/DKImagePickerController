@@ -1,5 +1,11 @@
 # Change Log
 
+## [3.3.4](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.4) (2016-08-16)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.3...3.3.4)
+
+- Fixed an issue may cause singleSelect doesn't work as it should.
+
 ## [3.3.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.3) (2016-08-08)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.2...3.3.3)
