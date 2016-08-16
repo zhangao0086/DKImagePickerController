@@ -8,15 +8,17 @@
 #import "GPUImagePicture.h"
 #import "STFilter.h"
 #import "STGPUImageOutputComposeItem.h"
-#import "GPUImageSkinToneFilter.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
-#import "GPUImageVibranceFilter.h"
 #import "GPUImageFalseColorFilter+STGPUImageFilter.h"
-#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
+#import "UIColor+BFPaperColors.h"
+#import "GPUImageContrastFilter+STGPUImageFilter.h"
+#import "LEColorPicker.h"
+#import "NSObject+STUtil.h"
+#import "NSString+STUtil.h"
+#import "GPUImageSaturationFilter+STGPUImageFilter.h"
 
 @implementation STGIFFDisplayLayerDarkenMaskEffect {
-
 }
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
@@ -59,19 +61,16 @@
     NSMutableArray * composers = [NSMutableArray array];
 
     //soure image
-//    STGIFFDisplayLayerPatternizedCrossFadeEffect * effect = STGIFFDisplayLayerPatternizedCrossFadeEffect.new;
-//    effect.patternImageName = @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg";
-//    UIImage * effectAppliedImage = [effect processImages:@[sourceImage]];
-
-//    STGIFFDisplayLayerPepVentosaEffect * effect = STGIFFDisplayLayerPepVentosaEffect.new;
-//    UIImage * effectAppliedImage = [effect processImages:@[sourceImage]];
-
     STGPUImageOutputComposeItem * composeItemPrimary = [STGPUImageOutputComposeItem new];
     composeItemPrimary.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
     composeItemPrimary.composer = [GPUImageLightenBlendFilter new];
+//    composeItemPrimary.composer = [GPUImageNormalBlendFilter new];
     composeItemPrimary.filters = @[
-//            GPUImageColorInvertFilter.new
+//            [GPUImageFalseColorFilter filterWithColors:@[
+//                    UIColorFromRGB(0xDA3DEF), UIColorFromRGB(0x50ECF0)
+//            ]]
     ];
+
     [composers addObject:composeItemPrimary];
 
     //mask image
@@ -89,16 +88,26 @@
     [composers addObject:composeItemInvertingMask];
 
     //background image
-    STGPUImageOutputComposeItem * composeItemA = [STGPUImageOutputComposeItem new];
-    composeItemA.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
+    STGIFFDisplayLayerPepVentosaEffect * effect = STGIFFDisplayLayerPepVentosaEffect.new;
+    UIImage * effectImage = [effect processImages:@[sourceImage]];
 
-//    [GPUImageFalseColorFilter filterWithColors:@[]];
+    STGPUImageOutputComposeItem * composeItemA = [STGPUImageOutputComposeItem new];
+    composeItemA.source = [[GPUImagePicture alloc] initWithImage:effectImage smoothlyScaleOutput:NO];
+
+    //https://github.com/metasmile/DominantColor (import)
+    LEColorScheme * colorScheme = [self st_cachedObject:sourceImage.st_uid init:^id {
+        return [LEColorPicker.new colorSchemeFromImage:sourceImage];
+    }];
 
     composeItemA.filters = @[
-            GPUImageFalseColorFilter.new
-            ,[GPUImageTransformFilter filterByTransform:CGAffineTransformMakeRotation(AGKDegreesToRadians(90*randomir(1,3)))]
+            [GPUImageFalseColorFilter filterWithColors:@[
+                    colorScheme.primaryTextColor, colorScheme.backgroundColor
+//    UIColorFromRGB(0x5E21CF), UIColorFromRGB(0x50ECF0)
+            ]]
+//            , [GPUImageContrastFilter contrast:2]
+//            ,[GPUImageSaturationFilter saturation:1.3f]
+            , [[GPUImageTransformFilter filterByTransform:CGAffineTransformMakeRotation(AGKDegreesToRadians(180/*90 * randomir(1, 3)*/))] addScaleScalar:1.2]
     ];
-
 
     [composers addObject:composeItemA];
 

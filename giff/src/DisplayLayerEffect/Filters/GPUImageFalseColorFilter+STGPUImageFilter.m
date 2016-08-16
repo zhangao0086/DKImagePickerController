@@ -13,12 +13,12 @@
     NSParameterAssert(colors.count>0);
     GPUImageFalseColorFilter * falseColorFilter = [[GPUImageFalseColorFilter alloc] init];
 
-    NSArray* firstColorArr = [[colors firstObject] rgbaArray];
+    NSArray* firstColorArr = [colors[0] rgbaArray];
     [falseColorFilter setFirstColorRed:[firstColorArr[0] floatValue] green:[firstColorArr[1] floatValue] blue:[firstColorArr[2] floatValue]];
 
     if(colors.count>1){
         NSArray* secondColorArr = [colors[1] rgbaArray];
-        [falseColorFilter setFirstColorRed:[secondColorArr[0] floatValue] green:[secondColorArr[1] floatValue] blue:[secondColorArr[2] floatValue]];
+        [falseColorFilter setSecondColorRed:[secondColorArr[0] floatValue] green:[secondColorArr[1] floatValue] blue:[secondColorArr[2] floatValue]];
     }
 
     return falseColorFilter;
