@@ -24,6 +24,7 @@
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
 #import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "STGIFFDisplayLayerInvertMaskEffect.h"
 
 @implementation EBRootViewController {
 
@@ -33,8 +34,8 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"face1.jpg"]
-            ,@[@"face3.jpg"]
+            @[@"people1.jpg"]
+            ,@[@"bg1.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -47,7 +48,7 @@
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPatternizedCrossFadeEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerInvertMaskEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
             , @"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"
