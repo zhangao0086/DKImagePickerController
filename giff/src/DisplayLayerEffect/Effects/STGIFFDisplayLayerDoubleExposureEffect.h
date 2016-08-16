@@ -7,5 +7,5 @@
 #import "STGIFFDisplayLayerSeparatedProcessingEffect.h"
 
 
-@interface STGIFFDisplayLayerInvertMaskEffect : STGIFFDisplayLayerSeparatedProcessingEffect
+@interface STGIFFDisplayLayerDoubleExposureEffect : STGIFFDisplayLayerSeparatedProcessingEffect
 @end
