@@ -418,8 +418,9 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		let selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
 		self.imagePickerController.selectImage(selectedAsset!)
         
-		let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
-		cell.checkView.checkLabel.text = "\(self.imagePickerController.selectedAssets.count)"
+        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell {
+            cell.checkView.checkLabel.text = "\(self.imagePickerController.selectedAssets.count)"
+        }
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
