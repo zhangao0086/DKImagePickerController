@@ -7,5 +7,5 @@
 #import "STGIFFDisplayLayerSeparatedProcessingEffect.h"
 
 
-@interface STGIFFDisplayLayerDoubleExposureEffect : STGIFFDisplayLayerSeparatedProcessingEffect
+@interface STGIFFDisplayLayerDarkenMaskEffect : STGIFFDisplayLayerSeparatedProcessingEffect
 @end
