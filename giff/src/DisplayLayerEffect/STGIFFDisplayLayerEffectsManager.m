@@ -21,6 +21,7 @@
 #import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
 #import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "STGIFFDisplayLayerDarkenMaskEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -42,9 +43,10 @@
     return _effects ?: (_effects = @[
             [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class imageName:@"STGIFFDisplayLayerAfterImagePopStarEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPepVentosaEffect.class imageName:@"STGIFFDisplayLayerPepVentosaEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerDarkenMaskEffect.class imageName:@"STGIFFDisplayLayerDarkenMaskEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPatternizedCrossFadeEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg" valuesForKeysToApply:@{@"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"}]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class imageName:@"STGIFFDisplayLayerFluorEffect.jpg"]
-            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPatternizedCrossFadeEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg" valuesForKeysToApply:@{@"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"}]
     ]);
 }
 

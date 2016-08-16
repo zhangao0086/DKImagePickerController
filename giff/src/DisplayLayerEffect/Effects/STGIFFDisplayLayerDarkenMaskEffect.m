@@ -11,12 +11,8 @@
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
 #import "GPUImageFalseColorFilter+STGPUImageFilter.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
-#import "UIColor+BFPaperColors.h"
-#import "GPUImageContrastFilter+STGPUImageFilter.h"
 #import "LEColorPicker.h"
 #import "NSObject+STUtil.h"
-#import "NSString+STUtil.h"
-#import "GPUImageSaturationFilter+STGPUImageFilter.h"
 
 @implementation STGIFFDisplayLayerDarkenMaskEffect {
 }
