@@ -432,15 +432,18 @@ public class DKImagePickerController : UINavigationController {
     }
 	
 	internal func selectImage(asset: DKAsset) {
-		selectedAssets.append(asset)
-		
-		if self.sourceType == .Camera {
-			self.done()
-		} else if self.singleSelect {
-			self.done()
-		} else {
-			self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
-		}
+        if self.singleSelect {
+            self.deselectAllAssets()
+            self.selectedAssets.append(asset)
+            self.done()
+        } else {
+            self.selectedAssets.append(asset)
+            if self.sourceType == .Camera {
+                self.done()
+            } else {
+                self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
+            }
+        }
 	}
 	
 	internal func deselectImage(asset: DKAsset) {
