@@ -108,7 +108,7 @@ PODS:
   - MustOverride (1.1)
   - NGAParallaxMotion (1.1.0)
   - NHBalancedFlowLayout (0.2)
-  - NSGIF2 (1.4.2)
+  - NSGIF2 (1.4.3)
   - NYXImagesKit (2.5)
   - ObjectiveSugar (1.1.0)
   - PAPreferences (0.5)
@@ -173,6 +173,7 @@ PODS:
   - UIAlertController+Blocks (0.9)
   - UIColor+BFPaperColors (1.7.2)
   - UIImage-ResizeMagick (0.0.1)
+  - UIImageScanlineFloodfill (1.0.1)
   - UIView+Positioning (1.1)
   - WCFastCell (1.1)
 
@@ -239,6 +240,8 @@ DEPENDENCIES:
   - TTTAttributedLabel
   - UIAlertController+Blocks
   - UIColor+BFPaperColors
+  - UIImageScanlineFloodfill (from `https://github.com/swinz/UIImageScanlineFloodfill.git`,
+    branch `psb`)
   - UIView+Positioning
   - WCFastCell
 
@@ -268,6 +271,9 @@ EXTERNAL SOURCES:
     :git: https://github.com/SVGKit/SVGKit.git
   TMTumblrSDK:
     :git: https://github.com/VidMob/TMTumblrSDK.git
+  UIImageScanlineFloodfill:
+    :branch: psb
+    :git: https://github.com/swinz/UIImageScanlineFloodfill.git
 
 CHECKOUT OPTIONS:
   Block-KVO:
@@ -294,6 +300,9 @@ CHECKOUT OPTIONS:
   TMTumblrSDK:
     :commit: 2ba61837b408f8e33c21a5041bb1bf0cd5deeb53
     :git: https://github.com/VidMob/TMTumblrSDK.git
+  UIImageScanlineFloodfill:
+    :commit: cdd5dd10ca2264b86993f947d6b4e458b4523485
+    :git: https://github.com/swinz/UIImageScanlineFloodfill.git
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
@@ -336,7 +345,7 @@ SPEC CHECKSUMS:
   MustOverride: feccf16d11e574a814a03d940b9f4d7b4a759ce0
   NGAParallaxMotion: 8772f51f75e5177840053229bbf32bf6f7687e52
   NHBalancedFlowLayout: fd253023c6754e605acdb180d50123e582cc62bb
-  NSGIF2: dc3dbb6f8a9159d26766d695aa50068d1a007206
+  NSGIF2: dd02158d25231401f57b61e36c918f60658f5766
   NYXImagesKit: d8159393e1b0c6e900574b737d42db8d7d1a0d4c
   ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
   PAPreferences: 9f0ffb1e67174a0df001af9d3320166ceb9ee6f5
@@ -360,6 +369,7 @@ SPEC CHECKSUMS:
   UIAlertController+Blocks: b48c673ff60726da468b32ab21bbc7683512d45b
   UIColor+BFPaperColors: 03101fe6c10ed00c6daae7c26553f1de41500853
   UIImage-ResizeMagick: f08c2d14d1e8a5f0b402185408785540562f2fe7
+  UIImageScanlineFloodfill: 043fa0b7de4dbd474f40e11c6845ac9ee3bf5591
   UIView+Positioning: e93fe9e3186d1ed7d60e344aa12787911e902056
   WCFastCell: 3e20a0c711d27307584bdbd359a44a714e991151
 

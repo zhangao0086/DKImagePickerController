@@ -103,6 +103,7 @@ def common_pods
   pod "SDWebImage"
   pod "DFImageManager"
   pod 'DFImageManager/GIF' #https://github.com/Flipboard/FLAnimatedImage/pull/117
+  pod 'UIImageScanlineFloodfill', :git=> "https://github.com/swinz/UIImageScanlineFloodfill.git", :branch=> "psb"
 
 #location/metadata/exif
   pod "INTULocationManager"
