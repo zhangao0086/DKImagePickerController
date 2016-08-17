@@ -109,6 +109,9 @@ def common_pods
   pod "INTULocationManager"
   pod "GusUtils"
   pod "BGUtilities"
+
+#OpenCV
+  pod 'OpenCV', '2.4.9'
 end
 
 target 'giff' do

@@ -111,6 +111,7 @@ PODS:
   - NSGIF2 (1.4.3)
   - NYXImagesKit (2.5)
   - ObjectiveSugar (1.1.0)
+  - OpenCV (2.4.9)
   - PAPreferences (0.5)
   - PINCache (2.2.2)
   - pop (1.0.9)
@@ -218,6 +219,7 @@ DEPENDENCIES:
   - NSGIF2 (from `~/Documents/NSGIF`)
   - NYXImagesKit (from `https://github.com/metasmile/NYXImagesKit.git`, commit `c8a67d6`)
   - ObjectiveSugar
+  - OpenCV (= 2.4.9)
   - PAPreferences
   - PINCache
   - pop
@@ -348,6 +350,7 @@ SPEC CHECKSUMS:
   NSGIF2: dd02158d25231401f57b61e36c918f60658f5766
   NYXImagesKit: d8159393e1b0c6e900574b737d42db8d7d1a0d4c
   ObjectiveSugar: a6a25f23d657c19df0a0b972466d5b5ca9f5295c
+  OpenCV: bb17904e55fc19b1f0f6c3e29bc04a7dd31eddb9
   PAPreferences: 9f0ffb1e67174a0df001af9d3320166ceb9ee6f5
   PINCache: 078426d356ab95ef875e9e62e5c35a2ea3333c28
   pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce

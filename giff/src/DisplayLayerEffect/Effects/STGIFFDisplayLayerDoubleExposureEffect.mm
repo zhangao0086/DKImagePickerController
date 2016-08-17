@@ -7,15 +7,35 @@
 #import "GPUImagePicture.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "UIImage+DisplayLayerEffect.h"
+#import "GrabCutManager.h"
+#import "NYXImagesKit.h"
+#import "UIImage+ResizeMagick.h"
 
+#ifdef __cplusplus
+#import <opencv2/opencv.hpp>
+#endif
 
 @implementation STGIFFDisplayLayerDoubleExposureEffect {
-
+    GrabCutManager * _manager;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _manager = [[GrabCutManager alloc] init];
+    }
+
+    return self;
+}
+
+
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+
     UIImage * sourceImage = sourceImages[0];
-    return [sourceImage removeEdgeMaskedBackground];
+
+    return [_manager doGrabCut:sourceImage
+               foregroundBound:CGRectInset(CGRectMakeWithSize_AGK(sourceImage.size), sourceImage.size.width/3, sourceImage.size.height/3)
+                iterationCount:5];
 }
 
 

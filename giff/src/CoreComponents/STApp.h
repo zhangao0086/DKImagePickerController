@@ -65,7 +65,7 @@ extern NSString *const STAppIdentificationURLQueryKey;
 
 + (NSInteger)appVersionsDistanceWithCurrent:(NSString *)target;
 
-+ (NSInteger)appVersionsDistance:(NSString *)old new:(NSString *)new;
++ (NSInteger)appVersionsDistance:(NSString *)oldVersion new:(NSString *)version;
 
 + (NSString *)buildVersion;
 
