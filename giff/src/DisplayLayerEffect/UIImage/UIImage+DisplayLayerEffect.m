@@ -14,22 +14,40 @@
 #define A(x) ( Mask8(x >> 24) )
 #define RGBAMake(r, g, b, a) ( Mask8(r) | Mask8(g) << 8 | Mask8(b) << 16 | Mask8(a) << 24 )
 
+@interface UIImage (BackgroundRemoval)
+//Simple Removal
+- (UIImage *)floodFillRemoveBackgroundColor;
+@end
+
 @implementation UIImage (DisplayLayerEffect)
 
 - (UIImage *)removeEdgeMaskedBackground{
 
     GPUImagePicture *stillImageSource = [[GPUImagePicture alloc] initWithImage:self];
 
-    GPUImagePrewittEdgeDetectionFilter *filter = [[GPUImagePrewittEdgeDetectionFilter alloc] init];
-    [filter setEdgeStrength:0.04];
+    GPUImageOutput * terminalOutput = nil;
+    GPUImageSobelEdgeDetectionFilter * edgeDetectionFilter = GPUImageSobelEdgeDetectionFilter.new;
 
-    [stillImageSource addTarget:filter];
-    [filter useNextFrameForImageCapture];
+    [edgeDetectionFilter setEdgeStrength:2];
+
+    [stillImageSource addTarget:edgeDetectionFilter];
+    terminalOutput = edgeDetectionFilter;
+
+    //add contrast/brightness to improve edge visibility
+//    GPUImageContrastFilter * contrastFilter = GPUImageContrastFilter.new;
+//    contrastFilter.contrast = 2;
+//    [edgeDetectionFilter addTarget:contrastFilter];
+//    terminalOutput = contrastFilter;
+
+    [terminalOutput useNextFrameForImageCapture];
     [stillImageSource processImage];
 
-    UIImage *resultImage = [filter imageFromCurrentFramebuffer];
+    UIImage *resultImage = [terminalOutput imageFromCurrentFramebuffer];
+//    return resultImage;
 
-    UIImage *processedImage = [resultImage floodFillFromPoint:CGPointMake(0, 0) withColor:[UIColor magentaColor] andTolerance:0];
+    UIImage *processedImage = [resultImage floodFillFromPoint:CGPointMake(0, 0) withColor:[UIColor greenColor] andTolerance:50];
+
+    return processedImage;
 
     CGImageRef inputCGImage=processedImage.CGImage;
     UInt32 * inputPixels;
@@ -76,7 +94,7 @@
     [maskImageSource processImage];
 
     UIImage *blurMaskImage = [blurFilter imageFromCurrentFramebuffer];
-    //return blurMaskImage;
+    return blurMaskImage;
     UIImage *result = [self maskImageWithMask:blurMaskImage];
 
     return result;

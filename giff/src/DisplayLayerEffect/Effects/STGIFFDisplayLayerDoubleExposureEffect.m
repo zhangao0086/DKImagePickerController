@@ -4,14 +4,26 @@
 //
 
 #import "STGIFFDisplayLayerDoubleExposureEffect.h"
+#import "GPUImagePicture.h"
+#import "STGPUImageOutputComposeItem.h"
+#import "UIImage+DisplayLayerEffect.h"
 
 
 @implementation STGIFFDisplayLayerDoubleExposureEffect {
 
 }
 
+- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+    UIImage * sourceImage = sourceImages[0];
+    return [sourceImage removeEdgeMaskedBackground];
+}
+
+
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
-    return [super composersToProcessMultiple:sourceImages];
+    STGPUImageOutputComposeItem * composeItemB = [STGPUImageOutputComposeItem new];
+    composeItemB.source = [[GPUImagePicture alloc] initWithImage:[sourceImages[0] removeEdgeMaskedBackground] smoothlyScaleOutput:NO];
+
+    return @[composeItemB];
 }
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
