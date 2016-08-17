@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 #import <GPUImage/GPUImageSaturationFilter.h>
 
+
 @interface GPUImageSaturationFilter (STGPUImageFilter)
 + (instancetype)saturation:(CGFloat) saturation;
 

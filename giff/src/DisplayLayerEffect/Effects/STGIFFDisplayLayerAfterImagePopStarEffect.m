@@ -44,7 +44,7 @@
     GPUImageTransformFilter * transformFilter1 = [[GPUImageTransformFilter alloc] init];
     transformFilter1.affineTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(.015f,0),CGAffineTransformMakeScale(1.04,1.04));
     composeItem0.filters = @[
-            [GPUImageRGBFilter filterWithColor:[self colors][0]]
+            [GPUImageRGBFilter rgbColor:[self colors][0]]
             ,transformFilter1
     ];
     composeItem0.composer = [[GPUImageLightenBlendFilter alloc] init];
@@ -70,7 +70,7 @@
     GPUImageTransformFilter * transformFilter4 = [[GPUImageTransformFilter alloc] init];
     transformFilter4.affineTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(-.015f,0),CGAffineTransformMakeScale(1.04,1.04));
     composeItem4.filters = @[
-            [GPUImageRGBFilter filterWithColor:[self colors][1]]
+            [GPUImageRGBFilter rgbColor:[self colors][1]]
 //            , saturationFilter4
             ,transformFilter4
     ];
@@ -92,7 +92,7 @@
 
     //[GPUImageMonochromeFilter filterWithColor:[self colors][0]]
     composeItem0.filters = @[
-            [GPUImageRGBFilter filterWithColor:[self colors][1]]
+            [GPUImageRGBFilter rgbColor:[self colors][1]]
 //            , saturationFilter0
             ,transformFilter1
     ];
@@ -113,7 +113,7 @@
     GPUImageTransformFilter * transformFilter4 = [[GPUImageTransformFilter alloc] init];
     transformFilter4.affineTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(-.015f,0),CGAffineTransformMakeScale(1.04,1.04));
     composeItem4.filters = @[
-            [GPUImageRGBFilter filterWithColor:[self colors][0]]
+            [GPUImageRGBFilter rgbColor:[self colors][0]]
             , saturationFilter4
             ,transformFilter4
     ];

@@ -6,11 +6,11 @@
 #import "GPUImageSaturationFilter+STGPUImageFilter.h"
 
 
+
 @implementation GPUImageSaturationFilter (STGPUImageFilter)
 + (instancetype)saturation:(CGFloat)saturation {
     GPUImageSaturationFilter * contrastFilter = GPUImageSaturationFilter.new;
     contrastFilter.saturation = saturation;
     return contrastFilter;
 }
-
 @end

@@ -8,7 +8,7 @@
 
 @implementation GPUImageTransformFilter (STGPUImageFilter)
 
-+ (instancetype)filterByTransform:(CGAffineTransform)transform{
++ (instancetype)transform:(CGAffineTransform)transform{
     GPUImageTransformFilter * transformFilter = GPUImageTransformFilter.new;
     transformFilter.affineTransform = transform;
     return transformFilter;

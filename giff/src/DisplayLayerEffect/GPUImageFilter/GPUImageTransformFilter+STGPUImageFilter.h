@@ -7,7 +7,7 @@
 #import <GPUImage/GPUImageTransformFilter.h>
 
 @interface GPUImageTransformFilter (STGPUImageFilter)
-+ (instancetype)filterByTransform:(CGAffineTransform)transform;
++ (instancetype)transform:(CGAffineTransform)transform;
 
 - (instancetype)addTransfrom:(CGAffineTransform)transform;
 

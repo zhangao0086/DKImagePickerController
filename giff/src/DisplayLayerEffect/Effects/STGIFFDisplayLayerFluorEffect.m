@@ -63,7 +63,7 @@
         composeItem1.filters = @[
                 edgeDetectionFilter
                 ,contrastFilter
-                ,[GPUImageRGBFilter filterWithColor:UIColorFromRGB(0xffffff)]
+                , [GPUImageRGBFilter rgbColor:UIColorFromRGB(0xffffff)]
 //                ,scaleFilter2
         ];
         [composers addObject:composeItem1];
@@ -158,7 +158,7 @@
         composeItem1.filters = @[
                 edgeDetectionFilter
                 ,contrastFilter
-                ,[GPUImageRGBFilter filterWithColor:UIColorFromRGB(0xffffff)]
+                , [GPUImageRGBFilter rgbColor:UIColorFromRGB(0xffffff)]
 //                ,scaleFilter2
         ];
         [composers addObject:composeItem1];

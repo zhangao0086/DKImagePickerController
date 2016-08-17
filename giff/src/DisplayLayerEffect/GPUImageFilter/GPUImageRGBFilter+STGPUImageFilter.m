@@ -9,7 +9,7 @@
 
 @implementation GPUImageRGBFilter (STGPUImageFilter)
 
-+ (instancetype)filterWithColor:(UIColor *)color{
++ (instancetype)rgbColor:(UIColor *)color{
     GPUImageRGBFilter * colorFilter = [[GPUImageRGBFilter alloc] init];
     NSArray* colors = [color rgbaArray];
     colorFilter.red = [colors[0] floatValue];

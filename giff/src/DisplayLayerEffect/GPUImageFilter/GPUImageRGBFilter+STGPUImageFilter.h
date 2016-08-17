@@ -7,5 +7,5 @@
 #import <GPUImage/GPUImageRGBFilter.h>
 
 @interface GPUImageRGBFilter (STGPUImageFilter)
-+ (instancetype)filterWithColor:(UIColor *)color;
++ (instancetype)rgbColor:(UIColor *)color;
 @end

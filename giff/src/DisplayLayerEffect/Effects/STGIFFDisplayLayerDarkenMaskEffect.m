@@ -102,7 +102,7 @@
             ]]
 //            , [GPUImageContrastFilter contrast:2]
 //            ,[GPUImageSaturationFilter saturation:1.3f]
-            , [[GPUImageTransformFilter filterByTransform:CGAffineTransformMakeRotation(AGKDegreesToRadians(180/*90 * randomir(1, 3)*/))] addScaleScalar:1.2]
+            , [[GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(180/*90 * randomir(1, 3)*/))] addScaleScalar:1.2]
     ];
 
     [composers addObject:composeItemA];
