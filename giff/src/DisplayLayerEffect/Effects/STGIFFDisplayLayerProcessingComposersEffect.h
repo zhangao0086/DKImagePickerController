@@ -6,8 +6,12 @@
 #import <Foundation/Foundation.h>
 #import "STMultiSourcingImageProcessor.h"
 
+@class STGPUImageOutputComposeItem;
 
-@interface STGIFFDisplayLayerSeparatedProcessingEffect : STMultiSourcingImageProcessor
+
+@interface STGIFFDisplayLayerProcessingComposersEffect : STMultiSourcingImageProcessor
+- (UIImage *__nullable)processImagesAsComposers:(NSArray<STGPUImageOutputComposeItem *> *__nullable)composers;
+
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages;
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage;

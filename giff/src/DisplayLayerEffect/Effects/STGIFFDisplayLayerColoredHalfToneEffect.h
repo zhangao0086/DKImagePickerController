@@ -7,5 +7,5 @@
 #import "STGIFFDisplayLayerProcessingComposersEffect.h"
 
 
-@interface STGIFFDisplayLayerDoubleExposureEffect : STGIFFDisplayLayerProcessingComposersEffect
+@interface STGIFFDisplayLayerColoredHalfToneEffect : STGIFFDisplayLayerProcessingComposersEffect
 @end

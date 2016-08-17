@@ -5,6 +5,7 @@
 
 #import "STGPUImageOutputComposeItem.h"
 #import "GPUImageTwoInputFilter.h"
+#import "GPUImagePicture.h"
 
 @implementation STGPUImageOutputComposeItem
 - (instancetype)initWithSource:(GPUImageOutput *)source composer:(GPUImageTwoInputFilter *)composer {
@@ -46,5 +47,9 @@
     return [[self alloc] initWithSource:source composer:composer];
 }
 
+- (instancetype)setSourceAsImage:(UIImage *)image {
+    self.source = [[GPUImagePicture alloc] initWithCGImage:[image CGImage]];
+    return self;
+}
 
 @end

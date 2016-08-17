@@ -33,6 +33,7 @@
 
     UIImage * sourceImage = sourceImages[0];
 
+    //TODO: 성능을 위해 손실이 최소화되는 크기로 리사이즈 -> 프로세싱 -> 마스킹
     return [_manager doGrabCut:sourceImage
                foregroundBound:CGRectInset(CGRectMakeWithSize_AGK(sourceImage.size), sourceImage.size.width/3, sourceImage.size.height/3)
                 iterationCount:5];

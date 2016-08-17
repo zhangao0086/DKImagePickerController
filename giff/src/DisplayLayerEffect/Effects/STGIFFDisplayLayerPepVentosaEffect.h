@@ -4,8 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STGIFFDisplayLayerSeparatedProcessingEffect.h"
+#import "STGIFFDisplayLayerProcessingComposersEffect.h"
 
 
-@interface STGIFFDisplayLayerPepVentosaEffect : STGIFFDisplayLayerSeparatedProcessingEffect
+@interface STGIFFDisplayLayerPepVentosaEffect : STGIFFDisplayLayerProcessingComposersEffect
 @end
