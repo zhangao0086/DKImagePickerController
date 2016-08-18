@@ -130,7 +130,7 @@
     composeItemB.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
     if(_scaleOfFadingImage!=1){
         composeItemB.filters = @[
-                [GPUImageTransformFilter.new addScaleScalar:_scaleOfFadingImage]
+                [GPUImageTransformFilter.new scaleScalar:_scaleOfFadingImage]
         ];
     }
 

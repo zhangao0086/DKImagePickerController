@@ -31,6 +31,7 @@
 #import "GPUImageAddBlendFilter.h"
 #import "GPUImageSoftLightBlendFilter.h"
 #import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "GPUImageHardLightBlendFilter.h"
 
 
 @implementation STGIFFDisplayLayerColoredHalfToneEffect {
@@ -52,20 +53,16 @@
             [GPUImageBrightnessFilter brightness:-.1f]
             ,
             halftoneFilter
-//            , GPUImageColorInvertFilter.new
             ,[GPUImageFalseColorFilter filterWithColors:@[
-                    UIColorFromRGB(0x0021A2),
-                    UIColorFromRGB(0xF1EDF0)
-//                    UIColorFromRGB(0xEC0000)
-//                    , UIColorFromRGB(0xADFBFB)
+                    UIColorFromRGB(0xEC0000)
+                    , UIColorFromRGB(0xADFBFB)
             ]]
 
     ]];
     [composers addObject:composeItem0];
 
-//    UIImage * image1 = [self processImagesAsComposers:[composers reverse]];
-
-
+////    UIImage * image1 = [self processImagesAsComposers:[composers reverse]];
+//
     composeItem0.composer = GPUImageSoftLightBlendFilter.new;
 
     GPUImageHalftoneFilter * halftoneFilterBig = GPUImageHalftoneFilter.new;
@@ -74,11 +71,16 @@
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
     [[composeItem1 setSourceAsImage:sourceImage] setFilters:@[
 //            [GPUImageSaturationFilter saturation:0]
-//           , halftoneFilterBig
+//           halftoneFilterBig ,
+//            [GPUImageTransformFilter.new scale:CGPointMake(-1,1)]
+//            ,
             [GPUImageFalseColorFilter filterWithColors:@[
-                    UIColorFromRGB(0xE12724),
-                    UIColorFromRGB(0x0C031A)
+                    UIColorFromRGB(0xF43C2B)
+                    , UIColorFromRGB(0xAFCC34)
             ]]
+            ,[GPUImageTransformFilter.new rotate:AGKDegreesToRadians(90)]
+    
+//            [GPUImageTransformFilter.new addScaleScalar:1.1],
 //            ,[GPUImageTransformFilter transform:CGAffineTransformMakeTranslation(halftoneFilter.fractionalWidthOfAPixel,halftoneFilter.fractionalWidthOfAPixel)]
     ]];
     [composers addObject:composeItem1];

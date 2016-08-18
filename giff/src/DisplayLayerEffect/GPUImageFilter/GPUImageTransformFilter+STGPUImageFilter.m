@@ -19,12 +19,16 @@
     return self;
 }
 
-- (instancetype)addScaleScalar:(CGFloat)scaleScalar{
-    return [self addScale:CGPointMake(scaleScalar,scaleScalar)];
+- (instancetype)scaleScalar:(CGFloat)scaleScalar{
+    return [self scale:CGPointMake(scaleScalar, scaleScalar)];
 }
 
-- (instancetype)addScale:(CGPoint)scale{
+- (instancetype)scale:(CGPoint)scale{
     return [self addTransfrom:CGAffineTransformMakeScale(scale.x,scale.y)];
+}
+
+- (instancetype)rotate:(CGFloat)angle{
+    return [self addTransfrom:CGAffineTransformMakeRotation(angle)];
 }
 
 @end

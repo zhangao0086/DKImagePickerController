@@ -28,7 +28,7 @@ NSString *const kSTGPUImageHalftoneFragmentShaderString = SHADER_STRING
             highp float distanceFromSamplePoint = distance(adjustedSamplePos, textureCoordinateToUse);
 
             lowp vec3 sampledColor = texture2D(inputImageTexture, samplePos ).rgb;
-            highp float dotScaling = 1.0 - (dot(sampledColor, W));
+            highp float dotScaling = 1.0 - (dot(sampledColor, W)+0.01);
 
             lowp float checkForPresenceWithinDot = 1.0 - step(distanceFromSamplePoint, (fractionalWidthOfPixel * 0.5) * dotScaling);
 

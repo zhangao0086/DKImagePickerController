@@ -48,7 +48,7 @@
 }
 
 - (instancetype)setSourceAsImage:(UIImage *)image {
-    self.source = [[GPUImagePicture alloc] initWithCGImage:[image CGImage]];
+    self.source = [[GPUImagePicture alloc] initWithCGImage:[image CGImage] smoothlyScaleOutput:YES];
     return self;
 }
 

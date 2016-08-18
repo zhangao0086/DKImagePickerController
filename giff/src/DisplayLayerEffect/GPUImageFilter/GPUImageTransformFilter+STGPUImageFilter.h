@@ -11,7 +11,9 @@
 
 - (instancetype)addTransfrom:(CGAffineTransform)transform;
 
-- (instancetype)addScaleScalar:(CGFloat)scaleScalar;
+- (instancetype)scaleScalar:(CGFloat)scaleScalar;
 
-- (instancetype)addScale:(CGPoint)scale;
+- (instancetype)scale:(CGPoint)scale;
+
+- (instancetype)rotate:(CGFloat)angle;
 @end
