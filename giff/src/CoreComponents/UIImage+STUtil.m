@@ -47,12 +47,37 @@
 }
 
 - (UIImage *)clipAsCircle:(CGFloat)diameter scale:(CGFloat)scale{
-    CGRect rect = CGRectMakeValue(diameter);
-    UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+    return [self clipAsCircle:diameter scale:scale fillColor:nil];
+}
+
+- (UIImage *)clipAsCircle:(CGFloat)diameter scale:(CGFloat)scale fillColor:(UIColor *)fillColor {
+    return [self clipAsCircle:diameter scale:scale fillColor:fillColor fillImage:nil];
+}
+
+- (UIImage *)clipAsCircle:(CGFloat)diameter scale:(CGFloat)scale fillImage:(UIImage *)fillImage {
+    return [self clipAsCircle:diameter scale:scale fillColor:nil fillImage:fillImage];
+}
+
+- (UIImage *)clipAsCircle:(CGFloat)diameter scale:(CGFloat)scale fillColor:(UIColor *)fillColor fillImage:(UIImage *)fillImage {
+    diameter = MIN(diameter,CGSizeMinSide(self.size));
+    CGRect imageRect = {CGPointZero, self.size};
+    CGRect drawRect = CGRectInset(imageRect, (imageRect.size.width-diameter)/2,(imageRect.size.height-diameter)/2);
+
+    UIGraphicsBeginImageContextWithOptions(imageRect.size, fillColor != nil, scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextAddEllipseInRect(context, rect);
+
+    if(fillColor){
+        CGContextSetFillColorWithColor(context, fillColor.CGColor);
+        CGContextFillRect(context, imageRect);
+    }
+
+    if(fillImage){
+        [fillImage drawInRect:imageRect blendMode:kCGBlendModeNormal alpha:1];
+    }
+
+    CGContextAddEllipseInRect(context, drawRect);
     CGContextClip(context);
-    [self drawInRect:rect];
+    [self drawInRect:imageRect];
     UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;

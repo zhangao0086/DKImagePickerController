@@ -70,6 +70,10 @@
 
 - (UIImage *)clipAsCircle:(CGFloat)diameter scale:(CGFloat)scale;
 
+- (UIImage *)clipAsCircle:(CGFloat)diameter scale:(CGFloat)scale fillColor:(UIColor *)fillColor;
+
+- (UIImage *)clipAsCircle:(CGFloat)diameter scale:(CGFloat)scale fillImage:(UIImage *)fillImage;
+
 - (UIColor *)averageColor;
 
 - (NSUInteger)exifOrientation;
