@@ -9,5 +9,5 @@
 
 @interface STGIFFDisplayLayerPatternizedCrossFadeEffect : STMultiSourcingGPUImageComposerProcessor
 @property (nonatomic, readwrite) NSString * patternImageName;
-@property (nonatomic, assign) CGFloat scaleOfFadingImage;
+@property (nonatomic, assign) CGAffineTransform transformFadingImage;
 @end

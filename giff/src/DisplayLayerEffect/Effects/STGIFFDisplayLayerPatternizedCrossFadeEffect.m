@@ -25,7 +25,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _scaleOfFadingImage = 1.02f;
+        _transformFadingImage = CGAffineTransformMakeScale(1.02f,1.02f);
     }
 
     return self;
@@ -91,7 +91,7 @@
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
 #if DEBUG
-    if(self.scaleOfFadingImage!=1){
+    if(!CGAffineTransformIsIdentity(_transformFadingImage)){
         oo(@"[!]WARNING: scaleOfFadingImage == 1 can't affect to apply this effect when process for single image");
     }
 #endif
@@ -128,9 +128,9 @@
 
     STGPUImageOutputComposeItem * composeItemB = [STGPUImageOutputComposeItem new];
     composeItemB.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
-    if(_scaleOfFadingImage!=1){
+    if(!CGAffineTransformIsIdentity(_transformFadingImage)){
         composeItemB.filters = @[
-                [GPUImageTransformFilter.new scaleScalar:_scaleOfFadingImage]
+                [GPUImageTransformFilter transform:_transformFadingImage]
         ];
     }
 
