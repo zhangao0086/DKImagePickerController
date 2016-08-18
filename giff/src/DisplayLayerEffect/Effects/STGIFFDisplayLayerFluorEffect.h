@@ -6,8 +6,8 @@
 #import <Foundation/Foundation.h>
 #import "STMultiSourcingImageProcessor.h"
 #import "STMultiSourcingGPUImageProcessor.h"
-#import "STMultiSourcingComposerProcessor.h"
+#import "STMultiSourcingGPUImageComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerFluorEffect : STMultiSourcingComposerProcessor
+@interface STGIFFDisplayLayerFluorEffect : STMultiSourcingGPUImageComposerProcessor
 @end

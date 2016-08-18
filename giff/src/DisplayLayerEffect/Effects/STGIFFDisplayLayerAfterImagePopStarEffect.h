@@ -5,9 +5,9 @@
 
 #import <Foundation/Foundation.h>
 #import "STMultiSourcingImageProcessor.h"
-#import "STMultiSourcingComposerProcessor.h"
+#import "STMultiSourcingGPUImageComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerAfterImagePopStarEffect : STMultiSourcingComposerProcessor
+@interface STGIFFDisplayLayerAfterImagePopStarEffect : STMultiSourcingGPUImageComposerProcessor
 @property (nonatomic, readwrite) NSArray<UIColor *> * colors;
 @end

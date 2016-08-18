@@ -9,7 +9,7 @@
 @class STGPUImageOutputComposeItem;
 
 
-@interface STMultiSourcingComposerProcessor : STMultiSourcingImageProcessor
+@interface STMultiSourcingGPUImageComposerProcessor : STMultiSourcingImageProcessor
 - (UIImage *__nullable)processComposers:(NSArray<STGPUImageOutputComposeItem *> *__nullable)composers;
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages;

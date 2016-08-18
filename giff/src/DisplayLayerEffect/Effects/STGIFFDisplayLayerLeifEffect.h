@@ -5,9 +5,9 @@
 
 #import <Foundation/Foundation.h>
 #import "STMultiSourcingImageProcessor.h"
-#import "STMultiSourcingComposerProcessor.h"
+#import "STMultiSourcingGPUImageComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerLeifEffect : STMultiSourcingComposerProcessor
+@interface STGIFFDisplayLayerLeifEffect : STMultiSourcingGPUImageComposerProcessor
 
 @end

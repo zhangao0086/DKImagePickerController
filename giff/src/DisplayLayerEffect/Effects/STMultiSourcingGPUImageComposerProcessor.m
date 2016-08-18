@@ -4,12 +4,12 @@
 //
 
 #import <GPUImage/GPUImageOutput.h>
-#import "STMultiSourcingComposerProcessor.h"
+#import "STMultiSourcingGPUImageComposerProcessor.h"
 #import "STFilterManager.h"
 #import "STGPUImageOutputComposeItem.h"
 
 
-@implementation STMultiSourcingComposerProcessor {
+@implementation STMultiSourcingGPUImageComposerProcessor {
 
 }
 
