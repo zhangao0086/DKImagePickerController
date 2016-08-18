@@ -27,6 +27,7 @@
 #import "STGIFFDisplayLayerDarkenMaskEffect.h"
 #import "STGIFFDisplayLayerDoubleExposureEffect.h"
 #import "STGIFFDisplayLayerColoredHalfToneEffect.h"
+#import "STGIFFDisplayLayerCircularCombineEffect.h"
 
 @implementation EBRootViewController {
 
@@ -50,7 +51,7 @@
     STGIFFAnimatableLayerPresentingView * _layerSetPresentationView = [[STGIFFAnimatableLayerPresentingView alloc] initWithSizeWidth:self.view.width];
     [self.view addSubview:_layerSetPresentationView];
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColoredHalfToneEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCircularCombineEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
             , @"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"
