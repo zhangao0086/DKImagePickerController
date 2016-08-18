@@ -52,8 +52,8 @@
     [[composeItem0 setSourceAsImage:sourceImage] setFilters:@[
             [GPUImageBrightnessFilter brightness:-.1f]
             ,
-            halftoneFilter
-            ,[GPUImageFalseColorFilter filterWithColors:@[
+//            halftoneFilter,
+            [GPUImageFalseColorFilter filterWithColors:@[
                     UIColorFromRGB(0xEC0000)
                     , UIColorFromRGB(0xADFBFB)
             ]]
@@ -63,7 +63,14 @@
 
 ////    UIImage * image1 = [self processImagesAsComposers:[composers reverse]];
 //
+
     composeItem0.composer = GPUImageSoftLightBlendFilter.new;
+
+    GPUImageMosaicFilter * mosaicFilter = GPUImageMosaicFilter.new;
+    mosaicFilter.inputTileSize = CGSizeMakeValue(0.015);
+    mosaicFilter.tileSet = @"GPUImageMosaicFilter_square.png";
+    composeItem0.composer = mosaicFilter;
+
 
     GPUImageHalftoneFilter * halftoneFilterBig = GPUImageHalftoneFilter.new;
     halftoneFilterBig.fractionalWidthOfAPixel = halftoneFilter.fractionalWidthOfAPixel;
@@ -78,8 +85,8 @@
                     UIColorFromRGB(0xF43C2B)
                     , UIColorFromRGB(0xAFCC34)
             ]]
-            ,[GPUImageTransformFilter.new rotate:AGKDegreesToRadians(90)]
-    
+//            ,[GPUImageTransformFilter.new rotate:AGKDegreesToRadians(90)]
+
 //            [GPUImageTransformFilter.new addScaleScalar:1.1],
 //            ,[GPUImageTransformFilter transform:CGAffineTransformMakeTranslation(halftoneFilter.fractionalWidthOfAPixel,halftoneFilter.fractionalWidthOfAPixel)]
     ]];

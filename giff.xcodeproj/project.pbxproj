@@ -13,6 +13,7 @@
 		4F71D03E6AED67BE8642F8A0 /* ico_cell_blank.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D3FF7F23C8E777423D71 /* ico_cell_blank.svg */; };
 		4F71D06576D106D68FEABC7A /* STGIFFDisplayLayerFluorEffect.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D86F5407E1BA99A7FEAC /* STGIFFDisplayLayerFluorEffect.jpg */; };
 		4F71D06D10208626E0F37626 /* STGIFFDisplayLayerCrossFadeEffect_patt2.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D275345DEA5CF90969EF /* STGIFFDisplayLayerCrossFadeEffect_patt2.svg */; };
+		4F71D0768A8A1F7FA640B3A3 /* GPUImageMosaicFilter_square.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D6EDC1A69670D5456C67 /* GPUImageMosaicFilter_square.png */; };
 		4F71D07EBE21E901492C2E1D /* STGIFFDisplayLayerDoubleExposureEffect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D147D7A13EB48FBF20B9 /* STGIFFDisplayLayerDoubleExposureEffect.mm */; };
 		4F71D0CA757E4B99A9CF2298 /* STPreviewPresenterAnimatableImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DD9519C73B5BEEF14313 /* STPreviewPresenterAnimatableImage.m */; };
 		4F71D0FA8CFBCC2CC49D80A3 /* AppDelegateEB.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D9A064EB5A44BFAB7099 /* AppDelegateEB.m */; };
@@ -103,6 +104,7 @@
 		4F71D887C27F93CC3FE6DEDF /* input.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DDB7D9DB2BAF229D9C49 /* input.jpg */; };
 		4F71D896481CD8E9136EAC5E /* STGIFFDisplayLayerPepVentosaEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D3D2D745877A6C26DC79 /* STGIFFDisplayLayerPepVentosaEffect.m */; };
 		4F71D8AB6E2D94394A9A5462 /* STGIFFDisplayLayerColoredHalfToneEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D901C39FA8BE65CC698B /* STGIFFDisplayLayerColoredHalfToneEffect.m */; };
+		4F71D8ABB272456C102C88E6 /* GPUImageMosaicFilter_square.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D6EDC1A69670D5456C67 /* GPUImageMosaicFilter_square.png */; };
 		4F71D8F21B9B07C49DCD5BC3 /* STSelectableCapturedImageSetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D7117F4477D308F77E3C /* STSelectableCapturedImageSetView.m */; };
 		4F71D9280E857A2CA498B710 /* STCapturedImageStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D787EF3B162A2D72AADD /* STCapturedImageStorageManager.m */; };
 		4F71D930B07A1B8E6F805C07 /* ico_macro.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DE9A5569D456EA33A09C /* ico_macro.svg */; };
@@ -1013,6 +1015,7 @@
 		4F71D6B801732370F066746B /* STGIFFDisplayLayerCrossFadeEffect_patt1.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = STGIFFDisplayLayerCrossFadeEffect_patt1.svg; sourceTree = "<group>"; };
 		4F71D6BF172C062443B9E70E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		4F71D6E47674B33F45BBC26E /* go_take.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = go_take.svg; sourceTree = "<group>"; };
+		4F71D6EDC1A69670D5456C67 /* GPUImageMosaicFilter_square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GPUImageMosaicFilter_square.png; sourceTree = "<group>"; };
 		4F71D6F20FFE4468CBC1EE63 /* STCapturedImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCapturedImageProcessor.m; sourceTree = "<group>"; };
 		4F71D703126510249FD53F07 /* STGIFFStandardColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGIFFStandardColor.h; sourceTree = "<group>"; };
 		4F71D70B9598BAB3AAEB3275 /* STAnimatableCaptureRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STAnimatableCaptureRequest.h; sourceTree = "<group>"; };
@@ -1807,6 +1810,7 @@
 				4F71DD92EE4AAB8BA6ACC938 /* STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg */,
 				4F71DE971B288378E7E8CF44 /* STGIFFDisplayLayerDarkenMaskEffect.jpg */,
 				4F71D81A879797614985D9DE /* STGIFFDisplayLayerCrossFadeEffect_PatternStar.svg */,
+				4F71D6EDC1A69670D5456C67 /* GPUImageMosaicFilter_square.png */,
 			);
 			path = effect;
 			sourceTree = "<group>";
@@ -3348,6 +3352,7 @@
 				4F71DB71124A4CB1DCFB1BEF /* STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg in Resources */,
 				4F71D9E5E32ADFCC6ED2FA48 /* STGIFFDisplayLayerDarkenMaskEffect.jpg in Resources */,
 				4F71D7BC477A5185E3ED69BF /* STGIFFDisplayLayerCrossFadeEffect_PatternStar.svg in Resources */,
+				4F71D8ABB272456C102C88E6 /* GPUImageMosaicFilter_square.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3528,6 +3533,7 @@
 				4F71D3C83A955E71AB35AF58 /* bg1.jpg in Resources */,
 				4F71DE391AF8A4E978835110 /* STGIFFDisplayLayerDarkenMaskEffect.jpg in Resources */,
 				4F71DC804A75614AD92BE3C5 /* STGIFFDisplayLayerCrossFadeEffect_PatternStar.svg in Resources */,
+				4F71D0768A8A1F7FA640B3A3 /* GPUImageMosaicFilter_square.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
