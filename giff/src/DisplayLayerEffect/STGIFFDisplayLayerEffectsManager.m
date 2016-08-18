@@ -22,6 +22,7 @@
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
 #import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
 #import "STGIFFDisplayLayerDarkenMaskEffect.h"
+#import "STGIFFDisplayLayerCircularCombineEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -46,6 +47,7 @@
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerDarkenMaskEffect.class imageName:@"STGIFFDisplayLayerDarkenMaskEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPatternizedCrossFadeEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg"
                                      valuesForKeysToApply:@{@"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"}]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCircularCombineEffect.class imageName:@"STGIFFDisplayLayerCircularCombineEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class imageName:@"STGIFFDisplayLayerFluorEffect.jpg"]
     ]);
