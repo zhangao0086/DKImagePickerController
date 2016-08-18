@@ -4,8 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STGIFFDisplayLayerProcessingComposersEffect.h"
+#import "STMultiSourcingComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerColoredHalfToneEffect : STGIFFDisplayLayerProcessingComposersEffect
+@interface STGIFFDisplayLayerColoredHalfToneEffect : STMultiSourcingComposerProcessor
 @end

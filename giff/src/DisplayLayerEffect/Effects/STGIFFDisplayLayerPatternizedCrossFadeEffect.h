@@ -4,10 +4,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STGIFFDisplayLayerProcessingComposersEffect.h"
+#import "STMultiSourcingComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerPatternizedCrossFadeEffect : STGIFFDisplayLayerProcessingComposersEffect
+@interface STGIFFDisplayLayerPatternizedCrossFadeEffect : STMultiSourcingComposerProcessor
 @property (nonatomic, readwrite) NSString * patternImageName;
 @property (nonatomic, assign) CGFloat scaleOfFadingImage;
 @end

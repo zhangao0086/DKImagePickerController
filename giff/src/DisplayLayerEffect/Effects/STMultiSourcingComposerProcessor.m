@@ -4,12 +4,12 @@
 //
 
 #import <GPUImage/GPUImageOutput.h>
-#import "STGIFFDisplayLayerProcessingComposersEffect.h"
+#import "STMultiSourcingComposerProcessor.h"
 #import "STFilterManager.h"
 #import "STGPUImageOutputComposeItem.h"
 
 
-@implementation STGIFFDisplayLayerProcessingComposersEffect {
+@implementation STMultiSourcingComposerProcessor {
 
 }
 
@@ -17,13 +17,13 @@
     NSArray * composers = sourceImages.count==1 ? [self composersToProcessSingle:sourceImages[0]] : [self composersToProcessMultiple:sourceImages];
 
     if(composers.count){
-        return [self processImagesAsComposers:composers];
+        return [self processComposers:composers];
     }else{
         return [super processImages:sourceImages];
     }
 }
 
-- (UIImage *__nullable)processImagesAsComposers:(NSArray<STGPUImageOutputComposeItem *> *__nullable)composers {
+- (UIImage *__nullable)processComposers:(NSArray<STGPUImageOutputComposeItem *> *__nullable)composers {
     if(composers.count){
         return [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:composers forInput:nil] imageFromCurrentFramebuffer];
     }else{

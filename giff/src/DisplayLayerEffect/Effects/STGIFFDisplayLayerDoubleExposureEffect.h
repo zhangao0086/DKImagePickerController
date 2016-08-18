@@ -4,8 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STGIFFDisplayLayerProcessingComposersEffect.h"
+#import "STMultiSourcingComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerDoubleExposureEffect : STGIFFDisplayLayerProcessingComposersEffect
+@interface STGIFFDisplayLayerDoubleExposureEffect : STMultiSourcingComposerProcessor
 @end

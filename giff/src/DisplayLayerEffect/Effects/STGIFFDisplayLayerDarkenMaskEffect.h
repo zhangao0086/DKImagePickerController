@@ -4,8 +4,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STGIFFDisplayLayerProcessingComposersEffect.h"
+#import "STMultiSourcingComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerDarkenMaskEffect : STGIFFDisplayLayerProcessingComposersEffect
+@interface STGIFFDisplayLayerDarkenMaskEffect : STMultiSourcingComposerProcessor
 @end

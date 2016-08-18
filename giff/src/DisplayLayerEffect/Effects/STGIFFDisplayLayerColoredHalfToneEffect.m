@@ -25,6 +25,12 @@
 #import "GPUImageDarkenBlendFilter.h"
 #import "GPUImageMultiplyBlendFilter.h"
 #import "GPUImageMaskFilter.h"
+#import "GPUImageScreenBlendFilter.h"
+#import "GPUImageColorInvertFilter.h"
+#import "GPUImageAlphaBlendFilter.h"
+#import "GPUImageAddBlendFilter.h"
+#import "GPUImageSoftLightBlendFilter.h"
+#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
 
 
 @implementation STGIFFDisplayLayerColoredHalfToneEffect {
@@ -39,35 +45,48 @@
     NSMutableArray * composers = NSMutableArray.array;
 
     STGPUImageHalftoneFilter * halftoneFilter = STGPUImageHalftoneFilter.new;
-    halftoneFilter.fractionalWidthOfAPixel = 0.015f;
+    halftoneFilter.fractionalWidthOfAPixel = 0.01f;
 
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
     [[composeItem0 setSourceAsImage:sourceImage] setFilters:@[
-            [GPUImageBrightnessFilter brightness:.2f]
-            ,halftoneFilter
+            [GPUImageBrightnessFilter brightness:-.1f]
+            ,
+            halftoneFilter
+//            , GPUImageColorInvertFilter.new
             ,[GPUImageFalseColorFilter filterWithColors:@[
-                    UIColorFromRGB(0xEC0000)
-                    , UIColorFromRGB(0xADFBFB)
+                    UIColorFromRGB(0x0021A2),
+                    UIColorFromRGB(0xF1EDF0)
+//                    UIColorFromRGB(0xEC0000)
+//                    , UIColorFromRGB(0xADFBFB)
             ]]
 
     ]];
     [composers addObject:composeItem0];
 
-    composeItem0.composer = GPUImageMaskFilter.new;
+//    UIImage * image1 = [self processImagesAsComposers:[composers reverse]];
+
+
+    composeItem0.composer = GPUImageSoftLightBlendFilter.new;
 
     GPUImageHalftoneFilter * halftoneFilterBig = GPUImageHalftoneFilter.new;
     halftoneFilterBig.fractionalWidthOfAPixel = halftoneFilter.fractionalWidthOfAPixel;
 
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
     [[composeItem1 setSourceAsImage:sourceImage] setFilters:@[
-            halftoneFilterBig
-            ,[GPUImageFalseColorFilter filterWithColors:@[
-                    UIColorFromRGB(0xF9FA56)
-                    , UIColorFromRGB(0xBA316D)
+//            [GPUImageSaturationFilter saturation:0]
+//           , halftoneFilterBig
+            [GPUImageFalseColorFilter filterWithColors:@[
+                    UIColorFromRGB(0xE12724),
+                    UIColorFromRGB(0x0C031A)
             ]]
-            ,[GPUImageTransformFilter transform:CGAffineTransformMakeTranslation(halftoneFilter.fractionalWidthOfAPixel,halftoneFilter.fractionalWidthOfAPixel)]
+//            ,[GPUImageTransformFilter transform:CGAffineTransformMakeTranslation(halftoneFilter.fractionalWidthOfAPixel,halftoneFilter.fractionalWidthOfAPixel)]
     ]];
     [composers addObject:composeItem1];
+
+
+//    STGIFFDisplayLayerPatternizedCrossFadeEffect * effect = STGIFFDisplayLayerPatternizedCrossFadeEffect.new;
+//    effect.patternImageName = @"STGIFFDisplayLayerCrossFadeEffect_PatternStar.svg";
+//    [effect processImages:@[image1]];
 
     return [composers reverse];
 }
