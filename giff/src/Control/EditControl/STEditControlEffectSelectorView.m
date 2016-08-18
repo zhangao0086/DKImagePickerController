@@ -38,11 +38,13 @@
     [carouselHolder.items addObjectsFromArray:[STGIFFDisplayLayerEffectsManager sharedManager].effects];
 
     carouselHolder.blockForItemView = ^UIView *(iCarousel *carousel, NSInteger index, UIView *view, STGIFFDisplayLayerEffectItem * item) {
+        UIImage * image = [UIImage imageBundledCache:item.imageName];
         if(!view){
-            UIImageView * newview = [[UIImageView alloc] initWithImage:[UIImage imageBundled:item.imageName]];
+            UIImageView * newview = [[UIImageView alloc] init];
             newview.size = CGSizeMakeValue(itemWidth);
             view = newview;
         }
+        ((UIImageView *)view).image = image;
         return view;
     };
 

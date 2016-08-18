@@ -52,7 +52,6 @@
     [self.view addSubview:_layerSetPresentationView];
 
 
-
     STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPatternizedCrossFadeEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
