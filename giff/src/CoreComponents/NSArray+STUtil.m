@@ -85,11 +85,12 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
 }
 
 - (CGSize)findMatchedSizeForItemsKeyPath:(NSString *)keypath matchingBlock:(BOOL(^)(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem))block{
+    NSArray * mappedValuesByKeypath = [self mapWithItemsKeyPath:keypath];
     CGSize targetSize = CGSizeZero;
-    for(id value in [self mapWithItemsKeyPath:keypath]){
+    for(id value in mappedValuesByKeypath){
         if(strcmp([value objCType], @encode(CGSize)) == 0){
             CGSize sizeOfItem = [value CGSizeValue];
-            if(block(targetSize, sizeOfItem)){
+            if([mappedValuesByKeypath indexOfObject:value]==0 || block(targetSize, sizeOfItem)){
                 targetSize = sizeOfItem;
             }
         }else{
@@ -106,7 +107,7 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
     }];
 }
 
-- (CGSize)findMaxSideScalarOfSizeForItemsKeyPath:(NSString *)keypath {
+- (CGSize)findSizeByMaxSideLengthForItemsKeyPath:(NSString *)keypath {
     return [self findMatchedSizeForItemsKeyPath:keypath matchingBlock:^BOOL(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem) {
         return CGSizeMaxSide(sizeOfCurrentItem) > CGSizeMaxSide(sizeOfLatestMatchedItem);
     }];
@@ -118,9 +119,9 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
     }];
 }
 
-- (CGSize)findMinSideScalarOfSizeForItemsKeyPath:(NSString *)keypath {
+- (CGSize)findSizeByMinSideLengthForItemsKeyPath:(NSString *)keypath {
     return [self findMatchedSizeForItemsKeyPath:keypath matchingBlock:^BOOL(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem) {
-        return CGSizeMaxSide(sizeOfCurrentItem) < CGSizeMaxSide(sizeOfLatestMatchedItem);
+        return CGSizeMinSide(sizeOfCurrentItem) < CGSizeMinSide(sizeOfLatestMatchedItem);
     }];
 }
 

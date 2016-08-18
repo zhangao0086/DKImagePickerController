@@ -28,11 +28,11 @@
 
 - (CGSize)findMaxSizeByAreaForItemsKeyPath:(NSString *)keypath3;
 
-- (CGSize)findMaxSideScalarOfSizeForItemsKeyPath:(NSString *)keypath3;
+- (CGSize)findSizeByMaxSideLengthForItemsKeyPath:(NSString *)keypath3;
 
 - (CGSize)findMinSizeByAreaForItemsKeyPath:(NSString *)keypath3;
 
-- (CGSize)findMinSideScalarOfSizeForItemsKeyPath:(NSString *)keypath3;
+- (CGSize)findSizeByMinSideLengthForItemsKeyPath:(NSString *)keypath3;
 
 - (void)eachViewsWithIndex:(void (^)(UIView *view, NSUInteger index))block;
 
