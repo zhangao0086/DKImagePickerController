@@ -84,6 +84,46 @@ DEFINE_ASSOCIATOIN_KEY(kPointedIndex)
     return nil;
 }
 
+- (CGSize)findMatchedSizeForItemsKeyPath:(NSString *)keypath matchingBlock:(BOOL(^)(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem))block{
+    CGSize targetSize = CGSizeZero;
+    for(id value in [self mapWithItemsKeyPath:keypath]){
+        if(strcmp([value objCType], @encode(CGSize)) == 0){
+            CGSize sizeOfItem = [value CGSizeValue];
+            if(block(targetSize, sizeOfItem)){
+                targetSize = sizeOfItem;
+            }
+        }else{
+            NSAssert(NO,@"Given keypath does not refer to value of CGSize type.");
+            continue;
+        }
+    }
+    return targetSize;
+}
+
+- (CGSize)findMaxSizeByAreaForItemsKeyPath:(NSString *)keypath {
+    return [self findMatchedSizeForItemsKeyPath:keypath matchingBlock:^BOOL(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem) {
+        return sizeOfLatestMatchedItem.width * sizeOfLatestMatchedItem.height < sizeOfCurrentItem.width * sizeOfCurrentItem.height;
+    }];
+}
+
+- (CGSize)findMaxSideScalarOfSizeForItemsKeyPath:(NSString *)keypath {
+    return [self findMatchedSizeForItemsKeyPath:keypath matchingBlock:^BOOL(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem) {
+        return CGSizeMaxSide(sizeOfCurrentItem) > CGSizeMaxSide(sizeOfLatestMatchedItem);
+    }];
+}
+
+- (CGSize)findMinSizeByAreaForItemsKeyPath:(NSString *)keypath {
+    return [self findMatchedSizeForItemsKeyPath:keypath matchingBlock:^BOOL(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem) {
+        return sizeOfLatestMatchedItem.width * sizeOfLatestMatchedItem.height > sizeOfCurrentItem.width * sizeOfCurrentItem.height;
+    }];
+}
+
+- (CGSize)findMinSideScalarOfSizeForItemsKeyPath:(NSString *)keypath {
+    return [self findMatchedSizeForItemsKeyPath:keypath matchingBlock:^BOOL(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem) {
+        return CGSizeMaxSide(sizeOfCurrentItem) < CGSizeMaxSide(sizeOfLatestMatchedItem);
+    }];
+}
+
 - (void)eachViewsWithIndex:(void (^)(UIView * view, NSUInteger  index))block {
     [self eachWithIndexMatchClass:UIView.class block:^(id o, NSUInteger i) {
         block(o, i);

@@ -365,7 +365,7 @@ typedef NS_ENUM(NSInteger, STSlideAllowedDirection) {
 
 - (void)transitionTo:(UIView *)toView presentImage:(UIImage *)image animations:(void (^)(UIView *trasitionView))animationsBlock completion:(void (^)(UIView *trasitionView, BOOL finished))completionBlock;
 
-- (void)removeGestureRecognizersByClass:(Class)class;
+- (void)removeGestureRecognizersByClass:(Class)Class;
 
 - (UIPanGestureRecognizer *)whenPanning:(void (^)(UIPanGestureRecognizer *))block;
 

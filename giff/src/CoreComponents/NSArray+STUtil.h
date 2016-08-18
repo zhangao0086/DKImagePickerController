@@ -24,6 +24,16 @@
 
 - (NSArray *)mapWithItemsKeyPath:(NSString *)keypath3 orDefaultKeypath:(NSString *)defaultKeypath;
 
+- (CGSize)findMatchedSizeForItemsKeyPath:(NSString *)keypath3 matchingBlock:(BOOL(^)(CGSize sizeOfLatestMatchedItem, CGSize sizeOfCurrentItem))block;
+
+- (CGSize)findMaxSizeByAreaForItemsKeyPath:(NSString *)keypath3;
+
+- (CGSize)findMaxSideScalarOfSizeForItemsKeyPath:(NSString *)keypath3;
+
+- (CGSize)findMinSizeByAreaForItemsKeyPath:(NSString *)keypath3;
+
+- (CGSize)findMinSideScalarOfSizeForItemsKeyPath:(NSString *)keypath3;
+
 - (void)eachViewsWithIndex:(void (^)(UIView *view, NSUInteger index))block;
 
 - (void)eachLayersWithIndex:(void (^)(CALayer *layer, NSUInteger index))block;
