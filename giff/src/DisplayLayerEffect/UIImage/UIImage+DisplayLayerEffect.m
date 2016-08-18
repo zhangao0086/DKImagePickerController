@@ -34,10 +34,11 @@
     terminalOutput = edgeDetectionFilter;
 
     //add contrast/brightness to improve edge visibility
-//    GPUImageContrastFilter * contrastFilter = GPUImageContrastFilter.new;
-//    contrastFilter.contrast = 2;
-//    [edgeDetectionFilter addTarget:contrastFilter];
-//    terminalOutput = contrastFilter;
+    GPUImageContrastFilter * contrastFilter = GPUImageContrastFilter.new;
+    contrastFilter.contrast = 2;
+    [edgeDetectionFilter addTarget:contrastFilter];
+    terminalOutput = contrastFilter;
+    //
 
     [terminalOutput useNextFrameForImageCapture];
     [stillImageSource processImage];
@@ -45,7 +46,7 @@
     UIImage *resultImage = [terminalOutput imageFromCurrentFramebuffer];
 //    return resultImage;
 
-    UIImage *processedImage = [resultImage floodFillFromPoint:CGPointMake(0, 0) withColor:[UIColor greenColor] andTolerance:50];
+    UIImage *processedImage = [resultImage floodFillFromPoint:CGPointMake(0, 0) withColor:[UIColor greenColor] andTolerance:34];
 
     return processedImage;
 

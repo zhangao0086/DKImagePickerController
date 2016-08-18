@@ -13,6 +13,14 @@
 #import "NSObject+BNRTimeBlock.h"
 #import "UIView+STUtil.h"
 #import "NSArray+STUtil.h"
+#import "GPUImageGaussianBlurFilter.h"
+#import "GPUImageContrastFilter.h"
+#import "GPUImageContrastFilter+STGPUImageFilter.h"
+#import "GPUImageMaskFilter.h"
+#import "GPUImageSaturationFilter.h"
+#import "GPUImageSaturationFilter+STGPUImageFilter.h"
+#import "GPUImageBrightnessFilter.h"
+#import "GPUImageBrightnessFilter+STGPUImageFilter.h"
 
 #ifdef __cplusplus
 #import <opencv2/opencv.hpp>
@@ -33,38 +41,65 @@
 
 
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-
-    CGSize sssize = [@[
-            [[UIView alloc] initWithSize:CGSizeMake(200, 100)], [[UIView alloc] initWithSize:CGSizeMake(4500, 100)], [[UIView alloc] initWithSize:CGSizeMake(2500, 600)], [[UIView alloc] initWithSize:CGSizeMake(2200, 300)], [[UIView alloc] initWithSize:CGSizeMake(260, 140)]
-    ] findMaxSideScalarOfSizeForItemsKeyPath:@"size"];
-
-    ss(sssize);
-
-    sssize = [@[
-            [[UIView alloc] initWithSize:CGSizeMake(200, 100)], [[UIView alloc] initWithSize:CGSizeMake(4500, 100)], [[UIView alloc] initWithSize:CGSizeMake(2500, 600)], [[UIView alloc] initWithSize:CGSizeMake(2200, 300)], [[UIView alloc] initWithSize:CGSizeMake(260, 140)]
-    ] findMaxSizeByAreaForItemsKeyPath:@"size"];
-
-    ss(sssize);
-
     __block UIImage * sourceImage = sourceImages[0];
 
-    __block UIImage * resultImage = nil;
+
+//    return [sourceImage removeEdgeMaskedBackground];
+
+    __block UIImage * maskingImage = nil;
 
     [self ckTime:^{
         sourceImage = [sourceImage scaleToFitSize:CGSizeMakeValue(100)];
 
         //TODO: 성능을 위해 손실이 최소화되는 크기로 리사이즈 -> 프로세싱 -> 마스킹
-        resultImage = [_manager doGrabCut:sourceImage
+        maskingImage = [_manager doGrabCut:sourceImage
                    foregroundBound:CGRectInset(CGRectMakeWithSize_AGK(sourceImage.size), 1,1)
                     iterationCount:2];
     }];
 
+    CGFloat minSide = CGSizeMinSide([sourceImages findSizeByMinSideLengthForItemsKeyPath:@"size"]);
+
+    ss(maskingImage.size);
+
     [self ckTime:^{
-        resultImage = [resultImage gaussianBlurWithBias:200];
+        GPUImagePicture * gpuImagePicture = [[GPUImagePicture alloc] initWithImage:maskingImage smoothlyScaleOutput:YES];
+
+        GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
+        blurFilter.blurRadiusInPixels = 1;
+        [gpuImagePicture addTarget:blurFilter];
+
+        [blurFilter useNextFrameForImageCapture];
+        [gpuImagePicture processImage];
+        maskingImage = [blurFilter imageFromCurrentFramebuffer];
+
+        maskingImage = [maskingImage scaleToFitSize:CGSizeMakeValue(minSide)];
+
+        UIGraphicsBeginImageContextWithOptions(maskingImage.size, NO, 3);
+        [maskingImage drawInRect:CGRectMake(0, 0, maskingImage.size.width, maskingImage.size.height)];
+        UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        maskingImage = imageCopy;
+
     }];
 
+    ss(maskingImage.size);
 
-    return resultImage;
+//    return maskingImage;
+    //TODO downscale되는 문제 수정(redraw하면 되지 않을까?)
+    NSMutableArray * composers = [NSMutableArray array];
+
+    STGPUImageOutputComposeItem * maskingComposeItem = [[STGPUImageOutputComposeItem alloc] init];
+    [maskingComposeItem setSourceAsImage:maskingImage];
+    maskingComposeItem.composer = [[GPUImageMaskFilter alloc] init];
+    [composers addObject:maskingComposeItem];
+
+    STGPUImageOutputComposeItem * composeItem0 = [[STGPUImageOutputComposeItem alloc] init];
+    [composeItem0 setSourceAsImage:sourceImage];
+    [composers addObject:composeItem0];
+
+    return [self processComposers:[composers reverse]];
+
+    return maskingImage;
 }
 
 
