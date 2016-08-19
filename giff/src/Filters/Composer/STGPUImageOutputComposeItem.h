@@ -33,5 +33,6 @@
 
 + (instancetype)itemWithSourceImage:(UIImage *)sourceImage composer:(GPUImageTwoInputFilter *)composer;
 
+- (instancetype)addFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)filters;
 
 @end

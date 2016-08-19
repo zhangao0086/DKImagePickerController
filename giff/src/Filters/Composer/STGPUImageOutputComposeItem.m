@@ -55,6 +55,10 @@
     return [[self alloc] initWithSourceImage:sourceImage composer:composer];
 }
 
+- (instancetype)addFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)filters {
+    self.filters = [self.filters arrayByAddingObjectsFromArray:filters];
+    return self;
+}
 
 - (void)setFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)filters {
 #if DEBUG

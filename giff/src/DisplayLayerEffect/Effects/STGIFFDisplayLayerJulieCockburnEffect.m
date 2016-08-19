@@ -10,6 +10,8 @@
 #import "NYXImagesKit.h"
 #import "UIImage+STUtil.h"
 #import "GPUImageMaskFilter.h"
+#import "GPUImageTransformFilter.h"
+#import "GPUImageTransformFilter+STGPUImageFilter.h"
 
 
 @implementation STGIFFDisplayLayerJulieCockburnEffect {
@@ -29,7 +31,9 @@
 
     [composers addObject:[STGPUImageOutputComposeItem itemWithSourceImage:maskImage composer:GPUImageMaskFilter.new]];
 
-    [composers addObject:[STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[0]]];
+    [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[0]] addFilters:@[
+            [GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(90))]
+    ]]];
 
 
     return [composers reverse];
