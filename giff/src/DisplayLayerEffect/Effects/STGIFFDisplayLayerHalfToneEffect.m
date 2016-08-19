@@ -29,8 +29,8 @@
     halftoneFilter.fractionalWidthOfAPixel = 0.01f;
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
     [[composeItem0 setSourceAsImage:sourceImages[0]] setFilters:@[
-            [GPUImageBrightnessFilter brightness:-.1f]
-            ,
+//            [GPUImageBrightnessFilter brightness:-.2f]
+//            ,
             halftoneFilter
 //            [GPUImageFalseColorFilter filterWithColors:@[
 //                    UIColorFromRGB(0xEC0000)
@@ -49,11 +49,12 @@
     [composers addObject:maskItem];
 
     STGPUImageHalftoneFilter * halftoneFilter1 = STGPUImageHalftoneFilter.new;
-    halftoneFilter1.fractionalWidthOfAPixel = 0.01f;
+    halftoneFilter1.fractionalWidthOfAPixel = 0.005f;
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
     [[composeItem1 setSourceAsImage:sourceImages[0]] setFilters:@[
-             [GPUImageBrightnessFilter brightness:-.1f]
-            , halftoneFilter1
+//             [GPUImageBrightnessFilter brightness:-.2f]
+//            ,
+            halftoneFilter1
 //    ,GPUImageColorInvertFilter.new
 //            , [GPUImageFalseColorFilter filterWithColors:@[
 //                    UIColorFromRGB(0xEC0000)
