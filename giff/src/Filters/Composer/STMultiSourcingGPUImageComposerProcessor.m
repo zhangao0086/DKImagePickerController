@@ -3,7 +3,7 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import <GPUImage/GPUImageOutput.h>
+#import "GPUImageOutput.h"
 #import "STMultiSourcingGPUImageComposerProcessor.h"
 #import "STFilterManager.h"
 #import "STGPUImageOutputComposeItem.h"
