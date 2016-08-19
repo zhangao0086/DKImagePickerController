@@ -3,6 +3,7 @@
 #import "NSObject+STUtil.h"
 #import "NYXImagesKit.h"
 #import "NSString+STUtil.h"
+#import <Accelerate/Accelerate.h>
 
 @implementation UIImage (STUtil)
 
@@ -688,4 +689,60 @@
 - (UIImage *)imageByCroppingAspectFillRatio:(CGSize)sizeOfAspectRatio {
     return [self imageByCroppingRect:CGRectCropRegionAspectFill(self.size, sizeOfAspectRatio)];
 }
+
+#pragma mark Resize
+
+- (UIImage*)imageByScalingToFitSize:(CGSize)fitSize {
+    return [self imageByScalingToFitSize:fitSize rescaleTo:self.scale];
+}
+
+//Over 50~450% faster than UIKit/CoreImage in real device
+- (UIImage*)imageByScalingToFitSize:(CGSize)fitSize rescaleTo:(CGFloat)scaleToRescale{
+    CGImageRef sourceRef = self.CGImage;
+    vImage_Buffer srcBuffer;
+    vImage_CGImageFormat format = {
+            .bitsPerComponent = 8,
+            .bitsPerPixel = 32,
+            .colorSpace = NULL,
+            .bitmapInfo = (CGBitmapInfo) kCGImageAlphaFirst,
+            .version = 0,
+            .decode = NULL,
+            .renderingIntent = kCGRenderingIntentDefault,
+    };
+    vImage_Error ret = vImageBuffer_InitWithCGImage(&srcBuffer, &format, NULL, sourceRef, kvImageNoFlags);
+    if (ret != kvImageNoError) {
+        free(srcBuffer.data);
+        return nil;
+    }
+
+    const NSUInteger scale = (NSUInteger) scaleToRescale;
+    const NSUInteger dstWidth = (NSUInteger) fitSize.width * scale;
+    const NSUInteger dstHeight = (NSUInteger) fitSize.height * scale;
+    const NSUInteger bytesPerPixel = 4;
+    const NSUInteger dstBytesPerRow = bytesPerPixel * dstWidth;
+    uint8_t *dstData = (uint8_t *) calloc(dstHeight * dstWidth * bytesPerPixel, sizeof(uint8_t));
+    vImage_Buffer dstBuffer = {
+            .data = dstData,
+            .height = dstHeight,
+            .width = dstWidth,
+            .rowBytes = dstBytesPerRow
+    };
+
+    ret = vImageScale_ARGB8888(&srcBuffer, &dstBuffer, NULL, kvImageHighQualityResampling);
+    free(srcBuffer.data);
+    if (ret != kvImageNoError) {
+        free(dstData);
+        return nil;
+    }
+
+    ret = kvImageNoError;
+    CGImageRef destRef = vImageCreateCGImageFromBuffer(&dstBuffer, &format, NULL, NULL, kvImageNoFlags, &ret);
+    free(dstData);
+
+    UIImage *destImage = [[UIImage alloc] initWithCGImage:destRef scale:0.0 orientation:self.imageOrientation];
+    CGImageRelease(destRef);
+
+    return destImage;
+}
+
 @end

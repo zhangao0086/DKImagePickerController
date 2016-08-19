@@ -56,6 +56,10 @@
 
 - (UIImage *)imageByCroppingAspectFillRatio:(CGSize)sizeOfAspectRatio;
 
+- (UIImage *)imageByScalingToFitSize:(CGSize)fitSize;
+
+- (UIImage *)imageByScalingToFitSize:(CGSize)fitSize rescaleTo:(CGFloat)scaleToRescale;
+
 - (UIImage *)maskWithColor:(UIColor *)color;
 
 - (UIImage *)clipAsRoundedRect:(CGSize)sizeToFit;
