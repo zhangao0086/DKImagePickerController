@@ -21,6 +21,7 @@
 #import "GPUImageSaturationFilter+STGPUImageFilter.h"
 #import "GPUImageBrightnessFilter.h"
 #import "GPUImageBrightnessFilter+STGPUImageFilter.h"
+#import "UIImage+STUtil.h"
 
 #ifdef __cplusplus
 #import <opencv2/opencv.hpp>
@@ -49,7 +50,9 @@
     __block UIImage * maskingImage = nil;
 
     [self ckTime:^{
-        sourceImage = [sourceImage scaleToFitSize:CGSizeMakeValue(100)];
+
+        sourceImage = [sourceImage imageByScalingToFitSize:CGSizeMakeValue(100)];
+//        sourceImage = [sourceImage scaleToFitSize:CGSizeMakeValue(100)];
 
         //TODO: 성능을 위해 손실이 최소화되는 크기로 리사이즈 -> 프로세싱 -> 마스킹
         maskingImage = [_manager doGrabCut:sourceImage
@@ -72,7 +75,8 @@
         [gpuImagePicture processImage];
         maskingImage = [blurFilter imageFromCurrentFramebuffer];
 
-        maskingImage = [maskingImage scaleToFitSize:CGSizeMakeValue(minSide)];
+        maskingImage = [maskingImage imageByScalingToFitSize:CGSizeMakeValue(minSide)];
+//        maskingImage = [maskingImage scaleToFitSize:CGSizeMakeValue(minSide)];
 
         UIGraphicsBeginImageContextWithOptions(maskingImage.size, NO, 3);
         [maskingImage drawInRect:CGRectMake(0, 0, maskingImage.size.width, maskingImage.size.height)];
@@ -82,6 +86,8 @@
 
     }];
 
+    //0.1
+    //0.3
     ss(maskingImage.size);
 
 //    return maskingImage;
