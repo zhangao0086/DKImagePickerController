@@ -95,9 +95,9 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             
         } /* DKImageCheckView */
 		
-		private var asset: DKAsset!
+        fileprivate var asset: DKAsset!
 		
-        private let thumbnailImageView: UIImageView = {
+        fileprivate let thumbnailImageView: UIImageView = {
             let thumbnailImageView = UIImageView()
             thumbnailImageView.contentMode = .scaleAspectFill
             thumbnailImageView.clipsToBounds = true
@@ -105,7 +105,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             return thumbnailImageView
         }()
         
-        private let checkView = DKImageCheckView()
+        fileprivate let checkView = DKImageCheckView()
         
         override var isSelected: Bool {
             didSet {
@@ -136,14 +136,14 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     
     class DKVideoAssetCell: DKAssetCell {
 		
-		override var asset: DKAsset! {
-			didSet {
-				let videoDurationLabel = self.videoInfoView.viewWithTag(-1) as! UILabel
-				let minutes: Int = Int(asset.duration!) / 60
-				let seconds: Int = Int(round(asset.duration!)) % 60
-				videoDurationLabel.text = String(format: "\(minutes):%02d", seconds)
-			}
-		}
+        override fileprivate var asset: DKAsset! {
+          didSet {
+            let videoDurationLabel = self.videoInfoView.viewWithTag(-1) as! UILabel
+            let minutes: Int = Int(asset.duration!) / 60
+            let seconds: Int = Int(round(asset.duration!)) % 60
+            videoDurationLabel.text = String(format: "\(minutes):%02d", seconds)
+          }
+        }
 		
         override var isSelected: Bool {
             didSet {
@@ -311,9 +311,9 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		self.title = group.groupName
 		
 		let groupsCount = getImageManager().groupDataManager.groupIds?.count
-		self.selectGroupButton.setTitle(group.groupName + (groupsCount > 1 ? "  \u{25be}" : "" ), for: UIControlState())
+		self.selectGroupButton.setTitle(group.groupName + (groupsCount! > 1 ? "  \u{25be}" : "" ), for: UIControlState())
 		self.selectGroupButton.sizeToFit()
-		self.selectGroupButton.isEnabled = groupsCount > 1
+		self.selectGroupButton.isEnabled = groupsCount! > 1
 		
 		self.navigationItem.titleView = self.selectGroupButton
 	}

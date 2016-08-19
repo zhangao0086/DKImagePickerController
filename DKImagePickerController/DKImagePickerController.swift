@@ -31,8 +31,8 @@ public protocol DKImagePickerControllerUIDelegate {
 	*/
 	func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
 	                                       didCancel: (() -> Void),
-	                                       didFinishCapturingImage: ((image: UIImage) -> Void),
-	                                       didFinishCapturingVideo: ((videoURL: URL) -> Void)) -> UIViewController
+	                                       didFinishCapturingImage: ((_ image: UIImage) -> Void),
+	                                       didFinishCapturingVideo: ((_ videoURL: URL) -> Void)) -> UIViewController
 	
 	/**
 		The camera image to be displayed in the album's first cell.
@@ -186,12 +186,12 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
     /// The callback block is executed when user pressed the select button.
-    public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
+    public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
 	
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
-			if self.defaultSelectedAssets?.count > 0 {
+			if let defaultSelectedAssets = self.defaultSelectedAssets, defaultSelectedAssets.count > 0 {
 				self.selectedAssets = self.defaultSelectedAssets ?? []
 				
 				if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
@@ -278,7 +278,7 @@ public class DKImagePickerController : UINavigationController {
 				self.UIDelegate.prepareLayout(self, vc: rootVC)
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
-				if self.defaultSelectedAssets?.count > 0 {
+				if let defaultSelectedAssets = self.defaultSelectedAssets, defaultSelectedAssets.count > 0 {
 					self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
 				}
 			}
@@ -409,7 +409,7 @@ public class DKImagePickerController : UINavigationController {
 	
     public func done() {
 		self.presentingViewController?.dismiss(animated: true, completion: nil)
-        self.didSelectAssets?(assets: self.selectedAssets)
+        self.didSelectAssets?(self.selectedAssets)
     }
     
     // MARK: - Selection Image
