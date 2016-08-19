@@ -40,7 +40,7 @@
 
     NSArray<STCapturedImageSet *> * images = [@[
             @[@"face3.jpg"]
-            ,@[@"bg1.jpg"]
+//            ,@[@"land2.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {

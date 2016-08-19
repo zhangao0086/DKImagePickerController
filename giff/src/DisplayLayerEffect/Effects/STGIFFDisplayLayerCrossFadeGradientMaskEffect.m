@@ -9,32 +9,24 @@
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "NSObject+STUtil.h"
 #import "NSString+STUtil.h"
-#import "R.h"
 #import "CCARadialGradientLayer.h"
 #import "LEColorPicker.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "GPUImageMonochromeFilter.h"
 #import "GPUImageMonochromeFilter+STGPUImageFilter.h"
+#import "GPUImageTransformFilter.h"
+#import "GPUImageTransformFilter+STGPUImageFilter.h"
 
 
 @implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect {
     LEColorPicker * _colorPicker;
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-
-    }
-
-    return self;
-}
-
-
-- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+- (NSArray *)_composersToProcessCrossFaceEffect:(NSArray<UIImage *> *__nullable)sourceImages {
     UIImage * sourceImage = sourceImages[0];
 
     CGSize sourceImageSize = sourceImage.size;
+
     CrossFadeGradientMaskEffectStyle style = self.style;
     STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
     NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(sourceImageSize)]];
@@ -50,7 +42,7 @@
                         (id)[[UIColor whiteColor] CGColor]
                         , (id)[[UIColor blackColor] CGColor]
                 ];
-                gradientLayer.locations = @[@.4, @.8];
+                gradientLayer.locations = @[@.35, @.75];
                 return [gradientLayer UIImage:YES];
             }
 
@@ -63,7 +55,7 @@
                         (id)[[UIColor whiteColor] CGColor]
                         , (id)[[UIColor blackColor] CGColor]
                 ];
-                gradientLayer.locations = @[@.4, @.8];
+                gradientLayer.locations = @[@.35, @.75];
                 return [gradientLayer UIImage:YES];
             }
 
@@ -85,25 +77,42 @@
         return nil;
     }];
 
-    NSArray * composersForCrossFadeEffect = [crossFadeEffect composersToProcess:sourceImages];
-
-    if(sourceImages.count>1){
-        if(!_colorPicker){
-            _colorPicker = [[LEColorPicker alloc] init];
-        }
-        LEColorScheme * colorScheme1 = [self st_cachedObject:[sourceImages[1] st_uid] init:^id {
-            return [_colorPicker colorSchemeFromImage:sourceImages[1]];
-        }];
-
-        for(STGPUImageOutputComposeItem * composeItem in composersForCrossFadeEffect){
-            if(composeItem.composer && composeItem.source){
-                composeItem.filters = [composeItem.filters ?: @[] arrayByAddingObject:[GPUImageMonochromeFilter color:colorScheme1.primaryTextColor intensity:.5]];
-            }
-        }
-    }
-
-    return [crossFadeEffect processComposers:composersForCrossFadeEffect];
+    return [crossFadeEffect composersToProcess:sourceImages];
 }
 
 
+- (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
+    self.style = CrossFadeGradientMaskEffectStyleLinearVertical;
+    NSArray * composers = [self _composersToProcessCrossFaceEffect:sourceImages];
+
+    if(!_colorPicker){
+        _colorPicker = [[LEColorPicker alloc] init];
+    }
+    LEColorScheme * colorScheme1 = [self st_cachedObject:[sourceImages[1] st_uid] init:^id {
+        return [_colorPicker colorSchemeFromImage:sourceImages[1]];
+    }];
+
+    for(STGPUImageOutputComposeItem * composeItem in composers){
+        if(composeItem.composer && composeItem.source){
+            composeItem.filters = [composeItem.filters ?: @[] arrayByAddingObject:[GPUImageMonochromeFilter color:colorScheme1.backgroundColor intensity:.8]];
+            break;
+        }
+    }
+
+    return composers;
+}
+
+- (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
+    self.style = CrossFadeGradientMaskEffectStyleLinearHorizontal;
+    NSArray * composers = [self _composersToProcessCrossFaceEffect:@[sourceImage]];
+    for(STGPUImageOutputComposeItem * composeItem in composers){
+        if(composeItem.source){
+            composeItem.filters = [composeItem.filters ?: @[] arrayByAddingObject:
+                    [GPUImageTransformFilter transform:CGAffineTransformMakeScale(-1,1)]
+            ];
+            break;
+        }
+    }
+    return composers;
+}
 @end
