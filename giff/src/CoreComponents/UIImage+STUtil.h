@@ -48,6 +48,8 @@
 
 - (UIImage *)drawOver:(UIImage *)targetImage atPosition:(CGPoint)origin alpha:(float)alpha;
 
+- (UIImage *)drawOver:(UIImage *)targetImage atPosition:(CGPoint)origin alpha:(float)alpha blend:(CGBlendMode)blendMode;
+
 - (UIImage *)imageByCroppingNormalizedRect:(CGRect)normalizedRect;
 
 - (UIImage *)imageByCroppingRect:(CGRect)rect;

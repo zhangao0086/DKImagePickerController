@@ -649,11 +649,15 @@
 }
 
 - (UIImage*)drawOver:(UIImage *)targetImage atPosition:(CGPoint)origin alpha:(float)alpha{
+    return [self drawOver:targetImage atPosition:origin alpha:alpha blend:kCGBlendModeNormal];
+}
+
+- (UIImage*)drawOver:(UIImage *)targetImage atPosition:(CGPoint)origin alpha:(float)alpha blend:(CGBlendMode)blendMode{
     UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
     [self drawInRect:CGRectMake( 0, 0, self.size.width, self.size.height)];
     CGRect imageRect = CGRectMake(origin.x, origin.y, targetImage.size.width, targetImage.size.height);
     if(alpha < 1){
-        [targetImage drawInRect:imageRect blendMode:kCGBlendModeNormal alpha:alpha];
+        [targetImage drawInRect:imageRect blendMode:blendMode alpha:alpha];
     }else{
         [targetImage drawInRect:imageRect];
     }
