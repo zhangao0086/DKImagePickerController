@@ -23,12 +23,13 @@
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
-#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "STGIFFDisplayLayerDarkenMaskEffect.h"
 #import "STGIFFDisplayLayerDoubleExposureEffect.h"
 #import "STGIFFDisplayLayerColoredHalfToneEffect.h"
 #import "STGIFFDisplayLayerCircularCombineEffect.h"
 #import "STGIFFDisplayLayerHalfToneEffect.h"
+#import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 
 @implementation EBRootViewController {
 
@@ -39,7 +40,7 @@
 
     NSArray<STCapturedImageSet *> * images = [@[
             @[@"face3.jpg"]
-//            ,@[@"bg1.jpg"]
+            ,@[@"bg1.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -53,7 +54,7 @@
     [self.view addSubview:_layerSetPresentationView];
 
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerHalfToneEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeGradientMaskEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
             , @"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"

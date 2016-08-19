@@ -3,7 +3,7 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "GPUImageChromaKeyBlendFilter.h"
 #import "GPUImagePicture.h"
 #import "STFilter.h"
@@ -14,11 +14,12 @@
 #import "NSString+STUtil.h"
 #import "UIImage+STUtil.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
+#import "NYXImagesKit.h"
 
 //http://www.freepik.com/free-photos-vectors/stripes
 //http://www.freepik.com/free-vector/different-patterns-with-golden-elements_865711.htm#term=stripes&page=1&position=24
 //https://www.brusheezy.com/free/pattern-stripe
-@implementation STGIFFDisplayLayerPatternizedCrossFadeEffect {
+@implementation STGIFFDisplayLayerCrossFadeMaskEffect {
 
 }
 
@@ -33,16 +34,23 @@
 
 
 - (UIImage *)patternImage:(CGSize)imageSize{
-    //리소소로 사용하는 이미지는 반드시 배경white과 전경black 모두 fill 되어 있어야 한다(투명 배경은 안됨)
-    NSString * mimeTypeForPatternImage = [self.patternImageName mimeTypeFromPathExtension];
-    if([@"image/svg+xml" isEqualToString:mimeTypeForPatternImage]){
-        return [[SVGKImage imageNamedNoCache:self.patternImageName widthSizeWidth:imageSize.width] UIImage];
-    }else if([@"image/png" isEqualToString:mimeTypeForPatternImage] || [@"image/jpeg" isEqualToString:mimeTypeForPatternImage]){
-        return [UIImage imageBundled:self.patternImageName];
+    //an image that used as a mask image must be filled out black and white color on both sides, background and foreground.
+    UIImage * maskeImage = nil;
+    if(self.maskImage){
+        NSAssert(CGSizeEqualToSize(imageSize,self.maskImage.size), @"Size of patternImage is not matched with given image size");
+        maskeImage = self.maskImage;
     }
 
-    NSAssert(NO, ([mimeTypeForPatternImage st_add:@" is not supported file format"]));
-    return nil;
+    NSString * mimeTypeForPatternImage = [self.maskImageName mimeTypeFromPathExtension];
+    if([@"image/svg+xml" isEqualToString:mimeTypeForPatternImage]){
+        maskeImage = [[SVGKImage imageNamedNoCache:self.maskImageName widthSizeWidth:imageSize.width] UIImage];
+    }else if([@"image/png" isEqualToString:mimeTypeForPatternImage] || [@"image/jpeg" isEqualToString:mimeTypeForPatternImage]){
+        maskeImage = [UIImage imageBundled:self.maskImageName];
+    }else{
+        NSAssert(NO, ([mimeTypeForPatternImage st_add:@" is not supported file format"]));
+    }
+
+    return self.invertMaskImage ? [maskeImage invert] : maskeImage;
 }
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {

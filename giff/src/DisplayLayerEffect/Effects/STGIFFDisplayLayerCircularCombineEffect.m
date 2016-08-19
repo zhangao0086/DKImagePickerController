@@ -4,7 +4,7 @@
 //
 
 #import "STGIFFDisplayLayerCircularCombineEffect.h"
-#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "UIImage+STUtil.h"
 #import "LEColorPicker.h"
 #import "NSObject+STUtil.h"
@@ -27,8 +27,8 @@
 
 
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-    STGIFFDisplayLayerPatternizedCrossFadeEffect * combineEffect = STGIFFDisplayLayerPatternizedCrossFadeEffect.new;
-    combineEffect.patternImageName = @"STGIFFDisplayLayerCrossFadeEffect_patt4.svg";
+    STGIFFDisplayLayerCrossFadeMaskEffect * combineEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
+    combineEffect.maskImageName = @"STGIFFDisplayLayerCrossFadeEffect_patt4.svg";
 
     //when process with single source, result should transform
     if(sourceImages.count==1){

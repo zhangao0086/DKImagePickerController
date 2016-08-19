@@ -30,7 +30,7 @@
 #import "GPUImageAlphaBlendFilter.h"
 #import "GPUImageAddBlendFilter.h"
 #import "GPUImageSoftLightBlendFilter.h"
-#import "STGIFFDisplayLayerPatternizedCrossFadeEffect.h"
+#import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "GPUImageHardLightBlendFilter.h"
 
 
@@ -94,7 +94,7 @@
 
 
 //    STGIFFDisplayLayerPatternizedCrossFadeEffect * effect = STGIFFDisplayLayerPatternizedCrossFadeEffect.new;
-//    effect.patternImageName = @"STGIFFDisplayLayerCrossFadeEffect_PatternStar.svg";
+//    effect.maskImageName = @"STGIFFDisplayLayerCrossFadeEffect_PatternStar.svg";
 //    [effect processImages:@[image1]];
 
     return [composers reverse];
