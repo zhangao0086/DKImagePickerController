@@ -23,6 +23,7 @@
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "STGIFFDisplayLayerDarkenMaskEffect.h"
 #import "STGIFFDisplayLayerCircularCombineEffect.h"
+#import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -47,6 +48,7 @@
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerDarkenMaskEffect.class imageName:@"STGIFFDisplayLayerDarkenMaskEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeMaskEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg"
                                      valuesForKeysToApply:@{@"maskImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"}]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeGradientMaskEffect.class imageName:@"STGIFFDisplayLayerCrossFadeGradientMaskEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCircularCombineEffect.class imageName:@"STGIFFDisplayLayerCircularCombineEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class imageName:@"STGIFFDisplayLayerFluorEffect.jpg"]

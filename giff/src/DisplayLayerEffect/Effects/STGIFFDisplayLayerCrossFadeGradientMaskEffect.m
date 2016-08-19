@@ -4,6 +4,7 @@
 //
 
 #import <GPUImage/GPUImageTwoInputFilter.h>
+#import <Colours/Colours.h>
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 #import "CALayer+STUtil.h"
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
