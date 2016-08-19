@@ -14,8 +14,7 @@
 }
 
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-    NSArray * composers = sourceImages.count==1 ? [self composersToProcessSingle:sourceImages[0]] : [self composersToProcessMultiple:sourceImages];
-
+    NSArray * composers = [self composersToProcess:sourceImages];
     if(composers.count){
         return [self processComposers:composers];
     }else{
@@ -29,6 +28,10 @@
     }else{
         return nil;
     }
+}
+
+- (NSArray *)composersToProcess:(NSArray<UIImage *> *__nullable)sourceImages {
+    return sourceImages.count==1 ? [self composersToProcessSingle:sourceImages[0]] : [self composersToProcessMultiple:sourceImages];
 }
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {

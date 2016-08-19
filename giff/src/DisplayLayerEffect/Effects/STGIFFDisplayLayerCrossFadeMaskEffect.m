@@ -57,6 +57,8 @@
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
     NSMutableArray * composers = [NSMutableArray array];
 
+    NSMutableArray * internal_composerItemsOfSourceImages = [NSMutableArray array];
+
     /*
      * masking image
      */
@@ -72,6 +74,8 @@
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
     composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
     [composers addObject:composeItem1];
+
+    [internal_composerItemsOfSourceImages addObject:composeItem1];
 
     UIImage * maskedImage = [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:[composers reverse] forInput:nil] imageFromCurrentFramebuffer];
 
@@ -93,6 +97,10 @@
 //        ];
 //    }
     [composers addObject:composeItemB];
+
+    [internal_composerItemsOfSourceImages addObject:composeItemB];
+
+    _composerItemsOfSourceImages = internal_composerItemsOfSourceImages;
 
     return [composers reverse];
 }

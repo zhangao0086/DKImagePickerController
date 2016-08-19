@@ -10,23 +10,33 @@
 #import "NSString+STUtil.h"
 #import "R.h"
 #import "CCARadialGradientLayer.h"
+#import "LEColorPicker.h"
+#import "STGPUImageOutputComposeItem.h"
+#import "GPUImageMonochromeFilter.h"
+#import "GPUImageMonochromeFilter+STGPUImageFilter.h"
 
 
 @implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect {
-
+    LEColorPicker * _colorPicker;
 }
 
-- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+- (instancetype)init {
+    self = [super init];
+    if (self) {
 
+    }
+
+    return self;
+}
+
+
+- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     UIImage * sourceImage = sourceImages[0];
 
     CGSize sourceImageSize = sourceImage.size;
     CrossFadeGradientMaskEffectStyle style = self.style;
     STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
     NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(sourceImageSize)]];
-
-    style = CrossFadeGradientMaskEffectStyleRadial;
-
     crossFadeEffect.maskImage = [self st_cachedImage:cacheKey init:^UIImage * {
 
         switch(style){
@@ -74,7 +84,22 @@
         return nil;
     }];
 
-    return [crossFadeEffect processImages:sourceImages];
+    NSArray * composersForCrossFadeEffect = [crossFadeEffect composersToProcess:sourceImages];
+
+    if(sourceImages.count>1){
+        if(!_colorPicker){
+            _colorPicker = [[LEColorPicker alloc] init];
+        }
+        LEColorScheme * colorScheme1 = [self st_cachedObject:[sourceImages[1] st_uid] init:^id {
+            return [_colorPicker colorSchemeFromImage:sourceImages[1]];
+        }];
+
+        STGPUImageOutputComposeItem * composeItem = crossFadeEffect.composerItemsOfSourceImages[0];
+        composeItem.filters = [composeItem.filters arrayByAddingObject:[GPUImageMonochromeFilter filterWithColor:colorScheme1.backgroundColor]];
+    }
+
+    return [crossFadeEffect processComposers:composersForCrossFadeEffect];
 }
+
 
 @end

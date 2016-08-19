@@ -10,7 +10,10 @@
 
 
 @interface STMultiSourcingGPUImageComposerProcessor : STMultiSourcingImageProcessor
+
 - (UIImage *__nullable)processComposers:(NSArray<STGPUImageOutputComposeItem *> *__nullable)composers;
+
+- (NSArray *)composersToProcess:(NSArray<UIImage *> *__nullable)sourceImages;
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages;
 

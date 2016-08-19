@@ -5,6 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "STMultiSourcingImageProcessor.h"
+#import "STMultiSourcingGPUImageComposerProcessor.h"
 
 typedef NS_ENUM(NSInteger, CrossFadeGradientMaskEffectStyle) {
     CrossFadeGradientMaskEffectStyleLinearVertical,
@@ -12,6 +13,6 @@ typedef NS_ENUM(NSInteger, CrossFadeGradientMaskEffectStyle) {
     CrossFadeGradientMaskEffectStyleRadial
 };
 
-@interface STGIFFDisplayLayerCrossFadeGradientMaskEffect : STMultiSourcingImageProcessor
+@interface STGIFFDisplayLayerCrossFadeGradientMaskEffect : STMultiSourcingGPUImageComposerProcessor
 @property (nonatomic, assign) CrossFadeGradientMaskEffectStyle style;
 @end
