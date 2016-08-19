@@ -55,21 +55,25 @@
              [GPUImageBrightnessFilter brightness:-.1f]
             , halftoneFilter1
 //    ,GPUImageColorInvertFilter.new
-//            [GPUImageFalseColorFilter filterWithColors:@[
+//            , [GPUImageFalseColorFilter filterWithColors:@[
 //                    UIColorFromRGB(0xEC0000)
 //                    , UIColorFromRGB(0xADFBFB)
 //            ]]
             ,[GPUImageTransformFilter transform:CGAffineTransformMakeTranslation(
-                    halftoneFilter.fractionalWidthOfAPixel,
-                    halftoneFilter.fractionalWidthOfAPixel
+                    halftoneFilter1.fractionalWidthOfAPixel,
+                    halftoneFilter1.fractionalWidthOfAPixel
             )]
+//            ,[GPUImageTransformFilter.new scaleScalar:1.2f]
     ]];
+
     [composers addObject:composeItem1];
 
     UIImage * halfToneF = [self processComposers:[composers reverse]];
 
     //https://www.yumpu.com/en/document/view/11401079/blending/7
-    return [halfToneB drawOver:halfToneF atPosition:CGPointZero alpha:1 blend:kCGBlendModeSourceOut];
+    UIImage * resultImage = [halfToneB drawOver:halfToneF atPosition:CGPointZero alpha:1 blend:kCGBlendModeSourceIn];
+
+    return resultImage;
 }
 
 
