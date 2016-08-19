@@ -47,12 +47,13 @@
     }else if([@"image/png" isEqualToString:mimeTypeForPatternImage] || [@"image/jpeg" isEqualToString:mimeTypeForPatternImage]){
         maskeImage = [UIImage imageBundled:self.maskImageName];
     }else{
-        NSAssert(NO, ([mimeTypeForPatternImage st_add:@" is not supported file format"]));
+        NSAssert(maskeImage, ([mimeTypeForPatternImage st_add:@" is not supported file format"]));
     }
 
     return self.invertMaskImage ? [maskeImage invert] : maskeImage;
 }
 
+//TODO: 단순히 mask후 위에 draw를 하는 방식이므로 그냥 UIKit을 써서 하는게 더 빠르고 고품질일 듯. 테스트 후 비교 필요.
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
     NSMutableArray * composers = [NSMutableArray array];
 

@@ -9,6 +9,7 @@
 #import "NSObject+STUtil.h"
 #import "NSString+STUtil.h"
 #import "R.h"
+#import "CCARadialGradientLayer.h"
 
 
 @implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect {
@@ -22,45 +23,56 @@
     CGSize sourceImageSize = sourceImage.size;
     CrossFadeGradientMaskEffectStyle style = self.style;
     STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
+    NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(sourceImageSize)]];
 
-//    style = CrossFadeGradientMaskEffectStyleLinearHorizontal;
+    style = CrossFadeGradientMaskEffectStyleRadial;
 
-    crossFadeEffect.maskImageName = @"STGIFFDisplayLayerCrossFadeEffect_PatternStar.svg";
-    crossFadeEffect.invertMaskImage = YES;
-//    crossFadeEffect.maskImage = [self st_cachedImage:[@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[@(style) stringValue]] init:^UIImage * {
-//
-//        switch(style){
-//            case CrossFadeGradientMaskEffectStyleLinearVertical:{
-//                CAGradientLayer * gradientLayer = [[CAGradientLayer alloc] init];
-//                gradientLayer.startPoint = CGPointMake(0.5,1.0);
-//                gradientLayer.endPoint = CGPointMake(0.5,0.0);
-//                gradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
-//                gradientLayer.colors = @[
-//                        (id)[[UIColor whiteColor] CGColor]
-//                        , (id)[[UIColor blackColor] CGColor]
-//                ];
-//                gradientLayer.locations = @[@.4, @.8];
-//                return [gradientLayer UIImage:YES];
-//            }
-//
-//            case CrossFadeGradientMaskEffectStyleLinearHorizontal:{
-//                CAGradientLayer * gradientLayer = [[CAGradientLayer alloc] init];
-//                gradientLayer.startPoint = CGPointMake(0.0,.5);
-//                gradientLayer.endPoint = CGPointMake(1.0,.5);
-//                gradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
-//                gradientLayer.colors = @[
-//                        (id)[[UIColor whiteColor] CGColor]
-//                        , (id)[[UIColor blackColor] CGColor]
-//                ];
-//                gradientLayer.locations = @[@.4, @.8];
-//                return [gradientLayer UIImage:YES];
-//            }
-//
-//            case CrossFadeGradientMaskEffectStyleRadial:break;
-//        }
-//
-//        return nil;
-//    }];
+    crossFadeEffect.maskImage = [self st_cachedImage:cacheKey init:^UIImage * {
+
+        switch(style){
+            case CrossFadeGradientMaskEffectStyleLinearVertical:{
+                CAGradientLayer * gradientLayer = [[CAGradientLayer alloc] init];
+                gradientLayer.startPoint = CGPointMake(0.5,1.0);
+                gradientLayer.endPoint = CGPointMake(0.5,0.0);
+                gradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
+                gradientLayer.colors = @[
+                        (id)[[UIColor whiteColor] CGColor]
+                        , (id)[[UIColor blackColor] CGColor]
+                ];
+                gradientLayer.locations = @[@.4, @.8];
+                return [gradientLayer UIImage:YES];
+            }
+
+            case CrossFadeGradientMaskEffectStyleLinearHorizontal:{
+                CAGradientLayer * gradientLayer = [[CAGradientLayer alloc] init];
+                gradientLayer.startPoint = CGPointMake(0.0,.5);
+                gradientLayer.endPoint = CGPointMake(1.0,.5);
+                gradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
+                gradientLayer.colors = @[
+                        (id)[[UIColor whiteColor] CGColor]
+                        , (id)[[UIColor blackColor] CGColor]
+                ];
+                gradientLayer.locations = @[@.4, @.8];
+                return [gradientLayer UIImage:YES];
+            }
+
+            case CrossFadeGradientMaskEffectStyleRadial:{
+                CCARadialGradientLayer * radialGradientLayer = [CCARadialGradientLayer layer];
+                radialGradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
+                CGFloat minSideSize = CGSizeMinSide(sourceImageSize);
+                radialGradientLayer.gradientOrigin = CGPointMake(minSideSize/2, minSideSize/2);
+                radialGradientLayer.gradientRadius = minSideSize/2;
+                radialGradientLayer.colors = @[
+                        (id)[[UIColor whiteColor] CGColor]
+                        , (id)[[UIColor blackColor] CGColor]
+                ];
+                radialGradientLayer.locations = @[@.6, @1];
+                return [radialGradientLayer UIImage:YES];
+            }
+        }
+
+        return nil;
+    }];
 
     return [crossFadeEffect processImages:sourceImages];
 }
