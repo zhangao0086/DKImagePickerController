@@ -8,5 +8,7 @@
 
 @interface GPUImageMonochromeFilter (STGPUImageFilter)
 
-+ (instancetype)filterWithColor:(UIColor *)color;
++ (instancetype)color:(UIColor *)color;
+
++ (instancetype)color:(UIColor *)color intensity:(CGFloat)intensity;
 @end

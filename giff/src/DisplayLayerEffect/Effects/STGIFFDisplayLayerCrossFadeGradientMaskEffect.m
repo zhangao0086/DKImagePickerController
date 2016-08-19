@@ -3,6 +3,7 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
+#import <GPUImage/GPUImageTwoInputFilter.h>
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 #import "CALayer+STUtil.h"
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
@@ -94,8 +95,11 @@
             return [_colorPicker colorSchemeFromImage:sourceImages[1]];
         }];
 
-        STGPUImageOutputComposeItem * composeItem = crossFadeEffect.composerItemsOfSourceImages[0];
-        composeItem.filters = [composeItem.filters arrayByAddingObject:[GPUImageMonochromeFilter filterWithColor:colorScheme1.backgroundColor]];
+        for(STGPUImageOutputComposeItem * composeItem in composersForCrossFadeEffect){
+            if(composeItem.composer && composeItem.source){
+                composeItem.filters = [composeItem.filters ?: @[] arrayByAddingObject:[GPUImageMonochromeFilter color:colorScheme1.primaryTextColor intensity:.5]];
+            }
+        }
     }
 
     return [crossFadeEffect processComposers:composersForCrossFadeEffect];

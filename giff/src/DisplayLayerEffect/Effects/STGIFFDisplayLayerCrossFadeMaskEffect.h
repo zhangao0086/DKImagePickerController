@@ -8,7 +8,6 @@
 
 
 @interface STGIFFDisplayLayerCrossFadeMaskEffect : STMultiSourcingGPUImageComposerProcessor
-@property (nonatomic, readonly) NSArray<STGPUImageOutputComposeItem *> * composerItemsOfSourceImages;
 @property (nonatomic, readwrite) NSString * maskImageName;
 @property (nonatomic, readwrite) UIImage * maskImage;
 @property (nonatomic, assign) BOOL invertMaskImage;
