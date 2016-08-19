@@ -8,6 +8,8 @@
 #import "CAShapeLayer+STUtil.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "NYXImagesKit.h"
+#import "UIImage+STUtil.h"
+#import "GPUImageMaskFilter.h"
 
 
 @implementation STGIFFDisplayLayerJulieCockburnEffect {
@@ -17,31 +19,23 @@
 - (NSArray *)composersToProcess:(NSArray<UIImage *> *__nullable)sourceImages {
 
     CGSize size = [sourceImages[0] size];
-    size.height *= .3f;
     CAShapeLayer * layer = [CAShapeLayer layerWithSize:size];
     layer.fillColor = [UIColor whiteColor].CGColor;
-    layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMakeWithSize_AGK(size)].CGPath;
+
+    layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(CGRectMakeWithSize_AGK(size), 0, size.height*.3f)].CGPath;
     UIImage * maskImage = [layer UIImage:YES];
 
-    [maskImage maskWithImage:sourceImages[0]];
+    NSMutableArray * composers = NSMutableArray.array;
 
-    STGPUImageOutputComposeItem * composeItem0 = STGPUImageOutputComposeItem.new;
-    [composeItem0 setSourceAsImage:sourceImages[0]];
+    [composers addObject:[STGPUImageOutputComposeItem itemWithSourceImage:maskImage composer:GPUImageMaskFilter.new]];
 
-    return [super composersToProcess:sourceImages];
+    [composers addObject:[STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[0]]];
+
+
+    return [composers reverse];
 }
 
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
-
-    CGSize size = [sourceImages[0] size];
-    size.height *= .3f;
-    CAShapeLayer * layer = [CAShapeLayer layerWithSize:size];
-    layer.fillColor = [UIColor whiteColor].CGColor;
-    layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMakeWithSize_AGK(size)].CGPath;
-    UIImage * maskImage = [layer UIImage:YES];
-
-    return [sourceImages[0] maskWithImage:maskImage];
-
     return [super processImages:sourceImages];
 }
 

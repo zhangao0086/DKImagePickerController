@@ -27,6 +27,35 @@
     return self;
 }
 
+- (instancetype)initWithSourceImage:(UIImage *)sourceImage composer:(GPUImageTwoInputFilter *)composer {
+    self = [super init];
+    if (self) {
+        [self setSourceAsImage:sourceImage];
+        self.composer = composer;
+    }
+
+    return self;
+}
+
+- (instancetype)initWithSourceImage:(UIImage *)sourceImage {
+    self = [super init];
+    if (self) {
+        [self setSourceAsImage:sourceImage];
+    }
+
+    return self;
+}
+
++ (instancetype)itemWithSourceImage:(UIImage *)sourceImage {
+    return [[self alloc] initWithSourceImage:sourceImage];
+}
+
+
++ (instancetype)itemWithSourceImage:(UIImage *)sourceImage composer:(GPUImageTwoInputFilter *)composer {
+    return [[self alloc] initWithSourceImage:sourceImage composer:composer];
+}
+
+
 - (void)setFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)filters {
 #if DEBUG
     for(id filter in filters){
