@@ -56,7 +56,7 @@
 }
 
 - (instancetype)addFilters:(NSArray<GPUImageOutput <GPUImageInput> *> *)filters {
-    self.filters = [self.filters arrayByAddingObjectsFromArray:filters];
+    self.filters = self.filters ? [self.filters arrayByAddingObjectsFromArray:filters] : filters;
     return self;
 }
 

@@ -29,10 +29,11 @@
 
     NSMutableArray * composers = NSMutableArray.array;
 
-    [composers addObject:[STGPUImageOutputComposeItem itemWithSourceImage:maskImage composer:GPUImageMaskFilter.new]];
-
+    [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:maskImage composer:GPUImageMaskFilter.new] addFilters:@[
+            [GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(30))]
+    ]]];
     [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[0]] addFilters:@[
-            [GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(90))]
+            [GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(30))]
     ]]];
 
 
