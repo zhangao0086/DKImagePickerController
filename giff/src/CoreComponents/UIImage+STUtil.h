@@ -44,6 +44,8 @@
 
 - (UIImage *)animatedImageWithAppendingReverse:(NSTimeInterval)newDuration;
 
+- (UIImage *)drawOver:(UIImage *)targetImage;
+
 - (UIImage *)drawOver:(UIImage *)targetImage atPosition:(CGPoint)origin;
 
 - (UIImage *)drawOver:(UIImage *)targetImage atPosition:(CGPoint)origin alpha:(float)alpha;

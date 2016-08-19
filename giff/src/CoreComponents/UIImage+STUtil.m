@@ -645,6 +645,10 @@
 }
 
 #pragma mark overlay
+- (UIImage*)drawOver:(UIImage *)targetImage{
+    return [self drawOver:targetImage atPosition:CGPointZero alpha:1];
+}
+
 - (UIImage*)drawOver:(UIImage *)targetImage atPosition:(CGPoint)origin{
     return [self drawOver:targetImage atPosition:origin alpha:1];
 }
