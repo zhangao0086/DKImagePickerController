@@ -11,7 +11,9 @@
 #import "STCapturedImageSetDisplayLayerSet.h"
 #import "STCapturedImage.h"
 #import "STCapturedImageSetDisplayLayer.h"
-
+#if DEBUG
+#import "NSObject+BNRTimeBlock.h"
+#endif
 
 @implementation STCapturedImageSetDisplayProcessor {
     NSArray<NSArray *> * _resourcesFromTargetLayerSet;
@@ -58,8 +60,17 @@
                 }else{
                     //newly create
                     NSArray<UIImage *> * imagesToProcessEffect = [self loadImagesFromSourceSet:resourceSet];
-                    UIImage * processedImage = [Wself.layerSet.effect processImages:imagesToProcessEffect];
-
+#if DEBUG
+                    __block
+#endif
+                    UIImage * processedImage = nil;
+#if DEBUG
+                    [Wself ckTime:^{
+#endif
+                        processedImage = [Wself.layerSet.effect processImages:imagesToProcessEffect];
+#if DEBUG
+                    } symbol:NSStringFromClass(Wself.layerSet.effect.class)];
+#endif
                     NSAssert(processedImage, ([@"Processed Image is nil: " st_add:tempURLToApplyEffect.path]));
 
                     if([(self.loselessImageEncoding ?
