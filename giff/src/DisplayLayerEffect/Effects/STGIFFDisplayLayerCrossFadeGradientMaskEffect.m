@@ -32,9 +32,12 @@
 }
 
 
-+ (UIImage *)crossFadingGradientMaskImageByStyle:(CrossFadeGradientMaskEffectStyle)style size:(CGSize)size {
++ (UIImage *)crossFadingGradientMaskImageByStyle:(CrossFadeGradientMaskEffectStyle)style size:(CGSize)size locations:(NSArray<NSNumber *> *)locations{
+    NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_"
+            st_add:[[[@(style) stringValue]
+                    st_add:NSStringFromCGSize(size)]
+                    st_add:[locations componentsJoinedByString:@","]]];
 
-    NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(size)]];
     return [self st_cachedImage:cacheKey init:^UIImage * {
 
         switch(style){
@@ -47,7 +50,7 @@
                         (id)[[UIColor whiteColor] CGColor]
                         , (id)[[UIColor blackColor] CGColor]
                 ];
-                gradientLayer.locations = @[@.35, @.75];
+                gradientLayer.locations = locations ?: @[@.35, @.75];
                 return [gradientLayer UIImage:YES];
             }
 
@@ -60,7 +63,7 @@
                         (id)[[UIColor whiteColor] CGColor]
                         , (id)[[UIColor blackColor] CGColor]
                 ];
-                gradientLayer.locations = @[@.35, @.75];
+                gradientLayer.locations = locations ?: @[@.35, @.75];
                 return [gradientLayer UIImage:YES];
             }
 
@@ -74,7 +77,7 @@
                         (id)[[UIColor whiteColor] CGColor]
                         , (id)[[UIColor blackColor] CGColor]
                 ];
-                radialGradientLayer.locations = @[@.6, @1];
+                radialGradientLayer.locations = locations ?: @[@.6, @1];
                 return [radialGradientLayer UIImage:YES];
             }
         }
@@ -92,7 +95,7 @@
     CrossFadeGradientMaskEffectStyle style = self.style;
     STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
 
-    UIImage * maskLayerImage = [self.class crossFadingGradientMaskImageByStyle:style size:sourceImageSize];
+    UIImage * maskLayerImage = [self.class crossFadingGradientMaskImageByStyle:style size:sourceImageSize locations:self.locations];
 
     NSAssert(maskLayerImage, @"maskLayer is nil.");
     crossFadeEffect.maskImageSource = [STRasterizingImageSourceItem itemWithImage:maskLayerImage];
