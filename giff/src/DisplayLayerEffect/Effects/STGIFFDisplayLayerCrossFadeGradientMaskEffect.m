@@ -18,11 +18,10 @@
 #import "GPUImageTransformFilter.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
 #import "STRasterizingImageSourceItem.h"
+#import "STGIFFDisplayLayerEffectSharedUtil.h"
 
 
-@implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect {
-    LEColorPicker * _colorPicker;
-}
+@implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect
 
 - (NSArray *)_composersToProcessCrossFaceEffect:(NSArray<UIImage *> *__nullable)sourceImages {
     UIImage * sourceImage = sourceImages[0];
@@ -90,11 +89,8 @@
     self.style = CrossFadeGradientMaskEffectStyleLinearVertical;
     NSArray * composers = [self _composersToProcessCrossFaceEffect:sourceImages];
 
-    if(!_colorPicker){
-        _colorPicker = [[LEColorPicker alloc] init];
-    }
     LEColorScheme * colorScheme1 = [self st_cachedObject:[sourceImages[1] st_uid] init:^id {
-        return [_colorPicker colorSchemeFromImage:sourceImages[1]];
+        return [[STGIFFDisplayLayerEffectSharedUtil colorPicker] colorSchemeFromImage:sourceImages[1]];
     }];
 
     for(STGPUImageOutputComposeItem * composeItem in composers){

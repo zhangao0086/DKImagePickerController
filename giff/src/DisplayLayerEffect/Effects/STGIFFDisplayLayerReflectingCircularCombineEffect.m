@@ -1,9 +1,9 @@
 //
-// Created by BLACKGENE on 8/18/16.
+// Created by BLACKGENE on 8/21/16.
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STGIFFDisplayLayerCircularCombineEffect.h"
+#import "STGIFFDisplayLayerReflectingCircularCombineEffect.h"
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "UIImage+STUtil.h"
 #import "LEColorPicker.h"
@@ -13,8 +13,8 @@
 #import "STRasterizingImageSourceItem.h"
 #import "STGIFFDisplayLayerEffectSharedUtil.h"
 
+@implementation STGIFFDisplayLayerReflectingCircularCombineEffect
 
-@implementation STGIFFDisplayLayerCircularCombineEffect
 
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     STGIFFDisplayLayerCrossFadeMaskEffect * combineEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
@@ -30,8 +30,6 @@
 
     //https://github.com/metasmile/DominantColor (import)
     UIColor * fillColor = nil;
-
-    
     LEColorScheme * colorScheme0 = [self st_cachedObject:[sourceImages[0] st_uid] init:^id {
         return [[STGIFFDisplayLayerEffectSharedUtil colorPicker] colorSchemeFromImage:sourceImages[0]];
     }];
