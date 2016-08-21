@@ -6,14 +6,7 @@
 #import "STGIFFDisplayLayerReflectingCircularCombineEffect.h"
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "UIImage+STUtil.h"
-#import "LEColorPicker.h"
-#import "NSObject+STUtil.h"
-#import "Colours.h"
-#import "UIColor+STColorUtil.h"
-#import "STRasterizingImageSourceItem.h"
-#import "STGIFFDisplayLayerEffectSharedUtil.h"
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
-#import "NSObject+BNRTimeBlock.h"
 #import "NYXImagesKit.h"
 
 @implementation STGIFFDisplayLayerReflectingCircularCombineEffect
@@ -24,11 +17,15 @@
 
     UIImage * circularClippedImage = [[sourceImages[0] rotateImagePixelsInDegrees:180] clipAsCircle:diameter*.75f scale:sourceImages[0].scale fillColor:[UIColor whiteColor]];
 
+    //TODO: gradient의 경계선 부근에 원근감을 주기 위해서 흰색 gradient띠가 하나 더 필요
     STGIFFDisplayLayerCrossFadeGradientMaskEffect * crossFadeGradientMaskEffect = STGIFFDisplayLayerCrossFadeGradientMaskEffect.new;
     crossFadeGradientMaskEffect.automaticallyMatchUpColors = NO;
 
-    return [crossFadeGradientMaskEffect processImages:@[sourceImages[0],circularClippedImage]];
-//    return [crossFadeGradientMaskEffect processImages:@[[UIImage imageAsColor:[UIColor whiteColor] withSize:sourceImages[0].size],circularClippedImage]];
+//    return [crossFadeGradientMaskEffect processImages:@[sourceImages[0],circularClippedImage]];
+    circularClippedImage = [crossFadeGradientMaskEffect processImages:@[[UIImage imageAsColor:[UIColor whiteColor] withSize:sourceImages[0].size],circularClippedImage]];
+
+
+    return [crossFadeGradientMaskEffect processImages:@[sourceImages.count>1 ? sourceImages[1] : sourceImages[0], circularClippedImage]];
 
 
 //    STGIFFDisplayLayerCrossFadeMaskEffect * combineEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
