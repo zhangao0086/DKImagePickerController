@@ -9,6 +9,7 @@
 #import "GPUImageMaskFilter.h"
 #import "GPUImageTransformFilter.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
+#import "STRasterizingImageSourceItem.h"
 #import "NSNumber+STUtil.h"
 #import "GPUImageNormalBlendFilter.h"
 #import "GPUImageLightenBlendFilter.h"
@@ -60,14 +61,16 @@ NSArray * BlendingFiltersClassNames;
 
 
 - (NSArray *)composersToProcess:(NSArray<UIImage *> *__nullable)sourceImages {
-
-    CGSize size = [sourceImages[0] size];
-    CAShapeLayer * layer = [CAShapeLayer layerWithSize:size];
-    layer.fillColor = [UIColor whiteColor].CGColor;
-
-    layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(CGRectMakeWithSize_AGK(size), size.width*.35f, 0/*size.height*.05f*//*size.height*.3f*/)].CGPath;
-    //TODO:추후 이걸 외부에셋으로 뺄 수도 있겠음
-    UIImage * maskImage = [layer UIImage:YES];
+    UIImage * maskImage = nil;
+    if(self.maskedImageSource){
+        maskImage = [self.maskedImageSource rasterize:sourceImages[0].size];
+    }else{
+        CGSize size = [sourceImages[0] size];
+        CAShapeLayer * layer = [CAShapeLayer layerWithSize:size];
+        layer.fillColor = [UIColor whiteColor].CGColor;
+        layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(CGRectMakeWithSize_AGK(size), size.width*.35f, 0/*size.height*.05f*//*size.height*.3f*/)].CGPath;
+        maskImage = [layer UIImage:YES];
+    }
 
     NSMutableArray * composers = NSMutableArray.array;
 

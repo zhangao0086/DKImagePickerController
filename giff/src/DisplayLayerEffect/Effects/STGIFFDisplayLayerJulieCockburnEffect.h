@@ -6,6 +6,9 @@
 #import <Foundation/Foundation.h>
 #import "STMultiSourcingGPUImageComposerProcessor.h"
 
+@class STRasterizingImageSourceItem;
+
 
 @interface STGIFFDisplayLayerJulieCockburnEffect : STMultiSourcingGPUImageComposerProcessor
+@property (nonatomic, readwrite) STRasterizingImageSourceItem * maskedImageSource;
 @end
