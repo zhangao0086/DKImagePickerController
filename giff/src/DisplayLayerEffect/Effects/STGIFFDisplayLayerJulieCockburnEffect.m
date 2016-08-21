@@ -66,6 +66,7 @@ NSArray * BlendingFiltersClassNames;
     layer.fillColor = [UIColor whiteColor].CGColor;
 
     layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(CGRectMakeWithSize_AGK(size), size.width*.35f, 0/*size.height*.05f*//*size.height*.3f*/)].CGPath;
+    //TODO:추후 이걸 외부에셋으로 뺄 수도 있겠음
     UIImage * maskImage = [layer UIImage:YES];
 
     NSMutableArray * composers = NSMutableArray.array;
