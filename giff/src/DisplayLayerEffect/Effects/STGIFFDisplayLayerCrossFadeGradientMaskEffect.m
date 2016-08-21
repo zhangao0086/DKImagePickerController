@@ -22,6 +22,16 @@
 
 @implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.automaticallyMatchUpColors = YES;
+    }
+
+    return self;
+}
+
+
 + (UIImage *)crossFadingGradientMaskImageByStyle:(CrossFadeGradientMaskEffectStyle)style size:(CGSize)size {
 
     NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(size)]];
@@ -94,13 +104,18 @@
     self.style = CrossFadeGradientMaskEffectStyleLinearVertical;
     NSArray * composers = [self _composersToProcessCrossFaceEffect:sourceImages];
 
-    LEColorScheme * colorScheme1 = [self st_cachedObject:[sourceImages[1] st_uid] init:^id {
-        return [[STGIFFDisplayLayerEffectSharedUtil colorPicker] colorSchemeFromImage:sourceImages[1]];
-    }];
+    NSMutableArray * addingFilters = nil;
+
+    if(self.automaticallyMatchUpColors){
+        LEColorScheme * colorScheme1 = [self st_cachedObject:[sourceImages[1] st_uid] init:^id {
+            return [[STGIFFDisplayLayerEffectSharedUtil colorPicker] colorSchemeFromImage:sourceImages[1]];
+        }];
+        addingFilters = [@[[GPUImageMonochromeFilter color:colorScheme1.backgroundColor intensity:.8]] mutableCopy];
+    }
 
     for(STGPUImageOutputComposeItem * composeItem in composers){
         if(composeItem.composer && composeItem.source){
-            composeItem.filters = [composeItem.filters ?: @[] arrayByAddingObject:[GPUImageMonochromeFilter color:colorScheme1.backgroundColor intensity:.8]];
+            composeItem.filters = [(composeItem.filters ?: @[]) arrayByAddingObjectsFromArray:addingFilters];
             break;
         }
     }

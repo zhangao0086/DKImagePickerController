@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, CrossFadeGradientMaskEffectStyle) {
 
 @interface STGIFFDisplayLayerCrossFadeGradientMaskEffect : STMultiSourcingGPUImageComposerProcessor
 @property (nonatomic, assign) CrossFadeGradientMaskEffectStyle style;
+@property (nonatomic, assign) BOOL automaticallyMatchUpColors;
 
 + (UIImage *)crossFadingGradientMaskImageByStyle:(CrossFadeGradientMaskEffectStyle)style size:(CGSize)size;
 @end

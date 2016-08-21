@@ -32,6 +32,7 @@
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 #import "STGIFFDisplayLayerJulieCockburnEffect.h"
 #import "STRasterizingImageSourceItem.h"
+#import "STGIFFDisplayLayerReflectingCircularCombineEffect.h"
 
 @implementation EBRootViewController {
 
@@ -41,7 +42,7 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"face3.jpg"]
+            @[@"land1.jpg"]
             ,@[@"land2.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
@@ -56,7 +57,7 @@
     [self.view addSubview:_layerSetPresentationView];
 
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeGradientMaskEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerReflectingCircularCombineEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
             , @"maskImageSource" : [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"]
