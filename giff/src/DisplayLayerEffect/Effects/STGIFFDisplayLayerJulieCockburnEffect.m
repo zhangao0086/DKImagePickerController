@@ -17,6 +17,8 @@
 #import "GPUImageMultiplyBlendFilter.h"
 #import "GPUImageSourceOverBlendFilter.h"
 #import "GPUImageScreenBlendFilter.h"
+#import "GPUImageOpacityFilter.h"
+#import "GPUImageOpacityFilter+STGPUImageFilter.h"
 
 
 @implementation STGIFFDisplayLayerJulieCockburnEffect {
@@ -93,6 +95,7 @@ NSArray * BlendingFiltersClassNames;
 
             [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:clipedImage composer: blender] addFilters:@[
                     [[GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(degree))] scaleScalar:.9]
+                    ,[GPUImageOpacityFilter opacity:.8]
             ]]];
         }
     }
