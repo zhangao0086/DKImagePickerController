@@ -5,51 +5,52 @@
 
 #import "STGIFFDisplayLayerJulieCockburnEffect.h"
 #import "CALayer+STUtil.h"
-#import "CAShapeLayer+STUtil.h"
 #import "STGPUImageOutputComposeItem.h"
-#import "NYXImagesKit.h"
-#import "UIImage+STUtil.h"
 #import "GPUImageMaskFilter.h"
 #import "GPUImageTransformFilter.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
 #import "NSNumber+STUtil.h"
-#import "NSObject+BNRTimeBlock.h"
-#import "GPUImageDarkenBlendFilter.h"
 #import "GPUImageNormalBlendFilter.h"
 #import "GPUImageLightenBlendFilter.h"
 #import "GPUImageSoftLightBlendFilter.h"
-#import "GPUImageDifferenceBlendFilter.h"
-#import "GPUImageSubtractBlendFilter.h"
 #import "GPUImageAddBlendFilter.h"
-#import "GPUImageColorBlendFilter.h"
-#import "GPUImageExclusionBlendFilter.h"
-#import "GPUImageLuminosityBlendFilter.h"
 #import "GPUImageMultiplyBlendFilter.h"
 #import "GPUImageSourceOverBlendFilter.h"
-#import "GPUImageLinearBurnBlendFilter.h"
-#import "GPUImageColorDodgeBlendFilter.h"
 #import "GPUImageScreenBlendFilter.h"
-#import "GPUImageOverlayBlendFilter.h"
-#import "GPUImageDissolveBlendFilter.h"
-#import "NSArray+STUtil.h"
 
 
 @implementation STGIFFDisplayLayerJulieCockburnEffect {
-    NSArray * const BlendingFiltersClassNames;
+
 }
+
+NSArray * BlendingFiltersClassNames;
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        BlendingFiltersClassNames = @[
-                NSStringFromClass(GPUImageNormalBlendFilter.class),
-                NSStringFromClass(GPUImageSourceOverBlendFilter.class),
-                NSStringFromClass(GPUImageSoftLightBlendFilter.class),
-                NSStringFromClass(GPUImageAddBlendFilter.class),
-                NSStringFromClass(GPUImageLightenBlendFilter.class),
-                NSStringFromClass(GPUImageMultiplyBlendFilter.class),
-                NSStringFromClass(GPUImageScreenBlendFilter.class)
-        ];
+        //GPUImageNormalBlendFilter -> original
+        //GPUImageSourceOverBlendFilter -> original
+        //GPUImageSoftLightBlendFilter
+        //GPUImageAddBlendFilter
+        //GPUImageLightenBlendFilter
+        //GPUImageMultiplyBlendFilter
+        //GPUImageScreenBlendFilter
+
+        //GPUImageDissolveBlendFilter -> normal but removed original pixels.
+
+        //GPUImageDifferenceBlendFilter -> clipped but awesome.
+
+        BlockOnce(^{
+            (BlendingFiltersClassNames = @[
+                    NSStringFromClass(GPUImageNormalBlendFilter.class),
+                    NSStringFromClass(GPUImageSourceOverBlendFilter.class),
+                    NSStringFromClass(GPUImageSoftLightBlendFilter.class),
+                    NSStringFromClass(GPUImageAddBlendFilter.class),
+                    NSStringFromClass(GPUImageLightenBlendFilter.class),
+                    NSStringFromClass(GPUImageMultiplyBlendFilter.class),
+                    NSStringFromClass(GPUImageScreenBlendFilter.class)
+            ]);
+        });
     }
 
     return self;
@@ -62,7 +63,7 @@
     CAShapeLayer * layer = [CAShapeLayer layerWithSize:size];
     layer.fillColor = [UIColor whiteColor].CGColor;
 
-    layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(CGRectMakeWithSize_AGK(size), 0, size.height*.3f)].CGPath;
+    layer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(CGRectMakeWithSize_AGK(size), size.width*.35f, 0/*size.height*.05f*//*size.height*.3f*/)].CGPath;
     UIImage * maskImage = [layer UIImage:YES];
 
     NSMutableArray * composers = NSMutableArray.array;
@@ -79,33 +80,25 @@
     [composers removeAllObjects];
 
     CGFloat gapOfDegree = 36;
-
-    //GPUImageNormalBlendFilter -> original
-    //GPUImageSourceOverBlendFilter -> original
-    //GPUImageSoftLightBlendFilter
-    //GPUImageAddBlendFilter
-    //GPUImageLightenBlendFilter
-    //GPUImageMultiplyBlendFilter
-    //GPUImageScreenBlendFilter
-
-    //GPUImageDissolveBlendFilter -> normal but removed original pixels.
-
-    //GPUImageDifferenceBlendFilter -> clipped but awesome.
-    
     NSUInteger count = (NSUInteger) ((180+gapOfDegree) / gapOfDegree);
     for(id index in [@(count) st_intArray]){
         @autoreleasepool {
-            CGFloat degree = gapOfDegree * [index floatValue];
+            CGFloat degree = gapOfDegree * ([index floatValue]/*start degree is 'gapOfDegree'*/+1);
 //            NSString * blenderClassName = [blendingFiltersClassNames st_objectOrNilAtIndex:[index unsignedIntegerValue]];
-            NSString * blenderClassName = [BlendingFiltersClassNames st_objectOrNilAtIndex:randomir(1,BlendingFiltersClassNames.count-1)];
-            GPUImageTwoInputFilter * blender = ([index unsignedIntegerValue]==count-1) ?
-                    nil : (GPUImageTwoInputFilter *)[NSClassFromString(blenderClassName ?: BlendingFiltersClassNames[0]) new];
+//            NSString * blenderClassName = NSStringFromClass(GPUImageMultiplyBlendFilter.class);
+            NSString * blenderClassName = BlendingFiltersClassNames[0];
+
+            GPUImageTwoInputFilter * blender = [index unsignedIntegerValue]==count-1 ?
+                    GPUImageNormalBlendFilter.new : (GPUImageTwoInputFilter *)[NSClassFromString(blenderClassName ?: BlendingFiltersClassNames[0]) new];
 
             [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:clipedImage composer: blender] addFilters:@[
-                    [GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(degree))]
+                    [[GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(degree))] scaleScalar:.9]
             ]]];
         }
     }
+
+    [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[0]] addFilters:@[
+    ]]];
 
     return [composers reverse];
 }
