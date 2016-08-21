@@ -74,7 +74,9 @@ NSArray * BlendingFiltersClassNames;
 
     NSMutableArray * composers = NSMutableArray.array;
 
-    //get cliped image
+    /*
+     * get cliped image 0
+     */
     [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:maskImage composer:GPUImageMaskFilter.new] addFilters:@[
 //            [GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(30))]
     ]]];
@@ -82,29 +84,44 @@ NSArray * BlendingFiltersClassNames;
 //            [GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(30))]
     ]]];
     UIImage * clipedImage = [self processComposers:[composers reverse]];
-
     [composers removeAllObjects];
+
+    /*
+     * get cliped image 1
+     */
+    UIImage * clipedImage1 = nil;
+    if(sourceImages.count>1){
+        [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:maskImage composer:GPUImageMaskFilter.new] addFilters:@[
+        ]]];
+        [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[1]] addFilters:@[
+        ]]];
+        clipedImage1 = [self processComposers:[composers reverse]];
+        [composers removeAllObjects];
+    }
 
     CGFloat gapOfDegree = 36;
     NSUInteger count = (NSUInteger) ((180+gapOfDegree) / gapOfDegree);
     for(id index in [@(count) st_intArray]){
         @autoreleasepool {
+            NSUInteger i = [index unsignedIntegerValue];
             CGFloat degree = gapOfDegree * ([index floatValue]/*start degree is 'gapOfDegree'*/+1);
 //            NSString * blenderClassName = [blendingFiltersClassNames st_objectOrNilAtIndex:[index unsignedIntegerValue]];
 //            NSString * blenderClassName = NSStringFromClass(GPUImageMultiplyBlendFilter.class);
             NSString * blenderClassName = BlendingFiltersClassNames[0];
 
-            GPUImageTwoInputFilter * blender = [index unsignedIntegerValue]==count-1 ?
+            GPUImageTwoInputFilter * blender = i==count-1 ?
                     GPUImageNormalBlendFilter.new : (GPUImageTwoInputFilter *)[NSClassFromString(blenderClassName ?: BlendingFiltersClassNames[0]) new];
 
-            [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:clipedImage composer: blender] addFilters:@[
+            UIImage * targetImageToBlend = clipedImage1 ? (i % 2 ? clipedImage : clipedImage1) : clipedImage;
+
+            [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:targetImageToBlend composer: blender] addFilters:@[
                     [[GPUImageTransformFilter transform:CGAffineTransformMakeRotation(AGKDegreesToRadians(degree))] scaleScalar:.9]
-                    ,[GPUImageOpacityFilter opacity:.8]
+                    ,[GPUImageOpacityFilter opacity:.65]
             ]]];
         }
     }
 
-    [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[0]] addFilters:@[
+    [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage: sourceImages[0]] addFilters:@[
     ]]];
 
     return [composers reverse];
