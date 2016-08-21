@@ -10,6 +10,7 @@
 #import "NSObject+STUtil.h"
 #import "Colours.h"
 #import "UIColor+STColorUtil.h"
+#import "STRasterizingImageSourceItem.h"
 
 
 @implementation STGIFFDisplayLayerCircularCombineEffect {
@@ -28,7 +29,7 @@
 
 - (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
     STGIFFDisplayLayerCrossFadeMaskEffect * combineEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
-    combineEffect.maskImageName = @"STGIFFDisplayLayerCrossFadeEffect_patt4.svg";
+    combineEffect.maskImageSource = [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerCrossFadeEffect_patt4.svg"];
 
     //when process with single source, result should transform
     if(sourceImages.count==1){

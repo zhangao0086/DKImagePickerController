@@ -95,12 +95,22 @@
 + (SVGKImage *)imageNamedNoCache:(NSString *)name withSize:(CGSize)size{
     SVGKImage * image = [SVGKImage imageWithSource:[SVGKSourceLocalFile internalSourceAnywhereInBundleUsingName:name]];
     NSAssert([image hasSize], @"not found svg' size");
+    //why scaling?
     image.size = CGSizeByScale(size, [UIScreen mainScreen].scale);
     return image;
 }
 
 + (SVGKImage *)imageNamedNoCache:(NSString *)name widthSizeWidth:(CGFloat)sizeWidth{
-    SVGKImage * image = [SVGKImage imageWithSource:[SVGKSourceLocalFile internalSourceAnywhereInBundleUsingName:name]];
+    return [self imageSourcedNoCache:[SVGKSourceLocalFile internalSourceAnywhereInBundleUsingName:name] widthSizeWidth:sizeWidth];
+}
+
++ (SVGKImage *)imageURLNoCache:(NSURL *)url widthSizeWidth:(CGFloat)sizeWidth{
+    return [self imageSourcedNoCache:[SVGKSourceURL sourceFromURL:url] widthSizeWidth:sizeWidth];
+}
+
++ (SVGKImage *)imageSourcedNoCache:(SVGKSource *)source widthSizeWidth:(CGFloat)sizeWidth{
+    //exactly duplicated
+    SVGKImage * image = [SVGKImage imageWithSource:source];
     NSAssert([image hasSize], @"not found svg' size");
     image.size = CGSizeMake(sizeWidth, sizeWidth*(image.size.height/image.size.width));
     return image;

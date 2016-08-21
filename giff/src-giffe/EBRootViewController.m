@@ -31,6 +31,7 @@
 #import "STGIFFDisplayLayerHalfToneEffect.h"
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 #import "STGIFFDisplayLayerJulieCockburnEffect.h"
+#import "STRasterizingImageSourceItem.h"
 
 @implementation EBRootViewController {
 
@@ -55,10 +56,10 @@
     [self.view addSubview:_layerSetPresentationView];
 
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJulieCockburnEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeGradientMaskEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
-            , @"patternImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"
+            , @"maskImageSource" : [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"]
 //            , @"transformFadingImage" : [NSValue valueWithCGAffineTransform:CGAffineTransformMakeScale(-1,-1)]
     };
 

@@ -10,6 +10,7 @@
 #import "STFilterManager.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "SVGKImage.h"
+#import "STRasterizingImageSourceItem.h"
 #import "SVGKImage+STUtil.h"
 #import "NSString+STUtil.h"
 #import "UIImage+STUtil.h"
@@ -34,22 +35,8 @@
 
 
 - (UIImage *)patternImage:(CGSize)imageSize{
-    //an image that used as a mask image must be filled out black and white color on both sides, background and foreground.
-    UIImage * maskeImage = nil;
-    if(self.maskImage){
-        NSAssert(CGSizeEqualToSize(imageSize,self.maskImage.size), @"Size of patternImage is not matched with given image size");
-        maskeImage = self.maskImage;
-    }
 
-    NSString * mimeTypeForPatternImage = [self.maskImageName mimeTypeFromPathExtension];
-    if([@"image/svg+xml" isEqualToString:mimeTypeForPatternImage]){
-        maskeImage = [[SVGKImage imageNamedNoCache:self.maskImageName widthSizeWidth:imageSize.width] UIImage];
-    }else if([@"image/png" isEqualToString:mimeTypeForPatternImage] || [@"image/jpeg" isEqualToString:mimeTypeForPatternImage]){
-        maskeImage = [UIImage imageBundled:self.maskImageName];
-    }else{
-        NSAssert(maskeImage, ([mimeTypeForPatternImage st_add:@" is not supported file format"]));
-    }
-
+    UIImage * maskeImage = [self.maskImageSource rasterize:imageSize];
     return self.invertMaskImage ? [maskeImage invert] : maskeImage;
 }
 

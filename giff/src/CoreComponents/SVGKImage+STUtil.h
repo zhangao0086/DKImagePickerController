@@ -36,6 +36,10 @@
 
 + (SVGKImage *)imageNamedNoCache:(NSString *)name widthSizeWidth:(CGFloat)sizeWidth;
 
++ (SVGKImage *)imageURLNoCache:(NSURL *)url widthSizeWidth:(CGFloat)sizeWidth;
+
++ (SVGKImage *)imageSourcedNoCache:(SVGKSource *)source widthSizeWidth:(CGFloat)sizeWidth;
+
 + (CALayer *)layerNamedWithFillColor:(NSString *)name size:(CGSize)size color:(UIColor *)color;
 
 + (UIView *)viewNamedWithFillColor:(NSString *)name size:(CGSize)size color:(UIColor *)color;

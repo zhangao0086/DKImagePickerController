@@ -17,6 +17,7 @@
 #import "GPUImageMonochromeFilter+STGPUImageFilter.h"
 #import "GPUImageTransformFilter.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
+#import "STRasterizingImageSourceItem.h"
 
 
 @implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect {
@@ -31,7 +32,7 @@
     CrossFadeGradientMaskEffectStyle style = self.style;
     STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
     NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(sourceImageSize)]];
-    crossFadeEffect.maskImage = [self st_cachedImage:cacheKey init:^UIImage * {
+    UIImage * maskLayerImage = [self st_cachedImage:cacheKey init:^UIImage * {
 
         switch(style){
             case CrossFadeGradientMaskEffectStyleLinearVertical:{
@@ -75,9 +76,12 @@
             }
         }
 
+        NSAssert(NO, @"Not supported gradient style.");
         return nil;
     }];
 
+    NSAssert(maskLayerImage, @"maskLayer is nil.");
+    crossFadeEffect.maskImageSource = [STRasterizingImageSourceItem itemWithImage:maskLayerImage];
     return [crossFadeEffect composersToProcess:sourceImages];
 }
 
