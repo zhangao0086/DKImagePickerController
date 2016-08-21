@@ -4,7 +4,6 @@
 //
 
 #import <GPUImage/GPUImageTwoInputFilter.h>
-#import <Colours/Colours.h>
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 #import "CALayer+STUtil.h"
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
@@ -23,22 +22,17 @@
 
 @implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect
 
-- (NSArray *)_composersToProcessCrossFaceEffect:(NSArray<UIImage *> *__nullable)sourceImages {
-    UIImage * sourceImage = sourceImages[0];
++ (UIImage *)crossFadingGradientMaskImageByStyle:(CrossFadeGradientMaskEffectStyle)style size:(CGSize)size {
 
-    CGSize sourceImageSize = sourceImage.size;
-
-    CrossFadeGradientMaskEffectStyle style = self.style;
-    STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
-    NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(sourceImageSize)]];
-    UIImage * maskLayerImage = [self st_cachedImage:cacheKey init:^UIImage * {
+    NSString * cacheKey = [@"STGIFFDisplayLayerCrossFadeGradientMaskEffect_gradient_" st_add:[[@(style) stringValue] st_add:NSStringFromCGSize(size)]];
+    return [self st_cachedImage:cacheKey init:^UIImage * {
 
         switch(style){
             case CrossFadeGradientMaskEffectStyleLinearVertical:{
                 CAGradientLayer * gradientLayer = [[CAGradientLayer alloc] init];
                 gradientLayer.startPoint = CGPointMake(0.5,1.0);
                 gradientLayer.endPoint = CGPointMake(0.5,0.0);
-                gradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
+                gradientLayer.frame = (CGRect){CGPointZero, size};
                 gradientLayer.colors = @[
                         (id)[[UIColor whiteColor] CGColor]
                         , (id)[[UIColor blackColor] CGColor]
@@ -51,7 +45,7 @@
                 CAGradientLayer * gradientLayer = [[CAGradientLayer alloc] init];
                 gradientLayer.startPoint = CGPointMake(0.0,.5);
                 gradientLayer.endPoint = CGPointMake(1.0,.5);
-                gradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
+                gradientLayer.frame = (CGRect){CGPointZero, size};
                 gradientLayer.colors = @[
                         (id)[[UIColor whiteColor] CGColor]
                         , (id)[[UIColor blackColor] CGColor]
@@ -62,8 +56,8 @@
 
             case CrossFadeGradientMaskEffectStyleRadial:{
                 CCARadialGradientLayer * radialGradientLayer = [CCARadialGradientLayer layer];
-                radialGradientLayer.frame = (CGRect){CGPointZero, sourceImageSize};
-                CGFloat minSideSize = CGSizeMinSide(sourceImageSize);
+                radialGradientLayer.frame = (CGRect){CGPointZero, size};
+                CGFloat minSideSize = CGSizeMinSide(size);
                 radialGradientLayer.gradientOrigin = CGPointMake(minSideSize/2, minSideSize/2);
                 radialGradientLayer.gradientRadius = minSideSize/2;
                 radialGradientLayer.colors = @[
@@ -78,6 +72,17 @@
         NSAssert(NO, @"Not supported gradient style.");
         return nil;
     }];
+}
+
+- (NSArray *)_composersToProcessCrossFaceEffect:(NSArray<UIImage *> *__nullable)sourceImages {
+    UIImage * sourceImage = sourceImages[0];
+
+    CGSize sourceImageSize = sourceImage.size;
+
+    CrossFadeGradientMaskEffectStyle style = self.style;
+    STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeEffect = STGIFFDisplayLayerCrossFadeMaskEffect.new;
+
+    UIImage * maskLayerImage = [self.class crossFadingGradientMaskImageByStyle:style size:sourceImageSize];
 
     NSAssert(maskLayerImage, @"maskLayer is nil.");
     crossFadeEffect.maskImageSource = [STRasterizingImageSourceItem itemWithImage:maskLayerImage];
