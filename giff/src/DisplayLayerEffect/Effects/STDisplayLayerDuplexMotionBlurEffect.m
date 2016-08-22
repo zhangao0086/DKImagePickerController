@@ -27,7 +27,7 @@
     motionBlurFilter.blurSize = 8;
     composeItem.filters = @[
             motionBlurFilter
-            ,[GPUImageBrightnessFilter brightness:-0.2f]
+            ,[GPUImageBrightnessFilter brightness:-0.16f]
             ,[GPUImageContrastFilter contrast:1.05f]
             ,[GPUImageTransformFilter scale:-1 y:1]
     ];
@@ -53,7 +53,7 @@
     composeItem.filters = @[
             motionBlurFilter
             ,[GPUImageBrightnessFilter brightness:-0.05f]
-            ,[GPUImageContrastFilter contrast:1.4f]
+            ,[GPUImageContrastFilter contrast:1.1f]
 //            ,[GPUImageTransformFilter scale:-1 y:1]
     ];
     UIImage * bluredImage = [self processComposers:@[composeItem]];
