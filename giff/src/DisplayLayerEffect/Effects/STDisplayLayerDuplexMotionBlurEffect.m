@@ -61,7 +61,7 @@
     STGIFFDisplayLayerCrossFadeGradientMaskEffect * crossFadeGradientMaskEffect = [[STGIFFDisplayLayerCrossFadeGradientMaskEffect alloc] init];
     crossFadeGradientMaskEffect.style = CrossFadeGradientMaskEffectStyleRadial;
     crossFadeGradientMaskEffect.automaticallyMatchUpColors = NO;
-    crossFadeGradientMaskEffect.locations = @[@.35,@1];
+    crossFadeGradientMaskEffect.locations = @[@.32,@1];
 
     return [crossFadeGradientMaskEffect composersToProcess:@[backgroundImage, bluredImage]];
 }
