@@ -31,4 +31,12 @@
     return [self addTransfrom:CGAffineTransformMakeRotation(angle)];
 }
 
+- (instancetype)translate:(CGFloat)x y:(CGFloat)y{
+    return [self addTransfrom:CGAffineTransformMakeTranslation(x,y)];
+}
+
++ (instancetype)translate:(CGFloat)x y:(CGFloat)y{
+    return [[[GPUImageTransformFilter alloc] init] translate:x y:y];
+}
+
 @end

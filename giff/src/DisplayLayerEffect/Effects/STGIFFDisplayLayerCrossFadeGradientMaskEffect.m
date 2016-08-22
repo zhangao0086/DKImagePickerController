@@ -104,7 +104,9 @@
 
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
-    self.style = CrossFadeGradientMaskEffectStyleLinearVertical;
+    if(!self.style){
+        self.style = CrossFadeGradientMaskEffectStyleLinearVertical;
+    }
     NSArray * composers = [self _composersToProcessCrossFaceEffect:sourceImages];
 
     NSMutableArray * addingFilters = nil;
@@ -127,7 +129,9 @@
 }
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
-    self.style = CrossFadeGradientMaskEffectStyleLinearHorizontal;
+    if(!self.style){
+        self.style = CrossFadeGradientMaskEffectStyleLinearHorizontal;
+    }
     NSArray * composers = [self _composersToProcessCrossFaceEffect:@[sourceImage]];
     for(STGPUImageOutputComposeItem * composeItem in composers){
         if(composeItem.source){
