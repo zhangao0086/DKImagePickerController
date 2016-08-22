@@ -8,7 +8,7 @@
 
 @implementation GPUImageAlphaBlendFilter (STGPUImageFilter)
 
-+ (instancetype)filterWithAlphaMix:(CGFloat)mix {
++ (instancetype)alphaMix:(CGFloat)mix {
     GPUImageAlphaBlendFilter * alphaBlendFilter = GPUImageAlphaBlendFilter.new;
     alphaBlendFilter.mix = mix;
     return alphaBlendFilter;

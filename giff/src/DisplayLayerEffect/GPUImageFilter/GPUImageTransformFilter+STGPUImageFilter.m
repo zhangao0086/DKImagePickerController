@@ -19,8 +19,16 @@
     return self;
 }
 
++ (instancetype)scaleScalar:(CGFloat)scalar{
+    return [self scale:scalar y:scalar];
+}
+
 - (instancetype)scaleScalar:(CGFloat)scaleScalar{
     return [self scale:CGPointMake(scaleScalar, scaleScalar)];
+}
+
++ (instancetype)scale:(CGFloat)x y:(CGFloat)y{
+    return [[[GPUImageTransformFilter alloc] init] scale:CGPointMake(x,y)];
 }
 
 - (instancetype)scale:(CGPoint)scale{

@@ -11,6 +11,10 @@
 
 + (instancetype)translate:(CGFloat)x y:(CGFloat)y;
 
++ (instancetype)scaleScalar:(CGFloat)scalar;
+
++ (instancetype)scale:(CGFloat)x y:(CGFloat)y;
+
 - (instancetype)addTransfrom:(CGAffineTransform)transform;
 
 - (instancetype)scaleScalar:(CGFloat)scaleScalar;

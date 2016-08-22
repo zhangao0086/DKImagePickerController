@@ -8,6 +8,6 @@
 
 @interface GPUImageAlphaBlendFilter (STGPUImageFilter)
 
-+ (instancetype)filterWithAlphaMix:(CGFloat)mix;
++ (instancetype)alphaMix:(CGFloat)mix;
 
 @end
