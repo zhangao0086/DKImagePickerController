@@ -26,6 +26,7 @@
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 #import "STGIFFDisplayLayerJulieCockburnEffect.h"
 #import "STGIFFDisplayLayerReflectingCircularCombineEffect.h"
+#import "STDisplayLayerDuplexMotionBlurEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -54,6 +55,7 @@
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCircularCombineEffect.class imageName:@"STGIFFDisplayLayerCircularCombineEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJulieCockburnEffect.class imageName:@"STGIFFDisplayLayerJulieCockburnEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerReflectingCircularCombineEffect.class imageName:@"STGIFFDisplayLayerReflectingCircularCombineEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STDisplayLayerDuplexMotionBlurEffect.class imageName:@"STDisplayLayerDuplexMotionBlurEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class imageName:@"STGIFFDisplayLayerFluorEffect.jpg"]
     ]);
