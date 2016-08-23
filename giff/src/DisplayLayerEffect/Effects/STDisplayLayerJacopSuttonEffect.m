@@ -29,46 +29,17 @@
     return 1;
 }
 
-- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+- (NSArray *)composersToProcessSingle:(UIImage *__nullable)sourceImage {
 
-    return [sourceImages[0] blurredImageWithRadius:200 iterations:2 tintColor:nil];;
+    UIImage * bluredImage = [sourceImage blurredImageWithRadius:200 iterations:2 tintColor:nil];
 
-    return [sourceImages[0] gaussianBlurWithBias:100];
+    STGIFFDisplayLayerCrossFadeGradientMaskEffect * crossFadeGradientMaskEffect = [[STGIFFDisplayLayerCrossFadeGradientMaskEffect alloc] init];
+    crossFadeGradientMaskEffect.style = CrossFadeGradientMaskEffectStyleRadial;
+    crossFadeGradientMaskEffect.automaticallyMatchUpColors = NO;
+    crossFadeGradientMaskEffect.locations = @[@.2,@1];
 
-    STGPUImageOutputComposeItem * composeItem = [STGPUImageOutputComposeItem itemWithSourceImage:sourceImages[0]];
-
-    GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
-    blurFilter.blurRadiusInPixels = 10;
-    composeItem.filters = @[
-            blurFilter
-            ,[GPUImageBrightnessFilter brightness:-0.05f]
-            ,[GPUImageContrastFilter contrast:1.1f]
-            ,[GPUImageTransformFilter scale:-1 y:1]
-    ];
-    UIImage * bluredImage = [self processComposers:@[composeItem]];
-    return bluredImage;
+    return [crossFadeGradientMaskEffect composersToProcess:@[sourceImage, bluredImage]];
 }
-
-//- (NSArray *)composersToProcessSingle:(UIImage *__nullable)sourceImage {
-//    STGPUImageOutputComposeItem * composeItem = [STGPUImageOutputComposeItem itemWithSourceImage:sourceImage];
-//
-//    GPUImageGaussianBlurFilter * blurFilter = [[GPUImageGaussianBlurFilter alloc] init];
-//    blurFilter.blurRadiusInPixels = 20;
-//    composeItem.filters = @[
-//            blurFilter
-//            ,[GPUImageBrightnessFilter brightness:-0.05f]
-//            ,[GPUImageContrastFilter contrast:1.1f]
-//            ,[GPUImageTransformFilter scale:-1 y:1]
-//    ];
-//    UIImage * bluredImage = [self processComposers:@[composeItem]];
-//
-//    STGIFFDisplayLayerCrossFadeGradientMaskEffect * crossFadeGradientMaskEffect = [[STGIFFDisplayLayerCrossFadeGradientMaskEffect alloc] init];
-//    crossFadeGradientMaskEffect.style = CrossFadeGradientMaskEffectStyleRadial;
-//    crossFadeGradientMaskEffect.automaticallyMatchUpColors = NO;
-//    crossFadeGradientMaskEffect.locations = @[@.32,@1];
-//
-//    return [crossFadeGradientMaskEffect composersToProcess:@[sourceImage, bluredImage]];
-//}
 
 
 @end
