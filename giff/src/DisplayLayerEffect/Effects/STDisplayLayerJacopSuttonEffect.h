@@ -4,7 +4,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "STMultiSourcingGPUImageProcessor.h"
+#import "STMultiSourcingGPUImageComposerProcessor.h"
 
 
-@interface STDisplayLayerJacopSuttonEffect : NSObject
+@interface STDisplayLayerJacopSuttonEffect : STMultiSourcingGPUImageComposerProcessor
+
 @end

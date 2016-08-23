@@ -14,7 +14,8 @@
 - (instancetype)initWithClass:(Class)classObj imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply {
     self = [super init];
     if (self) {
-        NSAssert([classObj isKindOfClass:STMultiSourcingImageProcessor.class], @"Class must be a kind of STMultiSourcingImageProcessor");
+
+        NSAssert([classObj isSubclassOfClass:STMultiSourcingImageProcessor.class], @"Class must be a subclass of STMultiSourcingImageProcessor");
         _classObj = classObj;
 
         BOOL respondsMaxSupportedNumberOfSourceImages = [classObj respondsToSelector:@selector(maxSupportedNumberOfSourceImages)];

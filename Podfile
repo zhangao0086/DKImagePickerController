@@ -98,7 +98,7 @@ def common_pods
 
 # image
   pod "NYXImagesKit", :git=> "https://github.com/metasmile/NYXImagesKit.git", :commit => 'c8a67d6' # https://github.com/Nyx0uf/NYXImagesKit
-# pod "FXBlurView", :git=> "https://github.com/nicklockwood/FXBlurView.git", :commit => 'HEAD'
+  pod "FXBlurView", :git=> "https://github.com/nicklockwood/FXBlurView.git", :commit => 'HEAD'
 # pod "FaceAwareFill" #reference with : https://github.com/croath/UIImageView-BetterFace/tree/master/bf/bf/BetterFaceClass
   pod "SDWebImage"
   pod "DFImageManager"

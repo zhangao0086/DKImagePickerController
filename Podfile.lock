@@ -89,6 +89,7 @@ PODS:
     - FBSDKCoreKit
   - FCFileManager (1.0.17)
   - FLAnimatedImage (1.0.12)
+  - FXBlurView (1.6.4)
   - FXNotifications (1.1)
   - GPUImage (0.1.7)
   - GusUtils (0.0.1)
@@ -199,6 +200,7 @@ DEPENDENCIES:
   - FBSDKMessengerShareKit
   - FBSDKShareKit
   - FCFileManager
+  - FXBlurView (from `https://github.com/nicklockwood/FXBlurView.git`, commit `HEAD`)
   - FXNotifications
   - GPUImage (from `./Podspec/GPUImage.podspec`)
   - GusUtils
@@ -255,6 +257,9 @@ EXTERNAL SOURCES:
   dyci:
     :branch: master
     :git: https://github.com/metasmile/dyci-main.git
+  FXBlurView:
+    :commit: HEAD
+    :git: https://github.com/nicklockwood/FXBlurView.git
   GPUImage:
     :podspec: "./Podspec/GPUImage.podspec"
   iRate:
@@ -287,6 +292,9 @@ CHECKOUT OPTIONS:
   dyci:
     :commit: 105b63700a5872b8871975ceab3aae64f4b78518
     :git: https://github.com/metasmile/dyci-main.git
+  FXBlurView:
+    :commit: HEAD
+    :git: https://github.com/nicklockwood/FXBlurView.git
   iRate:
     :commit: edceac04b4c72ebd49a8fbaf19d4411ca18f5e9e
     :git: https://github.com/nicklockwood/iRate.git
@@ -329,6 +337,7 @@ SPEC CHECKSUMS:
   FBSDKShareKit: 2d1746144cfc8a9dbbd24997c34ee0471be51b6a
   FCFileManager: 8bfc931ce2a6223676147e9baf0e8a65c691eca6
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  FXBlurView: db786c2561cb49a09ae98407f52460096ab8a44f
   FXNotifications: 97e1ef1f4608dea5078a851846e8d47a379678b0
   GPUImage: e3da5d6afd40eefee072d183e6b0de9f76304b81
   GusUtils: b8c0be21dda8092413b178353250fc19a34a6d3d

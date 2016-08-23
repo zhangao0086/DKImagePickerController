@@ -30,7 +30,7 @@
 }
 
 - (NSArray *)composersToProcess:(NSArray<UIImage *> *__nullable)sourceImages {
-    return sourceImages.count==1 || [self.class maxSupportedNumberOfSourceImages]==1 ? [self composersToProcessSingle:sourceImages[0]] : [self composersToProcessMultiple:sourceImages];
+    return sourceImages.count==1 ? [self composersToProcessSingle:sourceImages[0]] : [self composersToProcessMultiple:sourceImages];
 }
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {

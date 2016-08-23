@@ -34,6 +34,7 @@
 #import "STRasterizingImageSourceItem.h"
 #import "STGIFFDisplayLayerReflectingCircularCombineEffect.h"
 #import "STDisplayLayerDuplexMotionBlurEffect.h"
+#import "STDisplayLayerJacopSuttonEffect.h"
 
 @implementation EBRootViewController {
 
@@ -58,7 +59,7 @@
     [self.view addSubview:_layerSetPresentationView];
 
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STDisplayLayerDuplexMotionBlurEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STDisplayLayerJacopSuttonEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
             , @"maskImageSource" : [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"]
