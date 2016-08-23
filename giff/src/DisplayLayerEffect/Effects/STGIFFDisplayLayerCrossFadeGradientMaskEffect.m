@@ -18,6 +18,7 @@
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
 #import "STRasterizingImageSourceItem.h"
 #import "STGIFFDisplayLayerEffectSharedUtil.h"
+#import "NSArray+STUtil.h"
 
 
 @implementation STGIFFDisplayLayerCrossFadeGradientMaskEffect
@@ -39,6 +40,16 @@
                     st_add:[locations componentsJoinedByString:@","]]];
 
     return [self st_cachedImage:cacheKey init:^UIImage * {
+        NSArray * _colors = @[
+                (id) [[UIColor whiteColor] CGColor]
+                , (id) [[UIColor blackColor] CGColor]
+        ];
+
+        if(locations.count){
+            _colors = [_colors arrayByInterpolatingRemappedCount:locations.count];
+        }
+
+        oo(_colors);
 
         switch(style){
             case CrossFadeGradientMaskEffectStyleLinearVertical:{
@@ -46,10 +57,7 @@
                 gradientLayer.startPoint = CGPointMake(0.5,1.0);
                 gradientLayer.endPoint = CGPointMake(0.5,0.0);
                 gradientLayer.frame = (CGRect){CGPointZero, size};
-                gradientLayer.colors = @[
-                        (id)[[UIColor whiteColor] CGColor]
-                        , (id)[[UIColor blackColor] CGColor]
-                ];
+                gradientLayer.colors = _colors;
                 gradientLayer.locations = locations ?: @[@.35, @.75];
                 return [gradientLayer UIImage:YES];
             }
@@ -59,10 +67,7 @@
                 gradientLayer.startPoint = CGPointMake(0.0,.5);
                 gradientLayer.endPoint = CGPointMake(1.0,.5);
                 gradientLayer.frame = (CGRect){CGPointZero, size};
-                gradientLayer.colors = @[
-                        (id)[[UIColor whiteColor] CGColor]
-                        , (id)[[UIColor blackColor] CGColor]
-                ];
+                gradientLayer.colors = _colors;
                 gradientLayer.locations = locations ?: @[@.35, @.75];
                 return [gradientLayer UIImage:YES];
             }
@@ -73,10 +78,7 @@
                 CGFloat minSideSize = CGSizeMinSide(size);
                 radialGradientLayer.gradientOrigin = CGPointMake(size.width/2, size.height/2);
                 radialGradientLayer.gradientRadius = minSideSize/2;
-                radialGradientLayer.colors = @[
-                        (id)[[UIColor whiteColor] CGColor]
-                        , (id)[[UIColor blackColor] CGColor]
-                ];
+                radialGradientLayer.colors = _colors;
                 radialGradientLayer.locations = locations ?: @[@.6, @1];
                 return [radialGradientLayer UIImage:YES];
             }
