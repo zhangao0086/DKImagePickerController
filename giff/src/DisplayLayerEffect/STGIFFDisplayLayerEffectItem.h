@@ -8,9 +8,12 @@
 
 
 @interface STGIFFDisplayLayerEffectItem : STItem
-@property (nonatomic, readwrite) NSString * className;
+@property (nonatomic, readonly) Class classObj;
+@property (nonatomic, readonly) NSUInteger maxSupportedNumberOfSourceImages;
 @property (nonatomic, readwrite) NSString * imageName;
 @property (nonatomic, readwrite) NSDictionary * valuesForKeysToApply;
+
+- (instancetype)initWithClass:(Class)classObj imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply;
 
 + (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName;
 

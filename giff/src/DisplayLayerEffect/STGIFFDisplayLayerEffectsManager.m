@@ -73,7 +73,7 @@
 
     NSString * effect_uuid = [layerSet.uuid st_add:effectItem.uuid];
     STMultiSourcingImageProcessor * effect = (STMultiSourcingImageProcessor *)[self st_cachedObject:effect_uuid init:^id {
-        STMultiSourcingImageProcessor * created_effect = (STMultiSourcingImageProcessor *)[[NSClassFromString(effectItem.className) alloc] init];
+        STMultiSourcingImageProcessor * created_effect = (STMultiSourcingImageProcessor *)[[effectItem.classObj alloc] init];
         created_effect.uuid = effect_uuid;
         return created_effect;
     }];

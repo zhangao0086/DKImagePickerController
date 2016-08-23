@@ -10,7 +10,7 @@
 
 #pragma mark Process
 
-- (NSUInteger)maxSupportedNumberOfSourceImages {
++ (NSUInteger)maxSupportedNumberOfSourceImages {
     return 2;
 }
 

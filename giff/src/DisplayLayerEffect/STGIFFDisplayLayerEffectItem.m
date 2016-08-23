@@ -4,16 +4,23 @@
 //
 
 #import "STGIFFDisplayLayerEffectItem.h"
+#import "STMultiSourcingImageProcessor.h"
 
 
 @implementation STGIFFDisplayLayerEffectItem {
 
 }
 
-- (instancetype)initWithClassName:(NSString *)className imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply {
+- (instancetype)initWithClass:(Class)classObj imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply {
     self = [super init];
     if (self) {
-        self.className = className;
+        NSAssert([classObj isKindOfClass:STMultiSourcingImageProcessor.class], @"Class must be a kind of STMultiSourcingImageProcessor");
+        _classObj = classObj;
+
+        BOOL respondsMaxSupportedNumberOfSourceImages = [classObj respondsToSelector:@selector(maxSupportedNumberOfSourceImages)];
+        NSAssert(respondsMaxSupportedNumberOfSourceImages, @"Class must implement maxSupportedNumberOfSourceImages");
+        _maxSupportedNumberOfSourceImages = respondsMaxSupportedNumberOfSourceImages ? [classObj maxSupportedNumberOfSourceImages] : [STMultiSourcingImageProcessor maxSupportedNumberOfSourceImages];
+
         self.imageName = imageName;
         self.valuesForKeysToApply = valuesForKeysToApply;
     }
@@ -21,17 +28,12 @@
     return self;
 }
 
-+ (instancetype)itemWithClassName:(NSString *)className imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply {
-    return [[self alloc] initWithClassName:className imageName:imageName valuesForKeysToApply:valuesForKeysToApply];
-}
-
-
 + (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName {
     return [self itemWithClass:classObj imageName:imageName valuesForKeysToApply:nil];
 }
 
 + (instancetype)itemWithClass:(Class)classObj imageName:(NSString *)imageName valuesForKeysToApply:(NSDictionary *)valuesForKeysToApply{
-    return [self itemWithClassName:NSStringFromClass(classObj) imageName:imageName valuesForKeysToApply:valuesForKeysToApply];
+    return [[self alloc] initWithClass:classObj imageName:imageName valuesForKeysToApply:valuesForKeysToApply];
 }
 
 
