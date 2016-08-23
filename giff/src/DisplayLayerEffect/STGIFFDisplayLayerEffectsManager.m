@@ -27,6 +27,8 @@
 #import "STGIFFDisplayLayerJulieCockburnEffect.h"
 #import "STGIFFDisplayLayerReflectingCircularCombineEffect.h"
 #import "STDisplayLayerDuplexMotionBlurEffect.h"
+#import "STGIFFDisplayLayerLeifSteppingShapeMaskEffect.h"
+#import "STDisplayLayerJacopSuttonFogEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -55,8 +57,10 @@
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCircularCombineEffect.class imageName:@"STGIFFDisplayLayerCircularCombineEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJulieCockburnEffect.class imageName:@"STGIFFDisplayLayerJulieCockburnEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerReflectingCircularCombineEffect.class imageName:@"STGIFFDisplayLayerReflectingCircularCombineEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STDisplayLayerJacopSuttonFogEffect.class imageName:@"STDisplayLayerJacopSuttonFogEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STDisplayLayerDuplexMotionBlurEffect.class imageName:@"STDisplayLayerDuplexMotionBlurEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifEffect.class imageName:@"STGIFFDisplayLayerLeifEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifSteppingShapeMaskEffect.class imageName:@"STGIFFDisplayLayerLeifSteppingShapeMaskEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerFluorEffect.class imageName:@"STGIFFDisplayLayerFluorEffect.jpg"]
     ]);
 }

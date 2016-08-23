@@ -34,7 +34,7 @@
 #import "STRasterizingImageSourceItem.h"
 #import "STGIFFDisplayLayerReflectingCircularCombineEffect.h"
 #import "STDisplayLayerDuplexMotionBlurEffect.h"
-#import "STDisplayLayerJacopSuttonEffect.h"
+#import "STDisplayLayerJacopSuttonFogEffect.h"
 #import "STGIFFDisplayLayerLeifSteppingShapeMaskEffect.h"
 
 @implementation EBRootViewController {

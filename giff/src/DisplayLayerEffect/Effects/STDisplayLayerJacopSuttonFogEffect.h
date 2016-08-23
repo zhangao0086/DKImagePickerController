@@ -8,6 +8,6 @@
 #import "STMultiSourcingGPUImageComposerProcessor.h"
 
 
-@interface STDisplayLayerJacopSuttonEffect : STMultiSourcingGPUImageComposerProcessor
+@interface STDisplayLayerJacopSuttonFogEffect : STMultiSourcingGPUImageComposerProcessor
 
 @end

@@ -3,7 +3,7 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STDisplayLayerJacopSuttonEffect.h"
+#import "STDisplayLayerJacopSuttonFogEffect.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "GPUImageMotionBlurFilter.h"
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
@@ -14,7 +14,7 @@
 #import "FXBlurView.h"
 #import "GPUImageGrayscaleFilter.h"
 
-@implementation STDisplayLayerJacopSuttonEffect {
+@implementation STDisplayLayerJacopSuttonFogEffect {
 
 }
 
