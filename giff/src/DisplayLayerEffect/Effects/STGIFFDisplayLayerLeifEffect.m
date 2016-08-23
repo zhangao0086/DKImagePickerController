@@ -11,8 +11,11 @@
 #import "NSNumber+STUtil.h"
 #import "NSArray+STUtil.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
+#import "STRasterizingImageSourceItem.h"
 #import "GPUImageNormalBlendFilter.h"
 #import "UIImage+STUtil.h"
+#import "CALayer+STUtil.h"
+#import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 
 
 @implementation STGIFFDisplayLayerLeifEffect {
@@ -20,22 +23,46 @@
     //http://leifpodhajsky.bigcartel.com/
 }
 
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _minScaleOfCircle = .4f;
+        _maxScaleOfCircle = 1;
+    }
+    return self;
+}
+
+
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
 
-    return [self composersToProcessSingle:sourceImages[0]];
+    NSArray *processedImages = @[
+            //FIXME: 너무 헤비 하진 않을까..
+            [self processComposers:[self composersToProcessSingle:sourceImages[0]]]
+            ,[self processComposers:[self composersToProcessSingle:sourceImages[1]]]
+    ];
+
+    UIImage * sourceImage = sourceImages.firstObject;
+    CAShapeLayer * layer = [CAShapeLayer layerWithSize:sourceImage.size];
+    layer.path = [[UIBezierPath bezierPathWithRect:(CGRect) {CGPointZero, CGSizeMake(sourceImage.size.width / 2, sourceImage.size.height)}] CGPath];
+    layer.fillColor = [UIColor whiteColor].CGColor;
+
+    STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeMaskEffect = [[STGIFFDisplayLayerCrossFadeMaskEffect alloc] init];
+    crossFadeMaskEffect.maskImageSource = [STRasterizingImageSourceItem itemWithLayer:layer];
+    return [crossFadeMaskEffect composersToProcessMultiple:processedImages];
 }
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
     NSUInteger count = 8;
 
-    //TODO:여기에 마스크를 어떤것이든 받을 수 있음,
     UIImage * circluarClippedImage = [sourceImage clipAsCircle:sourceImage.size.width scale:sourceImage.scale];
+    CGFloat minScale = self.minScaleOfCircle;
+    CGFloat maxScale = self.maxScaleOfCircle;
 
     NSArray * composers = [[[@(count) st_intArray] reverse] mapWithIndex:^id(id object, NSInteger index) {
         @autoreleasepool {
             CGFloat offset = [object floatValue];
-            CGFloat minScale = .4f;
-            CGFloat scaleValue = AGKRemap(offset, 0, count - 1, minScale, 1);
+            CGFloat scaleValue = AGKRemap(offset, 0, count - 1, minScale, maxScale);
 //            scaleValue *= AGKEaseOutWithOverShoot([object floatValue]/count, 1.8f);
 
             STGPUImageOutputComposeItem *composeItem1 = STGPUImageOutputComposeItem.new;
@@ -57,7 +84,6 @@
             return composeItem1;
         }
     }];
-
     return composers;
 }
 

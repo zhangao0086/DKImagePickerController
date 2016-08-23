@@ -9,5 +9,6 @@
 
 
 @interface STGIFFDisplayLayerLeifEffect : STMultiSourcingGPUImageComposerProcessor
-
+@property (nonatomic, assign) CGFloat minScaleOfCircle;
+@property (nonatomic, assign) CGFloat maxScaleOfCircle;
 @end
