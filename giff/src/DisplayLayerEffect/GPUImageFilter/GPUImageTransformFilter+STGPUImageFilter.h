@@ -15,6 +15,10 @@
 
 + (instancetype)scale:(CGFloat)x y:(CGFloat)y;
 
++ (instancetype)rotate:(CGFloat)angle;
+
++ (instancetype)rotateDegree:(CGFloat)degrees;
+
 - (instancetype)addTransfrom:(CGAffineTransform)transform;
 
 - (instancetype)scaleScalar:(CGFloat)scaleScalar;

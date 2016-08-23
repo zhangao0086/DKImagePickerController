@@ -6,28 +6,13 @@
 #import "STGIFFDisplayLayerLeifEffect.h"
 #import "GPUImageChromaKeyBlendFilter.h"
 #import "GPUImagePicture.h"
-#import "GPUImageDifferenceBlendFilter.h"
-#import "GPUImageSourceOverBlendFilter.h"
-#import "GPUImageOverlayBlendFilter.h"
-#import "GPUImageAlphaBlendFilter.h"
-#import "GPUImageMonochromeFilter.h"
-#import "UIColor+BFPaperColors.h"
-#import "Colours.h"
-#import "GPUImageColorBlendFilter.h"
-#import "GPUImageFalseColorFilter.h"
-#import "GPUImageHardLightBlendFilter.h"
-#import "GPUImageSubtractBlendFilter.h"
-#import "GPUImageDarkenBlendFilter.h"
-#import "GPUImageSoftLightBlendFilter.h"
 #import "GPUImageTransformFilter.h"
-#import "GPUImageZoomBlurFilter.h"
-#import "STGPUImageOffsetScalingFilter.h"
-#import "STFilter.h"
-#import "STFilterManager.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "NSNumber+STUtil.h"
 #import "NSArray+STUtil.h"
-#import "GPUImageAlphaBlendFilter+STGPUImageFilter.h"
+#import "GPUImageTransformFilter+STGPUImageFilter.h"
+#import "GPUImageNormalBlendFilter.h"
+#import "UIImage+STUtil.h"
 
 
 @implementation STGIFFDisplayLayerLeifEffect {
@@ -35,60 +20,41 @@
 }
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
-    NSUInteger composeCount = 6;
 
-    return [[@(composeCount) st_intArray] mapWithIndex:^id(id object, NSInteger index) {
-        CGFloat scaleValue = AGKRemap([object floatValue],0,composeCount-1,.2,1);
-
-        scaleValue *= AGKEaseOutWithOverShoot([object floatValue]/composeCount, 1.5f);
-
-        STGPUImageOutputComposeItem * composeItem1 = STGPUImageOutputComposeItem.new;
-        composeItem1.source = [[GPUImagePicture alloc] initWithImage:index== 1 /*|| [object integerValue]==composeCount-1 */ ? sourceImages[1] : sourceImages[0] smoothlyScaleOutput:NO];
-
-        if(index>0){
-            composeItem1.composer = GPUImageSoftLightBlendFilter.new;
-        }
-
-        if(scaleValue!=1){
-            GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
-            scaleFilter1.affineTransform = CGAffineTransformMakeScale(scaleValue,scaleValue);
-            composeItem1.filters = @[
-                    scaleFilter1
-            ];
-        }
-        return composeItem1;
-    }];
+    return [self composersToProcessSingle:sourceImages[0]];
 }
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
-    NSUInteger composeCount = 6;
+    NSUInteger count = 8;
+    UIImage * circluarClippedImage = [sourceImage clipAsCircle:sourceImage.size.width scale:sourceImage.scale];
+    NSArray * composers = [[[@(count) st_intArray] reverse] mapWithIndex:^id(id object, NSInteger index) {
+        @autoreleasepool {
+            CGFloat offset = [object floatValue];
+            CGFloat minScale = .4f;
+            CGFloat scaleValue = AGKRemap(offset, 0, count - 1, minScale, 1);
+//            scaleValue *= AGKEaseOutWithOverShoot([object floatValue]/count, 1.8f);
 
-    NSArray * composeIndexes = [@(composeCount) st_intArray];
-//    composeIndexes = [composeIndexes reverse];
+            STGPUImageOutputComposeItem *composeItem1 = STGPUImageOutputComposeItem.new;
 
-    return [composeIndexes mapWithIndex:^id(id object, NSInteger index) {
+            if (offset == count-1) { //background biggest image
+                composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
+                composeItem1.filters = @[
+                        [GPUImageTransformFilter rotateDegree:90]
+                ];
 
-        CGFloat scaleValue = AGKRemap(index,0,composeCount-1,.2,1);
+            } else {
+                composeItem1.source = [[GPUImagePicture alloc] initWithImage:circluarClippedImage smoothlyScaleOutput:NO];
+                composeItem1.composer = GPUImageNormalBlendFilter.new;
+                composeItem1.filters = @[
+                        [[GPUImageTransformFilter scaleScalar:scaleValue] rotate:AGKDegreesToRadians(AGKRemap(offset, 0, count - 1, 0, 90))]
+                ];
+            }
 
-        scaleValue *= AGKEaseOutWithOverShoot([object floatValue]/composeCount, 1.8f);
-
-        STGPUImageOutputComposeItem * composeItem1 = STGPUImageOutputComposeItem.new;
-        composeItem1.source = [[GPUImagePicture alloc] initWithImage: sourceImage smoothlyScaleOutput:NO];
-
-        if(index>0){
-            composeItem1.composer = GPUImageSoftLightBlendFilter.new;
+            return composeItem1;
         }
-
-        if(scaleValue!=1){
-            GPUImageTransformFilter * scaleFilter1 = [[GPUImageTransformFilter alloc] init];
-            scaleFilter1.affineTransform = CGAffineTransformMakeScale(scaleValue,scaleValue);
-            composeItem1.filters = @[
-                    scaleFilter1
-            ];
-        }
-
-        return composeItem1;
     }];
+
+    return composers;
 }
 
 @end

@@ -39,6 +39,14 @@
     return [self addTransfrom:CGAffineTransformMakeRotation(angle)];
 }
 
++ (instancetype)rotate:(CGFloat)angle{
+    return [[[GPUImageTransformFilter alloc] init] rotate:angle];
+}
+
++ (instancetype)rotateDegree:(CGFloat)degrees{
+    return [self rotate:(CGFloat) (degrees * M_PI / 180.f)];
+}
+
 - (instancetype)translate:(CGFloat)x y:(CGFloat)y{
     return [self addTransfrom:CGAffineTransformMakeTranslation(x,y)];
 }
