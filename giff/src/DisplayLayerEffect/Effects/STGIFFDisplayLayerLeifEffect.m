@@ -17,6 +17,7 @@
 
 @implementation STGIFFDisplayLayerLeifEffect {
     //Standard method of multi blending : https://github.com/BradLarson/GPUImage/issues/269
+    //http://leifpodhajsky.bigcartel.com/
 }
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
@@ -26,7 +27,10 @@
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
     NSUInteger count = 8;
+
+    //TODO:여기에 마스크를 어떤것이든 받을 수 있음,
     UIImage * circluarClippedImage = [sourceImage clipAsCircle:sourceImage.size.width scale:sourceImage.scale];
+
     NSArray * composers = [[[@(count) st_intArray] reverse] mapWithIndex:^id(id object, NSInteger index) {
         @autoreleasepool {
             CGFloat offset = [object floatValue];
