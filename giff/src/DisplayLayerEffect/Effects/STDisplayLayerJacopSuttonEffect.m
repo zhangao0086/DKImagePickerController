@@ -6,22 +6,14 @@
 #import "STDisplayLayerJacopSuttonEffect.h"
 #import "STGPUImageOutputComposeItem.h"
 #import "GPUImageMotionBlurFilter.h"
-#import "STGPUImageOutputComposeItem.h"
 #import "STGIFFDisplayLayerCrossFadeGradientMaskEffect.h"
 #import "GPUImageBrightnessFilter.h"
 #import "GPUImageBrightnessFilter+STGPUImageFilter.h"
 #import "GPUImageContrastFilter.h"
 #import "GPUImageContrastFilter+STGPUImageFilter.h"
-#import "GPUImageTransformFilter.h"
-#import "GPUImageTransformFilter+STGPUImageFilter.h"
-#import "GPUImageZoomBlurFilter.h"
 #import "GPUImageGaussianBlurFilter.h"
-#import "GPUImageBoxBlurFilter.h"
-#import "NYXImagesKit.h"
-#import "UIImage+ImageEffects.h"
 #import "FXBlurView.h"
 #import "GPUImageGrayscaleFilter.h"
-#import "NSArray+STGPUImageOutputComposeItem.h"
 
 @implementation STDisplayLayerJacopSuttonEffect {
 
@@ -33,20 +25,23 @@
 
 - (NSArray *)composersToProcessSingle:(UIImage *__nullable)sourceImage {
 
-//    sourceImage = [[sourceImage grayscale] brightenWithValue:-20];
-
-    UIImage * bluredImage = [sourceImage blurredImageWithRadius:120 iterations:2 tintColor:nil];
-
-//    bluredImage = [bluredImage contrastAdjustmentWithValue:30];
+    UIImage * bluredImagePhase0 = [sourceImage blurredImageWithRadius:70 iterations:2 tintColor:nil];
 
     STGIFFDisplayLayerCrossFadeGradientMaskEffect * crossFadeGradientMaskEffect = [[STGIFFDisplayLayerCrossFadeGradientMaskEffect alloc] init];
     crossFadeGradientMaskEffect.style = CrossFadeGradientMaskEffectStyleRadial;
     crossFadeGradientMaskEffect.automaticallyMatchUpColors = NO;
-    crossFadeGradientMaskEffect.locations = @[@0.15,@.7];
+    
+    //TODO: 틸트 시프트랑 비교..
+    crossFadeGradientMaskEffect.locations = @[@0,@.8];
+    NSArray * composers = [crossFadeGradientMaskEffect composersToProcess:@[sourceImage, bluredImagePhase0]];
+    UIImage * phase0 = [crossFadeGradientMaskEffect processComposers:composers];
 
-    NSArray * composers = [crossFadeGradientMaskEffect composersToProcess:@[sourceImage, bluredImage]];
+    //실기기(6S Plus) 기준 프로세스 하나당 약 0.4Xs걸림
+    UIImage * bluredImagePhase1 = [sourceImage blurredImageWithRadius:130 iterations:2 tintColor:nil];
+    crossFadeGradientMaskEffect.locations = @[@.5,@1];
+    composers = [crossFadeGradientMaskEffect composersToProcess:@[phase0, bluredImagePhase1]];
 
-    [[composers composeItemsByCategory:STGPUImageOutputComposeItemCategorySourceImage] eachWithIndex:^(STGPUImageOutputComposeItem * sourceImageComposeItem, NSUInteger index) {
+    [composers eachWithIndex:^(STGPUImageOutputComposeItem * sourceImageComposeItem, NSUInteger index) {
         [sourceImageComposeItem addFilters:@[
                 [GPUImageContrastFilter contrast:1]
                 ,[GPUImageBrightnessFilter brightness:-.2f]
@@ -55,7 +50,6 @@
     }];
 
     return composers;
-
 
 //    crossFadeGradientMaskEffect.locations = @[@0,@.6];
 //    return [crossFadeGradientMaskEffect composersToProcess:@[processedImage, bluredImage]];

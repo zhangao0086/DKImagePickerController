@@ -107,11 +107,13 @@
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
     composeItem0.source = [[GPUImagePicture alloc] initWithImage:sourceImageForMask smoothlyScaleOutput:NO];
     composeItem0.composer = GPUImageMaskFilter.new;
+    composeItem0.category = STGPUImageOutputComposeItemCategoryMask;
     [composers addObject:composeItem0];
 
     //image
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
     composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
+    composeItem1.category = STGPUImageOutputComposeItemCategorySourceImage;
     [composers addObject:composeItem1];
 
     UIImage * maskedImage = [[[STFilterManager sharedManager] buildTerminalOutputToComposeMultiSource:[composers reverse] forInput:nil] imageFromCurrentFramebuffer];
@@ -124,10 +126,12 @@
     STGPUImageOutputComposeItem * composeItemA = [STGPUImageOutputComposeItem new];
     composeItemA.source = [[GPUImagePicture alloc] initWithImage:maskedImage smoothlyScaleOutput:NO];
     composeItemA.composer = GPUImageNormalBlendFilter.new;
+    composeItemA.category = STGPUImageOutputComposeItemCategoryMask;
     [composers addObject:composeItemA];
 
     STGPUImageOutputComposeItem * composeItemB = [STGPUImageOutputComposeItem new];
     composeItemB.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
+    composeItemB.category = STGPUImageOutputComposeItemCategorySourceImage;
     if(!CGAffineTransformIsIdentity(_transformFadingImage)){
         composeItemB.filters = @[
                 [GPUImageTransformFilter transform:_transformFadingImage]
