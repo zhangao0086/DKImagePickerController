@@ -29,6 +29,7 @@
     if (self) {
         _minScaleOfCircle = .4f;
         _maxScaleOfCircle = 1;
+        _countOfCirlce = 7;
     }
     return self;
 }
@@ -37,23 +38,26 @@
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
 
     NSArray *processedImages = @[
-            //FIXME: 너무 헤비 하진 않을까..
+            //FIXME: 너무 헤비 하진 않을까.. //실기기 0.9s ~ 0.6s
             [self processComposers:[self composersToProcessSingle:sourceImages[0]]]
             ,[self processComposers:[self composersToProcessSingle:sourceImages[1]]]
     ];
 
-    UIImage * sourceImage = sourceImages.firstObject;
-    CAShapeLayer * layer = [CAShapeLayer layerWithSize:sourceImage.size];
-    layer.path = [[UIBezierPath bezierPathWithRect:(CGRect) {CGPointZero, CGSizeMake(sourceImage.size.width / 2, sourceImage.size.height)}] CGPath];
-    layer.fillColor = [UIColor whiteColor].CGColor;
+    if(self.maskImageToDivideMultipleSourceImages){
+        UIImage * sourceImage = sourceImages.firstObject;
+        CAShapeLayer * layer = [CAShapeLayer layerWithSize:sourceImage.size];
+        layer.path = [[UIBezierPath bezierPathWithRect:(CGRect) {CGPointZero, CGSizeMake(sourceImage.size.width, sourceImage.size.height/2)}] CGPath];
+        layer.fillColor = [UIColor whiteColor].CGColor;
+        self.maskImageToDivideMultipleSourceImages = [STRasterizingImageSourceItem itemWithLayer:layer];
+    }
 
     STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeMaskEffect = [[STGIFFDisplayLayerCrossFadeMaskEffect alloc] init];
-    crossFadeMaskEffect.maskImageSource = [STRasterizingImageSourceItem itemWithLayer:layer];
+    crossFadeMaskEffect.maskImageSource = self.maskImageToDivideMultipleSourceImages;
     return [crossFadeMaskEffect composersToProcessMultiple:processedImages];
 }
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
-    NSUInteger count = 8;
+    NSUInteger count = self.countOfCirlce;
 
     UIImage * circluarClippedImage = [sourceImage clipAsCircle:sourceImage.size.width scale:sourceImage.scale];
     CGFloat minScale = self.minScaleOfCircle;
