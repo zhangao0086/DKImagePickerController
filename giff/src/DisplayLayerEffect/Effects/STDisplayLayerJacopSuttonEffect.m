@@ -11,7 +11,6 @@
 #import "GPUImageBrightnessFilter+STGPUImageFilter.h"
 #import "GPUImageContrastFilter.h"
 #import "GPUImageContrastFilter+STGPUImageFilter.h"
-#import "GPUImageGaussianBlurFilter.h"
 #import "FXBlurView.h"
 #import "GPUImageGrayscaleFilter.h"
 
@@ -30,8 +29,6 @@
     STGIFFDisplayLayerCrossFadeGradientMaskEffect * crossFadeGradientMaskEffect = [[STGIFFDisplayLayerCrossFadeGradientMaskEffect alloc] init];
     crossFadeGradientMaskEffect.style = CrossFadeGradientMaskEffectStyleRadial;
     crossFadeGradientMaskEffect.automaticallyMatchUpColors = NO;
-    
-    //TODO: 틸트 시프트랑 비교..
     crossFadeGradientMaskEffect.locations = @[@0,@.8];
     NSArray * composers = [crossFadeGradientMaskEffect composersToProcess:@[sourceImage, bluredImagePhase0]];
     UIImage * phase0 = [crossFadeGradientMaskEffect processComposers:composers];
@@ -50,9 +47,6 @@
     }];
 
     return composers;
-
-//    crossFadeGradientMaskEffect.locations = @[@0,@.6];
-//    return [crossFadeGradientMaskEffect composersToProcess:@[processedImage, bluredImage]];
 }
 
 
