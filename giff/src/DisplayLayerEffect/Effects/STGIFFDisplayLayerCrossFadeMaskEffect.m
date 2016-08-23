@@ -53,10 +53,12 @@
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
     composeItem0.source = [[GPUImagePicture alloc] initWithImage:sourceImageForMask smoothlyScaleOutput:NO];
     composeItem0.composer = GPUImageMaskFilter.new;
+    composeItem0.category = STGPUImageOutputComposeItemCategoryMask;
     [composers addObject:composeItem0];
 
     //image
     STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
+    composeItem1.category = STGPUImageOutputComposeItemCategorySourceImage;
     composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:NO];
     [composers addObject:composeItem1];
 
@@ -70,9 +72,11 @@
     STGPUImageOutputComposeItem * composeItemA = [STGPUImageOutputComposeItem new];
     composeItemA.source = [[GPUImagePicture alloc] initWithImage:maskedImage smoothlyScaleOutput:NO];
     composeItemA.composer = GPUImageNormalBlendFilter.new;
+    composeItemA.category = STGPUImageOutputComposeItemCategoryMask;
     [composers addObject:composeItemA];
 
     STGPUImageOutputComposeItem * composeItemB = [STGPUImageOutputComposeItem new];
+    composeItemB.category = STGPUImageOutputComposeItemCategorySourceImage;
     composeItemB.source = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:NO];
 //    if(_scaleOfFadingImage!=1){
 //        composeItemB.filters = @[

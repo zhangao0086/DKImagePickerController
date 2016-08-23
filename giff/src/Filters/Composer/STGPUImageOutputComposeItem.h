@@ -10,10 +10,17 @@
 @class GPUImageOutput;
 @protocol GPUImageInput;
 
+typedef NS_ENUM(NSInteger, STGPUImageOutputComposeItemCategory) {
+    STGPUImageOutputComposeItemCategoryUndefined,
+    STGPUImageOutputComposeItemCategorySourceImage,
+    STGPUImageOutputComposeItemCategoryMask
+};
+
 @interface STGPUImageOutputComposeItem : STItem
 @property (nonatomic, readwrite) NSArray<GPUImageOutput <GPUImageInput> *> *filters;
 @property (nonatomic, readwrite) GPUImageOutput *source;
 @property (nonatomic, readwrite) GPUImageTwoInputFilter *composer;
+@property (nonatomic, assign) STGPUImageOutputComposeItemCategory category;
 
 - (instancetype)initWithSourceImage:(UIImage *)sourceImage;
 

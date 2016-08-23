@@ -20,6 +20,8 @@
 #import "NYXImagesKit.h"
 #import "UIImage+ImageEffects.h"
 #import "FXBlurView.h"
+#import "GPUImageGrayscaleFilter.h"
+#import "NSArray+STGPUImageOutputComposeItem.h"
 
 @implementation STDisplayLayerJacopSuttonEffect {
 
@@ -31,14 +33,32 @@
 
 - (NSArray *)composersToProcessSingle:(UIImage *__nullable)sourceImage {
 
-    UIImage * bluredImage = [sourceImage blurredImageWithRadius:200 iterations:2 tintColor:nil];
+//    sourceImage = [[sourceImage grayscale] brightenWithValue:-20];
+
+    UIImage * bluredImage = [sourceImage blurredImageWithRadius:120 iterations:2 tintColor:nil];
+
+//    bluredImage = [bluredImage contrastAdjustmentWithValue:30];
 
     STGIFFDisplayLayerCrossFadeGradientMaskEffect * crossFadeGradientMaskEffect = [[STGIFFDisplayLayerCrossFadeGradientMaskEffect alloc] init];
     crossFadeGradientMaskEffect.style = CrossFadeGradientMaskEffectStyleRadial;
     crossFadeGradientMaskEffect.automaticallyMatchUpColors = NO;
-    crossFadeGradientMaskEffect.locations = @[@.2,@1];
+    crossFadeGradientMaskEffect.locations = @[@0.15,@.7];
 
-    return [crossFadeGradientMaskEffect composersToProcess:@[sourceImage, bluredImage]];
+    NSArray * composers = [crossFadeGradientMaskEffect composersToProcess:@[sourceImage, bluredImage]];
+
+    [[composers composeItemsByCategory:STGPUImageOutputComposeItemCategorySourceImage] eachWithIndex:^(STGPUImageOutputComposeItem * sourceImageComposeItem, NSUInteger index) {
+        [sourceImageComposeItem addFilters:@[
+                [GPUImageContrastFilter contrast:1]
+                ,[GPUImageBrightnessFilter brightness:-.2f]
+                , [[GPUImageGrayscaleFilter alloc] init]
+        ]];
+    }];
+
+    return composers;
+
+
+//    crossFadeGradientMaskEffect.locations = @[@0,@.6];
+//    return [crossFadeGradientMaskEffect composersToProcess:@[processedImage, bluredImage]];
 }
 
 

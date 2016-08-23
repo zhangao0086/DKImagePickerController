@@ -8,7 +8,6 @@
 
 @class STRasterizingImageSourceItem;
 
-
 @interface STGIFFDisplayLayerCrossFadeMaskEffect : STMultiSourcingGPUImageComposerProcessor
 @property (nonatomic, readwrite) STRasterizingImageSourceItem * maskImageSource;
 @property (nonatomic, assign) BOOL invertMaskImage;

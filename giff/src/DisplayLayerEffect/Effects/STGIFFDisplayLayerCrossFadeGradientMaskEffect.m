@@ -71,7 +71,7 @@
                 CCARadialGradientLayer * radialGradientLayer = [CCARadialGradientLayer layer];
                 radialGradientLayer.frame = (CGRect){CGPointZero, size};
                 CGFloat minSideSize = CGSizeMinSide(size);
-                radialGradientLayer.gradientOrigin = CGPointMake(minSideSize/2, minSideSize/2);
+                radialGradientLayer.gradientOrigin = CGPointMake(size.width/2, size.height/2);
                 radialGradientLayer.gradientRadius = minSideSize/2;
                 radialGradientLayer.colors = @[
                         (id)[[UIColor whiteColor] CGColor]
