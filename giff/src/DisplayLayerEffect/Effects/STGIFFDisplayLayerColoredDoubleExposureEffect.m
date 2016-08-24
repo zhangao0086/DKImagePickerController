@@ -61,18 +61,6 @@
     composeItem0.composer = [[GPUImageLightenBlendFilter alloc] init];
     [composers addObject:composeItem0];
 
-    //2
-//    STGPUImageOutputComposeItem * composeItem1 = [STGPUImageOutputComposeItem new];
-//    composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImages[0] smoothlyScaleOutput:YES];
-//    composeItem1.composer = GPUImageSoftLightBlendFilter.new;
-//    [composers addObject:composeItem1];
-//
-//    //3
-//    STGPUImageOutputComposeItem * composeItem3 = [STGPUImageOutputComposeItem new];
-//    composeItem3.source = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:NO];
-//    composeItem3.composer = GPUImageDarkenBlendFilter .new;
-//    [composers addObject:composeItem3];
-
     //4
     STGPUImageOutputComposeItem * composeItem4 = [STGPUImageOutputComposeItem new];
     composeItem4.source = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:NO];
@@ -97,22 +85,27 @@
     [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImage
                                                                   composer:[[GPUImageLightenBlendFilter alloc] init]] addFilters:@[
             [[GPUImageGrayscaleFilter alloc] init]
+//            ,[GPUImageContrastFilter contrast:.2]
+
     ]]];
 
     [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImage
                                                                   composer:[[GPUImageSoftLightBlendFilter alloc] init]] addFilters:@[
             [[GPUImageGrayscaleFilter alloc] init]
-            , [[GPUImageTransformFilter translate:.2f y:0] scaleScalar:1.3]
-            , [GPUImageFalseColorFilter colors:@[UIColorFromRGB(0xEC3CA3),UIColorFromRGB(0xA0C2D0)]]
+
+//            , [GPUImageFalseColorFilter colors:@[UIColorFromRGB(0x232065),UIColorFromRGB(0x57EEB1)]]
+            , [GPUImageFalseColorFilter colors:@[UIColorFromRGB(0xFDCDD4),UIColorFromRGB(0x4223F1)]]
+            , [[GPUImageTransformFilter translate:.1f y:0] scaleScalar:1.2]
 //            ,[GPUImageSaturationFilter saturation:2]
     ]]];
+
 
 //    sourceImage = [sourceImage blurredImageWithRadius:100 iterations:2 tintColor:nil];
     [composers addObject:[[STGPUImageOutputComposeItem itemWithSourceImage:sourceImage] addFilters:@[
             [[GPUImageGrayscaleFilter alloc] init]
             , [GPUImageFalseColorFilter colors:@[self.primaryColor, self.secondaryColor]]
 //            ,[GPUImageSaturationFilter saturation:2]
-            , [[GPUImageTransformFilter translate:-.15f y:0] scaleScalar:1.2]
+            , [[GPUImageTransformFilter translate:-.3f y:0] scaleScalar:1.42]
 //            ,[GPUImageRGBFilter rgbColor:self.primaryColor]
     ]]];
 
