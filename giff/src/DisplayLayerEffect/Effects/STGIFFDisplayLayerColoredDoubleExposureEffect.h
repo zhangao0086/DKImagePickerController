@@ -9,8 +9,8 @@
 
 
 typedef NS_ENUM(NSInteger, ColoredDoubleExposureEffectColorBlendingStyle) {
-    ColoredDoubleExposureEffectBlendingStyleSolid,
-    ColoredDoubleExposureEffectBlendingStyleTwoColors
+    ColoredDoubleExposureEffectBlendingStyleTwoColors,
+    ColoredDoubleExposureEffectBlendingStyleSolid
 };
 
 @interface STGIFFDisplayLayerColoredDoubleExposureEffect : STMultiSourcingGPUImageComposerProcessor
