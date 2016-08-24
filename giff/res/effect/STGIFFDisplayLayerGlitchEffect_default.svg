@@ -5,10 +5,13 @@
 	 width="200px" height="200px" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
 <rect fill="#FFFFFF" width="200" height="200"/>
 <rect y="0" width="200" height="18.932"/>
-<rect y="35" width="200" height="20.249"/>
+<rect y="35" width="200" height="17.749"/>
 <rect y="64.748" width="200" height="15.685"/>
 <rect y="90.8" width="200" height="6.558"/>
 <rect y="151.725" width="200" height="16.844"/>
 <rect y="111.864" width="200" height="25.588"/>
 <rect y="177.613" width="200" height="22.387"/>
+<rect y="25.008" width="200" height="3.517"/>
+<rect y="140.988" width="200" height="2.034"/>
+<rect y="103.947" width="200" height="3.344"/>
 </svg>

@@ -29,6 +29,7 @@
 #import "STDisplayLayerDuplexMotionBlurEffect.h"
 #import "STGIFFDisplayLayerLeifSteppingShapeMaskEffect.h"
 #import "STDisplayLayerJacopSuttonFogEffect.h"
+#import "STGIFFDisplayLayerColoredDoubleExposureEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -48,7 +49,8 @@
 
 - (NSArray <STGIFFDisplayLayerEffectItem *> *)effects{
     return _effects ?: (_effects = @[
-            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerGlitchEffect.class imageName:@"STGIFFDisplayLayerAfterImagePopStarEffect.jpg"]
+            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColoredDoubleExposureEffect.class imageName:@"STGIFFDisplayLayerColoredDoubleExposureEffect.jpg"]
+            ,[STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerGlitchEffect.class imageName:@"STGIFFDisplayLayerGlitchEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPepVentosaEffect.class imageName:@"STGIFFDisplayLayerPepVentosaEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerDarkenMaskEffect.class imageName:@"STGIFFDisplayLayerDarkenMaskEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeMaskEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg"

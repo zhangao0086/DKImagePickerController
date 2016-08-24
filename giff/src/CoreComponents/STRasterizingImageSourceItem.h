@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "STItem.h"
 
-
+//TODO: add cache based on resource's exact identification.
 @interface STRasterizingImageSourceItem : STItem
 @property (nonatomic, readwrite) UIImage * image;
 
