@@ -8,7 +8,13 @@
 #import "STMultiSourcingGPUImageComposerProcessor.h"
 
 
+typedef NS_ENUM(NSInteger, ColoredDoubleExposureEffectColorBlendingStyle) {
+    ColoredDoubleExposureEffectBlendingStyleSolid,
+    ColoredDoubleExposureEffectBlendingStyleTwoColors
+};
+
 @interface STGIFFDisplayLayerColoredDoubleExposureEffect : STMultiSourcingGPUImageComposerProcessor
+@property (nonatomic, assign) ColoredDoubleExposureEffectColorBlendingStyle style;
 @property (nonatomic, readwrite) NSArray<UIColor *> * primary2ColorSet;
 @property (nonatomic, readwrite) NSArray<UIColor *> * secondary2ColorSet;
 
