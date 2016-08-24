@@ -47,7 +47,7 @@
 
     NSArray<STCapturedImageSet *> * images = [@[
             @[@"face1.jpg"]
-            ,@[@"land2.jpg"]
+//            ,@[@"land2.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -61,7 +61,7 @@
     [self.view addSubview:_layerSetPresentationView];
 
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerLeifSteppingShapeMaskEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerColoredDoubleExposureEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
             , @"maskImageSource" : [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"]

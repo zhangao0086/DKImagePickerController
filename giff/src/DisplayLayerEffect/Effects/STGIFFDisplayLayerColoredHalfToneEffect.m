@@ -53,9 +53,8 @@
             [GPUImageBrightnessFilter brightness:-.1f]
             ,
 //            halftoneFilter,
-            [GPUImageFalseColorFilter filterWithColors:@[
-                    UIColorFromRGB(0xEC0000)
-                    , UIColorFromRGB(0xADFBFB)
+            [GPUImageFalseColorFilter colors:@[
+                    UIColorFromRGB(0xEC0000), UIColorFromRGB(0xADFBFB)
             ]]
 
     ]];
@@ -81,9 +80,8 @@
 //           halftoneFilterBig ,
 //            [GPUImageTransformFilter.new scale:CGPointMake(-1,1)]
 //            ,
-            [GPUImageFalseColorFilter filterWithColors:@[
-                    UIColorFromRGB(0xF43C2B)
-                    , UIColorFromRGB(0xAFCC34)
+            [GPUImageFalseColorFilter colors:@[
+                    UIColorFromRGB(0xF43C2B), UIColorFromRGB(0xAFCC34)
             ]]
 //            ,[GPUImageTransformFilter.new rotate:AGKDegreesToRadians(90)]
 

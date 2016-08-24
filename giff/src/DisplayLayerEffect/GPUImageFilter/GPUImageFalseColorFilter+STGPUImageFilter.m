@@ -9,7 +9,7 @@
 
 @implementation GPUImageFalseColorFilter (STGPUImageFilter)
 
-+ (instancetype)filterWithColors:(NSArray <UIColor *> *)colors {
++ (instancetype)colors:(NSArray <UIColor *> *)colors {
     NSParameterAssert(colors.count>0);
     GPUImageFalseColorFilter * falseColorFilter = [[GPUImageFalseColorFilter alloc] init];
 

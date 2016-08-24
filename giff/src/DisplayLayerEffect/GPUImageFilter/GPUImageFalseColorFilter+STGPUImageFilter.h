@@ -8,6 +8,6 @@
 
 @interface GPUImageFalseColorFilter (STGPUImageFilter)
 
-+ (instancetype)filterWithColors:(NSArray <UIColor *> *)colors;
++ (instancetype)colors:(NSArray <UIColor *> *)colors;
 
 @end

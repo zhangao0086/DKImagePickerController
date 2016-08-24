@@ -96,7 +96,7 @@
     }];
 
     composeItemA.filters = @[
-            [GPUImageFalseColorFilter filterWithColors:@[
+            [GPUImageFalseColorFilter colors:@[
                     colorScheme.primaryTextColor, colorScheme.backgroundColor
 //    UIColorFromRGB(0x5E21CF), UIColorFromRGB(0x50ECF0)
             ]]
