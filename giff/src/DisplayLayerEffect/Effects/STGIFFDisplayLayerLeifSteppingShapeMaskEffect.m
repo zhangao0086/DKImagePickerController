@@ -13,11 +13,13 @@
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
 #import "STRasterizingImageSourceItem.h"
 #import "GPUImageNormalBlendFilter.h"
-#import "CALayer+STUtil.h"
-#import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "NYXImagesKit.h"
 #import "NSObject+STUtil.h"
-#import "NSString+STUtil.h"
+#import "GPUImageAlphaBlendFilter.h"
+#import "GPUImageAlphaBlendFilter+STGPUImageFilter.h"
+#import "GPUImageDifferenceBlendFilter.h"
+#import "GPUImageHardLightBlendFilter.h"
+#import "GPUImageColorInvertFilter.h"
 
 
 @implementation STGIFFDisplayLayerLeifSteppingShapeMaskEffect {
@@ -29,56 +31,38 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _minScaleOfShape = .2f;
-        _maxScaleOfShape = 1.2f;
-        _countOfShape = 4;
+        self.minScaleOfShape = .2f;
+        self.maxScaleOfShape = 1.2f;
+        self.countOfShape = 4;
+
     }
     return self;
 }
 
-
-- (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
-
-    NSArray *processedImages = @[
-            //FIXME: 너무 헤비 하진 않을까.. //실기기 0.9s ~ 0.6s
-            [self processComposers:[self composersToProcessSingle:sourceImages[0]]]
-            ,[self processComposers:[self composersToProcessSingle:sourceImages[1]]]
-    ];
-
-    if(self.maskImageForShape){
-        UIImage * sourceImage = sourceImages.firstObject;
-        CAShapeLayer * layer = [CAShapeLayer layerWithSize:sourceImage.size];
-        layer.path = [[UIBezierPath bezierPathWithRect:(CGRect) {CGPointZero, CGSizeMake(sourceImage.size.width, sourceImage.size.height/2)}] CGPath];
-        layer.fillColor = [UIColor whiteColor].CGColor;
-        self.maskImageForShape = [STRasterizingImageSourceItem itemWithLayer:layer];
-    }
-
-    STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeMaskEffect = [[STGIFFDisplayLayerCrossFadeMaskEffect alloc] init];
-    crossFadeMaskEffect.maskImageSource = self.maskImageForShape;
-    return [crossFadeMaskEffect composersToProcessMultiple:processedImages];
+- (STRasterizingImageSourceItem *)primaryShapeSource {
+    return _primaryShapeSource ?: [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerLeifSteppingShapeMaskEffect_default.svg"];
 }
 
-- (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
+- (STRasterizingImageSourceItem *)secondaryShapeSource {
+    return _secondaryShapeSource ?: [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerLeifSteppingShapeMaskEffect_default_rect.svg"];
+}
+
+
+- (NSArray *)_composersToProcessSingle:(UIImage *)sourceImage
+                       shapeMaskSource:(STRasterizingImageSourceItem *)shapeMaskSource
+                        allowInvertMix:(BOOL)allowInvertMix
+               primaryBlendFilterClass:(Class)primaryComposerFilterClass
+             secondaryBlendFilterClass:(Class)secondaryComposerFilterClass{
     NSUInteger count = self.countOfShape + 1;
 
-    Weaks
-    //set default maskImageForSteppingShape
-    if(!self.maskImageForShape){
-        self.maskImageForShape = [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerLeifSteppingShapeMaskEffect_default.svg"];
-    }
-
-    NSString * cacheKeyToGenMask = [NSString stringWithFormat:@"%@_%@_%@", NSStringFromClass(self.class), NSStringFromCGSize(sourceImage.size), self.maskImageForShape.uuid];
+    NSString * cacheKeyToGenMask = [NSString stringWithFormat:@"%@_%@_%@", NSStringFromClass(self.class), NSStringFromCGSize(sourceImage.size), shapeMaskSource.uuid];
     UIImage * clipedImageForShapeMask = [self st_cachedImage:cacheKeyToGenMask init:^UIImage * {
-        return [sourceImage maskWithImage:[Wself.maskImageForShape rasterize:sourceImage.size]];
+        return [sourceImage maskWithImage:[shapeMaskSource rasterize:sourceImage.size]];
     }];
-
-    UIImage * clipedImageForShapeMaskInvert = [self st_cachedImage:[cacheKeyToGenMask st_add:@"invert"] init:^UIImage * {
-        return [clipedImageForShapeMask invert];
-    }];
-
 
     CGFloat minScale = self.minScaleOfShape;
     CGFloat maxScale = self.maxScaleOfShape;
+    CGFloat maxDegree = self.maxDegreeForAllShapes;
 
     NSArray * composers = [[[@(count) st_intArray] reverse] mapWithIndex:^id(id object, NSInteger index) {
         @autoreleasepool {
@@ -89,20 +73,73 @@
                 composeItem1.source = [[GPUImagePicture alloc] initWithImage:sourceImage smoothlyScaleOutput:NO];
 
             } else {
-                CGFloat scaleValue = AGKRemap(offset+1, 0, count-1, minScale, maxScale);
 //            scaleValue *= AGKEaseOutWithOverShoot([object floatValue]/(count-1), 1.8f);
+                composeItem1.source = [[GPUImagePicture alloc] initWithImage:clipedImageForShapeMask smoothlyScaleOutput:NO];
 
-                composeItem1.source = [[GPUImagePicture alloc] initWithImage:index % 2 ? clipedImageForShapeMaskInvert : clipedImageForShapeMask smoothlyScaleOutput:NO];
-                composeItem1.composer = GPUImageNormalBlendFilter.new;
-                composeItem1.filters = @[
-                        [GPUImageTransformFilter scaleScalar:scaleValue]
-//                        [[GPUImageTransformFilter scaleScalar:scaleValue] rotate:AGKDegreesToRadians(AGKRemap(offset, 0, count - 1, 0, 90))]
-                ];
+                //composer
+                Class targetComposerFilterClassToApply = index % 2 && secondaryComposerFilterClass ? secondaryComposerFilterClass : primaryComposerFilterClass;
+                composeItem1.composer = (GPUImageTwoInputFilter *)[[targetComposerFilterClassToApply alloc] init];
+
+                //transform
+                CGFloat scaleValue = AGKRemap(offset+1, 0, count-1, minScale, maxScale);
+                GPUImageTransformFilter * transformFilter = [GPUImageTransformFilter scaleScalar:scaleValue];
+                if(maxDegree){
+                    [transformFilter rotate:AGKDegreesToRadians(AGKRemap(offset, 0, count - 1, 0, maxDegree))];
+                }
+
+                //append mix filters
+                composeItem1.filters = allowInvertMix && index % 2 ?
+                        @[[[GPUImageColorInvertFilter alloc] init],transformFilter] : @[transformFilter];
             }
             return composeItem1;
         }
     }];
     return composers;
+}
+
+- (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
+    NSArray * composers0 = [self _composersToProcessSingle:sourceImages[0]
+                                           shapeMaskSource:self.primaryShapeSource
+                                            allowInvertMix:NO
+                                   primaryBlendFilterClass:GPUImageNormalBlendFilter.class
+                                 secondaryBlendFilterClass:nil];
+
+    //GPUImageLightenBlendFilter
+    //GPUImageSoftLightBlendFilter
+    //GPUImageOverlayBlendFilter
+    //GPUImageDifferenceBlendFilter
+    //GPUImageDarkenBlendFilter
+    //GPUImageHardLightBlendFilter
+    NSArray * composers1 = [self _composersToProcessSingle:sourceImages[1]
+                                           shapeMaskSource:self.secondaryShapeSource
+                                            allowInvertMix:NO
+                                   primaryBlendFilterClass:GPUImageHardLightBlendFilter.class
+                                 secondaryBlendFilterClass:GPUImageDifferenceBlendFilter.class];
+
+    STGPUImageOutputComposeItem * composers1_firstItem = [composers1 firstObject];
+    composers1_firstItem.composer = [GPUImageAlphaBlendFilter alphaMix:0];
+
+    NSMutableArray * resultComposers = [NSMutableArray array];
+    for(id indexval in [@(composers0.count) st_intArray]){
+        NSUInteger index = [indexval unsignedIntegerValue];
+        STGPUImageOutputComposeItem * item0 = composers0[index];
+        [resultComposers addObject:item0];
+
+        STGPUImageOutputComposeItem * item1 = composers1[index];
+        [resultComposers addObject:item1];
+    }
+
+    return resultComposers;
+
+}
+
+- (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
+    return [self _composersToProcessSingle:sourceImage
+                           shapeMaskSource:self.primaryShapeSource
+                            allowInvertMix:YES
+                   primaryBlendFilterClass:GPUImageNormalBlendFilter.class
+                 secondaryBlendFilterClass:nil];
+
 }
 
 @end

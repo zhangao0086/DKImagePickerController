@@ -14,5 +14,8 @@
 @property (nonatomic, assign) CGFloat minScaleOfShape;
 @property (nonatomic, assign) CGFloat maxScaleOfShape;
 @property (nonatomic, assign) NSUInteger countOfShape;
-@property (nonatomic, readwrite) STRasterizingImageSourceItem * maskImageForShape;
+@property (nonatomic, assign) CGFloat maxDegreeForAllShapes;
+
+@property (nonatomic, readwrite, nullable) STRasterizingImageSourceItem * primaryShapeSource;
+@property (nonatomic, readwrite, nullable) STRasterizingImageSourceItem * secondaryShapeSource;
 @end
