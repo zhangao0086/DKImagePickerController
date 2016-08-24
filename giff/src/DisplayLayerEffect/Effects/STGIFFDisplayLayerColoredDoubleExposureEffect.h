@@ -9,7 +9,7 @@
 
 
 @interface STGIFFDisplayLayerColoredDoubleExposureEffect : STMultiSourcingGPUImageComposerProcessor
-@property (nonatomic, readwrite) UIColor * primaryColor;
-@property (nonatomic, readwrite) UIColor * secondaryColor;
+@property (nonatomic, readwrite) NSArray<UIColor *> * primary2ColorSet;
+@property (nonatomic, readwrite) NSArray<UIColor *> * secondary2ColorSet;
 
 @end
