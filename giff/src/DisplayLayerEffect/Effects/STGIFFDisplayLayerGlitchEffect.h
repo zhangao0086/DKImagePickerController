@@ -9,5 +9,7 @@
 
 
 @interface STGIFFDisplayLayerGlitchEffect : STMultiSourcingGPUImageComposerProcessor
-@property (nonatomic, readwrite) NSArray<UIColor *> * colors;
+@property(nonatomic, readwrite) BOOL screenShaking;
+@property(nonatomic, readwrite) UIColor * primaryColor;
+@property(nonatomic, readwrite) UIColor * secondaryColor;
 @end

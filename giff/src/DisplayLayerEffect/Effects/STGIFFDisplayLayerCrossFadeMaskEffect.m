@@ -16,6 +16,7 @@
 #import "UIImage+STUtil.h"
 #import "GPUImageTransformFilter+STGPUImageFilter.h"
 #import "NYXImagesKit.h"
+#import "GPUImageAlphaBlendFilter+STGPUImageFilter.h"
 
 //http://www.freepik.com/free-photos-vectors/stripes
 //http://www.freepik.com/free-vector/different-patterns-with-golden-elements_865711.htm#term=stripes&page=1&position=24
@@ -24,15 +25,15 @@
 
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _transformFadingImage = CGAffineTransformMakeScale(1.02f,1.02f);
-    }
-
-    return self;
-}
-
+//TODO: 사이드 이펙트 소지 있음
+//- (instancetype)init {
+//    self = [super init];
+//    if (self) {
+//        _transformFadingImage = CGAffineTransformMakeScale(1.02f,1.02f);
+//    }
+//
+//    return self;
+//}
 
 - (UIImage *)patternImage:(CGSize)imageSize{
 
@@ -71,6 +72,7 @@
 
     STGPUImageOutputComposeItem * composeItemA = [STGPUImageOutputComposeItem new];
     composeItemA.source = [[GPUImagePicture alloc] initWithImage:maskedImage smoothlyScaleOutput:NO];
+
     composeItemA.composer = GPUImageNormalBlendFilter.new;
     composeItemA.category = STGPUImageOutputComposeItemCategoryMask;
     [composers addObject:composeItemA];
@@ -78,11 +80,12 @@
     STGPUImageOutputComposeItem * composeItemB = [STGPUImageOutputComposeItem new];
     composeItemB.category = STGPUImageOutputComposeItemCategorySourceImage;
     composeItemB.source = [[GPUImagePicture alloc] initWithImage:sourceImages[1] smoothlyScaleOutput:NO];
-//    if(_scaleOfFadingImage!=1){
-//        composeItemB.filters = @[
-//                [GPUImageTransformFilter.new addScaleScalar:_scaleOfFadingImage]
-//        ];
-//    }
+
+    if(!CGAffineTransformIsIdentity(_transformFadingImage)){
+        composeItemB.filters = @[
+                [GPUImageTransformFilter transform:_transformFadingImage]
+        ];
+    }
     [composers addObject:composeItemB];
 
     return [composers reverse];
