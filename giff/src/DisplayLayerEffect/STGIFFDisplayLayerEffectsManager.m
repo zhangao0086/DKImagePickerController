@@ -18,7 +18,7 @@
 #import "NSObject+STUtil.h"
 #import "STGIFFDisplayLayerColorizeEffect.h"
 #import "STGIFFDisplayLayerFluorEffect.h"
-#import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
+#import "STGIFFDisplayLayerGlitchEffect.h"
 #import "STGIFFDisplayLayerPepVentosaEffect.h"
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "STGIFFDisplayLayerDarkenMaskEffect.h"
@@ -48,7 +48,7 @@
 
 - (NSArray <STGIFFDisplayLayerEffectItem *> *)effects{
     return _effects ?: (_effects = @[
-            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerAfterImagePopStarEffect.class imageName:@"STGIFFDisplayLayerAfterImagePopStarEffect.jpg"]
+            [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerGlitchEffect.class imageName:@"STGIFFDisplayLayerAfterImagePopStarEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerPepVentosaEffect.class imageName:@"STGIFFDisplayLayerPepVentosaEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerDarkenMaskEffect.class imageName:@"STGIFFDisplayLayerDarkenMaskEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeMaskEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg"

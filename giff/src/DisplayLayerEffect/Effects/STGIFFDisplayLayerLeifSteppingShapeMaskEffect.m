@@ -20,6 +20,7 @@
 #import "GPUImageDifferenceBlendFilter.h"
 #import "GPUImageHardLightBlendFilter.h"
 #import "GPUImageColorInvertFilter.h"
+#import "NSArray+STGPUImageOutputComposeItem.h"
 
 
 @implementation STGIFFDisplayLayerLeifSteppingShapeMaskEffect {
@@ -115,6 +116,8 @@
                                             allowInvertMix:NO
                                    primaryBlendFilterClass:GPUImageHardLightBlendFilter.class
                                  secondaryBlendFilterClass:GPUImageDifferenceBlendFilter.class];
+
+    return [composers0 concatOtherComposers:composers1 blender:[GPUImageAlphaBlendFilter alphaMix:0] orderByMix:YES];
 
     STGPUImageOutputComposeItem * composers1_firstItem = [composers1 firstObject];
     composers1_firstItem.composer = [GPUImageAlphaBlendFilter alphaMix:0];

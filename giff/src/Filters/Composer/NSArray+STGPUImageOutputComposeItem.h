@@ -7,5 +7,7 @@
 #import "STGPUImageOutputComposeItem.h"
 
 @interface NSArray (STGPUImageOutputComposeItem)
-- (NSArray *)composeItemsByCategory:(STGPUImageOutputComposeItemCategory)category;
+- (NSArray<STGPUImageOutputComposeItem *> *)composeItemsByCategory:(STGPUImageOutputComposeItemCategory)category;
+
+- (NSArray<STGPUImageOutputComposeItem *> *)concatOtherComposers:(NSArray<STGPUImageOutputComposeItem *> *)otherComposers blender:(GPUImageTwoInputFilter *)filter orderByMix:(BOOL)orderByMix;
 @end

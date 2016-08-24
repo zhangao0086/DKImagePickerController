@@ -8,6 +8,8 @@
 #import "STMultiSourcingGPUImageComposerProcessor.h"
 
 
-@interface STGIFFDisplayLayerAfterImagePopStarEffect : STMultiSourcingGPUImageComposerProcessor
-@property (nonatomic, readwrite) NSArray<UIColor *> * colors;
+@interface STGIFFDisplayLayerColoredDoubleExposureEffect : STMultiSourcingGPUImageComposerProcessor
+@property (nonatomic, readwrite) UIColor * primaryColor;
+@property (nonatomic, readwrite) UIColor * secondaryColor;
+
 @end

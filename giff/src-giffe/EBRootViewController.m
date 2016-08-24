@@ -15,7 +15,7 @@
 #import "NSString+STUtil.h"
 #import "STGIFFDisplayLayerColorizeEffect.h"
 #import "BlocksKit.h"
-#import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
+#import "STGIFFDisplayLayerGlitchEffect.h"
 #import "UIImage+STUtil.h"
 #import "NSArray+STUtil.h"
 #import "UIColor+BFPaperColors.h"
@@ -36,6 +36,7 @@
 #import "STDisplayLayerDuplexMotionBlurEffect.h"
 #import "STDisplayLayerJacopSuttonFogEffect.h"
 #import "STGIFFDisplayLayerLeifSteppingShapeMaskEffect.h"
+#import "STGIFFDisplayLayerColoredDoubleExposureEffect.h"
 
 @implementation EBRootViewController {
 

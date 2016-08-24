@@ -3,7 +3,7 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
-#import "STGIFFDisplayLayerAfterImagePopStarEffect.h"
+#import "STGIFFDisplayLayerGlitchEffect.h"
 #import "STGIFFDisplayLayerFluorEffect.h"
 #import "GPUImageChromaKeyBlendFilter.h"
 #import "GPUImagePicture.h"
@@ -23,7 +23,7 @@
 #import "GPUImageMotionBlurFilter+STGPUImageFilter.h"
 #import "GPUImageRGBFilter+STGPUImageFilter.h"
 
-@implementation STGIFFDisplayLayerAfterImagePopStarEffect {
+@implementation STGIFFDisplayLayerGlitchEffect {
 
 }
 
