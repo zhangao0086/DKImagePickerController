@@ -21,11 +21,35 @@
 
 + (CAShapeLayer *)rect:(CGSize)size color:(UIColor *)color {
     CAShapeLayer * layer = [CAShapeLayer layer];
-    [layer setColorToAll:color];
     layer.lineWidth = 0;
     layer.path = [[UIBezierPath bezierPathWithRect:CGRectMake(0, 0, size.width, size.height)] CGPath];
     layer.frame = layer.bounds = layer.pathBound;
+    [layer setColorToAll:color];
     return layer;
+}
+
++ (instancetype)rectWithFillingRect:(CGSize)size fillRect:(CGRect)fillRect{
+    return [self rectWithFilledRect:size inRect:fillRect color:nil bgColor:nil];
+}
+
++ (instancetype)rectWithFilledRect:(CGSize)size inRect:(CGRect)fillRect color:(UIColor *)fillColor bgColor:(UIColor *)bgColor {
+    NSAssert(fillRect.origin.x<fillRect.origin.y,@"fillRect.origin.x is must be lower than fillRect.origin.y");
+    NSAssert(fillRect.origin.x+fillRect.size.width<=size.width,@"fillRect.origin.x+fillRect.size.width is must be same or lower than bound's size.width");
+    NSAssert(fillRect.origin.y+fillRect.size.height<=size.height,@"fillRect.origin.y+fillRect.size.height is must be same or lower than bound's size.height");
+    CAShapeLayer * layer = [CAShapeLayer layer];
+    layer.lineWidth = 0;
+    layer.frame = layer.bounds = CGRectMakeSize(size);
+    if(bgColor){
+        layer.backgroundColor = bgColor.CGColor;
+    }
+    return [layer fillRect:fillRect color:fillColor];
+}
+
+- (instancetype)fillRect:(CGRect)rect color:(UIColor *)fillColor{
+    self.path = [UIBezierPath bezierPathWithRect:rect].CGPath;
+    self.fillMode = kCAFillModeForwards;
+    self.fillColor = (fillColor ?: [UIColor whiteColor]).CGColor;
+    return self;
 }
 
 + (CAShapeLayer *)roundRect:(CGSize)size cornerRadius:(CGFloat)radius color:(UIColor *)color {

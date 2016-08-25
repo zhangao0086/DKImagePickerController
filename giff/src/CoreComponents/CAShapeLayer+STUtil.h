@@ -13,6 +13,12 @@
 
 + (CAShapeLayer *)rect:(CGSize)size color:(UIColor *)color;
 
++ (instancetype)rectWithFillingRect:(CGSize)size fillRect:(CGRect)fillRect;
+
++ (instancetype)rectWithFilledRect:(CGSize)size inRect:(CGRect)fillRect color:(UIColor *)fillColor bgColor:(UIColor *)bgColor;
+
+- (instancetype)fillRect:(CGRect)rect color:(UIColor *)fillColor;
+
 + (CAShapeLayer *)roundRect:(CGSize)size cornerRadius:(CGFloat)radius color:(UIColor *)color;
 
 + (CAShapeLayer *)roundRect:(CGSize)size;

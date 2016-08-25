@@ -213,21 +213,21 @@ CGSizeMakeFromImageToView(CGSize imageSize)
 }
 
 CG_INLINE CGRect
-CGRectMakeValue(CGFloat scalarSize)
+CGRectMakeSize(CGSize size)
 {
-    CGRect rect;
-    rect.origin = CGPointZero;
-    rect.size = CGSizeMakeValue(scalarSize);
-    return rect;
+    return (CGRect){CGPointZero, size};
 }
 
 CG_INLINE CGRect
 CGRectMakeWH(CGFloat width, CGFloat height)
 {
-    CGRect rect;
-    rect.origin = CGPointZero;
-    rect.size = CGSizeMake(width,height);
-    return rect;
+    return CGRectMakeSize(CGSizeMake(width,height));
+}
+
+CG_INLINE CGRect
+CGRectMakeValue(CGFloat scalarSize)
+{
+    return CGRectMakeSize(CGSizeMakeValue(scalarSize));
 }
 
 CG_INLINE CGRect
