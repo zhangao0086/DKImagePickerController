@@ -37,6 +37,7 @@
 #import "STDisplayLayerJacopSuttonFogEffect.h"
 #import "STGIFFDisplayLayerLeifSteppingShapeMaskEffect.h"
 #import "STGIFFDisplayLayerColoredDoubleExposureEffect.h"
+#import "STDisplayLayerJatiPutraEffect.h"
 
 @implementation EBRootViewController {
 
@@ -46,8 +47,8 @@
     [super loadView];
 
     NSArray<STCapturedImageSet *> * images = [@[
-            @[@"face1.jpg"]
-            ,@[@"face3.jpg"]
+            @[@"land2.jpg"]
+            ,@[@"land.jpg"]
 
     ] mapWithIndex:^id(NSArray * imageURLSet, NSInteger index) {
         return [STCapturedImageSet setWithImageURLs:[imageURLSet mapWithIndex:^id(NSString *bundleFileName, NSInteger _index) {
@@ -61,7 +62,7 @@
     [self.view addSubview:_layerSetPresentationView];
 
 
-    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerGlitchEffect.class imageName:nil];
+    STGIFFDisplayLayerEffectItem * currentSelectedEffect = [STGIFFDisplayLayerEffectItem itemWithClass:STDisplayLayerJatiPutraEffect.class imageName:nil];
     currentSelectedEffect.valuesForKeysToApply = @{
             @"colors": @[UIColorFromRGB(0x00B6AD), UIColorFromRGB(0x24A7AC)]
             , @"maskImageSource" : [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"]
