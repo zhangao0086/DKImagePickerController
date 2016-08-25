@@ -9,7 +9,7 @@
 @implementation GPUImageOpacityFilter (STGPUImageFilter)
 
 + (instancetype)opacity:(CGFloat)opacity {
-    GPUImageOpacityFilter * opacityFilter = GPUImageOpacityFilter.new;
+    GPUImageOpacityFilter * opacityFilter = [[GPUImageOpacityFilter alloc] init];
     opacityFilter.opacity = opacity;
     return opacityFilter;
 }

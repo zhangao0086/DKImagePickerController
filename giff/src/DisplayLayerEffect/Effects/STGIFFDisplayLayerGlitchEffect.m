@@ -14,6 +14,10 @@
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "STRasterizingImageSourceItem.h"
 #import "NSArray+STGPUImageOutputComposeItem.h"
+#import "UIImage+STUtil.h"
+#import "UIColor+STUtil.h"
+#import "GPUImageAlphaBlendFilter+STGPUImageFilter.h"
+#import "NSObject+STUtil.h"
 
 @implementation STGIFFDisplayLayerGlitchEffect {
 
@@ -30,34 +34,28 @@
     return self;
 }
 
+- (NSArray *)composersToProcess:(NSArray<UIImage *> *__nullable)sourceImages {
+    NSArray * composers = [super composersToProcess:sourceImages];
+
+    //append stripe shapes.
+    UIImage * patternImage = [self st_cachedImage:@"STGIFFDisplayLayerGlitchEffect_patternImage" init:^UIImage * {
+        return [UIImage imageAsColor:[UIColor colorPatternRect:CGSizeMake(1, 12) rect:CGRectMake(0, 6, 1, 6) opaque:NO] withSize:sourceImages[0].size];
+    }];
+    return [composers concatOtherComposers:@[
+            [[STGPUImageOutputComposeItem itemWithSourceImage:patternImage] addFilters:@[
+
+            ]]
+    ] blender:[GPUImageAlphaBlendFilter alphaMix:.1] orderByMix:NO];
+}
+
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
-//    STGIFFDisplayLayerDarkenMaskEffect * darkenMaskEffect = [[STGIFFDisplayLayerDarkenMaskEffect alloc] init];
-//    UIImage * preprocessedImage = [darkenMaskEffect processImages:sourceImages];
-
-//    STGIFFDisplayLayerColoredDoubleExposureEffect * coloredDoubleExposureEffect = [[STGIFFDisplayLayerColoredDoubleExposureEffect alloc] init];
-//    coloredDoubleExposureEffect.style = ColoredDoubleExposureEffectBlendingStyleSolid;
-
-//    UIImage * preprocessedImage = [coloredDoubleExposureEffect processImages:sourceImages];
-
-//    return [self composersToProcessSingle:preprocessedImage];
-
-
-//    STGIFFDisplayLayerCrossFadeMaskEffect * crossFadeMaskEffect = [[STGIFFDisplayLayerCrossFadeMaskEffect alloc] init];
-//    crossFadeMaskEffect.maskImageSource = [STRasterizingImageSourceItem itemWithBundleFileName:@"STGIFFDisplayLayerGlitchEffect_default.svg"];
-//    crossFadeMaskEffect.transformFadingImage = CGAffineTransformMakeScale(1.04,1);
-
     return [[self composersToProcessSingle:sourceImages[0]]
             concatOtherComposers:[self composersToProcessSingle:sourceImages[1]]
                          blender:GPUImageLightenBlendFilter.new
                       orderByMix:YES];
-//    return [crossFadeMaskEffect composersToProcess:@[glichedImage,glichedImage]];
-
 }
 
 - (NSArray *)composersToProcessSingle:(UIImage *)sourceImage {
-    //TODO:stripe를 alpha mix로 하나 깔아주는 게 좋을듯
-    //TODO:stripe가 좀 더 실감나게
-
     NSMutableArray * composers = [NSMutableArray array];
     //1
     STGPUImageOutputComposeItem * composeItem0 = [STGPUImageOutputComposeItem new];
@@ -67,7 +65,6 @@
     GPUImageTransformFilter * transformFilter1 = [[GPUImageTransformFilter alloc] init];
     transformFilter1.affineTransform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(.02f,0),CGAffineTransformMakeScale(1.04,1.04));
 
-    //[GPUImageMonochromeFilter filterWithColor:[self colors][0]]
     composeItem0.filters = @[
             [GPUImageRGBFilter rgbColor:self.primaryColor]
             , saturationFilter0
