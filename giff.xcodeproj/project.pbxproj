@@ -12,6 +12,7 @@
 		4F71D00ED4CC93CFCF507B4D /* STGPUImageOutputComposeItem+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DB3579F471499CD4E233 /* STGPUImageOutputComposeItem+Utils.m */; };
 		4F71D00FC25C8ED14AB95DD7 /* STDisplayLayerJatiPutraEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DBA5CDF43594E90564D6 /* STDisplayLayerJatiPutraEffect.m */; };
 		4F71D019E4F4C77CB808685B /* building1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D7A9E1632E109CA8FF6E /* building1.jpg */; };
+		4F71D037AE41EC33455DAE37 /* STDisplayLayerJatiPutraEffect.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D1202BCFF05EC75B582D /* STDisplayLayerJatiPutraEffect.jpg */; };
 		4F71D03E6AED67BE8642F8A0 /* ico_cell_blank.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D3FF7F23C8E777423D71 /* ico_cell_blank.svg */; };
 		4F71D06576D106D68FEABC7A /* STGIFFDisplayLayerFluorEffect.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D86F5407E1BA99A7FEAC /* STGIFFDisplayLayerFluorEffect.jpg */; };
 		4F71D06D10208626E0F37626 /* STGIFFDisplayLayerCrossFadeEffect_patt2.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D275345DEA5CF90969EF /* STGIFFDisplayLayerCrossFadeEffect_patt2.svg */; };
@@ -25,6 +26,7 @@
 		4F71D12B6A9068F2F946610F /* STEditControlEffectSelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D09EE7A6407DEC9E2B71 /* STEditControlEffectSelectorView.m */; };
 		4F71D13AB04E241D05A34E13 /* STGIFFDisplayLayerCrossFadeGradientMaskEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DAAA51B20739B9C41C94 /* STGIFFDisplayLayerCrossFadeGradientMaskEffect.m */; };
 		4F71D15E93FD426F09788DF1 /* STGIFFDisplayLayerGlitchEffect_default.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D147C53098D4C4284054 /* STGIFFDisplayLayerGlitchEffect_default.svg */; };
+		4F71D1666F293542C7F3E930 /* STDisplayLayerJatiPutraEffect.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D1202BCFF05EC75B582D /* STDisplayLayerJatiPutraEffect.jpg */; };
 		4F71D17272849E0018157756 /* GPUImageMonochromeFilter+STGPUImageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D52176CDCE26885FDC33 /* GPUImageMonochromeFilter+STGPUImageFilter.m */; };
 		4F71D17570EB6BFF5525EB8E /* set_torchlight_on.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DA20030C611C8BC69FDC /* set_torchlight_on.svg */; };
 		4F71D183C777C061536E1EE7 /* go_play.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DB4986A8A5DBBD75E686 /* go_play.svg */; };
@@ -992,6 +994,7 @@
 		4F71D0D2E259FCF2DB3A53C9 /* set_resolution_medium.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = set_resolution_medium.svg; sourceTree = "<group>"; };
 		4F71D0E809959AE9BEC986D1 /* STGPUImageOffsetScalingFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STGPUImageOffsetScalingFilter.h; sourceTree = "<group>"; };
 		4F71D106AC9DDE9AB72B8604 /* GPUImageSaturationFilter+STGPUImageFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GPUImageSaturationFilter+STGPUImageFilter.m"; sourceTree = "<group>"; };
+		4F71D1202BCFF05EC75B582D /* STDisplayLayerJatiPutraEffect.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = STDisplayLayerJatiPutraEffect.jpg; sourceTree = "<group>"; };
 		4F71D13086633362632D4CB5 /* STEditControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STEditControlView.m; sourceTree = "<group>"; };
 		4F71D134D88D6DEE411B8BDE /* STGIFFDisplayLayerColoredDoubleExposureEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerColoredDoubleExposureEffect.m; sourceTree = "<group>"; };
 		4F71D138C0E19D47C015CFF5 /* STExporter+ConfigGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "STExporter+ConfigGIF.h"; sourceTree = "<group>"; };
@@ -1923,6 +1926,7 @@
 				4F71D147C53098D4C4284054 /* STGIFFDisplayLayerGlitchEffect_default.svg */,
 				4F71D55E9E3E9235410894E9 /* STGIFFDisplayLayerColoredDoubleExposureEffect.jpg */,
 				4F71DCB53E48D1BC5B16CBF8 /* STGIFFDisplayLayerGlitchEffect.jpg */,
+				4F71D1202BCFF05EC75B582D /* STDisplayLayerJatiPutraEffect.jpg */,
 			);
 			path = effect;
 			sourceTree = "<group>";
@@ -3517,6 +3521,7 @@
 				4F71D15E93FD426F09788DF1 /* STGIFFDisplayLayerGlitchEffect_default.svg in Resources */,
 				4F71D3143054FA58B9B7FD27 /* STGIFFDisplayLayerColoredDoubleExposureEffect.jpg in Resources */,
 				4F71D674AC648A5AA3C43DED /* STGIFFDisplayLayerGlitchEffect.jpg in Resources */,
+				4F71D1666F293542C7F3E930 /* STDisplayLayerJatiPutraEffect.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3710,6 +3715,7 @@
 				4F71D44970E8AAAEFD54EF0D /* STGIFFDisplayLayerGlitchEffect_default.svg in Resources */,
 				4F71D6EF40C68F9D87E9ABE4 /* STGIFFDisplayLayerColoredDoubleExposureEffect.jpg in Resources */,
 				4F71D425459114D8CB16CCA3 /* STGIFFDisplayLayerGlitchEffect.jpg in Resources */,
+				4F71D037AE41EC33455DAE37 /* STDisplayLayerJatiPutraEffect.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

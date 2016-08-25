@@ -30,6 +30,7 @@
 #import "STGIFFDisplayLayerLeifSteppingShapeMaskEffect.h"
 #import "STDisplayLayerJacopSuttonFogEffect.h"
 #import "STGIFFDisplayLayerColoredDoubleExposureEffect.h"
+#import "STDisplayLayerJatiPutraEffect.h"
 
 @implementation STGIFFDisplayLayerEffectsManager {
     NSArray <STGIFFDisplayLayerEffectItem *> * _effects;
@@ -56,6 +57,7 @@
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeMaskEffect.class imageName:@"STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg"
                                      valuesForKeysToApply:@{@"maskImageName" : @"STGIFFDisplayLayerCrossFadeEffect_patt2.svg"}]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCrossFadeGradientMaskEffect.class imageName:@"STGIFFDisplayLayerCrossFadeGradientMaskEffect.jpg"]
+            , [STGIFFDisplayLayerEffectItem itemWithClass:STDisplayLayerJatiPutraEffect.class imageName:@"STDisplayLayerJatiPutraEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerCircularCombineEffect.class imageName:@"STGIFFDisplayLayerCircularCombineEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerJulieCockburnEffect.class imageName:@"STGIFFDisplayLayerJulieCockburnEffect.jpg"]
             , [STGIFFDisplayLayerEffectItem itemWithClass:STGIFFDisplayLayerReflectingCircularCombineEffect.class imageName:@"STGIFFDisplayLayerReflectingCircularCombineEffect.jpg"]
