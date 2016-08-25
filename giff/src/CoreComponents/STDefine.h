@@ -222,6 +222,15 @@ CGRectMakeValue(CGFloat scalarSize)
 }
 
 CG_INLINE CGRect
+CGRectMakeWH(CGFloat width, CGFloat height)
+{
+    CGRect rect;
+    rect.origin = CGPointZero;
+    rect.size = CGSizeMake(width,height);
+    return rect;
+}
+
+CG_INLINE CGRect
 CGRectResolveOrientation(CGRect rect, UIInterfaceOrientation orientation, CGFloat containerPortraitWidth, CGFloat containersPortraitHeight) {
     switch(orientation)
     {
