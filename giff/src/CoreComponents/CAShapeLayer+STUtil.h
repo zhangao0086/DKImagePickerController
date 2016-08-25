@@ -7,6 +7,13 @@
 #import <CoreGraphics/CoreGraphics.h>
 
 @interface CAShapeLayer (STUtil)
+typedef NS_ENUM(NSInteger, ShapeLayerCorneredTriangle) {
+    ShapeLayerCorneredTriangleTopLeft,
+    ShapeLayerCorneredTriangleTopRight,
+    ShapeLayerCorneredTriangleBottomRight,
+    ShapeLayerCorneredTriangleBottomLeft
+};
+
 + (CAShapeLayer *)rectWidth:(CGFloat)width color:(UIColor *)color;
 
 + (CAShapeLayer *)rect:(CGSize)size;
@@ -18,6 +25,12 @@
 + (instancetype)rectWithFilledRect:(CGSize)size inRect:(CGRect)fillRect color:(UIColor *)fillColor bgColor:(UIColor *)bgColor;
 
 - (instancetype)fillRect:(CGRect)rect color:(UIColor *)fillColor;
+
++ (instancetype)corneredTriangle:(CGSize)size type:(ShapeLayerCorneredTriangle)type;
+
++ (instancetype)corneredTriangle:(CGSize)size type:(ShapeLayerCorneredTriangle)type color:(UIColor *)fillColor bgColor:(UIColor *)bgColor;
+
+- (instancetype)fillCorneredTriangle:(ShapeLayerCorneredTriangle)type color:(UIColor *)color;
 
 + (CAShapeLayer *)roundRect:(CGSize)size cornerRadius:(CGFloat)radius color:(UIColor *)color;
 

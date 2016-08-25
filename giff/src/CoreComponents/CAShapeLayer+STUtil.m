@@ -52,6 +52,54 @@
     return self;
 }
 
++ (instancetype)corneredTriangle:(CGSize)size type:(ShapeLayerCorneredTriangle)type{
+    return [self corneredTriangle:size type:type color:nil bgColor:nil];
+}
+
++ (instancetype)corneredTriangle:(CGSize)size type:(ShapeLayerCorneredTriangle)type color:(UIColor *)fillColor bgColor:(UIColor *)bgColor {
+    CAShapeLayer * layer = [CAShapeLayer layer];
+    layer.lineWidth = 0;
+    layer.frame = layer.bounds = CGRectMakeSize(size);
+    if(bgColor){
+        layer.backgroundColor = bgColor.CGColor;
+    }
+    return [layer fillCorneredTriangle:type color:fillColor];
+}
+
+- (instancetype)fillCorneredTriangle:(ShapeLayerCorneredTriangle)type color:(UIColor *)color{
+    UIBezierPath* trianglePath = [UIBezierPath bezierPath];
+
+    CGFloat w = self.bounds.size.width;
+    CGFloat h = self.bounds.size.height;
+    switch (type){
+        case ShapeLayerCorneredTriangleTopLeft:
+            [trianglePath moveToPoint:CGPointMake(0, 0)];
+            [trianglePath addLineToPoint:CGPointMake(w,0)];
+            [trianglePath addLineToPoint:CGPointMake(0,h)];
+            break;
+        case ShapeLayerCorneredTriangleTopRight:
+            [trianglePath moveToPoint:CGPointMake(0,0)];
+            [trianglePath addLineToPoint:CGPointMake(w,h)];
+            [trianglePath addLineToPoint:CGPointMake(w,0)];
+            break;
+        case ShapeLayerCorneredTriangleBottomRight:
+            [trianglePath moveToPoint:CGPointMake(w,0)];
+            [trianglePath addLineToPoint:CGPointMake(w,h)];
+            [trianglePath addLineToPoint:CGPointMake(0,h)];
+            break;
+        case ShapeLayerCorneredTriangleBottomLeft:
+            [trianglePath moveToPoint:CGPointMake(0,0)];
+            [trianglePath addLineToPoint:CGPointMake(0,h)];
+            [trianglePath addLineToPoint:CGPointMake(w,h)];
+            break;
+    }
+    [trianglePath closePath];
+    self.path = trianglePath.CGPath;
+    self.fillColor = (color ?: [UIColor whiteColor]).CGColor;
+
+    return self;
+}
+
 + (CAShapeLayer *)roundRect:(CGSize)size cornerRadius:(CGFloat)radius color:(UIColor *)color {
     CAShapeLayer * layer = [CAShapeLayer layer];
     [layer setColorToAll:color];
