@@ -151,8 +151,8 @@
 
     UIColor * systemYellowColor = UIColorFromRGB(0xFFBD2E);
 
-    CGFloat cornerRadious = 6;
-    CAShapeLayer * layer = [CAShapeLayer roundRect:thumbView.size andBlankedInnerRect:CGSizeMakeValue(3) cornerRadius:cornerRadious color:systemYellowColor];
+    CGFloat innerCornerRadious = thumbView.width*1.5f<thumbView.height ? 4 : 6;
+    CAShapeLayer * layer = [CAShapeLayer roundRect:thumbView.size cornerRadius:0 andInnerRect:CGSizeMakeValue(3) innerCornerRadius:innerCornerRadious color:systemYellowColor];
 
     [thumbView.layer addSublayer:layer];
 
