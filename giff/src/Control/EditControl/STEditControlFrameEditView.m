@@ -197,7 +197,7 @@ NSString * const STEditControlFrameEditItemViewFrameOffsetListenerIdPrefix = @"S
     Weaks
     [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger _index) {
         STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) view;
-        editItemView.highlightedIndex = Wself.currentMasterFrameIndex;
+        editItemView.highlightedIndex = Wself.layerSet.frameCount>1 ? Wself.currentMasterFrameIndex : NSUIntegerMax;
     }];
 }
 
