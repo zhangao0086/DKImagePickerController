@@ -85,8 +85,6 @@
 - (void)exportPhotoFileCropIfNeeded:(CGRect)rectToCrop completion:(void(^)(NSURL * tempFileURL))block{
     BOOL croppingRequired = !CGSizeEqualToSize(self.pixelSize, rectToCrop.size);
     if(croppingRequired){
-        [self exportFileByResourceType:PHAssetResourceTypePhoto completion:block];
-    }else{
         [self exportFileByResourceType:PHAssetResourceTypePhoto completion:^(NSURL *tempFileURL) {
             UIImage * resultImage = [[UIImage imageWithContentsOfFile:tempFileURL.path] imageByCroppingRect:rectToCrop];
 
@@ -96,6 +94,8 @@
                 !block?:block(nil);
             }
         }];
+    }else{
+        [self exportFileByResourceType:PHAssetResourceTypePhoto completion:block];
     }
 }
 
