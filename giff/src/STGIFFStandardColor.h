@@ -8,4 +8,5 @@
 
 @interface STGIFFStandardColor : NSObject <STStandardColor>
 
++ (UIColor *)frameEditHighlightColor;
 @end

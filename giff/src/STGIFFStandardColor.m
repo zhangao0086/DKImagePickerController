@@ -78,5 +78,13 @@
     return UIColorFromRGB(0xe9e9e9);
 }
 
++ (UIColor *)frameEditHighlightColor {
+    static UIColor * _frameEditHighlightColor;
+    BlockOnce(^{
+        _frameEditHighlightColor = [STStandardUI iOSSystemCameraHighlightColor];
+    });
+    return _frameEditHighlightColor;
+}
+
 
 @end

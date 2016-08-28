@@ -109,7 +109,7 @@ NSString * const ThumbViewHighlightLayerTagName = @"ThumbViewHighlightLayerTagNa
             view.clipsToBounds = YES;
             view.size = CGSizeMake(self.thumbnailWidth, self.squareUnitWidth);
 
-            CAShapeLayer * highlightLayer = [CAShapeLayer rect:_frameOffsetSlider.thumbView.size color:[[STStandardUI iOSSystemCameraHighlightColor] colorWithAlphaComponent:[STStandardUI alphaForDimmingWeak]]];
+            CAShapeLayer * highlightLayer = [CAShapeLayer rect:_frameOffsetSlider.thumbView.size color:[STGIFFStandardColor.frameEditHighlightColor colorWithAlphaComponent:[STStandardUI alphaForDimmingWeak]]];
             highlightLayer.name = ThumbViewHighlightLayerTagName;
             highlightLayer.hidden = YES;
             [view.layer addSublayer:highlightLayer];
@@ -178,7 +178,8 @@ NSString * const ThumbViewHighlightLayerTagName = @"ThumbViewHighlightLayerTagNa
 - (UIView *)createThumbView {
     UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(self.thumbnailWidth, self.squareUnitWidth)];
 
-    UIColor * systemYellowColor = STStandardUI.iOSSystemCameraHighlightColor;
+
+    UIColor * systemYellowColor = STGIFFStandardColor.frameEditHighlightColor;
 
     CGFloat innerCornerRadious = thumbView.width*1.5f<thumbView.height ? 4 : 6;
     CAShapeLayer * layer = [CAShapeLayer roundRect:thumbView.size cornerRadius:0 andInnerRect:CGSizeMakeValue(3) innerCornerRadius:innerCornerRadious color:systemYellowColor];

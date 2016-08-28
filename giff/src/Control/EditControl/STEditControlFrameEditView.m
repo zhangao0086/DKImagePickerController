@@ -16,6 +16,8 @@
 #import "STMainControl.h"
 #import "NSObject+STUtil.h"
 #import "BlocksKit.h"
+#import "NSString+STUtil.h"
+#import "STGIFFStandardColor.h"
 
 @implementation STEditControlFrameEditView {
     STUIView * _masterOffsetSliderContainer;
@@ -30,10 +32,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        //frame edit items
-        _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
-        [self addSubview:_frameEditItemViewContainer];
-
         //master frame offset slider
         _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView/2)];
         [self addSubview:_masterOffsetSliderContainer];
@@ -49,6 +47,10 @@
         [_playButton setButtons:@[R.go_play, [R go_pause]] colors:nil style:STStandardButtonStylePTBT];
         _playButton.right = self.right;
 //        [_masterOffsetSliderContainer addSubview:_playButton];
+
+        //frame edit items
+        _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
+        [self addSubview:_frameEditItemViewContainer];
 
         //frame add button
         _frameAddButton = [[STStandardButton alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
@@ -76,6 +78,7 @@
     return (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:layer.uuid];
 }
 
+NSString * const STEditControlFrameEditItemViewFrameOffsetListenerIdPrefix = @"STEditControlFrameEditView_frameIndexOffset_Listen";
 
 - (void)setLayerSet:(STCapturedImageSetAnimatableLayerSet *)layerSet {
     if(layerSet.layers.count){
@@ -92,6 +95,12 @@
                 [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
                     [Wself removeLayerTapped:editItemView];
                 }];
+                [editItemView whenValueOf:@keypath(editItemView.frameIndexOffset) id:[STEditControlFrameEditItemViewFrameOffsetListenerIdPrefix st_add:layer.uuid] changed:^(id value, id _weakSelf) {
+                    [CATransaction begin];
+                    [CATransaction setDisableActions: YES];
+                    [Wself updateFrameEditItemsHighlightIndex];
+                    [CATransaction commit];
+                }];
                 [_frameEditItemViewContainer addSubview:editItemView];
             }
             editItemView.tagName = layer.uuid;
@@ -102,8 +111,11 @@
         _layerSet = nil;
 
         [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger index) {
-            ((STEditControlFrameEditItemView *) view).displayLayer = nil;
-            [((STEditControlFrameEditItemView *) view) disposeContent];
+            STEditControlFrameEditItemView * itemView = (STEditControlFrameEditItemView *) view;
+            [itemView st_removeAllKeypathListenersWidthId:[STEditControlFrameEditItemViewFrameOffsetListenerIdPrefix st_add:itemView.displayLayer.uuid]];
+            itemView.displayLayer = nil;
+
+            [itemView disposeContent];
         }];
         [_frameEditItemViewContainer clearAllOwnedImagesIfNeeded:NO removeSubViews:YES];
     }
@@ -218,7 +230,7 @@
 #pragma mark OffsetSlider
 - (UIView *)createThumbView {
     UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, _masterOffsetSliderContainer.height)];
-    thumbView.backgroundColor = STStandardUI.iOSSystemCameraHighlightColor;
+    thumbView.backgroundColor = STGIFFStandardColor.frameEditHighlightColor;
     return thumbView;
 }
 
