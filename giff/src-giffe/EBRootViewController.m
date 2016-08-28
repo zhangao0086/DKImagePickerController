@@ -38,6 +38,10 @@
 #import "STGIFFDisplayLayerLeifSteppingShapeMaskEffect.h"
 #import "STGIFFDisplayLayerColoredDoubleExposureEffect.h"
 #import "STDisplayLayerJatiPutraEffect.h"
+#import "R.h"
+#import "SVGKImage.h"
+#import "SVGKImage+STUtil.h"
+#import "CAShapeLayer+STUtil.h"
 
 @implementation EBRootViewController {
 
@@ -89,6 +93,33 @@
             }
         } repeats:YES];
     }
+
+
+    //make bullet
+    UIColor * systemYellowColor = UIColorFromRGB(0xFFBD2E);
+    CGSize imageSize = CGSizeMake(108/3,111/3);
+
+    UIView * containerView = [[UIView alloc] initWithSize:imageSize];
+    [self.view addSubview:containerView];
+    [containerView centerToParent];
+
+    CGFloat cornerRadious = 6;
+    CAShapeLayer * layer = [CAShapeLayer roundRect:imageSize andBlankedInnerRect:CGSizeMakeValue(3) cornerRadius:cornerRadious color:systemYellowColor];
+
+    [containerView.layer addSublayer:layer];
+
+    UIImageView * leftArrow = [SVGKImage UIImageViewNamed:[R slide_arrow_down_ios] withSizeWidth:18 color:systemYellowColor degree:-90];
+    [containerView addSubview:leftArrow];
+
+    [leftArrow centerToParentVertical];
+    leftArrow.right = 0;
+
+    UIImageView * rightArrow = [SVGKImage UIImageViewNamed:[R slide_arrow_down_ios] withSizeWidth:18 color:systemYellowColor degree:90];
+    [containerView addSubview:rightArrow];
+
+    [rightArrow centerToParentVertical];
+    rightArrow.x = containerView.width;
+
 }
 
 @end

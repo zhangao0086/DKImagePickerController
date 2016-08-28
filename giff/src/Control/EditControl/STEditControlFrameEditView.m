@@ -88,6 +88,7 @@
             STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) [_frameEditItemViewContainer viewWithTagName:layer.uuid];
             if(!editItemView){
                 editItemView = [[STEditControlFrameEditItemView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+                editItemView.backgroundColor = [UIColor blackColor];
                 [editItemView.removeButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
                     [Wself removeLayerTapped:editItemView];
                 }];

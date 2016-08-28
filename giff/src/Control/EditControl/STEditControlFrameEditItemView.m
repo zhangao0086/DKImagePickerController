@@ -14,6 +14,10 @@
 #import "NSArray+BlocksKit.h"
 #import "STCapturedImageProtected.h"
 #import "STCapturedImage+Extension.h"
+#import "SVGKImage.h"
+#import "SVGKImage+STUtil.h"
+#import "CAShapeLayer+STUtil.h"
+#import "UIColor+BFPaperColors.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -144,7 +148,27 @@
 #pragma mark Slider Delegator
 - (UIView *)createThumbView {
     UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth)];
-    thumbView.backgroundColor = [UIColor whiteColor];
+
+    UIColor * systemYellowColor = UIColorFromRGB(0xFFBD2E);
+
+    CGFloat cornerRadious = 6;
+    CAShapeLayer * layer = [CAShapeLayer roundRect:thumbView.size andBlankedInnerRect:CGSizeMakeValue(3) cornerRadius:cornerRadious color:systemYellowColor];
+
+    [thumbView.layer addSublayer:layer];
+
+    UIImageView * leftArrow = [SVGKImage UIImageViewNamed:[R slide_arrow_down_ios] withSizeWidth:18 color:systemYellowColor degree:-90];
+    [thumbView addSubview:leftArrow];
+
+    [leftArrow centerToParentVertical];
+    leftArrow.right = 0;
+
+    UIImageView * rightArrow = [SVGKImage UIImageViewNamed:[R slide_arrow_down_ios] withSizeWidth:18 color:systemYellowColor degree:90];
+    [thumbView addSubview:rightArrow];
+
+    [rightArrow centerToParentVertical];
+    rightArrow.x = thumbView.width;
+
+//    thumbView.backgroundColor = [UIColor whiteColor];
     return thumbView;
 }
 
