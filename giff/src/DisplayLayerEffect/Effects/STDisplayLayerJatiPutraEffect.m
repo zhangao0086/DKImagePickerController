@@ -9,11 +9,31 @@
 #import "GPUImageMaskFilter.h"
 #import "STGIFFDisplayLayerCrossFadeMaskEffect.h"
 #import "STRasterizingImageSourceItem.h"
+#import "CALayer+STUtil.h"
 
 
 @implementation STDisplayLayerJatiPutraEffect {
 
 }
+
+- (UIImage *__nullable)processImages:(NSArray<UIImage *> *__nullable)sourceImages {
+
+    CGSize imageSize= sourceImages[0].size;
+    CGFloat imageTargetSize = imageSize.height;
+    CGFloat cornerRadious = imageTargetSize/8;
+
+    CAShapeLayer * layer = [CAShapeLayer roundRect:imageSize andBlankedInnerRect:CGSizeMakeValue(imageTargetSize/8) cornerRadius:cornerRadious color:[UIColor yellowColor]];
+//
+//    CAShapeLayer * layer = [CAShapeLayer roundRect:imageSize cornerRadius:cornerRadious color:[UIColor yellowColor]];
+//    UIBezierPath * path = [UIBezierPath bezierPathWithCGPath:layer.path];
+//    [path appendPath:[UIBezierPath bezierPathWithRect:CGRectInset(CGRectMakeSize(imageSize),imageTargetSize/8,imageTargetSize/8)]];
+//    layer.fillRule = kCAFillRuleEvenOdd;
+//    layer.fillColor = [UIColor blackColor].CGColor;
+//    layer.path = path.CGPath;
+
+    return [layer UIImage];
+}
+
 
 - (NSArray *)composersToProcessMultiple:(NSArray<UIImage *> *__nullable)sourceImages {
     NSArray * firstComposers = [self composersToProcessSingle:sourceImages[0]];

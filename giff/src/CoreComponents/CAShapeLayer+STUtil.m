@@ -110,6 +110,16 @@
     return layer;
 }
 
++ (instancetype)roundRect:(CGSize)size andBlankedInnerRect:(CGSize)inset cornerRadius:(CGFloat)radius color:(UIColor *)color {
+    CAShapeLayer * layer = [CAShapeLayer roundRect:size cornerRadius:radius color:color];
+    UIBezierPath * path = [UIBezierPath bezierPathWithCGPath:layer.path];
+    [path appendPath:[UIBezierPath bezierPathWithRect:CGRectInset(CGRectMakeSize(size),inset.width,inset.height)]];
+    layer.fillRule = kCAFillRuleEvenOdd;
+    layer.fillColor = color.CGColor;
+    layer.path = path.CGPath;
+    return layer;
+}
+
 + (CAShapeLayer *)roundRect:(CGSize)size {
     return [self roundRect:size cornerRadius:size.height/2 color:nil];
 }

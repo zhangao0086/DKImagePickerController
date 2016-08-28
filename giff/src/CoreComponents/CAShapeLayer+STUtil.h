@@ -34,6 +34,8 @@ typedef NS_ENUM(NSInteger, ShapeLayerCorneredTriangle) {
 
 + (CAShapeLayer *)roundRect:(CGSize)size cornerRadius:(CGFloat)radius color:(UIColor *)color;
 
++ (instancetype)roundRect:(CGSize)size andBlankedInnerRect:(CGSize)inset cornerRadius:(CGFloat)radius color:(UIColor *)color;
+
 + (CAShapeLayer *)roundRect:(CGSize)size;
 
 + (CAShapeLayer *)roundRect:(CGSize)size color:(UIColor *)color;
