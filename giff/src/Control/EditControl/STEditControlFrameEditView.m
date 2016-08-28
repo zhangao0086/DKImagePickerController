@@ -30,11 +30,15 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        //frame edit items
+        _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
+        [self addSubview:_frameEditItemViewContainer];
+
         //master frame offset slider
-        _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+        _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView/2)];
         [self addSubview:_masterOffsetSliderContainer];
 
-        _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width-self.heightForFrameItemView,self.heightForFrameItemView)];
+        _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width-self.heightForFrameItemView,_masterOffsetSliderContainer.height)];
         _masterOffsetSlider.delegateSlider = self;
         [_masterOffsetSliderContainer addSubview:_masterOffsetSlider];
 
@@ -44,11 +48,7 @@
         _playButton.fitIconImageSizeToCenterSquare = YES;
         [_playButton setButtons:@[R.go_play, [R go_pause]] colors:nil style:STStandardButtonStylePTBT];
         _playButton.right = self.right;
-        [_masterOffsetSliderContainer addSubview:_playButton];
-
-        //frame edit items
-        _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
-        [self addSubview:_frameEditItemViewContainer];
+//        [_masterOffsetSliderContainer addSubview:_playButton];
 
         //frame add button
         _frameAddButton = [[STStandardButton alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
@@ -160,6 +160,9 @@
 }
 
 - (void)setNeedsLayersDisplayAndLayout {
+    STEditControlFrameEditItemView * firstItemView = [[_frameEditItemViewContainer subviews] firstObject];
+    _masterOffsetSlider.thumbView.size = CGSizeMake(firstItemView.thumbnailWidth,_masterOffsetSlider.thumbView.height);
+
     _masterOffsetSliderContainer.visible = self.layerSet.frameCount>1;
     if(_masterOffsetSliderContainer.visible){
         _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/self.layerSet.frameCount;
@@ -203,8 +206,8 @@
 
 #pragma mark OffsetSlider
 - (UIView *)createThumbView {
-    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, self.heightForFrameItemView)];
-    thumbView.backgroundColor = [UIColor whiteColor];
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(14, _masterOffsetSliderContainer.height)];
+    thumbView.backgroundColor = STStandardUI.iOSSystemCameraHighlightColor;
     return thumbView;
 }
 
@@ -225,6 +228,12 @@
         _currentMasterFrameIndex = currentMasterFrameIndex;
         [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
     }
+
+    //highlight
+    [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger _index) {
+        STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) view;
+        editItemView.highlightedIndex = _currentMasterFrameIndex;
+    }];
 }
 
 @end

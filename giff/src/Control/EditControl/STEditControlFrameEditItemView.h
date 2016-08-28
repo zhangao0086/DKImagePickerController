@@ -17,4 +17,7 @@
 @property (nonatomic, assign) NSInteger frameIndexOffset;
 @property (nonatomic, readonly) BOOL frameIndexOffsetHasChanging;
 @property (nonatomic, readonly) STStandardButton * removeButton;
+@property (nonatomic, assign) NSUInteger highlightedIndex;
+
+- (CGFloat)thumbnailWidth;
 @end

@@ -18,6 +18,8 @@
 #import "SVGKImage+STUtil.h"
 #import "CAShapeLayer+STUtil.h"
 #import "UIColor+BFPaperColors.h"
+#import "STGIFFStandardColor.h"
+#import "CALayer+STUtil.h"
 
 
 @implementation STEditControlFrameEditItemView {
@@ -34,6 +36,8 @@
         _removeButton.fitIconImageSizeToCenterSquare = YES;
         [_removeButton setButtons:@[R.go_remove] colors:nil style:STStandardButtonStylePTBT];
         _removeButton.right = self.right;
+
+        _highlightedIndex = NSUIntegerMax;
     }
 
     return self;
@@ -64,9 +68,11 @@
     return self.height;
 }
 
-- (CGFloat)minThumbnailWidth{
+- (CGFloat)thumbnailWidth{
     return (self.width-self.squareUnitWidth)/_displayLayer.imageSet.count;
 }
+
+NSString * const ThumbViewHighlightLayerTagName = @"ThumbViewHighlightLayerTagName";
 
 - (void)setDisplayLayer:(STCapturedImageSetAnimatableLayer *)displayLayer {
     _displayLayer = displayLayer;
@@ -88,7 +94,7 @@
                 NSURL * thumbnailUrl = frameImage.tempImageUrl;
 
                 //use thumbnailUrl instead of the smallest thumbnail(tempImageUrl) image for size optimization
-                if(self.minThumbnailWidth >= self.squareUnitWidth*2 || !frameImage.tempImageUrl){
+                if(self.thumbnailWidth >= self.squareUnitWidth*2 || !frameImage.tempImageUrl){
                     thumbnailUrl = frameImage.thumbnailUrl;
                 }
                 UIImage * thumbnailImage = [UIImage imageWithContentsOfFile:thumbnailUrl.path];
@@ -101,7 +107,12 @@
             view.tagName = image.uuid;
             view.contentMode = UIViewContentModeScaleAspectFill;
             view.clipsToBounds = YES;
-            view.size = CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth);
+            view.size = CGSizeMake(self.thumbnailWidth, self.squareUnitWidth);
+
+            CAShapeLayer * highlightLayer = [CAShapeLayer rect:_frameOffsetSlider.thumbView.size color:[[STStandardUI iOSSystemCameraHighlightColor] colorWithAlphaComponent:[STStandardUI alphaForDimmingWeak]]];
+            highlightLayer.name = ThumbViewHighlightLayerTagName;
+            highlightLayer.hidden = YES;
+            [view.layer addSublayer:highlightLayer];
         }];
 
         [self updateThumbnailsPosition];
@@ -128,14 +139,14 @@
 - (void)updateThumbnailsPosition{
     _frameOffsetSlider.thumbView.visible = _displayLayer.frameCount>1;
     if(_frameOffsetSlider.thumbView.visible){
-        _frameOffsetSlider.thumbView.size = CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth);
+        _frameOffsetSlider.thumbView.size = CGSizeMake(self.thumbnailWidth, self.squareUnitWidth);
     }
 
     [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
         UIView * thumbnailCellView = [_frameOffsetSlider.segmentationViews bk_match:^BOOL(UIView * view) {
             return [view.tagName isEqualToString:frameImage.uuid];
         }];
-        thumbnailCellView.x = self.minThumbnailWidth * index;
+        thumbnailCellView.x = self.thumbnailWidth * index;
     }];
 }
 
@@ -145,11 +156,29 @@
     }
 }
 
+- (void)setHighlightedIndex:(NSUInteger)highlightedIndex {
+    _highlightedIndex = highlightedIndex;
+
+    [_displayLayer.imageSet.images eachWithIndex:^(STCapturedImage *frameImage, NSUInteger index) {
+        UIView * thumbnailCellView = [_frameOffsetSlider.segmentationViews bk_match:^BOOL(UIView * view) {
+            return [view.tagName isEqualToString:frameImage.uuid];
+        }];
+        BOOL hidden = YES;
+        if(index==highlightedIndex){
+            hidden = highlightedIndex==NSUIntegerMax;
+        }
+        CALayer * highlightLayer = [thumbnailCellView.layer layerWithName:ThumbViewHighlightLayerTagName];
+        if(highlightLayer.hidden!=hidden){
+            highlightLayer.hidden = hidden;
+        }
+    }];
+}
+
 #pragma mark Slider Delegator
 - (UIView *)createThumbView {
-    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(self.minThumbnailWidth, self.squareUnitWidth)];
+    UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(self.thumbnailWidth, self.squareUnitWidth)];
 
-    UIColor * systemYellowColor = UIColorFromRGB(0xFFBD2E);
+    UIColor * systemYellowColor = STStandardUI.iOSSystemCameraHighlightColor;
 
     CGFloat innerCornerRadious = thumbView.width*1.5f<thumbView.height ? 4 : 6;
     CAShapeLayer * layer = [CAShapeLayer roundRect:thumbView.size cornerRadius:0 andInnerRect:CGSizeMakeValue(3) innerCornerRadius:innerCornerRadious color:systemYellowColor];
