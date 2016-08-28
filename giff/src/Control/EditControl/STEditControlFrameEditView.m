@@ -33,7 +33,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         //master frame offset slider
-        _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView/2)];
+        _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
         [self addSubview:_masterOffsetSliderContainer];
 
         _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width-self.heightForFrameItemView,_masterOffsetSliderContainer.height)];
@@ -46,7 +46,7 @@
         _playButton.fitIconImageSizeToCenterSquare = YES;
         [_playButton setButtons:@[R.go_play, [R go_pause]] colors:nil style:STStandardButtonStylePTBT];
         _playButton.right = self.right;
-//        [_masterOffsetSliderContainer addSubview:_playButton];
+        [_masterOffsetSliderContainer addSubview:_playButton];
 
         //frame edit items
         _frameEditItemViewContainer = [[STUIView alloc] initWithSize:self.size];
