@@ -174,8 +174,19 @@
         editItemView.y = index*editItemView.height;
     }];
 
+    [self updateFrameEditItemsHighlightIndex];
+
     _frameAddButton.y = _frameEditItemViewContainer.top+[_frameEditItemViewContainer lastSubview].bottom;
     _frameAddButton.visible = _frameEditItemViewContainer.subviews.count<self.maxNumberOfLayersOfLayerSet;
+}
+
+- (void)updateFrameEditItemsHighlightIndex{
+    //highlight
+    Weaks
+    [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger _index) {
+        STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) view;
+        editItemView.highlightedIndex = Wself.currentMasterFrameIndex;
+    }];
 }
 
 - (void)removeLayerTapped:(STEditControlFrameEditItemView *)editItemView{
@@ -217,6 +228,9 @@
 
 - (void)didSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
     [self doingSlide:timeSlider withSelectedIndex:index];
+
+    STCapturedImageSetDisplayLayer * anyLayer = [self.layerSet.layers firstObject];
+    _masterOffsetSlider.normalizedPosition = ((CGFloat)_currentMasterFrameIndex/anyLayer.imageSet.count);
 }
 
 - (void)doingSlide:(STSegmentedSliderView *)timeSlider withSelectedIndex:(int)index {
@@ -229,11 +243,7 @@
         [self didChangeValueForKey:@keypath(self.currentMasterFrameIndex)];
     }
 
-    //highlight
-    [_frameEditItemViewContainer st_eachSubviews:^(UIView *view, NSUInteger _index) {
-        STEditControlFrameEditItemView * editItemView = (STEditControlFrameEditItemView *) view;
-        editItemView.highlightedIndex = _currentMasterFrameIndex;
-    }];
+    [self updateFrameEditItemsHighlightIndex];
 }
 
 @end
