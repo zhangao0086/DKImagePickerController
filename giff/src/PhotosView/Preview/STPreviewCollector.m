@@ -149,6 +149,7 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
     _carousel = _previewView.iCarouselView;
     //for scrollzoom
     _carousel.type = iCarouselTypeCustom;
+    _carousel.scrollEnabled = YES;
 
     if(type== STPhotoViewTypeEdit){
         Weaks
@@ -214,8 +215,11 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
 
         [self _endTransitionLive];
 
-        [self initFiltersIncludeDefault];
+//        [self initFiltersIncludeDefault];
+        //FIXME: DisabledFilters
+        [self initItems:[@[[STFilterManager sharedManager].defaultFilterItem] mutableCopy]];
         [self startForLive:_carousel];
+        _carousel.scrollEnabled = NO;
 
         void(^initialRenderCompletionBlock)(void) = ^{
             Strongs
@@ -234,26 +238,29 @@ NSString * const STPreviewCollectorNotificationPreviewBeginDragging = @"STPrevie
             }
         }];
 
+        //FIXME: DisabledFilters
+        [[self presenter] dispatchItemRenderFinished:0];
+
 
 #pragma mark Tutorial - FilterSlide
 #if DEBUG
 //        STGIFFAppSetting.get._confirmedTutorialFilterSlide = NO;
 #endif
-        if(!STGIFFAppSetting.get._confirmedTutorialFilterSlide){
-            STGIFFAppSetting.get._confirmedTutorialFilterSlide = YES;
-            [STGIFFAppSetting.get synchronize];
-
-            [[NSNotificationCenter defaultCenter] st_addObserverWithMainQueueOnlyOnce:self forName:STNotificationFilterPresenterItemRenderFinish usingBlock:^(NSNotification *note, id observer) {
-                [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-                [self st_performOnceAfterDelay:@"_confirmedTutorialFilterSlide_1" interval:.8 block:^{
-                    [self.carousel scrollToItemAtIndex:1 duration:2.5];
-                    [self st_performOnceAfterDelay:@"_confirmedTutorialFilterSlide_2" interval:3 block:^{
-                        [self reset];
-                        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-                    }];
-                }];
-            }];
-        }
+//        if(!STGIFFAppSetting.get._confirmedTutorialFilterSlide){
+//            STGIFFAppSetting.get._confirmedTutorialFilterSlide = YES;
+//            [STGIFFAppSetting.get synchronize];
+//
+//            [[NSNotificationCenter defaultCenter] st_addObserverWithMainQueueOnlyOnce:self forName:STNotificationFilterPresenterItemRenderFinish usingBlock:^(NSNotification *note, id observer) {
+//                [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+//                [self st_performOnceAfterDelay:@"_confirmedTutorialFilterSlide_1" interval:.8 block:^{
+//                    [self.carousel scrollToItemAtIndex:1 duration:2.5];
+//                    [self st_performOnceAfterDelay:@"_confirmedTutorialFilterSlide_2" interval:3 block:^{
+//                        [self reset];
+//                        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+//                    }];
+//                }];
+//            }];
+//        }
 
     }else{
         NSAssert(NO, @"must set as FilterTypes");
