@@ -904,12 +904,16 @@ STExportSelectView * exportSelectView;
 }
 
 - (void)setMode:(STControlDisplayMode)mode reload:(BOOL)reload; {
-    _previousMode = _mode;
-    BOOL changed = _previousMode != mode || reload;
+    BOOL changed = _mode != mode || reload;
 
-    if(changed) [self willChangeValueForKey:@keypath(self.mode)];
+    if(!changed){
+        return;
+    }
+
+    [self willChangeValueForKey:@keypath(self.mode)];
+    _previousMode = _mode;
     _mode = mode;
-    if(changed) [self didChangeValueForKey:@keypath(self.mode)];
+    [self didChangeValueForKey:@keypath(self.mode)];
 
     if(mode == STControlDisplayModeHome){
         [_historyModes removeAllObjects];
