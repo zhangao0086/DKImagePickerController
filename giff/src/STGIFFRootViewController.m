@@ -29,6 +29,8 @@
 #import "STFilterPresenterBase.h"
 #import "STFilterManager.h"
 #import "STFilter.h"
+#import "UIColor+BFPaperColors.h"
+#import "ChameleonMacros.h"
 
 @interface STGIFFRootViewController (){
     //Device Control
@@ -126,9 +128,17 @@
     _photoSelectionView.backgroundColor = [STGIFFApp launchScreenBackgroundColor];
 
     // init elie control
-
     STMainControl * control = [STMainControl initSharedInstanceWithFrame:CGRectMake(0, 0, self.view.width, self.view.height-_cameraFrame.size.height)];
-    control.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.2];
+//    control.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:.4];
+//    control.backgroundColor = UIColorFromRGB(0x7895AC);
+    control.backgroundColor = [UIColor colorWithGradientStyle:UIGradientStyleTopToBottom withFrame:CGRectMakeSize(control.size) andColors:@[
+//            UIColorFromRGB(0x7895AC),
+//            UIColorFromRGB(0x8eb5cb)
+//            UIColorFromRGB(0x2B2B2B),
+//            UIColorFromRGB(0x3C3F41)
+            UIColorFromRGB(0x3E475B),
+            UIColorFromRGB(0x49526A)
+    ]];
     control.bottom = self.view.height;
 
     // init status bar
@@ -153,7 +163,7 @@
         [self cameraPreviewWillInitialize];
     });
     if([STApp isInSimulator]){
-        control.backgroundColor = [UIColor redColor];
+//        control.backgroundColor = [UIColor redColor];
 
         [STElieStatusBar sharedInstance].backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:.4];
 
