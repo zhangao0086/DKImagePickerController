@@ -93,6 +93,10 @@
     return @"dotdotdot.svg";
 }
 
++ (NSString *)down_arrow_triangle; {
+    return @"down_arrow_triangle.svg";
+}
+
 + (NSString *)down_triangle_rounded; {
     return @"down_triangle_rounded.svg";
 }

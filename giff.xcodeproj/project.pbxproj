@@ -58,6 +58,7 @@
 		4F71D3675E5A7C4F0C632D6D /* STMultiSourcingImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DC608A8141B705DA42B3 /* STMultiSourcingImageProcessor.m */; };
 		4F71D36F9F99DF06DBC3402A /* STGIFFDisplayLayerHalfToneEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D074E48306CAEED9B063 /* STGIFFDisplayLayerHalfToneEffect.m */; };
 		4F71D393253E6E52F50CA295 /* go_take.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D6E47674B33F45BBC26E /* go_take.svg */; };
+		4F71D3B78892F2B17E53BD0E /* down_arrow_triangle.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D8CD4975DA16E6905BF6 /* down_arrow_triangle.svg */; };
 		4F71D3C83A955E71AB35AF58 /* bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DC81C0C5992CEBC38466 /* bg1.jpg */; };
 		4F71D3F146E266CA927B8AD5 /* set_resolution_4k.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D3401F5ECD85A0B7AEA8 /* set_resolution_4k.svg */; };
 		4F71D40234A066096F3BA2AC /* STCapturedImageSetAnimatableLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DE13232605B8697535E2 /* STCapturedImageSetAnimatableLayer.m */; };
@@ -75,6 +76,7 @@
 		4F71D4951E2293DDB84B45BD /* STGIFFDisplayLayerLeifEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D2BD2D4871511173350E /* STGIFFDisplayLayerLeifEffect.m */; };
 		4F71D496638072356445C5DC /* STCaptureRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D4CE33205F28C6D789C2 /* STCaptureRequest.m */; };
 		4F71D499A2DCD03E2A852B93 /* STPostFocusCaptureRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D07AD32D8DF864503295 /* STPostFocusCaptureRequest.m */; };
+		4F71D49FC48AFE52734B86DA /* down_arrow_triangle.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71D8CD4975DA16E6905BF6 /* down_arrow_triangle.svg */; };
 		4F71D49FCCB09CAF0DEEE5BF /* STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F71DD92EE4AAB8BA6ACC938 /* STGIFFDisplayLayerPatternizedCrossFadeEffect.jpg */; };
 		4F71D4BE7F235FB13E2816F6 /* GPUImageSaturationFilter+STGPUImageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71D106AC9DDE9AB72B8604 /* GPUImageSaturationFilter+STGPUImageFilter.m */; };
 		4F71D4C2C85791E2059E0B96 /* GPUImageContrastFilter+STGPUImageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71DCDF42919F84D0049A3C /* GPUImageContrastFilter+STGPUImageFilter.m */; };
@@ -1123,6 +1125,7 @@
 		4F71D87E02CE010CB0948FFA /* STPhotoItem+UIAccessory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "STPhotoItem+UIAccessory.m"; sourceTree = "<group>"; };
 		4F71D89E504DE9FBDFEA873C /* STGIFFDisplayLayerFluorEffect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFDisplayLayerFluorEffect.m; sourceTree = "<group>"; };
 		4F71D8AEF12644D342578130 /* RLMCapturedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLMCapturedImage.m; sourceTree = "<group>"; };
+		4F71D8CD4975DA16E6905BF6 /* down_arrow_triangle.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; path = down_arrow_triangle.svg; sourceTree = "<group>"; };
 		4F71D8D343A6C7E2A202E59A /* STGIFFAnimatableLogoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STGIFFAnimatableLogoView.m; sourceTree = "<group>"; };
 		4F71D8D69A7E32DF739028F9 /* land1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = land1.jpg; sourceTree = "<group>"; };
 		4F71D8DEBDD9961CF869A450 /* STFastUIViewSelectableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STFastUIViewSelectableView.m; sourceTree = "<group>"; };
@@ -2480,6 +2483,7 @@
 				A050CEFF1CC5DD0D00628C2F /* slide_arrow_down_ios.svg */,
 				4F71DB4986A8A5DBBD75E686 /* go_play.svg */,
 				4F71DD4541B21581EC5FC478 /* go_pause.svg */,
+				4F71D8CD4975DA16E6905BF6 /* down_arrow_triangle.svg */,
 			);
 			path = svg;
 			sourceTree = "<group>";
@@ -3522,6 +3526,7 @@
 				4F71D3143054FA58B9B7FD27 /* STGIFFDisplayLayerColoredDoubleExposureEffect.jpg in Resources */,
 				4F71D674AC648A5AA3C43DED /* STGIFFDisplayLayerGlitchEffect.jpg in Resources */,
 				4F71D1666F293542C7F3E930 /* STDisplayLayerJatiPutraEffect.jpg in Resources */,
+				4F71D49FC48AFE52734B86DA /* down_arrow_triangle.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3716,6 +3721,7 @@
 				4F71D6EF40C68F9D87E9ABE4 /* STGIFFDisplayLayerColoredDoubleExposureEffect.jpg in Resources */,
 				4F71D425459114D8CB16CCA3 /* STGIFFDisplayLayerGlitchEffect.jpg in Resources */,
 				4F71D037AE41EC33455DAE37 /* STDisplayLayerJatiPutraEffect.jpg in Resources */,
+				4F71D3B78892F2B17E53BD0E /* down_arrow_triangle.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

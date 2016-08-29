@@ -49,6 +49,8 @@
 
 + (NSString *)dotdotdot;
 
++ (NSString *)down_arrow_triangle;
+
 + (NSString *)down_triangle_rounded;
 
 + (NSString *)go_back;

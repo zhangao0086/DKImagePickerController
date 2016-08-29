@@ -33,19 +33,20 @@
     self = [super initWithFrame:frame];
     if (self) {
         //master frame offset slider
-        _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
+        _masterOffsetSliderContainer = [[STUIView alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView/1.5f)];
         [self addSubview:_masterOffsetSliderContainer];
 
         _masterOffsetSlider = [[STSegmentedSliderView alloc] initWithSize:CGSizeMake(self.width-self.heightForFrameItemView,_masterOffsetSliderContainer.height)];
         _masterOffsetSlider.delegateSlider = self;
         [_masterOffsetSliderContainer addSubview:_masterOffsetSlider];
 
-        _playButton = [[STStandardButton alloc] initWithSizeWidth:self.heightForFrameItemView];
-        _playButton.preferredIconImagePadding = _playButton.width/4;
-        _playButton.backgroundColor = [UIColor grayColor];
+        _playButton = [[STStandardButton alloc] initWithSizeWidth:_masterOffsetSliderContainer.height];
+        _playButton.preferredIconImagePadding = _playButton.width/6;
+//        _playButton.backgroundColor = [UIColor grayColor];
         _playButton.fitIconImageSizeToCenterSquare = YES;
         [_playButton setButtons:@[R.go_play, [R go_pause]] colors:nil style:STStandardButtonStylePTBT];
-        _playButton.right = self.right;
+//        _playButton.right = self.right;
+        _playButton.centerX = self.right-(self.heightForFrameItemView/2);
         [_masterOffsetSliderContainer addSubview:_playButton];
 
         //frame edit items

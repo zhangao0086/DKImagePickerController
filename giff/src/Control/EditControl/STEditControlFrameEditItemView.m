@@ -178,24 +178,25 @@ NSString * const ThumbViewHighlightLayerTagName = @"ThumbViewHighlightLayerTagNa
 - (UIView *)createThumbView {
     UIView * thumbView = [[UIView alloc] initWithSize:CGSizeMake(self.thumbnailWidth, self.squareUnitWidth)];
 
-
     UIColor * systemYellowColor = STGIFFStandardColor.frameEditHighlightColor;
 
     CGFloat innerCornerRadious = thumbView.width*1.5f<thumbView.height ? 4 : 6;
-    CAShapeLayer * layer = [CAShapeLayer roundRect:thumbView.size cornerRadius:0 andInnerRect:CGSizeMakeValue(3) innerCornerRadius:innerCornerRadious color:systemYellowColor];
+    CAShapeLayer * layer = [CAShapeLayer roundRect:thumbView.size cornerRadius:0 andInnerRect:CGSizeMakeValue(3) innerCornerRadius:0 color:systemYellowColor];
 
     [thumbView.layer addSublayer:layer];
 
-    UIImageView * leftArrow = [SVGKImage UIImageViewNamed:[R slide_arrow_down_ios] withSizeWidth:18 color:systemYellowColor degree:-90];
+    UIImageView * leftArrow = [SVGKImage UIImageViewNamed:[R down_arrow_triangle] withSizeWidth:18 color:systemYellowColor degree:-90];
     [thumbView addSubview:leftArrow];
 
     [leftArrow centerToParentVertical];
+//    leftArrow.x = 0;
     leftArrow.right = 0;
 
-    UIImageView * rightArrow = [SVGKImage UIImageViewNamed:[R slide_arrow_down_ios] withSizeWidth:18 color:systemYellowColor degree:90];
+    UIImageView * rightArrow = [SVGKImage UIImageViewNamed:[R down_arrow_triangle] withSizeWidth:18 color:systemYellowColor degree:90];
     [thumbView addSubview:rightArrow];
 
     [rightArrow centerToParentVertical];
+//    rightArrow.right = thumbView.width;
     rightArrow.x = thumbView.width;
 
 //    thumbView.backgroundColor = [UIColor whiteColor];
