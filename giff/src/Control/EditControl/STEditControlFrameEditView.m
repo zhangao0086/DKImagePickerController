@@ -18,6 +18,8 @@
 #import "BlocksKit.h"
 #import "NSString+STUtil.h"
 #import "STGIFFStandardColor.h"
+#import "CALayer+STUtil.h"
+#import "CAShapeLayer+STUtil.h"
 
 @implementation STEditControlFrameEditView {
     STUIView * _masterOffsetSliderContainer;
@@ -179,6 +181,26 @@ NSString * const STEditControlFrameEditItemViewFrameOffsetListenerIdPrefix = @"S
     _masterOffsetSliderContainer.visible = self.layerSet.frameCount>1;
     if(_masterOffsetSliderContainer.visible){
         _masterOffsetSlider.normalizedPosition = self.layerSet.frameIndexOffset/self.layerSet.frameCount;
+    }
+
+    CAShapeLayer * trianglePointerLayer = (CAShapeLayer *) [_masterOffsetSlider.thumbView.layer layerWithName:@"PointingTriangleLayer"];
+    if(_masterOffsetSlider.thumbView){
+        if(!trianglePointerLayer){
+            CGSize size = CGSizeMake(12,6);
+            trianglePointerLayer = [CAShapeLayer layerWithSize:size];
+            trianglePointerLayer.name = @"PointingTriangleLayer";
+            UIBezierPath* trianglePath = [UIBezierPath bezierPath];
+            [trianglePath moveToPoint:CGPointMake(0, 0)];
+            [trianglePath addLineToPoint:CGPointMake(size.width,0)];
+            [trianglePath addLineToPoint:CGPointMake(size.width/2,size.height)];
+            [trianglePath closePath];
+            trianglePointerLayer.path = trianglePath.CGPath;
+//        trianglePointerLayer.fillRule = kCAFillRuleEvenOdd;
+            trianglePointerLayer.fillColor = [UIColor blackColor].CGColor;
+            [_masterOffsetSlider.thumbView.layer addSublayer:trianglePointerLayer];
+        }
+        [trianglePointerLayer centerToParent];
+        trianglePointerLayer.frameOrigin = CGPointMake(trianglePointerLayer.frameOrigin.x, _masterOffsetSlider.thumbView.height-trianglePointerLayer.boundsHeight-5);
     }
 
     _frameEditItemViewContainer.top = _masterOffsetSliderContainer.visible ? _masterOffsetSliderContainer.bottom : 0;
