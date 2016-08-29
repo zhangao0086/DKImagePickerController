@@ -185,21 +185,16 @@ NSString * const ThumbViewHighlightLayerTagName = @"ThumbViewHighlightLayerTagNa
 
     [thumbView.layer addSublayer:layer];
 
-    UIImageView * leftArrow = [SVGKImage UIImageViewNamed:[R down_arrow_triangle] withSizeWidth:18 color:systemYellowColor degree:-90];
-    [thumbView addSubview:leftArrow];
+    CAShapeLayer * leftArrowLayer = [CAShapeLayer isoscelesTriangle:ShapeLayerIsoscelesTriangleLeft size:CGSizeMake(6,16) color:systemYellowColor];
+    [thumbView.layer addSublayer:leftArrowLayer];
+    [leftArrowLayer centerToParent];
+    leftArrowLayer.frameMaxX = 0;
 
-    [leftArrow centerToParentVertical];
-//    leftArrow.x = 0;
-    leftArrow.right = 0;
+    CAShapeLayer * rightArrowLayer = [CAShapeLayer isoscelesTriangle:ShapeLayerIsoscelesTriangleRight size:CGSizeMake(6,16) color:systemYellowColor];
+    [thumbView.layer addSublayer:rightArrowLayer];
+    [rightArrowLayer centerToParent];
+    rightArrowLayer.frameMinX = thumbView.width;
 
-    UIImageView * rightArrow = [SVGKImage UIImageViewNamed:[R down_arrow_triangle] withSizeWidth:18 color:systemYellowColor degree:90];
-    [thumbView addSubview:rightArrow];
-
-    [rightArrow centerToParentVertical];
-//    rightArrow.right = thumbView.width;
-    rightArrow.x = thumbView.width;
-
-//    thumbView.backgroundColor = [UIColor whiteColor];
     return thumbView;
 }
 
