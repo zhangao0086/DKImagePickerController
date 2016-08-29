@@ -100,6 +100,42 @@
     return self;
 }
 
++ (instancetype)isoscelesTriangle:(ShapeLayerIsoscelesTriangle)type size:(CGSize)size color:(UIColor *)color{
+    CAShapeLayer * triangle = [CAShapeLayer layerWithSize:size];
+    return [triangle fillIsoscelesTriangle:type size:size color:color];
+}
+
+- (instancetype)fillIsoscelesTriangle:(ShapeLayerIsoscelesTriangle)type size:(CGSize)size color:(UIColor *)color{
+    UIBezierPath* trianglePath = [UIBezierPath bezierPath];
+    switch(type)
+    {
+        case ShapeLayerIsoscelesTriangleDown:
+            [trianglePath moveToPoint:CGPointMake(0, 0)];
+            [trianglePath addLineToPoint:CGPointMake(size.width,0)];
+            [trianglePath addLineToPoint:CGPointMake(size.width/2,size.height)];
+            break;
+        case ShapeLayerIsoscelesTriangleUp:
+            [trianglePath moveToPoint:CGPointMake(size.width/2, 0)];
+            [trianglePath addLineToPoint:CGPointMake(size.width,size.height)];
+            [trianglePath addLineToPoint:CGPointMake(0,size.height)];
+            break;
+        case ShapeLayerIsoscelesTriangleLeft:
+            [trianglePath moveToPoint:CGPointMake(size.width, 0)];
+            [trianglePath addLineToPoint:CGPointMake(size.width,size.height)];
+            [trianglePath addLineToPoint:CGPointMake(0,size.height/2)];
+            break;
+        case ShapeLayerIsoscelesTriangleRight:
+            [trianglePath moveToPoint:CGPointMake(0, 0)];
+            [trianglePath addLineToPoint:CGPointMake(size.width,size.height/2)];
+            [trianglePath addLineToPoint:CGPointMake(0,size.height)];
+            break;
+    }
+    [trianglePath closePath];
+    self.path = trianglePath.CGPath;
+    self.fillColor = (color ?: [UIColor whiteColor]).CGColor;
+    return self;
+}
+
 + (CAShapeLayer *)roundRect:(CGSize)size cornerRadius:(CGFloat)radius color:(UIColor *)color {
     CAShapeLayer * layer = [CAShapeLayer layer];
     [layer setColorToAll:color];

@@ -14,6 +14,13 @@ typedef NS_ENUM(NSInteger, ShapeLayerCorneredTriangle) {
     ShapeLayerCorneredTriangleBottomLeft
 };
 
+typedef NS_ENUM(NSInteger, ShapeLayerIsoscelesTriangle) {
+    ShapeLayerIsoscelesTriangleDown,
+    ShapeLayerIsoscelesTriangleUp,
+    ShapeLayerIsoscelesTriangleLeft,
+    ShapeLayerIsoscelesTriangleRight
+};
+
 + (CAShapeLayer *)rectWidth:(CGFloat)width color:(UIColor *)color;
 
 + (CAShapeLayer *)rect:(CGSize)size;
@@ -31,6 +38,10 @@ typedef NS_ENUM(NSInteger, ShapeLayerCorneredTriangle) {
 + (instancetype)corneredTriangle:(CGSize)size type:(ShapeLayerCorneredTriangle)type color:(UIColor *)fillColor bgColor:(UIColor *)bgColor;
 
 - (instancetype)fillCorneredTriangle:(ShapeLayerCorneredTriangle)type color:(UIColor *)color;
+
++ (instancetype)isoscelesTriangle:(ShapeLayerIsoscelesTriangle)type size:(CGSize)size color:(UIColor *)color;
+
+- (instancetype)fillIsoscelesTriangle:(ShapeLayerIsoscelesTriangle)type size:(CGSize)size color:(UIColor *)color;
 
 + (CAShapeLayer *)roundRect:(CGSize)size cornerRadius:(CGFloat)radius color:(UIColor *)color;
 

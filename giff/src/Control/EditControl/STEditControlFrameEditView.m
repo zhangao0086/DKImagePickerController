@@ -186,17 +186,8 @@ NSString * const STEditControlFrameEditItemViewFrameOffsetListenerIdPrefix = @"S
     CAShapeLayer * trianglePointerLayer = (CAShapeLayer *) [_masterOffsetSlider.thumbView.layer layerWithName:@"PointingTriangleLayer"];
     if(_masterOffsetSlider.thumbView){
         if(!trianglePointerLayer){
-            CGSize size = CGSizeMake(12,6);
-            trianglePointerLayer = [CAShapeLayer layerWithSize:size];
+            trianglePointerLayer = [CAShapeLayer isoscelesTriangle:ShapeLayerIsoscelesTriangleDown size:CGSizeMake(12,6) color:[UIColor blackColor]];
             trianglePointerLayer.name = @"PointingTriangleLayer";
-            UIBezierPath* trianglePath = [UIBezierPath bezierPath];
-            [trianglePath moveToPoint:CGPointMake(0, 0)];
-            [trianglePath addLineToPoint:CGPointMake(size.width,0)];
-            [trianglePath addLineToPoint:CGPointMake(size.width/2,size.height)];
-            [trianglePath closePath];
-            trianglePointerLayer.path = trianglePath.CGPath;
-//        trianglePointerLayer.fillRule = kCAFillRuleEvenOdd;
-            trianglePointerLayer.fillColor = [UIColor blackColor].CGColor;
             [_masterOffsetSlider.thumbView.layer addSublayer:trianglePointerLayer];
         }
         [trianglePointerLayer centerToParent];
