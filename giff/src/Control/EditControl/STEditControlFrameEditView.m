@@ -20,6 +20,7 @@
 #import "STGIFFStandardColor.h"
 #import "CALayer+STUtil.h"
 #import "CAShapeLayer+STUtil.h"
+#import "STPhotoImporter.h"
 
 @implementation STEditControlFrameEditView {
     STUIView * _masterOffsetSliderContainer;
@@ -62,7 +63,10 @@
         [_frameAddButton setButtons:@[[R set_add]] colors:nil style:STStandardButtonStylePTBT];
 
         [_frameAddButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
-            [[STPhotoSelector sharedInstance] doExitEditAfterCapture:YES];
+            [[STPhotoImporter sharedImporter] startImporting:^(NSArray<STPhotoItemSource *> *importedPhotoItemSource) {
+                [[STPhotoSelector sharedInstance] doAfterCaptured:[importedPhotoItemSource firstObject]];
+            }];
+//            [[STPhotoSelector sharedInstance] doExitEditAfterCapture:YES];
         }];
     }
 

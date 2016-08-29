@@ -13,11 +13,6 @@
 #import "STAppSetting.h"
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STPhotoSelector.h"
-#if GIFFE
-#import "giffe-Swift.h"
-#else
-#import "giff-Swift.h"
-#endif
 #import "STCapturedImageSet+PHAsset.h"
 #import "NSArray+STUtil.h"
 #import "STPhotoItemSource.h"
@@ -32,6 +27,7 @@
 #import "STMainControl.h"
 #import "BlocksKit.h"
 #import "NSNumber+STUtil.h"
+#import "STPhotoImporter.h"
 
 @interface STCameraControlView()
 @property(nonatomic, strong) STStandardButton * torchLightButton;
@@ -217,52 +213,17 @@ CGFloat padding;
     [_sourceLibraryButton setButtons:@[[R go_roll]] colors:nil style:STStandardButtonStylePTTP];
     [_sourceLibraryButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
         _sourceLibraryButton.badgeSmallPoint = NO;
+        [[STPhotoImporter sharedImporter] startImporting:^(NSArray<STPhotoItemSource *> *importedPhotoItemSource) {
+            [[STPhotoSelector sharedInstance] doAfterCaptured:[importedPhotoItemSource firstObject]];
+        }];
 
         // fix for Fully Cached image - blanked image
 //        if([STUIApplication sharedApplication].hasBeenReceivedMemoryWarning){
 //            [[[STPhotoSelector sharedInstance] collectionView] representPhotoItemOfAllVisibleCells:YES];
 //        }
 
-        DKImagePickerController *pickerController = [DKImagePickerController new];
-        pickerController.maxSelectableCount = 1;
-        pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
-        pickerController.showsCancelButton = YES;
-        pickerController.showsEmptyAlbums = YES;
-        pickerController.allowMultipleTypes = YES;
-        pickerController.defaultSelectedAssets = @[];
-        pickerController.sourceType = DKImagePickerControllerSourceTypePhoto;
 
-        [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
-            [STCapturedImageSet setDefaultAspectFillRatioForAssets:CGSizeMake(1, 1)];
-            [STCapturedImageSet setMaxFrameDurationIfAssetHadAnimatableContents:[STGIFFApp defaultMaxDurationForAnimatableContent]];
-            NSArray<PHAsset *> * importedAssets = [assets mapWithItemsKeyPath:@"originalAsset"];
-            [STCapturedImageSet createFromAssets:importedAssets completion:^(NSArray *imageSets) {
-                for(STCapturedImageSet * imageSet in imageSets){
-                    [[STPhotoSelector sharedInstance] doAfterCaptured:[STPhotoItemSource sourceWithImageSet:imageSet]];
-                }
-
-            }];
-            NSLog(@"didSelectAssets");
-        }];
-
-        [[self st_rootUVC] presentViewController:pickerController animated:YES completion:nil];
-
-//        if(STElieCamera.mode==STCameraModeManualExitAndPause){
-//            [[STMainControl sharedInstance] backToHome];
-//        }else {
-//
-//            if ([STMainControl sharedInstance].mode == STControlDisplayModeLivePreview) {
-//
-//                UIImageView *coveredView = [_sourceLibraryButton coverAndUncoverBegin:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance]];
-//                [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManualExitAndPause)];
-//                [_sourceLibraryButton coverAndUncoverEnd:self.st_rootUVC.view presentingTarget:[STPhotoSelector sharedInstance] beforeCoverView:coveredView comletion:nil];
-//
-//            } else {
-//                [[STPhotoSelector sharedInstance] doDirectlyEnterHome];
-//
-//                [[STUserActor sharedInstance] act:STUserActionChangeCameraMode object:@(STCameraModeManualExitAndPause)];
-//            }
-//        }
+//        [[STPhotoSelector sharedInstance] doAfterCaptured:[STPhotoItemSource sourceWithImageSet:imageSet]];
     }];
 
     [[NSNotificationCenter get] st_addObserverWithMainQueue:self forName:STNotificationPhotosDidLocalSaved usingBlock:^(NSNotification *note, id observer) {
