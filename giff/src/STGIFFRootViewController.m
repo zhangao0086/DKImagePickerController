@@ -31,6 +31,7 @@
 #import "STFilter.h"
 #import "UIColor+BFPaperColors.h"
 #import "ChameleonMacros.h"
+#import "STGIFFStandardColor.h"
 
 @interface STGIFFRootViewController (){
     //Device Control
@@ -136,8 +137,10 @@
 //            UIColorFromRGB(0x8eb5cb)
 //            UIColorFromRGB(0x2B2B2B),
 //            UIColorFromRGB(0x3C3F41)
-            UIColorFromRGB(0x3E475B),
-            UIColorFromRGB(0x49526A)
+//            UIColorFromRGB(0x3E475B),
+//            UIColorFromRGB(0x49526A)
+            [STStandardUI backgroundColor],
+            UIColorFromRGB(0x26223a)
     ]];
     control.bottom = self.view.height;
 

@@ -11,55 +11,53 @@
 
 }
 - (UIColor *)foregroundColor {
-    return nil;
+    return UIColorFromRGB(0x9D96D4);
 }
 
 - (UIColor *)backgroundColor {
-    return UIColorFromRGB(0xe6e6e6);
+    return UIColorFromRGB(0x1B192B);
 }
 
 - (UIColor *)buttonColorFront {
-    return UIColorFromRGB(0xeffbff);
+    return self.foregroundColor;
 }
 
 - (UIColor *)buttonColorBack {
-    return [UIColor paperColorGray50];
+    return self.backgroundColor;
 }
 
-//collectable backgroud
-- (UIColor *)buttonColorBackgroundAssistance; {
-    return [self buttonColorBack];
-}
-
-//collectable icon color
 - (UIColor *)buttonColorForegroundAssistance {
-    return [self pointColorLighten];
+    return UIColorFromRGB(0xFDFDFD);
+}
+
+- (UIColor *)buttonColorBackgroundAssistance; {
+    return self.pointColorDarken;
 }
 
 - (UIColor *)buttonColorFrontSecondary; {
-    return [UIColor paperColorGray200];
+    return self.buttonColorForegroundAssistance;
 }
 
 - (UIColor *)buttonColorBackSecondary; {
-    return self.pointColor;
+    return self.buttonColorBackgroundAssistance;
+}
+
+- (UIColor *)buttonColorBackgroundOverlay {
+    return self.buttonColorFront;
 }
 
 - (UIColor *)pointColor {
-    return UIColorFromRGB(0xD7DAFF);
+    return UIColorFromRGB(0xA44EFF);
 }
 
 - (UIColor *)pointColorDarken {
     //0xa999b2
-    return UIColorFromRGB(0x8a7e90);
+    return UIColorFromRGB(0x863ED3);
 }
 
 - (UIColor *)pointColorLighten {
-    return UIColorFromRGB(0xD7DAFF);
+    return self.pointColor;
 }
-
-//+ (UIColor *)strokeColorProgressFront {
-//    return [self pointColor];
-//}
 
 - (UIColor *)strokeColorProgressBackground {
     return [UIColor clearColor];

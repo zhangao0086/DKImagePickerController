@@ -1071,7 +1071,7 @@ STExportSelectView * exportSelectView;
                 _home.containerButton.preferredIconImagePadding = 0;
                 [_home.containerButton setButtons:@[iconImageName]
                                            colors:@[[STStandardUI buttonColorFront]]
-                                         bgColors:@[[STStandardUI buttonColorBack]]
+                                         bgColors:@[[STStandardUI buttonColorBackgroundAssistance]]
                                             style:STStandardButtonStylePTTP
                      blockForCreateBackgroundView:nil];
                 break;
@@ -1096,7 +1096,7 @@ STExportSelectView * exportSelectView;
             break;
         default:
             _home.containerButton.backgroundViewAsColoredImage = [STStandardUI buttonColorBackgroundOverlay];
-            _home.containerButton.backgroundView.alpha = [STStandardUI alphaForGlassLikeOverlayButtonBackground];
+            _home.containerButton.backgroundView.alpha = [STStandardUI alphaForDimmingGlass];
             break;
     }
 

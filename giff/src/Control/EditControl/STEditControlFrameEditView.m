@@ -47,7 +47,8 @@
         _playButton.preferredIconImagePadding = _playButton.width/6;
 //        _playButton.backgroundColor = [UIColor grayColor];
         _playButton.fitIconImageSizeToCenterSquare = YES;
-        [_playButton setButtons:@[R.go_play, [R go_pause]] colors:nil style:STStandardButtonStylePTBT];
+
+        [_playButton setButtons:@[R.go_play, [R go_pause]] colors:@[[STStandardUI pointColor],[STStandardUI pointColor]] style:STStandardButtonStylePTBT];
 //        _playButton.right = self.right;
         _playButton.centerX = self.right-(self.heightForFrameItemView/2);
         [_masterOffsetSliderContainer addSubview:_playButton];
@@ -59,8 +60,9 @@
         //frame add button
         _frameAddButton = [[STStandardButton alloc] initWithSize:CGSizeMake(self.width,self.heightForFrameItemView)];
         _frameAddButton.fitIconImageSizeToCenterSquare = YES;
+        _frameAddButton.preferredIconImagePadding = 0;
         [self addSubview:_frameAddButton];
-        [_frameAddButton setButtons:@[[R set_add]] colors:nil style:STStandardButtonStylePTBT];
+        [_frameAddButton setButtons:@[[R set_add]] colors:@[[STStandardUI foregroundColor]] bgColors:@[[STStandardUI buttonColorForegroundAssistance]] style:STStandardButtonStylePTBT];
 
         [_frameAddButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
             [[STPhotoImporter sharedImporter] startImporting:^(NSArray<STPhotoItemSource *> *importedPhotoItemSource) {
@@ -190,7 +192,7 @@ NSString * const STEditControlFrameEditItemViewFrameOffsetListenerIdPrefix = @"S
     CAShapeLayer * trianglePointerLayer = (CAShapeLayer *) [_masterOffsetSlider.thumbView.layer layerWithName:@"PointingTriangleLayer"];
     if(_masterOffsetSlider.thumbView){
         if(!trianglePointerLayer){
-            trianglePointerLayer = [CAShapeLayer isoscelesTriangle:ShapeLayerIsoscelesTriangleDown size:CGSizeMake(12,6) color:[UIColor blackColor]];
+            trianglePointerLayer = [CAShapeLayer isoscelesTriangle:ShapeLayerIsoscelesTriangleDown size:CGSizeMake(10,6) color:[STStandardUI buttonColorBack]];
             trianglePointerLayer.name = @"PointingTriangleLayer";
             [_masterOffsetSlider.thumbView.layer addSublayer:trianglePointerLayer];
         }

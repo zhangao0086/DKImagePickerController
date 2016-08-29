@@ -28,6 +28,7 @@
 #import "BlocksKit.h"
 #import "NSNumber+STUtil.h"
 #import "STPhotoImporter.h"
+#import "SVGKImage+STUtil.h"
 
 @interface STCameraControlView()
 @property(nonatomic, strong) STStandardButton * torchLightButton;
@@ -93,12 +94,14 @@ CGFloat padding;
 
     //Exposure Control
     self.exposureSlider = [[STStandardPointableSlider alloc] initWithSize:CGSizeMake(self.width/2,STStandardLayout.heightOverlayHorizontal)];
-    self.exposureSlider.pointColor = [UIColor whiteColor];
-    self.exposureSlider.trackColor = [[UIColor whiteColor] colorWithAlphaComponent:[STStandardUI alphaForDimmingWeak]];
+    self.exposureSlider.pointColor = [STStandardUI buttonColorFront];
+    self.exposureSlider.thumbColor = [STStandardUI buttonColorFront];
+    self.exposureSlider.trackColor = [self.exposureSlider.pointColor colorWithAlphaComponent:[STStandardUI alphaForDimmingWeak]];
     [self.exposureSlider setProgress:.5 animated:NO];
     [self.exposureSlider.layer setRasterize];
-    self.exposureSlider.iconViewOfMinimumSide = [SVGKFastImageView viewWithImageNamed:[R ico_exposure_min] sizeValue:15];
-    self.exposureSlider.iconViewOfMaximumSide = [SVGKFastImageView viewWithImageNamed:[R ico_exposure_max] sizeValue:16];
+
+    self.exposureSlider.iconViewOfMinimumSide = [SVGKImage UIImageViewNamed:[R ico_exposure_min] withSizeWidth:15 color:self.exposureSlider.thumbColor];
+    self.exposureSlider.iconViewOfMaximumSide = [SVGKImage UIImageViewNamed:[R ico_exposure_max] withSizeWidth:16 color:self.exposureSlider.thumbColor];
     self.exposureSlider.progressOfPointer = .5;
 
     self.cameraControlView = [[STUIView alloc] initWithSize:CGSizeMake(self.width, [STStandardButton subSmallSize].height)];

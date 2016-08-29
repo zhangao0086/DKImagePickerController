@@ -12,13 +12,6 @@
 #import "STEditControlEffectSelectorView.h"
 #import "STPhotoSelector.h"
 #import "STMainControl.h"
-#import "NSString+STUtil.h"
-#import "NSGIF.h"
-#import "STElieStatusBar.h"
-#import "STApp+Logger.h"
-#import "STExporter+IOGIF.h"
-#import "STPhotoItem+ExporterIOGIF.h"
-#import "NSArray+STUtil.h"
 
 
 @implementation STEditControlView {
@@ -89,9 +82,9 @@
     //right button
     _exportButton = [STStandardButton subSmallSize];
     _exportButton.allowSelectAsTap = YES;
-    _exportButton.preferredIconImagePadding = _exportButton.height/4;
+//    _exportButton.preferredIconImagePadding = _exportButton.height/4;
 
-    [_exportButton setButtons:@[R.export.share_fit] style:STStandardButtonStylePTTP];
+    [_exportButton setButtons:@[[R set_done]] colors:@[[STStandardUI pointColor]] style:STStandardButtonStylePTTP];
     [_exportButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
 
         [[STPhotoSelector sharedInstance] exportDisplayImageLayer:^(BOOL succeed) {

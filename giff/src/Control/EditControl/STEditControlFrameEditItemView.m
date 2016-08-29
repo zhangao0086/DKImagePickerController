@@ -32,9 +32,10 @@
         _removeButton = [[STStandardButton alloc] initWithSizeWidth:self.height];
         _removeButton.preferredIconImagePadding = _removeButton.width/4;
         [self addSubview:_removeButton];
-        _removeButton.backgroundColor = [UIColor grayColor];
+        _removeButton.backgroundColor = [STStandardUI buttonColorBackgroundAssistance];
         _removeButton.fitIconImageSizeToCenterSquare = YES;
-        [_removeButton setButtons:@[R.go_remove] colors:nil style:STStandardButtonStylePTBT];
+
+        [_removeButton setButtons:@[R.go_remove] colors:@[[STStandardUI buttonColorForegroundAssistance]] style:STStandardButtonStylePTBT];
         _removeButton.right = self.right;
 
         _highlightedIndex = NSUIntegerMax;
@@ -188,12 +189,12 @@ NSString * const ThumbViewHighlightLayerTagName = @"ThumbViewHighlightLayerTagNa
     CAShapeLayer * leftArrowLayer = [CAShapeLayer isoscelesTriangle:ShapeLayerIsoscelesTriangleLeft size:CGSizeMake(6,16) color:systemYellowColor];
     [thumbView.layer addSublayer:leftArrowLayer];
     [leftArrowLayer centerToParent];
-    leftArrowLayer.frameMaxX = 0;
+    leftArrowLayer.frameMaxX = 1;
 
     CAShapeLayer * rightArrowLayer = [CAShapeLayer isoscelesTriangle:ShapeLayerIsoscelesTriangleRight size:CGSizeMake(6,16) color:systemYellowColor];
     [thumbView.layer addSublayer:rightArrowLayer];
     [rightArrowLayer centerToParent];
-    rightArrowLayer.frameMinX = thumbView.width;
+    rightArrowLayer.frameMinX = thumbView.width-1;
 
     return thumbView;
 }
