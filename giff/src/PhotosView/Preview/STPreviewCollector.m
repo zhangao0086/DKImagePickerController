@@ -468,7 +468,8 @@ static NSString * observerToken = nil;
     [super updateDisplayState];
 
     STFilterItem * filterItem = self.items[self.scrolledIndex];
-    [[STMainControl sharedInstance] setDisplayHomeScrolledFilters:self.scrolledIndex withCount:self.items.count];
+    //FIXME: DisabledFilters
+//    [[STMainControl sharedInstance] setDisplayHomeScrolledFilters:self.scrolledIndex withCount:self.items.count];
 
     //change current selected filter in image edit mode
     if(_type == STPhotoViewTypeEdit || _type == STPhotoViewTypeEditAfterCapture){

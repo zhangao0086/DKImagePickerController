@@ -210,8 +210,9 @@ static STMainControl *_instance = nil;
 
 #pragma mark Reset by scrolled
 - (void)setNeedsDisplayCurrentHomeScrolledFilters{
-    STFilterCollectorState * state = [STPhotoSelector sharedInstance].previewState;
-    [self setDisplayHomeScrolledFilters:state.currentFocusedFilterIndex withCount:state.numberOfFilters];
+    //FIXME: DisableFilters
+//    STFilterCollectorState * state = [STPhotoSelector sharedInstance].previewState;
+//    [self setDisplayHomeScrolledFilters:state.currentFocusedFilterIndex withCount:state.numberOfFilters];
 }
 
 static BOOL _needsShowCollectables = NO;
@@ -219,7 +220,6 @@ static BOOL _needsShowCollectables = NO;
     _home.indexProgressDisplayInstantly = NO;
     [_home setIndexNumberOfSegments:count];
     [_home setIndexProgress:count ? (CGFloat)(index+1)/count : 0];
-
 
     STFilterItem * currentFilterItem = [STPhotoSelector sharedInstance].previewState.currentFocusedFilterItem;
     if(currentFilterItem.type == STFilterTypeITunesProduct){
