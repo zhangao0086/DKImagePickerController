@@ -295,8 +295,13 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         }
         
         self.selectedGroupId = groupId
-		self.updateTitleView()
-		self.collectionView!.reloadData()
+        self.updateTitleView()
+        if(self.imagePickerController.deselectAllWhenChangingAlbum
+            || self.imagePickerController.allowCirculatingSelection){            
+            self.imagePickerController.deselectAllAssets()
+        }else{
+            self.collectionView!.reloadData()
+        }
     }
 	
 	func updateTitleView() {

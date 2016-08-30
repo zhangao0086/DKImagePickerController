@@ -133,6 +133,9 @@ public class DKImagePickerController : UINavigationController {
  
     /// Whether allows to circulate selections when current selected count has reached to maxSelectableCount. Alert message will not be shown.
     public var allowCirculatingSelection = false
+    
+    /// An option to deselect all items when user changes album selection
+    public var deselectAllWhenChangingAlbum = false
 	
 	/// Set the defaultAssetGroup to specify which album is the default asset group.
 	public var defaultAssetGroup: PHAssetCollectionSubtype?

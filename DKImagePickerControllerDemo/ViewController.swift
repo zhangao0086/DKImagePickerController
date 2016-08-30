@@ -38,9 +38,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		
 		pickerController.assetType = assetType
 		pickerController.allowsLandscape = allowsLandscape
-//		pickerController.allowMultipleTypes = allowMultipleType
-//        pickerController.maxSelectableCount = 2
-        pickerController.allowCirculatingSelection = true
+		pickerController.allowMultipleTypes = allowMultipleType
+//      pickerController.maxSelectableCount = 2
+//      pickerController.allowCirculatingSelection = true
+//      pickerController.deselectAllWhenChangingAlbum = true
 		pickerController.sourceType = sourceType
 		pickerController.singleSelect = singleSelect
 		
