@@ -106,6 +106,9 @@ public class DKImagePickerController : UINavigationController {
 		
     /// The maximum count of assets which the user will be able to select.
     public var maxSelectableCount = 999
+
+	/// Whether allows to rotate selection when current selected count has reached to maxSelectableCount. Alert message will not be shown.
+	public var allowRotatingSelection = false
 	
 	/// Set the defaultAssetGroup to specify which album is the default asset group.
 	public var defaultAssetGroup: PHAssetCollectionSubtype?

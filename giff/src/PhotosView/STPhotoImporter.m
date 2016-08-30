@@ -35,8 +35,9 @@
 - (void)startImporting:(void(^)(NSArray<STPhotoItemSource *> *importedPhotoItemSource))block{
     NSParameterAssert(block);
 
-    DKImagePickerController *pickerController = [DKImagePickerController new];
-    pickerController.maxSelectableCount = 1;
+    DKImagePickerController * pickerController = [[DKImagePickerController alloc] init];
+    pickerController.maxSelectableCount = 2;
+    pickerController.allowRotatingSelection = YES;
     pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
     pickerController.showsCancelButton = YES;
     pickerController.showsEmptyAlbums = YES;
