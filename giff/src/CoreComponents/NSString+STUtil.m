@@ -165,7 +165,8 @@
 
 - (BOOL)isGeneralURL{
     NSURL * url = [NSURL URLWithString:self];
-    return url.scheme && url.host;
+    return [@"file" isEqualToString:url.scheme]//local file url doesn't need host.
+            || (url.scheme && url.host);
 }
 
 - (NSString *)escapeForQuery{
