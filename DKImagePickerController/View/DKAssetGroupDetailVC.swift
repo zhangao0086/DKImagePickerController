@@ -406,12 +406,26 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
                 return false
         }
 		
-		let shouldSelect = self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount
-		if !shouldSelect {
-			self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
-		}
-		
-		return shouldSelect
+        let didReachMaxSelectableCount = self.imagePickerController.selectedAssets.count >= self.imagePickerController.maxSelectableCount
+        if didReachMaxSelectableCount {
+            if self.imagePickerController.allowCirculatingSelection {
+                let currentSelectedIndexPaths:[NSIndexPath] = collectionView.indexPathsForSelectedItems()!
+                let firstSelectedIndexPath:NSIndexPath = currentSelectedIndexPaths.first!
+                if let removingAsset:DKAsset = (collectionView.cellForItemAtIndexPath(firstSelectedIndexPath) as! DKAssetCell).asset{
+                    self.imagePickerController.deselectImage(removingAsset)
+                }
+                UIView.performWithoutAnimation({
+                    collectionView.reloadItemsAtIndexPaths(currentSelectedIndexPaths)
+                })
+                return true
+                
+            }else{
+                self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
+                return false
+            }
+        }
+        
+        return true
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
