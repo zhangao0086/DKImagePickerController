@@ -370,7 +370,6 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
             [iconImageViewByURL sd_setImageWithURL:[NSURL URLWithString:url]];
             break;
     }
-
     return @[iconImageViewByURL];
 }
 
@@ -466,7 +465,6 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
                     imageNormal = image;
                     break;
             }
-
         }else{
             /*
             * start normal,selected images

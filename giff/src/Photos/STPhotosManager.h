@@ -7,12 +7,17 @@
 
 @class STPhotoItem;
 @class STPhotoItemSource;
+@class PHFetchOptions;
 
 
 @interface STPhotosManager : NSObject
 + (STPhotosManager *)sharedManager;
 
 - (STPhotoItem *)generatePhotoItem:(STPhotoItemSource *)photoSource;
+
+- (NSArray<STPhotoItem *> *)fetchPhotos:(PHFetchOptions *)option;
+
+- (NSArray<STPhotoItem *> *)fetchRecentPhotosByLimit:(NSUInteger)numberOfLimit;
 
 - (CGSize)previewImageSizeByType:(STPhotoViewType)type ratio:(CGFloat)ratio;
 

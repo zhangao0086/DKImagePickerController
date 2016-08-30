@@ -14,21 +14,20 @@
 #import "NSNotificationCenter+STFXNotificationsShortHand.h"
 #import "STPhotoSelector.h"
 #import "STCapturedImageSet+PHAsset.h"
-#import "NSArray+STUtil.h"
 #import "STPhotoItemSource.h"
 #import "STStandardPointableSlider.h"
 #import "CALayer+STUtil.h"
 
 #import "STViewFinderPointLayer.h"
 #import "SVGKImage.h"
-#import "SVGKFastImageView.h"
-#import "SVGKFastImageView+STUtil.h"
-#import "STPreview.h"
 #import "STMainControl.h"
 #import "BlocksKit.h"
 #import "NSNumber+STUtil.h"
 #import "STPhotoImporter.h"
 #import "SVGKImage+STUtil.h"
+#import "STPhotosManager.h"
+#import "STCapturedImage.h"
+#import "NSString+STUtil.h"
 
 @interface STCameraControlView()
 @property(nonatomic, strong) STStandardButton * torchLightButton;
@@ -212,8 +211,23 @@ CGFloat padding;
     //right button
     _sourceLibraryButton = [STStandardButton subSmallSize];
     _sourceLibraryButton.allowSelectAsTap = YES;
-    _sourceLibraryButton.preferredIconImagePadding = _sourceLibraryButton.height/4;
-    [_sourceLibraryButton setButtons:@[[R go_roll]] colors:nil style:STStandardButtonStylePTTP];
+
+    STPhotoItem * latestPhotoItem = [[[STPhotosManager sharedManager] fetchRecentPhotosByLimit:1] firstObject];
+    STCapturedImage * capturedImage = nil;
+    if(latestPhotoItem){
+        capturedImage = [STCapturedImage imageWithImage:latestPhotoItem.previewImage];
+        capturedImage.preferredThumbnailSize = CGSizeByScale(_sourceLibraryButton.size, [UIScreen mainScreen].scale);
+        [latestPhotoItem disposePreviewImage];
+    }
+    NSURL * tempRectImageURL = [@"STCameraControlViewLatestPhoto.jpg" URLForTemp];
+    if([capturedImage createThumbnail:tempRectImageURL.path]){
+        _sourceLibraryButton.preferredIconImagePadding = _sourceLibraryButton.height/12;
+        [_sourceLibraryButton setButtons:@[tempRectImageURL.absoluteString] colors:nil style:STStandardButtonStyleRawImageWithClipAsCenteredRoundRect];
+    }else{
+        _sourceLibraryButton.preferredIconImagePadding = _sourceLibraryButton.height/4;
+        [_sourceLibraryButton setButtons:@[[R go_roll]] colors:nil style:STStandardButtonStylePTTP];
+    }
+
     [_sourceLibraryButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
         _sourceLibraryButton.badgeSmallPoint = NO;
         [[STPhotoImporter sharedImporter] startImporting:^(NSArray<STPhotoItemSource *> *importedPhotoItemSource) {

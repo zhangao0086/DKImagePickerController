@@ -1928,26 +1928,11 @@ static SVGKFastImageView *_nophotoView;
 #pragma clang diagnostic pop
 
 - (void)_loadAndAddThumbnailsFromAssetLibrary; {
-    PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
-    allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
-    allPhotosOptions.fetchLimit = 50;
-    PHFetchResult *allPhotos = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
-
-    __block NSMutableArray *_photos = [NSMutableArray array];
-
-    [allPhotos enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        STPhotoItem * photoItem = [STPhotoItem itemWithAsset:obj];
-        photoItem.index = idx;
-        [_photos addObject:photoItem];
-    }];
-
-    [self _putPhotoItemsFromAssetLibrary:_photos addToLast:YES];
+    [self _putPhotoItemsFromAssetLibrary:[[STPhotosManager sharedManager] fetchRecentPhotosByLimit:50] addToLast:YES];
 
     [[NSNotificationCenter get] postNotificationName:STNotificationPhotosDidLoaded object:@(STPhotoSourceAssetLibrary)];
 
     [[STElieStatusBar sharedInstance] stopProgress];
-
-    _photos = nil;
 }
 
 #pragma mark STPhotoSourceCapturedImageStorage

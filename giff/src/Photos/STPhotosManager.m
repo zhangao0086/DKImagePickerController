@@ -3,6 +3,7 @@
 // Copyright (c) 2016 stells. All rights reserved.
 //
 
+#import <Photos/Photos.h>
 #import "STPhotosManager.h"
 
 #import "STPhotoItem.h"
@@ -12,6 +13,7 @@
 #import "BGUtilities.h"
 #import "STQueueManager.h"
 #import "NYXImagesKit.h"
+#import "PHAsset+STUtil.h"
 
 @implementation STPhotosManager {
 
@@ -83,6 +85,24 @@
 
     [photoSource dispose];
     return item;
+}
+
+- (NSArray<STPhotoItem *> *)fetchPhotos:(PHFetchOptions *)option{
+    NSMutableArray *_photos = [NSMutableArray array];
+    [[PHAsset fetchAssetsWithOptions:option] enumerateObjectsUsingBlock:^(PHAsset * phAsset, NSUInteger idx, BOOL *stop) {
+        STPhotoItem * photoItem = [STPhotoItem itemWithAsset:phAsset];
+        photoItem.index = idx;
+        photoItem.uuid = phAsset.localIdentifierClearingPathSeparator;
+        [_photos addObject:photoItem];
+    }];
+    return _photos;
+}
+
+- (NSArray<STPhotoItem *> *)fetchRecentPhotosByLimit:(NSUInteger)numberOfLimit{
+    PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
+    allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+    allPhotosOptions.fetchLimit = numberOfLimit;
+    return [self fetchPhotos:allPhotosOptions];
 }
 
 - (CGSize)previewImageSizeByType:(STPhotoViewType)type ratio:(CGFloat)ratio{

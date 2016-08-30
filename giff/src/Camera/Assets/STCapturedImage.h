@@ -35,6 +35,8 @@ extern NSString * const STCapturedImageSetDirectory;
 @property (nonatomic, readonly) UIImageOrientation capturedImageOrientation;
 @property (nonatomic, readonly) UIDeviceOrientation capturedDeviceOrientation;
 
+//TODO: transfer logics for image content between UIImage,NSURL,NSData -> Other common object
+
 + (void)registerProcessingBlockBeforeSave:(UIImage *(^)(UIImage * savingImage))block;
 
 - (UIImage *)UIImage;
