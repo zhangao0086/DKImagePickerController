@@ -173,15 +173,14 @@ static UIImage *(^ProcessingBlockBeforeSave)(UIImage *);
 }
 
 - (NSString *)_createResizedImage:(NSString *)path suffix:(NSString *)suffix sizeInScreen:(CGSize)sizeInScreen quality:(float const)quality{
-    NSAssert(self.imageUrl.path,@"self.imageUrl.path is nil");
-
     @autoreleasepool {
         if(!path){
-            path = [self.imageUrl.path stringByAppendingSuffixOfLastPathComponent:suffix];
+            NSString * availablePath = self.imageUrl.path ?: [self.uuid URLForTemp:@"CapturedImageResized" extension:@"jpg"].path;
+            path = [availablePath stringByAppendingSuffixOfLastPathComponent:suffix];
         }
 
         CGSize const resizedImageSize = CGSizeByScale(sizeInScreen, TwiceMaxScreenScale());
-        UIImage * resizedImage = [[UIImage imageWithContentsOfFile:self.imageUrl.path] scaleToFitSize:resizedImageSize];
+        UIImage * resizedImage = [self.UIImage scaleToFitSize:resizedImageSize];
         NSAssert(resizedImage,@"image is nil");
         if([UIImageJPEGRepresentation(resizedImage, quality) writeToFile:path atomically:NO]){
             NSAssert([[NSFileManager defaultManager] fileExistsAtPath:path], @"file does not exist");
