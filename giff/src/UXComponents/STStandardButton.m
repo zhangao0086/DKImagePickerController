@@ -24,7 +24,6 @@
 #import "UIImageView+WebCache.h"
 #import "NSNumber+STUtil.h"
 #import "M13ProgressViewPie.h"
-#import "STDrawableLayer.h"
 
 @implementation STStandardButton {
     void (^_whenToggled)(STStandardButton * button, BOOL selected);
@@ -250,6 +249,8 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
         /*
          * create resources
          */
+        //TODO: wrap the content of "imageName (NSURL.absoluteString)" to STRasterizingImageSourceItem
+        //TODO: absoluteString from URL -> relative path support
         NSArray * iconPresentableObjects = nil;
         if([imageName isGeneralURL]){
             //from url
@@ -311,14 +312,12 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
 - (NSArray *)createButtonIconViewsFromURL:(NSString *)url
                                      size:(CGSize)size
                                     style:(STStandardButtonStyle)style{
+    NSParameterAssert(!CGSizeEqualToSize(CGSizeZero,size));
 #if DEBUG
     //warning
     if(![url matchedSchemeToURL:[NSSet setWithArray:@[@"https", @"http",@"file",@"assets-library"]]]){
         NSString * msg = [NSString stringWithFormat:@"[!]WARNING: %@ is not general remote url to fetch images", url];
         oo(msg);
-    }
-    if(self.preferredIconImagePadding!=0){
-        NSLog(@"%@",@"[!]WARNING: self.preferredIconImagePadding not allowed when type of image is URL");
     }
     if(self.autoAdjustVectorIconImagePaddingIfNeeded){
         NSLog(@"%@",@"[!]WARNING: self.autoAdjustVectorIconImagePaddingIfNeeded not allowed when type of image is URL");
@@ -326,23 +325,50 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
 #endif
 
     UIImageView * iconImageViewByURL = [[UIImageView alloc] initWithSize:size];
-    WeakAssign(iconImageViewByURL)
-
-    if(self.style== STStandardButtonStyleRawImageWithClipAsCircle){
-        [iconImageViewByURL sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            dispatch_queue_t processingqueue = dispatch_queue_create("com.stells.standardbutton.createroundmask", DISPATCH_QUEUE_SERIAL);
-            dispatch_set_target_queue(processingqueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-            dispatch_async(processingqueue, ^{
-                UIImage * clipedImage = [image clipAsCenteredCircle];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(weak_iconImageViewByURL){
-                        weak_iconImageViewByURL.image = clipedImage;
+    STStandardButtonStyle styleToAppy = self.style;
+    switch(styleToAppy){
+        case STStandardButtonStyleRawImageWithClipAsCenteredCircle:
+        case STStandardButtonStyleRawImageWithClipAsCenteredRoundRect:{
+            WeakAssign(iconImageViewByURL)
+            //inset from self.preferredIconImagePadding
+            CGRect destinationImageViewFrame = CGRectInset(CGRectMakeSize(size),self.preferredIconImagePadding,self.preferredIconImagePadding);
+            [iconImageViewByURL sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                dispatch_queue_t processingqueue = dispatch_queue_create("com.stells.standardbutton.createroundmask", DISPATCH_QUEUE_SERIAL);
+                dispatch_set_target_queue(processingqueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+                dispatch_async(processingqueue, ^{
+                    CGFloat originalImageScale = image.scale;
+                    //reset scale for processing image
+                    UIImage * resultImage = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:UIImageOrientationUp];
+                    //centered crop
+                    BOOL needToCrop = resultImage.size.width != resultImage.size.height;
+                    resultImage = needToCrop ? [resultImage imageByCroppingAspectFillRatio:CGSizeMakeValue(1)] : image;
+                    //clip
+                    switch(styleToAppy){
+                        case STStandardButtonStyleRawImageWithClipAsCenteredCircle:
+                            resultImage = [resultImage clipAsCenteredCircle];
+                            break;
+                        case STStandardButtonStyleRawImageWithClipAsCenteredRoundRect:
+                            resultImage = [resultImage clipAsRoundedRect:resultImage.size cornerRadius:resultImage.size.width/6];
+                            break;
+                        default:
+                            NSAssert(NO, @"Doesn't support for currently given STStandardButtonStyle");
+                            break;
                     }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(weak_iconImageViewByURL){
+                            weak_iconImageViewByURL.contentMode = UIViewContentModeScaleAspectFill;
+                            //restore original scale
+                            weak_iconImageViewByURL.image = [UIImage imageWithCGImage:resultImage.CGImage scale:originalImageScale orientation:UIImageOrientationUp];
+                            weak_iconImageViewByURL.frame = destinationImageViewFrame;
+                        }
+                    });
                 });
-            });
-        }];
-    }else{
-        [iconImageViewByURL sd_setImageWithURL:[NSURL URLWithString:url]];
+            }];
+        }
+            break;
+        default:
+            [iconImageViewByURL sd_setImageWithURL:[NSURL URLWithString:url]];
+            break;
     }
 
     return @[iconImageViewByURL];
@@ -394,7 +420,8 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
     );
 
     BOOL useRawImage = style== STStandardButtonStyleRawImage
-            || style == STStandardButtonStyleRawImageWithClipAsCircle;
+            || style == STStandardButtonStyleRawImageWithClipAsCenteredCircle
+            || style == STStandardButtonStyleRawImageWithClipAsCenteredRoundRect;
 
     BOOL skipRenderingImageDefault = style==STStandardButtonStyleSkipImage
             || style==STStandardButtonStyleSkipImageNormalDimmed
@@ -428,10 +455,16 @@ blockForCreateBackgroundView:(UIView *(^)(void))block; {
          * return pure image if style none
          */
         if(image && useRawImage) {
-            if(style==STStandardButtonStyleRawImageWithClipAsCircle){
-                imageNormal = [image clipAsCenteredCircle];
-            }else{
-                imageNormal = image;
+            switch(style){
+                case STStandardButtonStyleRawImageWithClipAsCenteredCircle:
+                    imageNormal = [image clipAsCenteredCircle];
+                    break;
+                case STStandardButtonStyleRawImageWithClipAsCenteredRoundRect:
+                    imageNormal = [image clipAsRoundedRect:image.size cornerRadius:image.size.width/6];
+                    break;
+                default:
+                    imageNormal = image;
+                    break;
             }
 
         }else{

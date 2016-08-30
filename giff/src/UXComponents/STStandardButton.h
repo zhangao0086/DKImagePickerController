@@ -48,8 +48,11 @@ typedef NS_ENUM(NSInteger, STStandardButtonStyle){
     STStandardButtonStyleRawImage,
     //Raw Image, Normal and Selected are same.
 
-    STStandardButtonStyleRawImageWithClipAsCircle,
+    STStandardButtonStyleRawImageWithClipAsCenteredCircle,
     //Raw Image, Normal and Selected are same. + Crop as circle mask.
+
+    STStandardButtonStyleRawImageWithClipAsCenteredRoundRect,
+    //Raw Image, Normal and Selected are same. + Crop as roundRect mask.
 
     STStandardButtonStyleSkipImage,
     //Normal-> Background:PrimaryColor
