@@ -66,7 +66,11 @@
 
         [_frameAddButton whenSelected:^(STSelectableView *selectedView, NSInteger index) {
             [[STPhotoImporter sharedImporter] startImporting:^(NSArray<STPhotoItemSource *> *importedPhotoItemSource) {
-                [[STPhotoSelector sharedInstance] doAfterCaptured:[importedPhotoItemSource firstObject]];
+                for(STPhotoItemSource * source in importedPhotoItemSource){
+                    @autoreleasepool {
+                        [[STPhotoSelector sharedInstance] doAfterCaptured:source];
+                    }
+                }
             }];
 //            [[STPhotoSelector sharedInstance] doExitEditAfterCapture:YES];
         }];

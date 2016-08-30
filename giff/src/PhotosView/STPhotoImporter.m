@@ -36,6 +36,18 @@
     NSParameterAssert(block);
 
     DKImagePickerController * pickerController = [[DKImagePickerController alloc] init];
+    pickerController.navigationBar.barTintColor = [STStandardUI backgroundColor];
+    pickerController.navigationBar.tintColor = [STStandardUI foregroundColor];
+    pickerController.navigationBar.titleTextAttributes = @{
+            NSForegroundColorAttributeName : [STStandardUI foregroundColor]
+    };
+    [UINavigationBar appearance].titleTextAttributes = pickerController.navigationBar.titleTextAttributes;
+
+    DKImagePickerControllerSTPhotoImporter * imagePickerDelegator = DKImagePickerControllerSTPhotoImporter.new;
+    imagePickerDelegator.checkedNumberColor = [STStandardUI pointColor];
+    imagePickerDelegator.collectionViewBackgroundColor = [STStandardUI backgroundColor];
+
+    pickerController.UIDelegate = imagePickerDelegator;
     pickerController.maxSelectableCount = 2;
     pickerController.allowCirculatingSelection = YES;
     pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
@@ -48,12 +60,14 @@
     [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
         [STCapturedImageSet setDefaultAspectFillRatioForAssets:CGSizeMake(1, 1)];
         [STCapturedImageSet setMaxFrameDurationIfAssetHadAnimatableContents:[STGIFFApp defaultMaxDurationForAnimatableContent]];
-        NSArray<PHAsset *> * importedAssets = [assets mapWithItemsKeyPath:@"originalAsset"];
+        NSArray<PHAsset *> * importedAssets = [assets mapWithIndex:^id(DKAsset * dkAsset, NSInteger index) {
+            return dkAsset.originalAsset;
+        }];
         [STCapturedImageSet createFromAssets:importedAssets completion:^(NSArray *imageSets) {
-            for(STCapturedImageSet * imageSet in imageSets){
-                !block?:block(@[[STPhotoItemSource sourceWithImageSet:imageSet]]);
-            }
 
+            !block?:block([imageSets mapWithIndex:^id(STCapturedImageSet * imageSet, NSInteger index) {
+                return [STPhotoItemSource sourceWithImageSet:imageSet];
+            }]);
         }];
         NSLog(@"didSelectAssets");
     }];

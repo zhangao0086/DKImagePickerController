@@ -248,6 +248,8 @@
 		A028DB321D519B0C00983BE8 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB231D519B0C00983BE8 /* DKAssetGroupListVC.swift */; };
 		A028DB331D519B0C00983BE8 /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028DB241D519B0C00983BE8 /* DKPermissionView.swift */; };
 		A028DB351D519DA500983BE8 /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A028DB341D519DA500983BE8 /* DKCameraResource.bundle */; };
+		A04EE1F81D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04EE1F71D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift */; };
+		A04EE1F91D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04EE1F71D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift */; };
 		A050D0E51CC5DD0D00628C2F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CDE91CC5DD0C00628C2F /* AppDelegate.m */; };
 		A050D0E71CC5DD0D00628C2F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A050CDEC1CC5DD0C00628C2F /* main.m */; };
 		A050D0E91CC5DD0D00628C2F /* color_names.json in Resources */ = {isa = PBXBuildFile; fileRef = A050CDF01CC5DD0C00628C2F /* color_names.json */; };
@@ -1268,6 +1270,7 @@
 		A028DB231D519B0C00983BE8 /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		A028DB241D519B0C00983BE8 /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
 		A028DB341D519DA500983BE8 /* DKCameraResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKCameraResource.bundle; sourceTree = "<group>"; };
+		A04EE1F71D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerSTPhotoImporter.swift; sourceTree = "<group>"; };
 		A050CDE81CC5DD0C00628C2F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A050CDE91CC5DD0C00628C2F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A050CDEA1CC5DD0C00628C2F /* giff-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "giff-Prefix.pch"; sourceTree = "<group>"; };
@@ -2198,6 +2201,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		4F71DDB4A4F36E7BDEFD6954 /* ImporterView */ = {
+			isa = PBXGroup;
+			children = (
+				A04EE1F71D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift */,
+			);
+			path = ImporterView;
+			sourceTree = "<group>";
+		};
 		4F71DF8B4D8BC83DC897C11B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -3042,6 +3053,7 @@
 				A050D0951CC5DD0D00628C2F /* STThumbnailGridViewCell.m */,
 				4F71D42F59C1EA3B5C403215 /* STPhotoImporter.m */,
 				4F71DDE39C697B870286FA6A /* STPhotoImporter.h */,
+				4F71DDB4A4F36E7BDEFD6954 /* ImporterView */,
 			);
 			path = PhotosView;
 			sourceTree = "<group>";
@@ -3905,6 +3917,7 @@
 				A050D1C01CC5DD0D00628C2F /* CAShapeLayer+STUtil.m in Sources */,
 				A050D2521CC5DD0D00628C2F /* STSLComposeViewExporter.m in Sources */,
 				A050D1F61CC5DD0D00628C2F /* STUIApplication.m in Sources */,
+				A04EE1F81D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift in Sources */,
 				A050D1E71CC5DD0D00628C2F /* STLivePhotoView.m in Sources */,
 				A050D2561CC5DD0D00628C2F /* STPhotoItem.m in Sources */,
 				A050D1E91CC5DD0D00628C2F /* STMotionManager.m in Sources */,
@@ -4372,6 +4385,7 @@
 				A0FA6FFA1D5ACF430040AC3F /* STGIFFDisplayLayerLeifEffect.m in Sources */,
 				A0FA6FFB1D5ACF430040AC3F /* STGPUImageOffsetScalingFilter.m in Sources */,
 				A0FA6FFC1D5ACF430040AC3F /* STGIFFDisplayLayerFluorEffect.m in Sources */,
+				A04EE1F91D7597100053E655 /* DKImagePickerControllerSTPhotoImporter.swift in Sources */,
 				A0FA6FFD1D5ACF430040AC3F /* STMultiSourcingImageProcessor.m in Sources */,
 				A0FA6FFE1D5ACF430040AC3F /* STCapturedImageProcessor.m in Sources */,
 				A0FA6FFF1D5ACF430040AC3F /* DKAssetGroupListVC.swift in Sources */,
