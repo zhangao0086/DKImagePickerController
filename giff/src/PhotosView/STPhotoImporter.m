@@ -37,7 +37,7 @@
 
     DKImagePickerController * pickerController = [[DKImagePickerController alloc] init];
     pickerController.maxSelectableCount = 2;
-    pickerController.allowRotatingSelection = YES;
+    pickerController.allowCirculatingSelection = YES;
     pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
     pickerController.showsCancelButton = YES;
     pickerController.showsEmptyAlbums = YES;

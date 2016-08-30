@@ -13,21 +13,21 @@ import Photos
 public protocol DKImagePickerControllerUIDelegate {
 	
 	/**
-		The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
+     The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
 	*/
 	func prepareLayout(imagePickerController: DKImagePickerController, vc: UIViewController)
 	
 	/**
-		Returns a custom camera.
+     Returns a custom camera.
 
-		**Note**
+     **Note**
 
-		If you are using a UINavigationController as the custom camera,
-		you should also set the picker's modalPresentationStyle to .OverCurrentContext, like this:
-		
-		```
-		pickerController.modalPresentationStyle = .OverCurrentContext
-		```
+     If you are using a UINavigationController as the custom camera,
+     you should also set the picker's modalPresentationStyle to .OverCurrentContext, like this:
+
+     ```
+     pickerController.modalPresentationStyle = .OverCurrentContext
+     ```
 	*/
 	func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
 	                                       didCancel: (() -> Void),
@@ -35,44 +35,67 @@ public protocol DKImagePickerControllerUIDelegate {
 	                                       didFinishCapturingVideo: ((videoURL: NSURL) -> Void)) -> UIViewController
 	
 	/**
-		The camera image to be displayed in the album's first cell.
-	*/
-	func imagePickerControllerCameraImage() -> UIImage
-	
-	/**
-		The layout is to provide information about the position and visual state of items in the collection view.
+     The layout is to provide information about the position and visual state of items in the collection view.
 	*/
 	func layoutForImagePickerController(imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type
 	
 	/**
-		Called when the user needs to show the cancel button.
+     Called when the user needs to show the cancel button.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, showsCancelButtonForVC vc: UIViewController)
 	
 	/**
-		Called when the user needs to hide the cancel button.
+     Called when the user needs to hide the cancel button.
 	*/
 	func imagePickerController(imagePickerController: DKImagePickerController, hidesCancelButtonForVC vc: UIViewController)
 	
 	/**
-		Called after the user changes the selection.
+     Called after the user changes the selection.
 	*/
-	func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset)
+	@available(*, deprecated=1.0, message="Use imagePickerController(_:didSelectAssets:) instead.") func imagePickerController(imagePickerController: DKImagePickerController, didSelectAsset: DKAsset)
+    func imagePickerController(imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset])
 	
 	/**
-		Called after the user changes the selection.
+     Called after the user changes the selection.
 	*/
-	func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset)
+	@available(*, deprecated=1.0, message="Use imagePickerController(_:didDeselectAssets:) instead.") func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset)
+    func imagePickerController(imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset])
 	
 	/**
-		Called when the selectedAssets'count did reach `maxSelectableCount`.
+     Called when the count of the selectedAssets did reach `maxSelectableCount`.
 	*/
 	func imagePickerControllerDidReachMaxLimit(imagePickerController: DKImagePickerController)
 	
 	/**
-		Accessory view below content. default is nil.
+     Accessory view below content. default is nil.
 	*/
 	func imagePickerControllerFooterView(imagePickerController: DKImagePickerController) -> UIView?
+    
+    /**
+     The camera image to be displayed in the album's first cell.
+     */
+    func imagePickerControllerCameraImage() -> UIImage
+    
+    /**
+     Set the color of the number when object is selected.
+     */
+    func imagePickerControllerCheckedNumberColor() -> UIColor
+    
+    /**
+     Set the font of the number when object is selected.
+     */
+    func imagePickerControllerCheckedNumberFont() -> UIFont
+    
+    /**
+     Set the color of the object outline when object is selected.
+     */
+    func imagePickerControllerCheckedImageTintColor() -> UIColor?
+    
+    /**
+     Set the color of the background of the collection view.
+     */
+    func imagePickerControllerCollectionViewBackgroundColor() -> UIColor
+
 }
 
 /**
@@ -90,6 +113,7 @@ public enum DKImagePickerControllerSourceType : Int {
 	case Camera, Photo, Both
 }
 
+
 // MARK: - Public DKImagePickerController
 
 /**
@@ -100,17 +124,20 @@ public class DKImagePickerController : UINavigationController {
 	public var UIDelegate: DKImagePickerControllerUIDelegate = {
 		return DKImagePickerControllerDefaultUIDelegate()
 	}()
-	
+
     /// Forces selection of tapped image immediatly.
 	public var singleSelect = false
 		
     /// The maximum count of assets which the user will be able to select.
     public var maxSelectableCount = 999
+ 
+    /// Whether allows to circulate selections when current selected count has reached to maxSelectableCount. Alert message will not be shown.
+    public var allowCirculatingSelection = false
 
-	/// Whether allows to rotate selection when current selected count has reached to maxSelectableCount. Alert message will not be shown.
-	public var allowRotatingSelection = false
-	
-	/// Set the defaultAssetGroup to specify which album is the default asset group.
+    /// An option to deselect all items when user changes album selection
+    public var deselectAllWhenChangingAlbum = false
+
+    /// Set the defaultAssetGroup to specify which album is the default asset group.
 	public var defaultAssetGroup: PHAssetCollectionSubtype?
 	
 	/// The types of PHAssetCollection to display in the picker.
@@ -199,7 +226,7 @@ public class DKImagePickerController : UINavigationController {
 			}
         }
     }
-    
+        
     public var selectedAssets = [DKAsset]()
 	
     public convenience init() {
@@ -246,11 +273,12 @@ public class DKImagePickerController : UINavigationController {
                 self.navigationBarHidden = false
 				let rootVC = DKAssetGroupDetailVC()
 				rootVC.imagePickerController = self
+                
 				self.UIDelegate.prepareLayout(self, vc: rootVC)
 				self.updateCancelButtonForVC(rootVC)
 				self.setViewControllers([rootVC], animated: false)
 				if self.defaultSelectedAssets?.count > 0 {
-					self.UIDelegate.imagePickerController(self, didSelectAsset: self.defaultSelectedAssets!.last!)
+					self.UIDelegate.imagePickerController(self, didSelectAssets: [self.defaultSelectedAssets!.last!])
 				}
 			}
 		}
@@ -327,13 +355,13 @@ public class DKImagePickerController : UINavigationController {
 							if self.sourceType != .Camera || self.viewControllers.count == 0 {
 								self.dismissViewControllerAnimated(true, completion: nil)
 							}
-							self.selectedImage(DKAsset(originalAsset: newAsset))
+							self.selectImage(DKAsset(originalAsset: newAsset))
 						}
 					} else {
 						if self.sourceType != .Camera {
 							self.dismissViewControllerAnimated(true, completion: nil)
 						}
-						self.selectedImage(DKAsset(image: image))
+						self.selectImage(DKAsset(image: image))
 					}
 				})
 			})
@@ -351,9 +379,8 @@ public class DKImagePickerController : UINavigationController {
 							if self.sourceType != .Camera || self.viewControllers.count == 0 {
 								self.dismissViewControllerAnimated(true, completion: nil)
 							}
-							self.selectedImage(DKAsset(originalAsset: newAsset))
+							self.selectImage(DKAsset(originalAsset: newAsset))
 						}
-
 					} else {
 						self.dismissViewControllerAnimated(true, completion: nil)
 					}
@@ -374,38 +401,66 @@ public class DKImagePickerController : UINavigationController {
 	}
 	
 	public func dismiss() {
-		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-		self.didCancel?()
+		self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+			self.didCancel?()
+		})
 	}
 	
     public func done() {
-		self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-        self.didSelectAssets?(assets: self.selectedAssets)
+		self.presentingViewController?.dismissViewControllerAnimated(true, completion: {
+			self.didSelectAssets?(assets: self.selectedAssets)
+		})
     }
     
-    // MARK: - Selection Image
+    // MARK: - Selection
+    
+    public func deselectAssetAtIndex(index: Int) {
+        let asset = self.selectedAssets[index]
+        self.deselectAsset(asset)
+    }
+    
+    public func deselectAsset(asset: DKAsset) {
+        self.deselectImage(asset)
+        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            rootVC.collectionView?.reloadData()
+        }
+    }
+    
+    public func deselectAllAssets() {
+        if self.selectedAssets.count > 0 {
+            let assets = self.selectedAssets
+            self.selectedAssets.removeAll()
+            self.UIDelegate.imagePickerController(self, didDeselectAssets: assets)
+            if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+                rootVC.collectionView?.reloadData()
+            }
+        }
+    }
 	
-	internal func selectedImage(asset: DKAsset) {
-		selectedAssets.append(asset)
-		
-		if self.sourceType == .Camera {
-			self.done()
-		} else if self.singleSelect {
-			self.done()
-		} else {
-			self.UIDelegate.imagePickerController(self, didSelectAsset: asset)
-		}
+	internal func selectImage(asset: DKAsset) {
+        if self.singleSelect {
+            self.deselectAllAssets()
+            self.selectedAssets.append(asset)
+            self.done()
+        } else {
+            self.selectedAssets.append(asset)
+            if self.sourceType == .Camera {
+                self.done()
+            } else {
+                self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
+            }
+        }
 	}
 	
-	internal func unselectedImage(asset: DKAsset) {
-		selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
-		self.UIDelegate.imagePickerController(self, didDeselectAsset: asset)
+	internal func deselectImage(asset: DKAsset) {
+		self.selectedAssets.removeAtIndex(selectedAssets.indexOf(asset)!)
+		self.UIDelegate.imagePickerController(self, didDeselectAssets: [asset])
 	}
-	
+    
     // MARK: - Handles Orientation
 
     public override func shouldAutorotate() -> Bool {
-		return self.allowsLandscape ? true : false
+		return self.allowsLandscape && self.sourceType != .Camera ? true : false
     }
     
     public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {

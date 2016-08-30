@@ -280,6 +280,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 			getImageManager().groupDataManager.addObserver(self)
 			self.groupListVC = DKAssetGroupListVC(selectedGroupDidChangeBlock: { [unowned self] groupId in
 				self.selectAssetGroup(groupId)
+
 			}, defaultAssetGroup: self.imagePickerController.defaultAssetGroup)
 			self.groupListVC.loadGroups()
 		}
@@ -293,10 +294,15 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         if self.selectedGroupId == groupId {
             return
         }
-        
+
         self.selectedGroupId = groupId
-		self.updateTitleView()
-		self.collectionView!.reloadData()
+        self.updateTitleView()
+        if(self.imagePickerController.deselectAllWhenChangingAlbum
+                || self.imagePickerController.allowCirculatingSelection){
+            self.imagePickerController.deselectAllAssets()
+        }else{
+            self.collectionView!.reloadData()
+        }
     }
 	
 	func updateTitleView() {
@@ -402,11 +408,11 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		
 		let didReachMaxSelectableCount = self.imagePickerController.selectedAssets.count >= self.imagePickerController.maxSelectableCount
         if didReachMaxSelectableCount {
-            if self.imagePickerController.allowRotatingSelection {
+            if self.imagePickerController.allowCirculatingSelection {
                 let currentSelectedIndexPaths:[NSIndexPath] = collectionView.indexPathsForSelectedItems()!
                 let firstSelectedIndexPath:NSIndexPath = currentSelectedIndexPaths.first!
                 if let removingAsset:DKAsset = (collectionView.cellForItemAtIndexPath(firstSelectedIndexPath) as! DKAssetCell).asset{
-                    self.imagePickerController.unselectedImage(removingAsset)
+                    self.imagePickerController.deselectImage(removingAsset)
                 }
                 UIView.performWithoutAnimation({
                     collectionView.reloadItemsAtIndexPaths(currentSelectedIndexPaths)
@@ -424,7 +430,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		let selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
-		self.imagePickerController.selectedImage(selectedAsset!)
+		self.imagePickerController.selectImage(selectedAsset!)
         
 		let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
 		cell.checkView.checkLabel.text = "\(self.imagePickerController.selectedAssets.count)"
@@ -450,7 +456,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 				}
 			}
 			
-			self.imagePickerController.unselectedImage(removedAsset)
+			self.imagePickerController.deselectImage(removedAsset)
 		}
     }
 	
@@ -466,7 +472,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		for (_, selectedAsset) in self.imagePickerController.selectedAssets.enumerate() {
 			for removedAsset in assets {
 				if selectedAsset.isEqual(removedAsset) {
-					self.imagePickerController.unselectedImage(selectedAsset)
+					self.imagePickerController.deselectImage(selectedAsset)
 				}
 			}
 		}
