@@ -114,8 +114,10 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	
 	public func updateDoneButtonTitle(button: UIButton) {
 		if self.imagePickerController.selectedAssets.count > 0 {
+			button.hidden = false
 			button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), self.imagePickerController.selectedAssets.count), forState: UIControlState.Normal)
 		} else {
+			button.hidden = true
 			button.setTitle(DKImageLocalizedStringWithKey("done"), forState: UIControlState.Normal)
 		}
 		
