@@ -1,7 +1,0 @@
-"NSLocationWhenInUseUsageDescription" = "เราจำเป็นของตำแหน่ง geotag รูปถ่ายของคุณ";
-"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsFullRange" = "Shoot With Full Range";
-"UIApplicationShortcutItemTitle.STShortcutItemTypeCaptureAsMultiPoint" = "Shoot With Multi Points";
-"UIApplicationShortcutItemTitle.STShortcutItemTypeEditLastPhoto" = "แก้ไขภาพถ่ายล่าสุด";
-/* Translated from: Open Album */
-"UIApplicationShortcutItemTitle.STShortcutItemTypeOpenAlbum" = "เปิดอัลบั้ม";
-"STAppMarketingTitle" = "GGIIFF - GIFs Like After-Image";

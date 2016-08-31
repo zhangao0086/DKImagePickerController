@@ -1,7 +1,0 @@
-// # format : {index}_{representativeColor}_{uid/uid_short}_{type}_{tag}.png
-
-type:
-    STFilterTypeUndefined = 0,
-    STFilterTypeDefault = 1,
-    STFilterTypeITunesProduct = 2,
-    STFilterTypeExternalProduct = 3
