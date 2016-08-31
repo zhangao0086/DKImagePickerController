@@ -92,6 +92,12 @@
     [[STElieCamera sharedInstance] startCameraCapture];
 
     //initialize window
+    [UINavigationBar appearance].barTintColor = [STStandardUI backgroundColor];
+    [UINavigationBar appearance].tintColor = [STStandardUI foregroundColor];
+    [UINavigationBar appearance].titleTextAttributes = @{
+            NSForegroundColorAttributeName : [STStandardUI foregroundColor]
+    };
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
     [self.window setRootViewController:[[STGIFFRootViewController alloc] init]];

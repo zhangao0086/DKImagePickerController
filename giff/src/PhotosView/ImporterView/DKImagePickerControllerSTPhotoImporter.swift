@@ -9,7 +9,7 @@
 import UIKit
 
 @objc
-public class DKImagePickerControllerSTPhotoImporter: NSObject, DKImagePickerControllerUIDelegate {
+public class DKImagePickerControllerSTPhotoImporterDelegate: NSObject, DKImagePickerControllerUIDelegate {
 	
 	public weak var imagePickerController: DKImagePickerController!
 	
@@ -101,29 +101,24 @@ public class DKImagePickerControllerSTPhotoImporter: NSObject, DKImagePickerCont
         return DKImageResource.cameraImage()
     }
 
-//	public var checkedNumberColor:UIColor?
 	public lazy var checkedNumberColor: UIColor = { return UIColor.whiteColor() }()
 	public func imagePickerControllerCheckedNumberColor() -> UIColor {
-		return UIColor.redColor()
+		return self.checkedNumberColor
     }
 
-	public var checkedNumberFont:UIFont?
+	public lazy var checkedNumberFont: UIFont = { return UIFont.systemFontOfSize(12) }()
     public func imagePickerControllerCheckedNumberFont() -> UIFont {
-		return self.checkedNumberFont ?? UIFont.systemFontOfSize(24)
+		return self.checkedNumberFont
     }
-    
+
+	public var checkedImageTintColor: UIColor?
     public func imagePickerControllerCheckedImageTintColor() -> UIColor? {
-        return nil
+        return self.checkedImageTintColor
     }
 
-//	public var teeeee:Int
-
-	public var collectionViewBackgroundColor: UIColor?// = { return UIColor.whiteColor() }()
-    public func imagePickerControllerCollectionViewBackgroundColor() -> UIColor {
-		return UIColor.redColor()
-//		print(teeeee)
-		print(self.collectionViewBackgroundColor)
-        return self.collectionViewBackgroundColor!
+	public var collectionViewBackgroundColor:UIColor?
+	public func imagePickerControllerCollectionViewBackgroundColor() -> UIColor {
+		return self.collectionViewBackgroundColor ?? UIColor.whiteColor()
     }
 	
 	// Internal

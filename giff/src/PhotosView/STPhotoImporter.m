@@ -15,6 +15,8 @@
 #import "giffe-Swift.h"
 #else
 #import "giff-Swift.h"
+#import "UIView+STUtil.h"
+
 #endif
 
 @implementation STPhotoImporter {
@@ -36,15 +38,10 @@
     NSParameterAssert(block);
 
     DKImagePickerController * pickerController = [[DKImagePickerController alloc] init];
-    pickerController.navigationBar.barTintColor = [STStandardUI backgroundColor];
-    pickerController.navigationBar.tintColor = [STStandardUI foregroundColor];
-    pickerController.navigationBar.titleTextAttributes = @{
-            NSForegroundColorAttributeName : [STStandardUI foregroundColor]
-    };
-    [UINavigationBar appearance].titleTextAttributes = pickerController.navigationBar.titleTextAttributes;
 
-    DKImagePickerControllerSTPhotoImporter * imagePickerDelegator = DKImagePickerControllerSTPhotoImporter.new;
-    imagePickerDelegator.checkedNumberColor = [STStandardUI pointColor];
+    DKImagePickerControllerSTPhotoImporterDelegate * imagePickerDelegator = DKImagePickerControllerSTPhotoImporterDelegate.new;
+    imagePickerDelegator.checkedNumberColor = [STStandardUI buttonColorForegroundAssistance];
+    imagePickerDelegator.checkedImageTintColor = [STStandardUI pointColor];
     imagePickerDelegator.collectionViewBackgroundColor = [STStandardUI backgroundColor];
 
     pickerController.UIDelegate = imagePickerDelegator;
@@ -73,6 +70,7 @@
     }];
 
     [[self st_rootUVC] presentViewController:pickerController animated:YES completion:nil];
+
 
 }
 @end

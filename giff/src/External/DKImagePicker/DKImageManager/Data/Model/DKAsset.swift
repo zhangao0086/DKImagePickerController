@@ -17,7 +17,7 @@ public extension CGSize {
 }
 
 /**
-	An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
+ An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
 */
 public class DKAsset: NSObject {
 
@@ -32,7 +32,7 @@ public class DKAsset: NSObject {
 	
 	public private(set) var originalAsset: PHAsset?
 		
-	init(originalAsset: PHAsset) {
+	public init(originalAsset: PHAsset) {
 		super.init()
 		
 		self.originalAsset = originalAsset
@@ -83,10 +83,10 @@ public class DKAsset: NSObject {
 	}
 	
 	/**
-		Fetch an image with the current screen size.
-	
-		- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
-		- parameter completeBlock: The block is executed when the image download is complete.
+     Fetch an image with the current screen size.
+     
+     - parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+     - parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchFullScreenImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		if let (image, info) = self.fullScreenImage {
@@ -113,10 +113,10 @@ public class DKAsset: NSObject {
 	}
 	
 	/**
-		Fetch an image with the original size.
-	
-		- parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
-		- parameter completeBlock: The block is executed when the image download is complete.
+     Fetch an image with the original size.
+     
+     - parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+     - parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchOriginalImage(sync: Bool, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
 		let options = PHImageRequestOptions()
@@ -129,23 +129,23 @@ public class DKAsset: NSObject {
 		})
 	}
 	
-	/**
-		Fetch an AVAsset with a completeBlock.
+    /**
+     Fetch an AVAsset with a completeBlock.
 	*/
 	public func fetchAVAssetWithCompleteBlock(completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		self.fetchAVAsset(nil, completeBlock: completeBlock)
 	}
 	
-	/**
-		Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
-	*/
+    /**
+     Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+     */
 	public func fetchAVAsset(options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		getImageManager().fetchAVAsset(self, options: options, completeBlock: completeBlock)
 	}
 	
-	/**
-		Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
-	*/
+    /**
+     Sync fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
+     */
 	public func fetchAVAsset(sync: Bool, options: PHVideoRequestOptions?, completeBlock: (AVAsset: AVAsset?, info: [NSObject : AnyObject]?) -> Void) {
 		if sync {
 			let semaphore = dispatch_semaphore_create(0)
@@ -240,4 +240,5 @@ public extension AVAsset {
 			return 0
 		}
 	}
+    
 }

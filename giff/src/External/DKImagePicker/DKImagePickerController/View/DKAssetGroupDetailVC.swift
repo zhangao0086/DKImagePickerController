@@ -16,7 +16,7 @@ private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
 // Show all images in the asset group
 internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
-    
+
     class DKImageCameraCell: UICollectionViewCell {
         
         var didCameraButtonClicked: (() -> Void)?
@@ -51,20 +51,18 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         
     } /* DKImageCameraCell */
 
+    
     class DKAssetCell: UICollectionViewCell {
         
         class DKImageCheckView: UIView {
-            
-            private lazy var checkImageView: UIImageView = {
-                let imageView = UIImageView(image: DKImageResource.checkedImage())
-                
+
+            internal lazy var checkImageView: UIImageView = {
+                let imageView = UIImageView(image: DKImageResource.checkedImage().imageWithRenderingMode(.AlwaysTemplate))
                 return imageView
             }()
             
-            private lazy var checkLabel: UILabel = {
+            internal lazy var checkLabel: UILabel = {
                 let label = UILabel()
-                label.font = UIFont.boldSystemFontOfSize(14)
-                label.textColor = UIColor.whiteColor()
                 label.textAlignment = .Right
                 
                 return label
@@ -212,6 +210,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     private var hidesCamera: Bool = false
 	
 	internal var collectionView: UICollectionView!
+    
 	private var footerView: UIView?
 	
 	private var currentViewSize: CGSize!
@@ -240,7 +239,8 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		
 		let layout = self.imagePickerController.UIDelegate.layoutForImagePickerController(self.imagePickerController).init()
 		self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        self.collectionView.backgroundColor = UIColor.whiteColor()
+        self.collectionView.backgroundColor = UICollectionView.appearance().backgroundColor
+                ?? self.imagePickerController.UIDelegate.imagePickerControllerCollectionViewBackgroundColor()
         self.collectionView.allowsMultipleSelection = true
 		self.collectionView.delegate = self
 		self.collectionView.dataSource = self
@@ -273,6 +273,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 	internal func checkPhotoPermission() {
 		func photoDenied() {
 			self.view.addSubview(DKPermissionView.permissionView(.Photo))
+			self.view.backgroundColor = UIColor.blackColor()
 			self.collectionView?.hidden = true
 		}
 		
@@ -280,7 +281,6 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 			getImageManager().groupDataManager.addObserver(self)
 			self.groupListVC = DKAssetGroupListVC(selectedGroupDidChangeBlock: { [unowned self] groupId in
 				self.selectAssetGroup(groupId)
-
 			}, defaultAssetGroup: self.imagePickerController.defaultAssetGroup)
 			self.groupListVC.loadGroups()
 		}
@@ -294,11 +294,11 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         if self.selectedGroupId == groupId {
             return
         }
-
+        
         self.selectedGroupId = groupId
         self.updateTitleView()
         if(self.imagePickerController.deselectAllWhenChangingAlbum
-                || self.imagePickerController.allowCirculatingSelection){
+            || self.imagePickerController.allowCirculatingSelection){            
             self.imagePickerController.deselectAllAssets()
         }else{
             self.collectionView!.reloadData()
@@ -327,12 +327,14 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         let cell = collectionView!.dequeueReusableCellWithReuseIdentifier(DKImageCameraIdentifier, forIndexPath: indexPath) as! DKImageCameraCell
 		cell.setCameraImage(self.imagePickerController.UIDelegate.imagePickerControllerCameraImage())
         
-        cell.didCameraButtonClicked = {
-            if UIImagePickerController.isSourceTypeAvailable(.Camera) && self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount  {
-                self.imagePickerController.presentCamera()
-			} else {
-				self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
-			}
+        cell.didCameraButtonClicked = { [unowned self] in
+            if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+                if self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount  {
+                    self.imagePickerController.presentCamera()
+                } else {
+                    self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
+                }
+            }
         }
 
         return cell
@@ -353,7 +355,11 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		}
 		
 		cell = self.collectionView!.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath) as! DKAssetCell
-		cell.asset = asset
+        cell.checkView.checkImageView.tintColor = self.imagePickerController.UIDelegate.imagePickerControllerCheckedImageTintColor()
+        cell.checkView.checkLabel.font = self.imagePickerController.UIDelegate.imagePickerControllerCheckedNumberFont()
+        cell.checkView.checkLabel.textColor = self.imagePickerController.UIDelegate.imagePickerControllerCheckedNumberColor()
+
+        cell.asset = asset
 		let tag = indexPath.row + 1
 		cell.tag = tag
 		
@@ -406,7 +412,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
                 return false
         }
 		
-		let didReachMaxSelectableCount = self.imagePickerController.selectedAssets.count >= self.imagePickerController.maxSelectableCount
+        let didReachMaxSelectableCount = self.imagePickerController.selectedAssets.count >= self.imagePickerController.maxSelectableCount
         if didReachMaxSelectableCount {
             if self.imagePickerController.allowCirculatingSelection {
                 let currentSelectedIndexPaths:[NSIndexPath] = collectionView.indexPathsForSelectedItems()!
@@ -418,22 +424,23 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
                     collectionView.reloadItemsAtIndexPaths(currentSelectedIndexPaths)
                 })
                 return true
-
+                
             }else{
                 self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
                 return false
             }
-		}
-
-		return true
+        }
+        
+        return true
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		let selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
 		self.imagePickerController.selectImage(selectedAsset!)
         
-		let cell = collectionView.cellForItemAtIndexPath(indexPath) as! DKAssetCell
-		cell.checkView.checkLabel.text = "\(self.imagePickerController.selectedAssets.count)"
+        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell {
+            cell.checkView.checkLabel.text = "\(self.imagePickerController.selectedAssets.count)"
+        }
     }
     
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {

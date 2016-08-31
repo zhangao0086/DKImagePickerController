@@ -42,7 +42,7 @@ class DKAssetGroupCell: UITableViewCell {
 	
     var totalCountLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFontOfSize(11)
+        label.font = UIFont.systemFontOfSize(10)
         label.textColor = UIColor.grayColor()
         return label
     }()
@@ -151,7 +151,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	}
 	
 	internal func loadGroups() {
-		getImageManager().groupDataManager.fetchGroups(self.defaultAssetGroup) { [weak self] groups, error in
+		getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
 			guard let strongSelf = self else { return }
 			
 			if error == nil {
