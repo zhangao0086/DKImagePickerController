@@ -239,7 +239,8 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		
 		let layout = self.imagePickerController.UIDelegate.layoutForImagePickerController(self.imagePickerController).init()
 		self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        self.collectionView.backgroundColor = self.imagePickerController.UIDelegate.imagePickerControllerCollectionViewBackgroundColor()
+        self.collectionView.backgroundColor = UICollectionView.appearance().backgroundColor
+            ?? self.imagePickerController.UIDelegate.imagePickerControllerCollectionViewBackgroundColor()
         self.collectionView.allowsMultipleSelection = true
 		self.collectionView.delegate = self
 		self.collectionView.dataSource = self
