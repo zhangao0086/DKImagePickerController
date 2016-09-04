@@ -397,13 +397,15 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         if let firstSelectedAsset = self.imagePickerController.selectedAssets.first,
             selectedAsset = (collectionView.cellForItemAtIndexPath(indexPath) as? DKAssetCell)?.asset
             where self.imagePickerController.allowMultipleTypes == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
-                
-                UIAlertView(title: DKImageLocalizedStringWithKey("selectPhotosOrVideos"),
-                    message: DKImageLocalizedStringWithKey("selectPhotosOrVideosError"),
-                    delegate: nil,
-                    cancelButtonTitle: DKImageLocalizedStringWithKey("ok")).show()
-                
-                return false
+
+            let alert = UIAlertController(
+                    title: DKImageLocalizedStringWithKey("selectPhotosOrVideos")
+                    , message: DKImageLocalizedStringWithKey("selectPhotosOrVideosError")
+                    , preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: DKImageLocalizedStringWithKey("ok"), style: .Cancel) { _ in })
+            self.imagePickerController.presentViewController(alert, animated: true){}
+
+            return false
         }
 		
 		let shouldSelect = self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount
