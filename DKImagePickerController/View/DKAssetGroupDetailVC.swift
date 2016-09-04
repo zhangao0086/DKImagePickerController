@@ -311,9 +311,16 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             self.selectGroupButton.setTitle(group.groupName + addingDownArrowStr, forState: .Normal)
             let attributedString = NSMutableAttributedString(attributedString: (self.selectGroupButton.titleLabel?.attributedText)!)
             let rangeToApply = NSRange(location: attributedString.string.characters.count-addingDownArrowStr.characters.count, length: addingDownArrowStr.characters.count)
-            attributedString.addAttribute(NSBaselineOffsetAttributeName, value: -5.0, range: rangeToApply)
+            //To beautify overall, like the Apple music app's, size, baseline offset and kerning of the arrow symbol should be smaller than label.
+            attributedString.enumerateAttribute(NSFontAttributeName, inRange:rangeToApply, options:.LongestEffectiveRangeNotRequired,
+                    usingBlock: { value, range, stop in
+                        let font = value as! UIFont
+                        attributedString.addAttribute(NSFontAttributeName, value:font.fontWithSize(font.pointSize/1.5), range:range)
+                    })
+            attributedString.addAttribute(NSBaselineOffsetAttributeName, value: -2.5, range: rangeToApply)
+            attributedString.addAttribute(NSKernAttributeName, value: -1.5, range: rangeToApply)
             self.selectGroupButton.setAttributedTitle(attributedString, forState: .Normal)
-            self.selectGroupButton.titleEdgeInsets = UIEdgeInsetsMake(6, 0, 0, 0)
+            self.selectGroupButton.titleEdgeInsets = UIEdgeInsetsMake(3, 0, 0, 0)
         }else{
             self.selectGroupButton.setTitle(group.groupName, forState: .Normal)
             self.selectGroupButton.titleEdgeInsets = UIEdgeInsetsZero
