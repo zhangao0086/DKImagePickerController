@@ -308,6 +308,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         if groupsCount > 1{
             //create pretty arrow
             let addingDownArrowStr = "  \u{FE40}"
+            self.selectGroupButton.setAttributedTitle(nil, forState: .Normal)
             self.selectGroupButton.setTitle(group.groupName + addingDownArrowStr, forState: .Normal)
             let attributedString = NSMutableAttributedString(attributedString: (self.selectGroupButton.titleLabel?.attributedText)!)
             let rangeToApply = NSRange(location: attributedString.string.characters.count-addingDownArrowStr.characters.count, length: addingDownArrowStr.characters.count)
