@@ -95,7 +95,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             
         } /* DKImageCheckView */
 		
-        fileprivate var asset: DKAsset!
+        public var asset: DKAsset!
 		
         fileprivate let thumbnailImageView: UIImageView = {
             let thumbnailImageView = UIImageView()
@@ -136,7 +136,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     
     class DKVideoAssetCell: DKAssetCell {
 		
-        override fileprivate var asset: DKAsset! {
+        override public var asset: DKAsset! {
           didSet {
             let videoDurationLabel = self.videoInfoView.viewWithTag(-1) as! UILabel
             let minutes: Int = Int(asset.duration!) / 60
