@@ -34,9 +34,9 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	}
 	
 	public func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
-	                                              didCancel: (() -> Void),
-	                                              didFinishCapturingImage: ((_ image: UIImage) -> Void),
-	                                              didFinishCapturingVideo: ((_ videoURL: URL) -> Void)) -> UIViewController {
+	                                              didCancel: @escaping (() -> Void),
+	                                              didFinishCapturingImage: @escaping ((_ image: UIImage) -> Void),
+	                                              didFinishCapturingVideo: @escaping ((_ videoURL: URL) -> Void)) -> UIViewController {
 		
 		let camera = DKCamera()
 		

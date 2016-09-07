@@ -30,9 +30,9 @@ public protocol DKImagePickerControllerUIDelegate {
 		```
 	*/
 	func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
-	                                       didCancel: (() -> Void),
-	                                       didFinishCapturingImage: ((_ image: UIImage) -> Void),
-	                                       didFinishCapturingVideo: ((_ videoURL: URL) -> Void)) -> UIViewController
+	                                       didCancel: @escaping (() -> Void),
+	                                       didFinishCapturingImage: @escaping ((_ image: UIImage) -> Void),
+	                                       didFinishCapturingVideo: @escaping ((_ videoURL: URL) -> Void)) -> UIViewController
 	
 	/**
 		The camera image to be displayed in the album's first cell.

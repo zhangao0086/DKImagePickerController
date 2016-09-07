@@ -16,9 +16,9 @@ public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImage
 	var didFinishCapturingVideo: ((_ videoURL: URL) -> Void)?
 	
   public override func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
-                                                        didCancel: (() -> Void),
-                                                        didFinishCapturingImage: ((_ image: UIImage) -> Void),
-                                                        didFinishCapturingVideo: ((_ videoURL: URL) -> Void)
+                                                        didCancel: @escaping (() -> Void),
+                                                        didFinishCapturingImage: @escaping ((_ image: UIImage) -> Void),
+                                                        didFinishCapturingVideo: @escaping ((_ videoURL: URL) -> Void)
                                                         ) -> UIViewController {
 		self.didCancel = didCancel
 		self.didFinishCapturingImage = didFinishCapturingImage
