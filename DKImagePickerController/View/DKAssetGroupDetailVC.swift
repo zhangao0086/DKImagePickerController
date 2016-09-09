@@ -304,8 +304,30 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		self.title = group.groupName
 		
 		let groupsCount = getImageManager().groupDataManager.groupIds?.count
-		self.selectGroupButton.setTitle(group.groupName + (groupsCount > 1 ? "  \u{25be}" : "" ), forState: .Normal)
-		self.selectGroupButton.sizeToFit()
+
+        if groupsCount > 1{
+            //create pretty arrow
+            let addingDownArrowStr = "  \u{FE40}"
+            self.selectGroupButton.setAttributedTitle(nil, forState: .Normal)
+            self.selectGroupButton.setTitle(group.groupName + addingDownArrowStr, forState: .Normal)
+            let attributedString = NSMutableAttributedString(attributedString: (self.selectGroupButton.titleLabel?.attributedText)!)
+            let rangeToApply = NSRange(location: attributedString.string.characters.count-addingDownArrowStr.characters.count, length: addingDownArrowStr.characters.count)
+            //To beautify overall, like the Apple music app's, size, baseline offset and kerning of the arrow symbol should be smaller than label.
+            attributedString.enumerateAttribute(NSFontAttributeName, inRange:rangeToApply, options:.LongestEffectiveRangeNotRequired,
+                    usingBlock: { value, range, stop in
+                        let font = value as! UIFont
+                        attributedString.addAttribute(NSFontAttributeName, value:font.fontWithSize(font.pointSize/1.5), range:range)
+                    })
+            attributedString.addAttribute(NSBaselineOffsetAttributeName, value: -2.5, range: rangeToApply)
+            attributedString.addAttribute(NSKernAttributeName, value: -1.5, range: rangeToApply)
+            self.selectGroupButton.setAttributedTitle(attributedString, forState: .Normal)
+            self.selectGroupButton.titleEdgeInsets = UIEdgeInsetsMake(3, 0, 0, 0)
+        }else{
+            self.selectGroupButton.setTitle(group.groupName, forState: .Normal)
+            self.selectGroupButton.titleEdgeInsets = UIEdgeInsetsZero
+        }
+
+        self.selectGroupButton.sizeToFit()
 		self.selectGroupButton.enabled = groupsCount > 1
 		
 		self.navigationItem.titleView = self.selectGroupButton
