@@ -12,13 +12,13 @@ import MobileCoreServices
 public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 	
 	var didCancel: (() -> Void)?
-	var didFinishCapturingImage: ((image: UIImage) -> Void)?
-	var didFinishCapturingVideo: ((videoURL: URL) -> Void)?
+	var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
+	var didFinishCapturingVideo: ((_ videoURL: URL) -> Void)?
 	
   public override func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
-                                                        didCancel: (() -> Void),
-                                                        didFinishCapturingImage: ((image: UIImage) -> Void),
-                                                        didFinishCapturingVideo: ((videoURL: URL) -> Void)
+                                                        didCancel: @escaping (() -> Void),
+                                                        didFinishCapturingImage: @escaping ((_ image: UIImage) -> Void),
+                                                        didFinishCapturingVideo: @escaping ((_ videoURL: URL) -> Void)
                                                         ) -> UIViewController {
 		self.didCancel = didCancel
 		self.didFinishCapturingImage = didFinishCapturingImage
@@ -33,16 +33,15 @@ public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImage
 	}
 	
 	// MARK: - UIImagePickerControllerDelegate methods
-	
-	public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+  public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 		let mediaType = info[UIImagePickerControllerMediaType] as! String
 		
 		if mediaType == kUTTypeImage as String {
 			let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-			self.didFinishCapturingImage?(image: image)
+			self.didFinishCapturingImage?(image)
 		} else if mediaType == kUTTypeMovie as String {
 			let videoURL = info[UIImagePickerControllerMediaURL] as! URL
-			self.didFinishCapturingVideo?(videoURL: videoURL)
+			self.didFinishCapturingVideo?(videoURL)
 		}
 	}
 	

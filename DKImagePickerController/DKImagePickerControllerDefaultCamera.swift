@@ -34,9 +34,9 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 	}
 	
 	public func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
-	                                              didCancel: (() -> Void),
-	                                              didFinishCapturingImage: ((image: UIImage) -> Void),
-	                                              didFinishCapturingVideo: ((videoURL: URL) -> Void)) -> UIViewController {
+	                                              didCancel: @escaping (() -> Void),
+	                                              didFinishCapturingImage: @escaping ((_ image: UIImage) -> Void),
+	                                              didFinishCapturingVideo: @escaping ((_ videoURL: URL) -> Void)) -> UIViewController {
 		
 		let camera = DKCamera()
 		
@@ -45,7 +45,7 @@ public class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCo
 		}
 		
 		camera.didFinishCapturingImage = { (image) in
-			didFinishCapturingImage(image: image)
+			didFinishCapturingImage(image)
 		}
 		
 		self.checkCameraPermission(camera)

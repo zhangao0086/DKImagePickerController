@@ -39,10 +39,10 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		PHPhotoLibrary.shared().unregisterChangeObserver(self)
 	}
 	
-	public func fetchGroups(_ completeBlock: (groups: [String]?, error: NSError?) -> Void) {
+	public func fetchGroups(_ completeBlock: (_ groups: [String]?, _ error: NSError?) -> Void) {
 		if let assetGroupTypes = self.assetGroupTypes {
 			if self.groups != nil {
-				completeBlock(groups: self.groupIds, error: nil)
+				completeBlock(self.groupIds, nil)
 				return
 			}
 			
@@ -67,7 +67,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			self.groupIds = groupIds
 			
 			PHPhotoLibrary.shared().register(self)
-			completeBlock(groups: groupIds, error: nil)
+			completeBlock(groupIds, nil)
 		}
 	}
 	
@@ -75,10 +75,10 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		return self.groups![groupId]!
 	}
 	
-	public func fetchGroupThumbnailForGroup(_ groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: (image: UIImage?, info: [NSObject : AnyObject]?) -> Void) {
+	public func fetchGroupThumbnailForGroup(_ groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: @escaping (_ image: UIImage?, _ info: [NSObject : AnyObject]?) -> Void) {
 		let group = self.fetchGroupWithGroupId(groupId)
 		if group.fetchResult.count == 0 {
-			completeBlock(image: nil, info: nil)
+			completeBlock(nil, nil)
 			return
 		}
 		
@@ -115,23 +115,23 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			if let changeDetails = changeInstance.changeDetails(for: group.originalCollection) {
 				if changeDetails.objectWasDeleted {
 					self.groups![group.groupId] = nil
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidRemove(_:)), object: group.groupId)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidRemove(_:)), object: group.groupId as AnyObject?)
 					continue
 				}
 				
 				if let objectAfterChanges = changeDetails.objectAfterChanges as? PHAssetCollection {
 					self.updateGroup(self.groups![group.groupId]!, collection: objectAfterChanges)
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidUpdate(_:)), object: group.groupId)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidUpdate(_:)), object: group.groupId as AnyObject?)
 				}
 			}
 			
-			if let changeDetails = changeInstance.changeDetails(for: group.fetchResult) {
+			if let changeDetails = changeInstance.changeDetails(for: group.fetchResult as! PHFetchResult<PHObject>) {
 				if let removedIndexes = changeDetails.removedIndexes {
 					var removedAssets = [DKAsset]()
 					(removedIndexes as NSIndexSet).enumerate({ index, stop in
 						removedAssets.append(self.fetchAssetWithGroup(group, index: index))
 					})
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didRemoveAssets:)), object: group.groupId, objectTwo: removedAssets)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didRemoveAssets:)), object: group.groupId as AnyObject?, objectTwo: removedAssets as AnyObject?)
 				}
 				self.updateGroup(group, fetchResult: changeDetails.fetchResultAfterChanges as! PHFetchResult<AnyObject>)
 				
@@ -140,7 +140,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 					for insertedAsset in changeDetails.insertedObjects {
 						insertedAssets.append(DKAsset(originalAsset: insertedAsset as! PHAsset))
 					}
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didInsertAssets:)), object: group.groupId, objectTwo: insertedAssets)
+					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didInsertAssets:)), object: group.groupId as AnyObject?, objectTwo: insertedAssets as AnyObject?)
 				}
 			}
 		}

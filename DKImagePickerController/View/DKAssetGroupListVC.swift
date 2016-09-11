@@ -26,7 +26,7 @@ class DKAssetGroupCell: UITableViewCell {
         }
     }
     
-	private let thumbnailImageView: UIImageView = {
+	fileprivate let thumbnailImageView: UIImageView = {
 		let thumbnailImageView = UIImageView()
 		thumbnailImageView.contentMode = .scaleAspectFill
 		thumbnailImageView.clipsToBounds = true
@@ -102,7 +102,7 @@ class DKAssetGroupCell: UITableViewCell {
 
 class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
     
-	convenience init(selectedGroupDidChangeBlock: (groupId: String?) -> (), defaultAssetGroup: PHAssetCollectionSubtype?) {
+	convenience init(selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> (), defaultAssetGroup: PHAssetCollectionSubtype?) {
 		self.init(style: .plain)
 		
 		self.defaultAssetGroup = defaultAssetGroup
@@ -115,7 +115,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	
 	private var defaultAssetGroup: PHAssetCollectionSubtype?
 	
-    private var selectedGroupDidChangeBlock:((group: String?)->())?
+  private var selectedGroupDidChangeBlock:((_ group: String?)->())?
 	
 	private lazy var groupThumbnailRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
@@ -163,7 +163,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 						scrollPosition: .none)
 				}
 				
-				strongSelf.selectedGroupDidChangeBlock?(group: strongSelf.selectedGroup)
+				strongSelf.selectedGroupDidChangeBlock?(strongSelf.selectedGroup)
 			}
 		}
 	}
@@ -195,20 +195,20 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         let assetGroup = getImageManager().groupDataManager.fetchGroupWithGroupId(groups![(indexPath as NSIndexPath).row])
         cell.groupNameLabel.text = assetGroup.groupName
 		
-		let tag = (indexPath as NSIndexPath).row + 1
-		cell.tag = tag
-		
-		if assetGroup.totalCount == 0 {
-			cell.thumbnailImageView.image = DKImageResource.emptyAlbumIcon()
-		} else {
-			getImageManager().groupDataManager.fetchGroupThumbnailForGroup(assetGroup.groupId,
-				size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
-				options: self.groupThumbnailRequestOptions) { image, info in
-				if cell.tag == tag {
-					cell.thumbnailImageView.image = image
-				}
-			}
-		}
+        let tag = (indexPath as NSIndexPath).row + 1
+        cell.tag = tag
+        
+        if assetGroup.totalCount == 0 {
+          cell.thumbnailImageView.image = DKImageResource.emptyAlbumIcon()
+        } else {
+          getImageManager().groupDataManager.fetchGroupThumbnailForGroup(assetGroup.groupId,
+            size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
+            options: self.groupThumbnailRequestOptions) { image, info in
+            if cell.tag == tag {
+              cell.thumbnailImageView.image = image
+            }
+          }
+        }
         cell.totalCountLabel.text = "\(assetGroup.totalCount)"
         
         return cell
@@ -218,7 +218,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         DKPopoverViewController.dismissPopoverViewController()
 		
 		self.selectedGroup = self.groups![(indexPath as NSIndexPath).row]
-		selectedGroupDidChangeBlock?(group: self.selectedGroup)
+		selectedGroupDidChangeBlock?(self.selectedGroup)
     }
 	
 	// MARK: - DKGroupDataManagerObserver methods
@@ -235,7 +235,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 		
 		if self.selectedGroup == groupId {
 			self.selectedGroup = self.groups?.first
-			selectedGroupDidChangeBlock?(group: self.selectedGroup)
+			selectedGroupDidChangeBlock?(self.selectedGroup)
 			self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
 		}
 	}

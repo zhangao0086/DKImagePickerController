@@ -19,7 +19,7 @@ public class DKCameraPassthroughView: UIView {
 
 public class DKCamera: UIViewController {
 	
-	public class func checkCameraPermission(_ handler: (granted: Bool) -> Void) {
+	public class func checkCameraPermission(_ handler: @escaping (_ granted: Bool) -> Void) {
 		func hasCameraPermission() -> Bool {
 			return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized
 		}
@@ -28,16 +28,16 @@ public class DKCamera: UIViewController {
 			return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .notDetermined
 		}
 		
-		hasCameraPermission() ? handler(granted: true) : (needsToRequestCameraPermission() ?
+		hasCameraPermission() ? handler(true) : (needsToRequestCameraPermission() ?
 			AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { granted in
 				DispatchQueue.main.async(execute: { () -> Void in
-					hasCameraPermission() ? handler(granted: true) : handler(granted: false)
+					hasCameraPermission() ? handler(true) : handler(false)
 				})
-			}) : handler(granted: false))
+			}) : handler(false))
 	}
 	
 	public var didCancel: (() -> Void)?
-	public var didFinishCapturingImage: ((image: UIImage) -> Void)?
+	public var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
 	
 	public var cameraOverlayView: UIView? {
 		didSet {
@@ -285,7 +285,7 @@ public class DKCamera: UIViewController {
 						let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
 
 						if let didFinishCapturingImage = self.didFinishCapturingImage, let image = UIImage(data: imageData!) {
-							didFinishCapturingImage(image: image)
+							didFinishCapturingImage(image)
 						}
 					} else {
 						print("error while capturing still image: \(error!.localizedDescription)", terminator: "")
