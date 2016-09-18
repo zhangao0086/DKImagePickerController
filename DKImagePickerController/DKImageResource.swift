@@ -8,28 +8,28 @@
 
 import UIKit
 
-public extension NSBundle {
+public extension Bundle {
     
-    class func imagePickerControllerBundle() -> NSBundle {
-        let assetPath = NSBundle(forClass: DKImageResource.self).resourcePath!
-        return NSBundle(path: (assetPath as NSString).stringByAppendingPathComponent("DKImagePickerController.bundle"))!
+    class func imagePickerControllerBundle() -> Bundle {
+        let assetPath = Bundle(for: DKImageResource.self).resourcePath!
+        return Bundle(path: (assetPath as NSString).appendingPathComponent("DKImagePickerController.bundle"))!
     }
     
 }
 
 public class DKImageResource {
 
-    private class func imageForResource(name: String) -> UIImage {
-        let bundle = NSBundle.imagePickerControllerBundle()
-        let imagePath = bundle.pathForResource(name, ofType: "png", inDirectory: "Images")
+    private class func imageForResource(_ name: String) -> UIImage {
+        let bundle = Bundle.imagePickerControllerBundle()
+        let imagePath = bundle.path(forResource: name, ofType: "png", inDirectory: "Images")
         let image = UIImage(contentsOfFile: imagePath!)
         return image!
     }
 	
-	private class func stretchImgFromMiddle(image: UIImage) -> UIImage {
+	private class func stretchImgFromMiddle(_ image: UIImage) -> UIImage {
 		let centerX = image.size.width / 2
 		let centerY = image.size.height / 2
-		return image.resizableImageWithCapInsets(UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
+		return image.resizableImage(withCapInsets: UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
 	}
 	
     class func checkedImage() -> UIImage {
@@ -56,13 +56,13 @@ public class DKImageResource {
 
 public class DKImageLocalizedString {
     
-    public class func localizedStringForKey(key: String) -> String {
-        return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:NSBundle.imagePickerControllerBundle(), value: "", comment: "")
+    public class func localizedStringForKey(_ key: String) -> String {
+        return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:Bundle.imagePickerControllerBundle(), value: "", comment: "")
     }
     
 }
 
-public func DKImageLocalizedStringWithKey(key: String) -> String {
+public func DKImageLocalizedStringWithKey(_ key: String) -> String {
     return DKImageLocalizedString.localizedStringForKey(key)
 }
 

@@ -8,13 +8,13 @@
 
 import UIKit
 
-public class DKAssetGroupGridLayout: UICollectionViewFlowLayout {
+open class DKAssetGroupGridLayout: UICollectionViewFlowLayout {
 	
-	public override func prepareLayout() {
-		super.prepareLayout()
+	open override func prepare() {
+		super.prepare()
 		
 		var minItemWidth: CGFloat = 80
-		if UI_USER_INTERFACE_IDIOM() == .Pad {
+		if UI_USER_INTERFACE_IDIOM() == .pad {
 			minItemWidth = 100
 		}
 		
