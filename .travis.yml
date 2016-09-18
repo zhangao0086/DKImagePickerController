@@ -1,11 +1,7 @@
-osx_image: xcode7.3
-
 language: objective-c
 
-#before_install:
-#- export LANG=en_US.UTF-8
-#- brew update
-#- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
+osx_image: xcode8
+xcode_sdk: iphonesimulator10.0
 
 script:
-- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -sdk iphonesimulator9.3
+- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -destination "platform=iOS Simulator,name=iPhone 6s"

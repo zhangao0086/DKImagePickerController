@@ -24,9 +24,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
     
-	func showImagePickerWithAssetType(assetType: DKImagePickerControllerAssetType,
+	func showImagePickerWithAssetType(_ assetType: DKImagePickerControllerAssetType,
 	                                  allowMultipleType: Bool,
-	                                  sourceType: DKImagePickerControllerSourceType = .Both,
+	                                  sourceType: DKImagePickerControllerSourceType = .both,
 	                                  allowsLandscape: Bool,
 	                                  singleSelect: Bool) {
 		
@@ -58,14 +58,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			self.previewView?.reloadData()
 		}
 		
-		if UI_USER_INTERFACE_IDIOM() == .Pad {
-			pickerController.modalPresentationStyle = .FormSheet
+		if UI_USER_INTERFACE_IDIOM() == .pad {
+			pickerController.modalPresentationStyle = .formSheet
 		}
 		
-		self.presentViewController(pickerController, animated: true) {}
+		self.present(pickerController, animated: true) {}
 	}
 	
-    func playVideo(asset: AVAsset) {
+    func playVideo(_ asset: AVAsset) {
 		let avPlayerItem = AVPlayerItem(asset: asset)
 		
 		let avPlayer = AVPlayer(playerItem: avPlayerItem)
@@ -74,7 +74,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		
         avPlayer.play()
 		
-		self.presentViewController(player, animated: true, completion: nil)
+		self.present(player, animated: true, completion: nil)
     }
     
     // MARK: - UITableViewDataSource, UITableViewDelegate methods
@@ -87,32 +87,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			["Allows landscape"],
 			["Single select"]
         ]
-        static let types: [DKImagePickerControllerAssetType] = [.AllAssets, .AllPhotos, .AllVideos, .AllAssets]
+        static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos, .allAssets]
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return Demo.titles.count
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Demo.titles[section].count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) 
         
         cell.textLabel?.text = Demo.titles[indexPath.section][indexPath.row]
         
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     
         let assetType = Demo.types[indexPath.row]
         let allowMultipleType = !(indexPath.row == 0 && indexPath.section == 3)
-        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .Camera :
-			(indexPath.section == 2 ? .Photo : .Both)
+        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .camera :
+			(indexPath.section == 2 ? .photo : .both)
 		let allowsLandscape = indexPath.section == 3
 		let singleSelect = indexPath.section == 4
 		
@@ -127,24 +127,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.assets?.count ?? 0
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let asset = self.assets![indexPath.row]
 		var cell: UICollectionViewCell?
 		var imageView: UIImageView?
 		
         if asset.isVideo {
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellVideo", forIndexPath: indexPath)
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellVideo", for: indexPath)
 			imageView = cell?.contentView.viewWithTag(1) as? UIImageView
         } else {
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellImage", forIndexPath: indexPath)
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellImage", for: indexPath)
             imageView = cell?.contentView.viewWithTag(1) as? UIImageView
         }
 		
-		if let cell = cell, imageView = imageView {
+		if let cell = cell, let imageView = imageView {
 			let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
 			let tag = indexPath.row + 1
 			cell.tag = tag
@@ -158,10 +158,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		return cell!
     }
 	
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = self.assets![indexPath.row]
 		asset.fetchAVAssetWithCompleteBlock { (avAsset, info) in
-			dispatch_async(dispatch_get_main_queue(), { () in
+			DispatchQueue.main.async(execute: { () in
 				self.playVideo(avAsset!)
 			})
 		}
