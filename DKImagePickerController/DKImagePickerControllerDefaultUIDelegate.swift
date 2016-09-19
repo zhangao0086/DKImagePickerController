@@ -25,6 +25,16 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 		
 		return button
 	}
+    
+    open func updateDoneButtonTitle(_ button: UIButton) {
+        if self.imagePickerController.selectedAssets.count > 0 {
+            button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), self.imagePickerController.selectedAssets.count), for: .normal)
+        } else {
+            button.setTitle(DKImageLocalizedStringWithKey("done"), for: .normal)
+        }
+        
+        button.sizeToFit()
+    }
 	
 	// Delegate methods...
 	
@@ -135,15 +145,5 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 			granted ? setup() : cameraDenied()
 		}
 	}
-	
-	public func updateDoneButtonTitle(_ button: UIButton) {
-		if self.imagePickerController.selectedAssets.count > 0 {
-			button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), self.imagePickerController.selectedAssets.count), for: .normal)
-		} else {
-			button.setTitle(DKImageLocalizedStringWithKey("done"), for: .normal)
-		}
 		
-		button.sizeToFit()
-	}
-	
 }
