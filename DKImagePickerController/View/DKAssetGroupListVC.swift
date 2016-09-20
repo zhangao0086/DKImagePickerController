@@ -209,7 +209,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 				}
 			}
 		}
-        cell.totalCountLabel.text = "\(assetGroup.totalCount)"
+        cell.totalCountLabel.text = String(assetGroup.totalCount)
         
         return cell
     }
