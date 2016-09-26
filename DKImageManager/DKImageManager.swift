@@ -108,10 +108,8 @@ public class DKImageManager: DKBaseManager {
 		                                  contentMode: contentMode,
 		                                  options: options,
 		                                  resultHandler: { image, info in
-											if let isInCloud = (info?[PHImageResultIsInCloudKey] as AnyObject).boolValue
-												, image == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
-//												var requestCloudOptions = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
-//												requestCloudOptions.networkAccessAllowed = true
+											if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
+												, image == nil && isInCloud.boolValue && self.autoDownloadWhenAssetIsInCloud {
 												options.isNetworkAccessAllowed = true
 												self.fetchImageForAsset(asset, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
 											} else {
@@ -123,8 +121,8 @@ public class DKImageManager: DKBaseManager {
 	public func fetchImageDataForAsset(_ asset: DKAsset, options: PHImageRequestOptions?, completeBlock: @escaping (_ data: Data?, _ info: [AnyHashable: Any]?) -> Void) {
 		self.manager.requestImageData(for: asset.originalAsset!,
 		                                      options: options ?? self.defaultImageRequestOptions) { (data, dataUTI, orientation, info) in
-												if let isInCloud = (info?[PHImageResultIsInCloudKey] as AnyObject).boolValue
-													, data == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+												if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
+													, data == nil && isInCloud.boolValue && self.autoDownloadWhenAssetIsInCloud {
 													let requestCloudOptions = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
 													requestCloudOptions.isNetworkAccessAllowed = true
 													self.fetchImageDataForAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
@@ -141,8 +139,8 @@ public class DKImageManager: DKBaseManager {
 	public func fetchAVAsset(_ asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: @escaping (_ avAsset: AVAsset?, _ info: [AnyHashable: Any]?) -> Void) {
 		self.manager.requestAVAsset(forVideo: asset.originalAsset!,
 			options: options ?? self.defaultVideoRequestOptions) { avAsset, audioMix, info in
-				if let isInCloud = (info?[PHImageResultIsInCloudKey] as AnyObject).boolValue
-					, avAsset == nil && isInCloud && self.autoDownloadWhenAssetIsInCloud {
+				if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
+					, avAsset == nil && isInCloud.boolValue && self.autoDownloadWhenAssetIsInCloud {
 					let requestCloudOptions = (options ?? self.defaultVideoRequestOptions).copy() as! PHVideoRequestOptions
 					requestCloudOptions.isNetworkAccessAllowed = true
 					self.fetchAVAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
