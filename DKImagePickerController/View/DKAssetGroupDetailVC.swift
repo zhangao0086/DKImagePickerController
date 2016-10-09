@@ -16,9 +16,14 @@ private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
 private extension UICollectionView {
     
-    func indexPathsForElements(in rect: CGRect) -> [IndexPath] {
+    func indexPathsForElements(in rect: CGRect, _ hidesCamera: Bool) -> [IndexPath] {
         let allLayoutAttributes = collectionViewLayout.layoutAttributesForElements(in: rect)!
-        return allLayoutAttributes.map { $0.indexPath }
+        
+        if hidesCamera {
+            return allLayoutAttributes.map { $0.indexPath }
+        } else {
+            return allLayoutAttributes.flatMap { $0.indexPath.item == 0 ? nil : IndexPath(item: $0.indexPath.item - 1, section: $0.indexPath.section) }
+        }
     }
     
 }
@@ -480,13 +485,13 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 
     func updateCachedAssets() {
         // Update only if the view is visible.
-        guard isViewLoaded && view.window != nil else { return }
+        guard isViewLoaded && view.window != nil && self.selectedGroupId != nil else { return }
         
         // The preheat window is twice the height of the visible rect.
         let preheatRect = view!.bounds.insetBy(dx: 0, dy: -0.5 * view!.bounds.height)
         
         // Update only if the visible area is significantly different from the last preheated area.
-        let delta = abs(preheatRect.midY - previousPreheatRect.midY)
+        let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
         guard delta > view.bounds.height / 3 else { return }
         
         let fetchResult = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!).fetchResult!
@@ -494,10 +499,10 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         // Compute the assets to start caching and to stop caching.
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)
         let addedAssets = addedRects
-            .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect) }
+            .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
             .map { indexPath in fetchResult.object(at: indexPath.item) }
         let removedAssets = removedRects
-            .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect) }
+            .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
             .map { indexPath in fetchResult.object(at: indexPath.item) }
         
         // Update the assets the PHCachingImageManager is caching.
