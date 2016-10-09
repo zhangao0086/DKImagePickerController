@@ -15,12 +15,14 @@ protocol DKGroupDataManagerObserver {
 	@objc optional func groupDidRemove(_ groupId: String)
 	@objc optional func group(_ groupId: String, didRemoveAssets assets: [DKAsset])
 	@objc optional func group(_ groupId: String, didInsertAssets assets: [DKAsset])
+    @objc optional func groupDidUpdateComplete(_ groupId: String)
 }
 
 public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 
+    public var groupIds: [String]?
 	private var groups: [String : DKAssetGroup]?
-	public var groupIds: [String]?
+    private var assets = [String: DKAsset]()
 	
 	public var assetGroupTypes: [PHAssetCollectionSubtype]?
 	public var assetFetchOptions: PHFetchOptions?
@@ -32,9 +34,8 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	
 	public func invalidate() {
 		self.groupIds?.removeAll()
-		self.groupIds = nil
-		self.groups?.removeAll()
-		self.groups = nil
+        self.groups?.removeAll()
+        self.assets.removeAll()
 		
 		PHPhotoLibrary.shared().unregisterChangeObserver(self)
 	}
@@ -77,7 +78,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	
 	public func fetchGroupThumbnailForGroup(_ groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
 		let group = self.fetchGroupWithGroupId(groupId)
-		if group.fetchResult.count == 0 {
+		if group.totalCount == 0 {
 			completeBlock(nil, nil)
 			return
 		}
@@ -87,8 +88,13 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	}
 	
 	public func fetchAssetWithGroup(_ group: DKAssetGroup, index: Int) -> DKAsset {
-		let asset = DKAsset(originalAsset:group.fetchResult[index])
-		return asset
+        let originalAsset = group.fetchResult[index]
+        var asset = self.assets[originalAsset.localIdentifier]
+        if asset == nil {
+            asset = DKAsset(originalAsset:originalAsset)
+            self.assets[originalAsset.localIdentifier] = asset
+        }
+		return asset!
 	}
 	
 	// MARK: - Private methods
@@ -142,6 +148,8 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 					}
 					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didInsertAssets:)), object: group.groupId as AnyObject?, objectTwo: insertedAssets as AnyObject?)
 				}
+                
+                self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidUpdateComplete(_:)), object: group.groupId as AnyObject?)
 			}
 		}
 	}

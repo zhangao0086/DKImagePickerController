@@ -63,12 +63,10 @@ public class DKImageManager: DKBaseManager {
 	
 	static let sharedInstance = DKImageManager()
 	
-	private let manager = PHCachingImageManager.default()
+    private let manager = PHCachingImageManager()
 	
 	private lazy var defaultImageRequestOptions: PHImageRequestOptions = {
 		let options = PHImageRequestOptions()
-		options.deliveryMode = .highQualityFormat
-		options.resizeMode = .exact
 		
 		return options
 	}()
@@ -82,10 +80,13 @@ public class DKImageManager: DKBaseManager {
 	
 	public var autoDownloadWhenAssetIsInCloud = true
 	
-	public let groupDataManager = DKGroupDataManager()
+    public lazy var groupDataManager: DKGroupDataManager! = {
+        return DKGroupDataManager()
+    }()
 	
 	public func invalidate() {
 		self.groupDataManager.invalidate()
+        self.groupDataManager = nil
 	}
 	
 	public func fetchImageForAsset(_ asset: DKAsset, size: CGSize, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
@@ -102,20 +103,21 @@ public class DKImageManager: DKBaseManager {
 	
 	public func fetchImageForAsset(_ asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode,
 	                               completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
-		let options = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
-		self.manager.requestImage(for: asset.originalAsset!,
-		                                  targetSize: size,
-		                                  contentMode: contentMode,
-		                                  options: options,
-		                                  resultHandler: { image, info in
-											if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
-												, image == nil && isInCloud.boolValue && self.autoDownloadWhenAssetIsInCloud {
-												options.isNetworkAccessAllowed = true
-												self.fetchImageForAsset(asset, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
-											} else {
-												completeBlock(image, info)
-											}
-		})
+            let options = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
+
+            self.manager.requestImage(for: asset.originalAsset!,
+                                      targetSize: size,
+                                      contentMode: contentMode,
+                                      options: options,
+                                      resultHandler: { image, info in
+                                        if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
+                                            , image == nil && isInCloud.boolValue && self.autoDownloadWhenAssetIsInCloud {
+                                            options.isNetworkAccessAllowed = true
+                                            self.fetchImageForAsset(asset, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
+                                        } else {
+                                            completeBlock(image, info)
+                                        }
+            })
 	}
 	
 	public func fetchImageDataForAsset(_ asset: DKAsset, options: PHImageRequestOptions?, completeBlock: @escaping (_ data: Data?, _ info: [AnyHashable: Any]?) -> Void) {
@@ -149,5 +151,16 @@ public class DKImageManager: DKBaseManager {
 				}
 		}
 	}
-	
+    
+    public func startCachingAssets(for assets: [PHAsset], targetSize: CGSize, contentMode: PHImageContentMode, options: PHImageRequestOptions?) {
+        self.manager.startCachingImages(for: assets, targetSize: targetSize, contentMode: contentMode, options: options)
+    }
+    
+    public func stopCachingAssets(for assets: [PHAsset], targetSize: CGSize, contentMode: PHImageContentMode, options: PHImageRequestOptions?) {
+        self.manager.stopCachingImages(for: assets, targetSize: targetSize, contentMode: contentMode, options: options)
+    }
+    
+    public func stopCachingForAllAssets() {
+        self.manager.stopCachingImagesForAllAssets()
+    }
 }
