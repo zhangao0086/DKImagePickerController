@@ -1,0 +1,6 @@
+framework module Pods_DKImagePickerController {
+  umbrella header "Pods-DKImagePickerController-umbrella.h"
+
+  export *
+  module * { export * }
+}
