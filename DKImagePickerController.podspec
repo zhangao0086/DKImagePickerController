@@ -14,6 +14,8 @@ Pod::Spec.new do |s|
   s.frameworks    = "Foundation", "UIKit", "Photos"
   s.requires_arc  = true
 
+  s.dependency 'CryptoSwift', '0.6.0'
+
   s.subspec 'Camera' do |camera|
 
     camera.ios.source_files = "DKCamera/DKCamera.swift"
