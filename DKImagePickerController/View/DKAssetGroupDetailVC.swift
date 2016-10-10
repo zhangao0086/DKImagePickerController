@@ -557,17 +557,20 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 				}
 			}
 		}
-		if self.selectedGroupId == groupId {
-			self.collectionView?.reloadData()
-		}
+//		if self.selectedGroupId == groupId {
+//			self.collectionView?.reloadData()
+//		}
 	}
 	
 	func group(_ groupId: String, didInsertAssets assets: [DKAsset]) {
-		self.collectionView?.reloadData()
+//		self.collectionView?.reloadData()
 	}
     
     func groupDidUpdateComplete(_ groupId: String) {
-        self.resetCachedAssets()
+        if self.selectedGroupId == groupId {
+            self.resetCachedAssets()
+            self.collectionView?.reloadData()
+        }
     }
 
 }

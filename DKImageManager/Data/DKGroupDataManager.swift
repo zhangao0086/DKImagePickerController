@@ -117,7 +117,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	// MARK: - PHPhotoLibraryChangeObserver methods
 	
 	public func photoLibraryDidChange(_ changeInstance: PHChange) {
-		for group in self.groups!.values {
+        for group in self.groups!.values {
 			if let changeDetails = changeInstance.changeDetails(for: group.originalCollection) {
 				if changeDetails.objectWasDeleted {
 					self.groups![group.groupId] = nil
@@ -132,20 +132,14 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			}
 			
 			if let changeDetails = changeInstance.changeDetails(for: group.fetchResult) {
-				if let removedIndexes = changeDetails.removedIndexes {
-					var removedAssets = [DKAsset]()
-					(removedIndexes as NSIndexSet).enumerate({ index, stop in
-						removedAssets.append(self.fetchAssetWithGroup(group, index: index))
-					})
+                let removedAssets = changeDetails.removedObjects.map{ DKAsset(originalAsset: $0) }
+				if removedAssets.count > 0 {
 					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didRemoveAssets:)), object: group.groupId as AnyObject?, objectTwo: removedAssets as AnyObject?)
 				}
 				self.updateGroup(group, fetchResult: changeDetails.fetchResultAfterChanges)
 				
-				if changeDetails.insertedObjects.count > 0  {
-					var insertedAssets = [DKAsset]()
-					for insertedAsset in changeDetails.insertedObjects {
-						insertedAssets.append(DKAsset(originalAsset: insertedAsset))
-					}
+                let insertedAssets = changeDetails.insertedObjects.map{ DKAsset(originalAsset: $0) }
+				if insertedAssets.count > 0  {
 					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didInsertAssets:)), object: group.groupId as AnyObject?, objectTwo: insertedAssets as AnyObject?)
 				}
                 
