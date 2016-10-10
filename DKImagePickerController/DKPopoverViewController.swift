@@ -76,8 +76,12 @@ public class DKPopoverViewController: UIViewController {
             
             let context = UIGraphicsGetCurrentContext()
             UIColor.clearColor().setFill()
-            CGContextFillRect(context, CGRect(x: 0, y: 0, width: arrowWidth, height: arrowHeight))
-            
+            #if swift(>=2.3)
+                CGContextFillRect(context!, CGRect(x: 0, y: 0, width: arrowWidth, height: arrowHeight))
+            #else
+                CGContextFillRect(context, CGRect(x: 0, y: 0, width: arrowWidth, height: arrowHeight))
+            #endif
+
             let arrowPath = CGPathCreateMutable()
             
             CGPathMoveToPoint(arrowPath, nil,  arrowWidth / 2, 0)
@@ -85,15 +89,27 @@ public class DKPopoverViewController: UIViewController {
             CGPathAddLineToPoint(arrowPath, nil, 0, arrowHeight)
             CGPathCloseSubpath(arrowPath)
 
-            CGContextAddPath(context, arrowPath)
-            
-            CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
-            CGContextDrawPath(context, CGPathDrawingMode.Fill)
+            #if swift(>=2.3)
+                CGContextAddPath(context!, arrowPath)
+
+                CGContextSetFillColorWithColor(context!, UIColor.whiteColor().CGColor)
+                CGContextDrawPath(context!, CGPathDrawingMode.Fill)
+            #else
+                CGContextAddPath(context, arrowPath)
+
+                CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
+                CGContextDrawPath(context, CGPathDrawingMode.Fill)
+            #endif
+
 
             let arrowImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             
-            return arrowImage
+            #if swift(>=2.3)
+                return arrowImage!
+            #else
+                return arrowImage
+            #endif
         }
     }
     
