@@ -35,6 +35,8 @@ DKImagePickerController is available on CocoaPods. Simply add the following line
 ```ruby
 # For latest release in cocoapods
 pod 'DKImagePickerController'
+
+
 ```
 
 #### iOS 7.x
@@ -46,6 +48,9 @@ pod 'DKImagePickerController'
 
 #### Swift 2.2
 > For Swift 2.2, use version <= 3.3.4
+
+#### Swift 2.3
+> For Swift 2.3, use version = 3.3.5
 
 ## Getting Started
 #### Initialization and presentation
