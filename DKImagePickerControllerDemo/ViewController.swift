@@ -10,21 +10,6 @@ import UIKit
 import Photos
 import AVKit
 
-class CustomDelegate: DKImagePickerControllerDefaultUIDelegate {
-    
-    override open func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
-        super.imagePickerController(imagePickerController, didSelectAssets: didSelectAssets)
-        
-        let collection = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [didSelectAssets.first!.localIdentifier], options: nil).firstObject
-
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AssetViewController") as! AssetViewController
-        vc.asset = didSelectAssets.first?.originalAsset
-        vc.assetCollection = collection
-        
-        imagePickerController.present(UINavigationController(rootViewController: vc), animated: true, completion: nil)
-    }
-}
-
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet var previewView: UICollectionView?
@@ -48,7 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		let pickerController = DKImagePickerController()
 		
 		// Custom camera
-		pickerController.UIDelegate = CustomDelegate()
+//		pickerController.UIDelegate = CustomDelegate()
 //		pickerController.modalPresentationStyle = .OverCurrentContext
 		
 		pickerController.assetType = assetType
