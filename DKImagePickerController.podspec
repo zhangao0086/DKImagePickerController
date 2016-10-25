@@ -11,10 +11,14 @@ Pod::Spec.new do |s|
   s.source_files  = "DKImagePickerController/**/*.{h,swift}"
 
   s.resource      = "DKImagePickerController/DKImagePickerController.bundle"
-  s.frameworks    = "Foundation", "UIKit", "Photos"
+  s.frameworks    = "Foundation", "UIKit", "Photos", "CryptoSwift"
   s.requires_arc  = true
 
   s.dependency 'CryptoSwift', '0.6.0'
+
+  s.pod_target_xcconfig = {
+    'SWIFT_VERSION' => '3.0',
+  }
 
   s.subspec 'Camera' do |camera|
 
