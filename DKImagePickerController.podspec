@@ -16,6 +16,10 @@ Pod::Spec.new do |s|
 
   s.dependency 'CryptoSwift', '0.6.0'
 
+  s.pod_target_xcconfig = {
+    'SWIFT_VERSION' => '3.0',
+  }
+
   s.subspec 'Camera' do |camera|
 
     camera.ios.source_files = "DKCamera/DKCamera.swift"
