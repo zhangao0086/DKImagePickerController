@@ -7,7 +7,6 @@
 //
 
 import Photos
-import CryptoSwift
 
 public extension CGSize {
 	
@@ -54,7 +53,7 @@ open class DKAsset: NSObject {
         
 		self.image = image
 		self.fullScreenImage = (image, nil)
-        self.localIdentifier = UIImagePNGRepresentation(image)!.md5().toHexString()
+        self.localIdentifier = String(image.hash)
 	}
 	
 	override open func isEqual(_ object: Any?) -> Bool {
