@@ -281,39 +281,29 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
+## [3.4.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.1) (2016-10-25)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.4.0...3.4.1)
+
+- Added french language.
+
+- Updated the condition of isInCloud.
+
+- Add CryptoSwift lib in order to the DKAsset has a unique identifier.
+
+- Improve scroll performance.
+
+- Fix crash issue.
+
+- Added support for asset editing.
+
+- Fix an issue that may cause arrow does not appear.
+
 ## [3.4.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.0) (2016-09-18)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.4...3.4.0)
 
 - Migrating to swift3
-
-## [3.3.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.3) (2016-08-08)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.2...3.3.3)
-
-- Added Carthage support
-
-- Added Urdu lozalization
-
-- Added German localization
-
-- Added `deselectAssetAtIndex` and `deselectAsset`.
-
-- Added `deselectAllAssets`.
-
-- Fixed an issue may cause `takePicture` is incorrect.
-
-- If a camera is not available, don't pops-up "Max photos limit reached".
-
-- The `didCancel` and `didSelectAssets` are executed after completion.
-
-- Updated DKImagePickerControllerDefaultUIDelegate interface.
-
-- Rename `unselectedImage` to `deselectImage`.
-
-- Rename `selectedImage` to `selectImage`. 
-
-- Replace tags with spaces.
 
 > [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
 

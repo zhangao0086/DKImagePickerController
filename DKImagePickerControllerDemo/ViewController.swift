@@ -33,7 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		let pickerController = DKImagePickerController()
 		
 		// Custom camera
-//		pickerController.UIDelegate = CustomUIDelegate()
+//		pickerController.UIDelegate = CustomDelegate()
 //		pickerController.modalPresentationStyle = .OverCurrentContext
 		
 		pickerController.assetType = assetType

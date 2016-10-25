@@ -1,5 +1,23 @@
 # Change Log
 
+## [3.4.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.1) (2016-10-25)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.4.0...3.4.1)
+
+- Added french language.
+
+- Updated the condition of isInCloud.
+
+- Add CryptoSwift lib in order to the DKAsset has a unique identifier.
+
+- Improve scroll performance.
+
+- Fix crash issue.
+
+- Added support for asset editing.
+
+- Fix an issue that may cause arrow does not appear.
+
 ## [3.4.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.0) (2016-09-18)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.4...3.4.0)

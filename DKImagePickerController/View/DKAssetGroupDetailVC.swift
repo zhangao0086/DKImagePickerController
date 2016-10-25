@@ -14,6 +14,20 @@ private let DKImageCameraIdentifier = "DKImageCameraIdentifier"
 private let DKImageAssetIdentifier = "DKImageAssetIdentifier"
 private let DKVideoAssetIdentifier = "DKVideoAssetIdentifier"
 
+private extension UICollectionView {
+    
+    func indexPathsForElements(in rect: CGRect, _ hidesCamera: Bool) -> [IndexPath] {
+        let allLayoutAttributes = collectionViewLayout.layoutAttributesForElements(in: rect)!
+        
+        if hidesCamera {
+            return allLayoutAttributes.map { $0.indexPath }
+        } else {
+            return allLayoutAttributes.flatMap { $0.indexPath.item == 0 ? nil : IndexPath(item: $0.indexPath.item - 1, section: $0.indexPath.section) }
+        }
+    }
+    
+}
+
 // Show all images in the asset group
 internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
 
@@ -88,9 +102,9 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             
         } /* DKImageCheckView */
 		
-        var asset: DKAsset!
+        weak var asset: DKAsset!
 		
-        fileprivate let thumbnailImageView: UIImageView = {
+        fileprivate lazy var thumbnailImageView: UIImageView = {
             let thumbnailImageView = UIImageView()
             thumbnailImageView.contentMode = .scaleAspectFill
             thumbnailImageView.clipsToBounds = true
@@ -110,21 +124,18 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
             super.init(frame: frame)
             
             self.thumbnailImageView.frame = self.bounds
+            self.thumbnailImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             self.contentView.addSubview(self.thumbnailImageView)
-            self.contentView.addSubview(checkView)
+            
+            self.checkView.frame = self.bounds
+            self.checkView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            self.contentView.addSubview(self.checkView)
         }
         
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        override func layoutSubviews() {
-            super.layoutSubviews()
-			
-            self.thumbnailImageView.frame = self.bounds
-            checkView.frame = self.thumbnailImageView.frame
-        }
-		
     } /* DKAssetCell */
     
     class DKVideoAssetCell: DKAssetCell {
@@ -225,14 +236,6 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 
 		self.collectionView?.collectionViewLayout.invalidateLayout()
 	}
-	
-	fileprivate lazy var groupImageRequestOptions: PHImageRequestOptions = {
-		let options = PHImageRequestOptions()
-		options.deliveryMode = .highQualityFormat
-		options.resizeMode = .exact
-		
-		return options
-	}()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -255,6 +258,14 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
+        
+        self.resetCachedAssets()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.updateCachedAssets()
     }
 	
 	override func viewDidLayoutSubviews() {
@@ -314,6 +325,15 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     func showGroupSelector() {
         DKPopoverViewController.popoverViewController(self.groupListVC, fromView: self.selectGroupButton)
     }
+    
+    func fetchAsset(for index: Int) -> DKAsset? {
+        if !self.hidesCamera && index == 0 {
+            return nil
+        }
+        let assetIndex = (index - (self.hidesCamera ? 0 : 1))
+        let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
+        return getImageManager().groupDataManager.fetchAssetWithGroup(group, index: assetIndex)
+    }
 	
     // MARK: - Cells
 
@@ -334,11 +354,10 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         return cell
 	}
 	
+    private var thumbnailSize = CGSize.zero
+    
 	func assetCellForIndexPath(_ indexPath: IndexPath) -> UICollectionViewCell {
-		let assetIndex = (indexPath.row - (self.hidesCamera ? 0 : 1))
-		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
-		
-		let asset = getImageManager().groupDataManager.fetchAssetWithGroup(group, index: assetIndex)
+		let asset = self.fetchAsset(for: indexPath.row)!
 		
 		var cell: DKAssetCell!
 		var identifier: String!
@@ -357,14 +376,16 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 		let tag = indexPath.row + 1
 		cell.tag = tag
 		
-		let itemSize = self.collectionView!.collectionViewLayout.layoutAttributesForItem(at: indexPath)!.size
+        if self.thumbnailSize.equalTo(CGSize.zero) {
+            self.thumbnailSize = self.collectionView!.collectionViewLayout.layoutAttributesForItem(at: indexPath)!.size.toPixel()
+        }
+        
+        asset.fetchImageWithSize(self.thumbnailSize, options: nil, contentMode: .aspectFill) { (image, info) in
+            if cell.tag == tag {
+                cell.thumbnailImageView.image = image
+            }
+        }
 
-		asset.fetchImageWithSize(itemSize.toPixel(), options: self.groupImageRequestOptions, contentMode: .aspectFill) { (image, info) in
-			if cell.tag == tag {
-				cell.thumbnailImageView.image = image
-			}
-		}
-		
 		if let index = self.imagePickerController.selectedAssets.index(of: asset) {
 			cell.isSelected = true
 			cell.checkView.checkLabel.text = "\(index + 1)"
@@ -380,9 +401,9 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		guard let selectedGroup = self.selectedGroupId else { return 0 }
+		guard let selectedGroupId = self.selectedGroupId else { return 0 }
 		
-		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(selectedGroup)
+		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(selectedGroupId)
         return (group.totalCount ?? 0) + (self.hidesCamera ? 0 : 1)
     }
     
@@ -448,6 +469,77 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 			self.imagePickerController.deselectImage(removedAsset)
 		}
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.updateCachedAssets()
+    }
+    
+    // MARK: - Asset Caching
+    
+    var previousPreheatRect = CGRect.zero
+    
+    fileprivate func resetCachedAssets() {
+        getImageManager().stopCachingForAllAssets()
+        self.previousPreheatRect = .zero
+    }
+
+    func updateCachedAssets() {
+        // Update only if the view is visible.
+        guard isViewLoaded && view.window != nil && self.selectedGroupId != nil else { return }
+        
+        // The preheat window is twice the height of the visible rect.
+        let preheatRect = view!.bounds.insetBy(dx: 0, dy: -0.5 * view!.bounds.height)
+        
+        // Update only if the visible area is significantly different from the last preheated area.
+        let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
+        guard delta > view.bounds.height / 3 else { return }
+        
+        let fetchResult = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!).fetchResult!
+        
+        // Compute the assets to start caching and to stop caching.
+        let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)
+        let addedAssets = addedRects
+            .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
+            .map { indexPath in fetchResult.object(at: indexPath.item) }
+        let removedAssets = removedRects
+            .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
+            .map { indexPath in fetchResult.object(at: indexPath.item) }
+        
+        // Update the assets the PHCachingImageManager is caching.
+        getImageManager().startCachingAssets(for: addedAssets,
+                                             targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
+        getImageManager().stopCachingAssets(for: removedAssets,
+                                            targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
+        
+        // Store the preheat rect to compare against in the future.
+        self.previousPreheatRect = preheatRect
+    }
+    
+    fileprivate func differencesBetweenRects(_ old: CGRect, _ new: CGRect) -> (added: [CGRect], removed: [CGRect]) {
+        if old.intersects(new) {
+            var added = [CGRect]()
+            if new.maxY > old.maxY {
+                added += [CGRect(x: new.origin.x, y: old.maxY,
+                                 width: new.width, height: new.maxY - old.maxY)]
+            }
+            if old.minY > new.minY {
+                added += [CGRect(x: new.origin.x, y: new.minY,
+                                 width: new.width, height: old.minY - new.minY)]
+            }
+            var removed = [CGRect]()
+            if new.maxY < old.maxY {
+                removed += [CGRect(x: new.origin.x, y: new.maxY,
+                                   width: new.width, height: old.maxY - new.maxY)]
+            }
+            if old.minY < new.minY {
+                removed += [CGRect(x: new.origin.x, y: old.minY,
+                                   width: new.width, height: new.minY - old.minY)]
+            }
+            return (added, removed)
+        } else {
+            return ([new], [old])
+        }
+    }
 	
 	// MARK: - DKGroupDataManagerObserver methods
 	
@@ -465,13 +557,20 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 				}
 			}
 		}
-		if self.selectedGroupId == groupId {
-			self.collectionView?.reloadData()
-		}
+//		if self.selectedGroupId == groupId {
+//			self.collectionView?.reloadData()
+//		}
 	}
 	
 	func group(_ groupId: String, didInsertAssets assets: [DKAsset]) {
-		self.collectionView?.reloadData()
+//		self.collectionView?.reloadData()
 	}
+    
+    func groupDidUpdateComplete(_ groupId: String) {
+        if self.selectedGroupId == groupId {
+            self.resetCachedAssets()
+            self.collectionView?.reloadData()
+        }
+    }
 
 }

@@ -15,12 +15,14 @@ protocol DKGroupDataManagerObserver {
 	@objc optional func groupDidRemove(_ groupId: String)
 	@objc optional func group(_ groupId: String, didRemoveAssets assets: [DKAsset])
 	@objc optional func group(_ groupId: String, didInsertAssets assets: [DKAsset])
+    @objc optional func groupDidUpdateComplete(_ groupId: String)
 }
 
 public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 
+    public var groupIds: [String]?
 	private var groups: [String : DKAssetGroup]?
-	public var groupIds: [String]?
+    private var assets = [String: DKAsset]()
 	
 	public var assetGroupTypes: [PHAssetCollectionSubtype]?
 	public var assetFetchOptions: PHFetchOptions?
@@ -32,9 +34,8 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	
 	public func invalidate() {
 		self.groupIds?.removeAll()
-		self.groupIds = nil
-		self.groups?.removeAll()
-		self.groups = nil
+        self.groups?.removeAll()
+        self.assets.removeAll()
 		
 		PHPhotoLibrary.shared().unregisterChangeObserver(self)
 	}
@@ -53,7 +54,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
                 let fetchResult = PHAssetCollection.fetchAssetCollections(with: self.collectionTypeForSubtype(groupType),
 				                                                                  subtype: groupType,
 				                                                                  options: nil)
-                fetchResult.enumerateObjects({ (collection, idnex, stop) in
+                fetchResult.enumerateObjects({ (collection, index, stop) in
                     let assetGroup = DKAssetGroup()
                     assetGroup.groupId = collection.localIdentifier
                     self.updateGroup(assetGroup, collection: collection)
@@ -77,7 +78,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	
 	public func fetchGroupThumbnailForGroup(_ groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
 		let group = self.fetchGroupWithGroupId(groupId)
-		if group.fetchResult.count == 0 {
+		if group.totalCount == 0 {
 			completeBlock(nil, nil)
 			return
 		}
@@ -87,8 +88,13 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	}
 	
 	public func fetchAssetWithGroup(_ group: DKAssetGroup, index: Int) -> DKAsset {
-		let asset = DKAsset(originalAsset:group.fetchResult[index])
-		return asset
+        let originalAsset = group.fetchResult[index]
+        var asset = self.assets[originalAsset.localIdentifier]
+        if asset == nil {
+            asset = DKAsset(originalAsset:originalAsset)
+            self.assets[originalAsset.localIdentifier] = asset
+        }
+		return asset!
 	}
 	
 	// MARK: - Private methods
@@ -111,7 +117,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	// MARK: - PHPhotoLibraryChangeObserver methods
 	
 	public func photoLibraryDidChange(_ changeInstance: PHChange) {
-		for group in self.groups!.values {
+        for group in self.groups!.values {
 			if let changeDetails = changeInstance.changeDetails(for: group.originalCollection) {
 				if changeDetails.objectWasDeleted {
 					self.groups![group.groupId] = nil
@@ -126,22 +132,18 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			}
 			
 			if let changeDetails = changeInstance.changeDetails(for: group.fetchResult) {
-				if let removedIndexes = changeDetails.removedIndexes {
-					var removedAssets = [DKAsset]()
-					(removedIndexes as NSIndexSet).enumerate({ index, stop in
-						removedAssets.append(self.fetchAssetWithGroup(group, index: index))
-					})
+                let removedAssets = changeDetails.removedObjects.map{ DKAsset(originalAsset: $0) }
+				if removedAssets.count > 0 {
 					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didRemoveAssets:)), object: group.groupId as AnyObject?, objectTwo: removedAssets as AnyObject?)
 				}
 				self.updateGroup(group, fetchResult: changeDetails.fetchResultAfterChanges)
 				
-				if changeDetails.insertedObjects.count > 0  {
-					var insertedAssets = [DKAsset]()
-					for insertedAsset in changeDetails.insertedObjects {
-						insertedAssets.append(DKAsset(originalAsset: insertedAsset))
-					}
+                let insertedAssets = changeDetails.insertedObjects.map{ DKAsset(originalAsset: $0) }
+				if insertedAssets.count > 0  {
 					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didInsertAssets:)), object: group.groupId as AnyObject?, objectTwo: insertedAssets as AnyObject?)
 				}
+                
+                self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidUpdateComplete(_:)), object: group.groupId as AnyObject?)
 			}
 		}
 	}

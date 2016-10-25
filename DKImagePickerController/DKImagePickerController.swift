@@ -113,7 +113,6 @@ public enum DKImagePickerControllerSourceType : Int {
 	case camera, photo, both
 }
 
-
 // MARK: - Public DKImagePickerController
 
 /**
@@ -121,7 +120,7 @@ public enum DKImagePickerControllerSourceType : Int {
  */
 open class DKImagePickerController : UINavigationController {
 
-	public var UIDelegate: DKImagePickerControllerUIDelegate = {
+	lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
 		return DKImagePickerControllerDefaultUIDelegate()
 	}()
 
@@ -135,15 +134,15 @@ open class DKImagePickerController : UINavigationController {
 	public var defaultAssetGroup: PHAssetCollectionSubtype?
 	
 	/// The types of PHAssetCollection to display in the picker.
-	public var assetGroupTypes: [PHAssetCollectionSubtype] = [
-		.smartAlbumUserLibrary,
-		.smartAlbumFavorites,
-		.albumRegular
-		] {
-		didSet {
-			getImageManager().groupDataManager.assetGroupTypes = self.assetGroupTypes
-		}
-	}
+    public var assetGroupTypes: [PHAssetCollectionSubtype] = [
+        .smartAlbumUserLibrary,
+        .smartAlbumFavorites,
+        .albumRegular
+        ] {
+        willSet(newTypes) {
+            getImageManager().groupDataManager.assetGroupTypes = newTypes
+        }
+    }
 	
 	/// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
 	public var showsEmptyAlbums = true {
@@ -429,7 +428,7 @@ open class DKImagePickerController : UINavigationController {
             }
         }
     }
-	
+    
 	internal func selectImage(_ asset: DKAsset) {
         if self.singleSelect {
             self.deselectAllAssets()

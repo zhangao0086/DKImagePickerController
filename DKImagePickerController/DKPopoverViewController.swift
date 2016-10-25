@@ -81,7 +81,7 @@ open class DKPopoverViewController: UIViewController {
             let arrowPath = CGMutablePath()
             
             arrowPath.move(to: CGPoint(x: arrowWidth / 2, y: 0))
-            arrowPath.move(to: CGPoint(x: arrowWidth, y: arrowHeight))
+            arrowPath.addLine(to: CGPoint(x: arrowWidth, y: arrowHeight))
             arrowPath.addLine(to: CGPoint(x: 0, y: arrowHeight))
             arrowPath.closeSubpath()
 

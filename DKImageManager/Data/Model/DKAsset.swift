@@ -7,6 +7,7 @@
 //
 
 import Photos
+import CryptoSwift
 
 public extension CGSize {
 	
@@ -31,11 +32,14 @@ open class DKAsset: NSObject {
 	open private(set) var duration: Double?
 	
 	open private(set) var originalAsset: PHAsset?
+    
+    open var localIdentifier: String!
 		
 	public init(originalAsset: PHAsset) {
 		super.init()
 		
 		self.originalAsset = originalAsset
+        self.localIdentifier = originalAsset.localIdentifier
 		
 		let assetType = originalAsset.mediaType
 		if assetType == .video {
@@ -47,19 +51,16 @@ open class DKAsset: NSObject {
 	private var image: UIImage?
 	internal init(image: UIImage) {
 		super.init()
+        
 		self.image = image
 		self.fullScreenImage = (image, nil)
+        self.localIdentifier = UIImagePNGRepresentation(image)!.md5().toHexString()
 	}
 	
 	override open func isEqual(_ object: Any?) -> Bool {
-		let another = object as! DKAsset!
+		let another = object! as! DKAsset
 		
-		if let localIdentifier = self.originalAsset?.localIdentifier,
-			let anotherLocalIdentifier = another?.originalAsset?.localIdentifier {
-				return localIdentifier.isEqual(anotherLocalIdentifier)
-		} else {
-			return false
-		}
+        return self.localIdentifier == another.localIdentifier
 	}
 	
 	public func fetchImageWithSize(_ size: CGSize, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
