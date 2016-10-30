@@ -35,7 +35,7 @@ open class DKAsset: NSObject {
     open var localIdentifier: String
 		
 	public init(originalAsset: PHAsset) {
-        self.localIdentifier = originalAsset.localIdentifier
+        	localIdentifier = originalAsset.localIdentifier
         
 		super.init()
 		
