@@ -35,8 +35,7 @@ open class DKAsset: NSObject {
     open var localIdentifier: String
 		
 	public init(originalAsset: PHAsset) {
-        	localIdentifier = originalAsset.localIdentifier
-        
+        self.localIdentifier = originalAsset.localIdentifier
 		super.init()
 		
 		self.originalAsset = originalAsset
@@ -51,7 +50,6 @@ open class DKAsset: NSObject {
 	private var image: UIImage?
 	internal init(image: UIImage) {
         self.localIdentifier = String(image.hash)
-        
 		super.init()
         
 		self.image = image
