@@ -28,6 +28,21 @@
 		9CC361541BA7E1D100756DDB /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CC361521BA7E1D100756DDB /* DKCameraResource.bundle */; };
 		9CD130051C144ED800AB5E2B /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD130041C144ED800AB5E2B /* Photos.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9CD45E7A1B7C9E4600365976 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CD45E791B7C9E4600365976 /* DKImagePickerController.bundle */; };
+		9CD64D401DE72DDE00FD78F4 /* DKCamera.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9CC361511BA7E1D100756DDB /* DKCamera.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D411DE72DDE00FD78F4 /* DKCameraResource.bundle in Headers */ = {isa = PBXBuildFile; fileRef = 9CC361521BA7E1D100756DDB /* DKCameraResource.bundle */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D421DE72DDE00FD78F4 /* DKImageManager.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C4C3A941C2401CD00A52572 /* DKImageManager.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D431DE72DDE00FD78F4 /* DKGroupDataManager.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C4C3A901C2401CD00A52572 /* DKGroupDataManager.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D441DE72DDE00FD78F4 /* DKAsset.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C4C3A921C2401CD00A52572 /* DKAsset.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D451DE72DDE00FD78F4 /* DKAssetGroup.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C4C3A931C2401CD00A52572 /* DKAssetGroup.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D461DE72DDE00FD78F4 /* DKImagePickerController.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D471DE72DDE00FD78F4 /* DKImagePickerControllerDefaultUIDelegate.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C13DF6E1C90490E001B0ED7 /* DKImagePickerControllerDefaultUIDelegate.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D481DE72DDE00FD78F4 /* DKAssetGroupListVC.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D491DE72DDE00FD78F4 /* DKAssetGroupDetailVC.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D4A1DE72DDE00FD78F4 /* DKAssetGroupGridLayout.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D4B1DE72DDE00FD78F4 /* DKPermissionView.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D4C1DE72DDE00FD78F4 /* DKPopoverViewController.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D4D1DE72DDE00FD78F4 /* DKImageResource.swift in Headers */ = {isa = PBXBuildFile; fileRef = 9C456CCC1B7A223300DFD777 /* DKImageResource.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		9CD64D4E1DE72DDE00FD78F4 /* DKImagePickerController.bundle in Headers */ = {isa = PBXBuildFile; fileRef = 9CD45E791B7C9E4600365976 /* DKImagePickerController.bundle */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */; };
 		9CDEF0F11B62279F003340FE /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDEF0F01B62279F003340FE /* DKImagePickerController.swift */; };
 		9CE807CC1DA9E300009CBDA5 /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */; };
@@ -329,6 +344,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9EFB9661D20FB7D006CDCAA /* DKImagePickerController.h in Headers */,
+				9CD64D401DE72DDE00FD78F4 /* DKCamera.swift in Headers */,
+				9CD64D411DE72DDE00FD78F4 /* DKCameraResource.bundle in Headers */,
+				9CD64D421DE72DDE00FD78F4 /* DKImageManager.swift in Headers */,
+				9CD64D431DE72DDE00FD78F4 /* DKGroupDataManager.swift in Headers */,
+				9CD64D441DE72DDE00FD78F4 /* DKAsset.swift in Headers */,
+				9CD64D451DE72DDE00FD78F4 /* DKAssetGroup.swift in Headers */,
+				9CD64D461DE72DDE00FD78F4 /* DKImagePickerController.swift in Headers */,
+				9CD64D471DE72DDE00FD78F4 /* DKImagePickerControllerDefaultUIDelegate.swift in Headers */,
+				9CD64D481DE72DDE00FD78F4 /* DKAssetGroupListVC.swift in Headers */,
+				9CD64D491DE72DDE00FD78F4 /* DKAssetGroupDetailVC.swift in Headers */,
+				9CD64D4A1DE72DDE00FD78F4 /* DKAssetGroupGridLayout.swift in Headers */,
+				9CD64D4B1DE72DDE00FD78F4 /* DKPermissionView.swift in Headers */,
+				9CD64D4C1DE72DDE00FD78F4 /* DKPopoverViewController.swift in Headers */,
+				9CD64D4D1DE72DDE00FD78F4 /* DKImageResource.swift in Headers */,
+				9CD64D4E1DE72DDE00FD78F4 /* DKImagePickerController.bundle in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

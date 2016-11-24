@@ -13,17 +13,18 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	
 	open weak var imagePickerController: DKImagePickerController!
 	
-	open lazy var doneButton: UIButton = {
-		return self.createDoneButton()
-	}()
+	open var doneButton: UIButton?
 	
-	open func createDoneButton() -> UIButton {
-		let button = UIButton(type: UIButtonType.custom)
-		button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.imagePickerController.navigationBar.tintColor, for: .normal)
-		button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControlEvents.touchUpInside)
-		self.updateDoneButtonTitle(button)
+	open func createDoneButtonIfNeeded() -> UIButton {
+        if self.doneButton == nil {
+            let button = UIButton(type: UIButtonType.custom)
+            button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.imagePickerController.navigationBar.tintColor, for: .normal)
+            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControlEvents.touchUpInside)
+            self.doneButton = button
+            self.updateDoneButtonTitle(button)
+        }
 		
-		return button
+		return self.doneButton!
 	}
     
     open func updateDoneButtonTitle(_ button: UIButton) {
@@ -40,7 +41,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	
 	open func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController) {
 		self.imagePickerController = imagePickerController
-		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.createDoneButtonIfNeeded())
 	}
     
 	open func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
@@ -80,19 +81,19 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	}
 	
 	open func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAsset: DKAsset) {
-		self.updateDoneButtonTitle(self.doneButton)
+		self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
 	}
     
     open func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
-        self.updateDoneButtonTitle(self.doneButton)
+        self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
     }
 	
 	open func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset) {
-		self.updateDoneButtonTitle(self.doneButton)
+		self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
 	}
     
     open func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset]) {
-        self.updateDoneButtonTitle(self.doneButton)
+        self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
     }
 	
 	open func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController) {
