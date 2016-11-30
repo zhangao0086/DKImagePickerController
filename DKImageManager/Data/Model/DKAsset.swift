@@ -203,22 +203,21 @@ public extension DKAsset {
      */
 	public func writeAVToFile(_ path: String, presetName: String, completeBlock: @escaping (_ success: Bool) -> Void) {
 		self.fetchAVAsset(nil) { (avAsset, _) in
-			DKAssetWriter.writeQueue.addOperation({
+            DKAssetWriter.writeQueue.addOperation({
                 if let avAsset = avAsset,
-                    let exportSession = AVAssetExportSession(asset: avAsset, presetName: presetName)
-                {
-					exportSession.outputFileType = AVFileTypeQuickTimeMovie
-					exportSession.outputURL = URL(fileURLWithPath: path)
-					exportSession.shouldOptimizeForNetworkUse = true
-					exportSession.exportAsynchronously(completionHandler: {
-						completeBlock(exportSession.status == .completed ? true : false)
-					})
-				} else {
-					completeBlock(false)
-				}
-			})
-		}
-	}
+                    let exportSession = AVAssetExportSession(asset: avAsset, presetName: presetName) {
+                    exportSession.outputFileType = AVFileTypeQuickTimeMovie
+                    exportSession.outputURL = URL(fileURLWithPath: path)
+                    exportSession.shouldOptimizeForNetworkUse = true
+                    exportSession.exportAsynchronously(completionHandler: {
+                        completeBlock(exportSession.status == .completed ? true : false)
+                    })
+                } else {
+                    completeBlock(false)
+                }
+            })
+        }
+    }
 }
 
 public extension AVAsset {
