@@ -329,6 +329,7 @@ open class DKImagePickerController : UINavigationController {
 		 let didCancel = { () in
 		 	if self.presentedViewController != nil {
 		 		self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: false)
 		 	} else {
 		 		self.dismiss()
 		 	}
@@ -393,10 +394,14 @@ open class DKImagePickerController : UINavigationController {
 	}
 	
 	public func dismiss() {
-		 self.presentingViewController?.dismiss(animated: true, completion: {
-		 	self.didCancel?()
-		 })
+        self.dismiss(animated: true)
 	}
+    
+    public func dismiss(animated flag: Bool) {
+        self.presentingViewController?.dismiss(animated: flag, completion: {
+            self.didCancel?()
+        })
+    }
 	
     public func done() {
 		 self.presentingViewController?.dismiss(animated: true, completion: {
