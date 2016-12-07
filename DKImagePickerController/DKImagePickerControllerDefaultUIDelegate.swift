@@ -43,27 +43,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 		self.imagePickerController = imagePickerController
 		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.createDoneButtonIfNeeded())
 	}
-    
-	open func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController,
-	                                              didCancel: @escaping (() -> Void),
-	                                              didFinishCapturingImage: @escaping ((_ image: UIImage) -> Void),
-	                                              didFinishCapturingVideo: @escaping ((_ videoURL: URL) -> Void)) -> UIViewController {
-		
-		let camera = DKCamera()
-		
-		camera.didCancel = { () -> Void in
-			didCancel()
-		}
-		
-		camera.didFinishCapturingImage = { (image) in
-			didFinishCapturingImage(image)
-		}
-		
-		self.checkCameraPermission(camera)
-	
-		return camera
-	}
-    
+        
     open func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController) -> UIViewController {
         let camera = DKImagePickerControllerCamera()
         
