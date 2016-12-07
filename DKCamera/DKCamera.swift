@@ -293,11 +293,16 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         if self.onFaceDetection != nil {
             let metadataOutput = AVCaptureMetadataOutput()
-            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue(label: "MetadataOutputQueue"))
             
             if self.captureSession.canAddOutput(metadataOutput) {
                 self.captureSession.addOutput(metadataOutput)
-                metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeFace]
+                
+                if metadataOutput.availableMetadataObjectTypes.contains(where: { $0 as! String == AVMetadataObjectTypeFace }) {
+                    metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue(label: "MetadataOutputQueue"))
+                    metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeFace]
+                } else {
+                    self.captureSession.removeOutput(metadataOutput)
+                }
             }
         }
         
@@ -372,7 +377,9 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     open func stopSession() {
-        self.previewLayer.connection.isEnabled = false
+        if let previewLayer = self.previewLayer, let connection = previewLayer.connection {
+            connection.isEnabled = false
+        }
     }
     
     // MARK: - Callbacks
@@ -387,11 +394,12 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         
-        if let stillImageOutput = self.stillImageOutput {
+        if let stillImageOutput = self.stillImageOutput, !stillImageOutput.isCapturingStillImage {
             self.captureButton.isEnabled = false
             
             DispatchQueue.global().async(execute: {
                 if let connection = stillImageOutput.connection(withMediaType: AVMediaTypeVideo) {
+                    
                     connection.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
                     connection.videoScaleAndCropFactor = self.zoomScale
                     
