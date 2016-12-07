@@ -63,6 +63,14 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	
 		return camera
 	}
+    
+    open func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController) -> UIViewController {
+        let camera = DKImagePickerControllerCamera()
+        
+        self.checkCameraPermission(camera)
+        
+        return camera
+    }
 	
 	open func layoutForImagePickerController(_ imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type {
 		return DKAssetGroupGridLayout.self
@@ -79,19 +87,11 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	                                  hidesCancelButtonForVC vc: UIViewController) {
 		vc.navigationItem.leftBarButtonItem = nil
 	}
-	
-	open func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAsset: DKAsset) {
-		self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
-	}
     
     open func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
         self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
     }
-	
-	open func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAsset: DKAsset) {
-		self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
-	}
-    
+	    
     open func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset]) {
         self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
     }
@@ -147,4 +147,21 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 		}
 	}
 		
+}
+
+@objc
+open class DKImagePickerControllerCamera: DKCamera, DKImagePickerControllerCameraProtocol {
+    
+    open func setDidFinishCapturingVideo(block: @escaping (URL) -> Void) {
+        
+    }
+
+    open func setDidFinishCapturingImage(block: @escaping (UIImage) -> Void) {
+        super.didFinishCapturingImage = block
+    }
+
+    open func setDidCancel(block: @escaping () -> Void) {
+        super.didCancel = block
+    }
+    
 }
