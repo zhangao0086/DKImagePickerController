@@ -88,24 +88,20 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 		return nil
 	}
     
-    open func imagePickerControllerCameraImage() -> UIImage {
-        return DKImageResource.cameraImage()
-    }
-    
-    open func imagePickerControllerCheckedNumberColor() -> UIColor {
-        return UIColor.white
-    }
-    
-    open func imagePickerControllerCheckedNumberFont() -> UIFont {
-        return UIFont.boldSystemFont(ofSize: 14)
-    }
-    
-    open func imagePickerControllerCheckedImageTintColor() -> UIColor? {
-        return nil
-    }
-    
     open func imagePickerControllerCollectionViewBackgroundColor() -> UIColor {
         return UIColor.white
+    }
+    
+    open func imagePickerControllerCollectionImageCell() -> DKAssetGroupDetailBaseCell.Type {
+        return DKAssetGroupDetailCell.self
+    }
+    
+    open func imagePickerControllerCollectionCameraCell() -> DKAssetGroupDetailBaseCell.Type {
+        return DKAssetGroupDetailCameraCell.self
+    }
+    
+    open func imagePickerControllerCollectionVideoCell() -> DKAssetGroupDetailBaseCell.Type {
+        return DKAssetGroupDetailVideoCell.self
     }
 	
 	// Internal

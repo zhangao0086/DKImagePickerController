@@ -86,30 +86,15 @@ public protocol DKImagePickerControllerUIDelegate {
     func imagePickerControllerFooterView(_ imagePickerController: DKImagePickerController) -> UIView?
     
     /**
-     The camera image to be displayed in the album's first cell.
-     */
-    func imagePickerControllerCameraImage() -> UIImage
-    
-    /**
-     Set the color of the number when object is selected.
-     */
-    func imagePickerControllerCheckedNumberColor() -> UIColor
-    
-    /**
-     Set the font of the number when object is selected.
-     */
-    func imagePickerControllerCheckedNumberFont() -> UIFont
-    
-    /**
-     Set the color of the object outline when object is selected.
-     */
-    func imagePickerControllerCheckedImageTintColor() -> UIColor?
-    
-    /**
      Set the color of the background of the collection view.
      */
     func imagePickerControllerCollectionViewBackgroundColor() -> UIColor
  
+    func imagePickerControllerCollectionImageCell() -> DKAssetGroupDetailBaseCell.Type
+    
+    func imagePickerControllerCollectionCameraCell() -> DKAssetGroupDetailBaseCell.Type
+    
+    func imagePickerControllerCollectionVideoCell() -> DKAssetGroupDetailBaseCell.Type
 }
 
 /**
