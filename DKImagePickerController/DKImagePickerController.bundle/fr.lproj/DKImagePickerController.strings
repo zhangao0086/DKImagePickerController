@@ -8,19 +8,19 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Sélectionnez(%ld)";
+"select" = "Sélectionner(%ld)";
 
-"permissionCamera" = "Merci d'autorisez l'accès à l'appareil photo";
+"permissionCamera" = "Merci d'autoriser l'accès à l'appareil photo";
 
-"permissionPhoto" = "Merci d'autorisez l'accès aux photos";
+"permissionPhoto" = "Merci d'autoriser l'accès aux photos";
 
-"permit" = "Autorisez l'accès";
+"permit" = "Autoriser l'accès";
 
-"gotoSettings" = "Allez dans 「Réglages」 pour donner l'accès";
+"gotoSettings" = "Aller dans 「Réglages」 pour donner l'accès";
 
 "ok" = "OK";
 
-"selectPhotosOrVideos" = "Sélectionnez des Photos ou des Vidéos";
+"selectPhotosOrVideos" = "Sélectionner des Photos ou des Vidéos";
 
 "selectPhotosOrVideosError" = "Il n'est pas possible de sélectionner des photos et des vidéos en même temps.";
 
