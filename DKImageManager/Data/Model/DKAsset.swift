@@ -132,6 +132,22 @@ open class DKAsset: NSObject {
 			completeBlock(image, info)
 		})
 	}
+    
+    /**
+     Fetch an image data with the original size.
+     
+     - parameter sync:          If true, the method blocks the calling thread until image is ready or an error occurs.
+     - parameter completeBlock: The block is executed when the image download is complete.
+     */
+    public func fetchImageDataForAsset(_ sync: Bool, completeBlock: @escaping (_ imageData: Data?, _ info: [AnyHashable: Any]?) -> Void) {
+        let options = PHImageRequestOptions()
+        options.version = .current
+        options.isSynchronous = sync
+        
+        getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, info) in
+            completeBlock(data, info)
+        })
+    }
 	
     /**
      Fetch an AVAsset with a completeBlock.
