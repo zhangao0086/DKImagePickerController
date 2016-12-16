@@ -14,7 +14,7 @@ open class DKPermissionView: UIView {
 	private let titleLabel = UILabel()
 	private let permitButton = UIButton()
 	
-	internal class func permissionView(_ style: DKImagePickerControllerSourceType) -> DKPermissionView {
+	open class func permissionView(_ style: DKImagePickerControllerSourceType) -> DKPermissionView {
 		
 		let permissionView = DKPermissionView()
 		permissionView.addSubview(permissionView.titleLabel)
