@@ -8,7 +8,8 @@
 
 import UIKit
 
-internal class DKPermissionView: UIView {
+@objc
+open class DKPermissionView: UIView {
 	
 	private let titleLabel = UILabel()
 	private let permitButton = UIButton()
@@ -42,7 +43,7 @@ internal class DKPermissionView: UIView {
 		return permissionView
 	}
 	
-	override func didMoveToWindow() {
+	open override func didMoveToWindow() {
 		super.didMoveToWindow()
 		
 		self.center = self.superview!.center
