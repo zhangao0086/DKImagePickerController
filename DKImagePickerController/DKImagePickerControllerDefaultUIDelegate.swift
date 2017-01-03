@@ -93,7 +93,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
     }
     
     open func imagePickerControllerCollectionImageCell() -> DKAssetGroupDetailBaseCell.Type {
-        return DKAssetGroupDetailCell.self
+        return DKAssetGroupDetailImageCell.self
     }
     
     open func imagePickerControllerCollectionCameraCell() -> DKAssetGroupDetailBaseCell.Type {

@@ -1,5 +1,5 @@
 //
-//  DKAssetGroupDetailCell.swift
+//  DKAssetGroupDetailImageCell.swift
 //  DKImagePickerController
 //
 //  Created by ZhangAo on 07/12/2016.
@@ -8,10 +8,29 @@
 
 import UIKit
 
-class DKAssetGroupDetailCell: DKAssetGroupDetailBaseCell {
+class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     
     class override func cellReuseIdentifier() -> String {
         return "DKImageAssetIdentifier"
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.thumbnailImageView.frame = self.bounds
+        self.thumbnailImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.contentView.addSubview(self.thumbnailImageView)
+        
+        self.checkView.frame = self.bounds
+        self.checkView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.checkView.checkImageView.tintColor = nil
+        self.checkView.checkLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        self.checkView.checkLabel.textColor = UIColor.white
+        self.contentView.addSubview(self.checkView)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     class DKImageCheckView: UIView {
@@ -73,25 +92,6 @@ class DKAssetGroupDetailCell: DKAssetGroupDetailBaseCell {
         didSet {
             checkView.isHidden = !super.isSelected
         }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.thumbnailImageView.frame = self.bounds
-        self.thumbnailImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.contentView.addSubview(self.thumbnailImageView)
-        
-        self.checkView.frame = self.bounds
-        self.checkView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.checkView.checkImageView.tintColor = nil
-        self.checkView.checkLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        self.checkView.checkLabel.textColor = UIColor.white
-        self.contentView.addSubview(self.checkView)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 } /* DKAssetGroupDetailCell */

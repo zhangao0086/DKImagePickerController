@@ -24,23 +24,6 @@ private extension UICollectionView {
     
 }
 
-public protocol DKAssetGroupDetailCellProtocol {
-    
-    weak var asset: DKAsset! { get set }
-    var index: Int { get set }
-    var thumbnailImage: UIImage! { get set }
-}
-
-open class DKAssetGroupDetailBaseCell: UICollectionViewCell, DKAssetGroupDetailCellProtocol {
-    
-    // This method must be overridden
-    open class func cellReuseIdentifier() -> String { preconditionFailure("This method must be overridden") }
-    
-    open weak var asset: DKAsset!
-    open var index: Int = 0
-    open var thumbnailImage: UIImage!
-}
-
 // Show all images in the asset group
 internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
     	

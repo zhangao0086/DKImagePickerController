@@ -8,10 +8,28 @@
 
 import UIKit
 
-class DKAssetGroupDetailVideoCell: DKAssetGroupDetailCell {
+class DKAssetGroupDetailVideoCell: DKAssetGroupDetailImageCell {
     
     class override func cellReuseIdentifier() -> String {
         return "DKVideoAssetIdentifier"
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.contentView.addSubview(videoInfoView)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let height: CGFloat = 30
+        self.videoInfoView.frame = CGRect(x: 0, y: self.contentView.bounds.height - height,
+                                          width: self.contentView.bounds.width, height: height)
     }
     
     override weak var asset: DKAsset! {
@@ -52,23 +70,5 @@ class DKAssetGroupDetailVideoCell: DKAssetGroupDetailCell {
         
         return videoInfoView
     }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.contentView.addSubview(videoInfoView)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let height: CGFloat = 30
-        self.videoInfoView.frame = CGRect(x: 0, y: self.contentView.bounds.height - height,
-                                          width: self.contentView.bounds.width, height: height)
-    }
     
 } /* DKAssetGroupDetailVideoCell */
