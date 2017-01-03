@@ -148,57 +148,10 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
-##### Customize footer view and UI color
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
-
 #### Create a custom camera
 
 You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
-The following code uses a `UIImagePickerController`:
-```swift
-public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    var didCancel: (() -> Void)?
-    var didFinishCapturingImage: ((image: UIImage) -> Void)?
-    var didFinishCapturingVideo: ((videoURL: NSURL) -> Void)?
-    
-    public override func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
-                                                           didCancel: (() -> Void),
-                                                           didFinishCapturingImage: ((image: UIImage) -> Void),
-                                                           didFinishCapturingVideo: ((videoURL: NSURL) -> Void)
-                                                           ) -> UIViewController {
-        self.didCancel = didCancel
-        self.didFinishCapturingImage = didFinishCapturingImage
-        self.didFinishCapturingVideo = didFinishCapturingVideo
-        
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.sourceType = .Camera
-        picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
-        
-        return picker
-    }
-    
-    // MARK: - UIImagePickerControllerDelegate methods
-    
-    public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        let mediaType = info[UIImagePickerControllerMediaType] as! String
-        
-        if mediaType == kUTTypeImage as String {
-            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-            self.didFinishCapturingImage?(image: image)
-        } else if mediaType == kUTTypeMovie as String {
-            let videoURL = info[UIImagePickerControllerMediaURL] as! NSURL
-            self.didFinishCapturingVideo?(videoURL: videoURL)
-        }
-    }
-    
-    public func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.didCancel?()
-    }
-    
-}
-```
+For example, see [CustomCameraUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomCameraUIDelegate).
 
 ## How to use in Objective-C
 
