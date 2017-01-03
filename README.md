@@ -19,8 +19,9 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports landscape and iPad and orientation switching.
 * Supports iCloud.
 * Supports UIAppearance.
-* Supports custom camera.
-* Supports custom UICollectionViewLayout.
+* Customizable camera.
+* Customizable UI.
+* Customizable UICollectionViewLayout.
 * Supports footer view.
 
 ## Requirements
@@ -138,7 +139,7 @@ public func writeAVToFile(path: String, presetName: String, completeBlock: (succ
 
 ```
 
-##### Customize Navigation Bar
+##### Conforms UIAppearance protocol
 You can easily customize the appearance of navigation bar using the appearance proxy.
 ```swift
 UINavigationBar.appearance().titleTextAttributes = [
@@ -148,10 +149,14 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
-#### Create a custom camera
+#### Camera customization
 
 You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
 For example, see [CustomCameraUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomCameraUIDelegate).
+
+#### UI customization
+
+For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomUIDelegate).
 
 ## How to use in Objective-C
 
