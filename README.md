@@ -266,14 +266,19 @@ pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 It has been supported languages so far:
 
 * en.lproj
-* zh-Hans.lproj
-* hu.lproj
-* ru.lproj
 * es.lproj
-* tr.lproj
+* da.lproj
 * de.lproj
+* fr.lproj
+* hu.lproj
+* ja.lproj
+* ko.lproj
+* ru.lproj
+* tr.lproj
 * ur.lproj
 * vi.lproj
+* zh-Hans.lproj
+* zh-Hant.lproj
 
 If you want to add new language, pull request or issue!
 
