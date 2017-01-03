@@ -79,6 +79,12 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
+        case "Layout Customization":
+            let pickerController = DKImagePickerController()
+            pickerController.UIDelegate = CustomLayoutUIDelegate()
+            
+            destination.pickerController = pickerController
+            
         default:
             assert(false)
         }

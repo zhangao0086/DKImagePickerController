@@ -26,6 +26,8 @@
 		9CBD589D1E1B597400F41A88 /* CustomCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD589B1E1B597400F41A88 /* CustomCamera.swift */; };
 		9CBD589E1E1B597400F41A88 /* CustomCameraUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD589C1E1B597400F41A88 /* CustomCameraUIDelegate.swift */; };
 		9CBD58A11E1B5B4900F41A88 /* CustomGroupDetailCameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD58A01E1B5B4900F41A88 /* CustomGroupDetailCameraCell.swift */; };
+		9CBD58A41E1B8C4400F41A88 /* CustomLayoutUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD58A31E1B8C4400F41A88 /* CustomLayoutUIDelegate.swift */; };
+		9CBD58A61E1B8EAC00F41A88 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD58A51E1B8EAC00F41A88 /* CustomFlowLayout.swift */; };
 		9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */; };
 		9CBF3F7E1AB15D210000F1D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CBF3F721AB15D210000F1D1 /* Images.xcassets */; };
 		9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBF3F751AB15D210000F1D1 /* ViewController.swift */; };
@@ -135,6 +137,8 @@
 		9CBD589B1E1B597400F41A88 /* CustomCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCamera.swift; sourceTree = "<group>"; };
 		9CBD589C1E1B597400F41A88 /* CustomCameraUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCameraUIDelegate.swift; sourceTree = "<group>"; };
 		9CBD58A01E1B5B4900F41A88 /* CustomGroupDetailCameraCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomGroupDetailCameraCell.swift; sourceTree = "<group>"; };
+		9CBD58A31E1B8C4400F41A88 /* CustomLayoutUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLayoutUIDelegate.swift; sourceTree = "<group>"; };
+		9CBD58A51E1B8EAC00F41A88 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
 		9CBF3F6B1AB15D210000F1D1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CBF3F6D1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9CBF3F6F1AB15D210000F1D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -293,6 +297,15 @@
 			path = CustomCameraUIDelegate;
 			sourceTree = "<group>";
 		};
+		9CBD58A21E1B8C1C00F41A88 /* CustomLayoutUIDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				9CBD58A31E1B8C4400F41A88 /* CustomLayoutUIDelegate.swift */,
+				9CBD58A51E1B8EAC00F41A88 /* CustomFlowLayout.swift */,
+			);
+			path = CustomLayoutUIDelegate;
+			sourceTree = "<group>";
+		};
 		9CBF3F6A1AB15D210000F1D1 /* DKImagePickerControllerDemo */ = {
 			isa = PBXGroup;
 			children = (
@@ -301,6 +314,7 @@
 				9CBF3F751AB15D210000F1D1 /* ViewController.swift */,
 				9CBF3F6E1AB15D210000F1D1 /* Main.storyboard */,
 				9CBF3F6C1AB15D210000F1D1 /* LaunchScreen.xib */,
+				9CBD58A21E1B8C1C00F41A88 /* CustomLayoutUIDelegate */,
 				9CBD589A1E1B597400F41A88 /* CustomCameraUIDelegate */,
 				9CBD58951E1B596400F41A88 /* CustomUIDelegate */,
 				9CBF3F721AB15D210000F1D1 /* Images.xcassets */,
@@ -580,6 +594,7 @@
 				9CC361531BA7E1D100756DDB /* DKCamera.swift in Sources */,
 				9C4C3A961C2401CD00A52572 /* DKAsset.swift in Sources */,
 				9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */,
+				9CBD58A61E1B8EAC00F41A88 /* CustomFlowLayout.swift in Sources */,
 				9CDEF0F11B62279F003340FE /* DKImagePickerController.swift in Sources */,
 				9CC1BC781DF7F72F00B54018 /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */,
@@ -599,6 +614,7 @@
 				9C13DF6F1C90490E001B0ED7 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
 				9CC1BC7B1DF7F74C00B54018 /* DKAssetGroupDetailImageCell.swift in Sources */,
 				9C1B8EE41E1B419900282232 /* DKAssetGroupDetailBaseCell.swift in Sources */,
+				9CBD58A41E1B8C4400F41A88 /* CustomLayoutUIDelegate.swift in Sources */,
 				9CBD589D1E1B597400F41A88 /* CustomCamera.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
