@@ -148,20 +148,6 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
-#### Hides camera
-
-```swift
-pickerController.sourceType = .Photo
-```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
-
-#### Quickly take a picture
-
-```swift
-pickerController.sourceType = .Camera
-```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
-
 ##### Customize footer view and UI color
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
 
