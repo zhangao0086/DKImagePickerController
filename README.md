@@ -273,6 +273,7 @@ It has been supported languages so far:
 * tr.lproj
 * de.lproj
 * ur.lproj
+* vi.lproj
 
 If you want to add new language, pull request or issue!
 
