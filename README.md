@@ -239,6 +239,30 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
+## [3.5.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.0) (2017-01-03)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.4.1...3.5.0)
+
+- Added danish translation.
+
+- Added Korean Language.
+
+- Added Traditional Chinese language.
+
+- Added Vietnamese language.
+
+- Updated DKCamera.
+
+- Updated demo project.
+
+- Updated API for custom camera.
+
+- Supports UICollectionViewCell customizable.
+
+- DKPermissionView access modifier is open.
+
+- Fixed some bugs.
+
 ## [3.4.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.1) (2016-10-25)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.4.0...3.4.1)
@@ -257,21 +281,9 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 - Fix an issue that may cause arrow does not appear.
 
-## [3.4.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.0) (2016-09-18)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.4...3.4.0)
-
-- Migrating to swift3
-
-> [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
-
-## Special Thanks
-Big thanks to all the [contributors][contributors] so far!
-
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
 
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
-[contributors]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors
