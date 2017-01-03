@@ -2,8 +2,8 @@
 //  CustomCamera.swift
 //  DKImagePickerControllerDemo
 //
-//  Created by ZhangAo on 16/3/17.
-//  Copyright © 2016年 ZhangAo. All rights reserved.
+//  Created by ZhangAo on 03/01/2017.
+//  Copyright © 2017 ZhangAo. All rights reserved.
 //
 
 import UIKit
@@ -31,6 +31,8 @@ open class CustomCamera: UIImagePickerController, DKImagePickerControllerCameraP
         super.viewDidLoad()
         
         self.delegate = self
+        self.sourceType = .camera
+        self.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
     }
     
     // MARK: - UIImagePickerControllerDelegate methods
@@ -47,21 +49,8 @@ open class CustomCamera: UIImagePickerController, DKImagePickerControllerCameraP
         }
     }
     
-    
     open func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.didCancel?()
-    }
-    
-}
-
-open class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate {
-	
-    open override func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController) -> UIViewController {
-        let picker = CustomCamera()
-        picker.sourceType = .camera
-        picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
-        
-        return picker
     }
     
 }
