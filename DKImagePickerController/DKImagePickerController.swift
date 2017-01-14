@@ -278,7 +278,7 @@ open class DKImagePickerController : UINavigationController {
     
     private lazy var assetFetchOptions: PHFetchOptions = {
         let assetFetchOptions = PHFetchOptions()
-        assetFetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        assetFetchOptions.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: false)]
         return assetFetchOptions
     }()
     
