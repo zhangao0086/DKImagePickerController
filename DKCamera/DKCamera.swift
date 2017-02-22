@@ -575,55 +575,10 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    open func focusAtTouchPoint(_ touchPoint: CGPoint) {
-        
-        func showFocusViewAtPoint(_ touchPoint: CGPoint) {
-            
-            struct FocusView {
-                static let focusView: UIView = {
-                    let focusView = UIView()
-                    let diameter: CGFloat = 100
-                    focusView.bounds.size = CGSize(width: diameter, height: diameter)
-                    focusView.layer.borderWidth = 2
-                    focusView.layer.cornerRadius = diameter / 2
-                    focusView.layer.borderColor = UIColor.white.cgColor
-                    
-                    return focusView
-                }()
-            }
-            FocusView.focusView.transform = CGAffineTransform.identity
-            FocusView.focusView.center = touchPoint
-            self.view.addSubview(FocusView.focusView)
-            UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.1,
-                                       options: UIViewAnimationOptions(), animations: { () -> Void in
-                                        FocusView.focusView.transform = CGAffineTransform.identity.scaledBy(x: 0.6, y: 0.6)
-            }) { (Bool) -> Void in
-                FocusView.focusView.removeFromSuperview()
-            }
-        }
-        
-        if self.currentDevice == nil || self.currentDevice?.isFlashAvailable == false {
-            return
-        }
-        
-        let focusPoint = self.previewLayer.captureDevicePointOfInterest(for: touchPoint)
-        
-        showFocusViewAtPoint(touchPoint)
-        
-        if let currentDevice = self.currentDevice {
-            try! currentDevice.lockForConfiguration()
-            currentDevice.focusPointOfInterest = focusPoint
-            currentDevice.exposurePointOfInterest = focusPoint
-            
-            currentDevice.focusMode = .continuousAutoFocus
-            
-            if currentDevice.isExposureModeSupported(.continuousAutoExposure) {
-                currentDevice.exposureMode = .continuousAutoExposure
-            }
-            
-            currentDevice.unlockForConfiguration()
-        }
-        
+    // MARK: - AVCaptureMetadataOutputObjectsDelegate
+    
+    public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+        self.onFaceDetection?(metadataObjects as! [AVMetadataFaceObject])
     }
     
     // MARK: - Handles Orientation
