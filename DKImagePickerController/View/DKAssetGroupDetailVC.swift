@@ -289,9 +289,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 			let intersect = Set(indexPathsForVisibleItems).intersection(Set(indexPathsForSelectedItems))
 			
 			for selectedIndexPath in intersect {
-				if let selectedCell = (collectionView.cellForItem(at: selectedIndexPath) as? DKAssetGroupDetailBaseCell) {
-					let selectedIndex = self.imagePickerController.selectedAssets.index(of: selectedCell.asset)!
-					
+                if let selectedCell = (collectionView.cellForItem(at: selectedIndexPath) as? DKAssetGroupDetailBaseCell), let selectedCellAsset = selectedCell.asset, let selectedIndex = self.imagePickerController.selectedAssets.index(of: selectedCellAsset) {
 					if selectedIndex > removedIndex {
 						selectedCell.index = selectedCell.index - 1
 					}

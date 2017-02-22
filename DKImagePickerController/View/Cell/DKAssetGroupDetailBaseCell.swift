@@ -14,7 +14,7 @@ open class DKAssetGroupDetailBaseCell: UICollectionViewCell, DKAssetGroupCellIte
     // This method must be overridden
     open class func cellReuseIdentifier() -> String { preconditionFailure("This method must be overridden") }
     
-    open weak var asset: DKAsset!
+    open weak var asset: DKAsset?
     open var index: Int = 0
     open var thumbnailImage: UIImage!
 }
