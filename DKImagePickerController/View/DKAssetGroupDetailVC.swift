@@ -153,7 +153,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         }
         let assetIndex = (index - (self.hidesCamera ? 0 : 1))
         let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
-        return getImageManager().groupDataManager.fetchAssetWithGroup(group, index: assetIndex)
+        return getImageManager().groupDataManager.fetchAsset(group, index: assetIndex)
     }
     
     func isCameraCell(indexPath: IndexPath) -> Bool {
@@ -324,16 +324,16 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
         let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
         guard delta > view.bounds.height / 3 else { return }
         
-        let fetchResult = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!).fetchResult!
+        let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
         
         // Compute the assets to start caching and to stop caching.
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)
         let addedAssets = addedRects
             .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in fetchResult.object(at: indexPath.item) }
+            .map { indexPath in getImageManager().groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
         let removedAssets = removedRects
             .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in fetchResult.object(at: indexPath.item) }
+            .map { indexPath in getImageManager().groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
         
         // Update the assets the PHCachingImageManager is caching.
         getImageManager().startCachingAssets(for: addedAssets,
