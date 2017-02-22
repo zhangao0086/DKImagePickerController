@@ -83,12 +83,12 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			return
 		}
 		
-		let latestAsset = DKAsset(originalAsset:group.fetchResult.firstObject!)
+		let latestAsset = DKAsset(originalAsset:group.fetchResult.lastObject!)
 		latestAsset.fetchImageWithSize(size, options: options, completeBlock: completeBlock)
 	}
 	
-	public func fetchAssetWithGroup(_ group: DKAssetGroup, index: Int) -> DKAsset {
-        let originalAsset = group.fetchResult[index]
+	public func fetchAsset(_ group: DKAssetGroup, index: Int) -> DKAsset {
+        let originalAsset = self.fetchOriginalAsset(group, index: index)
         var asset = self.assets[originalAsset.localIdentifier]
         if asset == nil {
             asset = DKAsset(originalAsset:originalAsset)
@@ -96,6 +96,10 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
         }
 		return asset!
 	}
+    
+    public func fetchOriginalAsset(_ group: DKAssetGroup, index: Int) -> PHAsset {
+        return group.fetchResult[group.totalCount - index - 1]
+    }
 	
 	// MARK: - Private methods
 	

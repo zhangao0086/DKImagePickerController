@@ -225,6 +225,7 @@ It has been supported languages so far:
 * hu.lproj
 * ja.lproj
 * ko.lproj
+* pt_BR.lproj
 * ru.lproj
 * tr.lproj
 * ur.lproj
@@ -238,6 +239,16 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Change Log
+
+## [3.5.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.1) (2017-02-22)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.0...3.5.1)
+
+- Fix https://github.com/zhangao0086/DKImagePickerController/pull/277.
+
+- Update DKCamera.
+
+- Sorting photos like native Photos app.
 
 ## [3.5.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.0) (2017-01-03)
 
@@ -262,24 +273,6 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 - DKPermissionView access modifier is open.
 
 - Fixed some bugs.
-
-## [3.4.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.1) (2016-10-25)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.4.0...3.4.1)
-
-- Added french language.
-
-- Updated the condition of isInCloud.
-
-- Add CryptoSwift lib in order to the DKAsset has a unique identifier.
-
-- Improve scroll performance.
-
-- Fix crash issue.
-
-- Added support for asset editing.
-
-- Fix an issue that may cause arrow does not appear.
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
