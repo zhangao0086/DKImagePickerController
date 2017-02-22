@@ -408,7 +408,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             return
         }
         
-        if let stillImageOutput = self.stillImageOutput {
+        if let stillImageOutput = self.stillImageOutput, !stillImageOutput.isCapturingStillImage {
             self.captureButton.isEnabled = false
             
             DispatchQueue.global().async(execute: {
