@@ -1,5 +1,15 @@
 # Change Log
 
+## [3.5.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.1) (2017-02-22)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.0...3.5.1)
+
+- Fix https://github.com/zhangao0086/DKImagePickerController/pull/277.
+
+- Update DKCamera.
+
+- Sorting photos like native Photos app.
+
 ## [3.5.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.0) (2017-01-03)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.4.1...3.5.0)
