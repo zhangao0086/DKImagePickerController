@@ -150,6 +150,12 @@ open class DKImagePickerController : UINavigationController {
         }
     }
     
+    public var assetFilter: ((_ asset: PHAsset) -> Bool)? {
+        didSet {
+            getImageManager().groupDataManager.assetFilter = self.assetFilter
+        }
+    }
+    
     /// The type of picker interface to be displayed by the controller.
     public var assetType: DKImagePickerControllerAssetType = .allAssets {
         didSet {
