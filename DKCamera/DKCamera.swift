@@ -685,11 +685,11 @@ public extension UIDeviceOrientation {
         case .portrait:
             return 0
         case .portraitUpsideDown:
-            return CGFloat(M_PI)
+            return CGFloat(Double.pi)
         case .landscapeRight:
-            return CGFloat(-M_PI_2)
+            return CGFloat(-Double.pi / 2)
         case .landscapeLeft:
-            return CGFloat(M_PI_2)
+            return CGFloat(Double.pi / 2)
         default:
             return 0
         }
