@@ -27,6 +27,8 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	public var assetGroupTypes: [PHAssetCollectionSubtype]?
 	public var assetFetchOptions: PHFetchOptions?
 	public var showsEmptyAlbums: Bool = true
+
+    public var assetFilter: ((_ asset: PHAsset) -> Bool)?
 	
 	deinit {
 		PHPhotoLibrary.shared().unregisterChangeObserver(self)
@@ -129,10 +131,23 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	}
 	
 	private func updateGroup(_ group: DKAssetGroup, fetchResult: PHFetchResult<PHAsset>) {
-		group.fetchResult = fetchResult
+        group.fetchResult = filterResults(fetchResult)
 		group.totalCount = group.fetchResult.count
 	}
 	
+    private func filterResults(_ fetchResult: PHFetchResult<PHAsset>) -> PHFetchResult<PHAsset> {
+        guard let filter = assetFilter else { return fetchResult }
+        
+        var filtered = [PHAsset]()
+        for i in 0..<fetchResult.count {
+            if filter(fetchResult[i]) {
+                filtered.append(fetchResult[i])
+            }
+        }
+
+        let collection = PHAssetCollection.transientAssetCollection(with: filtered, title: nil)
+        return PHAsset.fetchAssets(in: collection, options: nil)
+    }
 	// MARK: - PHPhotoLibraryChangeObserver methods
 	
 	public func photoLibraryDidChange(_ changeInstance: PHChange) {

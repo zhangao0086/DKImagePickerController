@@ -691,7 +691,7 @@ public extension UIDeviceOrientation {
         case .landscapeLeft:
             return CGFloat(Double.pi / 2)
         default:
-            return 0
+            return 0.0
         }
     }
     
