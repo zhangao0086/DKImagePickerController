@@ -262,7 +262,7 @@ open class DKImagePickerController : UINavigationController {
                 
                 let camera = self.createCamera()
                 if camera is UINavigationController {
-                    self.present(self.createCamera(), animated: true, completion: nil)
+                    self.present(camera, animated: true, completion: nil)
                     self.setViewControllers([], animated: false)
                 } else {
                     self.setViewControllers([camera], animated: false)
@@ -332,8 +332,10 @@ open class DKImagePickerController : UINavigationController {
     private func createCamera() -> UIViewController {
         let didCancel = { () in
             if self.sourceType == .camera {
-                self.dismiss(animated: true, completion: nil)
-                self.dismiss(animated: false)
+                if (self.presentedViewController != nil) {
+                    self.dismiss(animated: false, completion: nil)
+                }
+                self.dismiss(animated: true)
             } else {
                 self.dismiss(animated: true, completion: nil)
             }
