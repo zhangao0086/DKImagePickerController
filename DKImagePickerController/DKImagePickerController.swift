@@ -330,7 +330,7 @@ open class DKImagePickerController : UINavigationController {
     }
     
     private func createCamera() -> UIViewController {
-        let didCancel = { () in
+        let didCancel = { [unowned self] () in
             if self.sourceType == .camera {
                 if (self.presentedViewController != nil) {
                     self.dismiss(animated: false, completion: nil)
@@ -341,7 +341,7 @@ open class DKImagePickerController : UINavigationController {
             }
         }
         
-        let didFinishCapturingImage = { (image: UIImage) in
+        let didFinishCapturingImage = { [unowned self] (image: UIImage) in
             
             var newImageIdentifier: String!
 
@@ -368,7 +368,7 @@ open class DKImagePickerController : UINavigationController {
             }
         }
         
-        let didFinishCapturingVideo = { (videoURL: URL) in
+        let didFinishCapturingVideo = { [unowned self] (videoURL: URL) in
             var newVideoIdentifier: String!
             PHPhotoLibrary.shared().performChanges({
                 let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)
