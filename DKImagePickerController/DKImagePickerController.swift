@@ -215,7 +215,7 @@ open class DKImagePickerController : UINavigationController {
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
-            if let count = self.defaultSelectedAssets?.count, count > 0 {
+            if let count = self.defaultSelectedAssets?.count, count != self.selectedAssets.count {
                 self.selectedAssets = self.defaultSelectedAssets ?? []
                 
                 if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
