@@ -176,7 +176,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        self.stopSession()
+        self.updateSession(isEnable: false)
         self.motionManager.stopAccelerometerUpdates()
     }
     
