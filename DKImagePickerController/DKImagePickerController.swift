@@ -150,6 +150,12 @@ open class DKImagePickerController : UINavigationController {
         }
     }
     
+    public var assetFilter: ((_ asset: PHAsset) -> Bool)? {
+        didSet {
+            getImageManager().groupDataManager.assetFilter = self.assetFilter
+        }
+    }
+    
     /// The type of picker interface to be displayed by the controller.
     public var assetType: DKImagePickerControllerAssetType = .allAssets {
         didSet {
@@ -209,7 +215,7 @@ open class DKImagePickerController : UINavigationController {
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
-            if let count = self.defaultSelectedAssets?.count, count > 0 {
+            if let count = self.defaultSelectedAssets?.count, count != self.selectedAssets.count {
                 self.selectedAssets = self.defaultSelectedAssets ?? []
                 
                 if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
@@ -256,7 +262,7 @@ open class DKImagePickerController : UINavigationController {
                 
                 let camera = self.createCamera()
                 if camera is UINavigationController {
-                    self.present(self.createCamera(), animated: true, completion: nil)
+                    self.present(camera, animated: true, completion: nil)
                     self.setViewControllers([], animated: false)
                 } else {
                     self.setViewControllers([camera], animated: false)
@@ -324,16 +330,18 @@ open class DKImagePickerController : UINavigationController {
     }
     
     private func createCamera() -> UIViewController {
-        let didCancel = { () in
+        let didCancel = { [unowned self] () in
             if self.sourceType == .camera {
-                self.dismiss(animated: true, completion: nil)
-                self.dismiss(animated: false)
+                if (self.presentedViewController != nil) {
+                    self.dismiss(animated: false, completion: nil)
+                }
+                self.dismiss(animated: true)
             } else {
                 self.dismiss(animated: true, completion: nil)
             }
         }
         
-        let didFinishCapturingImage = { (image: UIImage) in
+        let didFinishCapturingImage = { [unowned self] (image: UIImage) in
             
             var newImageIdentifier: String!
 
@@ -360,7 +368,7 @@ open class DKImagePickerController : UINavigationController {
             }
         }
         
-        let didFinishCapturingVideo = { (videoURL: URL) in
+        let didFinishCapturingVideo = { [unowned self] (videoURL: URL) in
             var newVideoIdentifier: String!
             PHPhotoLibrary.shared().performChanges({
                 let assetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: videoURL)

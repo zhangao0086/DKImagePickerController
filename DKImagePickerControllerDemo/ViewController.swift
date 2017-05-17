@@ -20,6 +20,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	func showImagePicker() {
 		pickerController.defaultSelectedAssets = self.assets
 		
+        pickerController.didCancel = { ()
+            print("didCancel")
+        }
+        
 		pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
 			print("didSelectAssets")
 			

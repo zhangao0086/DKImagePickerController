@@ -1,5 +1,23 @@
 # Change Log
 
+## [3.5.2](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.2) (2017-05-17)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.1...3.5.2)
+
+- Custom filter for assets.
+
+- Added location property for DKAsset.
+
+- Removed deprecated calls: M_PI, M_PI_2.
+
+- Fixed an issue cause deselect images failed.
+
+- Fixed an issue cause camera not working properly.
+
+- Fixed an issue cause didCancel not working.	
+
+- Fixed a memory leak issue.
+
 ## [3.5.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.1) (2017-02-22)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.0...3.5.1)

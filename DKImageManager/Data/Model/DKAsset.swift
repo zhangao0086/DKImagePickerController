@@ -27,6 +27,9 @@ open class DKAsset: NSObject {
 	/// When the asset was an image, it's false. Otherwise true.
 	open private(set) var isVideo: Bool = false
 	
+    /// Returns location, if its contained in original asser
+    open private(set) var location: CLLocation?
+    
 	/// play time duration(seconds) of a video.
 	open private(set) var duration: Double?
 	
@@ -36,6 +39,7 @@ open class DKAsset: NSObject {
 		
 	public init(originalAsset: PHAsset) {
         self.localIdentifier = originalAsset.localIdentifier
+        self.location = originalAsset.location
 		super.init()
 		
 		self.originalAsset = originalAsset
