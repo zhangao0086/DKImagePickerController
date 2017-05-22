@@ -123,6 +123,7 @@ internal class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate,
 	
     func selectAssetGroup(_ groupId: String?) {
         if self.selectedGroupId == groupId {
+            self.updateTitleView()
             return
         }
         
