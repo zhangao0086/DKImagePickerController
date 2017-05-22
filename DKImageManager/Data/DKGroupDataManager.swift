@@ -68,6 +68,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 						let assetGroup = DKAssetGroup()
 						assetGroup.groupId = collection.localIdentifier
 						strongSelf.updateGroup(assetGroup, collection: collection)
+                        strongSelf.updateGroup(assetGroup, fetchResult: PHAsset.fetchAssets(in: collection, options: strongSelf.assetFetchOptions))
 						if strongSelf.showsEmptyAlbums || assetGroup.totalCount > 0 {
 							groups[assetGroup.groupId] = assetGroup
 							groupIds.append(assetGroup.groupId)
@@ -126,7 +127,6 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	
 	private func updateGroup(_ group: DKAssetGroup, collection: PHAssetCollection) {
 		group.groupName = collection.localizedTitle
-		self.updateGroup(group, fetchResult: PHAsset.fetchAssets(in: collection, options: self.assetFetchOptions))
 		group.originalCollection = collection
 	}
 	
