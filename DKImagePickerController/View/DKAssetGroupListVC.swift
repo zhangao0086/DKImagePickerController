@@ -152,15 +152,18 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	
 	internal func loadGroups() {
 		getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
-			guard let strongSelf = self else { return }
+			guard let groups = groups, let strongSelf = self else { return }
 			
 			if error == nil {
-				strongSelf.groups = groups!
+				strongSelf.groups = groups
 				strongSelf.selectedGroup = strongSelf.defaultAssetGroupOfAppropriate()
-				if let selectedGroup = strongSelf.selectedGroup {
-					strongSelf.tableView.selectRow(at: IndexPath(row: groups!.index(of: selectedGroup)!, section: 0),
-						animated: false,
-						scrollPosition: .none)
+				if let selectedGroup = strongSelf.selectedGroup,
+                    let row =  groups.index(of: selectedGroup)
+                {
+                    strongSelf.tableView.selectRow(
+                        at: IndexPath(row: row, section: 0),
+                        animated: false,
+                        scrollPosition: .none)
 				}
 				
 				strongSelf.selectedGroupDidChangeBlock?(strongSelf.selectedGroup)
@@ -178,7 +181,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 					}
 				}
 			}
-			return self.groups!.first
+			return groups.first
 		}
 		return nil
 	}
@@ -190,9 +193,14 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DKImageGroupCellIdentifier, for: indexPath) as! DKAssetGroupCell
+        guard let groups = groups,
+            let cell = tableView.dequeueReusableCell(withIdentifier: DKImageGroupCellIdentifier, for: indexPath) as? DKAssetGroupCell else
+        {
+            assertionFailure("Expect groups and cell")
+            return UITableViewCell()
+        }
 		
-        let assetGroup = getImageManager().groupDataManager.fetchGroupWithGroupId(groups![indexPath.row])
+        let assetGroup = getImageManager().groupDataManager.fetchGroupWithGroupId(groups[indexPath.row])
         cell.groupNameLabel.text = assetGroup.groupName
 		
 		let tag = indexPath.row + 1
@@ -216,28 +224,32 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DKPopoverViewController.dismissPopoverViewController()
+
+        guard let groups = self.groups, groups.count > indexPath.row else {
+            assertionFailure("Expect groups with count > \(indexPath.row)")
+            return
+        }
 		
-		self.selectedGroup = self.groups![indexPath.row]
+		self.selectedGroup = groups[indexPath.row]
 		selectedGroupDidChangeBlock?(self.selectedGroup)
     }
 	
 	// MARK: - DKGroupDataManagerObserver methods
 	
 	func groupDidUpdate(_ groupId: String) {
-		let indexPath = IndexPath(row: self.groups!.index(of: groupId)!, section: 0)
-		self.tableView.reloadRows(at: [indexPath], with: .none)
+		self.tableView.reloadData()
 	}
 	
-	func groupDidRemove(_ groupId: String) {
-		let indexPath = IndexPath(row: self.groups!.index(of: groupId)!, section: 0)
-		self.groups?.remove(at: indexPath.row)
-		self.tableView.deleteRows(at: [indexPath], with: .none)
-		
-		if self.selectedGroup == groupId {
-			self.selectedGroup = self.groups?.first
-			selectedGroupDidChangeBlock?(self.selectedGroup)
-			self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
-		}
-	}
-    
+    func groupDidRemove(_ groupId: String) {
+        guard let row = self.groups?.index(of: groupId) else { return }
+        self.groups?.remove(at: row)
+
+        self.tableView.reloadData()
+
+        if self.selectedGroup == groupId {
+            self.selectedGroup = self.groups?.first
+            selectedGroupDidChangeBlock?(self.selectedGroup)
+            self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
+        }
+    }
 }
