@@ -1,5 +1,11 @@
 # Change Log
 
+## [3.5.5](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.5) (2017-05-24)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.3...3.5.5)
+
+- Fixed #309
+
 ## [3.5.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.3) (2017-05-22)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.2...3.5.3)
