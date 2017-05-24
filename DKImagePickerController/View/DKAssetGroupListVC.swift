@@ -241,27 +241,6 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         self.selectedGroup = groups[indexPath.row]
         selectedGroupDidChangeBlock?(self.selectedGroup)
     }
-	
-	// MARK: - DKGroupDataManagerObserver methods
-	
-	func groupDidUpdate(_ groupId: String) {
-		let indexPath = IndexPath(row: self.groups!.index(of: groupId)!, section: 0)
-		self.tableView.reloadRows(at: [indexPath], with: .none)
-	}
-	
-	func groupDidRemove(_ groupId: String) {
-        if let row = self.groups?.index(of: groupId) {
-            self.groups?.remove(at: row)
-            
-            self.tableView.reloadData()
-            
-            if self.selectedGroup == groupId {
-                self.selectedGroup = self.groups?.first
-                selectedGroupDidChangeBlock?(self.selectedGroup)
-                self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
-            }
-        }
-	}
     
     // MARK: - DKGroupDataManagerObserver methods
     
