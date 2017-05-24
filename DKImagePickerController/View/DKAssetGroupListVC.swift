@@ -229,15 +229,17 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 	}
 	
 	func groupDidRemove(_ groupId: String) {
-		let indexPath = IndexPath(row: self.groups!.index(of: groupId)!, section: 0)
-		self.groups?.remove(at: indexPath.row)
-		self.tableView.deleteRows(at: [indexPath], with: .none)
-		
-		if self.selectedGroup == groupId {
-			self.selectedGroup = self.groups?.first
-			selectedGroupDidChangeBlock?(self.selectedGroup)
-			self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
-		}
+        if let row = self.groups?.index(of: groupId) {
+            self.groups?.remove(at: row)
+            
+            self.tableView.reloadData()
+            
+            if self.selectedGroup == groupId {
+                self.selectedGroup = self.groups?.first
+                selectedGroupDidChangeBlock?(self.selectedGroup)
+                self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
+            }
+        }
 	}
     
 }
