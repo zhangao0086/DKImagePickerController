@@ -89,15 +89,23 @@ class DKAssetGroupCell: UITableViewCell {
 
         let imageViewY = CGFloat(10)
         let imageViewHeight = self.contentView.bounds.height - 2 * imageViewY
-        self.thumbnailImageView.frame = CGRect(x: imageViewY, y: imageViewY,
-                                               width: imageViewHeight, height: imageViewHeight)
+        self.thumbnailImageView.frame = CGRect(x: imageViewY,
+                                               y: imageViewY,
+                                               width: imageViewHeight,
+                                               height: imageViewHeight)
 
-        self.groupNameLabel.frame = CGRect(x: self.thumbnailImageView.frame.maxX + 10, y: self.thumbnailImageView.frame.minY + 5,
-                                           width: 200, height: 20)
+        self.groupNameLabel.frame = CGRect(
+            x: self.thumbnailImageView.frame.maxX + 10,
+            y: self.thumbnailImageView.frame.minY + 5,
+            width: 200,
+            height: 20)
 
-        self.totalCountLabel.frame = CGRect(x: self.groupNameLabel.frame.minX, y: self.thumbnailImageView.frame.maxY - 20, width: 200, height: 20)
+        self.totalCountLabel.frame = CGRect(
+            x: self.groupNameLabel.frame.minX,
+            y: self.thumbnailImageView.frame.maxY - 20,
+            width: 200,
+            height: 20)
     }
-
 }
 
 class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
@@ -128,7 +136,8 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
     override var preferredContentSize: CGSize {
         get {
             if let groups = self.groups {
-                return CGSize(width: UIViewNoIntrinsicMetric, height: CGFloat(groups.count) * self.tableView.rowHeight)
+                return CGSize(width: UIViewNoIntrinsicMetric,
+                              height: CGFloat(groups.count) * self.tableView.rowHeight)
             } else {
                 return super.preferredContentSize
             }
@@ -152,38 +161,34 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 
     internal func loadGroups() {
         getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
-            guard let groups = groups, let strongSelf = self else { return }
+            guard let groups = groups, let strongSelf = self, error == nil else { return }
 
-            if error == nil {
-                strongSelf.groups = groups
-                strongSelf.selectedGroup = strongSelf.defaultAssetGroupOfAppropriate()
-                if let selectedGroup = strongSelf.selectedGroup,
-                    let row =  groups.index(of: selectedGroup)
-                {
-                    strongSelf.tableView.selectRow(
-                        at: IndexPath(row: row, section: 0),
-                        animated: false,
-                        scrollPosition: .none)
-                }
-
-                strongSelf.selectedGroupDidChangeBlock?(strongSelf.selectedGroup)
+            strongSelf.groups = groups
+            strongSelf.selectedGroup = strongSelf.defaultAssetGroupOfAppropriate()
+            if let selectedGroup = strongSelf.selectedGroup,
+                let row =  groups.index(of: selectedGroup)
+            {
+                strongSelf.tableView.selectRow(
+                    at: IndexPath(row: row, section: 0),
+                    animated: false,
+                    scrollPosition: .none)
             }
+
+            strongSelf.selectedGroupDidChangeBlock?(strongSelf.selectedGroup)
         }
     }
 
     fileprivate func defaultAssetGroupOfAppropriate() -> String? {
-        if let groups = self.groups {
-            if let defaultAssetGroup = self.defaultAssetGroup {
-                for groupId in groups {
-                    let group = getImageManager().groupDataManager.fetchGroupWithGroupId(groupId)
-                    if defaultAssetGroup == group.originalCollection.assetCollectionSubtype {
-                        return groupId
-                    }
+        guard let groups = self.groups else { return nil }
+        if let defaultAssetGroup = self.defaultAssetGroup {
+            for groupId in groups {
+                let group = getImageManager().groupDataManager.fetchGroupWithGroupId(groupId)
+                if defaultAssetGroup == group.originalCollection.assetCollectionSubtype {
+                    return groupId
                 }
             }
-            return groups.first
         }
-        return nil
+        return groups.first
     }
 
     // MARK: - UITableViewDelegate, UITableViewDataSource methods
@@ -194,7 +199,9 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let groups = groups,
-            let cell = tableView.dequeueReusableCell(withIdentifier: DKImageGroupCellIdentifier, for: indexPath) as? DKAssetGroupCell else
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: DKImageGroupCellIdentifier,
+                for: indexPath) as? DKAssetGroupCell else
         {
             assertionFailure("Expect groups and cell")
             return UITableViewCell()
@@ -209,12 +216,13 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         if assetGroup.totalCount == 0 {
             cell.thumbnailImageView.image = DKImageResource.emptyAlbumIcon()
         } else {
-            getImageManager().groupDataManager.fetchGroupThumbnailForGroup(assetGroup.groupId,
-                                                                           size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
-                                                                           options: self.groupThumbnailRequestOptions) { image, info in
-                                                                            if cell.tag == tag {
-                                                                                cell.thumbnailImageView.image = image
-                                                                            }
+            getImageManager().groupDataManager.fetchGroupThumbnailForGroup(
+                assetGroup.groupId,
+                size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
+                options: self.groupThumbnailRequestOptions) { image, info in
+                    if cell.tag == tag {
+                        cell.thumbnailImageView.image = image
+                    }
             }
         }
         cell.totalCountLabel.text = String(assetGroup.totalCount)
@@ -249,7 +257,9 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         if self.selectedGroup == groupId {
             self.selectedGroup = self.groups?.first
             selectedGroupDidChangeBlock?(self.selectedGroup)
-            self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
+            self.tableView.selectRow(at: IndexPath(row: 0, section: 0),
+                                     animated: false,
+                                     scrollPosition: .none)
         }
     }
 }
