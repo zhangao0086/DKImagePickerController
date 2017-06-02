@@ -248,6 +248,11 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         self.tableView.reloadData()
     }
     
+    func groupsDidInsert(_ groupIds: [String]) {
+        self.groups! += groupIds
+        self.tableView.reloadData()
+    }
+    
     func groupDidRemove(_ groupId: String) {
         guard let row = self.groups?.index(of: groupId) else { return }
         self.groups?.remove(at: row)
