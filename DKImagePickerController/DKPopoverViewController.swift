@@ -131,17 +131,17 @@ open class DKPopoverViewController: UIViewController {
 		
 		self.popoverView.contentView = self.contentViewController.view
         self.popoverView.frame = self.calculatePopoverViewFrame()
+        
+        self.contentViewController!.addObserver(self,
+                                                forKeyPath: "preferredContentSize",
+                                                options: .new,
+                                                context: nil)
 		
         self.popoverView.transform = self.popoverView.transform.translatedBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaledBy(x: 0.1, y: 0.1)
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .allowUserInteraction, animations: {
             self.popoverView.transform = CGAffineTransform.identity
             self.view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
-        }, completion: { result in
-            self.contentViewController!.addObserver(self,
-                                                   forKeyPath: "preferredContentSize",
-                                                   options: .new,
-                                                   context: nil)
-        })
+        }, completion: nil)
     }
     
     func dismiss() {
