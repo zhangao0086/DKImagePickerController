@@ -225,6 +225,7 @@ It has been supported languages so far:
 * hu.lproj
 * ja.lproj
 * ko.lproj
+* nb-NO.lproj
 * pt_BR.lproj
 * ru.lproj
 * tr.lproj
