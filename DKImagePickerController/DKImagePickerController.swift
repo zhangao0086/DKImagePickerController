@@ -348,20 +348,20 @@ open class DKImagePickerController : UINavigationController {
             PHPhotoLibrary.shared().performChanges({
                 let assetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
                 newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-            }) { (success, error) in
-                DispatchQueue.main.async(execute: {
+            }) { [weak self] (success, error) in
+                DispatchQueue.main.async(execute: { [weak self] in
                     if success {
                         if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
-                            if self.presentedViewController != nil {
-                                self.dismiss(animated: true, completion: nil)
+                            if self?.presentedViewController != nil {
+                                self?.dismiss(animated: true, completion: nil)
                             }
-                            self.selectImage(DKAsset(originalAsset: newAsset))
+                            self?.selectImage(DKAsset(originalAsset: newAsset))
                         }
                     } else {
-                        if self.sourceType != .camera {
-                            self.dismiss(animated: true, completion: nil)
+                        if self?.sourceType != .camera {
+                            self?.dismiss(animated: true, completion: nil)
                         }
-                        self.selectImage(DKAsset(image: image))
+                        self?.selectImage(DKAsset(image: image))
                     }
                 })
                 
