@@ -1,5 +1,19 @@
 # Change Log
 
+## [3.5.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.6) (2017-06-24)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.5...3.5.6)
+
+- Fixes an issue may cause crashes.
+
+- Add norwegian translation for bokmål dialect
+
+- Fixed an issue cause crash when remove observer.
+
+- Updated the size of album list view to fit them when add or remove of photo albums.
+
+- Improved sync of albums.
+
 ## [3.5.5](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.5) (2017-05-24)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.3...3.5.5)

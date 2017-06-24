@@ -225,6 +225,7 @@ It has been supported languages so far:
 * hu.lproj
 * ja.lproj
 * ko.lproj
+* nb-NO.lproj
 * pt_BR.lproj
 * ru.lproj
 * tr.lproj
@@ -240,39 +241,19 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
-## [3.5.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.1) (2017-02-22)
+## [3.5.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.6) (2017-06-24)
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.0...3.5.1)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.5...3.5.6)
 
-- Fix https://github.com/zhangao0086/DKImagePickerController/pull/277.
+- Fixes an issue may cause crashes.
 
-- Update DKCamera.
+- Add norwegian translation for bokmål dialect
 
-- Sorting photos like native Photos app.
+- Fixed an issue cause crash when remove observer.
 
-## [3.5.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.0) (2017-01-03)
+- Updated the size of album list view to fit them when add or remove of photo albums.
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.4.1...3.5.0)
-
-- Added danish translation.
-
-- Added Korean Language.
-
-- Added Traditional Chinese language.
-
-- Added Vietnamese language.
-
-- Updated DKCamera.
-
-- Updated demo project.
-
-- Updated API for custom camera.
-
-- Supports UICollectionViewCell customizable.
-
-- DKPermissionView access modifier is open.
-
-- Fixed some bugs.
+- Improved sync of albums.
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.

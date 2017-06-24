@@ -248,12 +248,26 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         self.tableView.reloadData()
     }
     
+    func groupsDidInsert(_ groupIds: [String]) {
+        self.groups! += groupIds
+        
+        self.willChangeValue(forKey: "preferredContentSize")
+        
+        let indexPathForSelectedRow = self.tableView.indexPathForSelectedRow
+        self.tableView.reloadData()
+        self.tableView.selectRow(at: indexPathForSelectedRow, animated: false, scrollPosition: .none)
+        
+        self.didChangeValue(forKey: "preferredContentSize")
+    }
+    
     func groupDidRemove(_ groupId: String) {
         guard let row = self.groups?.index(of: groupId) else { return }
+        
+        self.willChangeValue(forKey: "preferredContentSize")
+        
         self.groups?.remove(at: row)
         
         self.tableView.reloadData()
-        
         if self.selectedGroup == groupId {
             self.selectedGroup = self.groups?.first
             selectedGroupDidChangeBlock?(self.selectedGroup)
@@ -261,5 +275,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
                                      animated: false,
                                      scrollPosition: .none)
         }
+        
+        self.didChangeValue(forKey: "preferredContentSize")
     }
 }
