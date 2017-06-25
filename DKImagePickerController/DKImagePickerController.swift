@@ -123,8 +123,11 @@ open class DKImagePickerController : UINavigationController {
         return DKImagePickerControllerDefaultUIDelegate()
     }()
     
-    /// Forces selection of tapped image immediatly.
+    /// Forces deselect of previous selected image
     public var singleSelect = false
+    
+    /// Auto close picker on single select
+    public var autoCloseOnSingleSelect = true
     
     /// The maximum count of assets which the user will be able to select.
     public var maxSelectableCount = 999
@@ -448,7 +451,9 @@ open class DKImagePickerController : UINavigationController {
         if self.singleSelect {
             self.deselectAllAssets()
             self.selectedAssets.append(asset)
-            self.done()
+            if autoCloseOnSingleSelect {
+                self.done()
+            }
         } else {
             self.selectedAssets.append(asset)
             if self.sourceType == .camera {
