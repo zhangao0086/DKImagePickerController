@@ -206,7 +206,7 @@ open class DKImagePickerController : UINavigationController {
     public var didCancel: (() -> Void)?
     public var showsCancelButton = false {
         didSet {
-            if let rootVC =  self.viewControllers.first {
+            if let rootVC = self.viewControllers.first {
                 self.updateCancelButtonForVC(rootVC)
             }
         }
@@ -272,7 +272,7 @@ open class DKImagePickerController : UINavigationController {
                 }
             } else {
                 self.isNavigationBarHidden = false
-                let rootVC = DKAssetGroupDetailVC()
+                let rootVC = self.makeRootVC()
                 rootVC.imagePickerController = self
                 
                 self.UIDelegate.prepareLayout(self, vc: rootVC)
@@ -289,6 +289,10 @@ open class DKImagePickerController : UINavigationController {
         let assetFetchOptions = PHFetchOptions()
         return assetFetchOptions
     }()
+  
+    open func makeRootVC() -> DKAssetGroupDetailVC {
+      return DKAssetGroupDetailVC()
+    }
     
     private func createAssetFetchOptions() -> PHFetchOptions? {
         let createImagePredicate = { () -> NSPredicate in
