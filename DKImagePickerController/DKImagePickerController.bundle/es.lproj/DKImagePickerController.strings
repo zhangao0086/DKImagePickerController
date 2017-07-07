@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Seleccciona(%ld)";
+"select" = "Seleccciona(%@)";
 
 "permissionCamera" = "Por favor, permite el Acceso a la cámara";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Superado el número máximo de fotos";
 
-"maxLimitReachedMessage" = "Puedes seleccionar %ld fotos";
+"maxLimitReachedMessage" = "Puedes seleccionar %@ fotos";

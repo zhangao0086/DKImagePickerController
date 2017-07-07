@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Выбрать(%ld)";
+"select" = "Выбрать(%@)";
 
 "permissionCamera" = "Пожалуйста, разрешите доступ к камере";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Достигнут лимит фото";
 
-"maxLimitReachedMessage" = "Вы можете выбрать %ld фото";
+"maxLimitReachedMessage" = "Вы можете выбрать %@ фото";

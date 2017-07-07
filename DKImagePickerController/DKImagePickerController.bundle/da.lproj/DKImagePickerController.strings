@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Tilføj(%ld)";
+"select" = "Tilføj(%@)";
 
 "permissionCamera" = "Tillad venligst adgang til kameraet";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Grænsen for antal billeder er nået";
 
-"maxLimitReachedMessage" = "Du kan maksimalt tilføje %ld billeder";
+"maxLimitReachedMessage" = "Du kan maksimalt tilføje %@ billeder";

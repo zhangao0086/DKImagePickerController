@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Chọn(%ld)";
+"select" = "Chọn(%@)";
 
 "permissionCamera" = "Vui lòng cho phép truy cập camera";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Số lượng ảnh đã đạt giới hạn";
 
-"maxLimitReachedMessage" = "Bạn có thể chọn %ld mục";
+"maxLimitReachedMessage" = "Bạn có thể chọn %@ mục";

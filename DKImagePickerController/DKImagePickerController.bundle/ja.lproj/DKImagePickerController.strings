@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "選択(%ld)";
+"select" = "選択(%@)";
 
 "permissionCamera" = "カメラへのアクセスを許可してください";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "選択可能枚数に到達しました";
 
-"maxLimitReachedMessage" = "%ld 枚まで選択することができます";
+"maxLimitReachedMessage" = "%@ 枚まで選択することができます";

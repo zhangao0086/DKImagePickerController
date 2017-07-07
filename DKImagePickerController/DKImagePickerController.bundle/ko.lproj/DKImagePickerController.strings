@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "선택(%ld)";
+"select" = "선택(%@)";
 
 "permissionCamera" = "카메라 권한을 허용해주세요.";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "최대치 만큼 사진을 선택하셨습니다.";
 
-"maxLimitReachedMessage" = "%ld개의 사진까지 선택할수 있습니다.";
+"maxLimitReachedMessage" = "%@개의 사진까지 선택할수 있습니다.";
