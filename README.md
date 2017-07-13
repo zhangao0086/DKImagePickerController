@@ -9,7 +9,7 @@ DKImagePickerController
 ---
 
 ## Description
-It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
+参考swift写的OC的.  
 
 ### Features
 * Supports both single and multiple selection.
