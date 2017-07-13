@@ -27,117 +27,9 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 ## Requirements
 * iOS 8.0+
 * ARC
-* Swift 3 and Xcode 8
-
-## Installation
-#### iOS 8 and newer
-DKImagePickerController is available on CocoaPods. Simply add the following line to your podfile:
-
-```ruby
-# For latest release in cocoapods
-pod 'DKImagePickerController'
+* Xcode 8
 
 
-```
-
-#### iOS 7.x
-
-> The 3.x aren't supported before iOS 8. If you want to support iOS 7, you can look at the [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) branch that uses `ALAssetsLibrary` instead of using `Photos`.
-
-> To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
-[CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
-
-#### Swift 2.2
-> For Swift 2.2, use version <= 3.3.4
-
-#### Swift 2.3
-> For Swift 2.3, use version = 3.3.5
-
-## Getting Started
-#### Initialization and presentation
-```swift
-
-let pickerController = DKImagePickerController()
-
-pickerController.didSelectAssets = { (assets: [DKAsset]) in
-    print("didSelectAssets")
-    print(assets)
-}
-
-self.presentViewController(pickerController, animated: true) {}
-
-````
-
-#### Customizing
-
-```swift
-/// Forces selection of tapped image immediatly.
-public var singleSelect = false
-    
-/// The maximum count of assets which the user will be able to select.
-public var maxSelectableCount = 999
-
-/// Set the defaultAssetGroup to specify which album is the default asset group.
-public var defaultAssetGroup: PHAssetCollectionSubtype?
-
-/// The types of PHAssetCollection to display in the picker.
-public var assetGroupTypes: [PHAssetCollectionSubtype] = [
-    .SmartAlbumUserLibrary,
-    .SmartAlbumFavorites,
-    .AlbumRegular
-    ]
-
-/// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
-public var showsEmptyAlbums = true
-
-/// The type of picker interface to be displayed by the controller.
-public var assetType: DKImagePickerControllerAssetType = .AllAssets
-
-/// The predicate applies to images only.
-public var imageFetchPredicate: NSPredicate?
-
-/// The predicate applies to videos only.
-public var videoFetchPredicate: NSPredicate?
-
-/// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-public var sourceType: DKImagePickerControllerSourceType = .Both
-
-/// Whether allows to select photos and videos at the same time.
-public var allowMultipleTypes = true
-
-/// If YES, and the requested image is not stored on the local device, the Picker downloads the image from iCloud.
-public var autoDownloadWhenAssetIsInCloud = true
-
-/// Determines whether or not the rotation is enabled.
-public var allowsLandscape = false
-
-/// The callback block is executed when user pressed the cancel button.
-public var didCancel: (() -> Void)?
-public var showsCancelButton = false
-
-/// The callback block is executed when user pressed the select button.
-public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
-
-/// It will have selected the specific assets.
-public var defaultSelectedAssets: [DKAsset]?
-
-```
-
-##### Exporting to file
-```swift
-/**
-    Writes the image in the receiver to the file specified by a given path.
-*/
-public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void)
-
-/**
-    Writes the AV in the receiver to the file specified by a given path.
-
-    - parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
-*/
-public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void)
-
-```
 
 #### Camera customization
 
@@ -166,35 +58,6 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
-## How to use in Objective-C
-
-#### If you use [CocoaPods](http://cocoapods.org/)
-
-* Adding the following two lines into your `Podfile`:
-
-    ```ruby
-    pod 'DKImagePickerController'
-    use_frameworks!
-    ```
-* Importing it into your Objective-C file: 
-
-    ```objective-c
-    #import <DKImagePickerController/DKImagePickerController-Swift.h>
-    ```
-
-#### If you use it directly in your project
-
-> See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
-
-* Drag and drop the [DKCamera][DKCamera] and `DKImageManager` and `DKImagePickerController` to your project
-* Importing it into your Objective-C file: 
-
-    ```objective-c
-    #import "YourProductModuleName-Swift.h"
-    ```
-
----
-then you can:
 
 ```objective-c
 DKImagePickerController *pickerController = [DKImagePickerController new];
@@ -236,28 +99,3 @@ It has been supported languages so far:
 
 If you want to add new language, pull request or issue!
 
----
-You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
-
-## Change Log
-
-## [3.5.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.6) (2017-06-24)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.5...3.5.6)
-
-- Fixes an issue may cause crashes.
-
-- Add norwegian translation for bokmål dialect
-
-- Fixed an issue cause crash when remove observer.
-
-- Updated the size of album list view to fit them when add or remove of photo albums.
-
-- Improved sync of albums.
-
-## License
-DKImagePickerController is released under the MIT license. See LICENSE for details.
-
-[docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
-[mitLink]:http://opensource.org/licenses/MIT
-[DKCamera]:https://github.com/zhangao0086/DKCamera
