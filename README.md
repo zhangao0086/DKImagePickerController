@@ -1,8 +1,6 @@
 DKImagePickerController
 =======================
 
- [![Build Status](https://secure.travis-ci.org/zhangao0086/DKImagePickerController.svg)](http://travis-ci.org/zhangao0086/DKImagePickerController) [![Version Status](http://img.shields.io/cocoapods/v/DKImagePickerController.png)][docsLink] [![license MIT](http://img.shields.io/badge/license-MIT-orange.png)][mitLink] [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot1.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot2.png" />
 ---
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
@@ -50,11 +48,6 @@ For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImage
 
 ##### Conforms UIAppearance protocol
 You can easily customize the appearance of navigation bar using the appearance proxy.
-```swift
-UINavigationBar.appearance().titleTextAttributes = [
-    NSFontAttributeName : UIFont(name: "Optima-BoldItalic", size: 21)!,
-    NSForegroundColorAttributeName : UIColor.redColor()
-]
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
@@ -76,26 +69,4 @@ pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
  
  [self presentViewController:pickerController animated:YES completion:nil];
 ```
-
-## Localization
-It has been supported languages so far:
-
-* en.lproj
-* es.lproj
-* da.lproj
-* de.lproj
-* fr.lproj
-* hu.lproj
-* ja.lproj
-* ko.lproj
-* nb-NO.lproj
-* pt_BR.lproj
-* ru.lproj
-* tr.lproj
-* ur.lproj
-* vi.lproj
-* zh-Hans.lproj
-* zh-Hant.lproj
-
-If you want to add new language, pull request or issue!
 
