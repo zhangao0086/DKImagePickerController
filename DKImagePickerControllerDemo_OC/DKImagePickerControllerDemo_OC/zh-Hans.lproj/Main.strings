@@ -1,0 +1,48 @@
+
+/* Class = "UILabel"; text = "Pick Videos Only"; ObjectID = "36U-Sj-UMT"; */
+"36U-Sj-UMT.text" = "Pick Videos Only";
+
+/* Class = "UILabel"; text = "UI Customization"; ObjectID = "64w-Lr-QXe"; */
+"64w-Lr-QXe.text" = "UI Customization";
+
+/* Class = "UILabel"; text = "Allows Landscape"; ObjectID = "CUi-EV-4kg"; */
+"CUi-EV-4kg.text" = "Allows Landscape";
+
+/* Class = "UILabel"; text = "Single Select"; ObjectID = "GYU-x5-am0"; */
+"GYU-x5-am0.text" = "Single Select";
+
+/* Class = "UILabel"; text = "Hides Camera"; ObjectID = "INj-Vq-iEy"; */
+"INj-Vq-iEy.text" = "Hides Camera";
+
+/* Class = "UILabel"; text = "Pick All"; ObjectID = "Klc-XD-VXh"; */
+"Klc-XD-VXh.text" = "Pick All";
+
+/* Class = "UILabel"; text = "PickPhotosOnly"; ObjectID = "PrI-kY-3gT"; */
+"PrI-kY-3gT.text" = "PickPhotosOnly";
+
+/* Class = "UITableViewSection"; headerTitle = "Camera"; ObjectID = "QCb-2J-bbw"; */
+"QCb-2J-bbw.headerTitle" = "Camera";
+
+/* Class = "UILabel"; text = "Take A Picture"; ObjectID = "Qcm-AR-fl5"; */
+"Qcm-AR-fl5.text" = "Take A Picture";
+
+/* Class = "UITableViewSection"; headerTitle = "Appearance"; ObjectID = "VFa-Yx-71f"; */
+"VFa-Yx-71f.headerTitle" = "Appearance";
+
+/* Class = "UILabel"; text = "Pick All(Only Photos Or Videos)"; ObjectID = "ZJE-UR-vHJ"; */
+"ZJE-UR-vHJ.text" = "Pick All(Only Photos Or Videos)";
+
+/* Class = "UINavigationItem"; title = "Root View Controller"; ObjectID = "fV4-FB-sxt"; */
+"fV4-FB-sxt.title" = "Root View Controller";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "mOW-I0-ua8"; */
+"mOW-I0-ua8.text" = "Title";
+
+/* Class = "UILabel"; text = "Camera Customization"; ObjectID = "oKD-xt-PkD"; */
+"oKD-xt-PkD.text" = "Camera Customization";
+
+/* Class = "UITableViewSection"; headerTitle = "Basic"; ObjectID = "pCo-jW-DCN"; */
+"pCo-jW-DCN.headerTitle" = "Basic";
+
+/* Class = "UILabel"; text = "Layout Customization"; ObjectID = "pJN-48-o08"; */
+"pJN-48-o08.text" = "Layout Customization";
