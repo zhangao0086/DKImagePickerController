@@ -29,28 +29,6 @@ DKImagePickerController
 
 
 
-#### Camera customization
-
-You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
-For example, see [CustomCameraUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomCameraUIDelegate).
-
-#### UI customization
-
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
-
-For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomUIDelegate).
-
-#### Layout customization
-
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
-
-For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomLayoutUIDelegate).
-
-##### Conforms UIAppearance protocol
-You can easily customize the appearance of navigation bar using the appearance proxy.
-```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
-
 
 ```objective-c
 DKImagePickerController *pickerController = [DKImagePickerController new];
