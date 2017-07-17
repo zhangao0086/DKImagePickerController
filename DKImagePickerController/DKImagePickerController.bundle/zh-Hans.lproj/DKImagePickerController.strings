@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "选择(%ld)";
+"select" = "选择(%@)";
 
 "permissionCamera" = "请授权使用相机";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "最大数限制";
 
-"maxLimitReachedMessage" = "你能选择%ld项";
+"maxLimitReachedMessage" = "你能选择%@项";

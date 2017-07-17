@@ -60,9 +60,17 @@ public class DKImageLocalizedString {
         return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:Bundle.imagePickerControllerBundle(), value: "", comment: "")
     }
     
+    public class func localizedStringForKey(_ key: String, value: String) -> String {
+        return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:Bundle.imagePickerControllerBundle(), value: value, comment: "")
+    }
+    
 }
 
 public func DKImageLocalizedStringWithKey(_ key: String) -> String {
     return DKImageLocalizedString.localizedStringForKey(key)
+}
+
+public func DKImageLocalizedStringWithKey(_ key: String, value: String) -> String {
+    return DKImageLocalizedString.localizedStringForKey(key, value: value)
 }
 

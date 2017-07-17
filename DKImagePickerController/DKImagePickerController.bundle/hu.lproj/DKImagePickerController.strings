@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Kiválaszt(%ld)";
+"select" = "Kiválaszt(%@)";
 
 "permissionCamera" = "Kérlek adj hozzáférést a Kamerához";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Max fotók Elérte a";
 
-"maxLimitReachedMessage" = "Megadhatja %ld fotók";
+"maxLimitReachedMessage" = "Megadhatja %@ fotók";
