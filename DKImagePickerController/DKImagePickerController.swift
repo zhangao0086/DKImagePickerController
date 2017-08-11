@@ -433,6 +433,13 @@ open class DKImagePickerController : UINavigationController {
         self.deselectAsset(asset)
     }
     
+    public func selectImage(atIndexPath index: IndexPath) {
+        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            rootVC.selectAsset(atIndex: index)
+            rootVC.collectionView?.reloadData()
+        }
+    }
+    
     public func deselectAsset(_ asset: DKAsset) {
         self.deselectImage(asset)
         if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {

@@ -157,6 +157,16 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         return getImageManager().groupDataManager.fetchAsset(group, index: assetIndex)
     }
     
+    //select an asset at a specific index
+    public func selectAsset(atIndex indexPath: IndexPath) {
+        let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset
+        self.imagePickerController.selectImage(selectedAsset!)
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell {
+            cell.index = self.imagePickerController.selectedAssets.count - 1
+        }
+    }
+    
     func isCameraCell(indexPath: IndexPath) -> Bool {
         return indexPath.row == 0 && !self.hidesCamera
     }
@@ -271,12 +281,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
                 self.imagePickerController.presentCamera()
             }
         } else {
-            let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset
-            self.imagePickerController.selectImage(selectedAsset!)
-            
-            if let cell = collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell {
-                cell.index = self.imagePickerController.selectedAssets.count - 1
-            }
+            selectAsset(atIndex: indexPath)
         }
     }
     
