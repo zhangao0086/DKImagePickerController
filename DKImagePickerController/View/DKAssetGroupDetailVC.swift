@@ -80,6 +80,9 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
+        
+        let swipeOutGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.swiping(gesture:)))
+        self.collectionView.addGestureRecognizer(swipeOutGesture)
     }
     
     override open func viewDidAppear(_ animated: Bool) {
@@ -130,6 +133,17 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         self.selectedGroupId = groupId
 		self.updateTitleView()
 		self.collectionView!.reloadData()
+    }
+    
+    //use the swiping gesture to select the currently swiping cell.
+    @objc
+    private func swiping(gesture: UIPanGestureRecognizer) {
+        if gesture.state != .ended {
+            let loc = gesture.location(ofTouch: 0, in: self.collectionView)
+            if let cell = self.collectionView.indexPathForItem(at: loc) {
+                print(cell)
+            }
+        }
     }
 	
 	open func updateTitleView() {
