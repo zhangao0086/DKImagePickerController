@@ -135,6 +135,9 @@ open class DKImagePickerController : UINavigationController {
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
     
+    ///allow swipe to select images.
+    public var allowSwipeToSelect:Bool = false
+    
     /// The types of PHAssetCollection to display in the picker.
     public var assetGroupTypes: [PHAssetCollectionSubtype] = [
         .smartAlbumUserLibrary,

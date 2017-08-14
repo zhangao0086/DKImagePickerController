@@ -49,6 +49,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     private var currentViewSize: CGSize!
     private var registeredCellIdentifiers = Set<String>()
     private var thumbnailSize = CGSize.zero
+    private var curSwipingPath:IndexPath? = nil
 	
 	override open func viewWillLayoutSubviews() {
 		super.viewWillLayoutSubviews()
@@ -81,8 +82,10 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
         
-        let swipeOutGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.swiping(gesture:)))
-        self.collectionView.addGestureRecognizer(swipeOutGesture)
+        if self.imagePickerController.allowSwipeToSelect {
+            let swipeOutGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.swiping(gesture:)))
+            self.collectionView.addGestureRecognizer(swipeOutGesture)
+        }
     }
     
     override open func viewDidAppear(_ animated: Bool) {
@@ -140,8 +143,17 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     private func swiping(gesture: UIPanGestureRecognizer) {
         if gesture.state != .ended {
             let loc = gesture.location(ofTouch: 0, in: self.collectionView)
-            if let cell = self.collectionView.indexPathForItem(at: loc) {
-                print(cell)
+            if let path = self.collectionView.indexPathForItem(at: loc), let cell = self.collectionView.cellForItem(at: path), let cc = cell as? DKAssetGroupDetailBaseCell {
+                if let ast = cc.asset {
+                    if curSwipingPath != path {
+                        curSwipingPath = path
+                        if !self.imagePickerController.selectedAssets.contains(ast) {
+                            self.imagePickerController.selectImage(atIndexPath: path)
+                        } else {
+                            self.imagePickerController.deselectAsset(ast)
+                        }
+                    }
+                }
             }
         }
     }
@@ -173,12 +185,19 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     
     //select an asset at a specific index
     public func selectAsset(atIndex indexPath: IndexPath) {
-        let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset
-        self.imagePickerController.selectImage(selectedAsset!)
-        
-        if let cell = collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell {
-            cell.index = self.imagePickerController.selectedAssets.count - 1
+        let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)
+        if let ss = selectedAsset {
+            selectAsset(cellToSelect: ss)
         }
+    }
+    
+    public func selectAsset(cellToSelect cell:DKAssetGroupDetailBaseCell) {
+        guard let ast = cell.asset else {
+            return
+        }
+        
+        self.imagePickerController.selectImage(ast)
+        cell.index = self.imagePickerController.selectedAssets.count - 1
     }
     
     func isCameraCell(indexPath: IndexPath) -> Bool {

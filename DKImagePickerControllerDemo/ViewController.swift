@@ -35,8 +35,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			pickerController.modalPresentationStyle = .formSheet
 		}
 		
-		self.present(pickerController, animated: true) {
-            
+        //turn on the swipe selection feature
+        //self.pickerController.allowSwipeToSelect = true
+		
+        self.present(pickerController, animated: true) {
             //select a specific image via index
             //self.pickerController.selectImage(atIndexPath: IndexPath(item: 1, section: 0))
         }
