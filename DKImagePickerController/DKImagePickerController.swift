@@ -426,11 +426,11 @@ open class DKImagePickerController : UINavigationController {
                 self?.selectImage(DKAsset(image: UIImage(data: data)!))
             }
             else{
-                if let image = UIImage(data: data) {
+                if let newAsset = PHAsset.fetchAssets(withALAssetURLs: [newURL!], options: nil).firstObject {
                     if self?.presentedViewController != nil {
                         self?.dismiss(animated: true, completion: nil)
                     }
-                    self?.selectImage(DKAsset(image: image))
+                    self?.selectImage(DKAsset(originalAsset: newAsset))
                 }
             }
         })
