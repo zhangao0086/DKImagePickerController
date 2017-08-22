@@ -135,6 +135,9 @@ open class DKImagePickerController : UINavigationController {
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
     
+    ///allow swipe to select images.
+    public var allowSwipeToSelect:Bool = false
+    
     /// The types of PHAssetCollection to display in the picker.
     public var assetGroupTypes: [PHAssetCollectionSubtype] = [
         .smartAlbumUserLibrary,
@@ -206,7 +209,7 @@ open class DKImagePickerController : UINavigationController {
     public var didCancel: (() -> Void)?
     public var showsCancelButton = false {
         didSet {
-            if let rootVC =  self.viewControllers.first {
+            if let rootVC = self.viewControllers.first {
                 self.updateCancelButtonForVC(rootVC)
             }
         }
@@ -272,7 +275,7 @@ open class DKImagePickerController : UINavigationController {
                 }
             } else {
                 self.isNavigationBarHidden = false
-                let rootVC = DKAssetGroupDetailVC()
+                let rootVC = self.makeRootVC()
                 rootVC.imagePickerController = self
                 
                 self.UIDelegate.prepareLayout(self, vc: rootVC)
@@ -289,6 +292,10 @@ open class DKImagePickerController : UINavigationController {
         let assetFetchOptions = PHFetchOptions()
         return assetFetchOptions
     }()
+  
+    open func makeRootVC() -> DKAssetGroupDetailVC {
+      return DKAssetGroupDetailVC()
+    }
     
     private func createAssetFetchOptions() -> PHFetchOptions? {
         let createImagePredicate = { () -> NSPredicate in
@@ -427,6 +434,13 @@ open class DKImagePickerController : UINavigationController {
     public func deselectAssetAtIndex(_ index: Int) {
         let asset = self.selectedAssets[index]
         self.deselectAsset(asset)
+    }
+    
+    public func selectImage(atIndexPath index: IndexPath) {
+        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            rootVC.selectAsset(atIndex: index)
+            rootVC.collectionView?.reloadData()
+        }
     }
     
     public func deselectAsset(_ asset: DKAsset) {
