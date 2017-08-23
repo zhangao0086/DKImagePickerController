@@ -221,6 +221,8 @@ open class DKImagePickerController : UINavigationController {
     /// The callback block is executed when user pressed the select button.
     public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
     
+    public var selectedChanged: (() -> Void)?
+    
     /// It will have selected the specific assets.
     public var defaultSelectedAssets: [DKAsset]? {
         didSet {
@@ -271,9 +273,13 @@ open class DKImagePickerController : UINavigationController {
         if !hasInitialized {
             hasInitialized = true
             
-            if self.sourceType == .camera {
+            if self.inline || self.sourceType == .camera {
                 self.isNavigationBarHidden = true
-                
+            } else {
+                self.isNavigationBarHidden = false
+            }
+            
+            if self.sourceType == .camera {
                 let camera = self.createCamera()
                 if camera is UINavigationController {
                     self.presentCamera(camera: camera)
@@ -282,7 +288,6 @@ open class DKImagePickerController : UINavigationController {
                     self.setViewControllers([camera], animated: false)
                 }
             } else {
-                self.isNavigationBarHidden = false
                 let rootVC = self.makeRootVC()
                 rootVC.imagePickerController = self
                 
@@ -413,7 +418,29 @@ open class DKImagePickerController : UINavigationController {
     }
     
     internal func presentCamera() {
-        self.present(self.createCamera(), animated: true, completion: nil)
+        self.presentCamera(camera: self.createCamera())
+    }
+    
+    internal weak var camera: UIViewController?
+    internal func presentCamera(camera: UIViewController) {
+        self.camera = camera
+        
+        if self.inline {
+            UIApplication.shared.keyWindow!.rootViewController!.present(camera, animated: true, completion: nil)
+        } else {
+            self.present(camera, animated: true, completion: nil)
+        }
+    }
+    
+    internal func dismissCamera() {
+        if let _ = self.camera {
+            if self.inline {
+                UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+            self.camera = nil
+        }
     }
     
     open func dismiss() {
@@ -473,6 +500,7 @@ open class DKImagePickerController : UINavigationController {
                 self.done()
             } else {
                 self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
+                self.triggerSelectedChanged()
             }
         }
     }
@@ -480,6 +508,13 @@ open class DKImagePickerController : UINavigationController {
     internal func deselectImage(_ asset: DKAsset) {
         self.selectedAssets.remove(at: selectedAssets.index(of: asset)!)
         self.UIDelegate.imagePickerController(self, didDeselectAssets: [asset])
+        self.triggerSelectedChanged()
+    }
+    
+    internal func triggerSelectedChanged() {
+        if let selectedChanged = self.selectedChanged {
+            selectedChanged()
+        }
     }
     
     // MARK: - Handles Orientation
