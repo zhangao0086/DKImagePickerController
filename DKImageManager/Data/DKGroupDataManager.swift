@@ -28,6 +28,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	public var assetGroupTypes: [PHAssetCollectionSubtype]?
 	public var assetFetchOptions: PHFetchOptions?
 	public var showsEmptyAlbums: Bool = true
+    public var fetchLimit = 0
 
     public var assetFilter: ((_ asset: PHAsset) -> Bool)?
 	
@@ -153,18 +154,30 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 	}
 	
     private func filterResults(_ fetchResult: PHFetchResult<PHAsset>) -> PHFetchResult<PHAsset> {
-        guard let filter = assetFilter else { return fetchResult }
+        if self.assetFilter == nil && (self.fetchLimit == 0 || fetchResult.count < self.fetchLimit) {
+            return fetchResult
+        }
         
         var filtered = [PHAsset]()
-        for i in 0..<fetchResult.count {
-            if filter(fetchResult[i]) {
-                filtered.append(fetchResult[i])
+        
+        if let filter = assetFilter {
+            for i in 0..<fetchResult.count {
+                if filter(fetchResult[i]) {
+                    filtered.append(fetchResult[i])
+                    
+                    if filtered.count == self.fetchLimit {
+                        break
+                    }
+                }
             }
+        } else {
+            filtered += fetchResult.objects(at: IndexSet(integersIn: fetchResult.count - self.fetchLimit..<fetchResult.count))
         }
-
+        
         let collection = PHAssetCollection.transientAssetCollection(with: filtered, title: nil)
         return PHAsset.fetchAssets(in: collection, options: nil)
     }
+    
 	// MARK: - PHPhotoLibraryChangeObserver methods
 	
 	public func photoLibraryDidChange(_ changeInstance: PHChange) {

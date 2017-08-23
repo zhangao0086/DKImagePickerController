@@ -129,8 +129,17 @@ open class DKImagePickerController : UINavigationController {
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
     
-    ///allow swipe to select images.
-    public var allowSwipeToSelect:Bool = false
+    /// allow swipe to select images.
+    public var allowSwipeToSelect: Bool = false
+    
+    public var inline: Bool = false
+    
+    /// Limits the maximum number of objects returned in the fetch result, a value of 0 means no limit.
+    public var fetchLimit = 0 {
+        didSet {
+            getImageManager().groupDataManager.fetchLimit = self.fetchLimit
+        }
+    }
     
     /// The types of PHAssetCollection to display in the picker.
     public var assetGroupTypes: [PHAssetCollectionSubtype] = [
