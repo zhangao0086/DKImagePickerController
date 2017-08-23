@@ -10,9 +10,14 @@ import UIKit
 import MobileCoreServices
 
 open class CustomCamera: UIImagePickerController, DKImagePickerControllerCameraProtocol, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    public func setDidFinishCapturingImage_Data(block: @escaping (Data) -> Void) {
+        self.didFinishCapturingImage_Data = block
+    }
+
     
     var didCancel: (() -> Void)?
     var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
+    var didFinishCapturingImage_Data: ((_ data: Data) -> Void)?
     var didFinishCapturingVideo: ((_ videoURL: URL) -> Void)?
     
     public func setDidCancel(block: @escaping () -> Void) {

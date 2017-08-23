@@ -152,6 +152,10 @@ open class DKImagePickerControllerCamera: DKCamera, DKImagePickerControllerCamer
         super.didFinishCapturingImage = block
     }
 
+    open func setDidFinishCapturingImage_Data(block: @escaping (Data) -> Void) {
+        super.didFinishCapturingImage_Data = block
+    }
+
     open func setDidCancel(block: @escaping () -> Void) {
         super.didCancel = block
     }
