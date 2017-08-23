@@ -86,6 +86,15 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
+        case "Inline":
+            let pickerController = DKImagePickerController()
+            pickerController.inline = true
+            pickerController.fetchLimit = 10
+            pickerController.assetType = .allPhotos
+            pickerController.sourceType = .photo
+            
+            destination.pickerController = pickerController
+            
         default:
             assert(false)
         }
