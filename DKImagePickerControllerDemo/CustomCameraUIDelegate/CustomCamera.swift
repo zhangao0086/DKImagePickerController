@@ -10,21 +10,16 @@ import UIKit
 import MobileCoreServices
 
 open class CustomCamera: UIImagePickerController, DKImagePickerControllerCameraProtocol, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    public func setDidFinishCapturingImage_Data(block: @escaping (Data) -> Void) {
-        self.didFinishCapturingImage_Data = block
-    }
-
     
     var didCancel: (() -> Void)?
-    var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
-    var didFinishCapturingImage_Data: ((_ data: Data) -> Void)?
+    var didFinishCapturingImage: ((_ image: UIImage?, _ data: Data?) -> Void)?
     var didFinishCapturingVideo: ((_ videoURL: URL) -> Void)?
     
     public func setDidCancel(block: @escaping () -> Void) {
         self.didCancel = block
     }
     
-    public func setDidFinishCapturingImage(block: @escaping (UIImage) -> Void) {
+    public func setDidFinishCapturingImage(block: @escaping (UIImage?, Data?) -> Void) {
         self.didFinishCapturingImage = block
     }
     
@@ -47,7 +42,7 @@ open class CustomCamera: UIImagePickerController, DKImagePickerControllerCameraP
         
         if mediaType == kUTTypeImage as String {
             let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-            self.didFinishCapturingImage?(image)
+            self.didFinishCapturingImage?(image, nil)
         } else if mediaType == kUTTypeMovie as String {
             let videoURL = info[UIImagePickerControllerMediaURL] as! URL
             self.didFinishCapturingVideo?(videoURL)

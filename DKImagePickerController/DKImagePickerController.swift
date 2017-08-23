@@ -15,9 +15,7 @@ public protocol DKImagePickerControllerCameraProtocol {
     
     func setDidCancel(block: @escaping () -> Void) -> Void
     
-    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage) -> Void) -> Void
-
-    func setDidFinishCapturingImage_Data(block: @escaping (_ data: Data) -> Void) -> Void
+    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage?, _ data: Data?) -> Void) -> Void
     
     func setDidFinishCapturingVideo(block: @escaping (_ videoURL: URL) -> Void) -> Void
 }
@@ -365,38 +363,14 @@ open class DKImagePickerController : UINavigationController {
             }
         }
         
-        let didFinishCapturingImage = { [unowned self] (image: UIImage) in
-            var newImageIdentifier: String!
-
-            PHPhotoLibrary.shared().performChanges({
-                let assetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-                newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-            }) { [weak self] (success, error) in
-                DispatchQueue.main.async(execute: { [weak self] in
-                    if success {
-                        if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
-                            self?.dismissCamera()
-                            self?.selectImage(DKAsset(originalAsset: newAsset))
-                        }
-                    } else {
-                        if self?.sourceType != .camera {
-                            self?.dismiss(animated: true, completion: nil)
-                        }
-                        self?.selectImage(DKAsset(image: image))
-                    }
-                })
-                
-            }
-        }
-
-        let didFinishCapturingImage_Data = { [unowned self] (data: Data) in
-
-            if #available(iOS 9.0, *) {
-                self.capturingImage_Data_9(data)
+        let didFinishCapturingImage = { [unowned self] (image: UIImage?, data: Data?) in
+            if let data = data {
+                self.capturingImageData(data, image)
+            } else if let image = image {
+                self.capturingImage(image)
             } else {
-                self.capturingImage_Data_8(data)
+                assert(false)
             }
-            
         }
         
         let didFinishCapturingVideo = { [unowned self] (videoURL: URL) in
@@ -425,62 +399,9 @@ open class DKImagePickerController : UINavigationController {
         
         cameraProtocol.setDidCancel(block: didCancel)
         cameraProtocol.setDidFinishCapturingImage(block: didFinishCapturingImage)
-        cameraProtocol.setDidFinishCapturingImage_Data(block: didFinishCapturingImage_Data)
         cameraProtocol.setDidFinishCapturingVideo(block: didFinishCapturingVideo)
         
         return camera
-    }
-
-    internal func capturingImage_Data_8(_ data: Data) {
-        let library = ALAssetsLibrary()
-        library.writeImageData(toSavedPhotosAlbum: data, metadata: nil, completionBlock: { [weak self] (newURL, error) in
-            if let _ = error {
-                if self?.sourceType != .camera {
-                    self?.dismiss(animated: true, completion: nil)
-                }
-                self?.selectImage(DKAsset(image: UIImage(data: data)!))
-            }
-            else{
-                if let newAsset = PHAsset.fetchAssets(withALAssetURLs: [newURL!], options: nil).firstObject {
-                    if self?.presentedViewController != nil {
-                        self?.dismiss(animated: true, completion: nil)
-                    }
-                    self?.selectImage(DKAsset(originalAsset: newAsset))
-                }
-            }
-        })
-    }
-
-    internal func capturingImage_Data_9(_ data: Data) {
-        var newImageIdentifier: String!
-
-        PHPhotoLibrary.shared().performChanges({
-
-            if #available(iOS 9.0, *) {
-                let assetRequest = PHAssetCreationRequest.forAsset()
-                assetRequest.addResource(with: .photo, data: data, options: nil)
-                newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-            } else {
-                // Fallback on earlier versions
-            }
-        }) { [weak self] (success, error) in
-            DispatchQueue.main.async(execute: { [weak self] in
-                if success {
-                    if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
-                        if self?.presentedViewController != nil {
-                            self?.dismiss(animated: true, completion: nil)
-                        }
-                        self?.selectImage(DKAsset(originalAsset: newAsset))
-                    }
-                } else {
-                    if self?.sourceType != .camera {
-                        self?.dismiss(animated: true, completion: nil)
-                    }
-                    self?.selectImage(DKAsset(image: UIImage(data: data)!))
-                }
-            })
-            
-        }
     }
     
     internal func presentCamera() {
@@ -519,6 +440,121 @@ open class DKImagePickerController : UINavigationController {
         self.presentingViewController?.dismiss(animated: true, completion: {
             self.didSelectAssets?(self.selectedAssets)
         })
+    }
+    
+    // MARK:- Capturing Image
+    
+    internal func capturingImage(_ image: UIImage) {
+        var newImageIdentifier: String!
+        
+        PHPhotoLibrary.shared().performChanges({
+            let assetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
+            newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
+        }) { [weak self] (success, error) in
+            DispatchQueue.main.async(execute: { [weak self] in
+                if success {
+                    if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
+                        self?.dismissCamera()
+                        self?.selectImage(DKAsset(originalAsset: newAsset))
+                    }
+                } else {
+                    if self?.sourceType != .camera {
+                        self?.dismissCamera()
+                    }
+                    self?.selectImage(DKAsset(image: image))
+                }
+            })
+            
+        }
+    }
+    
+    internal func capturingImageData(_ data: Data, _ image: UIImage?) {
+        var metadata: Dictionary<AnyHashable, Any>?
+        if let source = CGImageSourceCreateWithData(data as CFData, nil) {
+            metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? Dictionary<AnyHashable, Any>
+        }
+        
+        var imageData = data
+        if let image = image {
+            imageData = UIImageJPEGRepresentation(image, 1)!
+        }
+        
+        if #available(iOS 9.0, *) {
+            if let metadata = metadata {
+                if let imageDataWithMetadata = self.writeMetadata(metadata, Into: imageData) {
+                    self.capturingImageDataForiOS9(imageDataWithMetadata)
+                } else {
+                    self.capturingImageDataForiOS9(imageData)
+                }
+            } else {
+                self.capturingImageDataForiOS9(imageData)
+            }
+        } else {
+            self.capturingImageDataForiOS8(imageData, metadata)
+        }
+    }
+    
+    internal func capturingImageDataForiOS8(_ data: Data, _ metadata: Dictionary<AnyHashable, Any>?) {
+        let library = ALAssetsLibrary()
+        library.writeImageData(toSavedPhotosAlbum: data, metadata: metadata, completionBlock: { [weak self] (newURL, error) in
+            if let _ = error {
+                if self?.sourceType != .camera {
+                    self?.dismissCamera()
+                }
+                self?.selectImage(DKAsset(image: UIImage(data: data)!))
+            } else {
+                if let newAsset = PHAsset.fetchAssets(withALAssetURLs: [newURL!], options: nil).firstObject {
+                    self?.dismissCamera()
+                    self?.selectImage(DKAsset(originalAsset: newAsset))
+                }
+            }
+        })
+    }
+    
+    internal func capturingImageDataForiOS9(_ data: Data) {
+        var newImageIdentifier: String!
+        
+        PHPhotoLibrary.shared().performChanges({
+            if #available(iOS 9.0, *) {
+                let assetRequest = PHAssetCreationRequest.forAsset()
+                assetRequest.addResource(with: .photo, data: data, options: nil)
+                newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
+            } else {
+                // Fallback on earlier versions
+            }
+        }) { [weak self] (success, error) in
+            DispatchQueue.main.async(execute: { [weak self] in
+                if success {
+                    if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
+                        self?.dismissCamera()
+                        self?.selectImage(DKAsset(originalAsset: newAsset))
+                    }
+                } else {
+                    if self?.sourceType != .camera {
+                        self?.dismissCamera()
+                    }
+                    self?.selectImage(DKAsset(image: UIImage(data: data)!))
+                }
+            })
+            
+        }
+    }
+    
+    internal func writeMetadata(_ metadata: Dictionary<AnyHashable, Any>, Into imageData: Data) -> Data? {
+        let source = CGImageSourceCreateWithData(imageData as CFData, nil)!
+        let UTI = CGImageSourceGetType(source)!
+        
+        let newImageData = NSMutableData()
+        if let destination = CGImageDestinationCreateWithData(newImageData, UTI, 1, nil) {
+            CGImageDestinationAddImageFromSource(destination, source, 0, metadata as CFDictionary)
+            if CGImageDestinationFinalize(destination) {
+                return newImageData as Data
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
     }
     
     // MARK: - Selection
