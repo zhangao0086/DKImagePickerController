@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Velg(%ld)";
+"select" = "Velg(%@)";
 
 "permissionCamera" = "Vennligst gi tilgang til kamera";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Maks antall bilder er valgt";
 
-"maxLimitReachedMessage" = "Du kan velge %ld elementer";
+"maxLimitReachedMessage" = "Du kan velge %@ elementer";

@@ -323,7 +323,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		if let removedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset {
 			let removedIndex = self.imagePickerController.selectedAssets.index(of: removedAsset)!
 			
-			/// Minimize the number of cycles.
+			/// Minimize the number of times.
 			let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems!
 			let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems
 			

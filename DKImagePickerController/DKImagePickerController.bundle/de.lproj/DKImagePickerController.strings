@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Auswählen (%ld)";
+"select" = "Auswählen (%@)";
 
 "permissionCamera" = "Bitte gestatte der App den Zugriff zur Kamera";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Maximale Bilderanzahl erreicht";
 
-"maxLimitReachedMessage" = "Sie können nur %ld Fotos auswählen";
+"maxLimitReachedMessage" = "Sie können nur %@ Fotos auswählen";

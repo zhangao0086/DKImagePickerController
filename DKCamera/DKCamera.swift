@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import CoreMotion
+import ImageIO
 
 open class DKCameraPassthroughView: UIView {
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -62,7 +63,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     open var didCancel: (() -> Void)?
-    open var didFinishCapturingImage: ((_ image: UIImage) -> Void)?
+    open var didFinishCapturingImage: ((_ image: UIImage?, _ data: Data?) -> Void)?
     
     /// Notify the listener of the detected faces in the preview frame.
     open var onFaceDetection: ((_ faces: [AVMetadataFaceObject]) -> Void)?
@@ -126,6 +127,17 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     open var cameraSwitchButton: UIButton!
     open var captureButton: UIButton!
     
+    let cameraResource: DKCameraResource
+    
+    init(cameraResource: DKCameraResource = DKDefaultCameraResource()) {
+        self.cameraResource = cameraResource
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        self.cameraResource = DKDefaultCameraResource()
+        super.init(coder: aDecoder)
+    }
     override open func viewDidLoad() {
         super.viewDidLoad()
         
@@ -209,7 +221,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let cameraSwitchButton: UIButton = {
             let cameraSwitchButton = UIButton()
             cameraSwitchButton.addTarget(self, action: #selector(DKCamera.switchCamera), for: .touchUpInside)
-            cameraSwitchButton.setImage(DKCameraResource.cameraSwitchImage(), for: .normal)
+            cameraSwitchButton.setImage(cameraResource.cameraSwitchImage(), for: .normal)
             cameraSwitchButton.sizeToFit()
             
             return cameraSwitchButton
@@ -265,7 +277,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let cancelButton: UIButton = {
             let cancelButton = UIButton()
             cancelButton.addTarget(self, action: #selector(dismiss as (Void) -> Void), for: .touchUpInside)
-            cancelButton.setImage(DKCameraResource.cameraCancelImage(), for: .normal)
+            cancelButton.setImage(cameraResource.cameraCancelImage(), for: .normal)
             cancelButton.sizeToFit()
             
             return cancelButton
@@ -431,7 +443,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                                 let cropCGImage = takenCGImage.cropping(to: cropRect)
                                 let cropTakenImage = UIImage(cgImage: cropCGImage!, scale: 1, orientation: takenImage.imageOrientation)
                                 
-                                didFinishCapturingImage(cropTakenImage)
+                                didFinishCapturingImage(cropTakenImage, imageData)
                                 
                                 self.captureButton.isEnabled = true
                             }
@@ -552,15 +564,19 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     open func updateFlashButton() {
         struct FlashImage {
+            let images: [AVCaptureFlashMode: UIImage]
             
-            static let images = [
-                AVCaptureFlashMode.auto : DKCameraResource.cameraFlashAutoImage(),
-                AVCaptureFlashMode.on : DKCameraResource.cameraFlashOnImage(),
-                AVCaptureFlashMode.off : DKCameraResource.cameraFlashOffImage()
-            ]
+            init(cameraResource: DKCameraResource) {
+                self.images = [
+                    AVCaptureFlashMode.auto : cameraResource.cameraFlashAutoImage(),
+                    AVCaptureFlashMode.on : cameraResource.cameraFlashOnImage(),
+                    AVCaptureFlashMode.off : cameraResource.cameraFlashOffImage()
+                ]
+            }
+
             
         }
-        let flashImage: UIImage = FlashImage.images[self.flashMode]!
+        let flashImage: UIImage = FlashImage(cameraResource:cameraResource).images[self.flashMode]!
         
         self.flashButton.setImage(flashImage, for: .normal)
         self.flashButton.sizeToFit()
@@ -615,14 +631,14 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             UIView.animate(withDuration: 0.2, animations: {
                 self.contentView.bounds.size = contentViewNewSize
                 self.contentView.transform = CGAffineTransform(rotationAngle: newAngle)
-            }) 
+            })
         } else {
             let rotateAffineTransform = CGAffineTransform.identity.rotated(by: newAngle)
             
             UIView.animate(withDuration: 0.2, animations: {
                 self.flashButton.transform = rotateAffineTransform
                 self.cameraSwitchButton.transform = rotateAffineTransform
-            }) 
+            })
         }
     }
     
@@ -718,38 +734,38 @@ public extension CMAcceleration {
 public extension Bundle {
     
     class func cameraBundle() -> Bundle {
-        let assetPath = Bundle(for: DKCameraResource.self).resourcePath!
+        let assetPath = Bundle(for: DKDefaultCameraResource.self).resourcePath!
         return Bundle(path: (assetPath as NSString).appendingPathComponent("DKCameraResource.bundle"))!
     }
     
 }
 
-open class DKCameraResource {
+open class DKDefaultCameraResource: DKCameraResource {
     
-    open class func imageForResource(_ name: String) -> UIImage {
+    open func imageForResource(_ name: String) -> UIImage {
         let bundle = Bundle.cameraBundle()
         let imagePath = bundle.path(forResource: name, ofType: "png", inDirectory: "Images")
         let image = UIImage(contentsOfFile: imagePath!)
         return image!
     }
     
-    class func cameraCancelImage() -> UIImage {
+     public func cameraCancelImage() -> UIImage {
         return imageForResource("camera_cancel")
     }
     
-    class func cameraFlashOnImage() -> UIImage {
+     public func cameraFlashOnImage() -> UIImage {
         return imageForResource("camera_flash_on")
     }
     
-    class func cameraFlashAutoImage() -> UIImage {
+     public func cameraFlashAutoImage() -> UIImage {
         return imageForResource("camera_flash_auto")
     }
     
-    class func cameraFlashOffImage() -> UIImage {
+     public func cameraFlashOffImage() -> UIImage {
         return imageForResource("camera_flash_off")
     }
     
-    class func cameraSwitchImage() -> UIImage {
+     public func cameraSwitchImage() -> UIImage {
         return imageForResource("camera_switch")
     }
     

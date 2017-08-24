@@ -20,6 +20,16 @@
 		9C4C3A981C2401CD00A52572 /* DKImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A941C2401CD00A52572 /* DKImageManager.swift */; };
 		9C6B3E041C219724009684FE /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */; };
 		9C6B3E0B1C2266A8009684FE /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */; };
+		9C6E4AE11F4DB2A0008F1CD2 /* DKCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4ADE1F4DB2A0008F1CD2 /* DKCamera.swift */; };
+		9C6E4AE21F4DB2A0008F1CD2 /* DKCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4ADE1F4DB2A0008F1CD2 /* DKCamera.swift */; };
+		9C6E4AE31F4DB2A0008F1CD2 /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E4ADF1F4DB2A0008F1CD2 /* DKCameraResource.bundle */; };
+		9C6E4AE41F4DB2A0008F1CD2 /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E4ADF1F4DB2A0008F1CD2 /* DKCameraResource.bundle */; };
+		9C6E4AE51F4DB2A0008F1CD2 /* DKCameraResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE01F4DB2A0008F1CD2 /* DKCameraResource.swift */; };
+		9C6E4AE61F4DB2A0008F1CD2 /* DKCameraResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE01F4DB2A0008F1CD2 /* DKCameraResource.swift */; };
+		9C6E4AEA1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */; };
+		9C6E4AEB1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */; };
+		9C6E4AEC1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */; };
+		9C6E4AED1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */; };
 		9CBAA4A91C4B893A0097AFAB /* DKAssetGroupGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */; };
 		9CBD58981E1B596400F41A88 /* CustomGroupDetailImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD58961E1B596400F41A88 /* CustomGroupDetailImageCell.swift */; };
 		9CBD58991E1B596400F41A88 /* CustomUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD58971E1B596400F41A88 /* CustomUIDelegate.swift */; };
@@ -41,8 +51,6 @@
 		9CC1BC7C1DF7F74C00B54018 /* DKAssetGroupDetailImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC1BC7A1DF7F74C00B54018 /* DKAssetGroupDetailImageCell.swift */; };
 		9CC1BC7E1DF7F76000B54018 /* DKAssetGroupDetailVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC1BC7D1DF7F76000B54018 /* DKAssetGroupDetailVideoCell.swift */; };
 		9CC1BC7F1DF7F76000B54018 /* DKAssetGroupDetailVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC1BC7D1DF7F76000B54018 /* DKAssetGroupDetailVideoCell.swift */; };
-		9CC361531BA7E1D100756DDB /* DKCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC361511BA7E1D100756DDB /* DKCamera.swift */; };
-		9CC361541BA7E1D100756DDB /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CC361521BA7E1D100756DDB /* DKCameraResource.bundle */; };
 		9CD130051C144ED800AB5E2B /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD130041C144ED800AB5E2B /* Photos.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9CD45E7A1B7C9E4600365976 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CD45E791B7C9E4600365976 /* DKImagePickerController.bundle */; };
 		9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */; };
@@ -55,7 +63,6 @@
 		B9EFB9741D20FB7D006CDCAA /* DKImagePickerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EFB9731D20FB7D006CDCAA /* DKImagePickerControllerTests.swift */; };
 		B9EFB9781D20FB7D006CDCAA /* DKImagePickerController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EFB9631D20FB7D006CDCAA /* DKImagePickerController.framework */; };
 		B9EFB9791D20FB7D006CDCAA /* DKImagePickerController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9EFB9631D20FB7D006CDCAA /* DKImagePickerController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B9EFB9811D20FBAA006CDCAA /* DKCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC361511BA7E1D100756DDB /* DKCamera.swift */; };
 		B9EFB9831D20FBAA006CDCAA /* DKImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A941C2401CD00A52572 /* DKImageManager.swift */; };
 		B9EFB9841D20FBAA006CDCAA /* DKGroupDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A901C2401CD00A52572 /* DKGroupDataManager.swift */; };
 		B9EFB9851D20FBAA006CDCAA /* DKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4C3A921C2401CD00A52572 /* DKAsset.swift */; };
@@ -68,7 +75,6 @@
 		B9EFB98D1D20FBAA006CDCAA /* DKPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */; };
 		B9EFB98E1D20FBAA006CDCAA /* DKImageResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C456CCC1B7A223300DFD777 /* DKImageResource.swift */; };
 		B9EFB9941D2105A3006CDCAA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9EFB9931D2105A3006CDCAA /* UIKit.framework */; };
-		B9EFB9981D210A22006CDCAA /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CC361521BA7E1D100756DDB /* DKCameraResource.bundle */; };
 		B9EFB9991D210A22006CDCAA /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CD45E791B7C9E4600365976 /* DKImagePickerController.bundle */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +137,11 @@
 		9C6B3E011C219724009684FE /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
 		9C6B3E021C219724009684FE /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		9C6B3E0A1C2266A8009684FE /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
+		9C6E4ADE1F4DB2A0008F1CD2 /* DKCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCamera.swift; sourceTree = "<group>"; };
+		9C6E4ADF1F4DB2A0008F1CD2 /* DKCameraResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKCameraResource.bundle; sourceTree = "<group>"; };
+		9C6E4AE01F4DB2A0008F1CD2 /* DKCameraResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCameraResource.swift; sourceTree = "<group>"; };
+		9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineFlowLayout.swift; sourceTree = "<group>"; };
+		9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineLayoutUIDelegate.swift; sourceTree = "<group>"; };
 		9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupGridLayout.swift; sourceTree = "<group>"; };
 		9CBD58961E1B596400F41A88 /* CustomGroupDetailImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomGroupDetailImageCell.swift; sourceTree = "<group>"; };
 		9CBD58971E1B596400F41A88 /* CustomUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIDelegate.swift; sourceTree = "<group>"; };
@@ -150,8 +161,6 @@
 		9CC1BC771DF7F72F00B54018 /* DKAssetGroupDetailCameraCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailCameraCell.swift; sourceTree = "<group>"; };
 		9CC1BC7A1DF7F74C00B54018 /* DKAssetGroupDetailImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailImageCell.swift; sourceTree = "<group>"; };
 		9CC1BC7D1DF7F76000B54018 /* DKAssetGroupDetailVideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVideoCell.swift; sourceTree = "<group>"; };
-		9CC361511BA7E1D100756DDB /* DKCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCamera.swift; sourceTree = "<group>"; };
-		9CC361521BA7E1D100756DDB /* DKCameraResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKCameraResource.bundle; sourceTree = "<group>"; };
 		9CD130041C144ED800AB5E2B /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		9CD45E791B7C9E4600365976 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKImagePickerController.bundle; sourceTree = "<group>"; };
 		9CD9F1881B720CC20084B9DD /* DKPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPopoverViewController.swift; sourceTree = "<group>"; };
@@ -207,7 +216,7 @@
 		9C1B8EED1E1B479000282232 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				9CC361501BA7E1D100756DDB /* DKCamera */,
+				9C6E4ADD1F4DB2A0008F1CD2 /* DKCamera */,
 				9C4C3A8E1C2401CD00A52572 /* DKImageManager */,
 				9CDEF0EF1B62279F003340FE /* DKImagePickerController */,
 			);
@@ -278,6 +287,25 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		9C6E4ADD1F4DB2A0008F1CD2 /* DKCamera */ = {
+			isa = PBXGroup;
+			children = (
+				9C6E4ADE1F4DB2A0008F1CD2 /* DKCamera.swift */,
+				9C6E4AE01F4DB2A0008F1CD2 /* DKCameraResource.swift */,
+				9C6E4ADF1F4DB2A0008F1CD2 /* DKCameraResource.bundle */,
+			);
+			path = DKCamera;
+			sourceTree = SOURCE_ROOT;
+		};
+		9C6E4AE71F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */,
+				9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */,
+			);
+			path = CustomInlineLayoutUIDelegate;
+			sourceTree = "<group>";
+		};
 		9CBD58951E1B596400F41A88 /* CustomUIDelegate */ = {
 			isa = PBXGroup;
 			children = (
@@ -315,6 +343,7 @@
 				9CBF3F6E1AB15D210000F1D1 /* Main.storyboard */,
 				9CBF3F6C1AB15D210000F1D1 /* LaunchScreen.xib */,
 				9CBD58A21E1B8C1C00F41A88 /* CustomLayoutUIDelegate */,
+				9C6E4AE71F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate */,
 				9CBD589A1E1B597400F41A88 /* CustomCameraUIDelegate */,
 				9CBD58951E1B596400F41A88 /* CustomUIDelegate */,
 				9CBF3F721AB15D210000F1D1 /* Images.xcassets */,
@@ -336,15 +365,6 @@
 			);
 			path = Cell;
 			sourceTree = "<group>";
-		};
-		9CC361501BA7E1D100756DDB /* DKCamera */ = {
-			isa = PBXGroup;
-			children = (
-				9CC361511BA7E1D100756DDB /* DKCamera.swift */,
-				9CC361521BA7E1D100756DDB /* DKCameraResource.bundle */,
-			);
-			path = DKCamera;
-			sourceTree = SOURCE_ROOT;
 		};
 		9CDEF0EF1B62279F003340FE /* DKImagePickerController */ = {
 			isa = PBXGroup;
@@ -548,7 +568,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CC361541BA7E1D100756DDB /* DKCameraResource.bundle in Resources */,
+				9C6E4AE31F4DB2A0008F1CD2 /* DKCameraResource.bundle in Resources */,
 				9CD45E7A1B7C9E4600365976 /* DKImagePickerController.bundle in Resources */,
 				9CBF3F861AB15E040000F1D1 /* LaunchScreen.xib in Resources */,
 				9CBF3F871AB15E0D0000F1D1 /* LaunchScreen.strings in Resources */,
@@ -569,8 +589,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9EFB9981D210A22006CDCAA /* DKCameraResource.bundle in Resources */,
 				B9EFB9991D210A22006CDCAA /* DKImagePickerController.bundle in Resources */,
+				9C6E4AE41F4DB2A0008F1CD2 /* DKCameraResource.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,10 +608,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C6E4AE51F4DB2A0008F1CD2 /* DKCameraResource.swift in Sources */,
 				9C456CCD1B7A223300DFD777 /* DKImageResource.swift in Sources */,
 				9CC1BC7E1DF7F76000B54018 /* DKAssetGroupDetailVideoCell.swift in Sources */,
 				9C4C3A981C2401CD00A52572 /* DKImageManager.swift in Sources */,
-				9CC361531BA7E1D100756DDB /* DKCamera.swift in Sources */,
 				9C4C3A961C2401CD00A52572 /* DKAsset.swift in Sources */,
 				9CBF3F7A1AB15D210000F1D1 /* AppDelegate.swift in Sources */,
 				9CBD58A61E1B8EAC00F41A88 /* CustomFlowLayout.swift in Sources */,
@@ -599,6 +619,7 @@
 				9CC1BC781DF7F72F00B54018 /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */,
 				9C1B8EE11E1B411A00282232 /* DKAssetGroupCellItemProtocol.swift in Sources */,
+				9C6E4AEA1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */,
 				9CBD589E1E1B597400F41A88 /* CustomCameraUIDelegate.swift in Sources */,
 				9CBAA4A91C4B893A0097AFAB /* DKAssetGroupGridLayout.swift in Sources */,
 				9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */,
@@ -606,9 +627,11 @@
 				9C6B3E041C219724009684FE /* DKAssetGroupListVC.swift in Sources */,
 				9C1B8EEF1E1B4B2E00282232 /* DKImagePickerControllerDemoVC.swift in Sources */,
 				9CBD58A11E1B5B4900F41A88 /* CustomGroupDetailCameraCell.swift in Sources */,
+				9C6E4AE11F4DB2A0008F1CD2 /* DKCamera.swift in Sources */,
 				9C4C3A971C2401CD00A52572 /* DKAssetGroup.swift in Sources */,
 				9CE807CC1DA9E300009CBDA5 /* DKAssetGroupDetailVC.swift in Sources */,
 				9CBD58991E1B596400F41A88 /* CustomUIDelegate.swift in Sources */,
+				9C6E4AEC1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */,
 				9CBD58981E1B596400F41A88 /* CustomGroupDetailImageCell.swift in Sources */,
 				9C4C3A951C2401CD00A52572 /* DKGroupDataManager.swift in Sources */,
 				9C13DF6F1C90490E001B0ED7 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
@@ -632,7 +655,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9EFB9871D20FBAA006CDCAA /* DKImagePickerController.swift in Sources */,
-				B9EFB9811D20FBAA006CDCAA /* DKCamera.swift in Sources */,
 				B9EFB9831D20FBAA006CDCAA /* DKImageManager.swift in Sources */,
 				B9EFB9841D20FBAA006CDCAA /* DKGroupDataManager.swift in Sources */,
 				B9EFB9851D20FBAA006CDCAA /* DKAsset.swift in Sources */,
@@ -642,13 +664,17 @@
 				B9EFB9881D20FBAA006CDCAA /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
 				B9EFB9891D20FBAA006CDCAA /* DKAssetGroupListVC.swift in Sources */,
 				B9EFB98B1D20FBAA006CDCAA /* DKAssetGroupGridLayout.swift in Sources */,
+				9C6E4AE61F4DB2A0008F1CD2 /* DKCameraResource.swift in Sources */,
+				9C6E4AEB1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */,
 				9CC1BC791DF7F72F00B54018 /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				B9EFB98C1D20FBAA006CDCAA /* DKPermissionView.swift in Sources */,
 				B9EFB98D1D20FBAA006CDCAA /* DKPopoverViewController.swift in Sources */,
+				9C6E4AE21F4DB2A0008F1CD2 /* DKCamera.swift in Sources */,
 				9C1B8EE51E1B419900282232 /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				B9EFB98E1D20FBAA006CDCAA /* DKImageResource.swift in Sources */,
 				9CE807CD1DA9E300009CBDA5 /* DKAssetGroupDetailVC.swift in Sources */,
 				9C1B8EE21E1B411A00282232 /* DKAssetGroupCellItemProtocol.swift in Sources */,
+				9C6E4AED1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,7 +29,14 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
     
     open func updateDoneButtonTitle(_ button: UIButton) {
         if self.imagePickerController.selectedAssets.count > 0 {
-            button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), self.imagePickerController.selectedAssets.count), for: .normal)
+            
+            let nF = NumberFormatter()
+            nF.numberStyle = .decimal
+            nF.locale = Locale(identifier: Locale.current.identifier)
+            
+            let formattedSelectableCount = nF.string(from: NSNumber(value: self.imagePickerController.selectedAssets.count))
+            
+            button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), formattedSelectableCount ?? self.imagePickerController.selectedAssets.count), for: .normal)
         } else {
             button.setTitle(DKImageLocalizedStringWithKey("done"), for: .normal)
         }
@@ -77,10 +84,19 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
     }
 	
 	open func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController) {
-        let alert = UIAlertController(title: DKImageLocalizedStringWithKey("maxLimitReached")
-            , message:String(format: DKImageLocalizedStringWithKey("maxLimitReachedMessage"), imagePickerController.maxSelectableCount)
-            , preferredStyle: .alert)
+        
+        let nF = NumberFormatter()
+        nF.numberStyle = .decimal
+        nF.locale = Locale(identifier: Locale.current.identifier)
+        
+        let formattedMaxSelectableCount = nF.string(from: NSNumber(value: imagePickerController.maxSelectableCount))
+        
+        let alert = UIAlertController(title: DKImageLocalizedStringWithKey("maxLimitReached"), message: nil, preferredStyle: .alert)
+        
+        alert.message = String(format: DKImageLocalizedStringWithKey("maxLimitReachedMessage"), formattedMaxSelectableCount ?? imagePickerController.maxSelectableCount)
+        
         alert.addAction(UIAlertAction(title: DKImageLocalizedStringWithKey("ok"), style: .cancel) { _ in })
+        
         imagePickerController.present(alert, animated: true){}
 	}
 	
@@ -132,7 +148,7 @@ open class DKImagePickerControllerCamera: DKCamera, DKImagePickerControllerCamer
         
     }
 
-    open func setDidFinishCapturingImage(block: @escaping (UIImage) -> Void) {
+    open func setDidFinishCapturingImage(block: @escaping (UIImage?, Data?) -> Void) {
         super.didFinishCapturingImage = block
     }
 
