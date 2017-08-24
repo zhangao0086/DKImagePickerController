@@ -7,7 +7,7 @@ DKImagePickerController
 ---
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
 ---
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot5.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 ---
 
 ## Description
@@ -23,6 +23,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Customizable UI.
 * Customizable UICollectionViewLayout.
 * Supports footer view.
+* Supports inline mode.
 
 ## Requirements
 * iOS 8.0+
@@ -120,6 +121,16 @@ public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
+
+/// allow swipe to select images.
+public var allowSwipeToSelect: Bool = false
+
+public var inline: Bool = false
+
+/// Limits the maximum number of objects returned in the fetch result, a value of 0 means no limit.
+public var fetchLimit = 0
+
+public var selectedChanged: (() -> Void)?
 
 ```
 
