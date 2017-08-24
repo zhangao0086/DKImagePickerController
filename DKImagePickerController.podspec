@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Camera' do |camera|
 
-    camera.ios.source_files = "DKCamera/DKCamera.swift"
+    camera.ios.source_files = "DKCamera/DKCamera.swift", "DKCamera/DKCameraResource.swift"
     camera.resource = "DKCamera/DKCameraResource.bundle"
   end
 
