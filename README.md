@@ -256,6 +256,7 @@ It has been supported languages so far:
 * ur.lproj
 * vi.lproj
 * ar.lproj
+* it.lproj
 * zh-Hans.lproj
 * zh-Hant.lproj
 
