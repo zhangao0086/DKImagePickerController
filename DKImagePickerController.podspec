@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "DKImagePickerController"
-  s.version       = "3.5.7"
+  s.version       = "3.6.0"
   s.summary       = "Image Picker Controller by Swift3."
   s.homepage      = "https://github.com/zhangao0086/DKImagePickerController"
   s.license       = { :type => "MIT", :file => "LICENSE" }
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Camera' do |camera|
 
-    camera.ios.source_files = "DKCamera/DKCamera.swift"
+    camera.ios.source_files = "DKCamera/DKCamera.swift", "DKCamera/DKCameraResource.swift"
     camera.resource = "DKCamera/DKCameraResource.bundle"
   end
 
