@@ -1,5 +1,21 @@
 # Change Log
 
+## [3.6.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.6.0) (2017-08-24)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.6...3.6.0)
+
+- Support Arabic language
+
+- Ability to specify the exported file format.
+
+- Added support for fetchLimit.
+
+- Added support for inline mode.
+
+- Save image with metadata.
+
+- Updated DKCamera.
+
 ## [3.5.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.6) (2017-06-24)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.5...3.5.6)

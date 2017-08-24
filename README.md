@@ -37,8 +37,6 @@ DKImagePickerController is available on CocoaPods. Simply add the following line
 ```ruby
 # For latest release in cocoapods
 pod 'DKImagePickerController'
-
-
 ```
 
 #### iOS 7.x
@@ -177,6 +175,21 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
+#### Inline
+
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
+
+```swift
+let pickerController = DKImagePickerController()
+pickerController.inline = true
+pickerController.fetchLimit = 10
+pickerController.UIDelegate = CustomInlineLayoutUIDelegate()
+pickerController.assetType = .allPhotos
+pickerController.sourceType = .photo
+```
+
+Please see my demo project.
+
 ## How to use in Objective-C
 
 #### If you use [CocoaPods](http://cocoapods.org/)
@@ -252,6 +265,22 @@ If you want to add new language, pull request or issue!
 You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
 
 ## Change Log
+
+## [3.6.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.6.0) (2017-08-24)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.6...3.6.0)
+
+- Support Arabic language
+
+- Ability to specify the exported file format.
+
+- Added support for fetchLimit.
+
+- Added support for inline mode.
+
+- Save image with metadata.
+
+- Updated DKCamera.
 
 ## [3.5.6](https://github.com/zhangao0086/DKImagePickerController/tree/3.5.6) (2017-06-24)
 
