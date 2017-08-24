@@ -593,7 +593,7 @@ open class DKImagePickerController : UINavigationController {
         if self.singleSelect {
             self.deselectAllAssets()
             self.selectedAssets.append(asset)
-            if self.sourceType == .camera || autoCloseOnSingleSelect{
+            if self.sourceType == .camera || autoCloseOnSingleSelect {
                 self.done()
             } else {
                 self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
