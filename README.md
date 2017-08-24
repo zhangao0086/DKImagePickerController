@@ -231,6 +231,7 @@ It has been supported languages so far:
 * tr.lproj
 * ur.lproj
 * vi.lproj
+* ar.lproj
 * zh-Hans.lproj
 * zh-Hant.lproj
 

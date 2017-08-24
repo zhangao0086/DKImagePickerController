@@ -26,6 +26,10 @@
 		9C6E4AE41F4DB2A0008F1CD2 /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E4ADF1F4DB2A0008F1CD2 /* DKCameraResource.bundle */; };
 		9C6E4AE51F4DB2A0008F1CD2 /* DKCameraResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE01F4DB2A0008F1CD2 /* DKCameraResource.swift */; };
 		9C6E4AE61F4DB2A0008F1CD2 /* DKCameraResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE01F4DB2A0008F1CD2 /* DKCameraResource.swift */; };
+		9C6E4AEA1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */; };
+		9C6E4AEB1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */; };
+		9C6E4AEC1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */; };
+		9C6E4AED1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */; };
 		9CBAA4A91C4B893A0097AFAB /* DKAssetGroupGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */; };
 		9CBD58981E1B596400F41A88 /* CustomGroupDetailImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD58961E1B596400F41A88 /* CustomGroupDetailImageCell.swift */; };
 		9CBD58991E1B596400F41A88 /* CustomUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBD58971E1B596400F41A88 /* CustomUIDelegate.swift */; };
@@ -136,6 +140,8 @@
 		9C6E4ADE1F4DB2A0008F1CD2 /* DKCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCamera.swift; sourceTree = "<group>"; };
 		9C6E4ADF1F4DB2A0008F1CD2 /* DKCameraResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKCameraResource.bundle; sourceTree = "<group>"; };
 		9C6E4AE01F4DB2A0008F1CD2 /* DKCameraResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCameraResource.swift; sourceTree = "<group>"; };
+		9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineFlowLayout.swift; sourceTree = "<group>"; };
+		9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineLayoutUIDelegate.swift; sourceTree = "<group>"; };
 		9CBAA4A81C4B893A0097AFAB /* DKAssetGroupGridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupGridLayout.swift; sourceTree = "<group>"; };
 		9CBD58961E1B596400F41A88 /* CustomGroupDetailImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomGroupDetailImageCell.swift; sourceTree = "<group>"; };
 		9CBD58971E1B596400F41A88 /* CustomUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUIDelegate.swift; sourceTree = "<group>"; };
@@ -291,6 +297,15 @@
 			path = DKCamera;
 			sourceTree = SOURCE_ROOT;
 		};
+		9C6E4AE71F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				9C6E4AE81F4EC738008F1CD2 /* CustomInlineFlowLayout.swift */,
+				9C6E4AE91F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift */,
+			);
+			path = CustomInlineLayoutUIDelegate;
+			sourceTree = "<group>";
+		};
 		9CBD58951E1B596400F41A88 /* CustomUIDelegate */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +343,7 @@
 				9CBF3F6E1AB15D210000F1D1 /* Main.storyboard */,
 				9CBF3F6C1AB15D210000F1D1 /* LaunchScreen.xib */,
 				9CBD58A21E1B8C1C00F41A88 /* CustomLayoutUIDelegate */,
+				9C6E4AE71F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate */,
 				9CBD589A1E1B597400F41A88 /* CustomCameraUIDelegate */,
 				9CBD58951E1B596400F41A88 /* CustomUIDelegate */,
 				9CBF3F721AB15D210000F1D1 /* Images.xcassets */,
@@ -603,6 +619,7 @@
 				9CC1BC781DF7F72F00B54018 /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				9CD9F1891B720CC20084B9DD /* DKPopoverViewController.swift in Sources */,
 				9C1B8EE11E1B411A00282232 /* DKAssetGroupCellItemProtocol.swift in Sources */,
+				9C6E4AEA1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */,
 				9CBD589E1E1B597400F41A88 /* CustomCameraUIDelegate.swift in Sources */,
 				9CBAA4A91C4B893A0097AFAB /* DKAssetGroupGridLayout.swift in Sources */,
 				9CBF3F811AB15D210000F1D1 /* ViewController.swift in Sources */,
@@ -614,6 +631,7 @@
 				9C4C3A971C2401CD00A52572 /* DKAssetGroup.swift in Sources */,
 				9CE807CC1DA9E300009CBDA5 /* DKAssetGroupDetailVC.swift in Sources */,
 				9CBD58991E1B596400F41A88 /* CustomUIDelegate.swift in Sources */,
+				9C6E4AEC1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */,
 				9CBD58981E1B596400F41A88 /* CustomGroupDetailImageCell.swift in Sources */,
 				9C4C3A951C2401CD00A52572 /* DKGroupDataManager.swift in Sources */,
 				9C13DF6F1C90490E001B0ED7 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
@@ -647,6 +665,7 @@
 				B9EFB9891D20FBAA006CDCAA /* DKAssetGroupListVC.swift in Sources */,
 				B9EFB98B1D20FBAA006CDCAA /* DKAssetGroupGridLayout.swift in Sources */,
 				9C6E4AE61F4DB2A0008F1CD2 /* DKCameraResource.swift in Sources */,
+				9C6E4AEB1F4EC738008F1CD2 /* CustomInlineFlowLayout.swift in Sources */,
 				9CC1BC791DF7F72F00B54018 /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				B9EFB98C1D20FBAA006CDCAA /* DKPermissionView.swift in Sources */,
 				B9EFB98D1D20FBAA006CDCAA /* DKPopoverViewController.swift in Sources */,
@@ -655,6 +674,7 @@
 				B9EFB98E1D20FBAA006CDCAA /* DKImageResource.swift in Sources */,
 				9CE807CD1DA9E300009CBDA5 /* DKAssetGroupDetailVC.swift in Sources */,
 				9C1B8EE21E1B411A00282232 /* DKAssetGroupCellItemProtocol.swift in Sources */,
+				9C6E4AED1F4EC738008F1CD2 /* CustomInlineLayoutUIDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
