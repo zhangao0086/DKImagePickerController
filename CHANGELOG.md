@@ -4,6 +4,8 @@
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.6...3.6.0)
 
+- Support Italian language.
+
 - Support Arabic language
 
 - Ability to specify the exported file format.
