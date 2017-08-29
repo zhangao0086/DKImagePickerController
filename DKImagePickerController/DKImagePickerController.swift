@@ -578,6 +578,7 @@ open class DKImagePickerController : UINavigationController {
         if self.selectedAssets.count > 0 {
             let assets = self.selectedAssets
             self.selectedAssets.removeAll()
+            self.triggerSelectedChanged()
             self.UIDelegate.imagePickerController(self, didDeselectAssets: assets)
             if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
                 rootVC.collectionView?.reloadData()
