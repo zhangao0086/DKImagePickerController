@@ -271,7 +271,14 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		guard let selectedGroupId = self.selectedGroupId else { return 0 }
 		
 		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(selectedGroupId)
-        return (group.totalCount ?? 0) + (self.hidesCamera ? 0 : 1)
+        
+        var totalCount = 0
+        if self.imagePickerController.fetchLimit > 0 {
+            totalCount = min(group.totalCount ?? 0, self.imagePickerController.fetchLimit)
+        } else {
+            totalCount = group.totalCount ?? 0
+        }
+        return totalCount + (self.hidesCamera ? 0 : 1)
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
