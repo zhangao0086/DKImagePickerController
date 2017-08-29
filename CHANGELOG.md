@@ -1,5 +1,13 @@
 # Change Log
 
+## [3.6.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.6.1) (2017-08-29)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.0...3.6.1)
+
+- Updated way of implementation for fetchLimit.
+
+- Call triggerSelectedChanged if deselectAllAssets was called.
+
 ## [3.6.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.6.0) (2017-08-24)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.6...3.6.0)
