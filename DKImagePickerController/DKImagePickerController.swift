@@ -360,10 +360,17 @@ open class DKImagePickerController : UINavigationController {
         }
         
         let didFinishCapturingImage = { [unowned self] (image: UIImage?, data: Data?) in
+            let completeBlock: ((_ asset: DKAsset) -> Void) = { asset in
+                if self.sourceType != .camera {
+                    self.dismissCamera()
+                }
+                self.selectImage(asset)
+            }
+            
             if let data = data {
-                self.capturingImageData(data, image)
+                self.capturingImageData(data, image, completeBlock)
             } else if let image = image {
-                self.capturingImage(image)
+                self.capturingImage(image, completeBlock)
             } else {
                 assert(false)
             }
@@ -440,31 +447,25 @@ open class DKImagePickerController : UINavigationController {
     
     // MARK:- Capturing Image
     
-    internal func capturingImage(_ image: UIImage) {
+    internal func capturingImage(_ image: UIImage, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         var newImageIdentifier: String!
         
         PHPhotoLibrary.shared().performChanges({
             let assetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
             newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
-        }) { [weak self] (success, error) in
-            DispatchQueue.main.async(execute: { [weak self] in
-                if success {
-                    if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
-                        self?.dismissCamera()
-                        self?.selectImage(DKAsset(originalAsset: newAsset))
-                    }
+        }) { (success, error) in
+            DispatchQueue.main.async(execute: {
+                if success, let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
+                    completeBlock(DKAsset(originalAsset: newAsset))
                 } else {
-                    if self?.sourceType != .camera {
-                        self?.dismissCamera()
-                    }
-                    self?.selectImage(DKAsset(image: image))
+                    completeBlock(DKAsset(image: image))
                 }
             })
             
         }
     }
     
-    internal func capturingImageData(_ data: Data, _ image: UIImage?) {
+    internal func capturingImageData(_ data: Data, _ image: UIImage?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         var metadata: Dictionary<AnyHashable, Any>?
         if let source = CGImageSourceCreateWithData(data as CFData, nil) {
             metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? Dictionary<AnyHashable, Any>
@@ -478,36 +479,32 @@ open class DKImagePickerController : UINavigationController {
         if #available(iOS 9.0, *) {
             if let metadata = metadata {
                 if let imageDataWithMetadata = self.writeMetadata(metadata, Into: imageData) {
-                    self.capturingImageDataForiOS9(imageDataWithMetadata)
+                    self.capturingImageDataForiOS9(imageDataWithMetadata, completeBlock)
                 } else {
-                    self.capturingImageDataForiOS9(imageData)
+                    self.capturingImageDataForiOS9(imageData, completeBlock)
                 }
             } else {
-                self.capturingImageDataForiOS9(imageData)
+                self.capturingImageDataForiOS9(imageData, completeBlock)
             }
         } else {
-            self.capturingImageDataForiOS8(imageData, metadata)
+            self.capturingImageDataForiOS8(imageData, metadata, completeBlock)
         }
     }
     
-    internal func capturingImageDataForiOS8(_ data: Data, _ metadata: Dictionary<AnyHashable, Any>?) {
+    internal func capturingImageDataForiOS8(_ data: Data, _ metadata: Dictionary<AnyHashable, Any>?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         let library = ALAssetsLibrary()
-        library.writeImageData(toSavedPhotosAlbum: data, metadata: metadata, completionBlock: { [weak self] (newURL, error) in
+        library.writeImageData(toSavedPhotosAlbum: data, metadata: metadata, completionBlock: { (newURL, error) in
             if let _ = error {
-                if self?.sourceType != .camera {
-                    self?.dismissCamera()
-                }
-                self?.selectImage(DKAsset(image: UIImage(data: data)!))
+                completeBlock(DKAsset(image: UIImage(data: data)!))
             } else {
                 if let newAsset = PHAsset.fetchAssets(withALAssetURLs: [newURL!], options: nil).firstObject {
-                    self?.dismissCamera()
-                    self?.selectImage(DKAsset(originalAsset: newAsset))
+                    completeBlock(DKAsset(originalAsset: newAsset))
                 }
             }
         })
     }
     
-    internal func capturingImageDataForiOS9(_ data: Data) {
+    internal func capturingImageDataForiOS9(_ data: Data, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         var newImageIdentifier: String!
         
         PHPhotoLibrary.shared().performChanges({
@@ -518,18 +515,12 @@ open class DKImagePickerController : UINavigationController {
             } else {
                 // Fallback on earlier versions
             }
-        }) { [weak self] (success, error) in
-            DispatchQueue.main.async(execute: { [weak self] in
-                if success {
-                    if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
-                        self?.dismissCamera()
-                        self?.selectImage(DKAsset(originalAsset: newAsset))
-                    }
+        }) { (success, error) in
+            DispatchQueue.main.async(execute: {
+                if success, let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
+                    completeBlock(DKAsset(originalAsset: newAsset))
                 } else {
-                    if self?.sourceType != .camera {
-                        self?.dismissCamera()
-                    }
-                    self?.selectImage(DKAsset(image: UIImage(data: data)!))
+                    completeBlock(DKAsset(image: UIImage(data: data)!))
                 }
             })
             
