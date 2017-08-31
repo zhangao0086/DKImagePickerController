@@ -51,7 +51,7 @@ open class DKAsset: NSObject {
 		}
 	}
 	
-	private var image: UIImage?
+	internal var image: UIImage?
 	internal init(image: UIImage) {
         self.localIdentifier = String(image.hash)
 		super.init()
@@ -124,17 +124,21 @@ open class DKAsset: NSObject {
      - parameter completeBlock: The block is executed when the image download is complete.
 	*/
 	public func fetchOriginalImage(_ sync: Bool, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
-		let options = PHImageRequestOptions()
-		options.version = .current
-		options.isSynchronous = sync
-		
-		getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, info) in
-            var image: UIImage?
-            if let data = data {
-    			image = UIImage(data: data)
-            }
-			completeBlock(image, info)
-		})
+        if let _ = self.originalAsset {
+            let options = PHImageRequestOptions()
+            options.version = .current
+            options.isSynchronous = sync
+            
+            getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, info) in
+                var image: UIImage?
+                if let data = data {
+                    image = UIImage(data: data)
+                }
+                completeBlock(image, info)
+            })
+        } else {
+            completeBlock(self.image, nil)
+        }
 	}
     
     /**
@@ -201,19 +205,24 @@ public extension DKAsset {
      Writes the image in the receiver to the file specified by a given path.
      */
 	public func writeImageToFile(_ path: String, completeBlock: @escaping (_ success: Bool) -> Void) {
-		let options = PHImageRequestOptions()
-		options.version = .current
-		
-		getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, _) in
-			DKAssetWriter.writeQueue.addOperation({
-				if let imageData = data {
-					try? imageData.write(to: URL(fileURLWithPath: path), options: [.atomic])
-					completeBlock(true)
-				} else {
-					completeBlock(false)
-				}
-			})
-		})
+        if let _ = self.originalAsset {
+            let options = PHImageRequestOptions()
+            options.version = .current
+            
+            getImageManager().fetchImageDataForAsset(self, options: options, completeBlock: { (data, _) in
+                DKAssetWriter.writeQueue.addOperation({
+                    if let imageData = data {
+                        try? imageData.write(to: URL(fileURLWithPath: path), options: [.atomic])
+                        completeBlock(true)
+                    } else {
+                        completeBlock(false)
+                    }
+                })
+            })
+        } else {
+            try! UIImageJPEGRepresentation(self.image!, 1)!.write(to: URL(fileURLWithPath: path))
+            completeBlock(true)
+        }
 	}
 	
     /**
