@@ -21,7 +21,6 @@
 		9C6E94D51F5E65810014B700 /* CustomUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94C11F5E65810014B700 /* CustomUIDelegate.swift */; };
 		9C6E94D61F5E65810014B700 /* DKImagePickerControllerDemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94C21F5E65810014B700 /* DKImagePickerControllerDemoVC.swift */; };
 		9C6E94D71F5E65810014B700 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C31F5E65810014B700 /* Images.xcassets */; };
-		9C6E94D81F5E65810014B700 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C41F5E65810014B700 /* Info.plist */; };
 		9C6E94D91F5E65810014B700 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94C51F5E65810014B700 /* ViewController.swift */; };
 		9C6E94DA1F5E65810014B700 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C61F5E65810014B700 /* LaunchScreen.strings */; };
 		9C6E94DB1F5E65810014B700 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C81F5E65810014B700 /* Main.strings */; };
@@ -574,7 +573,6 @@
 				9C6E94D71F5E65810014B700 /* Images.xcassets in Resources */,
 				9CD057461F5E62420044528B /* DKCameraResource.bundle in Resources */,
 				9CD057521F5E62420044528B /* DKImagePickerController.bundle in Resources */,
-				9C6E94D81F5E65810014B700 /* Info.plist in Resources */,
 				9C6E94DA1F5E65810014B700 /* LaunchScreen.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
