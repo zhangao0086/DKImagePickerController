@@ -15,7 +15,7 @@ public protocol DKImagePickerControllerCameraProtocol {
     
     func setDidCancel(block: @escaping () -> Void) -> Void
     
-    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage?, _ data: Data?) -> Void) -> Void
+    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage, _ metadata: [AnyHashable : Any]?) -> Void) -> Void
     
     func setDidFinishCapturingVideo(block: @escaping (_ videoURL: URL) -> Void) -> Void
 }
@@ -359,13 +359,11 @@ open class DKImagePickerController : UINavigationController {
             }
         }
         
-        let didFinishCapturingImage = { [unowned self] (image: UIImage?, data: Data?) in
-            if let data = data {
-                self.capturingImageData(data, image)
-            } else if let image = image {
-                self.capturingImage(image)
+        let didFinishCapturingImage = { [unowned self] (image: UIImage, metadata: [AnyHashable : Any]?) in
+            if let metadata = metadata {
+                self.capturingImage(image, metadata)
             } else {
-                assert(false)
+                self.capturingImage(image)
             }
         }
         
@@ -460,20 +458,11 @@ open class DKImagePickerController : UINavigationController {
                     self?.selectImage(DKAsset(image: image))
                 }
             })
-            
         }
     }
     
-    internal func capturingImageData(_ data: Data, _ image: UIImage?) {
-        var metadata: Dictionary<AnyHashable, Any>?
-        if let source = CGImageSourceCreateWithData(data as CFData, nil) {
-            metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? Dictionary<AnyHashable, Any>
-        }
-        
-        var imageData = data
-        if let image = image {
-            imageData = UIImageJPEGRepresentation(image, 1)!
-        }
+    internal func capturingImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?) {        
+        let imageData = UIImageJPEGRepresentation(image, 1)!
         
         if #available(iOS 9.0, *) {
             if let metadata = metadata {

@@ -63,7 +63,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     open var didCancel: (() -> Void)?
-    open var didFinishCapturingImage: ((_ image: UIImage?, _ data: Data?) -> Void)?
+    open var didFinishCapturingImage: ((_ image: UIImage, _ metadata: [AnyHashable : Any]?) -> Void)?
     
     /// Notify the listener of the detected faces in the preview frame.
     open var onFaceDetection: ((_ faces: [AVMetadataFaceObject]) -> Void)?
@@ -443,7 +443,12 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                                 let cropCGImage = takenCGImage.cropping(to: cropRect)
                                 let cropTakenImage = UIImage(cgImage: cropCGImage!, scale: 1, orientation: takenImage.imageOrientation)
                                 
-                                didFinishCapturingImage(cropTakenImage, imageData)
+                                var metadata: Dictionary<AnyHashable, Any>?
+                                if let source = CGImageSourceCreateWithData(imageData as CFData, nil) {
+                                    metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? Dictionary<AnyHashable, Any>
+                                }
+                                
+                                didFinishCapturingImage(cropTakenImage, metadata)
                                 
                                 self.captureButton.isEnabled = true
                             }
