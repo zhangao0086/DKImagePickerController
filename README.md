@@ -46,15 +46,11 @@ pod 'DKImagePickerController'
 > To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
 [CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
 
-<del>
-
 #### Swift 2.2
 > For Swift 2.2, use version <= 3.3.4
 
 #### Swift 2.3
-> For Swift 2.3, use version = 3.3.5
-
-</del>
+> For Swift 2.3, use version = 3.3.5 or the `Feature/Swift2.3` branch
 
 ## Getting Started
 #### Initialization and presentation

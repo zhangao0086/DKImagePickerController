@@ -15,7 +15,7 @@ public protocol DKImagePickerControllerCameraProtocol {
     
     func setDidCancel(block: @escaping () -> Void) -> Void
     
-    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage?, _ data: Data?) -> Void) -> Void
+    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage, _ metadata: [AnyHashable : Any]?) -> Void) -> Void
     
     func setDidFinishCapturingVideo(block: @escaping (_ videoURL: URL) -> Void) -> Void
 }
@@ -372,7 +372,7 @@ open class DKImagePickerController : UINavigationController {
             } else if let image = image {
                 self.capturingImage(image, completeBlock)
             } else {
-                assert(false)
+                self.capturingImage(image)
             }
         }
         
@@ -461,7 +461,6 @@ open class DKImagePickerController : UINavigationController {
                     completeBlock(DKAsset(image: image))
                 }
             })
-            
         }
     }
     
