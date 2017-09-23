@@ -491,6 +491,7 @@ open class DKImagePickerController : UINavigationController {
         }
     }
     
+    @available(iOS, deprecated: 9.0)
     internal func capturingImageDataForiOS8(_ data: Data, _ metadata: Dictionary<AnyHashable, Any>?) {
         let library = ALAssetsLibrary()
         library.writeImageData(toSavedPhotosAlbum: data, metadata: metadata, completionBlock: { [weak self] (newURL, error) in
