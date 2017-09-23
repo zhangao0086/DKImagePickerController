@@ -14,13 +14,11 @@ Pod::Spec.new do |s|
   s.frameworks    = "Foundation", "UIKit", "Photos"
   s.requires_arc  = true
 
+  s.dependency 'CLImageEditor', '0.2.0'
+  s.dependency 'DKCamera', '1.4.0'
+  # s.dependency 'DKPhotoGallery'
+
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
-
-  s.subspec 'Camera' do |camera|
-
-    camera.ios.source_files = "DKCamera/DKCamera.swift", "DKCamera/DKCameraResource.swift"
-    camera.resource = "DKCamera/DKCameraResource.bundle"
-  end
 
   s.subspec 'ImageManager' do |image|
 

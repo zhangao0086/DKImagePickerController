@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DKCamera
 
 @objc
 open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
