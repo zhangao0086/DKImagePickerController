@@ -279,7 +279,7 @@ open class DKImagePickerController : UINavigationController {
             if self.sourceType == .camera {
                 let camera = self.createCamera()
                 if camera is UINavigationController {
-                    self.presentCamera(camera: camera)
+                    self.present(camera: camera)
                     self.setViewControllers([], animated: false)
                 } else {
                     self.setViewControllers([camera], animated: false)
@@ -400,12 +400,12 @@ open class DKImagePickerController : UINavigationController {
         return camera
     }
     
-    internal func presentCamera() {
-        self.presentCamera(camera: self.createCamera())
+    @objc open func presentCamera() {
+        self.present(camera: self.createCamera())
     }
     
     internal weak var camera: UIViewController?
-    internal func presentCamera(camera: UIViewController) {
+    @objc  open func present(camera: UIViewController) {
         self.camera = camera
         
         if self.inline {
@@ -415,7 +415,7 @@ open class DKImagePickerController : UINavigationController {
         }
     }
     
-    internal func dismissCamera() {
+    open func dismissCamera() {
         if let _ = self.camera {
             if self.inline {
                 UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
