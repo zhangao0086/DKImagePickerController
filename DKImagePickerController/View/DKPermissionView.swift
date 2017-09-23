@@ -49,7 +49,7 @@ open class DKPermissionView: UIView {
 		self.center = self.superview!.center
 	}
 	
-	open func gotoSettings() {
+	@objc open func gotoSettings() {
 		if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
 			UIApplication.shared.openURL(appSettings)
 		}
