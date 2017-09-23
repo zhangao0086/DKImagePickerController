@@ -12,6 +12,7 @@ open class CustomCameraUIDelegate: DKImagePickerControllerDefaultUIDelegate {
 	
     open override func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController) -> UIViewController {
         let picker = CustomCamera()
+        picker.sourceType = .camera
         
         return picker
     }

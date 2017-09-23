@@ -31,7 +31,6 @@ open class CustomCamera: UIImagePickerController, DKImagePickerControllerCameraP
         super.viewDidLoad()
         
         self.delegate = self
-        self.sourceType = .camera
         self.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
     }
     
