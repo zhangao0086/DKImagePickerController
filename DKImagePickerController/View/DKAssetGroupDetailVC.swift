@@ -30,10 +30,10 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
 		
-		let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSForegroundColorAttributeName] as? UIColor
+		let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSAttributedStringKey.foregroundColor] as? UIColor
 		button.setTitleColor(globalTitleColor ?? UIColor.black, for: .normal)
 		
-		let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSFontAttributeName] as? UIFont
+		let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSAttributedStringKey.font] as? UIFont
 		button.titleLabel!.font = globalTitleFont ?? UIFont.boldSystemFont(ofSize: 18.0)
 		
 		button.addTarget(self, action: #selector(DKAssetGroupDetailVC.showGroupSelector), for: .touchUpInside)
@@ -139,8 +139,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     }
     
     //use the swiping gesture to select the currently swiping cell.
-    @objc
-    private func swiping(gesture: UIPanGestureRecognizer) {
+    @objc private func swiping(gesture: UIPanGestureRecognizer) {
         if gesture.state != .ended {
             let loc = gesture.location(ofTouch: 0, in: self.collectionView)
             if let path = self.collectionView.indexPathForItem(at: loc), let cell = self.collectionView.cellForItem(at: path), let cc = cell as? DKAssetGroupDetailBaseCell {
@@ -170,7 +169,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		self.navigationItem.titleView = self.selectGroupButton
 	}
     
-    func showGroupSelector() {
+    @objc func showGroupSelector() {
         DKPopoverViewController.popoverViewController(self.groupListVC, fromView: self.selectGroupButton)
     }
     
