@@ -360,14 +360,12 @@ open class DKImagePickerController : UINavigationController {
         }
         
         let didFinishCapturingImage = { [unowned self] (image: UIImage, metadata: [AnyHashable : Any]?) in
-            let completeBlock: ((_ asset: DKAsset) -> Void) = { asset in
+            self.capturingImage(image, metadata, { [unowned self] (asset) in
                 if self.sourceType != .camera {
                     self.dismissCamera()
                 }
                 self.selectImage(asset)
-            }
-            
-            self.capturingImage(image, metadata, completeBlock)
+            })
         }
         
         let didFinishCapturingVideo = { [unowned self] (videoURL: URL) in

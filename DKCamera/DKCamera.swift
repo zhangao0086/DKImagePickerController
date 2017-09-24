@@ -489,37 +489,31 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             let height = CGFloat(takenCGImage.height)
             let cropRect = CGRect(x: outputRect.origin.x * width, y: outputRect.origin.y * height, width: outputRect.size.width * width, height: outputRect.size.height * height)
             
-            DispatchQueue.global().async(execute: {
-                if let connection = stillImageOutput.connection(withMediaType: AVMediaTypeVideo) {
-                    connection.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
-                    connection.videoScaleAndCropFactor = self.zoomScale
-                    
-                    stillImageOutput.captureStillImageAsynchronously(from: connection, completionHandler: { (imageDataSampleBuffer, error) in
-                        if error == nil {
-                            let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer)
-                            
-                            if let didFinishCapturingImage = self.didFinishCapturingImage, let imageData = imageData, let takenImage = UIImage(data: imageData) {
-                                
-                                let outputRect = self.previewLayer.metadataOutputRectOfInterest(for: self.previewLayer.bounds)
-                                let takenCGImage = takenImage.cgImage!
-                                let width = CGFloat(takenCGImage.width)
-                                let height = CGFloat(takenCGImage.height)
-                                let cropRect = CGRect(x: outputRect.origin.x * width, y: outputRect.origin.y * height, width: outputRect.size.width * width, height: outputRect.size.height * height)
-                                
-                                let cropCGImage = takenCGImage.cropping(to: cropRect)
-                                let cropTakenImage = UIImage(cgImage: cropCGImage!, scale: 1, orientation: takenImage.imageOrientation)
-                                
-                                var metadata: Dictionary<AnyHashable, Any>?
-                                if let source = CGImageSourceCreateWithData(imageData as CFData, nil) {
-                                    metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? Dictionary<AnyHashable, Any>
-                                }
-                                
-                                didFinishCapturingImage(cropTakenImage, metadata)
-                                
-                                self.captureButton.isEnabled = true
-                            }
-                        } else {
-                            print("error while capturing still image: \(error!.localizedDescription)", terminator: "")
+            let cropCGImage = takenCGImage.cropping(to: cropRect)
+            let cropTakenImage = UIImage(cgImage: cropCGImage!, scale: 1, orientation: takenImage.imageOrientation)
+            
+            var metadata: Dictionary<AnyHashable, Any>?
+            if let source = CGImageSourceCreateWithData(imageData as CFData, nil) {
+                metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? Dictionary<AnyHashable, Any>
+            }
+            
+            self.didFinishCapturingImage?(cropTakenImage, metadata)
+        }
+        
+        if #available(iOS 10.0, *) {
+            if let photoOutput = self.captureOutput as? AVCapturePhotoOutput, self.currentCapturer == nil {
+                self.captureButton.isEnabled = false
+                
+                self.sessionQueue.async {
+                    if let connection = photoOutput.connection(with: .video) {
+                        connection.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
+                        connection.videoScaleAndCropFactor = self.zoomScale
+                        
+                        let settings = AVCapturePhotoSettings(from: self.defaultPhotoSettings)
+                        
+                        let capturer = DKCameraPhotoCapturer()
+                        capturer.didCaptureWithImageData = { (imageData) in
+                            process(imageData)
                         }
                         capturer.didFinish = { [unowned self] in
                             self.currentCapturer = nil
@@ -543,9 +537,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                         
                         stillImageOutput.captureStillImageAsynchronously(from: connection, completionHandler: { (imageDataSampleBuffer, error) in
                             if error == nil {
-                                let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
-                                
-                                if let imageData = imageData {
+                                if let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer!) {
                                     process(imageData)
                                     self.captureButton.isEnabled = true
                                 }
