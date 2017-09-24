@@ -139,8 +139,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     }
     
     //use the swiping gesture to select the currently swiping cell.
-    @objc
-    private func swiping(gesture: UIPanGestureRecognizer) {
+    @objc private func swiping(gesture: UIPanGestureRecognizer) {
         if gesture.state != .ended {
             let loc = gesture.location(ofTouch: 0, in: self.collectionView)
             if let path = self.collectionView.indexPathForItem(at: loc), let cell = self.collectionView.cellForItem(at: path), let cc = cell as? DKAssetGroupDetailBaseCell {

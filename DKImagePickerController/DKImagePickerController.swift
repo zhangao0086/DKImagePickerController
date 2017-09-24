@@ -405,7 +405,7 @@ open class DKImagePickerController : UINavigationController {
     }
     
     internal weak var camera: UIViewController?
-    @objc  open func present(camera: UIViewController) {
+    @objc open func present(camera: UIViewController) {
         self.camera = camera
         
         if self.inline {
@@ -432,8 +432,7 @@ open class DKImagePickerController : UINavigationController {
         })
     }
 	
-	@objc
-    open func done() {
+	@objc open func done() {
         self.presentingViewController?.dismiss(animated: true, completion: {
             self.didSelectAssets?(self.selectedAssets)
         })

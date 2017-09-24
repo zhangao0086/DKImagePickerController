@@ -11,13 +11,6 @@ import AVFoundation
 import CoreMotion
 import ImageIO
 
-open class DKCameraPassthroughView: UIView {
-    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let hitTestingView = super.hitTest(point, with: event)
-        return hitTestingView == self ? nil : hitTestingView
-    }
-}
-
 extension AVMetadataFaceObject {
 
     open func realBounds(inCamera camera: DKCamera) -> CGRect {
@@ -37,6 +30,43 @@ extension AVMetadataFaceObject {
         return bounds
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@available(iOS, introduced: 10.0)
+class DKCameraPhotoCapturer: NSObject, AVCapturePhotoCaptureDelegate {
+    
+    var didCaptureWithImageData: ((_ imageData: Data) -> Void)?
+    var didFinish: (() -> Void)?
+    
+    func photoOutput(_ output: AVCapturePhotoOutput,
+                     didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?,
+                     previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?,
+                     resolvedSettings: AVCaptureResolvedPhotoSettings,
+                     bracketSettings: AVCaptureBracketedStillImageSettings?,
+                     error: Error?) {
+        guard let photoSampleBuffer = photoSampleBuffer else {
+            print("DKCameraError: \(error!)")
+            return
+        }
+        
+        if let didCaptureWithImageData = self.didCaptureWithImageData {
+            let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)!
+            didCaptureWithImageData(imageData)
+        }
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
+        if let error = error {
+            print("DKCameraError: \(error)")
+        } else if let didFinish = self.didFinish {
+            didFinish()
+        }
+    }
+    
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @objc
 public enum DKCameraDeviceSourceType : Int {
@@ -103,6 +133,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     open let captureSession = AVCaptureSession()
     open var previewLayer: AVCaptureVideoPreviewLayer!
+    fileprivate let sessionQueue = DispatchQueue(label: "DKCamera_CaptureSession_Queue")
     fileprivate var beginZoomScale: CGFloat = 1.0
     fileprivate var zoomScale: CGFloat = 1.0
     
@@ -110,7 +141,24 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     open var currentDevice: AVCaptureDevice?
     open var captureDeviceFront: AVCaptureDevice?
     open var captureDeviceRear: AVCaptureDevice?
-    fileprivate weak var stillImageOutput: AVCaptureStillImageOutput?
+    
+    fileprivate weak var captureOutput: AVCaptureOutput?
+    
+    fileprivate var __defaultPhotoSettings: Any?
+    @available(iOS 10.0, *)
+    fileprivate var defaultPhotoSettings: AVCapturePhotoSettings {
+        get {
+            if __defaultPhotoSettings == nil {
+                let photoSettings = AVCapturePhotoSettings()
+                photoSettings.isHighResolutionPhotoEnabled = true
+                
+                __defaultPhotoSettings = photoSettings
+            }
+            
+            return __defaultPhotoSettings as! AVCapturePhotoSettings
+        }
+    }
+    fileprivate var currentCapturer: Any? // DKCameraPhotoCapturer
     
     open var contentView = UIView()
     
@@ -299,10 +347,18 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         self.setupCurrentDevice()
         
-        let stillImageOutput = AVCaptureStillImageOutput()
-        if self.captureSession.canAddOutput(stillImageOutput) {
-            self.captureSession.addOutput(stillImageOutput)
-            self.stillImageOutput = stillImageOutput
+        var captureOutput: AVCaptureOutput!
+        if #available(iOS 10.0, *) {
+            let photoOutput = AVCapturePhotoOutput()
+            photoOutput.isHighResolutionCaptureEnabled = true
+            captureOutput = photoOutput
+        } else {
+            captureOutput = AVCaptureStillImageOutput()
+        }
+        
+        if self.captureSession.canAddOutput(captureOutput) {
+            self.captureSession.addOutput(captureOutput)
+            self.captureOutput = captureOutput
         }
         
         if self.onFaceDetection != nil {
@@ -357,15 +413,20 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     open func setupDevices() {
-        let devices = AVCaptureDevice.devices(for: AVMediaType.video) 
-        
-        for device in devices {
-            if device.position == .back {
-                self.captureDeviceRear = device
-            }
+        if #available(iOS 10.0, *) {
+            self.captureDeviceFront = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front)
+            self.captureDeviceRear = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        } else {
+            let devices = AVCaptureDevice.devices(for: .video)
             
-            if device.position == .front {
-                self.captureDeviceFront = device
+            for device in devices {
+                if device.position == .back {
+                    self.captureDeviceRear = device
+                }
+                
+                if device.position == .front {
+                    self.captureDeviceFront = device
+                }
             }
         }
         
@@ -415,46 +476,76 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     @objc open func takePicture() {
-        let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
         if authStatus == .denied {
             return
         }
         
-        if let stillImageOutput = self.stillImageOutput, !stillImageOutput.isCapturingStillImage {
-            self.captureButton.isEnabled = false
+        func process(_ imageData: Data) {
+            let takenImage = UIImage(data: imageData)!
+            let outputRect = self.previewLayer.metadataOutputRectConverted(fromLayerRect: self.previewLayer.bounds)
+            let takenCGImage = takenImage.cgImage!
+            let width = CGFloat(takenCGImage.width)
+            let height = CGFloat(takenCGImage.height)
+            let cropRect = CGRect(x: outputRect.origin.x * width, y: outputRect.origin.y * height, width: outputRect.size.width * width, height: outputRect.size.height * height)
             
-            DispatchQueue.global().async(execute: {
-                if let connection = stillImageOutput.connection(with: AVMediaType.video) {
-                    connection.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
-                    connection.videoScaleAndCropFactor = self.zoomScale
-                    
-                    stillImageOutput.captureStillImageAsynchronously(from: connection, completionHandler: { (imageDataSampleBuffer, error) in
-                        if error == nil {
-                            let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
-                            
-                            if let didFinishCapturingImage = self.didFinishCapturingImage, let imageData = imageData, let takenImage = UIImage(data: imageData) {
-                                
-                                let outputRect = self.previewLayer.metadataOutputRectConverted(fromLayerRect: self.previewLayer.bounds)
-                                let takenCGImage = takenImage.cgImage!
-                                let width = CGFloat(takenCGImage.width)
-                                let height = CGFloat(takenCGImage.height)
-                                let cropRect = CGRect(x: outputRect.origin.x * width, y: outputRect.origin.y * height, width: outputRect.size.width * width, height: outputRect.size.height * height)
-                                
-                                let cropCGImage = takenCGImage.cropping(to: cropRect)
-                                let cropTakenImage = UIImage(cgImage: cropCGImage!, scale: 1, orientation: takenImage.imageOrientation)
-                                
-                                didFinishCapturingImage(cropTakenImage, imageData)
-                                
-                                self.captureButton.isEnabled = true
-                            }
-                        } else {
-                            print("error while capturing still image: \(error!.localizedDescription)", terminator: "")
-                        }
-                    })
-                }
-            })
+            let cropCGImage = takenCGImage.cropping(to: cropRect)
+            let cropTakenImage = UIImage(cgImage: cropCGImage!, scale: 1, orientation: takenImage.imageOrientation)
+            
+            self.didFinishCapturingImage!(cropTakenImage, imageData)
         }
         
+        if #available(iOS 10.0, *) {
+            if let photoOutput = self.captureOutput as? AVCapturePhotoOutput, self.currentCapturer == nil {
+                self.captureButton.isEnabled = false
+                
+                self.sessionQueue.async {
+                    if let connection = photoOutput.connection(with: .video) {
+                        connection.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
+                        connection.videoScaleAndCropFactor = self.zoomScale
+                        
+                        let settings = AVCapturePhotoSettings(from: self.defaultPhotoSettings)
+                        
+                        let capturer = DKCameraPhotoCapturer()
+                        capturer.didCaptureWithImageData = { (imageData) in
+                            process(imageData)
+                        }
+                        capturer.didFinish = { [unowned self] in
+                            self.currentCapturer = nil
+                            self.captureButton.isEnabled = true
+                        }
+                        
+                        photoOutput.capturePhoto(with: settings, delegate: capturer)
+                        
+                        self.currentCapturer = capturer
+                    }
+                }
+            }
+        } else {
+            if let stillImageOutput = self.captureOutput as? AVCaptureStillImageOutput, !stillImageOutput.isCapturingStillImage {
+                self.captureButton.isEnabled = false
+                
+                self.sessionQueue.async(execute: {
+                    if let connection = stillImageOutput.connection(with: .video) {
+                        connection.videoOrientation = self.currentOrientation.toAVCaptureVideoOrientation()
+                        connection.videoScaleAndCropFactor = self.zoomScale
+                        
+                        stillImageOutput.captureStillImageAsynchronously(from: connection, completionHandler: { (imageDataSampleBuffer, error) in
+                            if error == nil {
+                                let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer!)
+                                
+                                if let imageData = imageData {
+                                    process(imageData)
+                                    self.captureButton.isEnabled = true
+                                }
+                            } else {
+                                print("error while capturing still image: \(error!.localizedDescription)", terminator: "")
+                            }
+                        })
+                    }
+                })
+            }
+        }
     }
     
     // MARK: - Handles Zoom
@@ -583,11 +674,19 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     open func updateFlashMode() {
-        if let currentDevice = self.currentDevice
-            , currentDevice.isFlashAvailable && currentDevice.isFlashModeSupported(self.flashMode) {
-            try! currentDevice.lockForConfiguration()
-            currentDevice.flashMode = self.flashMode
-            currentDevice.unlockForConfiguration()
+        if let currentDevice = self.currentDevice, let captureOutput = self.captureOutput, currentDevice.isFlashAvailable  {
+            if #available(iOS 10.0, *) {
+                let isFlashModeSupported = (captureOutput as! AVCapturePhotoOutput).__supportedFlashModes.contains(NSNumber(value: self.flashMode.rawValue))
+                if isFlashModeSupported {
+                    self.defaultPhotoSettings.flashMode = self.flashMode
+                }
+            } else {
+                if currentDevice.isFlashModeSupported(self.flashMode) {
+                    try! currentDevice.lockForConfiguration()
+                    currentDevice.flashMode = self.flashMode
+                    currentDevice.unlockForConfiguration()
+                }
+            }
         }
     }
     
