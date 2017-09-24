@@ -15,7 +15,7 @@ public protocol DKImagePickerControllerCameraProtocol {
     
     func setDidCancel(block: @escaping () -> Void) -> Void
     
-    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage?, _ data: Data?) -> Void) -> Void
+    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage, _ metadata: [AnyHashable : Any]?) -> Void) -> Void
     
     func setDidFinishCapturingVideo(block: @escaping (_ videoURL: URL) -> Void) -> Void
 }
@@ -359,21 +359,13 @@ open class DKImagePickerController : UINavigationController {
             }
         }
         
-        let didFinishCapturingImage = { [unowned self] (image: UIImage?, data: Data?) in
-            let completeBlock: ((_ asset: DKAsset) -> Void) = { asset in
+        let didFinishCapturingImage = { [unowned self] (image: UIImage, metadata: [AnyHashable : Any]?) in
+            self.capturingImage(image, metadata, { [unowned self] (asset) in
                 if self.sourceType != .camera {
                     self.dismissCamera()
                 }
                 self.selectImage(asset)
-            }
-            
-            if let data = data {
-                self.capturingImageData(data, image, completeBlock)
-            } else if let image = image {
-                self.capturingImage(image, completeBlock)
-            } else {
-                assert(false)
-            }
+            })
         }
         
         let didFinishCapturingVideo = { [unowned self] (videoURL: URL) in
@@ -447,7 +439,25 @@ open class DKImagePickerController : UINavigationController {
     
     // MARK:- Capturing Image
     
-    internal func capturingImage(_ image: UIImage, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    internal func capturingImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+        if let metadata = metadata {
+            let imageData = UIImageJPEGRepresentation(image, 1)!
+            
+            if #available(iOS 9.0, *) {
+                if let imageDataWithMetadata = self.writeMetadata(metadata, into: imageData) {
+                    self.saveImageDataToAlbumForiOS9(imageDataWithMetadata, completeBlock)
+                } else {
+                    self.saveImageDataToAlbumForiOS9(imageData, completeBlock)
+                }
+            } else {
+                self.saveImageDataToAlbumForiOS8(imageData, metadata, completeBlock)
+            }
+        } else {
+            self.saveImageToAlbum(image, completeBlock)
+        }
+    }
+    
+    internal func saveImageToAlbum(_ image: UIImage, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         var newImageIdentifier: String!
         
         PHPhotoLibrary.shared().performChanges({
@@ -461,42 +471,14 @@ open class DKImagePickerController : UINavigationController {
                     completeBlock(DKAsset(image: image))
                 }
             })
-            
         }
     }
     
-    internal func capturingImageData(_ data: Data, _ image: UIImage?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
-        var metadata: Dictionary<AnyHashable, Any>?
-        if let source = CGImageSourceCreateWithData(data as CFData, nil) {
-            metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? Dictionary<AnyHashable, Any>
-        }
-        
-        var imageData = data
-        if let image = image {
-            imageData = UIImageJPEGRepresentation(image, 1)!
-        }
-        
-        if #available(iOS 9.0, *) {
-            if let metadata = metadata {
-                if let imageDataWithMetadata = self.writeMetadata(metadata, Into: imageData) {
-                    self.capturingImageDataForiOS9(imageDataWithMetadata, completeBlock)
-                } else {
-                    self.capturingImageDataForiOS9(imageData, completeBlock)
-                }
-            } else {
-                self.capturingImageDataForiOS9(imageData, completeBlock)
-            }
-        } else {
-            self.capturingImageDataForiOS8(imageData, metadata, completeBlock)
-        }
-    }
-    
-    @available(iOS, deprecated: 9.0)
-    internal func capturingImageDataForiOS8(_ data: Data, _ metadata: Dictionary<AnyHashable, Any>?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    internal func saveImageDataToAlbumForiOS8(_ imageData: Data, _ metadata: Dictionary<AnyHashable, Any>?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         let library = ALAssetsLibrary()
-        library.writeImageData(toSavedPhotosAlbum: data, metadata: metadata, completionBlock: { (newURL, error) in
+        library.writeImageData(toSavedPhotosAlbum: imageData, metadata: metadata, completionBlock: { (newURL, error) in
             if let _ = error {
-                completeBlock(DKAsset(image: UIImage(data: data)!))
+                completeBlock(DKAsset(image: UIImage(data: imageData)!))
             } else {
                 if let newAsset = PHAsset.fetchAssets(withALAssetURLs: [newURL!], options: nil).firstObject {
                     completeBlock(DKAsset(originalAsset: newAsset))
@@ -505,13 +487,13 @@ open class DKImagePickerController : UINavigationController {
         })
     }
     
-    internal func capturingImageDataForiOS9(_ data: Data, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    internal func saveImageDataToAlbumForiOS9(_ imageDataWithMetadata: Data, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         var newImageIdentifier: String!
         
         PHPhotoLibrary.shared().performChanges({
             if #available(iOS 9.0, *) {
                 let assetRequest = PHAssetCreationRequest.forAsset()
-                assetRequest.addResource(with: .photo, data: data, options: nil)
+                assetRequest.addResource(with: .photo, data: imageDataWithMetadata, options: nil)
                 newImageIdentifier = assetRequest.placeholderForCreatedAsset!.localIdentifier
             } else {
                 // Fallback on earlier versions
@@ -521,14 +503,14 @@ open class DKImagePickerController : UINavigationController {
                 if success, let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newImageIdentifier], options: nil).firstObject {
                     completeBlock(DKAsset(originalAsset: newAsset))
                 } else {
-                    completeBlock(DKAsset(image: UIImage(data: data)!))
+                    completeBlock(DKAsset(image: UIImage(data: imageDataWithMetadata)!))
                 }
             })
             
         }
     }
     
-    internal func writeMetadata(_ metadata: Dictionary<AnyHashable, Any>, Into imageData: Data) -> Data? {
+    internal func writeMetadata(_ metadata: Dictionary<AnyHashable, Any>, into imageData: Data) -> Data? {
         let source = CGImageSourceCreateWithData(imageData as CFData, nil)!
         let UTI = CGImageSourceGetType(source)!
         
