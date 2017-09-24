@@ -438,8 +438,8 @@ open class DKImagePickerController : UINavigationController {
             self.didCancel?()
         })
     }
-	
-	@objc open func done() {
+    
+    @objc open func done() {
         self.presentingViewController?.dismiss(animated: true, completion: {
             self.didSelectAssets?(self.selectedAssets)
         })
@@ -492,7 +492,7 @@ open class DKImagePickerController : UINavigationController {
     }
     
     @available(iOS, deprecated: 9.0)
-    internal func capturingImageDataForiOS8(_ data: Data, _ metadata: Dictionary<AnyHashable, Any>?) {
+    internal func capturingImageDataForiOS8(_ data: Data, _ metadata: Dictionary<AnyHashable, Any>?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         let library = ALAssetsLibrary()
         library.writeImageData(toSavedPhotosAlbum: data, metadata: metadata, completionBlock: { (newURL, error) in
             if let _ = error {
