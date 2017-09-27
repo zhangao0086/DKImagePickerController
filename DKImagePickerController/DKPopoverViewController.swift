@@ -10,11 +10,12 @@ import UIKit
 
 open class DKPopoverViewController: UIViewController {
     
-    open class func popoverViewController(_ viewController: UIViewController, fromView: UIView) {
+    open class func popoverViewController(_ viewController: UIViewController, fromView: UIView, arrowColor: UIColor = UIColor.white) {
         let window = UIApplication.shared.keyWindow!
         
         let popoverViewController = DKPopoverViewController()
         
+        popoverViewController.arrowColor = arrowColor
         popoverViewController.contentViewController = viewController
         popoverViewController.fromView = fromView
         
@@ -45,14 +46,16 @@ open class DKPopoverViewController: UIViewController {
         
         let arrowWidth: CGFloat = 20
         let arrowHeight: CGFloat = 10
+        var arrowColor = UIColor.white
         fileprivate let arrowImageView: UIImageView = UIImageView()
         
-        override init(frame: CGRect) {
-            super.init(frame: frame)
+        public init(arrowColor: UIColor) {
+            super.init(frame: CGRect.zero)
             
+            self.arrowColor = arrowColor
             self.commonInit()
         }
-
+        
         required init?(coder aDecoder: NSCoder) {
             super.init(coder: aDecoder)
             
@@ -87,7 +90,7 @@ open class DKPopoverViewController: UIViewController {
 
             context?.addPath(arrowPath)
             
-            context?.setFillColor(UIColor.white.cgColor)
+            context?.setFillColor(self.arrowColor.cgColor)
             context?.drawPath(using: CGPathDrawingMode.fill)
 
             let arrowImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -97,9 +100,11 @@ open class DKPopoverViewController: UIViewController {
         }
     }
     
+    public var arrowColor = UIColor.white
+    
     var contentViewController: UIViewController!
     var fromView: UIView!
-    private let popoverView = DKPopoverView()
+    private var popoverView: DKPopoverView!
     
     override open func loadView() {
         super.loadView()
@@ -114,7 +119,8 @@ open class DKPopoverViewController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.addSubview(popoverView)
+        self.popoverView = DKPopoverView(arrowColor: self.arrowColor)
+        self.view.addSubview(self.popoverView)
     }
 
 	@available(iOS, deprecated: 8.0)
