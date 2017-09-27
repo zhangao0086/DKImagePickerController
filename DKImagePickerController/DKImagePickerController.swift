@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 import AssetsLibrary
+import CLImageEditor
 
 @objc
 public protocol DKImagePickerControllerCameraProtocol {
@@ -112,7 +113,7 @@ public enum DKImagePickerControllerSourceType : Int {
 /**
  * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
  */
-open class DKImagePickerController : UINavigationController {
+open class DKImagePickerController : UINavigationController, CLImageEditorDelegate {
     
     lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
         return DKImagePickerControllerDefaultUIDelegate()
@@ -349,6 +350,7 @@ open class DKImagePickerController : UINavigationController {
         }
     }
     
+    private var metadataFromCamera: [AnyHashable : Any]?
     private func createCamera() -> UIViewController {
         let didCancel = { [unowned self] () in
             if self.sourceType == .camera {
@@ -360,14 +362,18 @@ open class DKImagePickerController : UINavigationController {
         }
         
         let didFinishCapturingImage = { [unowned self] (image: UIImage, metadata: [AnyHashable : Any]?) in
-            let completeBlock: ((_ asset: DKAsset) -> Void) = { asset in
-                if self.sourceType != .camera {
-                    self.dismissCamera()
-                }
-                self.selectImage(asset)
+            self.metadataFromCamera = metadata
+            
+            let imageEditor = CLImageEditor(image: image, delegate: self)!
+            if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLToneCurveTool", recursive: false) {
+                tool.available = false
             }
             
-            self.capturingImage(image, metadata, completeBlock)
+            if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLStickerTool", recursive: false) {
+                tool.available = false
+            }
+            
+            self.camera?.present(imageEditor, animated: true, completion: nil)
         }
         
         let didFinishCapturingVideo = { [unowned self] (videoURL: URL) in
@@ -441,7 +447,18 @@ open class DKImagePickerController : UINavigationController {
     
     // MARK:- Capturing Image
     
-    internal func capturingImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    open func processImageFromCamera(_ image: UIImage, _ metadata: [AnyHashable : Any]?) {
+        let completeBlock: ((_ asset: DKAsset) -> Void) = { asset in
+            if self.sourceType != .camera {
+                self.dismissCamera()
+            }
+            self.selectImage(asset)
+        }
+        
+        self.saveImage(image, metadata, completeBlock)
+    }
+    
+    internal func saveImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         if let metadata = metadata {
             let imageData = UIImageJPEGRepresentation(image, 1)!
             
@@ -606,5 +623,14 @@ open class DKImagePickerController : UINavigationController {
         } else {
             return UIInterfaceOrientationMask.portrait
         }
+    }
+    
+    // MARK: - CLImageEditorDelegate
+    
+    public func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
+        self.metadataFromCamera?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
+
+        self.processImageFromCamera(image, self.metadataFromCamera)
+        self.metadataFromCamera = nil
     }
 }
