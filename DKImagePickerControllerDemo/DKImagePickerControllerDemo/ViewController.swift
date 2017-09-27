@@ -156,11 +156,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         doneButton.setTitle("Done(\(self.pickerController.selectedAssets.count))", for: .normal)
     }
     
-    func done() {
+    @objc func done() {
         self.updateAssets(assets: self.pickerController.selectedAssets)
     }
     
-    func showAlbum() {
+    @objc func showAlbum() {
         let pickerController = DKImagePickerController()
         pickerController.defaultSelectedAssets = self.pickerController.selectedAssets
         pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in

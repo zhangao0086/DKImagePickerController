@@ -433,13 +433,13 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         }
     }
     
-    open func dismiss() {
+    @objc open func dismiss() {
         self.presentingViewController?.dismiss(animated: true, completion: {
             self.didCancel?()
         })
     }
     
-    open func done() {
+    @objc open func done() {
         self.presentingViewController?.dismiss(animated: true, completion: {
             self.didSelectAssets?(self.selectedAssets)
         })

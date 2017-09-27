@@ -239,7 +239,7 @@ public extension DKAsset {
      - parameter presetName:        An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
      - parameter outputFileType:    Type of file to export. Should be a valid media type, otherwise export will fail. See AVFileType.
      */
-    public func writeAVToFile(_ path: String, presetName: String, outputFileType: String = AVFileTypeQuickTimeMovie, completeBlock: @escaping (_ success: Bool) -> Void) {
+    public func writeAVToFile(_ path: String, presetName: String, outputFileType: AVFileType = AVFileType.mov, completeBlock: @escaping (_ success: Bool) -> Void) {
 		self.fetchAVAsset(nil) { (avAsset, _) in
             DKAssetWriter.writeQueue.addOperation({
                 if let avAsset = avAsset,

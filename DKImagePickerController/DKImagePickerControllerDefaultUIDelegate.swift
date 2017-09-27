@@ -68,7 +68,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	                                  showsCancelButtonForVC vc: UIViewController) {
 		vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
 		                                                      target: imagePickerController,
-		                                                      action: #selector(imagePickerController.dismiss as (Void) -> Void))
+		                                                      action: #selector(imagePickerController.dismiss as () -> Void))
 	}
 	
 	open func imagePickerController(_ imagePickerController: DKImagePickerController,
