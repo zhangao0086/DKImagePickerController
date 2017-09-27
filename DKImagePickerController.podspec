@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "DKImagePickerController"
-  s.version       = "3.6.1"
+  s.version       = "4.0.0"
   s.summary       = "Image Picker Controller by Swift3."
   s.homepage      = "https://github.com/zhangao0086/DKImagePickerController"
   s.license       = { :type => "MIT", :file => "LICENSE" }
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.dependency 'DKCamera', '1.4.0'
   # s.dependency 'DKPhotoGallery'
 
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 
   s.subspec 'ImageManager' do |image|
 
