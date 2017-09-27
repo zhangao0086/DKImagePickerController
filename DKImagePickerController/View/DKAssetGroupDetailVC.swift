@@ -183,20 +183,21 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         return getImageManager().groupDataManager.fetchAsset(group, index: assetIndex)
     }
     
-    //select an asset at a specific index
+    // select an asset at a specific index
     public func selectAsset(atIndex indexPath: IndexPath) {
-        let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)
-        if let ss = selectedAsset {
-            selectAsset(cellToSelect: ss)
-        }
-    }
-    
-    public func selectAsset(cellToSelect cell:DKAssetGroupDetailBaseCell) {
-        guard let ast = cell.asset else {
+        guard let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell) else {
             return
         }
         
-        self.imagePickerController.selectImage(ast)
+        selectAsset(cellToSelect: selectedAsset)
+    }
+    
+    public func selectAsset(cellToSelect cell: DKAssetGroupDetailBaseCell) {
+        guard let asset = cell.asset else {
+            return
+        }
+        
+        self.imagePickerController.selectImage(asset)
         cell.index = self.imagePickerController.selectedAssets.count - 1
     }
     
@@ -219,7 +220,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         let asset = self.fetchAsset(for: indexPath.row)!
         
         let cellClass: DKAssetGroupDetailBaseCell.Type!
-        if asset.isVideo {
+        if asset.type == .video {
             cellClass = self.imagePickerController.UIDelegate.imagePickerControllerCollectionVideoCell()
         } else {
             cellClass = self.imagePickerController.UIDelegate.imagePickerControllerCollectionImageCell()
@@ -294,7 +295,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         if let firstSelectedAsset = self.imagePickerController.selectedAssets.first,
-            let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset, self.imagePickerController.allowMultipleTypes == false && firstSelectedAsset.isVideo != selectedAsset.isVideo {
+            let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset, self.imagePickerController.allowMultipleTypes == false && firstSelectedAsset.type != selectedAsset.type {
 
             let alert = UIAlertController(
                     title: DKImageLocalizedStringWithKey("selectPhotosOrVideos")

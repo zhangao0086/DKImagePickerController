@@ -16,6 +16,15 @@ public extension CGSize {
 	}
 }
 
+@objc
+public enum DKAssetType : Int {
+    
+    case photo
+    
+    case video
+    
+}
+
 /**
  An `DKAsset` object represents a photo or a video managed by the `DKImagePickerController`.
  */
@@ -24,8 +33,7 @@ open class DKAsset: NSObject {
 	/// Returns a UIImage that is appropriate for displaying full screen.
 	private var fullScreenImage: (image: UIImage?, info: [AnyHashable: Any]?)?
 	
-	/// When the asset was an image, it's false. Otherwise true.
-	open private(set) var isVideo: Bool = false
+	open private(set) var type: DKAssetType = .photo
 	
     /// Returns location, if its contained in original asser
     open private(set) var location: CLLocation?
@@ -46,9 +54,9 @@ open class DKAsset: NSObject {
 		
 		let assetType = originalAsset.mediaType
 		if assetType == .video {
-			self.isVideo = true
+			self.type = .video
 			self.duration = originalAsset.duration
-		}
+        }
 	}
 	
 	internal var image: UIImage?

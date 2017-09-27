@@ -96,7 +96,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		var cell: UICollectionViewCell?
 		var imageView: UIImageView?
 		
-        if asset.isVideo {
+        if asset.type == .video {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellVideo", for: indexPath)
 			imageView = cell?.contentView.viewWithTag(1) as? UIImageView
         } else {
