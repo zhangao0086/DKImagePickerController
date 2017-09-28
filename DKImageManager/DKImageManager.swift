@@ -131,12 +131,18 @@ public class DKImageManager: DKBaseManager {
         let usedOptions = options ?? self.defaultImageRequestOptions
         
 		self.manager.requestImageData(for: asset.originalAsset!,
-                                              options: options ?? self.defaultImageRequestOptions) { (data, dataUTI, orientation, info) in
+		                                      options: usedOptions) { (data, dataUTI, orientation, info) in
 												if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
 													, data == nil && isInCloud.boolValue && self.autoDownloadWhenAssetIsInCloud {
-                                                    let requestCloudOptions = (options ?? self.defaultImageRequestOptions).copy() as! PHImageRequestOptions
-                                                    requestCloudOptions.isNetworkAccessAllowed = true
-                                                    self.fetchImageDataForAsset(asset, options: requestCloudOptions, completeBlock: completeBlock)
+                                                    
+                                                    if !usedOptions.isNetworkAccessAllowed {
+                                                        let requestCloudOptions = usedOptions.copy() as! PHImageRequestOptions
+                                                        requestCloudOptions.isNetworkAccessAllowed = true
+                                                        self.fetchImageData(for: asset, options: requestCloudOptions, completeBlock: completeBlock)
+                                                    } else {
+                                                        completeBlock(data, info)
+                                                    }
+                                                    
 												} else {
 													completeBlock(data, info)
 												}
