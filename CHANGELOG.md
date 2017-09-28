@@ -1,5 +1,21 @@
 # Change Log
 
+## [3.8.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.8.0) (2017-09-24)
+
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.1...3.8.0)
+
+- Swift 4.
+
+- Fixed #380.
+
+- Fixed #381.
+
+- Fixed #374.
+
+- Handle iOS 11 BarButtonItems bug.
+
+- In iOS 10.0, use AVCapturePhotoOutput instead AVCaptureStillImageOutput.
+
 ## [3.6.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.6.1) (2017-08-29)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.0...3.6.1)

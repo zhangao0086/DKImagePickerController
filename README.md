@@ -28,7 +28,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 ## Requirements
 * iOS 8.0+
 * ARC
-* Swift 3 and Xcode 8
+* Swift 4 and Xcode 9
 
 ## Installation
 #### iOS 8 and newer
@@ -45,6 +45,9 @@ pod 'DKImagePickerController'
 
 > To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
 [CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
+
+#### Swift 3.*
+> For Swift 3.*, use version < 3.8.0
 
 #### Swift 2.2
 > For Swift 2.2, use version <= 3.3.4
@@ -267,31 +270,21 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
-## [3.6.1](https://github.com/zhangao0086/DKImagePickerController/tree/3.6.1) (2017-08-29)
+## [3.8.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.8.0) (2017-09-24)
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.0...3.6.1)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.1...3.8.0)
 
-- Updated way of implementation for fetchLimit.
+- Swift 4.
 
-- Call triggerSelectedChanged if deselectAllAssets was called.
+- Fixed #380.
 
-## [3.6.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.6.0) (2017-08-24)
+- Fixed #381.
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.5.6...3.6.0)
+- Fixed #374.
 
-- Support Italian language.
+- Handle iOS 11 BarButtonItems bug.
 
-- Support Arabic language
-
-- Ability to specify the exported file format.
-
-- Added support for fetchLimit.
-
-- Added support for inline mode.
-
-- Save image with metadata.
-
-- Updated DKCamera.
+- In iOS 10.0, use AVCapturePhotoOutput instead AVCaptureStillImageOutput.
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
