@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
 
   s.dependency 'CLImageEditor', '0.2.0'
-  s.dependency 'DKCamera', '1.4.0'
+  s.dependency 'DKCamera', '1.5.0'
   # s.dependency 'DKPhotoGallery'
 
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
