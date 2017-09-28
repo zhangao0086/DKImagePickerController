@@ -13,9 +13,9 @@ open class DKAssetGroupGridLayout: UICollectionViewFlowLayout {
 	open override func prepare() {
 		super.prepare()
 		
-		var minItemWidth: CGFloat = 80
+		var minItemWidth: CGFloat = 100
 		if UI_USER_INTERFACE_IDIOM() == .pad {
-			minItemWidth = 100
+			minItemWidth = 120
 		}
 		
 		let interval: CGFloat = 1
