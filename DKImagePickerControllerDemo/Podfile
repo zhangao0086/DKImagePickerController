@@ -3,8 +3,7 @@ use_frameworks!
 
 target 'DKImagePickerController' do
 
-  pod 'DKImagePickerController', :path => './'
-  pod 'CLImageEditor'
+  pod 'DKImagePickerController', :path => '../'
 
   # Pods for DKImagePickerController
 
@@ -17,8 +16,7 @@ end
 
 target 'DKImagePickerControllerDemo' do
 
-  pod 'DKImagePickerController', :path => './'
-  pod 'CLImageEditor'
+  pod 'DKImagePickerController', :path => '../'
 
   # Pods for DKImagePickerControllerDemo
 
