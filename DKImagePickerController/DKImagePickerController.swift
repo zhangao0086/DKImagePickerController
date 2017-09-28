@@ -280,7 +280,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
             if self.sourceType == .camera {
                 let camera = self.createCamera()
                 if camera is UINavigationController {
-                    self.presentCamera(camera: camera)
+                    self.present(camera: camera)
                     self.setViewControllers([], animated: false)
                 } else {
                     self.setViewControllers([camera], animated: false)
@@ -407,12 +407,12 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         return camera
     }
     
-    internal func presentCamera() {
-        self.presentCamera(camera: self.createCamera())
+    @objc open func presentCamera() {
+        self.present(camera: self.createCamera())
     }
     
     internal weak var camera: UIViewController?
-    internal func presentCamera(camera: UIViewController) {
+    @objc open func present(camera: UIViewController) {
         self.camera = camera
         
         if self.inline {
@@ -422,7 +422,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         }
     }
     
-    internal func dismissCamera() {
+    @objc open func dismissCamera() {
         if let _ = self.camera {
             if self.inline {
                 UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
@@ -448,14 +448,12 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     // MARK:- Capturing Image
     
     open func processImageFromCamera(_ image: UIImage, _ metadata: [AnyHashable : Any]?) {
-        let completeBlock: ((_ asset: DKAsset) -> Void) = { asset in
+        self.saveImage(image, metadata) { asset in
             if self.sourceType != .camera {
                 self.dismissCamera()
             }
             self.selectImage(asset)
         }
-        
-        self.saveImage(image, metadata, completeBlock)
     }
     
     internal func saveImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {

@@ -91,7 +91,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 		}
 		
 		let latestAsset = DKAsset(originalAsset:group.fetchResult.lastObject!)
-		latestAsset.fetchImageWithSize(size, options: options, completeBlock: completeBlock)
+        latestAsset.fetchImage(with: size, options: options, completeBlock: completeBlock)
 	}
 	
 	public func fetchAsset(_ group: DKAssetGroup, index: Int) -> DKAsset {

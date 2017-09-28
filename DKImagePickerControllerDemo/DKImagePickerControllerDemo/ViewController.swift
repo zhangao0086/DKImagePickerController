@@ -108,7 +108,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
 			let tag = indexPath.row + 1
 			cell.tag = tag
-			asset.fetchImageWithSize(layout.itemSize.toPixel(), completeBlock: { image, info in
+            asset.fetchImage(with: layout.itemSize.toPixel(), completeBlock: { image, info in
 				if cell.tag == tag {
 					imageView.image = image
 				}
@@ -120,7 +120,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = self.assets![indexPath.row]
-		asset.fetchAVAssetWithCompleteBlock { (avAsset, info) in
+		asset.fetchAVAsset { (avAsset, info) in
 			DispatchQueue.main.async(execute: { () in
 				self.playVideo(avAsset!)
 			})
