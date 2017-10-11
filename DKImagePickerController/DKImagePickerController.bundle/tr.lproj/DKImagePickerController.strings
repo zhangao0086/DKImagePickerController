@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Seçili(%ld)";
+"select" = "Seçili(%@)";
 
 "permissionCamera" = "Kamera erişimine izin veriniz.";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "Maksimum fotoğraf limitine ulaştınız.";
 
-"maxLimitReachedMessage" = "%ld fotoğraf seçebilirsiniz.";
+"maxLimitReachedMessage" = "%@ fotoğraf seçebilirsiniz.";

@@ -1,13 +1,13 @@
 DKImagePickerController
 =======================
 
- [![Build Status](https://secure.travis-ci.org/zhangao0086/DKImagePickerController.svg)](http://travis-ci.org/zhangao0086/DKImagePickerController) [![Version Status](http://img.shields.io/cocoapods/v/DKImagePickerController.png)][docsLink] [![license MIT](http://img.shields.io/badge/license-MIT-orange.png)][mitLink] [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+ [![Build Status](https://secure.travis-ci.org/zhangao0086/DKImagePickerController.svg)](http://travis-ci.org/zhangao0086/DKImagePickerController) [![Version Status](http://img.shields.io/cocoapods/v/DKImagePickerController.png)][docsLink] [![license MIT](https://img.shields.io/cocoapods/l/DKImagePickerController.svg?style=flat)][mitLink] [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot1.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot2.png" />
 ---
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
 ---
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot5.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 ---
 
 ## Description
@@ -19,14 +19,16 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Supports landscape and iPad and orientation switching.
 * Supports iCloud.
 * Supports UIAppearance.
-* Supports custom camera.
-* Supports custom UICollectionViewLayout.
+* Customizable camera.
+* Customizable UI.
+* Customizable UICollectionViewLayout.
 * Supports footer view.
+* Supports inline mode.
 
 ## Requirements
 * iOS 8.0+
 * ARC
-* Swift 3 and Xcode 8
+* Swift 4 and Xcode 9
 
 ## Installation
 #### iOS 8 and newer
@@ -44,8 +46,14 @@ pod 'DKImagePickerController'
 > To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
 [CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
 
+#### Swift 3.*
+> For Swift 3.*, use version < 3.8.0
+
 #### Swift 2.2
 > For Swift 2.2, use version <= 3.3.4
+
+#### Swift 2.3
+> For Swift 2.3, use version = 3.3.5 or the `Feature/Swift2.3` branch
 
 ## Getting Started
 #### Initialization and presentation
@@ -115,6 +123,16 @@ public var didSelectAssets: ((assets: [DKAsset]) -> Void)?
 /// It will have selected the specific assets.
 public var defaultSelectedAssets: [DKAsset]?
 
+/// allow swipe to select images.
+public var allowSwipeToSelect: Bool = false
+
+public var inline: Bool = false
+
+/// Limits the maximum number of objects returned in the fetch result, a value of 0 means no limit.
+public var fetchLimit = 0
+
+public var selectedChanged: (() -> Void)?
+
 ```
 
 ##### Exporting to file
@@ -133,7 +151,24 @@ public func writeAVToFile(path: String, presetName: String, completeBlock: (succ
 
 ```
 
-##### Customize Navigation Bar
+#### Camera customization
+
+You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
+For example, see [CustomCameraUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomCameraUIDelegate).
+
+#### UI customization
+
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
+
+For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomUIDelegate).
+
+#### Layout customization
+
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
+
+For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomLayoutUIDelegate).
+
+##### Conforms UIAppearance protocol
 You can easily customize the appearance of navigation bar using the appearance proxy.
 ```swift
 UINavigationBar.appearance().titleTextAttributes = [
@@ -143,71 +178,20 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
-#### Hides camera
+#### Inline
 
-```swift
-pickerController.sourceType = .Photo
-```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
-
-#### Quickly take a picture
-
-```swift
-pickerController.sourceType = .Camera
-```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Exhibit1.gif" />
-
-##### Customize footer view and UI color
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
 
-#### Create a custom camera
-
-You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
-The following code uses a `UIImagePickerController`:
 ```swift
-public class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    var didCancel: (() -> Void)?
-    var didFinishCapturingImage: ((image: UIImage) -> Void)?
-    var didFinishCapturingVideo: ((videoURL: NSURL) -> Void)?
-    
-    public override func imagePickerControllerCreateCamera(imagePickerController: DKImagePickerController,
-                                                           didCancel: (() -> Void),
-                                                           didFinishCapturingImage: ((image: UIImage) -> Void),
-                                                           didFinishCapturingVideo: ((videoURL: NSURL) -> Void)
-                                                           ) -> UIViewController {
-        self.didCancel = didCancel
-        self.didFinishCapturingImage = didFinishCapturingImage
-        self.didFinishCapturingVideo = didFinishCapturingVideo
-        
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.sourceType = .Camera
-        picker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
-        
-        return picker
-    }
-    
-    // MARK: - UIImagePickerControllerDelegate methods
-    
-    public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        let mediaType = info[UIImagePickerControllerMediaType] as! String
-        
-        if mediaType == kUTTypeImage as String {
-            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-            self.didFinishCapturingImage?(image: image)
-        } else if mediaType == kUTTypeMovie as String {
-            let videoURL = info[UIImagePickerControllerMediaURL] as! NSURL
-            self.didFinishCapturingVideo?(videoURL: videoURL)
-        }
-    }
-    
-    public func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.didCancel?()
-    }
-    
-}
+let pickerController = DKImagePickerController()
+pickerController.inline = true
+pickerController.fetchLimit = 10
+pickerController.UIDelegate = CustomInlineLayoutUIDelegate()
+pickerController.assetType = .allPhotos
+pickerController.sourceType = .photo
 ```
+
+Please see my demo project.
 
 ## How to use in Objective-C
 
@@ -261,13 +245,23 @@ pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 It has been supported languages so far:
 
 * en.lproj
-* zh-Hans.lproj
-* hu.lproj
-* ru.lproj
 * es.lproj
-* tr.lproj
+* da.lproj
 * de.lproj
+* fr.lproj
+* hu.lproj
+* ja.lproj
+* ko.lproj
+* nb-NO.lproj
+* pt_BR.lproj
+* ru.lproj
+* tr.lproj
 * ur.lproj
+* vi.lproj
+* ar.lproj
+* it.lproj
+* zh-Hans.lproj
+* zh-Hant.lproj
 
 If you want to add new language, pull request or issue!
 
@@ -276,44 +270,21 @@ You can merge your branch into the `develop` branch. Any Pull Requests to be wel
 
 ## Change Log
 
-## [3.4.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.4.0) (2016-09-18)
+## [3.8.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.8.0) (2017-09-24)
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.4...3.4.0)
+[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.1...3.8.0)
 
-- Migrating to swift3
+- Swift 4.
 
-## [3.3.3](https://github.com/zhangao0086/DKImagePickerController/tree/3.3.3) (2016-08-08)
+- Fixed #380.
 
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.3.2...3.3.3)
+- Fixed #381.
 
-- Added Carthage support
+- Fixed #374.
 
-- Added Urdu lozalization
+- Handle iOS 11 BarButtonItems bug.
 
-- Added German localization
-
-- Added `deselectAssetAtIndex` and `deselectAsset`.
-
-- Added `deselectAllAssets`.
-
-- Fixed an issue may cause `takePicture` is incorrect.
-
-- If a camera is not available, don't pops-up "Max photos limit reached".
-
-- The `didCancel` and `didSelectAssets` are executed after completion.
-
-- Updated DKImagePickerControllerDefaultUIDelegate interface.
-
-- Rename `unselectedImage` to `deselectImage`.
-
-- Rename `selectedImage` to `selectImage`. 
-
-- Replace tags with spaces.
-
-> [More logs...](https://github.com/zhangao0086/DKImagePickerController/blob/develop/CHANGELOG.md)
-
-## Special Thanks
-Big thanks to all the [contributors][contributors] so far!
+- In iOS 10.0, use AVCapturePhotoOutput instead AVCaptureStillImageOutput.
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
@@ -321,4 +292,3 @@ DKImagePickerController is released under the MIT license. See LICENSE for detai
 [docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
 [DKCamera]:https://github.com/zhangao0086/DKCamera
-[contributors]:https://github.com/zhangao0086/DKImagePickerController/graphs/contributors

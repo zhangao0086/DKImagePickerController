@@ -8,7 +8,7 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "(%ld)منتخب کریں";
+"select" = "(%@)منتخب کریں";
 
 "permissionCamera" = "براےْ مھربانی کیمرے کی رسائی کی اجازت دیں";
 
@@ -28,4 +28,4 @@
 
 "maxLimitReached" = "تصاویر کی مقررہ تعداد پوری ہوگئی";
 
-"maxLimitReachedMessage" = "آپ %ld تصاویر منتخب کر سکتے ہیں";
+"maxLimitReachedMessage" = "آپ %@ تصاویر منتخب کر سکتے ہیں";

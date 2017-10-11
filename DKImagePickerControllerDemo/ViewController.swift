@@ -12,58 +12,42 @@ import AVKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
 
+    var pickerController: DKImagePickerController!
+    
     @IBOutlet var previewView: UICollectionView?
     var assets: [DKAsset]?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-	func showImagePickerWithAssetType(_ assetType: DKImagePickerControllerAssetType,
-	                                  allowMultipleType: Bool,
-	                                  sourceType: DKImagePickerControllerSourceType = .both,
-	                                  allowsLandscape: Bool,
-	                                  singleSelect: Bool) {
-		
-		let pickerController = DKImagePickerController()
-		
-		// Custom camera
-//		pickerController.UIDelegate = CustomUIDelegate()
-//		pickerController.modalPresentationStyle = .OverCurrentContext
-		
-		pickerController.assetType = assetType
-		pickerController.allowsLandscape = allowsLandscape
-		pickerController.allowMultipleTypes = allowMultipleType
-		pickerController.sourceType = sourceType
-		pickerController.singleSelect = singleSelect
-		
-//		pickerController.showsCancelButton = true
-//		pickerController.showsEmptyAlbums = false
-//		pickerController.defaultAssetGroup = PHAssetCollectionSubtype.SmartAlbumFavorites
-		
-		// Clear all the selected assets if you used the picker controller as a single instance.
-//		pickerController.defaultSelectedAssets = nil
-		
+	func showImagePicker() {
 		pickerController.defaultSelectedAssets = self.assets
-		
+        
+        pickerController.didCancel = { ()
+            print("didCancel")
+        }
+        
 		pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
-			print("didSelectAssets")
-			
-			self.assets = assets
-			self.previewView?.reloadData()
+            self.updateAssets(assets: assets)
 		}
 		
 		if UI_USER_INTERFACE_IDIOM() == .pad {
 			pickerController.modalPresentationStyle = .formSheet
 		}
 		
-		self.present(pickerController, animated: true) {}
+        // turn on the swipe selection feature
+        // self.pickerController.allowSwipeToSelect = true
+		
+        if pickerController.inline {
+            self.showInlinePicker()
+        } else {
+            self.present(pickerController, animated: true) {}
+        }
 	}
+    
+    func updateAssets(assets: [DKAsset]) {
+        print("didSelectAssets")
+        
+        self.assets = assets
+        self.previewView?.reloadData()
+    }
 	
     func playVideo(_ asset: AVAsset) {
 		let avPlayerItem = AVPlayerItem(asset: asset)
@@ -79,50 +63,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     // MARK: - UITableViewDataSource, UITableViewDelegate methods
     
-    struct Demo {
-        static let titles = [
-            ["Pick All", "Pick photos only", "Pick videos only", "Pick All (only photos or videos)"],
-            ["Take a picture"],
-            ["Hides camera"],
-			["Allows landscape"],
-			["Single select"]
-        ]
-        static let types: [DKImagePickerControllerAssetType] = [.allAssets, .allPhotos, .allVideos, .allAssets]
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Demo.titles.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Demo.titles[section].count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) 
         
-        cell.textLabel?.text = Demo.titles[indexPath.section][indexPath.row]
+        cell.textLabel?.text = "Start"
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-    
-        let assetType = Demo.types[indexPath.row]
-        let allowMultipleType = !(indexPath.row == 0 && indexPath.section == 3)
-        let sourceType: DKImagePickerControllerSourceType = indexPath.section == 1 ? .camera :
-			(indexPath.section == 2 ? .photo : .both)
-		let allowsLandscape = indexPath.section == 3
-		let singleSelect = indexPath.section == 4
 		
-		showImagePickerWithAssetType(
-			assetType,
-			allowMultipleType: allowMultipleType,
-			sourceType: sourceType,
-			allowsLandscape: allowsLandscape,
-			singleSelect: singleSelect
-		)
+		showImagePicker()
 	}
 	
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
@@ -166,5 +126,50 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			})
 		}
     }
+    
+    // Inline Mode
+    
+    func showInlinePicker() {
+        let pickerView = self.pickerController.view!
+        pickerView.frame = CGRect(x: 0, y: 170, width: self.view.bounds.width, height: 200)
+        self.view.addSubview(pickerView)
+        
+        let doneButton = UIButton(type: .custom)
+        doneButton.setTitleColor(UIColor.blue, for: .normal)
+        doneButton.addTarget(self, action: #selector(done), for: .touchUpInside)
+        doneButton.frame = CGRect(x: 0, y: pickerView.frame.maxY, width: pickerView.bounds.width / 2, height: 50)
+        self.view.addSubview(doneButton)
+        self.pickerController.selectedChanged = { [unowned self] in
+            self.updateDoneButtonTitle(doneButton)
+        }
+        self.updateDoneButtonTitle(doneButton)
+        
+        let albumButton = UIButton(type: .custom)
+        albumButton.setTitleColor(UIColor.blue, for: .normal)
+        albumButton.setTitle("Album", for: .normal)
+        albumButton.addTarget(self, action: #selector(showAlbum), for: .touchUpInside)
+        albumButton.frame = CGRect(x: doneButton.frame.maxX, y: doneButton.frame.minY, width: doneButton.bounds.width, height: doneButton.bounds.height)
+        self.view.addSubview(albumButton)
+    }
+    
+    func updateDoneButtonTitle(_ doneButton: UIButton) {
+        doneButton.setTitle("Done(\(self.pickerController.selectedAssets.count))", for: .normal)
+    }
+    
+    @objc func done() {
+        self.updateAssets(assets: self.pickerController.selectedAssets)
+    }
+    
+    @objc func showAlbum() {
+        let pickerController = DKImagePickerController()
+        pickerController.defaultSelectedAssets = self.pickerController.selectedAssets
+        pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
+            self.updateAssets(assets: assets)
+            self.pickerController.defaultSelectedAssets = assets
+        }
+        
+        self.present(pickerController, animated: true, completion: nil)
+    }
+
 }
 

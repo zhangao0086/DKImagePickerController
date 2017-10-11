@@ -1,0 +1,31 @@
+//
+//  GitHub
+//  https://github.com/zhangao0086/DKImagePickerController
+//
+//
+//  License
+//  Copyright (c) 2014 ZhangAo
+//  Released under an MIT license: http://opensource.org/licenses/MIT
+//
+
+"select" = "Velg(%@)";
+
+"permissionCamera" = "Vennligst gi tilgang til kamera";
+
+"permissionPhoto" = "Vennligst gi tilgang til bilder";
+
+"permit" = "Gi tilgang";
+
+"gotoSettings" = "Gå til 「Innstillinger」 for å gi tilgang";
+
+"ok" = "OK";
+
+"selectPhotosOrVideos" = "Velg bilder eller videoer";
+
+"selectPhotosOrVideosError" = "Det er ikke mulig å velge bilder eller videoer samtidig.";
+
+"done" = "Ferdig";
+
+"maxLimitReached" = "Maks antall bilder er valgt";
+
+"maxLimitReachedMessage" = "Du kan velge %@ elementer";
