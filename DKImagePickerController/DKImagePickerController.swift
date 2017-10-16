@@ -115,29 +115,29 @@ public enum DKImagePickerControllerSourceType : Int {
  */
 open class DKImagePickerController : UINavigationController, CLImageEditorDelegate {
     
-    lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
+    @objc lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
         return DKImagePickerControllerDefaultUIDelegate()
     }()
     
     /// Forces deselect of previous selected image
-    public var singleSelect = false
+    @objc public var singleSelect = false
     
     /// Auto close picker on single select
-    public var autoCloseOnSingleSelect = true
+    @objc public var autoCloseOnSingleSelect = true
     
     /// The maximum count of assets which the user will be able to select.
-    public var maxSelectableCount = 999
+    @objc public var maxSelectableCount = 999
     
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
     
     /// allow swipe to select images.
-    public var allowSwipeToSelect: Bool = false
+    @objc public var allowSwipeToSelect: Bool = false
     
-    public var inline: Bool = false
+    @objc public var inline: Bool = false
     
     /// Limits the maximum number of objects returned in the fetch result, a value of 0 means no limit.
-    public var fetchLimit = 0
+    @objc public var fetchLimit = 0
     
     /// The types of PHAssetCollection to display in the picker.
     public var assetGroupTypes: [PHAssetCollectionSubtype] = [
@@ -151,41 +151,41 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     }
     
     /// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
-    public var showsEmptyAlbums = true {
+    @objc public var showsEmptyAlbums = true {
         didSet {
             getImageManager().groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
         }
     }
     
-    public var assetFilter: ((_ asset: PHAsset) -> Bool)? {
+    @objc public var assetFilter: ((_ asset: PHAsset) -> Bool)? {
         didSet {
             getImageManager().groupDataManager.assetFilter = self.assetFilter
         }
     }
     
     /// The type of picker interface to be displayed by the controller.
-    public var assetType: DKImagePickerControllerAssetType = .allAssets {
+    @objc public var assetType: DKImagePickerControllerAssetType = .allAssets {
         didSet {
             getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         }
     }
     
     /// The predicate applies to images only.
-    public var imageFetchPredicate: NSPredicate? {
+    @objc public var imageFetchPredicate: NSPredicate? {
         didSet {
             getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         }
     }
     
     /// The predicate applies to videos only.
-    public var videoFetchPredicate: NSPredicate? {
+    @objc public var videoFetchPredicate: NSPredicate? {
         didSet {
             getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         }
     }
     
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-    public var sourceType: DKImagePickerControllerSourceType = .both {
+    @objc public var sourceType: DKImagePickerControllerSourceType = .both {
         didSet { /// If source type changed in the scenario of sharing instance, view controller should be reinitialized.
             if(oldValue != sourceType) {
                 self.hasInitialized = false
@@ -194,21 +194,22 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     }
     
     /// Whether allows to select photos and videos at the same time.
-    public var allowMultipleTypes = true
+    @objc public var allowMultipleTypes = true
     
     /// If YES, and the requested image is not stored on the local device, the Picker downloads the image from iCloud.
-    public var autoDownloadWhenAssetIsInCloud = true {
+    @objc public var autoDownloadWhenAssetIsInCloud = true {
         didSet {
             getImageManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
         }
     }
     
     /// Determines whether or not the rotation is enabled.
-    public var allowsLandscape = false
+    @objc public var allowsLandscape = false
     
     /// The callback block is executed when user pressed the cancel button.
-    public var didCancel: (() -> Void)?
-    public var showsCancelButton = false {
+    @objc public var didCancel: (() -> Void)?
+    
+    @objc public var showsCancelButton = false {
         didSet {
             if let rootVC = self.viewControllers.first {
                 self.updateCancelButtonForVC(rootVC)
@@ -217,12 +218,12 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     }
     
     /// The callback block is executed when user pressed the select button.
-    public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
+    @objc public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
     
-    public var selectedChanged: (() -> Void)?
+    @objc public var selectedChanged: (() -> Void)?
     
     /// It will have selected the specific assets.
-    public var defaultSelectedAssets: [DKAsset]? {
+    @objc public var defaultSelectedAssets: [DKAsset]? {
         didSet {
             if let defaultSelectedAssets = self.defaultSelectedAssets {
                 if Set(self.selectedAssets) != Set(defaultSelectedAssets) {
@@ -236,7 +237,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         }
     }
     
-    open private(set) var selectedAssets = [DKAsset]()
+    @objc open private(set) var selectedAssets = [DKAsset]()
     
     static private var imagePickerControllerReferenceCount = 0
     public convenience init() {
@@ -304,7 +305,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         return assetFetchOptions
     }()
   
-    open func makeRootVC() -> DKAssetGroupDetailVC {
+    @objc open func makeRootVC() -> DKAssetGroupDetailVC {
       return DKAssetGroupDetailVC()
     }
     
@@ -445,9 +446,9 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         })
     }
     
-    // MARK:- Capturing Image
+    // MARK: - Capturing Image
     
-    open func processImageFromCamera(_ image: UIImage, _ metadata: [AnyHashable : Any]?) {
+    internal func processImageFromCamera(_ image: UIImage, _ metadata: [AnyHashable : Any]?) {
         self.saveImage(image, metadata) { asset in
             if self.sourceType != .camera {
                 self.dismissCamera()
@@ -546,26 +547,26 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     
     // MARK: - Selection
     
-    public func selectImage(atIndexPath index: IndexPath) {
+    @objc public func selectImage(atIndexPath index: IndexPath) {
         if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
             rootVC.selectAsset(atIndex: index)
             rootVC.collectionView?.reloadData()
         }
     }
     
-    public func deselectAssetAtIndex(_ index: Int) {
+    @objc public func deselectAssetAtIndex(_ index: Int) {
         let asset = self.selectedAssets[index]
         self.deselectAsset(asset)
     }
     
-    public func deselectAsset(_ asset: DKAsset) {
+    @objc public func deselectAsset(_ asset: DKAsset) {
         self.deselectImage(asset)
         if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
             rootVC.collectionView?.reloadData()
         }
     }
     
-    public func deselectAllAssets() {
+    @objc public func deselectAllAssets() {
         if self.selectedAssets.count > 0 {
             let assets = self.selectedAssets
             self.selectedAssets.removeAll()

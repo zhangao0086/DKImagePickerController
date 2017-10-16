@@ -10,7 +10,7 @@ import UIKit
 
 open class DKPopoverViewController: UIViewController {
     
-    open class func popoverViewController(_ viewController: UIViewController, fromView: UIView, arrowColor: UIColor = UIColor.white) {
+    @objc open class func popoverViewController(_ viewController: UIViewController, fromView: UIView, arrowColor: UIColor = UIColor.white) {
         let window = UIApplication.shared.keyWindow!
         
         let popoverViewController = DKPopoverViewController()
@@ -23,7 +23,7 @@ open class DKPopoverViewController: UIViewController {
         window.rootViewController!.addChildViewController(popoverViewController)
     }
     
-    open class func dismissPopoverViewController() {
+    @objc open class func dismissPopoverViewController() {
         let window = UIApplication.shared.keyWindow!
 
         for vc in window.rootViewController!.childViewControllers {
@@ -100,10 +100,10 @@ open class DKPopoverViewController: UIViewController {
         }
     }
     
-    public var arrowColor = UIColor.white
+    @objc public var arrowColor = UIColor.white
     
-    var contentViewController: UIViewController!
-    var fromView: UIView!
+    private var contentViewController: UIViewController!
+    private var fromView: UIView!
     private var popoverView: DKPopoverView!
     
     override open func loadView() {
