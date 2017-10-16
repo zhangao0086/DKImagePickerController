@@ -405,6 +405,8 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         cameraProtocol.setDidFinishCapturingImage(block: didFinishCapturingImage)
         cameraProtocol.setDidFinishCapturingVideo(block: didFinishCapturingVideo)
         
+        self.camera = camera
+        
         return camera
     }
     
@@ -414,8 +416,6 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     
     internal weak var camera: UIViewController?
     @objc open func present(camera: UIViewController) {
-        self.camera = camera
-        
         if self.inline {
             UIApplication.shared.keyWindow!.rootViewController!.present(camera, animated: true, completion: nil)
         } else {
