@@ -214,6 +214,9 @@ open class DKImagePickerController : UINavigationController {
             }
         }
     }
+
+    /// Colors applied to the permission view when access needs to be granted by the user
+    public var permissionViewColors = DKPermissionViewColors()
     
     /// The callback block is executed when user pressed the select button.
     public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
