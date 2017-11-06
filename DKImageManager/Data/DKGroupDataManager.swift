@@ -169,7 +169,9 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
     // MARK: - PHPhotoLibraryChangeObserver methods
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        for group in self.groups!.values {
+        guard let groups = self.groups?.values else { return  }
+        
+        for group in groups {
             if let changeDetails = changeInstance.changeDetails(for: group.originalCollection) {
                 if changeDetails.objectWasDeleted {
                     self.groups![group.groupId] = nil
