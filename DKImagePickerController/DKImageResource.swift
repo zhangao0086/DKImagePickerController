@@ -17,7 +17,8 @@ public extension Bundle {
     
 }
 
-public class DKImageResource {
+@objc
+open class DKImageResource: NSObject {
 
     private class func imageForResource(_ name: String) -> UIImage {
         let bundle = Bundle.imagePickerControllerBundle()
@@ -32,23 +33,23 @@ public class DKImageResource {
 		return image.resizableImage(withCapInsets: UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
 	}
 	
-    class func checkedImage() -> UIImage {
+    @objc open class func checkedImage() -> UIImage {
 		return stretchImgFromMiddle(imageForResource("checked_background"))
     }
     
-    class func blueTickImage() -> UIImage {
+    @objc open class func blueTickImage() -> UIImage {
         return imageForResource("tick_blue")
     }
     
-    class func cameraImage() -> UIImage {
+    @objc open class func cameraImage() -> UIImage {
         return imageForResource("camera")
     }
     
-    class func videoCameraIcon() -> UIImage {
+    @objc open class func videoCameraIcon() -> UIImage {
         return imageForResource("video_camera")
     }
 	
-	class func emptyAlbumIcon() -> UIImage {
+	@objc open class func emptyAlbumIcon() -> UIImage {
 		return stretchImgFromMiddle(imageForResource("empty_album"))
 	}
     
