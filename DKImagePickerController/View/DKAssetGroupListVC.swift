@@ -108,14 +108,7 @@ class DKAssetGroupCell: UITableViewCell {
     }
 }
 
-class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
-
-    convenience init(selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> (), defaultAssetGroup: PHAssetCollectionSubtype?) {
-        self.init(style: .plain)
-
-        self.defaultAssetGroup = defaultAssetGroup
-        self.selectedGroupDidChangeBlock = selectedGroupDidChangeBlock
-    }
+class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver {
 
     fileprivate var groups: [String]?
 
@@ -146,7 +139,22 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
             super.preferredContentSize = newValue
         }
     }
-
+    
+    fileprivate var groupDataManager: DKImageGroupDataManager
+    
+    init(groupDataManager: DKImageGroupDataManager, defaultAssetGroup: PHAssetCollectionSubtype?, selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> ()) {
+        self.groupDataManager = groupDataManager
+        
+        super.init(style: .plain)
+        
+        self.defaultAssetGroup = defaultAssetGroup
+        self.selectedGroupDidChangeBlock = selectedGroupDidChangeBlock
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -156,11 +164,11 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
 
         self.clearsSelectionOnViewWillAppear = false
 
-        getImageManager().groupDataManager.addObserver(self)
+        self.groupDataManager.add(observer: self)
     }
 
     internal func loadGroups() {
-        getImageManager().groupDataManager.fetchGroups { [weak self] groups, error in
+        self.groupDataManager.fetchGroups { [weak self] groups, error in
             guard let groups = groups, let strongSelf = self, error == nil else { return }
 
             strongSelf.groups = groups
@@ -182,7 +190,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         guard let groups = self.groups else { return nil }
         if let defaultAssetGroup = self.defaultAssetGroup {
             for groupId in groups {
-                let group = getImageManager().groupDataManager.fetchGroupWithGroupId(groupId)
+                let group = self.groupDataManager.fetchGroupWithGroupId(groupId)
                 if defaultAssetGroup == group.originalCollection.assetCollectionSubtype {
                     return groupId
                 }
@@ -207,7 +215,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
             return UITableViewCell()
         }
 
-        let assetGroup = getImageManager().groupDataManager.fetchGroupWithGroupId(groups[indexPath.row])
+        let assetGroup = self.groupDataManager.fetchGroupWithGroupId(groups[indexPath.row])
         cell.groupNameLabel.text = assetGroup.groupName
 
         let tag = indexPath.row + 1
@@ -216,7 +224,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         if assetGroup.totalCount == 0 {
             cell.thumbnailImageView.image = DKImageResource.emptyAlbumIcon()
         } else {
-            getImageManager().groupDataManager.fetchGroupThumbnailForGroup(
+            self.groupDataManager.fetchGroupThumbnailForGroup(
                 assetGroup.groupId,
                 size: CGSize(width: tableView.rowHeight, height: tableView.rowHeight).toPixel(),
                 options: self.groupThumbnailRequestOptions) { image, info in
@@ -242,13 +250,13 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         selectedGroupDidChangeBlock?(self.selectedGroup)
     }
     
-    // MARK: - DKGroupDataManagerObserver methods
+    // MARK: - DKImageGroupDataManagerObserver methods
     
-    func groupDidUpdate(_ groupId: String) {
+    func groupDidUpdate(groupId: String) {
         self.tableView.reloadData()
     }
     
-    func groupsDidInsert(_ groupIds: [String]) {
+    func groupsDidInsert(groupIds: [String]) {
         self.groups! += groupIds
         
         self.willChangeValue(forKey: "preferredContentSize")
@@ -260,7 +268,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
         self.didChangeValue(forKey: "preferredContentSize")
     }
     
-    func groupDidRemove(_ groupId: String) {
+    func groupDidRemove(groupId: String) {
         guard let row = self.groups?.index(of: groupId) else { return }
         
         self.willChangeValue(forKey: "preferredContentSize")

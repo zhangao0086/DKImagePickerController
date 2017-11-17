@@ -25,7 +25,7 @@ private extension UICollectionView {
 }
 
 // Show all images in the asset group
-open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKGroupDataManagerObserver {
+open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver {
     	
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
@@ -112,17 +112,19 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 			self.view.backgroundColor = UIColor.black
 			self.collectionView?.isHidden = true
 		}
-		
-		func setup() {
+        
+        func setup() {
             self.resetCachedAssets()
-			getImageManager().groupDataManager.addObserver(self)
-			self.groupListVC = DKAssetGroupListVC(selectedGroupDidChangeBlock: { [unowned self] groupId in
-				self.selectAssetGroup(groupId)
-			}, defaultAssetGroup: self.imagePickerController.defaultAssetGroup)
-			self.groupListVC.loadGroups()
-		}
+            self.imagePickerController.groupDataManager.add(observer: self)
+            self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
+                                                  defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
+                                                  selectedGroupDidChangeBlock: { [unowned self] (groupId) in
+                                                    self.selectAssetGroup(groupId)
+            })
+            self.groupListVC.loadGroups()
+        }
 		
-		DKImageManager.checkPhotoPermission { granted in
+		DKImageDataManager.checkPhotoPermission { granted in
 			granted ? setup() : photoDenied()
 		}
 	}
@@ -158,10 +160,10 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     }
 	
 	open func updateTitleView() {
-		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
+		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
 		self.title = group.groupName
 		
-		let groupsCount = getImageManager().groupDataManager.groupIds?.count ?? 0
+		let groupsCount = self.imagePickerController.groupDataManager.groupIds?.count ?? 0
 		self.selectGroupButton.setTitle(group.groupName + (groupsCount > 1 ? "  \u{25be}" : "" ), for: .normal)
 		self.selectGroupButton.sizeToFit()
 		self.selectGroupButton.isEnabled = groupsCount > 1
@@ -178,8 +180,8 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             return nil
         }
         let assetIndex = (index - (self.hidesCamera ? 0 : 1))
-        let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
-        return getImageManager().groupDataManager.fetchAsset(group, index: assetIndex)
+        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
+        return self.imagePickerController.groupDataManager.fetchAsset(group, index: assetIndex)
     }
     
     // select an asset at a specific index
@@ -270,7 +272,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		guard let selectedGroupId = self.selectedGroupId else { return 0 }
 		
-		let group = getImageManager().groupDataManager.fetchGroupWithGroupId(selectedGroupId)
+		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
         
         var totalCount = 0
         if self.imagePickerController.fetchLimit > 0 {
@@ -357,7 +359,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     var previousPreheatRect = CGRect.zero
     
     fileprivate func resetCachedAssets() {
-        getImageManager().stopCachingForAllAssets()
+        getImageDataManager().stopCachingForAllAssets()
         self.previousPreheatRect = .zero
     }
 
@@ -372,21 +374,21 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
         guard delta > view.bounds.height / 3 else { return }
         
-        let group = getImageManager().groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
+        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
         
         // Compute the assets to start caching and to stop caching.
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)
         let addedAssets = addedRects
             .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in getImageManager().groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
+            .map { indexPath in self.imagePickerController.groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
         let removedAssets = removedRects
             .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in getImageManager().groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
+            .map { indexPath in self.imagePickerController.groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
         
         // Update the assets the PHCachingImageManager is caching.
-        getImageManager().startCachingAssets(for: addedAssets,
+        getImageDataManager().startCachingAssets(for: addedAssets,
                                              targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
-        getImageManager().stopCachingAssets(for: removedAssets,
+        getImageDataManager().stopCachingAssets(for: removedAssets,
                                             targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
         
         // Store the preheat rect to compare against in the future.
@@ -419,15 +421,15 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         }
     }
 	
-	// MARK: - DKGroupDataManagerObserver methods
+	// MARK: - DKImageGroupDataManagerObserver methods
 	
-	func groupDidUpdate(_ groupId: String) {
+	func groupDidUpdate(groupId: String) {
 		if self.selectedGroupId == groupId {
 			self.updateTitleView()
 		}
 	}
 	
-	func group(_ groupId: String, didRemoveAssets assets: [DKAsset]) {
+	func group(groupId: String, didRemoveAssets assets: [DKAsset]) {
 		for (_, selectedAsset) in self.imagePickerController.selectedAssets.enumerated() {
 			for removedAsset in assets {
 				if selectedAsset.isEqual(removedAsset) {
@@ -437,7 +439,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		}
 	}
     
-    func groupDidUpdateComplete(_ groupId: String) {
+    func groupDidUpdateComplete(groupId: String) {
         if self.selectedGroupId == groupId {
             self.resetCachedAssets()
             self.collectionView?.reloadData()

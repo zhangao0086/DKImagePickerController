@@ -139,6 +139,8 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     /// Limits the maximum number of objects returned in the fetch result, a value of 0 means no limit.
     @objc public var fetchLimit = 0
     
+    internal let groupDataManager = DKImageGroupDataManager()
+    
     /// The types of PHAssetCollection to display in the picker.
     public var assetGroupTypes: [PHAssetCollectionSubtype] = [
         .smartAlbumUserLibrary,
@@ -146,41 +148,41 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         .albumRegular
         ] {
         willSet(newTypes) {
-            getImageManager().groupDataManager.assetGroupTypes = newTypes
+            self.groupDataManager.assetGroupTypes = newTypes
         }
     }
     
     /// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
     @objc public var showsEmptyAlbums = true {
         didSet {
-            getImageManager().groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
+            self.groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
         }
     }
     
     @objc public var assetFilter: ((_ asset: PHAsset) -> Bool)? {
         didSet {
-            getImageManager().groupDataManager.assetFilter = self.assetFilter
+            self.groupDataManager.assetFilter = self.assetFilter
         }
     }
     
     /// The type of picker interface to be displayed by the controller.
     @objc public var assetType: DKImagePickerControllerAssetType = .allAssets {
         didSet {
-            getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+            self.groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         }
     }
     
     /// The predicate applies to images only.
     @objc public var imageFetchPredicate: NSPredicate? {
         didSet {
-            getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+            self.groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         }
     }
     
     /// The predicate applies to videos only.
     @objc public var videoFetchPredicate: NSPredicate? {
         didSet {
-            getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+            self.groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         }
     }
     
@@ -199,7 +201,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     /// If YES, and the requested image is not stored on the local device, the Picker downloads the image from iCloud.
     @objc public var autoDownloadWhenAssetIsInCloud = true {
         didSet {
-            getImageManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
+            getImageDataManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
         }
     }
     
@@ -239,7 +241,6 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     
     @objc open private(set) var selectedAssets = [DKAsset]()
     
-    static private var imagePickerControllerReferenceCount = 0
     public convenience init() {
         let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
@@ -248,21 +249,17 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         
         rootVC.navigationItem.hidesBackButton = true
         
-        getImageManager().groupDataManager.assetGroupTypes = self.assetGroupTypes
-        getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
-        getImageManager().groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
-        getImageManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
+        self.groupDataManager.assetGroupTypes = self.assetGroupTypes
+        self.groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
+        self.groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
         
-        DKImagePickerController.imagePickerControllerReferenceCount += 1
+        getImageDataManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
         
-        DKImagePickerController.imagePickerControllerReferenceCount -= 1
-        if DKImagePickerController.imagePickerControllerReferenceCount == 0 {
-            getImageManager().invalidate()
-        }
+        self.groupDataManager.invalidate()
     }
     
     private var hasInitialized = false
