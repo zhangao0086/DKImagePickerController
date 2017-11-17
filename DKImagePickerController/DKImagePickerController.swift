@@ -360,11 +360,13 @@ open class DKImagePickerController : UINavigationController {
         }
         
         let didFinishCapturingImage = { [unowned self] (image: UIImage, metadata: [AnyHashable : Any]?) in
-            self.capturingImage(image, metadata, { [unowned self] (asset) in
-                if self.sourceType != .camera {
-                    self.dismissCamera()
+            self.capturingImage(image, metadata, { [weak self] (asset) in
+                if let strongSelf = self {
+                    if strongSelf.sourceType != .camera {
+                        strongSelf.dismissCamera()
+                    }
+                    strongSelf.selectImage(asset)
                 }
-                self.selectImage(asset)
             })
         }
         
