@@ -16,7 +16,7 @@ open class DKAssetGroupDetailBaseCell: UICollectionViewCell, DKAssetGroupCellIte
     
     open weak var asset: DKAsset?
     open var index: Int = 0
-    open var thumbnailImage: UIImage!
+    open var thumbnailImage: UIImage?
     
 //    override init(frame: CGRect) {
 //        super.init(frame: frame)

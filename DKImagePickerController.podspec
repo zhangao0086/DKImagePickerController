@@ -20,9 +20,9 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 
-  s.subspec 'ImageManager' do |image|
+  s.subspec 'ImageDataManager' do |image|
 
-    image.ios.source_files = "DKImageManager/**/*.swift"
+    image.ios.source_files = "DKImageDataManager/**/*.swift"
   end
 
 end
