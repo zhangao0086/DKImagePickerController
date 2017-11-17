@@ -1,6 +1,6 @@
 //
-//  DKGroupDataManager.swift
-//  DKImagePickerControllerDemo
+//  DKImageGroupDataManager.swift
+//  DKImagePickerController
 //
 //  Created by ZhangAo on 15/12/16.
 //  Copyright © 2015年 ZhangAo. All rights reserved.
@@ -9,17 +9,17 @@
 import Photos
 
 @objc
-protocol DKGroupDataManagerObserver {
+protocol DKImageGroupDataManagerObserver {
 	
-	@objc optional func groupDidUpdate(_ groupId: String)
-	@objc optional func groupDidRemove(_ groupId: String)
-	@objc optional func group(_ groupId: String, didRemoveAssets assets: [DKAsset])
-	@objc optional func group(_ groupId: String, didInsertAssets assets: [DKAsset])
-    @objc optional func groupDidUpdateComplete(_ groupId: String)
-    @objc optional func groupsDidInsert(_ groupIds: [String])
+	@objc optional func groupDidUpdate(groupId: String)
+	@objc optional func groupDidRemove(groupId: String)
+	@objc optional func group(groupId: String, didRemoveAssets assets: [DKAsset])
+	@objc optional func group(groupId: String, didInsertAssets assets: [DKAsset])
+    @objc optional func groupDidUpdateComplete(groupId: String)
+    @objc optional func groupsDidInsert(groupIds: [String])
 }
 
-public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
+public class DKImageGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 
     public var groupIds: [String]?
 	private var groups: [String : DKAssetGroup]?
@@ -175,29 +175,29 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
 			if let changeDetails = changeInstance.changeDetails(for: group.originalCollection) {
 				if changeDetails.objectWasDeleted {
 					self.groups![group.groupId] = nil
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidRemove(_:)), object: group.groupId as AnyObject?)
+                    self.notify(with: #selector(DKImageGroupDataManagerObserver.groupDidRemove(groupId:)), object: group.groupId as AnyObject?)
 					continue
 				}
 				
 				if let objectAfterChanges = changeDetails.objectAfterChanges {
 					self.updateGroup(self.groups![group.groupId]!, collection: objectAfterChanges)
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidUpdate(_:)), object: group.groupId as AnyObject?)
+                    self.notify(with: #selector(DKImageGroupDataManagerObserver.groupDidUpdate(groupId:)), object: group.groupId as AnyObject?)
 				}
 			}
 			
 			if let changeDetails = changeInstance.changeDetails(for: group.fetchResult) {
                 let removedAssets = changeDetails.removedObjects.map{ DKAsset(originalAsset: $0) }
 				if removedAssets.count > 0 {
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didRemoveAssets:)), object: group.groupId as AnyObject?, objectTwo: removedAssets as AnyObject?)
+                    self.notify(with: #selector(DKImageGroupDataManagerObserver.group(groupId:didRemoveAssets:)), object: group.groupId as AnyObject?, objectTwo: removedAssets as AnyObject?)
 				}
 				self.updateGroup(group, fetchResult: changeDetails.fetchResultAfterChanges)
 				
                 let insertedAssets = changeDetails.insertedObjects.map{ DKAsset(originalAsset: $0) }
 				if insertedAssets.count > 0  {
-					self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.group(_:didInsertAssets:)), object: group.groupId as AnyObject?, objectTwo: insertedAssets as AnyObject?)
+                    self.notify(with: #selector(DKImageGroupDataManagerObserver.group(groupId:didInsertAssets:)), object: group.groupId as AnyObject?, objectTwo: insertedAssets as AnyObject?)
 				}
                 
-                self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupDidUpdateComplete(_:)), object: group.groupId as AnyObject?)
+                self.notify(with: #selector(DKImageGroupDataManagerObserver.groupDidUpdateComplete(groupId:)), object: group.groupId as AnyObject?)
 			}
 		}
         
@@ -215,7 +215,7 @@ public class DKGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
             })
             
             if (insertedGroupIds.count > 0) {
-                self.notifyObserversWithSelector(#selector(DKGroupDataManagerObserver.groupsDidInsert(_:)), object: insertedGroupIds as AnyObject)
+                self.notify(with: #selector(DKImageGroupDataManagerObserver.groupsDidInsert(groupIds:)), object: insertedGroupIds as AnyObject)
             }
         }
 	}

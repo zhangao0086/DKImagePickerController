@@ -1,6 +1,6 @@
 //
-//  DKImageManager.swift
-//  DKImagePickerControllerDemo
+//  DKImageDataManager.swift
+//  DKImagePickerController
 //
 //  Created by ZhangAo on 15/11/29.
 //  Copyright © 2015年 ZhangAo. All rights reserved.
@@ -8,41 +8,11 @@
 
 import Photos
 
-open class DKBaseManager: NSObject {
-
-	private let observers = NSHashTable<AnyObject>.weakObjects()
-	
-	open func addObserver(_ object: AnyObject) {
-		self.observers.add(object)
-	}
-	
-	open func removeObserver(_ object: AnyObject) {
-		self.observers.remove(object)
-	}
-	
-	open func notifyObserversWithSelector(_ selector: Selector, object: AnyObject?) {
-		self.notifyObserversWithSelector(selector, object: object, objectTwo: nil)
-	}
-	
-	open func notifyObserversWithSelector(_ selector: Selector, object: AnyObject?, objectTwo: AnyObject?) {
-		if self.observers.count > 0 {
-			DispatchQueue.main.async(execute: { () -> Void in
-				for observer in self.observers.allObjects {
-					if observer.responds(to: selector) {
-						_ = observer.perform(selector, with: object, with: objectTwo)
-					}
-				}
-			})
-		}
-	}
-
+public func getImageDataManager() -> DKImageDataManager {
+	return DKImageDataManager.sharedInstance
 }
 
-public func getImageManager() -> DKImageManager {
-	return DKImageManager.sharedInstance
-}
-
-public class DKImageManager: DKBaseManager {
+public class DKImageDataManager {
 	
 	public class func checkPhotoPermission(_ handler: @escaping (_ granted: Bool) -> Void) {
 		func hasPhotoPermission() -> Bool {
@@ -61,7 +31,7 @@ public class DKImageManager: DKBaseManager {
 			}) : handler(false))
 	}
 	
-	static let sharedInstance = DKImageManager()
+	static let sharedInstance = DKImageDataManager()
 	
     private let manager = PHCachingImageManager()
 	
@@ -79,22 +49,6 @@ public class DKImageManager: DKBaseManager {
 	}()
 	
 	public var autoDownloadWhenAssetIsInCloud = true
-    
-    private var _groupDataManager: DKGroupDataManager?
-    
-    public var groupDataManager: DKGroupDataManager {
-        get {
-            if _groupDataManager == nil {
-                _groupDataManager = DKGroupDataManager()
-            }
-            return _groupDataManager!
-        }
-    }
-	
-	public func invalidate() {
-		self.groupDataManager.invalidate()
-        _groupDataManager = nil
-	}
 	
 	public func fetchImage(for asset: DKAsset, size: CGSize, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
         self.fetchImage(for: asset, size: size, options: nil, completeBlock: completeBlock)
