@@ -51,15 +51,53 @@ fileprivate class DKImageAssetDiskPurger {
 
 /////////////////////////////////////////////////////////////////////////////
 
-public class DKImageAssetExporter {
+@objc
+public enum DKImageAssetExportResult: Int {
+    case complete, canceled
+}
+
+public let DKImageAssetExporterDomain = "DKImageAssetExporterDomain"
+
+@objc
+public enum DKImageAssetExporterError: Int {
+    
+    case canceled, exportFailed
+}
+
+@objc
+protocol DKImageAssetExporterObserver {
+    
+    @objc optional func exporterWillBeginExporting(exporter: DKImageAssetExporter, asset: DKAsset)
+    
+    @objc optional func exporterDidUpdateProgress(exporter: DKImageAssetExporter, asset: DKAsset)
+    
+    @objc optional func exporterDidEndExporting(exporter: DKImageAssetExporter, asset: DKAsset)
+}
+
+@objc
+public class DKImageAssetExporter: DKBaseManager {
+    
+    static public let sharedInstance = DKImageAssetExporter()
     
     public var presetName = AVAssetExportPresetPassthrough
     public var outputFileType = AVFileType.mov
     public var exportDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("DKImageAssetExporter")
     
-    public func exportAssetsAsynchronously(assets: [DKAsset], completion: @escaping ((Error?) -> Void)) {
-        DispatchQueue.global().async {
-            var exportError: NSError?
+    private var exportQueue: OperationQueue = {
+        let exportQueue = OperationQueue()
+        exportQueue.name = "DKImageAssetExporter_exportQueue"
+        exportQueue.maxConcurrentOperationCount = 1
+        return exportQueue
+    }()
+    
+    public func exportAssetsAsynchronously(assets: [DKAsset], completion: @escaping ((DKImageAssetExportResult) -> Void)) {
+        var operationVisitor = [Operation]()
+        
+        let operation = BlockOperation {
+            objc_sync_enter(self)
+            let operation = operationVisitor.first!
+            
+            var success = true
             var exportedCount = 0
             
             let exportCompletionBlock: (DKAsset, Error?) -> Void = { asset, error in
@@ -67,22 +105,30 @@ public class DKImageAssetExporter {
                 
                 defer {
                     if exportedCount == assets.count {
+                        objc_sync_exit(self)
+                        
                         DispatchQueue.main.async {
-                            completion(exportError)
+                            completion(operation.isCancelled ? .canceled : .complete)
                         }
                     }
                 }
                 
                 if let error = error as NSError? {
-                    exportError = error
+                    success = false
+                    asset.error = error
                     
                     asset.localTemporaryPath = nil
                 } else {
+                    defer {
+                        self.notify(with: #selector(DKImageAssetExporterObserver.exporterDidEndExporting(exporter:asset:)), object: self, objectTwo: asset)
+                    }
+                    
                     do {
                         let attributes = try FileManager.default.attributesOfItem(atPath: asset.localTemporaryPath!.path)
                         asset.fileSize = (attributes[FileAttributeKey.size] as! NSNumber).uintValue
                     } catch let error as NSError {
-                        exportError = error
+                        success = false
+                        asset.error = error
                         
                         asset.localTemporaryPath = nil
                     }
@@ -93,17 +139,40 @@ public class DKImageAssetExporter {
                 let asset = assets[i]
                 
                 if asset.localTemporaryPath != nil {
+                    exportCompletionBlock(asset, NSError(domain: DKImageAssetExporterDomain,
+                                                         code: DKImageAssetExporterError.canceled.rawValue,
+                                                         userInfo: [NSLocalizedDescriptionKey : "The operation was canceled."]))
+                    continue
+                }
+                
+                if operation.isCancelled {
                     exportCompletionBlock(asset, nil)
                     continue
                 }
                 
                 asset.localTemporaryPath = self.generateTemporaryPath(with: asset)
+                asset.error = nil
                 
-                self.exportAsset(with: asset, completion: { error in
+                asset.progress = 0.0
+                self.notify(with: #selector(DKImageAssetExporterObserver.exporterWillBeginExporting(exporter:asset:)), object: self, objectTwo: asset)
+                
+                self.exportAsset(with: asset, progress: { progress in
+                    asset.progress = progress
+                    
+                    self.notify(with: #selector(DKImageAssetExporterObserver.exporterDidUpdateProgress(exporter:asset:)), object: self, objectTwo: asset)
+                }, completion: { error in
                     exportCompletionBlock(asset, error)
                 })
+                
             }
         }
+        
+        operationVisitor.append(operation)
+        self.exportQueue.addOperation(operation)
+    }
+    
+    public func cancelAll() {
+        self.exportQueue.cancelAllOperations()
     }
     
     // MARK: - Private
@@ -128,20 +197,23 @@ public class DKImageAssetExporter {
     
     static let ioQueue = DispatchQueue(label: "DKPhotoImagePreviewVC.ioQueue")
     
-    private func exportAsset(with asset: DKAsset, completion: @escaping (Error?) -> Void) {
+    private func exportAsset(with asset: DKAsset, progress: @escaping (Double) -> Void, completion: @escaping (Error?) -> Void) {
         switch asset.type {
         case .photo:
-            self.exportImage(with: asset, completion: completion)
+            self.exportImage(with: asset, progress: progress, completion: completion)
         case .video:
-            self.exportAsset(with: asset, completion: completion)
+            self.exportAVAsset(with: asset, progress: progress, completion: completion)
         }
     }
     
-    private func exportImage(with asset: DKAsset, completion: @escaping (Error?) -> Void) {
+    private func exportImage(with asset: DKAsset, progress: @escaping (Double) -> Void, completion: @escaping (Error?) -> Void) {
         if let _ = asset.originalAsset {
             autoreleasepool {
                 let options = PHImageRequestOptions()
                 options.version = .current
+                options.progressHandler = { (p, _, _, _) in
+                    progress(p)
+                }
                 
                 getImageDataManager().fetchImageData(for: asset, options: options, completeBlock: { (data, info) in
                     if let imageData = data {
@@ -150,8 +222,8 @@ public class DKImageAssetExporter {
                         }
                         
                         if let image = UIImage(data: imageData) {
-                            asset.width = image.size.width
-                            asset.height = image.size.height
+                            asset.width = Float(image.size.width)
+                            asset.height = Float(image.size.height)
                         }
                         
                         if FileManager.default.fileExists(atPath: asset.localTemporaryPath!.path) {
@@ -183,8 +255,14 @@ public class DKImageAssetExporter {
         }
     }
     
-    private func exportAVAsset(with asset: DKAsset, completion: @escaping (Error?) -> Void) {
-        getImageDataManager().fetchAVAsset(for: asset, completeBlock: { (avAsset, _) in
+    private func exportAVAsset(with asset: DKAsset, progress: @escaping (Double) -> Void, completion: @escaping (Error?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.deliveryMode = .mediumQualityFormat
+        options.progressHandler = { (p, _, _, _) in
+            progress(p)
+        }
+        
+        getImageDataManager().fetchAVAsset(for: asset, options: options) { (avAsset, _) in
             if let avAsset = avAsset {
                 if let avURLAsset = avAsset as? AVURLAsset {
                     asset.fileName = avURLAsset.url.lastPathComponent
@@ -194,8 +272,8 @@ public class DKImageAssetExporter {
                 
                 if let track = avAsset.tracks(withMediaType: .video).first {
                     let size = __CGSizeApplyAffineTransform(track.naturalSize, track.preferredTransform)
-                    asset.width = size.width
-                    asset.height = size.height
+                    asset.width = Float(size.width)
+                    asset.height = Float(size.height)
                 }
                 
                 DKImageAssetExporter.ioQueue.async {
@@ -207,16 +285,16 @@ public class DKImageAssetExporter {
                             completion(exportSession.error)
                         })
                     } else {
-                        completion(NSError(domain: AVFoundationErrorDomain,
-                                           code: AVError.exportFailed.rawValue,
-                                           userInfo: nil))
+                        completion(NSError(domain: DKImageAssetExporterDomain,
+                                           code: DKImageAssetExporterError.exportFailed.rawValue,
+                                           userInfo: [NSLocalizedDescriptionKey : "Can't setup AVAssetExportSession."]))
                     }
                 }
             } else {
-                completion(NSError(domain: AVFoundationErrorDomain,
-                                   code: AVError.exportFailed.rawValue,
-                                   userInfo: nil))
+                completion(NSError(domain: DKImageAssetExporterDomain,
+                                   code: DKImageAssetExporterError.exportFailed.rawValue,
+                                   userInfo: [NSLocalizedDescriptionKey : "Failed to fetch AVAsset."]))
             }
-        })
+        }
     }
 }
