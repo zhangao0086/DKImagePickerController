@@ -359,19 +359,21 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
             }
         }
         
-        let didFinishCapturingImage = { [unowned self] (image: UIImage, metadata: [AnyHashable : Any]?) in
-            self.metadataFromCamera = metadata
-            
-            let imageEditor = CLImageEditor(image: image, delegate: self)!
-            if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLToneCurveTool", recursive: false) {
-                tool.available = false
+        let didFinishCapturingImage = { [weak self] (image: UIImage, metadata: [AnyHashable : Any]?) in
+            if let strongSelf = self {
+                strongSelf.metadataFromCamera = metadata
+                
+                let imageEditor = CLImageEditor(image: image, delegate: self)!
+                if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLToneCurveTool", recursive: false) {
+                    tool.available = false
+                }
+                
+                if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLStickerTool", recursive: false) {
+                    tool.available = false
+                }
+                
+                strongSelf.camera?.present(imageEditor, animated: true, completion: nil)
             }
-            
-            if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLStickerTool", recursive: false) {
-                tool.available = false
-            }
-            
-            self.camera?.present(imageEditor, animated: true, completion: nil)
         }
         
         let didFinishCapturingVideo = { [unowned self] (videoURL: URL) in
