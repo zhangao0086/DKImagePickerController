@@ -232,13 +232,14 @@ public extension DKAsset {
             completeBlock(true)
         }
 	}
-	
+    
     /**
      Writes the AVAsset in the receiver to the file specified by a given path.
      
      - parameter presetName:        An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
      - parameter outputFileType:    Type of file to export. Should be a valid media type, otherwise export will fail. See AVFileType.
      */
+    #if swift(>=4.0)
     @objc public func writeAVAsset(to path: String, presetName: String, outputFileType: AVFileType = AVFileType.mov, completeBlock: @escaping (_ success: Bool) -> Void) {
         self.fetchAVAsset(options: nil) { (avAsset, _) in
             DKAssetWriter.writeQueue.addOperation({
@@ -256,6 +257,25 @@ public extension DKAsset {
             })
         }
     }
+    #else
+    @objc public func writeAVAsset(to path: String, presetName: String, outputFileType: String = AVFileTypeQuickTimeMovie, completeBlock: @escaping (_ success: Bool) -> Void) {
+        self.fetchAVAsset(options: nil) { (avAsset, _) in
+            DKAssetWriter.writeQueue.addOperation({
+                if let avAsset = avAsset,
+                    let exportSession = AVAssetExportSession(asset: avAsset, presetName: presetName) {
+                    exportSession.outputFileType = outputFileType
+                    exportSession.outputURL = URL(fileURLWithPath: path)
+                    exportSession.shouldOptimizeForNetworkUse = true
+                    exportSession.exportAsynchronously(completionHandler: {
+                        completeBlock(exportSession.status == .completed ? true : false)
+                    })
+                } else {
+                    completeBlock(false)
+                }
+            })
+        }
+    }
+    #endif
 }
 
 public extension AVAsset {

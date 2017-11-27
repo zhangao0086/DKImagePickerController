@@ -30,10 +30,15 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
 		
+        #if swift(>=4.0)
         let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSAttributedStringKey.foregroundColor] as? UIColor
-		button.setTitleColor(globalTitleColor ?? UIColor.black, for: .normal)
-		
         let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSAttributedStringKey.font] as? UIFont
+        #else
+        let globalTitleColor = UINavigationBar.appearance().titleTextAttributes?[NSForegroundColorAttributeName] as? UIColor
+        let globalTitleFont = UINavigationBar.appearance().titleTextAttributes?[NSFontAttributeName] as? UIFont
+        #endif
+        
+        button.setTitleColor(globalTitleColor ?? UIColor.black, for: .normal)
 		button.titleLabel!.font = globalTitleFont ?? UIFont.boldSystemFont(ofSize: 18.0)
 		
 		button.addTarget(self, action: #selector(DKAssetGroupDetailVC.showGroupSelector), for: .touchUpInside)
@@ -251,8 +256,10 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             self.thumbnailSize = self.collectionView!.collectionViewLayout.layoutAttributesForItem(at: indexPath)!.size.toPixel()
         }
         
+        cell.thumbnailImage = nil
+        
         asset.fetchImage(with: self.thumbnailSize, options: nil, contentMode: .aspectFill) { (image, info) in
-            if cell.tag == tag {
+            if cell.tag == tag, let image = image {
                 cell.thumbnailImage = image
             }
         }

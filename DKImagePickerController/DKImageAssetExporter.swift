@@ -80,7 +80,13 @@ public class DKImageAssetExporter: DKBaseManager {
     static public let sharedInstance = DKImageAssetExporter()
     
     public var presetName = AVAssetExportPresetPassthrough
+    
+    #if swift(>=4.0)
     public var outputFileType = AVFileType.mov
+    #else
+    public var outputFileType = AVFileTypeQuickTimeMovie
+    #endif
+    
     public var exportDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("DKImageAssetExporter")
     
     private var exportQueue: OperationQueue = {
@@ -270,11 +276,19 @@ public class DKImageAssetExporter: DKBaseManager {
                     asset.fileName = asset.localIdentifier
                 }
                 
+                #if swift(>=4.0)
                 if let track = avAsset.tracks(withMediaType: .video).first {
                     let size = __CGSizeApplyAffineTransform(track.naturalSize, track.preferredTransform)
                     asset.width = Float(size.width)
                     asset.height = Float(size.height)
                 }
+                #else
+                if let track = avAsset.tracks(withMediaType: AVMediaTypeVideo).first {
+                    let size = __CGSizeApplyAffineTransform(track.naturalSize, track.preferredTransform)
+                    asset.width = Float(size.width)
+                    asset.height = Float(size.height)
+                }
+                #endif
                 
                 DKImageAssetExporter.ioQueue.async {
                     if avAsset.isExportable, let exportSession = AVAssetExportSession(asset: avAsset, presetName: self.presetName) {
