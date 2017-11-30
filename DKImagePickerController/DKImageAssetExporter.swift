@@ -84,13 +84,12 @@ protocol DKImageAssetExporterObserver {
 }
 
 /*
- This exporter is able to export DKAsset (PHAsset) from album (or iCloud) to app's tmp directory
- and it will automatically cleanup when appropriate.
+ Configuration options for an DKImageAssetExporter.  When a exporter is created,
+ a copy of the configuration object is made - you cannot modify the configuration
+ of a exporter after it has been created.
  */
 @objc
-public class DKImageAssetExporter: DKBaseManager {
-    
-    static public let sharedInstance = DKImageAssetExporter()
+public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
     
     @objc public var imageExportPreset = DKImageExportPresent.compatible
     
@@ -105,6 +104,32 @@ public class DKImageAssetExporter: DKBaseManager {
     
     @objc public var exportDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("DKImageAssetExporter")
     
+    public required override init() {
+        super.init()
+    }
+    
+    public func copy(with zone: NSZone? = nil) -> Any {
+        let copy = type(of: self).init()
+        copy.imageExportPreset = self.imageExportPreset
+        copy.videoExportPreset = self.videoExportPreset
+        copy.avOutputFileType = self.avOutputFileType
+        copy.exportDirectory = self.exportDirectory
+        
+        return copy
+    }
+}
+
+/*
+ This exporter is able to export DKAsset (PHAsset) from album (or iCloud) to app's tmp directory
+ and it will automatically cleanup when appropriate.
+ */
+@objc
+open class DKImageAssetExporter: DKBaseManager {
+    
+    static public let sharedInstance = DKImageAssetExporter(configuration: DKImageAssetExporterConfiguration())
+
+    private let configuration: DKImageAssetExporterConfiguration
+    
     private var exportQueue: OperationQueue = {
         let exportQueue = OperationQueue()
         exportQueue.name = "DKImageAssetExporter_exportQueue"
@@ -118,10 +143,13 @@ public class DKImageAssetExporter: DKBaseManager {
     private var requestIDs = [DKImageRequestID : Int]()
     private var isCancelled = false
     
-    deinit {
-        print("deinit")
+    public init(configuration: DKImageAssetExporterConfiguration) {
+        self.configuration = configuration.copy() as! DKImageAssetExporterConfiguration
+        
+        super.init()
     }
     
+    /// This method starts an asynchronous export operation of a batch of asset.
     @objc public func exportAssetsAsynchronously(assets: [DKAsset], completion: @escaping ((DKImageAssetExportResult) -> Void)) {
         guard assets.count > 0 else {
             return completion(.complete)
@@ -275,21 +303,21 @@ public class DKImageAssetExporter: DKBaseManager {
             }
             
             if asset.type == .photo {
-                fileName = fileName + String(self.imageExportPreset.rawValue)
+                fileName = fileName + String(self.configuration.imageExportPreset.rawValue)
             } else {
-                fileName = fileName + self.videoExportPreset + self.avOutputFileType.rawValue
+                fileName = fileName + self.configuration.videoExportPreset + self.configuration.avOutputFileType.rawValue
             }
         } else {
             fileName = "\(Date().timeIntervalSince1970)"
         }
         
-        if !FileManager.default.fileExists(atPath: self.exportDirectory.path) {
-            try? FileManager.default.createDirectory(at: self.exportDirectory, withIntermediateDirectories: true, attributes: nil)
+        if !FileManager.default.fileExists(atPath: self.configuration.exportDirectory.path) {
+            try? FileManager.default.createDirectory(at: self.configuration.exportDirectory, withIntermediateDirectories: true, attributes: nil)
         }
         
-        DKImageAssetDiskPurger.sharedInstance.addDirectory(self.exportDirectory)
+        DKImageAssetDiskPurger.sharedInstance.addDirectory(self.configuration.exportDirectory)
         
-        return self.exportDirectory.appendingPathComponent(fileName)
+        return self.configuration.exportDirectory.appendingPathComponent(fileName)
     }
     
     static let ioQueue = DispatchQueue(label: "DKPhotoImagePreviewVC.ioQueue")
@@ -330,7 +358,7 @@ public class DKImageAssetExporter: DKBaseManager {
                             }
                             
                             if  let image = image
-                                , self.imageExportPreset == .compatible
+                                , self.configuration.imageExportPreset == .compatible
                                 , self.isHEIC(with: imageData) {
                                 imageData = self.imageToJPEG(with: image) ?? imageData
                             }
@@ -399,7 +427,7 @@ public class DKImageAssetExporter: DKBaseManager {
                     let group = DispatchGroup()
                     group.enter()
                     
-                    if avAsset.isExportable, let exportSession = AVAssetExportSession(asset: avAsset, presetName: self.videoExportPreset) {
+                    if avAsset.isExportable, let exportSession = AVAssetExportSession(asset: avAsset, presetName: self.configuration.videoExportPreset) {
                         let fileManager = FileManager.default
                         let tempFilePath = asset.localTemporaryPath!.path + "~"
                         let tempFile = URL(fileURLWithPath: tempFilePath)
@@ -407,7 +435,7 @@ public class DKImageAssetExporter: DKBaseManager {
                             try? fileManager.removeItem(at: tempFile)
                         }
                         
-                        exportSession.outputFileType = self.avOutputFileType
+                        exportSession.outputFileType = self.configuration.avOutputFileType
                         exportSession.outputURL = tempFile
                         exportSession.shouldOptimizeForNetworkUse = true
                         exportSession.exportAsynchronously(completionHandler: {
