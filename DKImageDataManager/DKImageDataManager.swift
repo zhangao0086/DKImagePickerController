@@ -9,6 +9,7 @@
 import Photos
 
 public typealias DKImageRequestID = Int32
+public let DKImageInvalidRequestID: DKImageRequestID = 0
 
 public func getImageDataManager() -> DKImageDataManager {
 	return DKImageDataManager.sharedInstance

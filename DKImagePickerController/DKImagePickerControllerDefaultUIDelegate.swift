@@ -1,6 +1,6 @@
 //
 //  DKImagePickerControllerDefaultUIDelegate.swift
-//  DKImagePickerControllerDemo
+//  DKImagePickerController
 //
 //  Created by ZhangAo on 16/3/7.
 //  Copyright © 2016年 ZhangAo. All rights reserved.
@@ -31,11 +31,11 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
     open func updateDoneButtonTitle(_ button: UIButton) {
         if self.imagePickerController.selectedAssets.count > 0 {
             
-            let nF = NumberFormatter()
-            nF.numberStyle = .decimal
-            nF.locale = Locale(identifier: Locale.current.identifier)
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            formatter.locale = Locale(identifier: Locale.current.identifier)
             
-            let formattedSelectableCount = nF.string(from: NSNumber(value: self.imagePickerController.selectedAssets.count))
+            let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssets.count))
             
             button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), formattedSelectableCount ?? self.imagePickerController.selectedAssets.count), for: .normal)
         } else {
@@ -100,7 +100,6 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
     }
 	
 	open func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController) {
-        
         let nF = NumberFormatter()
         nF.numberStyle = .decimal
         nF.locale = Locale(identifier: Locale.current.identifier)
