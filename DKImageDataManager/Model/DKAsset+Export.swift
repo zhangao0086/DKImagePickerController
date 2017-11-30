@@ -14,14 +14,6 @@ import Foundation
 @objc
 extension DKAsset {
     
-    struct ExportKeys {
-        static fileprivate var localTemporaryPath: UInt8 = 0
-        static fileprivate var fileName: UInt8 = 0
-        static fileprivate var fileSize: UInt8 = 0
-        static fileprivate var progress: UInt8 = 0
-        static fileprivate var error: UInt8 = 0
-    }
-    
     /// The exported file will be placed in this location.
     /// All exported files can be automatically cleaned by the DKImageAssetDiskPurger when appropriate.
     @objc public var localTemporaryPath: URL? {
@@ -58,6 +50,14 @@ extension DKAsset {
     }
     
     // MARK: - Private
+    
+    private struct ExportKeys {
+        static fileprivate var localTemporaryPath: UInt8 = 0
+        static fileprivate var fileName: UInt8 = 0
+        static fileprivate var fileSize: UInt8 = 0
+        static fileprivate var progress: UInt8 = 0
+        static fileprivate var error: UInt8 = 0
+    }
     
     internal func setAssociatedObject(key: UnsafePointer<UInt8>, value: Any?, policy: objc_AssociationPolicy = .OBJC_ASSOCIATION_RETAIN) {
         objc_setAssociatedObject(self, key, value, policy)

@@ -48,9 +48,7 @@ open class DKAsset: NSObject {
     @objc public private(set) var localIdentifier: String
     
     @objc public private(set) var originalAsset: PHAsset?
-        
-    public internal(set) var fullScreenImage: (image: UIImage?, info: [AnyHashable: Any]?)?
-		
+        		
 	public init(originalAsset: PHAsset) {
         self.localIdentifier = originalAsset.localIdentifier
         self.location = originalAsset.location
@@ -75,7 +73,6 @@ open class DKAsset: NSObject {
 		super.init()
         
 		self.image = image
-		self.fullScreenImage = (image, nil)
 	}
 	
 	override open func isEqual(_ object: Any?) -> Bool {

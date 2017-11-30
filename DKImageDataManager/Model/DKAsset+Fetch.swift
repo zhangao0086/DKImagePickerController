@@ -41,6 +41,8 @@ public extension DKAsset {
     @objc public func fetchFullScreenImage(sync: Bool, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
         if let (image, info) = self.fullScreenImage {
             completeBlock(image, info)
+        } else if self.originalAsset == nil {
+            completeBlock(self.image, nil)
         } else {
             let screenSize = UIScreen.main.bounds.size
             
@@ -141,8 +143,9 @@ public extension DKAsset {
     
     // MARK: - Private
     
-    struct FetchKeys {
+    private struct FetchKeys {
         static fileprivate var requestID: UInt8 = 0
+        static fileprivate var fullScreenImage: UInt8 = 0
     }
     
     private var requestID: DKImageRequestID {
@@ -150,5 +153,10 @@ public extension DKAsset {
         set { setAssociatedObject(key: &FetchKeys.requestID, value: newValue) }
     }
 
+    public private(set) var fullScreenImage: (image: UIImage?, info: [AnyHashable: Any]?)? {
+        
+        get { return getAssociatedObject(key: &FetchKeys.fullScreenImage) as? (image: UIImage?, info: [AnyHashable: Any]?) }
+        set { setAssociatedObject(key: &FetchKeys.fullScreenImage, value: newValue) }
+    }
     
 }
