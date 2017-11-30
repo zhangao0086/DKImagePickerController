@@ -26,6 +26,10 @@
 		9C6E94D91F5E65810014B700 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94C51F5E65810014B700 /* ViewController.swift */; };
 		9C6E94DA1F5E65810014B700 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C61F5E65810014B700 /* LaunchScreen.strings */; };
 		9C6E94DB1F5E65810014B700 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C81F5E65810014B700 /* Main.strings */; };
+		9C79BF9C1FD00918005251C8 /* DKAsset+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C79BF9B1FD00917005251C8 /* DKAsset+Export.swift */; };
+		9C79BF9D1FD00918005251C8 /* DKAsset+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C79BF9B1FD00917005251C8 /* DKAsset+Export.swift */; };
+		9C79BF9F1FD00961005251C8 /* DKAsset+Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C79BF9E1FD00961005251C8 /* DKAsset+Fetch.swift */; };
+		9C79BFA01FD00961005251C8 /* DKAsset+Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C79BF9E1FD00961005251C8 /* DKAsset+Fetch.swift */; };
 		9CD057521F5E62420044528B /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CD057321F5E62420044528B /* DKImagePickerController.bundle */; };
 		9CD057531F5E62420044528B /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9CD057321F5E62420044528B /* DKImagePickerController.bundle */; };
 		9CD057551F5E62420044528B /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD057341F5E62420044528B /* DKImagePickerController.swift */; };
@@ -65,8 +69,6 @@
 		9CDE35721FBBFFA100741116 /* DKAssetGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDE356A1FBBFFA100741116 /* DKAssetGroup.swift */; };
 		9CEDC5681FBC19CC00CB5799 /* DKImageAssetExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEDC5671FBC19CC00CB5799 /* DKImageAssetExporter.swift */; };
 		9CEDC5691FBC19CC00CB5799 /* DKImageAssetExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEDC5671FBC19CC00CB5799 /* DKImageAssetExporter.swift */; };
-		9CEDC56B1FBED08D00CB5799 /* DKAsset+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEDC56A1FBED08D00CB5799 /* DKAsset+Export.swift */; };
-		9CEDC56C1FBED08D00CB5799 /* DKAsset+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEDC56A1FBED08D00CB5799 /* DKAsset+Export.swift */; };
 		9CEDC56E1FBED2A600CB5799 /* DKBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEDC56D1FBED2A600CB5799 /* DKBaseManager.swift */; };
 		9CEDC56F1FBED2A600CB5799 /* DKBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEDC56D1FBED2A600CB5799 /* DKBaseManager.swift */; };
 		9CF72B161B8F073400238B9A /* DKImagePickerControllerDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF72B151B8F073400238B9A /* DKImagePickerControllerDemoTests.swift */; };
@@ -152,6 +154,8 @@
 		9C6E94C51F5E65810014B700 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9C6E94C71F5E65810014B700 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9C6E94C91F5E65810014B700 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		9C79BF9B1FD00917005251C8 /* DKAsset+Export.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DKAsset+Export.swift"; sourceTree = "<group>"; };
+		9C79BF9E1FD00961005251C8 /* DKAsset+Fetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DKAsset+Fetch.swift"; sourceTree = "<group>"; };
 		9CD057321F5E62420044528B /* DKImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKImagePickerController.bundle; sourceTree = "<group>"; };
 		9CD057341F5E62420044528B /* DKImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerController.swift; sourceTree = "<group>"; };
 		9CD057351F5E62420044528B /* DKImagePickerControllerDefaultUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerDefaultUIDelegate.swift; sourceTree = "<group>"; };
@@ -172,7 +176,6 @@
 		9CDE35691FBBFFA100741116 /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
 		9CDE356A1FBBFFA100741116 /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
 		9CEDC5671FBC19CC00CB5799 /* DKImageAssetExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DKImageAssetExporter.swift; sourceTree = "<group>"; };
-		9CEDC56A1FBED08D00CB5799 /* DKAsset+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DKAsset+Export.swift"; sourceTree = "<group>"; };
 		9CEDC56D1FBED2A600CB5799 /* DKBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DKBaseManager.swift; sourceTree = "<group>"; };
 		9CF72B111B8F073400238B9A /* DKImagePickerControllerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKImagePickerControllerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CF72B141B8F073400238B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -343,7 +346,6 @@
 				9CD057321F5E62420044528B /* DKImagePickerController.bundle */,
 				9CD057341F5E62420044528B /* DKImagePickerController.swift */,
 				9CEDC5671FBC19CC00CB5799 /* DKImageAssetExporter.swift */,
-				9CEDC56A1FBED08D00CB5799 /* DKAsset+Export.swift */,
 				9CEDC56D1FBED2A600CB5799 /* DKBaseManager.swift */,
 				9CD057351F5E62420044528B /* DKImagePickerControllerDefaultUIDelegate.swift */,
 				9CD057361F5E62420044528B /* DKImageResource.swift */,
@@ -392,6 +394,8 @@
 		9CDE35681FBBFFA100741116 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9C79BF9B1FD00917005251C8 /* DKAsset+Export.swift */,
+				9C79BF9E1FD00961005251C8 /* DKAsset+Fetch.swift */,
 				9CDE35691FBBFFA100741116 /* DKAsset.swift */,
 				9CDE356A1FBBFFA100741116 /* DKAssetGroup.swift */,
 			);
@@ -837,6 +841,7 @@
 				9CD057611F5E62420044528B /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				9C6E94D41F5E65810014B700 /* CustomGroupDetailImageCell.swift in Sources */,
 				9C6E94D51F5E65810014B700 /* CustomUIDelegate.swift in Sources */,
+				9C79BF9F1FD00961005251C8 /* DKAsset+Fetch.swift in Sources */,
 				9CD057671F5E62420044528B /* DKAssetGroupDetailVideoCell.swift in Sources */,
 				9CD0575B1F5E62420044528B /* DKPopoverViewController.swift in Sources */,
 				9CD057551F5E62420044528B /* DKImagePickerController.swift in Sources */,
@@ -844,6 +849,7 @@
 				9C6E94D91F5E65810014B700 /* ViewController.swift in Sources */,
 				9C6E94D11F5E65810014B700 /* CustomFlowLayout.swift in Sources */,
 				9C6E94CA1F5E65810014B700 /* AppDelegate.swift in Sources */,
+				9C79BF9C1FD00918005251C8 /* DKAsset+Export.swift in Sources */,
 				9CD0576B1F5E62420044528B /* DKAssetGroupGridLayout.swift in Sources */,
 				9CD057571F5E62420044528B /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
 				9CD0575F1F5E62420044528B /* DKAssetGroupCellItemProtocol.swift in Sources */,
@@ -864,7 +870,6 @@
 				9C6E94CF1F5E65810014B700 /* CustomInlineFlowLayout.swift in Sources */,
 				9CD0576D1F5E62420044528B /* DKAssetGroupListVC.swift in Sources */,
 				9CEDC5681FBC19CC00CB5799 /* DKImageAssetExporter.swift in Sources */,
-				9CEDC56B1FBED08D00CB5799 /* DKAsset+Export.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -880,7 +885,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CEDC56C1FBED08D00CB5799 /* DKAsset+Export.swift in Sources */,
 				9CD057581F5E62420044528B /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
 				9CD0575A1F5E62420044528B /* DKImageResource.swift in Sources */,
 				9CDE35721FBBFFA100741116 /* DKAssetGroup.swift in Sources */,
@@ -888,11 +892,13 @@
 				9CD0576C1F5E62420044528B /* DKAssetGroupGridLayout.swift in Sources */,
 				9CD057621F5E62420044528B /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				9CD0576E1F5E62420044528B /* DKAssetGroupListVC.swift in Sources */,
+				9C79BF9D1FD00918005251C8 /* DKAsset+Export.swift in Sources */,
 				9CD057701F5E62420044528B /* DKPermissionView.swift in Sources */,
 				9CDE35701FBBFFA100741116 /* DKAsset.swift in Sources */,
 				9CD057641F5E62420044528B /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				9CEDC56F1FBED2A600CB5799 /* DKBaseManager.swift in Sources */,
 				9CDE356C1FBBFFA100741116 /* DKImageDataManager.swift in Sources */,
+				9C79BFA01FD00961005251C8 /* DKAsset+Fetch.swift in Sources */,
 				9CEDC5691FBC19CC00CB5799 /* DKImageAssetExporter.swift in Sources */,
 				9CDE356E1FBBFFA100741116 /* DKImageGroupDataManager.swift in Sources */,
 				9CD057601F5E62420044528B /* DKAssetGroupCellItemProtocol.swift in Sources */,

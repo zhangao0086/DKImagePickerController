@@ -315,12 +315,16 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             return false
         }
 		
-		let shouldSelect = self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount
-		if !shouldSelect {
-			self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
-		}
-		
-		return shouldSelect
+        if self.imagePickerController.maxSelectableCount > 0 {
+            let shouldSelect = self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount
+            if !shouldSelect {
+                self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
+            }
+            
+            return shouldSelect
+        } else {
+            return true
+        }
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

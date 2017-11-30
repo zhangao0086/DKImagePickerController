@@ -108,11 +108,12 @@ public enum DKImagePickerControllerSourceType : Int {
     case camera, photo, both
 }
 
-// MARK: - Public DKImagePickerController
+@objc
+public enum DKImagePickerControllerStatus: Int {
+    case unknown, selecting, exporting, completed, cancelled
+}
 
-/**
- * The `DKImagePickerController` class offers the all public APIs which will affect the UI.
- */
+@objc
 open class DKImagePickerController : UINavigationController, CLImageEditorDelegate {
     
     @objc lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
@@ -125,8 +126,8 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     /// Auto close picker on single select
     @objc public var autoCloseOnSingleSelect = true
     
-    /// The maximum count of assets which the user will be able to select.
-    @objc public var maxSelectableCount = 999
+    /// The maximum count of assets which the user will be able to select, a value of 0 means no limit.
+    @objc public var maxSelectableCount = 0
     
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
@@ -139,7 +140,9 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     /// Limits the maximum number of objects returned in the fetch result, a value of 0 means no limit.
     @objc public var fetchLimit = 0
     
-    internal let groupDataManager = DKImageGroupDataManager()
+    @objc public lazy var groupDataManager: DKImageGroupDataManager = {
+        return DKImageGroupDataManager()
+    }()
     
     /// The types of PHAssetCollection to display in the picker.
     public var assetGroupTypes: [PHAssetCollectionSubtype] = [
@@ -198,18 +201,8 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     /// Whether allows to select photos and videos at the same time.
     @objc public var allowMultipleTypes = true
     
-    /// If YES, and the requested image is not stored on the local device, the Picker downloads the image from iCloud.
-    @objc public var autoDownloadWhenAssetIsInCloud = true {
-        didSet {
-            getImageDataManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
-        }
-    }
-    
     /// Determines whether or not the rotation is enabled.
     @objc public var allowsLandscape = false
-    
-    /// The callback block is executed when user pressed the cancel button.
-    @objc public var didCancel: (() -> Void)?
     
     @objc public var showsCancelButton = false {
         didSet {
@@ -222,7 +215,17 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     /// The callback block is executed when user pressed the select button.
     @objc public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
     
+    @objc public private(set) var status = DKImagePickerControllerStatus.unknown {
+        didSet {
+            self.statusChanged?(self.status)
+        }
+    }
+    
+    @objc public var statusChanged: ((DKImagePickerControllerStatus) -> Void)?
+    
     @objc public var selectedChanged: (() -> Void)?
+    
+    @objc public var exporter: DKImageAssetExporter? = DKImageAssetExporter.sharedInstance
     
     /// It will have selected the specific assets.
     @objc public var defaultSelectedAssets: [DKAsset]? {
@@ -252,8 +255,6 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         self.groupDataManager.assetGroupTypes = self.assetGroupTypes
         self.groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         self.groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
-        
-        getImageDataManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
     }
     
     deinit {
@@ -435,13 +436,25 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     
     @objc open func dismiss() {
         self.presentingViewController?.dismiss(animated: true, completion: {
-            self.didCancel?()
+            self.status = .cancelled
         })
     }
     
     @objc open func done() {
         self.presentingViewController?.dismiss(animated: true, completion: {
-            self.didSelectAssets?(self.selectedAssets)
+            if let exporter = self.exporter {
+                self.status = .exporting
+                
+                exporter.exportAssetsAsynchronously(assets: self.selectedAssets, completion: { [weak self] result in
+                    guard let strongSelf = self else { return }
+                    
+                    strongSelf.status = .completed
+                    strongSelf.didSelectAssets?(strongSelf.selectedAssets)
+                })
+            } else {
+                self.status = .completed
+                self.didSelectAssets?(self.selectedAssets)
+            }
         })
     }
     
