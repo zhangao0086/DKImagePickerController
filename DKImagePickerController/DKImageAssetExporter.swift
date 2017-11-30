@@ -288,8 +288,14 @@ open class DKImageAssetExporter: DKBaseManager {
         }
     }
     
-    private func imageToJPEG(with image: UIImage) -> Data? {
-        return UIImageJPEGRepresentation(image, 0.9)
+    private func imageToJPEG(with imageData: Data) -> Data? {
+        if #available(iOS 10.0, *), let ciImage = CIImage(data: imageData), let colorSpace = ciImage.colorSpace {
+            return CIContext().jpegRepresentation(of: ciImage, colorSpace: colorSpace, options:[:])
+        } else if let image = UIImage(data: imageData) {
+            return UIImageJPEGRepresentation(image, 0.9)
+        } else {
+            return nil
+        }
     }
     
     private func generateTemporaryPath(with asset: DKAsset) -> URL {
@@ -347,20 +353,12 @@ open class DKImageAssetExporter: DKBaseManager {
                                 asset.fileName = fileURL.lastPathComponent
                             }
                             
-                            let image = UIImage(data: imageData)
-                            if let image = image {
-                                asset.width = Float(image.size.width)
-                                asset.height = Float(image.size.height)
-                            }
-                            
                             if FileManager.default.fileExists(atPath: asset.localTemporaryPath!.path) {
                                 return completion(nil)
                             }
                             
-                            if  let image = image
-                                , self.configuration.imageExportPreset == .compatible
-                                , self.isHEIC(with: imageData) {
-                                imageData = self.imageToJPEG(with: image) ?? imageData
+                            if  self.configuration.imageExportPreset == .compatible && self.isHEIC(with: imageData) {
+                                imageData = self.imageToJPEG(with: imageData) ?? imageData
                             }
                             
                             do {
@@ -408,20 +406,6 @@ open class DKImageAssetExporter: DKBaseManager {
                 } else {
                     asset.fileName = asset.localIdentifier
                 }
-                
-                #if swift(>=4.0)
-                if let track = avAsset.tracks(withMediaType: .video).first {
-                    let size = __CGSizeApplyAffineTransform(track.naturalSize, track.preferredTransform)
-                    asset.width = Float(size.width)
-                    asset.height = Float(size.height)
-                }
-                #else
-                if let track = avAsset.tracks(withMediaType: AVMediaTypeVideo).first {
-                    let size = __CGSizeApplyAffineTransform(track.naturalSize, track.preferredTransform)
-                    asset.width = Float(size.width)
-                    asset.height = Float(size.height)
-                }
-                #endif
                 
                 DKImageAssetExporter.ioQueue.async {
                     let group = DispatchGroup()
