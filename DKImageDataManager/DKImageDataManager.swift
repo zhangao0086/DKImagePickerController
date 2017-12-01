@@ -54,22 +54,10 @@ public class DKImageDataManager {
 	}()
     
     @discardableResult
-	public func fetchImage(for asset: DKAsset, size: CGSize, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
-        return self.fetchImage(for: asset, size: size, options: nil, completeBlock: completeBlock)
-	}
-	
-    @discardableResult
-	public func fetchImage(for asset: DKAsset, size: CGSize, contentMode: PHImageContentMode, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
-        return self.fetchImage(for: asset, size: size, options: nil, contentMode: contentMode, completeBlock: completeBlock)
-	}
-
-    @discardableResult
-	public func fetchImage(for asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
-        return self.fetchImage(for: asset, size: size, options: options, contentMode: .aspectFill, completeBlock: completeBlock)
-    }
-    
-    @discardableResult
-    public func fetchImage(for asset: DKAsset, size: CGSize, options: PHImageRequestOptions?, contentMode: PHImageContentMode,
+    public func fetchImage(for asset: DKAsset,
+                           size: CGSize,
+                           options: PHImageRequestOptions? = nil,
+                           contentMode: PHImageContentMode = .aspectFill,
                            completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
         return self.fetchImage(for: asset, size: size, options: options, contentMode: contentMode, oldRequestID: nil, completeBlock: completeBlock)
     }
@@ -108,12 +96,12 @@ public class DKImageDataManager {
                                                         }
         })
         
-        self.update(requestID: requestID, with: imageRequestID)
+        self.update(requestID: requestID, with: imageRequestID, old: oldRequestID)
         return requestID
     }
     
     @discardableResult
-    public func fetchImageData(for asset: DKAsset, options: PHImageRequestOptions?, completeBlock: @escaping (_ data: Data?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
+    public func fetchImageData(for asset: DKAsset, options: PHImageRequestOptions? = nil, completeBlock: @escaping (_ data: Data?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
         return self.fetchImageData(for: asset, options: options, oldRequestID: nil, completeBlock: completeBlock)
     }
     
@@ -146,17 +134,12 @@ public class DKImageDataManager {
                                                             }
         }
         
-        self.update(requestID: requestID, with: imageRequestID)
+        self.update(requestID: requestID, with: imageRequestID, old: oldRequestID)
         return requestID
     }
-    
-    @discardableResult
-	public func fetchAVAsset(for asset: DKAsset, completeBlock: @escaping (_ avAsset: AVAsset?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
-        return self.fetchAVAsset(for: asset, options: nil, completeBlock: completeBlock)
-	}
 	
     @discardableResult
-    public func fetchAVAsset(for asset: DKAsset, options: PHVideoRequestOptions?, completeBlock: @escaping (_ avAsset: AVAsset?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
+    public func fetchAVAsset(for asset: DKAsset, options: PHVideoRequestOptions? = nil, completeBlock: @escaping (_ avAsset: AVAsset?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
         return self.fetchAVAsset(for: asset, options: options, oldRequestID: nil, completeBlock: completeBlock)
     }
     
@@ -189,7 +172,7 @@ public class DKImageDataManager {
                                                             }
         }
         
-        self.update(requestID: requestID, with: imageRequestID)
+        self.update(requestID: requestID, with: imageRequestID, old: oldRequestID)
         return requestID
     }
     
@@ -229,12 +212,14 @@ public class DKImageDataManager {
         return seed
     }
     
-    private func update(requestID: DKImageRequestID, with imageRequestID: PHImageRequestID?) {
+    private func update(requestID: DKImageRequestID,
+                        with imageRequestID: PHImageRequestID?,
+                        old oldImageRequestID: DKImageRequestID? = nil) {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
         
         if let imageRequestID = imageRequestID {
-            if self.requestIDs[requestID] != nil {
+            if self.requestIDs[requestID] != nil || oldImageRequestID == nil {
                 self.requestIDs[requestID] = imageRequestID
             } else {
                 self.manager.cancelImageRequest(imageRequestID)
