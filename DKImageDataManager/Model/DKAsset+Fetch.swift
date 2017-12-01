@@ -19,7 +19,7 @@ public extension DKAsset {
                                  options: PHImageRequestOptions? = nil,
                                  contentMode: PHImageContentMode = .aspectFit,
                                  completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
-        if let _ = self.originalAsset {
+        if self.originalAsset != nil {
             self.requestID = getImageDataManager().fetchImage(for: self, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
         } else {
             completeBlock(self.image, nil)
@@ -54,7 +54,7 @@ public extension DKAsset {
      Fetch an image with the original size.
      */
     @objc public func fetchOriginalImage(options: PHImageRequestOptions? = nil, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
-        if let _ = self.originalAsset {
+        if self.originalAsset != nil {
             self.requestID = getImageDataManager().fetchImageData(for: self, options: options, completeBlock: { (data, info) in
                 var image: UIImage?
                 if let data = data {
@@ -71,7 +71,19 @@ public extension DKAsset {
      Fetch an image data with the original size.
      */
     @objc public func fetchImageData(options: PHImageRequestOptions? = nil, completeBlock: @escaping (_ imageData: Data?, _ info: [AnyHashable: Any]?) -> Void) {
-        self.requestID = getImageDataManager().fetchImageData(for: self, options: options, completeBlock: completeBlock)
+        if self.originalAsset != nil {
+            self.requestID = getImageDataManager().fetchImageData(for: self, options: options, completeBlock: completeBlock)
+        } else {
+            if let image = self.image {
+                if self.hasAlphaChannel(image: image) {
+                    completeBlock(UIImagePNGRepresentation(image), nil)
+                } else {
+                    completeBlock(UIImageJPEGRepresentation(image, 0.9), nil)
+                }
+            } else {
+                assert(false)
+            }
+        }
     }
     
     /**
@@ -90,12 +102,27 @@ public extension DKAsset {
     
     // MARK: - Private
     
+    private func hasAlphaChannel(image: UIImage) -> Bool {
+        if let cgImage = image.cgImage {
+            let alphaInfo = cgImage.alphaInfo
+            return alphaInfo == .first
+                || alphaInfo == .last
+                || alphaInfo == .premultipliedFirst
+                || alphaInfo == .premultipliedLast
+        } else {
+            return false
+        }
+    }
+    
+    // MARK: - Attributes
+    
     private struct FetchKeys {
         static fileprivate var requestID: UInt8 = 0
         static fileprivate var fullScreenImage: UInt8 = 0
     }
     
     private var requestID: DKImageRequestID {
+        
         get { return (getAssociatedObject(key: &FetchKeys.requestID) as? DKImageRequestID) ?? DKImageInvalidRequestID }
         set { setAssociatedObject(key: &FetchKeys.requestID, value: newValue) }
     }
