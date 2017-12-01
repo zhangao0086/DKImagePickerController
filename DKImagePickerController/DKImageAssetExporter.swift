@@ -311,10 +311,14 @@ open class DKImageAssetExporter: DKBaseManager {
             if asset.type == .photo {
                 fileName = fileName + String(self.configuration.imageExportPreset.rawValue)
             } else {
+                #if swift(>=4.0)
                 fileName = fileName + self.configuration.videoExportPreset + self.configuration.avOutputFileType.rawValue
+                #else
+                fileName = fileName + self.configuration.videoExportPreset + self.configuration.avOutputFileType
+                #endif
             }
         } else {
-            fileName = "\(Date().timeIntervalSince1970)"
+            fileName = "\(Date().timeIntervalSinceReferenceDate)"
         }
         
         if !FileManager.default.fileExists(atPath: self.configuration.exportDirectory.path) {
