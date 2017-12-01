@@ -108,9 +108,19 @@ class DKAssetGroupCell: UITableViewCell {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
 class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver {
 
-    fileprivate var groups: [String]?
+    fileprivate var groups: [String]? {
+        didSet {
+            self.displayGroups = self.filterEmptyGroupIfNeeded()
+        }
+    }
+    
+    private var displayGroups: [String]?
+    
+    var showsEmptyAlbums = true
 
     fileprivate var selectedGroup: String?
 
@@ -128,7 +138,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
 
     override var preferredContentSize: CGSize {
         get {
-            if let groups = self.groups {
+            if let groups = self.displayGroups {
                 return CGSize(width: UIViewNoIntrinsicMetric,
                               height: CGFloat(groups.count) * self.tableView.rowHeight)
             } else {
@@ -142,7 +152,8 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
     
     fileprivate var groupDataManager: DKImageGroupDataManager
     
-    init(groupDataManager: DKImageGroupDataManager, defaultAssetGroup: PHAssetCollectionSubtype?, selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> ()) {
+    init(groupDataManager: DKImageGroupDataManager,
+         defaultAssetGroup: PHAssetCollectionSubtype?, selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> ()) {
         self.groupDataManager = groupDataManager
         
         super.init(style: .plain)
@@ -170,24 +181,19 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
     internal func loadGroups() {
         self.groupDataManager.fetchGroups { [weak self] groups, error in
             guard let groups = groups, let strongSelf = self, error == nil else { return }
-
+            
             strongSelf.groups = groups
             strongSelf.selectedGroup = strongSelf.defaultAssetGroupOfAppropriate()
-            if let selectedGroup = strongSelf.selectedGroup,
-                let row =  groups.index(of: selectedGroup)
-            {
-                strongSelf.tableView.selectRow(
-                    at: IndexPath(row: row, section: 0),
-                    animated: false,
-                    scrollPosition: .none)
+            if let selectedGroup = strongSelf.selectedGroup, let row =  groups.index(of: selectedGroup) {
+                strongSelf.tableView.selectRow(at: IndexPath(row: row, section: 0), animated: false, scrollPosition: .none)
             }
-
+            
             strongSelf.selectedGroupDidChangeBlock?(strongSelf.selectedGroup)
         }
     }
 
     fileprivate func defaultAssetGroupOfAppropriate() -> String? {
-        guard let groups = self.groups else { return nil }
+        guard let groups = self.displayGroups else { return nil }
         if let defaultAssetGroup = self.defaultAssetGroup {
             for groupId in groups {
                 let group = self.groupDataManager.fetchGroupWithGroupId(groupId)
@@ -198,21 +204,32 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
         }
         return groups.first
     }
+    
+    private func filterEmptyGroupIfNeeded() -> [String]? {
+        var displayGroups = self.groups
+        if !self.showsEmptyAlbums {
+            if let groups = self.groups {
+                for groupId in groups {
+                    if self.groupDataManager.fetchGroupWithGroupId(groupId).totalCount > 0 {
+                        displayGroups?.append(groupId)
+                    }
+                }
+            }
+        }
+        return displayGroups
+    }
 
     // MARK: - UITableViewDelegate, UITableViewDataSource methods
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups?.count ?? 0
+        return self.displayGroups?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let groups = groups,
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: DKImageGroupCellIdentifier,
-                for: indexPath) as? DKAssetGroupCell else
-        {
-            assertionFailure("Expect groups and cell")
-            return UITableViewCell()
+        guard let groups = self.displayGroups
+            , let cell = tableView.dequeueReusableCell(withIdentifier: DKImageGroupCellIdentifier, for: indexPath) as? DKAssetGroupCell else {
+                assertionFailure("Expect groups and cell")
+                return UITableViewCell()
         }
 
         let assetGroup = self.groupDataManager.fetchGroupWithGroupId(groups[indexPath.row])
@@ -241,7 +258,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DKPopoverViewController.dismissPopoverViewController()
         
-        guard let groups = self.groups, groups.count > indexPath.row else {
+        guard let groups = self.displayGroups, groups.count > indexPath.row else {
             assertionFailure("Expect groups with count > \(indexPath.row)")
             return
         }
@@ -253,7 +270,11 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
     // MARK: - DKImageGroupDataManagerObserver methods
     
     func groupDidUpdate(groupId: String) {
+        self.displayGroups = self.filterEmptyGroupIfNeeded()
+        
+        let indexPathForSelectedRow = self.tableView.indexPathForSelectedRow
         self.tableView.reloadData()
+        self.tableView.selectRow(at: indexPathForSelectedRow, animated: false, scrollPosition: .none)
     }
     
     func groupsDidInsert(groupIds: [String]) {
@@ -277,7 +298,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
         
         self.tableView.reloadData()
         if self.selectedGroup == groupId {
-            self.selectedGroup = self.groups?.first
+            self.selectedGroup = self.displayGroups?.first
             selectedGroupDidChangeBlock?(self.selectedGroup)
             self.tableView.selectRow(at: IndexPath(row: 0, section: 0),
                                      animated: false,

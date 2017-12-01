@@ -126,6 +126,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
                                                   selectedGroupDidChangeBlock: { [unowned self] (groupId) in
                                                     self.selectAssetGroup(groupId)
             })
+            self.groupListVC.showsEmptyAlbums = self.imagePickerController.showsEmptyAlbums
             self.groupListVC.loadGroups()
         }
 		
