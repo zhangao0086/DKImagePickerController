@@ -45,16 +45,16 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         return button
     }()
 		
+    public var selectedGroupId: String?
     internal var collectionView: UICollectionView!
     internal weak var imagePickerController: DKImagePickerController!
-    public var selectedGroupId: String?
 	private var groupListVC: DKAssetGroupListVC!
     private var hidesCamera: Bool = false
 	private var footerView: UIView?
     private var currentViewSize: CGSize!
     private var registeredCellIdentifiers = Set<String>()
     private var thumbnailSize = CGSize.zero
-    private var curSwipingPath:IndexPath? = nil
+    private var curSwipingPath: IndexPath? = nil
 	
 	override open func viewWillLayoutSubviews() {
 		super.viewWillLayoutSubviews()
@@ -392,10 +392,10 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)
         let addedAssets = addedRects
             .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in self.imagePickerController.groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
+            .map { indexPath in self.imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
         let removedAssets = removedRects
             .flatMap { rect in self.collectionView!.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in self.imagePickerController.groupDataManager.fetchOriginalAsset(group, index: indexPath.item) }
+            .map { indexPath in self.imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
         
         // Update the assets the PHCachingImageManager is caching.
         getImageDataManager().startCachingAssets(for: addedAssets,
