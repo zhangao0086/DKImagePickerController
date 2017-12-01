@@ -65,14 +65,16 @@ open class DKAsset: NSObject {
         }
 	}
 	
-	internal var image: UIImage?
-	internal init(image: UIImage) {
+	public private(set) var image: UIImage?
+	public init(image: UIImage) {
         self.localIdentifier = String(image.hash)
         self.pixelWidth = Int(image.size.width * image.scale)
         self.pixelHeight = Int(image.size.height * image.scale)
 		super.init()
         
 		self.image = image
+        
+        self.type = .photo
 	}
 	
 	override open func isEqual(_ object: Any?) -> Bool {
