@@ -19,39 +19,60 @@ public extension Bundle {
 
 @objc
 open class DKImageResource: NSObject {
-
-    private class func imageForResource(_ name: String) -> UIImage {
+    
+    private let cache = NSCache<NSString, UIImage>()
+	
+    @objc open func checkedImage() -> UIImage {
+        return imageForResource("checked_background", stretchable: true, cacheable: true)
+    }
+    
+    @objc open func blueTickImage() -> UIImage {
+        return imageForResource("tick_blue", stretchable: false, cacheable: false)
+    }
+    
+    @objc open func cameraImage() -> UIImage {
+        return imageForResource("camera", stretchable: false, cacheable: false)
+    }
+    
+    @objc open func videoCameraIcon() -> UIImage {
+        return imageForResource("video_camera", stretchable: false, cacheable: true)
+    }
+	
+	@objc open func emptyAlbumIcon() -> UIImage {
+        return imageForResource("empty_album", stretchable: true, cacheable: false)
+	}
+    
+    @objc open func photoGalleryCheckedImage() -> UIImage {
+        return imageForResource("photoGalleryCheckedImage", stretchable: true, cacheable: true)
+    }
+    
+    @objc open func imageForResource(_ name: String, stretchable: Bool = false, cacheable: Bool = false) -> UIImage {
+        if cacheable {
+            if let cache = self.cache.object(forKey: name as NSString) {
+                return cache
+            }
+        }
+        
         let bundle = Bundle.imagePickerControllerBundle()
         let imagePath = bundle.path(forResource: name, ofType: "png", inDirectory: "Images")
-        let image = UIImage(contentsOfFile: imagePath!)
-        return image!
-    }
-	
-	private class func stretchImgFromMiddle(_ image: UIImage) -> UIImage {
-		let centerX = image.size.width / 2
-		let centerY = image.size.height / 2
-		return image.resizableImage(withCapInsets: UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
-	}
-	
-    @objc open class func checkedImage() -> UIImage {
-		return stretchImgFromMiddle(imageForResource("checked_background"))
-    }
-    
-    @objc open class func blueTickImage() -> UIImage {
-        return imageForResource("tick_blue")
+        var image = UIImage(contentsOfFile: imagePath!)!
+        
+        if stretchable {
+            image = self.stretchImgFromMiddle(image)
+        }
+        
+        if cacheable {
+            self.cache.setObject(image, forKey: name as NSString)
+        }
+        
+        return image
     }
     
-    @objc open class func cameraImage() -> UIImage {
-        return imageForResource("camera")
+    @objc open func stretchImgFromMiddle(_ image: UIImage) -> UIImage {
+        let centerX = image.size.width / 2
+        let centerY = image.size.height / 2
+        return image.resizableImage(withCapInsets: UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
     }
-    
-    @objc open class func videoCameraIcon() -> UIImage {
-        return imageForResource("video_camera")
-    }
-	
-	@objc open class func emptyAlbumIcon() -> UIImage {
-		return stretchImgFromMiddle(imageForResource("empty_album"))
-	}
     
 }
 
