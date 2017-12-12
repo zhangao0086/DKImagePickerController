@@ -18,7 +18,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var assets: [DKAsset]?
     
 	func showImagePicker() {
-		pickerController.defaultSelectedAssets = self.assets
+        if let assets = self.assets {
+            pickerController.select(assets: assets)
+        }
         
         pickerController.statusChanged = { status in
             switch status {
@@ -173,10 +175,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @objc func showAlbum() {
         let pickerController = DKImagePickerController()
-        pickerController.defaultSelectedAssets = self.pickerController.selectedAssets
+        pickerController.select(assets: self.pickerController.selectedAssets)
         pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
             self.updateAssets(assets: assets)
-            self.pickerController.defaultSelectedAssets = assets
+            self.pickerController.setSelectedAssets(assets: assets)
         }
         
         self.present(pickerController, animated: true, completion: nil)
