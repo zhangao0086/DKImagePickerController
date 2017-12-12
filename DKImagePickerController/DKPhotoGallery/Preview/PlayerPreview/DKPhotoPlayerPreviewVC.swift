@@ -89,7 +89,7 @@ open class DKPhotoPlayerPreviewVC: DKPhotoBasePreviewVC {
                                                         DispatchQueue.main.async {
                                                             if let asset = self?.item.asset, asset.localIdentifier == identifier {
                                                                 let URLAsset = avAsset as! AVURLAsset
-                                                                completeBlock(URLAsset.url, nil)
+                                                                completeBlock(URLAsset, nil)
                                                             }
                                                         }
             })
@@ -99,15 +99,18 @@ open class DKPhotoPlayerPreviewVC: DKPhotoBasePreviewVC {
     }
     
     open override func updateContentView(with content: Any) {
-        guard let contentURL = content as? URL else { return }
-        
         self.playerView?.closeBlock = self.closeBlock
         self.playerView?.autoHidesControlView = self.autoHidesControlView
         self.playerView?.tapToToggleControlView = self.tapToToggleControlView
         self.playerView?.beginPlayBlock = self.beginPlayBlock
         self.playerView?.isControlHidden = self.isControlHidden
         
-        self.playerView?.url = contentURL
+        if let asset = content as? AVURLAsset {
+            self.playerView?.asset = asset
+        } else if let contentURL = content as? URL {
+            self.playerView?.url = contentURL
+        }
+        
     }
     
     open override func enableZoom() -> Bool {

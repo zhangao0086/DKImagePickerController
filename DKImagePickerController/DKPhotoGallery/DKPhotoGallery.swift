@@ -81,6 +81,7 @@ open class DKPhotoGallery: UINavigationController, UIViewControllerTransitioning
         if self.singleTapMode == .toggleControlView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35, execute: {
                 self.setNavigationBarHidden(false, animated: true)
+                self.showsControlView()
             })
             self.statusBar?.alpha = 1
         } else {
