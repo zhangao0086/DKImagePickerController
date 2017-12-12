@@ -186,29 +186,19 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     
     @objc public var exporter: DKImageAssetExporter? = DKImageAssetExporter.sharedInstance
     
-    /// It will have selected the specific assets.
-    @objc public var defaultSelectedAssets: [DKAsset]? {
-        didSet {
-            if let defaultSelectedAssets = self.defaultSelectedAssets {
-                if Set(self.selectedAssets) != Set(defaultSelectedAssets) {
-                    self.selectedAssets = self.defaultSelectedAssets ?? []
-                    
-                    if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-                        rootVC.collectionView.reloadData()
-                    }
-                }
-            }
-        }
-    }
+    @objc public private(set) lazy var imageResource: DKImageResource = {
+        return DKImageResource()
+    }()
     
-    @objc open private(set) var selectedAssets = [DKAsset]()
-    
-    internal lazy var groupDataManager: DKImageGroupDataManager = {
+    @objc public private(set) lazy var groupDataManager: DKImageGroupDataManager = {
         let configuration = DKImageGroupDataManagerConfiguration()
         configuration.assetFetchOptions = self.createAssetFetchOptions()
         
         return DKImageGroupDataManager(configuration: configuration)
     }()
+    
+    public private(set) var selectedAssetIdentifiers = [String]() // DKAsset.localIdentifier
+    private var assets = [String : DKAsset]() // DKAsset.localIdentifier : DKAsset
     
     public convenience init() {
         let rootVC = UIViewController()
@@ -216,7 +206,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         self.init(rootViewController: rootVC)
     }
     
-    public convenience init(groupDataManager: DKImageGroupDataManager) {
+    private convenience init(groupDataManager: DKImageGroupDataManager) {
         let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
         
@@ -261,7 +251,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
             if self.sourceType == .camera {
                 let camera = self.createCamera()
                 if camera is UINavigationController {
-                    self.present(camera: camera)
+                    self.present(camera, animated: true)
                     self.setViewControllers([], animated: false)
                 } else {
                     self.setViewControllers([camera], animated: false)
@@ -273,9 +263,6 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
                 self.UIDelegate.prepareLayout(self, vc: rootVC)
                 self.updateCancelButtonForVC(rootVC)
                 self.setViewControllers([rootVC], animated: false)
-                if let count = self.defaultSelectedAssets?.count, count > 0 {
-                    self.UIDelegate.imagePickerController(self, didSelectAssets: [self.defaultSelectedAssets!.last!])
-                }
             }
         }
     }
@@ -321,6 +308,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         return assetFetchOptions
     }
     
+    internal weak var camera: UIViewController?
     private var metadataFromCamera: [AnyHashable : Any]?
     private func createCamera() -> UIViewController {
         let didCancel = { [unowned self] () in
@@ -361,7 +349,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
                             if self.sourceType != .camera || self.viewControllers.count == 0 {
                                 self.dismissCamera()
                             }
-                            self.selectImage(DKAsset(originalAsset: newAsset))
+                            self.select(asset: DKAsset(originalAsset: newAsset))
                         }
                     } else {
                         self.dismissCamera()
@@ -383,25 +371,30 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     }
     
     @objc open func presentCamera() {
-        self.present(camera: self.createCamera())
+        self.present(self.createCamera(), animated: true, completion: nil)
     }
     
-    internal weak var camera: UIViewController?
-    @objc open func present(camera: UIViewController) {
+    @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Swift.Void)? = nil) {
         if self.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.present(camera, animated: true, completion: nil)
+            UIApplication.shared.keyWindow!.rootViewController!.present(viewControllerToPresent,
+                                                                        animated: flag,
+                                                                        completion: completion)
         } else {
-            self.present(camera, animated: true, completion: nil)
+            super.present(viewControllerToPresent, animated: flag, completion: completion)
+        }
+    }
+    
+    @objc open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if self.inline {
+            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
+        } else {
+            super.dismiss(animated: true, completion: nil)
         }
     }
     
     @objc open func dismissCamera() {
         if let _ = self.camera {
-            if self.inline {
-                UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
-            } else {
-                self.dismiss(animated: true, completion: nil)
-            }
+            self.dismiss(animated: true)
             self.camera = nil
         }
     }
@@ -417,11 +410,9 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
             if let exporter = self.exporter {
                 self.status = .exporting
                 
-                exporter.exportAssetsAsynchronously(assets: self.selectedAssets, completion: { [weak self] result in
-                    guard let strongSelf = self else { return }
-                    
-                    strongSelf.status = .completed
-                    strongSelf.didSelectAssets?(strongSelf.selectedAssets)
+                exporter.exportAssetsAsynchronously(assets: self.selectedAssets, completion: { result in
+                    self.status = .completed
+                    self.didSelectAssets?(self.selectedAssets)
                 })
             } else {
                 self.status = .completed
@@ -443,85 +434,11 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
             if self.sourceType != .camera {
                 self.dismissCamera()
             }
-            self.selectImage(asset)
+            self.select(asset: asset)
         }
     }
     
-    // MARK: - CLImageEditorDelegate
-    
-    public func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
-        self.metadataFromCamera?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
-
-        self.processImageFromCamera(image, self.metadataFromCamera)
-        self.metadataFromCamera = nil
-    }
-}
-
-// MARK: - Selection
-
-extension DKImagePickerController {
-    
-    @objc open func selectImage(atIndexPath index: IndexPath) {
-        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-            rootVC.selectAsset(atIndex: index)
-            rootVC.collectionView?.reloadData()
-        }
-    }
-    
-    @objc open func deselectAssetAtIndex(_ index: Int) {
-        let asset = self.selectedAssets[index]
-        self.deselectAsset(asset)
-    }
-    
-    @objc open func deselectAsset(_ asset: DKAsset) {
-        self.deselectImage(asset)
-        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-            rootVC.collectionView?.reloadData()
-        }
-    }
-    
-    @objc open func deselectAllAssets() {
-        if self.selectedAssets.count > 0 {
-            let assets = self.selectedAssets
-            self.selectedAssets.removeAll()
-            self.triggerSelectedChanged()
-            self.UIDelegate.imagePickerController(self, didDeselectAssets: assets)
-            if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-                rootVC.collectionView?.reloadData()
-            }
-        }
-    }
-    
-    @objc open func selectImage(_ asset: DKAsset) {
-        if self.singleSelect {
-            self.deselectAllAssets()
-            self.selectedAssets.append(asset)
-            if self.sourceType == .camera || autoCloseOnSingleSelect {
-                self.done()
-            } else {
-                self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
-            }
-        } else {
-            self.selectedAssets.append(asset)
-            if self.sourceType == .camera {
-                self.done()
-            } else {
-                self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
-                self.triggerSelectedChanged()
-            }
-        }
-    }
-    
-    @objc open func deselectImage(_ asset: DKAsset) {
-        self.selectedAssets.remove(at: selectedAssets.index(of: asset)!)
-        self.UIDelegate.imagePickerController(self, didDeselectAssets: [asset])
-        self.triggerSelectedChanged()
-    }
-
-}
-
-// MARK: - Save Image
-extension DKImagePickerController {
+    // MARK: - Save Image
     
     @objc open func saveImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         if let metadata = metadata {
@@ -611,10 +528,120 @@ extension DKImagePickerController {
         }
     }
     
-}
+    // MARK: - Selection
+        
+    @objc open func select(asset: DKAsset, updateGroupDetailVC: Bool = true) {
+        if self.singleSelect {
+            self.deselectAll()
+        }
+        
+        if self.assets[asset.localIdentifier] != nil { return }
+        
+        self.selectedAssetIdentifiers.append(asset.localIdentifier)
+        self.assets[asset.localIdentifier] = asset
+        self.clearSelectedAssetsCache()
+        
+        if self.sourceType == .camera || (self.singleSelect && self.autoCloseOnSingleSelect) {
+            self.done()
+        } else {
+            self.triggerSelectedChanged()
+            self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
+            
+            if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+                rootVC.collectionView?.reloadData()
+            }
+        }
+    }
+    
+    @objc open func select(assets: [DKAsset], updateGroupDetailVC: Bool = true) {
+        var needsUpdateGroupDetailVC = false
+        
+        for asset in assets {
+            self.select(asset: asset, updateGroupDetailVC: false)
+            needsUpdateGroupDetailVC = true
+        }
+        
+        if needsUpdateGroupDetailVC, updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            rootVC.collectionView?.reloadData()
+        }
+    }
+    
+    @objc open func deselect(asset: DKAsset, updateGroupDetailVC: Bool = true) {
+        if self.assets[asset.localIdentifier] == nil { return }
+        
+        self.selectedAssetIdentifiers.remove(at: self.selectedAssetIdentifiers.index(of: asset.localIdentifier)!)
+        self.assets[asset.localIdentifier] = nil
+        self.clearSelectedAssetsCache()
+        
+        self.triggerSelectedChanged()
+        self.UIDelegate.imagePickerController(self, didDeselectAssets: [asset])
+        
+        if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            rootVC.collectionView?.reloadData()
+        }
+    }
+    
+    @objc open func deselectAll(updateGroupDetailVC: Bool = true) {
+        if self.selectedAssetIdentifiers.count > 0 {
+            let assets = self.selectedAssets
+            self.selectedAssetIdentifiers.removeAll()
+            self.assets.removeAll()
+            self.clearSelectedAssetsCache()
+            
+            self.triggerSelectedChanged()
+            self.UIDelegate.imagePickerController(self, didDeselectAssets: assets)
+            
+            
+            if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+                rootVC.collectionView?.reloadData()
+            }
+        }
+    }
+    
+    @objc open func setSelectedAssets(assets: [DKAsset]) {
+        if assets.count > 0 {
+            self.deselectAll(updateGroupDetailVC: false)
+            self.select(assets: assets, updateGroupDetailVC: true)
+        } else {
+            self.deselectAll(updateGroupDetailVC: true)
+        }
+    }
+    
+    open func index(of asset: DKAsset) -> Int? {
+        if self.contains(asset: asset) {
+            return self.selectedAssetIdentifiers.index(of: asset.localIdentifier)
+        } else {
+            return nil
+        }
+    }
+    
+    @objc func contains(asset: DKAsset) -> Bool {
+        return self.assets[asset.localIdentifier] != nil
+    }
+    
+    private var internalSelectedAssetsCache: [DKAsset]?
+    @objc public var selectedAssets: [DKAsset] {
+        get {
+            if self.internalSelectedAssetsCache != nil {
+                return self.internalSelectedAssetsCache!
+            }
+            
+            var assets = [DKAsset]()
+            for assetIdentifier in self.selectedAssetIdentifiers {
+                assets.append(self.assets[assetIdentifier]!)
+            }
+            
+            self.internalSelectedAssetsCache = assets
 
-// MARK: - Orientation
-extension DKImagePickerController {
+            return assets
+        }
+    }
+    
+    private func clearSelectedAssetsCache() {
+        self.internalSelectedAssetsCache = nil
+    }
+    
+    // MARK: - Orientation
     
     @objc open override var shouldAutorotate : Bool {
         return self.allowsLandscape && self.sourceType != .camera ? true : false
