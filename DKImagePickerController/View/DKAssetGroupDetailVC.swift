@@ -25,7 +25,7 @@ private extension UICollectionView {
 }
 
 // Show all images in the asset group
-open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver {
+open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver, DKPhotoGalleryDelegate, UIGestureRecognizerDelegate {
     	
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
@@ -54,7 +54,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     private var currentViewSize: CGSize!
     private var registeredCellIdentifiers = Set<String>()
     private var thumbnailSize = CGSize.zero
-    private var curSwipingPath: IndexPath? = nil
+    private weak var gallery: DKPhotoGallery?
 	
 	override open func viewWillLayoutSubviews() {
 		super.viewWillLayoutSubviews()
@@ -89,6 +89,8 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         
         if self.imagePickerController.allowSwipeToSelect {
             let swipeOutGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.swiping(gesture:)))
+            swipeOutGesture.delegate = self
+            self.collectionView.panGestureRecognizer.require(toFail: swipeOutGesture)
             self.collectionView.addGestureRecognizer(swipeOutGesture)
         }
     }
@@ -122,6 +124,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             self.resetCachedAssets()
             self.imagePickerController.groupDataManager.add(observer: self)
             self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
+                                                  imageResource: self.imagePickerController.imageResource,
                                                   defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
                                                   selectedGroupDidChangeBlock: { [unowned self] (groupId) in
                                                     self.selectAssetGroup(groupId)
@@ -146,25 +149,6 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		self.collectionView!.reloadData()
     }
     
-    //use the swiping gesture to select the currently swiping cell.
-    @objc private func swiping(gesture: UIPanGestureRecognizer) {
-        if gesture.state != .ended {
-            let loc = gesture.location(ofTouch: 0, in: self.collectionView)
-            if let path = self.collectionView.indexPathForItem(at: loc), let cell = self.collectionView.cellForItem(at: path), let cc = cell as? DKAssetGroupDetailBaseCell {
-                if let ast = cc.asset {
-                    if curSwipingPath != path {
-                        curSwipingPath = path
-                        if !self.imagePickerController.selectedAssets.contains(ast) {
-                            self.imagePickerController.selectImage(atIndexPath: path)
-                        } else {
-                            self.imagePickerController.deselectAsset(ast)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
 	open func updateTitleView() {
 		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
 		self.title = group.groupName
@@ -181,9 +165,14 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         DKPopoverViewController.popoverViewController(self.groupListVC, fromView: self.selectGroupButton)
     }
     
-    func fetchAsset(for index: Int) -> DKAsset? {
-        if !self.hidesCamera && index == 0 {
-            return nil
+    func fetchAsset(for index: Int, ignoreUI : Bool = false) -> DKAsset? {
+        var assetIndex = index
+        if !ignoreUI {
+            if !self.hidesCamera && index == 0 {
+                return nil
+            }
+            
+            assetIndex = (index - (self.hidesCamera ? 0 : 1))
         }
         let assetIndex = (index - (self.hidesCamera ? 0 : 1))
         let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
@@ -192,22 +181,52 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     
     // select an asset at a specific index
     public func selectAsset(atIndex indexPath: IndexPath) {
-        guard let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell) else {
+        guard let cell = self.collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell
+            , let asset = cell.asset else {
             return
         }
         
-        selectAsset(cellToSelect: selectedAsset)
+        if !self.imagePickerController.contains(asset: asset) {
+            self.imagePickerController.select(asset: asset, updateGroupDetailVC: false)
+            cell.selectedIndex = self.imagePickerController.selectedAssetIdentifiers.count - 1
+            
+            if !cell.isSelected {
+                self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+            }
+        }
     }
     
-    public func selectAsset(cellToSelect cell: DKAssetGroupDetailBaseCell) {
-        guard let asset = cell.asset else {
-            return
+    public func deselectAsset(atIndex indexPath: IndexPath) {
+        guard let cell = self.collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell
+            , let asset = cell.asset else {
+                return
         }
         
-        self.imagePickerController.selectImage(asset)
-        cell.index = self.imagePickerController.selectedAssets.count - 1
+        if let removedIndex = self.imagePickerController.index(of: asset) {
+            /// Minimize the number of times.
+            let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems!
+            let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems
+            
+            let intersect = Set(indexPathsForVisibleItems).intersection(Set(indexPathsForSelectedItems))
+            
+            for selectedIndexPath in intersect {
+                if let selectedCell = (collectionView.cellForItem(at: selectedIndexPath) as? DKAssetGroupDetailBaseCell)
+                    , let selectedCellAsset = selectedCell.asset
+                    , let selectedIndex = self.imagePickerController.index(of: selectedCellAsset) {
+                    if selectedIndex > removedIndex {
+                        selectedCell.selectedIndex = selectedCell.selectedIndex - 1
+                    }
+                }
+            }
+            
+            self.imagePickerController.deselect(asset: asset, updateGroupDetailVC: false)
+            
+            if cell.isSelected {
+                self.collectionView.deselectItem(at: indexPath, animated: true)
+            }
+        }
     }
-    
+
     func isCameraCell(indexPath: IndexPath) -> Bool {
         return indexPath.row == 0 && !self.hidesCamera
     }
@@ -267,7 +286,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 
         if let index = self.imagePickerController.selectedAssets.index(of: asset) {
 			cell.isSelected = true
-            cell.index = index
+			cell.selectedIndex = selectedIndex
 			self.collectionView!.selectItem(at: indexPath, animated: false, scrollPosition: [])
 		} else {
 			cell.isSelected = false
@@ -308,7 +327,8 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         if let firstSelectedAsset = self.imagePickerController.selectedAssets.first,
-            let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset, self.imagePickerController.allowMultipleTypes == false && firstSelectedAsset.type != selectedAsset.type {
+            let selectedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset
+            , self.imagePickerController.allowMultipleTypes == false && firstSelectedAsset.type != selectedAsset.type {
 
             let alert = UIAlertController(
                     title: DKImageLocalizedStringWithKey("selectPhotosOrVideos")
@@ -339,31 +359,12 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
                 self.imagePickerController.presentCamera()
             }
         } else {
-            selectAsset(atIndex: indexPath)
+            self.selectAsset(atIndex: indexPath)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
-        if let removedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset {
-            let removedIndex = self.imagePickerController.selectedAssets.index(of: removedAsset)!
-            
-            /// Minimize the number of times.
-            let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems!
-            let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems
-            
-            let intersect = Set(indexPathsForVisibleItems).intersection(Set(indexPathsForSelectedItems))
-            
-            for selectedIndexPath in intersect {
-                if let selectedCell = (collectionView.cellForItem(at: selectedIndexPath) as? DKAssetGroupDetailBaseCell), let selectedCellAsset = selectedCell.asset, let selectedIndex = self.imagePickerController.selectedAssets.index(of: selectedCellAsset) {
-                    if selectedIndex > removedIndex {
-                        selectedCell.index = selectedCell.index - 1
-                    }
-                }
-            }
-            
-            self.imagePickerController.deselectImage(removedAsset)
-        }
+        self.deselectAsset(atIndex: indexPath)
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -446,11 +447,9 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 	}
 	
 	func group(groupId: String, didRemoveAssets assets: [DKAsset]) {
-        for (_, selectedAsset) in self.imagePickerController.selectedAssets.enumerated() {
-            for removedAsset in assets {
-                if selectedAsset.isEqual(removedAsset) {
-                    self.imagePickerController.deselectImage(selectedAsset)
-                }
+        for removedAsset in assets {
+            if self.imagePickerController.contains(asset: removedAsset) {
+                self.imagePickerController.deselect(asset: removedAsset, updateGroupDetailVC: false)
             }
         }
 	}
