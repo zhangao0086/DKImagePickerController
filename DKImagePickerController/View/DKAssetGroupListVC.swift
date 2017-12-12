@@ -26,7 +26,7 @@ class DKAssetGroupCell: UITableViewCell {
         }
     }
 
-    fileprivate let thumbnailImageView: UIImageView = {
+    fileprivate lazy var thumbnailImageView: UIImageView = {
         let thumbnailImageView = UIImageView()
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.clipsToBounds = true
@@ -34,28 +34,42 @@ class DKAssetGroupCell: UITableViewCell {
         return thumbnailImageView
     }()
 
-    var groupNameLabel: UILabel = {
+    lazy var groupNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 13)
         return label
     }()
 
-    var totalCountLabel: UILabel = {
+    lazy var totalCountLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
         label.textColor = UIColor.gray
         return label
     }()
 
-    var customSelectedBackgroundView: UIView = {
-        let selectedBackgroundView = UIView()
+    var selectedFlagImage: UIImage? {
+        get {
+            return self.selectedFlagImageView.image
+        }
+        set {
+            if self.selectedFlagImageView.image != newValue {
+                self.selectedFlagImageView.image = newValue
+                self.selectedFlagImageView.sizeToFit()
+                
+                self.selectedFlagImageView.frame = CGRect(x: self.customSelectedBackgroundView.bounds.width - self.selectedFlagImageView.bounds.width - 20,
+                                                          y: (self.customSelectedBackgroundView.bounds.height - self.selectedFlagImageView.bounds.height) / 2,
+                                                          width: self.selectedFlagImageView.bounds.width, height: self.selectedFlagImageView.bounds.height)
+                self.selectedFlagImageView.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin, .flexibleBottomMargin]
+            }
+        }
+    }
+    
+    private var selectedFlagImageView = UIImageView()
 
-        let selectedFlag = UIImageView(image: DKImageResource.blueTickImage())
-        selectedFlag.frame = CGRect(x: selectedBackgroundView.bounds.width - selectedFlag.bounds.width - 20,
-                                    y: (selectedBackgroundView.bounds.width - selectedFlag.bounds.width) / 2,
-                                    width: selectedFlag.bounds.width, height: selectedFlag.bounds.height)
-        selectedFlag.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin, .flexibleBottomMargin]
-        selectedBackgroundView.addSubview(selectedFlag)
+    lazy var customSelectedBackgroundView: UIView = {
+        let selectedBackgroundView = UIView()
+        
+        selectedBackgroundView.addSubview(self.selectedFlagImageView)
 
         return selectedBackgroundView
     }()
@@ -73,9 +87,9 @@ class DKAssetGroupCell: UITableViewCell {
 
         self.selectedBackgroundView = self.customSelectedBackgroundView
 
-        self.contentView.addSubview(thumbnailImageView)
-        self.contentView.addSubview(groupNameLabel)
-        self.contentView.addSubview(totalCountLabel)
+        self.contentView.addSubview(self.thumbnailImageView)
+        self.contentView.addSubview(self.groupNameLabel)
+        self.contentView.addSubview(self.totalCountLabel)
 
         self.addSubview(self.customSeparator)
     }
@@ -155,6 +169,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
     init(groupDataManager: DKImageGroupDataManager,
          defaultAssetGroup: PHAssetCollectionSubtype?, selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> ()) {
         self.groupDataManager = groupDataManager
+        self.imageResource = imageResource
         
         super.init(style: .plain)
         
@@ -239,7 +254,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
         cell.tag = tag
 
         if assetGroup.totalCount == 0 {
-            cell.thumbnailImageView.image = DKImageResource.emptyAlbumIcon()
+            cell.thumbnailImageView.image = self.imageResource.emptyAlbumIcon()
         } else {
             self.groupDataManager.fetchGroupThumbnailForGroup(
                 assetGroup.groupId,
@@ -250,6 +265,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
                     }
             }
         }
+        cell.selectedFlagImage = self.imageResource.blueTickImage()
         cell.totalCountLabel.text = String(assetGroup.totalCount)
 
         return cell

@@ -36,7 +36,7 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     class DKImageCheckView: UIView {
         
         internal lazy var checkImageView: UIImageView = {
-            let imageView = UIImageView(image: DKImageResource.checkedImage().withRenderingMode(.alwaysTemplate))
+            let imageView = UIImageView()
             return imageView
         }()
         
@@ -72,13 +72,13 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
             self.thumbnailImageView.image = self.thumbnailImage
         }
     }
-    override var index: Int {
+    override var selectedIndex: Int {
         didSet {
-            self.checkView.checkLabel.text =  "\(self.index + 1)"
+            self.checkView.checkLabel.text =  "\(self.selectedIndex + 1)"
         }
     }
     
-    fileprivate lazy var thumbnailImageView: UIImageView = {
+    internal lazy override var thumbnailImageView: UIImageView = {
         let thumbnailImageView = UIImageView()
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.clipsToBounds = true
@@ -87,6 +87,14 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     }()
     
     fileprivate let checkView = DKImageCheckView()
+    
+    override var imagePickerController: DKImagePickerController? {
+        willSet {
+            if let newValue = newValue, self.checkView.checkImageView.image == nil {
+                self.checkView.checkImageView.image = newValue.imageResource.checkedImage().withRenderingMode(.alwaysTemplate)
+            }
+        }
+    }
     
     override var isSelected: Bool {
         didSet {

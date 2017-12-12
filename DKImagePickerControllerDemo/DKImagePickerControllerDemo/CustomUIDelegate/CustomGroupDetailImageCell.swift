@@ -36,7 +36,7 @@ class CustomGroupDetailImageCell: DKAssetGroupDetailBaseCell {
         }
     }
 
-    fileprivate lazy var thumbnailImageView: UIImageView = {
+    internal lazy override var thumbnailImageView: UIImageView = {
         let thumbnailImageView = UIImageView()
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.clipsToBounds = true
@@ -45,11 +45,19 @@ class CustomGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     }()
     
     fileprivate lazy var checkView: UIImageView = {
-        let checkView = UIImageView(image: DKImageResource.blueTickImage())
+        let checkView = UIImageView()
         checkView.contentMode = .center
         
         return checkView
     }()
+    
+    override var imagePickerController: DKImagePickerController? {
+        willSet {
+            if let newValue = newValue, self.checkView.image == nil {
+                self.checkView.image = newValue.imageResource.blueTickImage()
+            }
+        }
+    }
 
     override var isSelected: Bool {
         didSet {

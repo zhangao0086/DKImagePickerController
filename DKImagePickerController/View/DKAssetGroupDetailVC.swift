@@ -129,7 +129,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             self.groupListVC.showsEmptyAlbums = self.imagePickerController.showsEmptyAlbums
             self.groupListVC.loadGroups()
         }
-		
+        
 		DKImageDataManager.checkPhotoPermission { granted in
 			granted ? setup() : photoDenied()
 		}
@@ -164,7 +164,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             }
         }
     }
-	
+    
 	open func updateTitleView() {
 		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
 		self.title = group.groupName
@@ -211,7 +211,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     func isCameraCell(indexPath: IndexPath) -> Bool {
         return indexPath.row == 0 && !self.hidesCamera
     }
-	
+    
     // MARK: - Cells
     
     func registerCellIfNeeded(cellClass: DKAssetGroupDetailBaseCell.Type) {
@@ -265,9 +265,9 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             }
         }
 
-		if let index = self.imagePickerController.selectedAssets.index(of: asset) {
+        if let index = self.imagePickerController.selectedAssets.index(of: asset) {
 			cell.isSelected = true
-			cell.index = index
+            cell.index = index
 			self.collectionView!.selectItem(at: indexPath, animated: false, scrollPosition: [])
 		} else {
 			cell.isSelected = false
@@ -297,6 +297,10 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             cell = self.dequeueReusableCameraCell(for: indexPath)
         } else {
             cell = self.dequeueReusableCell(for: indexPath)
+        }
+        
+        if cell.imagePickerController == nil {
+            cell.imagePickerController = self.imagePickerController
         }
         
         return cell
@@ -341,25 +345,25 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     
     public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         
-		if let removedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset {
-			let removedIndex = self.imagePickerController.selectedAssets.index(of: removedAsset)!
-			
-			/// Minimize the number of times.
-			let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems!
-			let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems
-			
-			let intersect = Set(indexPathsForVisibleItems).intersection(Set(indexPathsForSelectedItems))
-			
-			for selectedIndexPath in intersect {
+        if let removedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset {
+            let removedIndex = self.imagePickerController.selectedAssets.index(of: removedAsset)!
+            
+            /// Minimize the number of times.
+            let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems!
+            let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems
+            
+            let intersect = Set(indexPathsForVisibleItems).intersection(Set(indexPathsForSelectedItems))
+            
+            for selectedIndexPath in intersect {
                 if let selectedCell = (collectionView.cellForItem(at: selectedIndexPath) as? DKAssetGroupDetailBaseCell), let selectedCellAsset = selectedCell.asset, let selectedIndex = self.imagePickerController.selectedAssets.index(of: selectedCellAsset) {
-					if selectedIndex > removedIndex {
-						selectedCell.index = selectedCell.index - 1
-					}
-				}
-			}
-			
-			self.imagePickerController.deselectImage(removedAsset)
-		}
+                    if selectedIndex > removedIndex {
+                        selectedCell.index = selectedCell.index - 1
+                    }
+                }
+            }
+            
+            self.imagePickerController.deselectImage(removedAsset)
+        }
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -442,13 +446,13 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 	}
 	
 	func group(groupId: String, didRemoveAssets assets: [DKAsset]) {
-		for (_, selectedAsset) in self.imagePickerController.selectedAssets.enumerated() {
-			for removedAsset in assets {
-				if selectedAsset.isEqual(removedAsset) {
-					self.imagePickerController.deselectImage(selectedAsset)
-				}
-			}
-		}
+        for (_, selectedAsset) in self.imagePickerController.selectedAssets.enumerated() {
+            for removedAsset in assets {
+                if selectedAsset.isEqual(removedAsset) {
+                    self.imagePickerController.deselectImage(selectedAsset)
+                }
+            }
+        }
 	}
     
     func groupDidUpdateComplete(groupId: String) {
