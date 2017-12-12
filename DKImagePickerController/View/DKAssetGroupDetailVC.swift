@@ -174,7 +174,6 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             
             assetIndex = (index - (self.hidesCamera ? 0 : 1))
         }
-        let assetIndex = (index - (self.hidesCamera ? 0 : 1))
         let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
         return self.imagePickerController.groupDataManager.fetchAsset(group, index: assetIndex)
     }
@@ -230,6 +229,203 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     func isCameraCell(indexPath: IndexPath) -> Bool {
         return indexPath.row == 0 && !self.hidesCamera
     }
+
+    // MARK: - Swiping
+    
+    private var fromIndexPath: IndexPath? = nil
+    private var swipingIndexPathes = Set<Int>()
+    private var swipingToSelect = true
+    
+    // use the swiping gesture to select the currently swiping cell.
+    @objc private func swiping(gesture: UIPanGestureRecognizer) {
+        let location = gesture.location(in: self.collectionView)
+        
+        switch gesture.state {
+        case .possible:
+            break
+        case .began:
+            if let indexPath = self.collectionView.indexPathForItem(at: location)
+                , let cell = self.collectionView.cellForItem(at: indexPath) {
+                self.fromIndexPath = indexPath
+                self.swipingToSelect = !cell.isSelected
+            }
+        case .changed:
+            if let toIndexPath = self.collectionView.indexPathForItem(at: location)
+                , let fromIndexPath = self.fromIndexPath {
+                let begin = min(fromIndexPath.row, toIndexPath.row)
+                let end = max(fromIndexPath.row, toIndexPath.row)
+                
+                var currentSwipingIndexPathes = Set<Int>()
+                for i in begin...end {
+                    currentSwipingIndexPathes.insert(i)
+                    self.swipingIndexPathes.remove(i)
+                    
+                    if self.swipingToSelect {
+                        self.selectAsset(atIndex: IndexPath(row: i, section: 0))
+                    } else {
+                        self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
+                    }
+                }
+                
+                for i in self.swipingIndexPathes {
+                    if self.swipingToSelect {
+                        self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
+                    } else {
+                        self.selectAsset(atIndex: IndexPath(row: i, section: 0))
+                    }
+                }
+                self.swipingIndexPathes = currentSwipingIndexPathes
+            }
+        case .ended:
+            self.swipingIndexPathes.removeAll()
+            self.fromIndexPath = nil
+        case .cancelled:
+            self.swipingIndexPathes.removeAll()
+            self.fromIndexPath = nil
+        case .failed:
+            self.swipingIndexPathes.removeAll()
+            self.fromIndexPath = nil
+        }
+    }
+    
+    // MARK: - UIGestureRecognizerDelegate
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let panGesture = gestureRecognizer as? UIPanGestureRecognizer else { return false }
+        
+        let locationPoint = panGesture.location(in: self.collectionView)
+        if let indexPath = self.collectionView.indexPathForItem(at: locationPoint),
+            self.isCameraCell(indexPath: indexPath) {
+            return false
+        }
+        
+        let velocityPoint = panGesture.velocity(in: nil)
+        let x = abs(velocityPoint.x)
+        let y = abs(velocityPoint.y)
+        return x > y
+    }
+    
+    // MARK: - DKPhotoGallery
+    
+    func showGallery(from cell: DKAssetGroupDetailBaseCell) {
+        if let groupId = self.selectedGroupId {
+            let presentationIndex = cell.tag - 1 - (self.hidesCamera ? 0 : 1)
+            let presentingFromImageView = cell.thumbnailImageView
+            
+            var items = [DKPhotoGalleryItem]()
+            let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(groupId)
+            
+            var totalCount: Int! = group.totalCount
+            if self.imagePickerController.fetchLimit > 0 {
+                totalCount = min(group.totalCount ?? 0, self.imagePickerController.fetchLimit)
+            }
+            
+            for i in 0..<totalCount {
+                let phAsset = self.imagePickerController.groupDataManager.fetchPHAsset(group, index: i)
+                
+                let item = DKPhotoGalleryItem(asset: phAsset)
+                
+                if i == presentationIndex {
+                    item.thumbnail = presentingFromImageView.image
+                }
+                
+                items.append(item)
+            }
+            
+            let gallery = DKPhotoGallery()
+            gallery.singleTapMode = .toggleControlView
+            gallery.items = items
+            gallery.galleryDelegate = self
+            gallery.presentingFromImageView = presentingFromImageView
+            gallery.presentationIndex = presentationIndex
+            gallery.finishedBlock = { index in
+                let cellIndex = index + (self.hidesCamera ? 0 : 1)
+                let cellIndexPath = IndexPath(row: cellIndex, section: 0)
+                if let cellFrame = self.collectionView.collectionViewLayout.layoutAttributesForItem(at: cellIndexPath)?.frame {
+                    self.collectionView.scrollRectToVisible(cellFrame, animated: false)
+                }
+                
+                if let cell = self.collectionView.cellForItem(at: cellIndexPath) as? DKAssetGroupDetailBaseCell {
+                    return cell.thumbnailImageView
+                } else {
+                    self.collectionView.reloadItems(at: [cellIndexPath])
+                    
+                    return (self.collectionView.cellForItem(at: cellIndexPath) as? DKAssetGroupDetailBaseCell)?
+                        .thumbnailImageView
+                }
+            }
+            
+            self.gallery = gallery
+            
+            if self.imagePickerController.inline {
+                UIApplication.shared.keyWindow!.rootViewController!.present(photoGallery: gallery)
+            } else {
+                self.present(photoGallery: gallery)
+            }
+        }
+    }
+    
+    open func updateGalleryAssetSelection() {
+        if let gallery = self.gallery, let button = gallery.topViewController?.navigationItem.rightBarButtonItem?.customView as? UIButton {
+            let currentIndex = gallery.currentIndex()
+            
+            if let asset = self.fetchAsset(for: currentIndex, ignoreUI: true) {
+                var labelWidth: CGFloat = 0.0
+                if let selectedIndex = self.imagePickerController.index(of: asset) {
+                    let title = "\(selectedIndex + 1)"
+                    button.setTitle(title, for: .selected)
+                    button.isSelected = true
+                    
+                    labelWidth = button.titleLabel!.sizeThatFits(CGSize(width: 100, height: 50)).width + 10
+                } else {
+                    button.isSelected = false
+                    button.sizeToFit()
+                }
+                
+                button.bounds = CGRect(x: 0, y: 0,
+                                       width: max(button.backgroundImage(for: .normal)!.size.width, labelWidth),
+                                       height: button.bounds.height)
+            }
+        }
+    }
+    
+    @objc func selectAssetFromGallery(button: UIButton) {
+        if let gallery = self.gallery {
+            let currentIndex = gallery.currentIndex()
+            if let asset = self.fetchAsset(for: currentIndex, ignoreUI: true) {
+                if button.isSelected {
+                    self.imagePickerController.deselect(asset: asset)
+                } else {
+                    self.imagePickerController.select(asset: asset, updateGroupDetailVC: true)
+                }
+                
+                self.updateGalleryAssetSelection()
+            }
+        }
+    }
+    
+    public func photoGallery(_ gallery: DKPhotoGallery, didShow index: Int) {
+        if let viewController = gallery.topViewController {
+            if viewController.navigationItem.rightBarButtonItem == nil {
+                let button = UIButton(type: .custom)
+                button.titleLabel?.font = UIFont(name: "Helvetica Neue", size: 13)
+                button.addTarget(self, action: #selector(DKAssetGroupDetailVC.selectAssetFromGallery(button:)), for: .touchUpInside)
+                button.setTitle("", for: .normal)
+                
+                button.setBackgroundImage(self.imagePickerController.imageResource.photoGalleryCheckedImage(), for: .selected)
+                button.setBackgroundImage(self.imagePickerController.imageResource.photoGalleryUncheckedImage(), for: .normal)
+                
+                let item = UIBarButtonItem(customView: button)
+                viewController.navigationItem.rightBarButtonItem = item
+            }
+            
+            self.updateGalleryAssetSelection()
+        }
+    }
     
     // MARK: - Cells
     
@@ -278,8 +474,8 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         
         cell.thumbnailImage = nil
         
-        asset.fetchImage(with: self.thumbnailSize, options: nil, contentMode: .aspectFill) { (image, info) in
-            if cell.tag == tag, let image = image {
+        asset.fetchImage(with: self.thumbnailSize, options: nil, contentMode: .aspectFill) { [weak cell] (image, info) in
+            if let cell = cell, cell.tag == tag, let image = image {
                 cell.thumbnailImage = image
             }
         }
@@ -292,6 +488,12 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 			cell.isSelected = false
 			self.collectionView!.deselectItem(at: indexPath, animated: false)
 		}
+        
+        cell.longPressBlock = { [weak self, weak cell] in
+            guard let strongSelf = self, let strongCell = cell else { return }
+            
+            strongSelf.showGallery(from: strongCell)
+        }
 	}
 
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
@@ -341,7 +543,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         }
 		
         if self.imagePickerController.maxSelectableCount > 0 {
-            let shouldSelect = self.imagePickerController.selectedAssets.count < self.imagePickerController.maxSelectableCount
+            let shouldSelect = self.imagePickerController.selectedAssetIdentifiers.count < self.imagePickerController.maxSelectableCount
             if !shouldSelect {
                 self.imagePickerController.UIDelegate.imagePickerControllerDidReachMaxLimit(self.imagePickerController)
             }
@@ -373,14 +575,22 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     
     // MARK: - Asset Caching
     
+    open func enableCaching() -> Bool {
+        return true
+    }
+    
     var previousPreheatRect = CGRect.zero
     
-    fileprivate func resetCachedAssets() {
+    func resetCachedAssets() {
+        guard enableCaching() else { return }
+
         getImageDataManager().stopCachingForAllAssets()
         self.previousPreheatRect = .zero
     }
 
     func updateCachedAssets() {
+        guard enableCaching() else { return }
+        
         // Update only if the view is visible.
         guard isViewLoaded && view.window != nil && self.selectedGroupId != nil else { return }
         
@@ -412,7 +622,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         self.previousPreheatRect = preheatRect
     }
     
-    fileprivate func differencesBetweenRects(_ old: CGRect, _ new: CGRect) -> (added: [CGRect], removed: [CGRect]) {
+    func differencesBetweenRects(_ old: CGRect, _ new: CGRect) -> (added: [CGRect], removed: [CGRect]) {
         if old.intersects(new) {
             var added = [CGRect]()
             if new.maxY > old.maxY {

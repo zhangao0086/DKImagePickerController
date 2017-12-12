@@ -12,6 +12,7 @@ import UIKit
 public protocol DKAssetGroupCellItemProtocol {
     
     weak var asset: DKAsset! { get set }
-    var index: Int { get set }
+    var selectedIndex: Int { get set }
     var thumbnailImage: UIImage? { get set }
+    var thumbnailImageView: UIImageView { get }
 }

@@ -12,23 +12,29 @@ import UIKit
 open class DKAssetGroupDetailBaseCell: UICollectionViewCell, DKAssetGroupCellItemProtocol {
     
     // This method must be overridden
-    open class func cellReuseIdentifier() -> String { preconditionFailure("This method must be overridden") }
+    open class func cellReuseIdentifier() -> String { preconditionFailure("This method must be overridden.") }
     
     open weak var asset: DKAsset?
-    open var index: Int = 0
+    open weak var imagePickerController: DKImagePickerController?
+    
+    open var selectedIndex: Int = 0
     open var thumbnailImage: UIImage?
     
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//
-//        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress(gestureRecognizer:)))
-//        longPressGesture.minimumPressDuration = 0.3
-//        self.addGestureRecognizer(longPressGesture)
-//    }
-//
-//    required public init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    open var thumbnailImageView: UIImageView { get { preconditionFailure("This method must be overridden.") } }
+    
+    internal var longPressBlock: (() -> Void)?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress(gestureRecognizer:)))
+        longPressGesture.minimumPressDuration = 0.3
+        self.addGestureRecognizer(longPressGesture)
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override open var isHighlighted: Bool {
         didSet {
@@ -47,10 +53,10 @@ open class DKAssetGroupDetailBaseCell: UICollectionViewCell, DKAssetGroupCellIte
     
     // MARK: - Private methods
     
-//    func longPress(gestureRecognizer: UIGestureRecognizer) {
-//        if gestureRecognizer.state == .began {
-//            print("longPress")
-//        }
-//    }
+    @objc func longPress(gestureRecognizer: UIGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            self.longPressBlock?()
+        }
+    }
 
 }
