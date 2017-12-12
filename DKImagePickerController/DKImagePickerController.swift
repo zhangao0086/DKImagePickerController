@@ -24,6 +24,8 @@ public protocol DKImagePickerControllerCameraProtocol {
 @objc
 public protocol DKImagePickerControllerUIDelegate {
     
+    init(imagePickerController: DKImagePickerController)
+    
     /**
      The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
      */
@@ -117,7 +119,7 @@ public enum DKImagePickerControllerStatus: Int {
 open class DKImagePickerController : UINavigationController, CLImageEditorDelegate {
     
     @objc lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
-        return DKImagePickerControllerDefaultUIDelegate()
+        return DKImagePickerControllerDefaultUIDelegate(imagePickerController: self)
     }()
     
     /// Forces deselect of previous selected image
@@ -234,7 +236,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     deinit {
@@ -627,3 +629,4 @@ extension DKImagePickerController {
     }
     
 }
+

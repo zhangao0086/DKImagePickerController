@@ -68,21 +68,21 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
         case "Camera Customization":
             let pickerController = DKImagePickerController()
-            pickerController.UIDelegate = CustomCameraUIDelegate()
+            pickerController.UIDelegate = CustomCameraUIDelegate(imagePickerController: pickerController)
             pickerController.modalPresentationStyle = .overCurrentContext
             
             destination.pickerController = pickerController
             
         case "UI Customization":
             let pickerController = DKImagePickerController()
-            pickerController.UIDelegate = CustomUIDelegate()
+            pickerController.UIDelegate = CustomUIDelegate(imagePickerController: pickerController)
             pickerController.showsCancelButton = true
             
             destination.pickerController = pickerController
             
         case "Layout Customization":
             let pickerController = DKImagePickerController()
-            pickerController.UIDelegate = CustomLayoutUIDelegate()
+            pickerController.UIDelegate = CustomLayoutUIDelegate(imagePickerController: pickerController)
             
             destination.pickerController = pickerController
             
@@ -90,7 +90,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             let pickerController = DKImagePickerController()
             pickerController.inline = true
             pickerController.fetchLimit = 10
-            pickerController.UIDelegate = CustomInlineLayoutUIDelegate()
+            pickerController.UIDelegate = CustomInlineLayoutUIDelegate(imagePickerController: pickerController)
             pickerController.assetType = .allPhotos
             pickerController.sourceType = .photo
             

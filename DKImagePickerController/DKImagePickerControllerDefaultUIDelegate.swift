@@ -15,6 +15,12 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	open weak var imagePickerController: DKImagePickerController!
 	
 	open var doneButton: UIButton?
+    
+    public required init(imagePickerController: DKImagePickerController) {
+        self.imagePickerController = imagePickerController
+        
+        super.init()
+    }
 	
 	open func createDoneButtonIfNeeded() -> UIButton {
         if self.doneButton == nil {
@@ -29,15 +35,16 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	}
     
     open func updateDoneButtonTitle(_ button: UIButton) {
-        if self.imagePickerController.selectedAssets.count > 0 {
+        if self.imagePickerController.selectedAssetIdentifiers.count > 0 {
             
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
             formatter.locale = Locale(identifier: Locale.current.identifier)
             
-            let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssets.count))
+            let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
             
-            button.setTitle(String(format: DKImageLocalizedStringWithKey("select"), formattedSelectableCount ?? self.imagePickerController.selectedAssets.count), for: .normal)
+            button.setTitle(String(format: DKImageLocalizedStringWithKey("select"),
+                                   formattedSelectableCount ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
         } else {
             button.setTitle(DKImageLocalizedStringWithKey("done"), for: .normal)
         }
@@ -63,7 +70,6 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	// Delegate methods...
 	
 	open func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController) {
-		self.imagePickerController = imagePickerController
 		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.createDoneButtonIfNeeded())
 	}
         
@@ -100,11 +106,11 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
     }
 	
 	open func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController) {
-        let nF = NumberFormatter()
-        nF.numberStyle = .decimal
-        nF.locale = Locale(identifier: Locale.current.identifier)
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: Locale.current.identifier)
         
-        let formattedMaxSelectableCount = nF.string(from: NSNumber(value: imagePickerController.maxSelectableCount))
+        let formattedMaxSelectableCount = formatter.string(from: NSNumber(value: imagePickerController.maxSelectableCount))
         
         let alert = UIAlertController(title: DKImageLocalizedStringWithKey("maxLimitReached"), message: nil, preferredStyle: .alert)
         
