@@ -479,8 +479,8 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
                 cell.thumbnailImage = image
             }
         }
-
-        if let index = self.imagePickerController.selectedAssets.index(of: asset) {
+        
+		if let selectedIndex = self.imagePickerController.index(of: asset) {
 			cell.isSelected = true
 			cell.selectedIndex = selectedIndex
 			self.collectionView!.selectItem(at: indexPath, animated: false, scrollPosition: [])

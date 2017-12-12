@@ -628,5 +628,13 @@ extension DKImagePickerController {
         }
     }
     
+    // MARK: - CLImageEditorDelegate
+    
+    public func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
+        self.metadataFromCamera?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
+
+        self.processImageFromCamera(image, self.metadataFromCamera)
+        self.metadataFromCamera = nil
+    }
 }
 
