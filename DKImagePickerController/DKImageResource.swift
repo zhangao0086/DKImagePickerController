@@ -46,6 +46,10 @@ open class DKImageResource: NSObject {
         return imageForResource("photoGalleryCheckedImage", stretchable: true, cacheable: true)
     }
     
+    @objc open func photoGalleryUncheckedImage() -> UIImage {
+        return imageForResource("photoGalleryUncheckedImage", stretchable: true, cacheable: true)
+    }
+    
     @objc open func imageForResource(_ name: String, stretchable: Bool = false, cacheable: Bool = false) -> UIImage {
         if cacheable {
             if let cache = self.cache.object(forKey: name as NSString) {
