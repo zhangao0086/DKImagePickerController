@@ -164,10 +164,13 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
         }
     }
     
-    fileprivate var groupDataManager: DKImageGroupDataManager
+    private var groupDataManager: DKImageGroupDataManager
+    private var imageResource: DKImageResource
     
     init(groupDataManager: DKImageGroupDataManager,
-         defaultAssetGroup: PHAssetCollectionSubtype?, selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> ()) {
+         imageResource: DKImageResource,
+         defaultAssetGroup: PHAssetCollectionSubtype?,
+         selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> ()) {
         self.groupDataManager = groupDataManager
         self.imageResource = imageResource
         

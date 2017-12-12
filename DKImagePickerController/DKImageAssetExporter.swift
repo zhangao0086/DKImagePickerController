@@ -132,7 +132,7 @@ open class DKImageAssetExporter: DKBaseManager {
     
     private var exportQueue: OperationQueue = {
         let exportQueue = OperationQueue()
-        exportQueue.name = "DKImageAssetExporter_exportQueue"
+        exportQueue.name = "DKImageAssetExporter_ExportQueue"
         exportQueue.maxConcurrentOperationCount = 1
         return exportQueue
     }()
@@ -248,7 +248,7 @@ open class DKImageAssetExporter: DKBaseManager {
         
         self.isCancelled = true
         for asset in self.requests {
-            asset.cancelCurrentRequest()
+            asset.cancelRequests()
         }
         self.requests.removeAll()
     }
@@ -258,7 +258,7 @@ open class DKImageAssetExporter: DKBaseManager {
         defer { objc_sync_exit(self) }
         
         if self.isCancelled {
-            asset.cancelCurrentRequest()
+            asset.cancelRequests()
         } else {
             self.requests.append(asset)
         }
