@@ -17,6 +17,8 @@ Pod::Spec.new do |s|
   s.dependency 'CLImageEditor', '0.2.0'
   s.dependency 'DKCamera', '1.5.0'
   # s.dependency 'DKPhotoGallery'
+  s.dependency 'SDWebImage/GIF', '~> 4.0'
+  s.dependency 'MBProgressHUD', '1.0.0'
 
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 
