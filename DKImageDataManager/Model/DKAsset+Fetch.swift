@@ -20,7 +20,7 @@ public extension DKAsset {
                                  contentMode: PHImageContentMode = .aspectFit,
                                  completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
         if self.originalAsset != nil {
-            self.requestID = getImageDataManager().fetchImage(for: self, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock)
+            self.add(requestID: getImageDataManager().fetchImage(for: self, size: size, options: options, contentMode: contentMode, completeBlock: completeBlock))
         } else {
             completeBlock(self.image, nil)
         }
@@ -41,12 +41,12 @@ public extension DKAsset {
             options.deliveryMode = .highQualityFormat
             options.resizeMode = .exact
             
-            self.requestID = getImageDataManager().fetchImage(for: self, size: screenSize.toPixel(), options: options, contentMode: .aspectFit) { [weak self] image, info in
+            self.add(requestID: getImageDataManager().fetchImage(for: self, size: screenSize.toPixel(), options: options, contentMode: .aspectFit) { [weak self] image, info in
                 guard let strongSelf = self else { return }
                 
                 strongSelf.fullScreenImage = (image, info)
                 completeBlock(image, info)
-            }
+            })
         }
     }
     
@@ -55,13 +55,13 @@ public extension DKAsset {
      */
     @objc public func fetchOriginalImage(options: PHImageRequestOptions? = nil, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
         if self.originalAsset != nil {
-            self.requestID = getImageDataManager().fetchImageData(for: self, options: options, completeBlock: { (data, info) in
+            self.add(requestID: getImageDataManager().fetchImageData(for: self, options: options, completeBlock: { (data, info) in
                 var image: UIImage?
                 if let data = data {
                     image = UIImage(data: data)
                 }
                 completeBlock(image, info)
-            })
+            }))
         } else {
             completeBlock(self.image, nil)
         }
@@ -72,7 +72,7 @@ public extension DKAsset {
      */
     @objc public func fetchImageData(options: PHImageRequestOptions? = nil, completeBlock: @escaping (_ imageData: Data?, _ info: [AnyHashable: Any]?) -> Void) {
         if self.originalAsset != nil {
-            self.requestID = getImageDataManager().fetchImageData(for: self, options: options, completeBlock: completeBlock)
+            self.add(requestID: getImageDataManager().fetchImageData(for: self, options: options, completeBlock: completeBlock))
         } else {
             if let image = self.image {
                 if self.hasAlphaChannel(image: image) {
@@ -90,13 +90,19 @@ public extension DKAsset {
      Fetch an AVAsset with a completeBlock and PHVideoRequestOptions.
      */
     @objc public func fetchAVAsset(options: PHVideoRequestOptions? = nil, completeBlock: @escaping (_ AVAsset: AVAsset?, _ info: [AnyHashable: Any]?) -> Void) {
-        self.requestID = getImageDataManager().fetchAVAsset(for: self, options: options, completeBlock: completeBlock)
+        self.add(requestID: getImageDataManager().fetchAVAsset(for: self, options: options, completeBlock: completeBlock))
     }
 
-    @objc public func cancelCurrentRequest() {
-        if self.requestID != DKImageInvalidRequestID {
-            getImageDataManager().cancelRequest(requestID: self.requestID)
-            self.requestID = DKImageInvalidRequestID
+    @objc public func cancelRequests() {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+        
+        if let requestIDs = self.requestIDs {
+            for requestID in requestIDs {
+                getImageDataManager().cancelRequest(requestID: requestID as! DKImageRequestID)
+            }
+            
+            self.requestIDs?.removeAllObjects()
         }
     }
     
@@ -114,17 +120,30 @@ public extension DKAsset {
         }
     }
     
+    private func add(requestID: DKImageRequestID) {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+        
+        var requestIDs: NSMutableArray! = self.requestIDs
+        if requestIDs == nil {
+            requestIDs = NSMutableArray()
+            self.requestIDs = requestIDs
+        }
+        
+        requestIDs.add(requestID)
+    }
+    
     // MARK: - Attributes
     
     private struct FetchKeys {
-        static fileprivate var requestID: UInt8 = 0
+        static fileprivate var requestIDs: UInt8 = 0
         static fileprivate var fullScreenImage: UInt8 = 0
     }
     
-    private var requestID: DKImageRequestID {
+    private var requestIDs: NSMutableArray? {
         
-        get { return (getAssociatedObject(key: &FetchKeys.requestID) as? DKImageRequestID) ?? DKImageInvalidRequestID }
-        set { setAssociatedObject(key: &FetchKeys.requestID, value: newValue) }
+        get { return getAssociatedObject(key: &FetchKeys.requestIDs) as? NSMutableArray }
+        set { setAssociatedObject(key: &FetchKeys.requestIDs, value: newValue) }
     }
 
     public private(set) var fullScreenImage: (image: UIImage?, info: [AnyHashable: Any]?)? {
