@@ -70,7 +70,7 @@ class DKPhotoGalleryInteractiveTransition: UIPercentDrivenInteractiveTransition,
         case .ended,
              .cancelled:
             self.isInteracting = false
-            let shouldComplete = self.percent > 0.5
+            let shouldComplete = self.percent > 0.35
             if !shouldComplete || recognizer.state == .cancelled {
                 if let fromContentView = self.fromContentView {
                     let toImageView = self.toImageView

@@ -27,73 +27,81 @@ open class DKPhotoImageView: FLAnimatedImageView {
 
 open class DKPhotoContentAnimationView: UIView {
     
-    let imageView = UIImageView()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.addSubview(self.imageView)
-    }
+    let contentView: UIView
+    let contentSize: CGSize
     
     init(image: UIImage?) {
+        self.contentView = UIImageView(image: image)
+        if let image = image {
+            self.contentSize = image.size
+        } else {
+            self.contentSize = CGSize.zero
+        }
+        
         super.init(frame: CGRect.zero)
         
-        self.imageView.image = image
-        self.addSubview(self.imageView)
+        self.addSubview(self.contentView)
+    }
+    
+    init(view: UIView, contentSize: CGSize = CGSize.zero) {
+        self.contentView = view
+        if contentSize == CGSize.zero {
+            self.contentSize = view.bounds.size
+        } else {
+            self.contentSize = contentSize
+        }
+        
+        super.init(frame: CGRect.zero)
+        
+        self.addSubview(self.contentView)
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        self.addSubview(self.imageView)
+        fatalError("init(coder:) has not been implemented")
     }
     
     open override var contentMode: UIViewContentMode {
         didSet {
-            self.layoutImageView()
+            self.layoutContentView()
         }
     }
     
     override open func layoutSubviews() {
         super.layoutSubviews()
         
-        self.layoutImageView()
-    }
-    
-    open var image: UIImage? {
-        get { return self.imageView.image }
-        set { self.imageView.image = newValue }
+        self.layoutContentView()
     }
     
     open override var backgroundColor: UIColor? {
-        get { return self.imageView.backgroundColor }
-        set { self.imageView.backgroundColor = newValue }
+        get { return self.contentView.backgroundColor }
+        set { self.contentView.backgroundColor = newValue }
     }
     
-    private func layoutImageView() {
-        
-        guard let image = self.imageView.image else { return }
+    private func layoutContentView() {
+        guard self.contentSize != CGSize.zero else { return }
         
         // MARK: - Layout Helpers
-        func imageToBoundsWidthRatio(image: UIImage) -> CGFloat  { return image.size.width / bounds.size.width }
-        func imageToBoundsHeightRatio(image: UIImage) -> CGFloat { return image.size.height / bounds.size.height }
-        func centerImageViewToPoint(point: CGPoint)              { self.imageView.center = point }
-        func imageViewBoundsToImageSize()                        { imageViewBoundsToSize(size: image.size) }
-        func imageViewBoundsToSize(size: CGSize)                 { self.imageView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height) }
-        func centerImageView()                                   { self.imageView.center = CGPoint(x: bounds.size.width / 2, y: bounds.size.height / 2) }
+        func imageToBoundsWidthRatio(size: CGSize) -> CGFloat  { return size.width / bounds.size.width }
+        func imageToBoundsHeightRatio(size: CGSize) -> CGFloat { return size.height / bounds.size.height }
+        func centerImageViewToPoint(point: CGPoint)              { self.contentView.center = point }
+        func imageViewBoundsToImageSize()                        { imageViewBoundsToSize(size: self.contentSize) }
+        func imageViewBoundsToSize(size: CGSize)                 { self.contentView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height) }
+        func centerImageView()                                   { self.contentView.center = CGPoint(x: bounds.size.width / 2, y: bounds.size.height / 2) }
         
         // MARK: - Layouts
         func layoutAspectFit() {
-            let widthRatio = imageToBoundsWidthRatio(image: image)
-            let heightRatio = imageToBoundsHeightRatio(image: image)
-            imageViewBoundsToSize(size: CGSize(width: image.size.width / max(widthRatio, heightRatio), height: image.size.height / max(widthRatio, heightRatio)))
+            let widthRatio = imageToBoundsWidthRatio(size: self.contentSize)
+            let heightRatio = imageToBoundsHeightRatio(size: self.contentSize)
+            imageViewBoundsToSize(size: CGSize(width: self.contentSize.width / max(widthRatio, heightRatio),
+                                               height: self.contentSize.height / max(widthRatio, heightRatio)))
             centerImageView()
         }
         
         func layoutAspectFill() {
-            let widthRatio = imageToBoundsWidthRatio(image: image)
-            let heightRatio = imageToBoundsHeightRatio(image: image)
-            imageViewBoundsToSize(size: CGSize(width: image.size.width /  min(widthRatio, heightRatio), height: image.size.height / min(widthRatio, heightRatio)))
+            let widthRatio = imageToBoundsWidthRatio(size: self.contentSize)
+            let heightRatio = imageToBoundsHeightRatio(size: self.contentSize)
+            imageViewBoundsToSize(size: CGSize(width: self.contentSize.width /  min(widthRatio, heightRatio),
+                                               height: self.contentSize.height / min(widthRatio, heightRatio)))
             centerImageView()
         }
         
@@ -108,42 +116,42 @@ open class DKPhotoContentAnimationView: UIView {
         
         func layoutTop() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: bounds.size.width / 2, y: image.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: bounds.size.width / 2, y: self.contentSize.height / 2))
         }
         
         func layoutBottom() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: bounds.size.width / 2, y: bounds.size.height - image.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: bounds.size.width / 2, y: bounds.size.height - self.contentSize.height / 2))
         }
         
         func layoutLeft() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: image.size.width / 2, y: bounds.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: self.contentSize.width / 2, y: bounds.size.height / 2))
         }
         
         func layoutRight() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: bounds.size.width - image.size.width / 2, y: bounds.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: bounds.size.width - self.contentSize.width / 2, y: bounds.size.height / 2))
         }
         
         func layoutTopLeft() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: image.size.width / 2, y: image.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: self.contentSize.width / 2, y: self.contentSize.height / 2))
         }
         
         func layoutTopRight() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: bounds.size.width - image.size.width / 2, y: image.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: bounds.size.width - self.contentSize.width / 2, y: self.contentSize.height / 2))
         }
         
         func layoutBottomLeft() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: image.size.width / 2, y: bounds.size.height - image.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: self.contentSize.width / 2, y: bounds.size.height - self.contentSize.height / 2))
         }
         
         func layoutBottomRight() {
             imageViewBoundsToImageSize()
-            centerImageViewToPoint(point: CGPoint(x: bounds.size.width - image.size.width / 2, y: bounds.size.height - image.size.height / 2))
+            centerImageViewToPoint(point: CGPoint(x: bounds.size.width - self.contentSize.width / 2, y: bounds.size.height - self.contentSize.height / 2))
         }
         
         switch contentMode {

@@ -29,13 +29,19 @@ open class DKPhotoGalleryTransitionDismiss: NSObject, UIViewControllerAnimatedTr
             fromContentView = DKPhotoContentAnimationView(image: self.gallery.currentContentVC().snapshotImage())
             fromContentView.frame = self.gallery.currentContentView().superview!.convert(self.gallery.currentContentView().frame, to: nil)
             fromContentView.contentMode = self.gallery.currentContentView().contentMode
-            fromContentView.backgroundColor = UIColor.red
-            containerView.addSubview(fromContentView)
             
             self.gallery.currentContentView().isHidden = true
         } else { // .video
-            fromContentView = self.gallery.currentContentView()
+            let playerView = self.gallery.currentContentView() as! DKPlayerView
+            playerView.autoresizingMask = []
+            let frame = self.gallery.currentContentView().superview!.convert(playerView.frame, to: nil)
+            
+            fromContentView = DKPhotoContentAnimationView(view: playerView)
+            fromContentView.frame = frame
+            fromContentView.contentMode = playerView.contentMode
         }
+        
+        containerView.addSubview(fromContentView)
         
         self.gallery.setNavigationBarHidden(true, animated: true)
         

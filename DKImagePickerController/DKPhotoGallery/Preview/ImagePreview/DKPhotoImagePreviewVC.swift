@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 import Photos
+import MobileCoreServices
 
 protocol DKPhotoImageDownloader {
     
@@ -83,20 +84,36 @@ class DKPhotoImageAssetDownloader: DKPhotoImageDownloader {
                 }
             }
             
-            PHImageManager.default().requestImage(for: asset,
-                                                  targetSize: CGSize(width: UIScreen.main.bounds.width * UIScreen.main.scale, height:UIScreen.main.bounds.height * UIScreen.main.scale),
-                                                  contentMode: .default,
-                                                  options: options,
-                                                  resultHandler: { (image, info) in
-                                                    if let image = image {
-                                                        completeBlock(image, nil, nil)
-                                                    } else {
-                                                        let error = NSError(domain: Bundle.main.bundleIdentifier!, code: -1, userInfo: [
-                                                            NSLocalizedDescriptionKey : "获取图片失败"
-                                                            ])
-                                                        completeBlock(nil, nil, error)
-                                                    }
-            })
+            let isGif = (asset.value(forKey: "uniformTypeIdentifier") as? String) == (kUTTypeGIF as String)
+            if isGif {
+                PHImageManager.default().requestImageData(for: asset,
+                                                          options: options,
+                                                          resultHandler: { (data, _, _, info) in
+                                                            if let data = data {
+                                                                completeBlock(nil, data, nil)
+                                                            } else {
+                                                                let error = NSError(domain: Bundle.main.bundleIdentifier!, code: -1, userInfo: [
+                                                                    NSLocalizedDescriptionKey : "获取图片失败"
+                                                                    ])
+                                                                completeBlock(nil, nil, error)
+                                                            }
+                })
+            } else {
+                PHImageManager.default().requestImage(for: asset,
+                                                      targetSize: CGSize(width: UIScreen.main.bounds.width * UIScreen.main.scale, height:UIScreen.main.bounds.height * UIScreen.main.scale),
+                                                      contentMode: .default,
+                                                      options: options,
+                                                      resultHandler: { (image, info) in
+                                                        if let image = image {
+                                                            completeBlock(image, nil, nil)
+                                                        } else {
+                                                            let error = NSError(domain: Bundle.main.bundleIdentifier!, code: -1, userInfo: [
+                                                                NSLocalizedDescriptionKey : "获取图片失败"
+                                                                ])
+                                                            completeBlock(nil, nil, error)
+                                                        }
+                })
+            }
         } else {
             assertionFailure()
         }
