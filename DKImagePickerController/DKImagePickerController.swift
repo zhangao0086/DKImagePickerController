@@ -186,10 +186,6 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     
     @objc public var exporter: DKImageAssetExporter? = DKImageAssetExporter.sharedInstance
     
-    @objc public private(set) lazy var imageResource: DKImageResource = {
-        return DKImageResource()
-    }()
-    
     @objc public private(set) lazy var groupDataManager: DKImageGroupDataManager = {
         let configuration = DKImageGroupDataManagerConfiguration()
         configuration.assetFetchOptions = self.createAssetFetchOptions()

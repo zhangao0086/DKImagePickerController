@@ -124,7 +124,6 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             self.resetCachedAssets()
             self.imagePickerController.groupDataManager.add(observer: self)
             self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
-                                                  imageResource: self.imagePickerController.imageResource,
                                                   defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
                                                   selectedGroupDidChangeBlock: { [unowned self] (groupId) in
                                                     self.selectAssetGroup(groupId)
@@ -416,8 +415,8 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
                 button.addTarget(self, action: #selector(DKAssetGroupDetailVC.selectAssetFromGallery(button:)), for: .touchUpInside)
                 button.setTitle("", for: .normal)
                 
-                button.setBackgroundImage(self.imagePickerController.imageResource.photoGalleryCheckedImage(), for: .selected)
-                button.setBackgroundImage(self.imagePickerController.imageResource.photoGalleryUncheckedImage(), for: .normal)
+                button.setBackgroundImage(DKImageResource.photoGalleryCheckedImage(), for: .selected)
+                button.setBackgroundImage(DKImageResource.photoGalleryUncheckedImage(), for: .normal)
                 
                 let item = UIBarButtonItem(customView: button)
                 viewController.navigationItem.rightBarButtonItem = item

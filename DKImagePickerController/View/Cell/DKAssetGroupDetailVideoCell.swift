@@ -53,14 +53,13 @@ class DKAssetGroupDetailVideoCell: DKAssetGroupDetailImageCell {
         }
     }
     
-    private var videoImageView: UIImageView?
-    
     fileprivate lazy var videoInfoView: UIView = {
         let videoInfoView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 0))
         
-        let videoImageView = UIImageView()
+        let videoImageView = UIImageView(image: DKImageResource.videoCameraIcon())
         videoInfoView.addSubview(videoImageView)
-        self.videoImageView = videoImageView
+        videoImageView.center = CGPoint(x: videoImageView.bounds.width / 2 + 7, y: videoInfoView.bounds.height / 2)
+        videoImageView.autoresizingMask = [.flexibleBottomMargin, .flexibleTopMargin]
         
         let videoDurationLabel = UILabel()
         videoDurationLabel.tag = -1
@@ -73,16 +72,5 @@ class DKAssetGroupDetailVideoCell: DKAssetGroupDetailImageCell {
         
         return videoInfoView
     }()
-    
-    override var imagePickerController: DKImagePickerController? {
-        willSet {
-            if let newValue = newValue, let videoImageView = self.videoImageView, videoImageView.image == nil {
-                videoImageView.image = newValue.imageResource.videoCameraIcon()
-                videoImageView.sizeToFit()
-                videoImageView.center = CGPoint(x: videoImageView.bounds.width / 2 + 7, y: self.videoInfoView.bounds.height / 2)
-                videoImageView.autoresizingMask = [.flexibleBottomMargin, .flexibleTopMargin]
-            }
-        }
-    }
     
 } /* DKAssetGroupDetailVideoCell */

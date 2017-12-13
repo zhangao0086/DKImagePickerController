@@ -17,40 +17,51 @@ public extension Bundle {
     
 }
 
-@objc
-open class DKImageResource: NSObject {
+private var CustomImageBlock: ((_ imageName: String) -> UIImage?)?
+
+/// Add a hook for custom images.
+public func DKImageCustomLocalizationBlock(block: @escaping ((_ imageName: String) -> UIImage?)) {
+    CustomImageBlock = block
+}
+
+public class DKImageResource: NSObject {
     
-    private let cache = NSCache<NSString, UIImage>()
+    private static let cache = NSCache<NSString, UIImage>()
 	
-    @objc open func checkedImage() -> UIImage {
+    public class func checkedImage() -> UIImage {
         return imageForResource("checked_background", stretchable: true, cacheable: true)
+            .withRenderingMode(.alwaysTemplate)
     }
     
-    @objc open func blueTickImage() -> UIImage {
+    public class func blueTickImage() -> UIImage {
         return imageForResource("tick_blue", stretchable: false, cacheable: false)
     }
     
-    @objc open func cameraImage() -> UIImage {
+    public class func cameraImage() -> UIImage {
         return imageForResource("camera", stretchable: false, cacheable: false)
     }
     
-    @objc open func videoCameraIcon() -> UIImage {
+    public class func videoCameraIcon() -> UIImage {
         return imageForResource("video_camera", stretchable: false, cacheable: true)
     }
 	
-	@objc open func emptyAlbumIcon() -> UIImage {
+	public class func emptyAlbumIcon() -> UIImage {
         return imageForResource("empty_album", stretchable: true, cacheable: false)
 	}
     
-    @objc open func photoGalleryCheckedImage() -> UIImage {
+    public class func photoGalleryCheckedImage() -> UIImage {
         return imageForResource("photoGalleryCheckedImage", stretchable: true, cacheable: true)
     }
     
-    @objc open func photoGalleryUncheckedImage() -> UIImage {
+    public class func photoGalleryUncheckedImage() -> UIImage {
         return imageForResource("photoGalleryUncheckedImage", stretchable: true, cacheable: true)
     }
     
-    @objc open func imageForResource(_ name: String, stretchable: Bool = false, cacheable: Bool = false) -> UIImage {
+    public class func imageForResource(_ name: String, stretchable: Bool = false, cacheable: Bool = false) -> UIImage {
+        if let image = CustomImageBlock?(name) {
+            return image
+        }
+        
         if cacheable {
             if let cache = self.cache.object(forKey: name as NSString) {
                 return cache
@@ -72,7 +83,7 @@ open class DKImageResource: NSObject {
         return image
     }
     
-    @objc open func stretchImgFromMiddle(_ image: UIImage) -> UIImage {
+    public class func stretchImgFromMiddle(_ image: UIImage) -> UIImage {
         let centerX = image.size.width / 2
         let centerY = image.size.height / 2
         return image.resizableImage(withCapInsets: UIEdgeInsets(top: centerY, left: centerX, bottom: centerY, right: centerX))
@@ -80,23 +91,17 @@ open class DKImageResource: NSObject {
     
 }
 
-public class DKImageLocalizedString {
-    
-    public class func localizedStringForKey(_ key: String) -> String {
-        return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:Bundle.imagePickerControllerBundle(), value: "", comment: "")
-    }
-    
-    public class func localizedStringForKey(_ key: String, value: String) -> String {
-        return NSLocalizedString(key, tableName: "DKImagePickerController", bundle:Bundle.imagePickerControllerBundle(), value: value, comment: "")
-    }
-    
+private var CustomLocalizationBlock: ((_ title: String) -> String?)?
+
+/// Add a hook for custom localization.
+public func DKImageCustomLocalizationBlock(block: @escaping ((_ title: String) -> String?)) {
+    CustomLocalizationBlock = block
 }
 
-public func DKImageLocalizedStringWithKey(_ key: String) -> String {
-    return DKImageLocalizedString.localizedStringForKey(key)
+public func DKImageLocalizedStringWithKey(_ key: String, value: String? = nil) -> String {
+    return CustomLocalizationBlock?(key) ?? NSLocalizedString(key,
+                                                              tableName: "DKImagePickerController",
+                                                              bundle:Bundle.imagePickerControllerBundle(),
+                                                              value: value ?? "",
+                                                              comment: "")
 }
-
-public func DKImageLocalizedStringWithKey(_ key: String, value: String) -> String {
-    return DKImageLocalizedString.localizedStringForKey(key, value: value)
-}
-

@@ -14,30 +14,20 @@ class DKAssetGroupDetailCameraCell: DKAssetGroupDetailBaseCell {
         return "DKImageCameraIdentifier"
     }
     
-    private var cameraImageView: UIImageView?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         let cameraImageView = UIImageView(frame: self.bounds)
         cameraImageView.contentMode = .center
         cameraImageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        cameraImageView.image = DKImageResource.cameraImage()
         self.contentView.addSubview(cameraImageView)
-        self.cameraImageView = cameraImageView
         
         self.contentView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override var imagePickerController: DKImagePickerController? {
-        willSet {
-            if let newValue = newValue, let cameraImageView = self.cameraImageView, cameraImageView.image == nil {
-                cameraImageView.image = newValue.imageResource.cameraImage()
-            }
-        }
     }
     
 } /* DKAssetGroupDetailCameraCell */

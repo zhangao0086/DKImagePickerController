@@ -36,7 +36,7 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     class DKImageCheckView: UIView {
         
         internal lazy var checkImageView: UIImageView = {
-            let imageView = UIImageView()
+            let imageView = UIImageView(image: DKImageResource.checkedImage())
             return imageView
         }()
         
@@ -87,14 +87,6 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     }()
     
     fileprivate let checkView = DKImageCheckView()
-    
-    override var imagePickerController: DKImagePickerController? {
-        willSet {
-            if let newValue = newValue, self.checkView.checkImageView.image == nil {
-                self.checkView.checkImageView.image = newValue.imageResource.checkedImage().withRenderingMode(.alwaysTemplate)
-            }
-        }
-    }
     
     override var isSelected: Bool {
         didSet {
