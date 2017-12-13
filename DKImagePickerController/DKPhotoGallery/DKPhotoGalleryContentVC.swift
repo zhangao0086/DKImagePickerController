@@ -56,11 +56,16 @@ open class DKPhotoGalleryContentVC: UIViewController, UIScrollViewDelegate {
     }
     
     internal func filterVisibleVCs<T>(with className: T.Type) -> [T]? {
-        return self.visibleVCs.values.filter { previewVC -> Bool in
-            return type(of: previewVC) == className
-        } as? [T]
+        var filtered = [T]()
+        for (_, value) in self.visibleVCs {
+            if let value = value as? T {
+                filtered.append(value)
+            }
+        }
+        
+        return filtered
     }
-    
+
     // MARK: - Private
     
     private func updateWithCurrentIndex(needToSetContentOffset need: Bool, onlyCurrentIndex: Bool = false) {
