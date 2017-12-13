@@ -29,6 +29,8 @@ open class DKPhotoGalleryTransitionDismiss: NSObject, UIViewControllerAnimatedTr
             fromContentView = DKPhotoContentAnimationView(image: self.gallery.currentContentVC().snapshotImage())
             fromContentView.frame = self.gallery.currentContentView().superview!.convert(self.gallery.currentContentView().frame, to: nil)
             fromContentView.contentMode = self.gallery.currentContentView().contentMode
+            fromContentView.layer.cornerRadius = self.gallery.currentContentView().layer.cornerRadius
+            fromContentView.clipsToBounds = self.gallery.currentContentView().clipsToBounds
             
             self.gallery.currentContentView().isHidden = true
         } else { // .video
@@ -39,6 +41,8 @@ open class DKPhotoGalleryTransitionDismiss: NSObject, UIViewControllerAnimatedTr
             fromContentView = DKPhotoContentAnimationView(view: playerView)
             fromContentView.frame = frame
             fromContentView.contentMode = playerView.contentMode
+            fromContentView.layer.cornerRadius = playerView.layer.cornerRadius
+            fromContentView.clipsToBounds = playerView.clipsToBounds
         }
         
         containerView.addSubview(fromContentView)
@@ -53,6 +57,8 @@ open class DKPhotoGalleryTransitionDismiss: NSObject, UIViewControllerAnimatedTr
                 fromContentView.frame = toImageViewFrameInScreen
                 fromContentView.contentMode = toImageView.contentMode
                 fromContentView.backgroundColor = toImageView.backgroundColor
+                fromContentView.layer.cornerRadius = toImageView.layer.cornerRadius
+                fromContentView.clipsToBounds = toImageView.clipsToBounds
                 self.gallery.updateContextBackground(alpha: 0, animated: false)
             }) { (finished) in
                 toImageView.isHidden = false

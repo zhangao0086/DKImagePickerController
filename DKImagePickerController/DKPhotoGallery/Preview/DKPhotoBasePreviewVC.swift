@@ -54,7 +54,7 @@ open class DKPhotoBasePreviewVC: UIViewController, UIScrollViewDelegate, DKPhoto
     open var customPreviewActions: [Any]?
     open var singleTapBlock: (() -> Void)?
     
-    private var thumbnailView = DKPhotoImageView()
+    private var thumbnailView = UIImageView()
     
     @available(iOS 9.0, *)
     private var _customPreviewActions: [UIPreviewActionItem]? {

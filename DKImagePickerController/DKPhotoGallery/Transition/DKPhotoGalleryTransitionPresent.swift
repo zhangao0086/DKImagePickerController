@@ -43,6 +43,8 @@ open class DKPhotoGalleryTransitionPresent: NSObject, UIViewControllerAnimatedTr
                 let frame = AVMakeRect(aspectRatio: fromImage.size, insideRect: toViewFinalFrame)
                 snapshotImageView.frame = frame
                 snapshotImageView.contentMode = toView.contentMode
+                snapshotImageView.clipsToBounds = toView.clipsToBounds
+                snapshotImageView.layer.cornerRadius = toView.layer.cornerRadius
                 containerView.backgroundColor = UIColor.black
             }) { (finished) in
                 let wasCanceled = transitionContext.transitionWasCancelled
@@ -58,7 +60,7 @@ open class DKPhotoGalleryTransitionPresent: NSObject, UIViewControllerAnimatedTr
             containerView.addSubview(toView)
             
             toView.alpha = 0
-            UIView.animate(withDuration: transitionDuration, animations: { 
+            UIView.animate(withDuration: transitionDuration, animations: {
                 toView.alpha = 1
             }, completion: { (finished) in
                 let wasCanceled = transitionContext.transitionWasCancelled

@@ -578,7 +578,6 @@ open class DKPlayerView: UIView {
         if let slider = tapGesture.view as? UISlider {
             if slider.isHighlighted { return }
             
-            
             let point = tapGesture.location(in: slider)
             let percentage = Float(point.x / slider.bounds.width)
             let delta = percentage * Float(slider.maximumValue - slider.minimumValue)
