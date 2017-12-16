@@ -12,8 +12,6 @@
 		9C6E94CA1F5E65810014B700 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94B01F5E65800014B700 /* AppDelegate.swift */; };
 		9C6E94CB1F5E65810014B700 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94B11F5E65800014B700 /* LaunchScreen.xib */; };
 		9C6E94CC1F5E65810014B700 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94B31F5E65800014B700 /* Main.storyboard */; };
-		9C6E94CD1F5E65810014B700 /* CustomCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94B61F5E65800014B700 /* CustomCamera.swift */; };
-		9C6E94CE1F5E65810014B700 /* CustomCameraUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94B71F5E65800014B700 /* CustomCameraUIDelegate.swift */; };
 		9C6E94CF1F5E65810014B700 /* CustomInlineFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94B91F5E65800014B700 /* CustomInlineFlowLayout.swift */; };
 		9C6E94D01F5E65810014B700 /* CustomInlineLayoutUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94BA1F5E65800014B700 /* CustomInlineLayoutUIDelegate.swift */; };
 		9C6E94D11F5E65810014B700 /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94BC1F5E65800014B700 /* CustomFlowLayout.swift */; };
@@ -26,7 +24,9 @@
 		9C6E94D91F5E65810014B700 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6E94C51F5E65810014B700 /* ViewController.swift */; };
 		9C6E94DA1F5E65810014B700 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C61F5E65810014B700 /* LaunchScreen.strings */; };
 		9C6E94DB1F5E65810014B700 /* Main.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E94C81F5E65810014B700 /* Main.strings */; };
+		9CA897E61FE59584007E7C25 /* CustomInlineCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA897E51FE59584007E7C25 /* CustomInlineCamera.swift */; };
 		9CD130051C144ED800AB5E2B /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD130041C144ED800AB5E2B /* Photos.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		9CDC7BF71FE59233008867C8 /* CustomCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDC7BF61FE59233008867C8 /* CustomCamera.swift */; };
 		9CF72B161B8F073400238B9A /* DKImagePickerControllerDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF72B151B8F073400238B9A /* DKImagePickerControllerDemoTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,8 +66,6 @@
 		9C6E94B01F5E65800014B700 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C6E94B21F5E65800014B700 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9C6E94B41F5E65800014B700 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9C6E94B61F5E65800014B700 /* CustomCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCamera.swift; sourceTree = "<group>"; };
-		9C6E94B71F5E65800014B700 /* CustomCameraUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCameraUIDelegate.swift; sourceTree = "<group>"; };
 		9C6E94B91F5E65800014B700 /* CustomInlineFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineFlowLayout.swift; sourceTree = "<group>"; };
 		9C6E94BA1F5E65800014B700 /* CustomInlineLayoutUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineLayoutUIDelegate.swift; sourceTree = "<group>"; };
 		9C6E94BC1F5E65800014B700 /* CustomFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomFlowLayout.swift; sourceTree = "<group>"; };
@@ -81,7 +79,9 @@
 		9C6E94C51F5E65810014B700 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9C6E94C71F5E65810014B700 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		9C6E94C91F5E65810014B700 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		9CA897E51FE59584007E7C25 /* CustomInlineCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineCamera.swift; sourceTree = "<group>"; };
 		9CD130041C144ED800AB5E2B /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		9CDC7BF61FE59233008867C8 /* CustomCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCamera.swift; sourceTree = "<group>"; };
 		9CF72B111B8F073400238B9A /* DKImagePickerControllerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKImagePickerControllerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CF72B141B8F073400238B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CF72B151B8F073400238B9A /* DKImagePickerControllerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerDemoTests.swift; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 				9C6E94B01F5E65800014B700 /* AppDelegate.swift */,
 				9C6E94B11F5E65800014B700 /* LaunchScreen.xib */,
 				9C6E94B31F5E65800014B700 /* Main.storyboard */,
-				9C6E94B51F5E65800014B700 /* CustomCameraUIDelegate */,
+				9CDC7BF51FE59233008867C8 /* CustomCamera */,
 				9C6E94B81F5E65800014B700 /* CustomInlineLayoutUIDelegate */,
 				9C6E94BB1F5E65800014B700 /* CustomLayoutUIDelegate */,
 				9C6E94BE1F5E65800014B700 /* CustomUIDelegate */,
@@ -169,15 +169,6 @@
 				9C6E94C81F5E65810014B700 /* Main.strings */,
 			);
 			path = DKImagePickerControllerDemo;
-			sourceTree = "<group>";
-		};
-		9C6E94B51F5E65800014B700 /* CustomCameraUIDelegate */ = {
-			isa = PBXGroup;
-			children = (
-				9C6E94B61F5E65800014B700 /* CustomCamera.swift */,
-				9C6E94B71F5E65800014B700 /* CustomCameraUIDelegate.swift */,
-			);
-			path = CustomCameraUIDelegate;
 			sourceTree = "<group>";
 		};
 		9C6E94B81F5E65800014B700 /* CustomInlineLayoutUIDelegate */ = {
@@ -206,6 +197,15 @@
 				9C6E94C11F5E65810014B700 /* CustomUIDelegate.swift */,
 			);
 			path = CustomUIDelegate;
+			sourceTree = "<group>";
+		};
+		9CDC7BF51FE59233008867C8 /* CustomCamera */ = {
+			isa = PBXGroup;
+			children = (
+				9CDC7BF61FE59233008867C8 /* CustomCamera.swift */,
+				9CA897E51FE59584007E7C25 /* CustomInlineCamera.swift */,
+			);
+			path = CustomCamera;
 			sourceTree = "<group>";
 		};
 		9CF72B121B8F073400238B9A /* DKImagePickerControllerDemoTests */ = {
@@ -433,6 +433,7 @@
 				"${BUILT_PRODUCTS_DIR}/CLImageEditor/CLImageEditor.framework",
 				"${BUILT_PRODUCTS_DIR}/DKCamera/DKCamera.framework",
 				"${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework",
+				"${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
@@ -441,6 +442,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CLImageEditor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKCamera.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKImagePickerController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKPhotoGallery.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
@@ -473,14 +475,14 @@
 			files = (
 				9C6E94D41F5E65810014B700 /* CustomGroupDetailImageCell.swift in Sources */,
 				9C6E94D51F5E65810014B700 /* CustomUIDelegate.swift in Sources */,
-				9C6E94CE1F5E65810014B700 /* CustomCameraUIDelegate.swift in Sources */,
+				9CA897E61FE59584007E7C25 /* CustomInlineCamera.swift in Sources */,
 				9C6E94D91F5E65810014B700 /* ViewController.swift in Sources */,
 				9C6E94D11F5E65810014B700 /* CustomFlowLayout.swift in Sources */,
 				9C6E94CA1F5E65810014B700 /* AppDelegate.swift in Sources */,
 				9C6E94D01F5E65810014B700 /* CustomInlineLayoutUIDelegate.swift in Sources */,
+				9CDC7BF71FE59233008867C8 /* CustomCamera.swift in Sources */,
 				9C6E94D21F5E65810014B700 /* CustomLayoutUIDelegate.swift in Sources */,
 				9C6E94D61F5E65810014B700 /* DKImagePickerControllerDemoVC.swift in Sources */,
-				9C6E94CD1F5E65810014B700 /* CustomCamera.swift in Sources */,
 				9C6E94D31F5E65810014B700 /* CustomGroupDetailCameraCell.swift in Sources */,
 				9C6E94CF1F5E65810014B700 /* CustomInlineFlowLayout.swift in Sources */,
 			);

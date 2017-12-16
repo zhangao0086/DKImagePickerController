@@ -1,5 +1,5 @@
 //
-//  DKImageExtensionCamera.swift
+//  DKImageExtensionInlineCamera.swift
 //  DKImagePickerController
 //
 //  Created by ZhangAo on 16/12/2017.
@@ -9,10 +9,10 @@
 import Foundation
 import DKCamera
 
-class DKImageExtensionCamera : DKImageBaseExtension {
+class DKImageExtensionInlineCamera : DKImageBaseExtension {
     
     override class func extensionType() -> DKImageExtensionType {
-        return .camera
+        return .inlineCamera
     }
         
     override func perform(with extraInfo: [AnyHashable: Any]) {
@@ -24,8 +24,13 @@ class DKImageExtensionCamera : DKImageBaseExtension {
         camera.didCancel = didCancel
         
         self.checkCameraPermission(camera)
-
-        self.context.imagePickerController.present(camera)
+        
+        if (camera as UIViewController) is UINavigationController {
+            self.context.imagePickerController.present(camera, animated: true)
+            self.context.imagePickerController.setViewControllers([], animated: false)
+        } else {
+            self.context.imagePickerController.setViewControllers([camera], animated: false)
+        }
     }
 
     override func finish() {

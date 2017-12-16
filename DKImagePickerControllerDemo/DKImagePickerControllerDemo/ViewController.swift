@@ -18,6 +18,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet var previewView: UICollectionView?
     var assets: [DKAsset]?
     
+    deinit {
+        unregisterExtension(for: .camera)
+        unregisterExtension(for: .inlineCamera)
+    }
+    
 	func showImagePicker() {
         if let assets = self.assets {
             pickerController.select(assets: assets)

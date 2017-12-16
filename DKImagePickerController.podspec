@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 
-  s.default_subspecs = 'Core', 'PhotoGallery'
+  s.default_subspecs = 'Full'
 
   s.subspec 'Core' do |core|
     core.dependency 'DKImagePickerController/ImageDataManager'
@@ -42,7 +42,21 @@ Pod::Spec.new do |s|
     camera.dependency 'DKImagePickerController/Core'
     camera.dependency 'DKCamera', '1.5.0'
 
-    gallery.ios.source_files = "Extensions/DKImageExtensionCamera.swift"
+    camera.ios.source_files = "Extensions/DKImageExtensionCamera.swift"
+  end
+
+  s.subspec 'InlineCamera' do |inlineCamera|
+    inlineCamera.dependency 'DKImagePickerController/Core'
+    inlineCamera.dependency 'DKCamera', '1.5.0'
+
+    inlineCamera.ios.source_files = "Extensions/DKImageExtensionInlineCamera.swift"
+  end
+
+  s.subspec 'Full' do |full|
+    full.dependency 'DKImagePickerController/Core'
+    full.dependency 'DKImagePickerController/Camera'
+    full.dependency 'DKImagePickerController/InlineCamera'
+    full.dependency 'DKImagePickerController/PhotoGallery'
   end
 
 end

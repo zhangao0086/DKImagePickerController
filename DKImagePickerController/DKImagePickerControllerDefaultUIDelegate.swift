@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import DKCamera
 
 @objc
 open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
@@ -72,15 +71,7 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
 	open func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController) {
 		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.createDoneButtonIfNeeded())
 	}
-        
-    open func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController) -> UIViewController {
-        let camera = DKImagePickerControllerCamera()
-        
-        self.checkCameraPermission(camera)
-        
-        return camera
-    }
-	
+        	
 	open func layoutForImagePickerController(_ imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type {
 		return DKAssetGroupGridLayout.self
 	}
@@ -140,41 +131,6 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
     open func imagePickerControllerCollectionVideoCell() -> DKAssetGroupDetailBaseCell.Type {
         return DKAssetGroupDetailVideoCell.self
     }
-	
-	// Internal
-	
-	public func checkCameraPermission(_ camera: DKCamera) {
-		func cameraDenied() {
-			DispatchQueue.main.async {
-				let permissionView = DKPermissionView.permissionView(.camera)
-				camera.cameraOverlayView = permissionView
-			}
-		}
-		
-		func setup() {
-			camera.cameraOverlayView = nil
-		}
-		
-		DKCamera.checkCameraPermission { granted in
-			granted ? setup() : cameraDenied()
-		}
-	}
 		
 }
 
-@objc
-open class DKImagePickerControllerCamera: DKCamera, DKImagePickerControllerCameraProtocol {
-    
-    open func setDidFinishCapturingVideo(block: @escaping (URL) -> Void) {
-        
-    }
-
-    open func setDidFinishCapturingImage(block: @escaping (UIImage, [AnyHashable : Any]?) -> Void) {
-        super.didFinishCapturingImage = block
-    }
-
-    open func setDidCancel(block: @escaping () -> Void) {
-        super.didCancel = block
-    }
-    
-}

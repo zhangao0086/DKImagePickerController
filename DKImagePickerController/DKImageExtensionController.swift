@@ -10,20 +10,22 @@ import Foundation
 
 public class DKImageExtensionContext {
     
-    var imagePickerController: DKImagePickerController!
-    var groupDetailVC: DKAssetGroupDetailVC?
+    public var imagePickerController: DKImagePickerController!
+    public var groupDetailVC: DKAssetGroupDetailVC?
     
 }
 
 ////////////////////////////////////////////////////////////////////////
 
 public enum DKImageExtensionType : Int {
-    case gallery, camera
+    case gallery, camera, inlineCamera
 }
 
 public protocol DKImageExtensionProtocol {
     
     func perform(with extraInfo: [AnyHashable: Any])
+    
+    func finish()
 }
 
 @objc
@@ -35,7 +37,11 @@ open class DKImageBaseExtension : NSObject, DKImageExtensionProtocol {
         self.context = context
     }
     
-    public func perform(with extraInfo: [AnyHashable : Any]) {
+    open func perform(with extraInfo: [AnyHashable : Any]) {
+        fatalError("This method must be overridden.")
+    }
+    
+    open func finish() {
         fatalError("This method must be overridden.")
     }
     
@@ -53,6 +59,10 @@ public func registerExtension(extensionClass: DKImageBaseExtension.Type, for typ
     DKImageExtensionController.extensions[type] = extensionClass
 }
 
+public func unregisterExtension(for type: DKImageExtensionType) {
+    DKImageExtensionController.extensions[type] = nil
+}
+
 internal func registerDefaultExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
     DKImageExtensionController.defaultExtensions[type] = extensionClass
 }
@@ -66,10 +76,18 @@ class DKImageExtensionController {
     private var cache = [DKImageExtensionType : DKImageBaseExtension]()
     
     private static let checkDefaultExtensions: Void = {
-        if let defaultGalleryClass = NSClassFromString("DKImagePickerController.DKImageExtensionGallery") {
-            if let defaultGalleryClass = (defaultGalleryClass as AnyObject) as? NSObjectProtocol {
-                if defaultGalleryClass.responds(to: #selector(DKImageBaseExtension.registerAsDefaultExtension)) {
-                    defaultGalleryClass.perform(#selector(DKImageBaseExtension.registerAsDefaultExtension))
+        let defaultClasses = [
+            "DKImagePickerController.DKImageExtensionGallery",
+            "DKImagePickerController.DKImageExtensionCamera",
+            "DKImagePickerController.DKImageExtensionInlineCamera",
+        ]
+        
+        for defaultClass in defaultClasses {
+            if let defaultClass = NSClassFromString(defaultClass) {
+                if let defaultClass = (defaultClass as AnyObject) as? NSObjectProtocol {
+                    if defaultClass.responds(to: #selector(DKImageBaseExtension.registerAsDefaultExtension)) {
+                        defaultClass.perform(#selector(DKImageBaseExtension.registerAsDefaultExtension))
+                    }
                 }
             }
         }
@@ -92,6 +110,14 @@ class DKImageExtensionController {
             }
             
             e?.perform(with: extraInfo)
+        } else {
+            debugPrint("No DKImageExtension founed.")
+        }
+    }
+    
+    func finish(extensionType: DKImageExtensionType) {
+        if let e = self.cache[extensionType] {
+            e.finish()
         }
     }
     

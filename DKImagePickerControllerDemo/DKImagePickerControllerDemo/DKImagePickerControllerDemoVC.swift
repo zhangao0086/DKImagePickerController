@@ -67,21 +67,30 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
-        case "Camera Customization":
+        case "Custom Camera":
             let pickerController = DKImagePickerController()
-            pickerController.UIDelegate = CustomCameraUIDelegate(imagePickerController: pickerController)
-            pickerController.modalPresentationStyle = .overCurrentContext
+            
+            registerExtension(extensionClass: CustomCameraExtension.self, for: .camera)
             
             destination.pickerController = pickerController
             
-        case "UI Customization":
+        case "Custom Inline Camera":
+            let pickerController = DKImagePickerController()
+            pickerController.sourceType = .camera
+            pickerController.modalPresentationStyle = .overCurrentContext
+            
+            registerExtension(extensionClass: CustomCameraExtension.self, for: .inlineCamera)
+            
+            destination.pickerController = pickerController
+
+        case "Custom UI":
             let pickerController = DKImagePickerController()
             pickerController.UIDelegate = CustomUIDelegate(imagePickerController: pickerController)
             pickerController.showsCancelButton = true
             
             destination.pickerController = pickerController
             
-        case "Layout Customization":
+        case "Custom Layout":
             let pickerController = DKImagePickerController()
             pickerController.UIDelegate = CustomLayoutUIDelegate(imagePickerController: pickerController)
             

@@ -12,16 +12,6 @@ import AssetsLibrary
 import CLImageEditor
 
 @objc
-public protocol DKImagePickerControllerCameraProtocol {
-    
-    func setDidCancel(block: @escaping () -> Void) -> Void
-    
-    func setDidFinishCapturingImage(block: @escaping (_ image: UIImage, _ metadata: [AnyHashable : Any]?) -> Void) -> Void
-    
-    func setDidFinishCapturingVideo(block: @escaping (_ videoURL: URL) -> Void) -> Void
-}
-
-@objc
 public protocol DKImagePickerControllerUIDelegate {
     
     init(imagePickerController: DKImagePickerController)
@@ -31,23 +21,6 @@ public protocol DKImagePickerControllerUIDelegate {
      */
     func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController)
     
-    /**
-     Returns a custom camera.
-     
-     **Note**
-     
-     If you are using a UINavigationController as the custom camera,
-     you should also set the picker's modalPresentationStyle to .overCurrentContext, like this:
-     
-     ```
-     pickerController.modalPresentationStyle = .overCurrentContext
-     ```
-     
-     - Parameter imagePickerController: DKImagePickerController
-     - Returns: The returned `UIViewControlelr` must conform to the `DKImagePickerControllerCameraProtocol`.
-     */
-    func imagePickerControllerCreateCamera(_ imagePickerController: DKImagePickerController) -> UIViewController
-        
     /**
      The layout is to provide information about the position and visual state of items in the collection view.
      */
@@ -236,6 +209,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     }
     
     private var hasInitialized = false
+    private var needShowInlineCamera = true
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -248,15 +222,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
                 self.isNavigationBarHidden = false
             }
             
-            if self.sourceType == .camera {
-                let camera = self.createCamera()
-                if camera is UINavigationController {
-                    self.present(camera, animated: true)
-                    self.setViewControllers([], animated: false)
-                } else {
-                    self.setViewControllers([camera], animated: false)
-                }
-            } else {
+            if self.sourceType != .camera {
                 let rootVC = self.makeRootVC()
                 rootVC.imagePickerController = self
                 
@@ -264,6 +230,11 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
                 self.updateCancelButtonForVC(rootVC)
                 self.setViewControllers([rootVC], animated: false)
             }
+        }
+        
+        if self.needShowInlineCamera && self.sourceType == .camera {
+            self.needShowInlineCamera = false
+            self.showCamera(isInline: true)
         }
     }
     
@@ -308,12 +279,11 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         return assetFetchOptions
     }
     
-    internal weak var camera: UIViewController?
     private var metadataFromCamera: [AnyHashable : Any]?
-    private func createCamera() -> UIViewController {
+    private func showCamera(isInline: Bool) {
         let didCancel = { [unowned self] () in
             if self.sourceType == .camera {
-                self.dismissCamera()
+                self.dismissCamera(isInline: true)
                 self.dismiss()
             } else {
                 self.dismissCamera()
@@ -333,7 +303,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
                     tool.available = false
                 }
                 
-                strongSelf.camera?.present(imageEditor, animated: true, completion: nil)
+                (strongSelf.presentedViewController ?? strongSelf).present(imageEditor, animated: true, completion: nil)
             }
         }
         
@@ -358,23 +328,18 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
             }
         }
         
-        let camera = self.UIDelegate.imagePickerControllerCreateCamera(self)
-        let cameraProtocol = camera as! DKImagePickerControllerCameraProtocol
-        
-        cameraProtocol.setDidCancel(block: didCancel)
-        cameraProtocol.setDidFinishCapturingImage(block: didFinishCapturingImage)
-        cameraProtocol.setDidFinishCapturingVideo(block: didFinishCapturingVideo)
-        
-        self.camera = camera
-        
-        return camera
+        self.extensionController.perform(extensionType: isInline ? .inlineCamera : .camera, with: [
+            "didFinishCapturingImage" : didFinishCapturingImage,
+            "didFinishCapturingVideo" : didFinishCapturingVideo,
+            "didCancel" : didCancel
+            ])
     }
     
     @objc open func presentCamera() {
-        self.present(self.createCamera(), animated: true, completion: nil)
+        self.showCamera(isInline: false)
     }
     
-    @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Swift.Void)? = nil) {
+    @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool = true, completion: (() -> Swift.Void)? = nil) {
         if self.inline {
             UIApplication.shared.keyWindow!.rootViewController!.present(viewControllerToPresent,
                                                                         animated: flag,
@@ -392,31 +357,39 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         }
     }
     
-    @objc open func dismissCamera() {
-        if let _ = self.camera {
-            self.dismiss(animated: true)
-            self.camera = nil
-        }
+    @objc open func dismissCamera(isInline: Bool = false) {
+        self.extensionController.finish(extensionType: isInline ? .inlineCamera : .camera)
     }
     
     @objc open func dismiss() {
         self.presentingViewController?.dismiss(animated: true, completion: {
             self.status = .cancelled
+            
+            if self.sourceType == .camera {
+                self.needShowInlineCamera = true
+            }
         })
     }
     
     @objc open func done() {
+        let completeBlock = {
+            self.status = .completed
+            self.didSelectAssets?(self.selectedAssets)
+            
+            if self.sourceType == .camera {
+                self.needShowInlineCamera = true
+            }
+        }
+        
         self.presentingViewController?.dismiss(animated: true, completion: {
             if let exporter = self.exporter {
                 self.status = .exporting
                 
                 exporter.exportAssetsAsynchronously(assets: self.selectedAssets, completion: { result in
-                    self.status = .completed
-                    self.didSelectAssets?(self.selectedAssets)
+                    completeBlock()
                 })
             } else {
-                self.status = .completed
-                self.didSelectAssets?(self.selectedAssets)
+                completeBlock()
             }
         })
     }
