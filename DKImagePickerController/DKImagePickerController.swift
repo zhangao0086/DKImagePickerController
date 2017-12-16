@@ -202,7 +202,7 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         self.init(rootViewController: rootVC)
     }
     
-    private convenience init(groupDataManager: DKImageGroupDataManager) {
+    public convenience init(groupDataManager: DKImageGroupDataManager) {
         let rootVC = UIViewController()
         self.init(rootViewController: rootVC)
         
