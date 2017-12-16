@@ -1,0 +1,6 @@
+framework module DKCamera {
+  umbrella header "DKCamera-umbrella.h"
+
+  export *
+  module * { export * }
+}

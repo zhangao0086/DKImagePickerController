@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import Photos
+import DKPhotoGallery
 
 private extension UICollectionView {
     

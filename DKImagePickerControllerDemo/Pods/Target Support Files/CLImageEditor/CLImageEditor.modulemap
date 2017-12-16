@@ -1,0 +1,6 @@
+framework module CLImageEditor {
+  umbrella header "CLImageEditor-umbrella.h"
+
+  export *
+  module * { export * }
+}
