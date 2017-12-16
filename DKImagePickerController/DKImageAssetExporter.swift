@@ -230,6 +230,16 @@ open class DKImageAssetExporter: DKBaseManager {
             }
         }
         
+        operation.completionBlock = {
+            if let operation = operationVisitor.popLast() {
+                assert(operation.isExecuting == false && operation.isCancelled == true, "Not yet executing.")
+                
+                DispatchQueue.main.async {
+                    completion(.cancelled)
+                }
+            }
+        }
+        
         operationVisitor.append(operation)
         self.exportQueue.addOperation(operation)
     }
