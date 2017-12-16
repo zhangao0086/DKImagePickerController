@@ -26,5 +26,7 @@
 
 "preview.image.download.original.title" = "Full Image";
 
+"preview.player.fetch.error" = "Video Fetch Failed";
+
 "preview.player.error.unknown" = "An unknown error occurred.";
 

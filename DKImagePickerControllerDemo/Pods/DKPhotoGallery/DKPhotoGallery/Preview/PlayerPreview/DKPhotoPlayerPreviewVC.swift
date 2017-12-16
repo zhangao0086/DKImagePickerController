@@ -88,8 +88,12 @@ open class DKPhotoPlayerPreviewVC: DKPhotoBasePreviewVC {
                                                     resultHandler: { [weak self] (avAsset, _, _) in
                                                         DispatchQueue.main.async {
                                                             if let asset = self?.item.asset, asset.localIdentifier == identifier {
-                                                                let URLAsset = avAsset as! AVURLAsset
-                                                                completeBlock(URLAsset, nil)
+                                                                completeBlock(avAsset, nil)
+                                                            } else {
+                                                                let error = NSError(domain: Bundle.main.bundleIdentifier!, code: -1, userInfo: [
+                                                                    NSLocalizedDescriptionKey : DKPhotoGalleryLocalizedStringWithKey("preview.player.fetch.error")
+                                                                    ])
+                                                                completeBlock(nil, error)
                                                             }
                                                         }
             })
@@ -105,12 +109,11 @@ open class DKPhotoPlayerPreviewVC: DKPhotoBasePreviewVC {
         self.playerView?.beginPlayBlock = self.beginPlayBlock
         self.playerView?.isControlHidden = self.isControlHidden
         
-        if let asset = content as? AVURLAsset {
+        if let asset = content as? AVAsset {
             self.playerView?.asset = asset
         } else if let contentURL = content as? URL {
             self.playerView?.url = contentURL
         }
-        
     }
     
     open override func enableZoom() -> Bool {

@@ -10,7 +10,6 @@ DKPhotoGallery
 - Image caching with SDWebImage
 - Original image download
 - Extract QR Code(Text、URL)
-- Play movie with no file extension
 - Localization
 - 3D Touch
 

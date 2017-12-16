@@ -26,4 +26,6 @@
 
 "preview.image.download.original.title" = "下载原图";
 
+"preview.player.fetch.error" = "获取视频失败";
+
 "preview.player.error.unknown" = "未知错误";

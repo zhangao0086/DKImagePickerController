@@ -47,20 +47,20 @@ open class DKPlayerView: UIView {
         }
     }
     
-    public var asset: AVURLAsset? {
+    public var asset: AVAsset? {
         
-        willSet {
-            if self.asset == newValue {
+        didSet {
+            if self.asset == oldValue {
                 return
             }
             
-            if let oldAsset = self.asset {
+            if let oldAsset = oldValue {
                 oldAsset.cancelLoading()
             }
             
             self.playerItem = nil
             
-            if let newValue = newValue {
+            if let newValue = self.asset {
                 self.bufferingIndicator.startAnimating()
                 newValue.loadValuesAsynchronously(forKeys: ["duration", "tracks"], completionHandler: {
                     if newValue == self.asset {
@@ -248,11 +248,16 @@ open class DKPlayerView: UIView {
         guard !self.isPlaying else { return }
         
         if let error = self.error {
-            if let URLAsset = (self.asset ?? self.playerItem?.asset) as? AVURLAsset, self.isTriableError(error) {
+            if let avAsset = self.asset ?? self.playerItem?.asset, self.isTriableError(error) {
                 self.autoPlayOrShowErrorOnce = true
                 
-                self.asset = nil
-                self.url = URLAsset.url
+                if let URLAsset = avAsset as? AVURLAsset {
+                    self.asset = nil
+                    self.url = URLAsset.url
+                } else {
+                    self.url = nil
+                    self.asset = avAsset
+                }
                 self.error = nil
             } else {
                 self.showPlayError(error.localizedDescription)

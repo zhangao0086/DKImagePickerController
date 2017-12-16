@@ -28,7 +28,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 ## Requirements
 * iOS 8.0+
 * ARC
-* Swift 4 and Xcode 9
+* Swift 3.2 & 4
 
 ## Installation
 #### iOS 8 and newer
@@ -45,9 +45,6 @@ pod 'DKImagePickerController'
 
 > To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
 [CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
-
-#### Swift 3.*
-> For Swift 3.*, use version < 3.8.0
 
 #### Swift 2.2
 > For Swift 2.2, use version <= 3.3.4

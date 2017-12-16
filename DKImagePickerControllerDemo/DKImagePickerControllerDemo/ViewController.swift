@@ -37,7 +37,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
         
-		pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
+        pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
             self.updateAssets(assets: assets)
 		}
 		
