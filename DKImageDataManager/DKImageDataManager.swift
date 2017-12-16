@@ -177,14 +177,13 @@ public class DKImageDataManager {
     }
     
     public func cancelRequest(requestID: DKImageRequestID) {
-        objc_sync_enter(self)
-        defer { objc_sync_exit(self) }
-        
-        if let imageRequestID = self.requestIDs[requestID] {
-            self.manager.cancelImageRequest(imageRequestID)
+        self.executeOnMainThread {
+            if let imageRequestID = self.requestIDs[requestID] {
+                self.manager.cancelImageRequest(imageRequestID)
+            }
+            
+            self.update(requestID: requestID, with: nil)
         }
-        
-        self.update(requestID: requestID, with: nil)
     }
     
     public func startCachingAssets(for assets: [PHAsset], targetSize: CGSize, contentMode: PHImageContentMode, options: PHImageRequestOptions?) {
@@ -215,17 +214,24 @@ public class DKImageDataManager {
     private func update(requestID: DKImageRequestID,
                         with imageRequestID: PHImageRequestID?,
                         old oldImageRequestID: DKImageRequestID? = nil) {
-        objc_sync_enter(self)
-        defer { objc_sync_exit(self) }
-        
-        if let imageRequestID = imageRequestID {
-            if self.requestIDs[requestID] != nil || oldImageRequestID == nil {
-                self.requestIDs[requestID] = imageRequestID
+        self.executeOnMainThread {
+            if let imageRequestID = imageRequestID {
+                if self.requestIDs[requestID] != nil || oldImageRequestID == nil {
+                    self.requestIDs[requestID] = imageRequestID
+                } else {
+                    self.manager.cancelImageRequest(imageRequestID)
+                }
             } else {
-                self.manager.cancelImageRequest(imageRequestID)
+                self.requestIDs[requestID] = nil
             }
+        }
+    }
+    
+    private func executeOnMainThread(block: @escaping (() -> Void)) {
+        if Thread.isMainThread {
+            block()
         } else {
-            self.requestIDs[requestID] = nil
+            DispatchQueue.main.async(execute: block)
         }
     }
 }
