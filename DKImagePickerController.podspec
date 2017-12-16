@@ -19,7 +19,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |core|
     core.dependency 'DKImagePickerController/ImageDataManager'
-    core.dependency 'CLImageEditor', '0.2.0'
     core.dependency 'SDWebImage/GIF', '~> 4.0'
 
     core.source_files = "DKImagePickerController/**/*.{h,swift}"
@@ -52,11 +51,19 @@ Pod::Spec.new do |s|
     inlineCamera.ios.source_files = "Extensions/DKImageExtensionInlineCamera.swift"
   end
 
+  s.subspec 'PhotoEditor' do |photoEditor|
+    photoEditor.dependency 'DKImagePickerController/Core'
+    photoEditor.dependency 'CLImageEditor', '0.2.0'
+
+    photoEditor.ios.source_files = "Extensions/DKImageExtensionPhotoEditor.swift"
+  end
+
   s.subspec 'Full' do |full|
     full.dependency 'DKImagePickerController/Core'
     full.dependency 'DKImagePickerController/Camera'
     full.dependency 'DKImagePickerController/InlineCamera'
     full.dependency 'DKImagePickerController/PhotoGallery'
+    full.dependency 'DKImagePickerController/PhotoEditor'
   end
 
 end

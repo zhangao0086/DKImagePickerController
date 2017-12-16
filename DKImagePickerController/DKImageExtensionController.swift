@@ -18,7 +18,7 @@ public class DKImageExtensionContext {
 ////////////////////////////////////////////////////////////////////////
 
 public enum DKImageExtensionType : Int {
-    case gallery, camera, inlineCamera
+    case gallery, camera, inlineCamera, photoEditor
 }
 
 public protocol DKImageExtensionProtocol {
@@ -80,6 +80,7 @@ class DKImageExtensionController {
             "DKImagePickerController.DKImageExtensionGallery",
             "DKImagePickerController.DKImageExtensionCamera",
             "DKImagePickerController.DKImageExtensionInlineCamera",
+            "DKImagePickerController.DKImageExtensionPhotoEditor",
         ]
         
         for defaultClass in defaultClasses {
@@ -99,7 +100,7 @@ class DKImageExtensionController {
         self.imagePickerController = imagePickerController
     }
     
-    func perform(extensionType: DKImageExtensionType, with extraInfo: [AnyHashable : Any]) {
+    public func perform(extensionType: DKImageExtensionType, with extraInfo: [AnyHashable : Any]) {
         DKImageExtensionController.checkDefaultExtensions
         
         if let extensionClass = (DKImageExtensionController.extensions[extensionType] ?? DKImageExtensionController.defaultExtensions[extensionType]) {
@@ -115,10 +116,14 @@ class DKImageExtensionController {
         }
     }
     
-    func finish(extensionType: DKImageExtensionType) {
+    public func finish(extensionType: DKImageExtensionType) {
         if let e = self.cache[extensionType] {
             e.finish()
         }
+    }
+    
+    public func isExtensionTypeAvailable(_ extensionType: DKImageExtensionType) -> Bool {
+        return (DKImageExtensionController.extensions[extensionType] ?? DKImageExtensionController.defaultExtensions[extensionType]) != nil
     }
     
     private func createContext() -> DKImageExtensionContext {

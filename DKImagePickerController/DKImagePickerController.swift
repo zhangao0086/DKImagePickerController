@@ -9,7 +9,6 @@
 import UIKit
 import Photos
 import AssetsLibrary
-import CLImageEditor
 
 @objc
 public protocol DKImagePickerControllerUIDelegate {
@@ -89,7 +88,7 @@ public enum DKImagePickerControllerStatus: Int {
 }
 
 @objc
-open class DKImagePickerController : UINavigationController, CLImageEditorDelegate {
+open class DKImagePickerController : UINavigationController {
     
     @objc lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
         return DKImagePickerControllerDefaultUIDelegate(imagePickerController: self)
@@ -294,16 +293,24 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
             if let strongSelf = self {
                 strongSelf.metadataFromCamera = metadata
                 
-                let imageEditor = CLImageEditor(image: image, delegate: self)!
-                if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLToneCurveTool", recursive: false) {
-                    tool.available = false
+                let didFinishEditing: ((UIImage, [AnyHashable : Any]?) -> Void) = { (image, metadata) in
+                    self?.processImageFromCamera(image, metadata)
                 }
                 
-                if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLStickerTool", recursive: false) {
-                    tool.available = false
+                if strongSelf.extensionController.isExtensionTypeAvailable(.photoEditor) {
+                    var extraInfo: [AnyHashable : Any] = [
+                        "image" : image,
+                        "didFinishEditing" : didFinishEditing,
+                        ]
+                    
+                    if let metadata = metadata {
+                        extraInfo["metadata"] = metadata
+                    }
+                    
+                    strongSelf.extensionController.perform(extensionType: .photoEditor, with: extraInfo)
+                } else {
+                    didFinishEditing(image, metadata)
                 }
-                
-                (strongSelf.presentedViewController ?? strongSelf).present(imageEditor, animated: true, completion: nil)
             }
         }
         
@@ -648,13 +655,4 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         self.extensionController.perform(extensionType: .gallery, with: extraInfo)
     }
     
-    // MARK: - CLImageEditorDelegate
-    
-    public func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
-        self.metadataFromCamera?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
-
-        self.processImageFromCamera(image, self.metadataFromCamera)
-        self.metadataFromCamera = nil
-    }
 }
-
