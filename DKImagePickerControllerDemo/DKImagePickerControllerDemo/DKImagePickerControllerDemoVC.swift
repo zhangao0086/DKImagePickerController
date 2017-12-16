@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DKImagePickerController
 
 class DKImagePickerControllerDemoVC: UITableViewController {
     

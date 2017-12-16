@@ -9,7 +9,6 @@
 import UIKit
 import AVFoundation
 import Photos
-import DKPhotoGallery
 
 private extension UICollectionView {
     
@@ -26,7 +25,7 @@ private extension UICollectionView {
 }
 
 // Show all images in the asset group
-open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver, DKPhotoGalleryDelegate, UIGestureRecognizerDelegate {
+open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver, UIGestureRecognizerDelegate {
     	
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
@@ -55,7 +54,6 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
     private var currentViewSize: CGSize!
     private var registeredCellIdentifiers = Set<String>()
     private var thumbnailSize = CGSize.zero
-    private weak var gallery: DKPhotoGallery?
 	
 	override open func viewWillLayoutSubviews() {
 		super.viewWillLayoutSubviews()
@@ -165,15 +163,14 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         DKPopoverViewController.popoverViewController(self.groupListVC, fromView: self.selectGroupButton)
     }
     
-    func fetchAsset(for index: Int, ignoreUI : Bool = false) -> DKAsset? {
+    func fetchAsset(for index: Int) -> DKAsset? {
         var assetIndex = index
-        if !ignoreUI {
-            if !self.hidesCamera && index == 0 {
-                return nil
-            }
-            
-            assetIndex = (index - (self.hidesCamera ? 0 : 1))
+        
+        if !self.hidesCamera && index == 0 {
+            return nil
         }
+        assetIndex = (index - (self.hidesCamera ? 0 : 1))
+        
         let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
         return self.imagePickerController.groupDataManager.fetchAsset(group, index: assetIndex)
     }
@@ -223,6 +220,31 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             if cell.isSelected {
                 self.collectionView.deselectItem(at: indexPath, animated: true)
             }
+        }
+    }
+    
+    public func adjustAssetIndex(_ index: Int) -> Int {
+        if self.hidesCamera {
+            return index
+        } else {
+            return index + 1
+        }
+    }
+    
+    public func scrollIndexPathToVisible(_ indexPath: IndexPath) {
+        if let cellFrame = self.collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath)?.frame {
+            self.collectionView.scrollRectToVisible(cellFrame, animated: false)
+        }
+    }
+    
+    public func thumbnailImageView(for indexPath: IndexPath) -> UIImageView? {
+        if let cell = self.collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell {
+            return cell.thumbnailImageView
+        } else {
+            self.collectionView.reloadItems(at: [indexPath])
+            
+            return (self.collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?
+                .thumbnailImageView
         }
     }
 
@@ -309,121 +331,14 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         return x > y
     }
     
-    // MARK: - DKPhotoGallery
+    // MARK: - Gallery
     
     func showGallery(from cell: DKAssetGroupDetailBaseCell) {
         if let groupId = self.selectedGroupId {
             let presentationIndex = cell.tag - 1 - (self.hidesCamera ? 0 : 1)
-            let presentingFromImageView = cell.thumbnailImageView
-            
-            var items = [DKPhotoGalleryItem]()
-            let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(groupId)
-            
-            var totalCount: Int! = group.totalCount
-            if self.imagePickerController.fetchLimit > 0 {
-                totalCount = min(group.totalCount ?? 0, self.imagePickerController.fetchLimit)
-            }
-            
-            for i in 0..<totalCount {
-                let phAsset = self.imagePickerController.groupDataManager.fetchPHAsset(group, index: i)
-                
-                let item = DKPhotoGalleryItem(asset: phAsset)
-                
-                if i == presentationIndex {
-                    item.thumbnail = presentingFromImageView.image
-                }
-                
-                items.append(item)
-            }
-            
-            let gallery = DKPhotoGallery()
-            gallery.singleTapMode = .toggleControlView
-            gallery.items = items
-            gallery.galleryDelegate = self
-            gallery.presentingFromImageView = presentingFromImageView
-            gallery.presentationIndex = presentationIndex
-            gallery.finishedBlock = { index in
-                let cellIndex = index + (self.hidesCamera ? 0 : 1)
-                let cellIndexPath = IndexPath(row: cellIndex, section: 0)
-                if let cellFrame = self.collectionView.collectionViewLayout.layoutAttributesForItem(at: cellIndexPath)?.frame {
-                    self.collectionView.scrollRectToVisible(cellFrame, animated: false)
-                }
-                
-                if let cell = self.collectionView.cellForItem(at: cellIndexPath) as? DKAssetGroupDetailBaseCell {
-                    return cell.thumbnailImageView
-                } else {
-                    self.collectionView.reloadItems(at: [cellIndexPath])
-                    
-                    return (self.collectionView.cellForItem(at: cellIndexPath) as? DKAssetGroupDetailBaseCell)?
-                        .thumbnailImageView
-                }
-            }
-            
-            self.gallery = gallery
-            
-            if self.imagePickerController.inline {
-                UIApplication.shared.keyWindow!.rootViewController!.present(photoGallery: gallery)
-            } else {
-                self.present(photoGallery: gallery)
-            }
-        }
-    }
-    
-    open func updateGalleryAssetSelection() {
-        if let gallery = self.gallery, let button = gallery.topViewController?.navigationItem.rightBarButtonItem?.customView as? UIButton {
-            let currentIndex = gallery.currentIndex()
-            
-            if let asset = self.fetchAsset(for: currentIndex, ignoreUI: true) {
-                var labelWidth: CGFloat = 0.0
-                if let selectedIndex = self.imagePickerController.index(of: asset) {
-                    let title = "\(selectedIndex + 1)"
-                    button.setTitle(title, for: .selected)
-                    button.isSelected = true
-                    
-                    labelWidth = button.titleLabel!.sizeThatFits(CGSize(width: 100, height: 50)).width + 10
-                } else {
-                    button.isSelected = false
-                    button.sizeToFit()
-                }
-                
-                button.bounds = CGRect(x: 0, y: 0,
-                                       width: max(button.backgroundImage(for: .normal)!.size.width, labelWidth),
-                                       height: button.bounds.height)
-            }
-        }
-    }
-    
-    @objc func selectAssetFromGallery(button: UIButton) {
-        if let gallery = self.gallery {
-            let currentIndex = gallery.currentIndex()
-            if let asset = self.fetchAsset(for: currentIndex, ignoreUI: true) {
-                if button.isSelected {
-                    self.imagePickerController.deselect(asset: asset)
-                } else {
-                    self.imagePickerController.select(asset: asset, updateGroupDetailVC: true)
-                }
-                
-                self.updateGalleryAssetSelection()
-            }
-        }
-    }
-    
-    public func photoGallery(_ gallery: DKPhotoGallery, didShow index: Int) {
-        if let viewController = gallery.topViewController {
-            if viewController.navigationItem.rightBarButtonItem == nil {
-                let button = UIButton(type: .custom)
-                button.titleLabel?.font = UIFont(name: "Helvetica Neue", size: 13)
-                button.addTarget(self, action: #selector(DKAssetGroupDetailVC.selectAssetFromGallery(button:)), for: .touchUpInside)
-                button.setTitle("", for: .normal)
-                
-                button.setBackgroundImage(DKImageResource.photoGalleryCheckedImage(), for: .selected)
-                button.setBackgroundImage(DKImageResource.photoGalleryUncheckedImage(), for: .normal)
-                
-                let item = UIBarButtonItem(customView: button)
-                viewController.navigationItem.rightBarButtonItem = item
-            }
-            
-            self.updateGalleryAssetSelection()
+            self.imagePickerController.showGallery(with: presentationIndex,
+                                                   presentingFromImageView: cell.thumbnailImageView,
+                                                   groupId: groupId)
         }
     }
     

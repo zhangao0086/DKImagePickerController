@@ -24,7 +24,7 @@ open class DKAssetGroupDetailBaseCell: UICollectionViewCell, DKAssetGroupCellIte
     
     internal var longPressBlock: (() -> Void)?
     
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
 
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress(gestureRecognizer:)))

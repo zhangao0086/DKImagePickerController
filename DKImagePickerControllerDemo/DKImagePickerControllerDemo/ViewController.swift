@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 import AVKit
+import DKImagePickerController
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
 

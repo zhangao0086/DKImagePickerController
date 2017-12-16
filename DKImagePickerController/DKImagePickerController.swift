@@ -196,6 +196,10 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
     public private(set) var selectedAssetIdentifiers = [String]() // DKAsset.localIdentifier
     private var assets = [String : DKAsset]() // DKAsset.localIdentifier : DKAsset
     
+    private lazy var extensionController: DKImageExtensionController! = {
+        return DKImageExtensionController(imagePickerController: self)
+    }()
+    
     public convenience init() {
         let rootVC = UIViewController()
         
@@ -649,6 +653,26 @@ open class DKImagePickerController : UINavigationController, CLImageEditorDelega
         } else {
             return UIInterfaceOrientationMask.portrait
         }
+    }
+    
+    // MARK: - Gallery
+    
+    public func showGallery(with presentationIndex: Int?,
+                            presentingFromImageView: UIImageView?,
+                            groupId: String) {
+        var extraInfo: [AnyHashable : Any] = [
+            "groupId" : groupId
+        ]
+        
+        if let presentationIndex = presentationIndex {
+            extraInfo["presentationIndex"] = presentationIndex
+        }
+        
+        if let presentingFromImageView = presentingFromImageView {
+            extraInfo["presentingFromImageView"] = presentingFromImageView
+        }
+        
+        self.extensionController.perform(extensionType: .gallery, with: extraInfo)
     }
     
     // MARK: - CLImageEditorDelegate

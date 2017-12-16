@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DKImagePickerController
 
 open class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate {
     

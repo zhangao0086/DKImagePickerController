@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DKImagePickerController
 
 class CustomGroupDetailCameraCell: DKAssetGroupDetailBaseCell {
     
