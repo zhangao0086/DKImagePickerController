@@ -10,7 +10,7 @@ import Foundation
 
 public class DKImageExtensionContext {
     
-    public var imagePickerController: DKImagePickerController!
+    public weak var imagePickerController: DKImagePickerController!
     public var groupDetailVC: DKAssetGroupDetailVC?
     
 }
@@ -94,7 +94,7 @@ class DKImageExtensionController {
         }
     }()
     
-    private let imagePickerController: DKImagePickerController
+    private weak var imagePickerController: DKImagePickerController!
     
     init(imagePickerController: DKImagePickerController) {
         self.imagePickerController = imagePickerController
