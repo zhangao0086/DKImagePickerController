@@ -19,7 +19,6 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |core|
     core.dependency 'DKImagePickerController/ImageDataManager'
-    core.dependency 'SDWebImage/GIF', '~> 4.0'
 
     core.source_files = "DKImagePickerController/**/*.{h,swift}"
 
@@ -39,14 +38,14 @@ Pod::Spec.new do |s|
 
   s.subspec 'Camera' do |camera|
     camera.dependency 'DKImagePickerController/Core'
-    camera.dependency 'DKCamera', '1.5.0'
+    camera.dependency 'DKCamera', '1.5.1'
 
     camera.ios.source_files = "Extensions/DKImageExtensionCamera.swift"
   end
 
   s.subspec 'InlineCamera' do |inlineCamera|
     inlineCamera.dependency 'DKImagePickerController/Core'
-    inlineCamera.dependency 'DKCamera', '1.5.0'
+    inlineCamera.dependency 'DKCamera', '1.5.1'
 
     inlineCamera.ios.source_files = "Extensions/DKImageExtensionInlineCamera.swift"
   end
