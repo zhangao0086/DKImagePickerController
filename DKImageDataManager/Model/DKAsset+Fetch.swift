@@ -98,9 +98,7 @@ public extension DKAsset {
         defer { objc_sync_exit(self) }
         
         if let requestIDs = self.requestIDs {
-            for requestID in requestIDs {
-                getImageDataManager().cancelRequest(requestID: requestID as! DKImageRequestID)
-            }
+            getImageDataManager().cancelRequests(requestIDs: requestIDs as! [DKImageRequestID])
             
             self.requestIDs?.removeAllObjects()
         }

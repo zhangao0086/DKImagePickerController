@@ -74,6 +74,8 @@ public class DKImageDataManager {
                                                        contentMode: contentMode,
                                                        options: requestOptions,
                                                        resultHandler: { image, info in
+                                                        self.update(requestID: requestID, with: info)
+                                                        
                                                         if let info = info, let isCancelled = info[PHImageCancelledKey] as? NSNumber, isCancelled.boolValue {
                                                             completeBlock(image, info)
                                                             return
@@ -81,17 +83,17 @@ public class DKImageDataManager {
                                                         
                                                         if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
                                                             , image == nil && isInCloud.boolValue && !requestOptions.isNetworkAccessAllowed {
-                                                            if self.requestIDs[requestID] == nil {
+                                                            if self.cancelledRequestIDs.contains(requestID) {
+                                                                self.cancelledRequestIDs.remove(requestID)
                                                                 completeBlock(nil, [PHImageCancelledKey : NSNumber(value: 1)])
                                                                 return
                                                             }
-                                                            
+
                                                             let requestCloudOptions = requestOptions.copy() as! PHImageRequestOptions
                                                             requestCloudOptions.isNetworkAccessAllowed = true
                                                             
                                                             self.fetchImage(for: asset, size: size, options: options, contentMode: contentMode, oldRequestID: requestID, completeBlock: completeBlock)
                                                         } else {
-                                                            self.update(requestID: requestID, with: nil)
                                                             completeBlock(image, info)
                                                         }
         })
@@ -112,6 +114,8 @@ public class DKImageDataManager {
         let requestOptions = options ?? self.imageRequestOptions
         let imageRequestID = self.manager.requestImageData(for: asset.originalAsset!,
                                                            options: requestOptions) { (data, dataUTI, orientation, info) in
+                                                            self.update(requestID: requestID, with: info)
+                                                            
                                                             if let info = info, let isCancelled = info[PHImageCancelledKey] as? NSNumber, isCancelled.boolValue {
                                                                 completeBlock(data, info)
                                                                 return
@@ -119,7 +123,8 @@ public class DKImageDataManager {
                                                             
                                                             if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
                                                                 , data == nil && isInCloud.boolValue && !requestOptions.isNetworkAccessAllowed {
-                                                                if self.requestIDs[requestID] == nil {
+                                                                if self.cancelledRequestIDs.contains(requestID) {
+                                                                    self.cancelledRequestIDs.remove(requestID)
                                                                     completeBlock(nil, [PHImageCancelledKey : NSNumber(value: 1)])
                                                                     return
                                                                 }
@@ -129,7 +134,6 @@ public class DKImageDataManager {
                                                                 
                                                                 self.fetchImageData(for: asset, options: requestCloudOptions, oldRequestID: requestID, completeBlock: completeBlock)
                                                             } else {
-                                                                self.update(requestID: requestID, with: nil)
                                                                 completeBlock(data, info)
                                                             }
         }
@@ -150,6 +154,8 @@ public class DKImageDataManager {
         let requestOptions = options ?? self.videoRequestOptions
         let imageRequestID = self.manager.requestAVAsset(forVideo: asset.originalAsset!,
                                                          options: requestOptions) { avAsset, audioMix, info in
+                                                            self.update(requestID: requestID, with: info)
+                                                            
                                                             if let info = info, let isCancelled = info[PHImageCancelledKey] as? NSNumber, isCancelled.boolValue {
                                                                 completeBlock(avAsset, info)
                                                                 return
@@ -157,7 +163,8 @@ public class DKImageDataManager {
 
                                                             if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?
                                                                 , avAsset == nil && isInCloud.boolValue && !requestOptions.isNetworkAccessAllowed {
-                                                                if self.requestIDs[requestID] == nil {
+                                                                if self.cancelledRequestIDs.contains(requestID) {
+                                                                    self.cancelledRequestIDs.remove(requestID)
                                                                     completeBlock(nil, [PHImageCancelledKey : NSNumber(value: 1)])
                                                                     return
                                                                 }
@@ -167,7 +174,6 @@ public class DKImageDataManager {
                                                                 
                                                                 self.fetchAVAsset(for: asset, options: requestCloudOptions, oldRequestID: requestID, completeBlock: completeBlock)
                                                             } else {
-                                                                self.update(requestID: requestID, with: nil)
                                                                 completeBlock(avAsset, info)
                                                             }
         }
@@ -177,12 +183,23 @@ public class DKImageDataManager {
     }
     
     public func cancelRequest(requestID: DKImageRequestID) {
+        self.cancelRequests(requestIDs: [requestID])
+    }
+    
+    public func cancelRequests(requestIDs: [DKImageRequestID]) {
         self.executeOnMainThread {
-            if let imageRequestID = self.requestIDs[requestID] {
-                self.manager.cancelImageRequest(imageRequestID)
+            while self.cancelledRequestIDs.count > 100 {
+                let _ = self.cancelledRequestIDs.popFirst()
             }
             
-            self.update(requestID: requestID, with: nil)
+            for requestID in requestIDs {
+                if let imageRequestID = self.requestIDs[requestID] {
+                    self.manager.cancelImageRequest(imageRequestID)
+                    self.cancelledRequestIDs.insert(requestID)
+                }
+                
+                self.requestIDs[requestID] = nil
+            }
         }
     }
     
@@ -201,6 +218,8 @@ public class DKImageDataManager {
     // MARK: - RequestID
     
     private var requestIDs = [DKImageRequestID : PHImageRequestID]()
+    private var finishedRequestIDs = Set<DKImageRequestID>()
+    private var cancelledRequestIDs = Set<DKImageRequestID>()
     private var seed: DKImageRequestID = 0
     
     private func getSeed() -> DKImageRequestID {
@@ -213,16 +232,42 @@ public class DKImageDataManager {
     
     private func update(requestID: DKImageRequestID,
                         with imageRequestID: PHImageRequestID?,
-                        old oldImageRequestID: DKImageRequestID? = nil) {
+                        old oldImageRequestID: DKImageRequestID?) {
         self.executeOnMainThread {
             if let imageRequestID = imageRequestID {
-                if self.requestIDs[requestID] != nil || oldImageRequestID == nil {
-                    self.requestIDs[requestID] = imageRequestID
-                } else {
+                if self.cancelledRequestIDs.contains(requestID) {
+                    self.cancelledRequestIDs.remove(requestID)
                     self.manager.cancelImageRequest(imageRequestID)
+                } else {
+                    if self.finishedRequestIDs.contains(requestID) {
+                        self.finishedRequestIDs.remove(requestID)
+                    } else {
+                        self.requestIDs[requestID] = imageRequestID
+                    }
                 }
             } else {
                 self.requestIDs[requestID] = nil
+            }
+        }
+    }
+    
+    private func update(requestID: DKImageRequestID, with info: [AnyHashable : Any]?) {
+        guard let info = info else { return }
+        
+        if let isCancelled = info[PHImageCancelledKey] as? NSNumber, isCancelled.boolValue {
+            self.executeOnMainThread {
+                self.requestIDs[requestID] = nil
+                self.cancelledRequestIDs.remove(requestID)
+            }
+        } else if let isDegraded = (info[PHImageResultIsDegradedKey] as? NSNumber)?.boolValue {
+            if !isDegraded { // No more callbacks for the requested image.
+                self.executeOnMainThread {
+                    if self.requestIDs[requestID] == nil {
+                        self.finishedRequestIDs.insert(requestID)
+                    } else {
+                        self.requestIDs[requestID] = nil
+                    }
+                }
             }
         }
     }
