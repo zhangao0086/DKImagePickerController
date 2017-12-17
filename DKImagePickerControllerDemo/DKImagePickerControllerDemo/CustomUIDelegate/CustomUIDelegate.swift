@@ -12,7 +12,7 @@ import DKImagePickerController
 open class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate {
     
     lazy var footer: UIToolbar = {
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
         toolbar.isTranslucent = false
         toolbar.items = [
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
