@@ -8,25 +8,26 @@
 
 import UIKit
 
-public extension Bundle {
-    
-    class func imagePickerControllerBundle() -> Bundle {
-        let assetPath = Bundle(for: DKImageResource.self).resourcePath!
-        return Bundle(path: (assetPath as NSString).appendingPathComponent("DKImagePickerController.bundle"))!
-    }
-    
-}
-
-private var CustomImageBlock: ((_ imageName: String) -> UIImage?)?
-
-/// Add a hook for custom images.
-public func DKImageCustomLocalizationBlock(block: @escaping ((_ imageName: String) -> UIImage?)) {
-    CustomImageBlock = block
-}
-
 public class DKImageResource: NSObject {
     
     private static let cache = NSCache<NSString, UIImage>()
+    
+    // MARK: - Internationalization
+    
+    /// Add a hook for custom localization.
+    public static var customLocalizationBlock: ((_ title: String) -> String?)?
+    
+    public class func localizedStringWithKey(_ key: String, value: String? = nil) -> String {
+        return customLocalizationBlock?(key) ?? NSLocalizedString(key,
+                                                                  tableName: "DKImagePickerController",
+                                                                  bundle:Bundle.imagePickerControllerBundle(),
+                                                                  value: value ?? "",
+                                                                  comment: "")
+    }
+    
+    // MARK: - Images
+    
+    public static var customImageBlock: ((_ imageName: String) -> UIImage?)?
 	
     public class func checkedImage() -> UIImage {
         return imageForResource("checked_background", stretchable: true, cacheable: true)
@@ -58,7 +59,7 @@ public class DKImageResource: NSObject {
     }
     
     public class func imageForResource(_ name: String, stretchable: Bool = false, cacheable: Bool = false) -> UIImage {
-        if let image = CustomImageBlock?(name) {
+        if let image = customImageBlock?(name) {
             return image
         }
         
@@ -91,17 +92,11 @@ public class DKImageResource: NSObject {
     
 }
 
-private var CustomLocalizationBlock: ((_ title: String) -> String?)?
-
-/// Add a hook for custom localization.
-public func DKImageCustomLocalizationBlock(block: @escaping ((_ title: String) -> String?)) {
-    CustomLocalizationBlock = block
-}
-
-public func DKImageLocalizedStringWithKey(_ key: String, value: String? = nil) -> String {
-    return CustomLocalizationBlock?(key) ?? NSLocalizedString(key,
-                                                              tableName: "DKImagePickerController",
-                                                              bundle:Bundle.imagePickerControllerBundle(),
-                                                              value: value ?? "",
-                                                              comment: "")
+private extension Bundle {
+    
+    class func imagePickerControllerBundle() -> Bundle {
+        let assetPath = Bundle(for: DKImageResource.self).resourcePath!
+        return Bundle(path: (assetPath as NSString).appendingPathComponent("DKImagePickerController.bundle"))!
+    }
+    
 }

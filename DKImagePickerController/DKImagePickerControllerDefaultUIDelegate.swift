@@ -42,10 +42,10 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
             
             let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
             
-            button.setTitle(String(format: DKImageLocalizedStringWithKey("select"),
+            button.setTitle(String(format: DKImageResource.localizedStringWithKey("select"),
                                    formattedSelectableCount ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
         } else {
-            button.setTitle(DKImageLocalizedStringWithKey("done"), for: .normal)
+            button.setTitle(DKImageResource.localizedStringWithKey("done"), for: .normal)
         }
         
         button.sizeToFit()
@@ -103,11 +103,11 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
         
         let formattedMaxSelectableCount = formatter.string(from: NSNumber(value: imagePickerController.maxSelectableCount))
         
-        let alert = UIAlertController(title: DKImageLocalizedStringWithKey("maxLimitReached"), message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: DKImageResource.localizedStringWithKey("maxLimitReached"), message: nil, preferredStyle: .alert)
         
-        alert.message = String(format: DKImageLocalizedStringWithKey("maxLimitReachedMessage"), formattedMaxSelectableCount ?? imagePickerController.maxSelectableCount)
+        alert.message = String(format: DKImageResource.localizedStringWithKey("maxLimitReachedMessage"), formattedMaxSelectableCount ?? imagePickerController.maxSelectableCount)
         
-        alert.addAction(UIAlertAction(title: DKImageLocalizedStringWithKey("ok"), style: .cancel) { _ in })
+        alert.addAction(UIAlertAction(title: DKImageResource.localizedStringWithKey("ok"), style: .cancel) { _ in })
         
         imagePickerController.present(alert, animated: true){}
 	}
