@@ -85,8 +85,6 @@
 		9CF72B111B8F073400238B9A /* DKImagePickerControllerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKImagePickerControllerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CF72B141B8F073400238B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CF72B151B8F073400238B9A /* DKImagePickerControllerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerDemoTests.swift; sourceTree = "<group>"; };
-		B9EFB9731D20FB7D006CDCAA /* DKImagePickerControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerTests.swift; sourceTree = "<group>"; };
-		B9EFB9751D20FB7D006CDCAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B9EFB9931D2105A3006CDCAA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DAD0C79E380771858014F6FF /* Pods-DKImagePickerControllerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DKImagePickerControllerDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-DKImagePickerControllerDemo/Pods-DKImagePickerControllerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		DEA2D9AC87F0FE66B93C2B0A /* Pods_DKImagePickerControllerDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DKImagePickerControllerDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,7 +133,6 @@
 			children = (
 				9C6E94AF1F5E65800014B700 /* DKImagePickerControllerDemo */,
 				9CF72B121B8F073400238B9A /* DKImagePickerControllerDemoTests */,
-				B9EFB9721D20FB7D006CDCAA /* DKImagePickerControllerTests */,
 				9C35CC0019DBB00700557269 /* Products */,
 				DD9FBB21E257DD5FDCD12AEB /* Frameworks */,
 				653F51E685B51ADD2517E429 /* Pods */,
@@ -223,15 +220,6 @@
 				9CF72B141B8F073400238B9A /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		B9EFB9721D20FB7D006CDCAA /* DKImagePickerControllerTests */ = {
-			isa = PBXGroup;
-			children = (
-				B9EFB9731D20FB7D006CDCAA /* DKImagePickerControllerTests.swift */,
-				B9EFB9751D20FB7D006CDCAA /* Info.plist */,
-			);
-			path = DKImagePickerControllerTests;
 			sourceTree = "<group>";
 		};
 		DD9FBB21E257DD5FDCD12AEB /* Frameworks */ = {
