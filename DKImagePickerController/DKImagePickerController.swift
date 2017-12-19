@@ -83,8 +83,8 @@ public enum DKImagePickerControllerSourceType : Int {
 }
 
 @objc
-public enum DKImagePickerControllerStatus: Int {
-    case unknown, selecting, exporting, completed, cancelled
+public enum DKImagePickerControllerExportStatus: Int {
+    case none, exporting
 }
 
 @objc
@@ -140,20 +140,23 @@ open class DKImagePickerController : UINavigationController {
         }
     }
     
-    /// The callback block is executed when user pressed the select button.
+    /// The block is executed when user pressed the cancel button.
+    @objc public var didCancel: (() -> Void)?
+    
+    /// The block is executed when user pressed the select button.
     @objc public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
-    
-    @objc public private(set) var status = DKImagePickerControllerStatus.unknown {
-        didSet {
-            self.statusChanged?(self.status)
-        }
-    }
-    
-    @objc public var statusChanged: ((DKImagePickerControllerStatus) -> Void)?
     
     @objc public var selectedChanged: (() -> Void)?
     
     @objc public var exporter: DKImageAssetExporter? = DKImageAssetExporter.sharedInstance
+    
+    @objc public private(set) var exportStatus = DKImagePickerControllerExportStatus.none {
+        didSet {
+            self.exportStatusChanged?(self.exportStatus)
+        }
+    }
+    
+    @objc public var exportStatusChanged: ((DKImagePickerControllerExportStatus) -> Void)?
     
     @objc public private(set) lazy var groupDataManager: DKImageGroupDataManager = {
         let configuration = DKImageGroupDataManagerConfiguration()
@@ -236,6 +239,91 @@ open class DKImagePickerController : UINavigationController {
     
     @objc open func makeRootVC() -> DKAssetGroupDetailVC {
       return DKAssetGroupDetailVC()
+    }
+    
+    @objc open func presentCamera() {
+        self.showCamera(isInline: false)
+    }
+    
+    @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool = true, completion: (() -> Swift.Void)? = nil) {
+        if self.inline {
+            UIApplication.shared.keyWindow!.rootViewController!.present(viewControllerToPresent,
+                                                                        animated: flag,
+                                                                        completion: completion)
+        } else {
+            super.present(viewControllerToPresent, animated: flag, completion: completion)
+        }
+    }
+    
+    @objc open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if self.inline {
+            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
+        } else {
+            super.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    @objc open func dismissCamera(isInline: Bool = false) {
+        self.extensionController.finish(extensionType: isInline ? .inlineCamera : .camera)
+    }
+    
+    @objc open func dismiss() {
+        self.cancelCurrentExportRequestIfNeeded()
+        
+        self.presentingViewController?.dismiss(animated: true, completion: {
+            self.didCancel?()
+            
+            if self.sourceType == .camera {
+                self.needShowInlineCamera = true
+            }
+        })
+    }
+    
+    private var exportRequestID = DKImageAssetExportInvalidRequestID
+    @objc open func done() {
+        self.cancelCurrentExportRequestIfNeeded()
+        
+        let completeBlock = {
+            self.exportStatus = .none
+            
+            self.didSelectAssets?(self.selectedAssets)
+            
+            if self.sourceType == .camera {
+                self.needShowInlineCamera = true
+            }
+        }
+        
+        let exportBlock = {
+            if let exporter = self.exporter {
+                self.exportRequestID = exporter.exportAssetsAsynchronously(assets: self.selectedAssets) { [weak self] info in
+                    if let strongSelf = self {
+                        let requestID = info[DKImageAssetExportResultRequestIDKey] as! DKImageAssetExportRequestID
+                        if strongSelf.exportRequestID == requestID {
+                            completeBlock()
+                        }
+                    }
+                }
+                
+                self.exportStatus = .exporting
+            } else {
+                completeBlock()
+            }
+        }
+        
+        if self.inline {
+            exportBlock()
+        } else {
+            self.presentingViewController?.dismiss(animated: true, completion: {
+                exportBlock()
+            })
+        }
+    }
+    
+    private func cancelCurrentExportRequestIfNeeded() {
+        if self.exportRequestID != DKImageAssetExportInvalidRequestID {
+            self.exporter?.cancel(requestID: self.exportRequestID)
+            self.exportStatus = .none
+        }
     }
     
     private func updateCancelButtonForVC(_ vc: UIViewController) {
@@ -339,66 +427,7 @@ open class DKImagePickerController : UINavigationController {
             ])
     }
     
-    @objc open func presentCamera() {
-        self.showCamera(isInline: false)
-    }
-    
-    @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool = true, completion: (() -> Swift.Void)? = nil) {
-        if self.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.present(viewControllerToPresent,
-                                                                        animated: flag,
-                                                                        completion: completion)
-        } else {
-            super.present(viewControllerToPresent, animated: flag, completion: completion)
-        }
-    }
-    
-    @objc open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        if self.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
-        } else {
-            super.dismiss(animated: true, completion: nil)
-        }
-    }
-    
-    @objc open func dismissCamera(isInline: Bool = false) {
-        self.extensionController.finish(extensionType: isInline ? .inlineCamera : .camera)
-    }
-    
-    @objc open func dismiss() {
-        self.presentingViewController?.dismiss(animated: true, completion: {
-            self.status = .cancelled
-            
-            if self.sourceType == .camera {
-                self.needShowInlineCamera = true
-            }
-        })
-    }
-    
-    @objc open func done() {
-        let completeBlock = {
-            self.status = .completed
-            self.didSelectAssets?(self.selectedAssets)
-            
-            if self.sourceType == .camera {
-                self.needShowInlineCamera = true
-            }
-        }
-        
-        self.presentingViewController?.dismiss(animated: true, completion: {
-            if let exporter = self.exporter {
-                self.status = .exporting
-                
-                exporter.exportAssetsAsynchronously(assets: self.selectedAssets, completion: { result in
-                    completeBlock()
-                })
-            } else {
-                completeBlock()
-            }
-        })
-    }
-    
-    @objc open func triggerSelectedChanged() {
+    private func triggerSelectedChangedIfNeeded() {
         if let selectedChanged = self.selectedChanged {
             selectedChanged()
         }
@@ -521,7 +550,7 @@ open class DKImagePickerController : UINavigationController {
         if self.sourceType == .camera || (self.singleSelect && self.autoCloseOnSingleSelect) {
             self.done()
         } else {
-            self.triggerSelectedChanged()
+            self.triggerSelectedChangedIfNeeded()
             self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
             
             if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
@@ -550,7 +579,7 @@ open class DKImagePickerController : UINavigationController {
         self.assets[asset.localIdentifier] = nil
         self.clearSelectedAssetsCache()
         
-        self.triggerSelectedChanged()
+        self.triggerSelectedChangedIfNeeded()
         self.UIDelegate.imagePickerController(self, didDeselectAssets: [asset])
         
         if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
@@ -565,7 +594,7 @@ open class DKImagePickerController : UINavigationController {
             self.assets.removeAll()
             self.clearSelectedAssetsCache()
             
-            self.triggerSelectedChanged()
+            self.triggerSelectedChangedIfNeeded()
             self.UIDelegate.imagePickerController(self, didDeselectAssets: assets)
             
             

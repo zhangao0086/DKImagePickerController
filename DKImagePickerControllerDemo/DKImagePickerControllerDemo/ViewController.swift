@@ -31,18 +31,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             pickerController.select(assets: assets)
         }
         
-        pickerController.statusChanged = { status in
+        pickerController.exportStatusChanged = { status in
             switch status {
-            case .selecting:
-                print("selecting")
             case .exporting:
+                DispatchQueue.global().asyncAfter(deadline: .now() + 0.2, execute: {
+                    self.pickerController.exporter?.cancelAll()
+                })
                 print("exporting")
-            case .completed:
-                print("completed")
-            case .cancelled:
-                print("cancelled")
-            default:
-                print("unknown")
+            case .none:
+                print("none")
             }
         }
         
