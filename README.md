@@ -1,10 +1,8 @@
 DKImagePickerController
 =======================
 
- [![Build Status](https://secure.travis-ci.org/zhangao0086/DKImagePickerController.svg)](http://travis-ci.org/zhangao0086/DKImagePickerController) [![Version Status](http://img.shields.io/cocoapods/v/DKImagePickerController.png)][docsLink] [![license MIT](https://img.shields.io/cocoapods/l/DKImagePickerController.svg?style=flat)][mitLink] [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+ [![Build Status](https://secure.travis-ci.org/zhangao0086/DKImagePickerController.svg)](http://travis-ci.org/zhangao0086/DKImagePickerController) [![Version Status](http://img.shields.io/cocoapods/v/DKImagePickerController.png)][docsLink] [![license MIT](https://img.shields.io/cocoapods/l/DKImagePickerController.svg?style=flat)][mitLink]
 
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot1.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot2.png" />
----
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
 ---
 <img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
@@ -22,8 +20,7 @@ It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCam
 * Customizable camera.
 * Customizable UI.
 * Customizable UICollectionViewLayout.
-* Supports footer view.
-* Supports inline mode.
+* Inline mode.
 
 ## Requirements
 * iOS 8.0+
@@ -38,19 +35,6 @@ DKImagePickerController is available on CocoaPods. Simply add the following line
 # For latest release in cocoapods
 pod 'DKImagePickerController'
 ```
-
-#### iOS 7.x
-
-> The 3.x aren't supported before iOS 8. If you want to support iOS 7, you can look at the [2.4.3](https://github.com/zhangao0086/DKImagePickerController/tree/2.4.3) branch that uses `ALAssetsLibrary` instead of using `Photos`.
-
-> To use Swift libraries on apps that support iOS 7, you must manually copy the files into your application project.
-[CocoaPods only supports Swift on OS X 10.9 and newer, and iOS 8 and newer.](https://github.com/CocoaPods/blog.cocoapods.org/commit/6933ae5ccfc1e0b39dd23f4ec67d7a083975836d)
-
-#### Swift 2.2
-> For Swift 2.2, use version <= 3.3.4
-
-#### Swift 2.3
-> For Swift 2.3, use version = 3.3.5 or the `Feature/Swift2.3` branch
 
 ## Getting Started
 #### Initialization and presentation
@@ -236,53 +220,38 @@ pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 ```
 
 ## Localization
-It has been supported languages so far:
+The default supported languages:
 
-* en.lproj
-* es.lproj
-* da.lproj
-* de.lproj
-* fr.lproj
-* hu.lproj
-* ja.lproj
-* ko.lproj
-* nb-NO.lproj
-* pt_BR.lproj
-* ru.lproj
-* tr.lproj
-* ur.lproj
-* vi.lproj
-* ar.lproj
-* it.lproj
-* zh-Hans.lproj
-* zh-Hant.lproj
+- en.lproj
+- es.lproj
+- da.lproj
+- de.lproj
+- fr.lproj
+- hu.lproj
+- ja.lproj
+- ko.lproj
+- nb-NO.lproj
+- pt_BR.lproj
+- ru.lproj
+- tr.lproj
+- ur.lproj
+- vi.lproj
+- ar.lproj
+- it.lproj
+- zh-Hans.lproj
+- zh-Hant.lproj
 
-If you want to add new language, pull request or issue!
+You can also add a hook to return your own localized string:
 
----
-You can merge your branch into the `develop` branch. Any Pull Requests to be welcome!!!
+```swift
+```
 
-## Change Log
-
-## [3.8.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.8.0) (2017-09-24)
-
-[Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.1...3.8.0)
-
-- Swift 4.
-
-- Fixed #380.
-
-- Fixed #381.
-
-- Fixed #374.
-
-- Handle iOS 11 BarButtonItems bug.
-
-- In iOS 10.0, use AVCapturePhotoOutput instead AVCaptureStillImageOutput.
+## Contributing to this project
+If you have feature requests or bug reports, feel free to help out by sending pull requests or by creating new issues.
 
 ## License
 DKImagePickerController is released under the MIT license. See LICENSE for details.
 
-[docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [mitLink]:http://opensource.org/licenses/MIT
+[docsLink]:http://cocoadocs.org/docsets/DKImagePickerController
 [DKCamera]:https://github.com/zhangao0086/DKCamera
