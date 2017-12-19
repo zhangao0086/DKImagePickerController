@@ -37,7 +37,8 @@ public class DKImageGroupDataManagerConfiguration: NSObject, NSCopying {
     /// Options that specify a filter predicate and sort order for the fetched assets, or nil to use default options.
     @objc public var assetFetchOptions: PHFetchOptions?
     
-    @objc public var assetFilter: ((_ asset: PHAsset) -> Bool)?
+    /// Only the number of data is displayed on the UI. 0 means no limit.
+    @objc public var fetchLimit = 0
     
     public required override init() {
         super.init()
@@ -47,7 +48,7 @@ public class DKImageGroupDataManagerConfiguration: NSObject, NSCopying {
         let copy = type(of: self).init()
         copy.assetGroupTypes = self.assetGroupTypes
         copy.assetFetchOptions = self.assetFetchOptions
-        copy.assetFilter = self.assetFilter
+        copy.fetchLimit = self.fetchLimit
         
         return copy
     }
@@ -143,14 +144,16 @@ open class DKImageGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver 
 	}
     
     open func fetchPHAsset(_ group: DKAssetGroup, index: Int) -> PHAsset {
-        return group.fetchResult[group.totalCount - 1 - index]
+        return group.fetchResult[group.fetchResult.count - 1 - index]
     }
     
     open func makeDKAssetGroup(with collection: PHAssetCollection) -> DKAssetGroup {
         let assetGroup = DKAssetGroup()
         assetGroup.groupId = collection.localIdentifier
         self.updateGroup(assetGroup, collection: collection)
-        self.updateGroup(assetGroup, fetchResult: PHAsset.fetchAssets(in: collection, options: self.configuration.assetFetchOptions))
+        
+        let fetchResult = PHAsset.fetchAssets(in: collection, options: self.configuration.assetFetchOptions)
+        self.updateGroup(assetGroup, fetchResult: fetchResult)
         
         return assetGroup
     }
@@ -185,23 +188,9 @@ open class DKImageGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver 
 	}
 	
 	open func updateGroup(_ group: DKAssetGroup, fetchResult: PHFetchResult<PHAsset>) {
-        group.fetchResult = self.filterResults(fetchResult)
-		group.totalCount = group.fetchResult.count
+        group.fetchResult = fetchResult
+        group.displayCount = self.configuration.fetchLimit
 	}
-	
-    open func filterResults(_ fetchResult: PHFetchResult<PHAsset>) -> PHFetchResult<PHAsset> {
-        guard let filter = self.configuration.assetFilter else { return fetchResult }
-        
-        var filtered = [PHAsset]()
-        for i in 0..<fetchResult.count {
-            if filter(fetchResult[i]) {
-                filtered.append(fetchResult[i])
-            }
-        }
-        
-        let collection = PHAssetCollection.transientAssetCollection(with: filtered, title: nil)
-        return PHAsset.fetchAssets(in: collection, options: nil)
-    }
     
 	// MARK: - PHPhotoLibraryChangeObserver methods
 	

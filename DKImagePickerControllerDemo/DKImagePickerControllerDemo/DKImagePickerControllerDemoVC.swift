@@ -8,6 +8,7 @@
 
 import UIKit
 import DKImagePickerController
+import Photos
 
 class DKImagePickerControllerDemoVC: UITableViewController {
     
@@ -97,9 +98,14 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             destination.pickerController = pickerController
             
         case "Inline":
-            let pickerController = DKImagePickerController()
+            let groupDataManagerConfiguration = DKImageGroupDataManagerConfiguration()
+            groupDataManagerConfiguration.fetchLimit = 10
+            groupDataManagerConfiguration.assetGroupTypes = [.smartAlbumUserLibrary]
+            
+            let groupDataManager = DKImageGroupDataManager(configuration: groupDataManagerConfiguration)
+            
+            let pickerController = DKImagePickerController(groupDataManager: groupDataManager)
             pickerController.inline = true
-            pickerController.fetchLimit = 10
             pickerController.UIDelegate = CustomInlineLayoutUIDelegate(imagePickerController: pickerController)
             pickerController.assetType = .allPhotos
             pickerController.sourceType = .photo

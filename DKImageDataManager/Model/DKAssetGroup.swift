@@ -12,7 +12,18 @@ import Photos
 public class DKAssetGroup : NSObject {
 	public var groupId: String!
 	public var groupName: String!
-	public var totalCount: Int!
+    
+    public var totalCount: Int {
+        get {
+            if let displayCount = displayCount, displayCount > 0 {
+                return min(displayCount, fetchResult.count)
+            } else {
+                return fetchResult.count
+            }
+        }
+    }
+    
+    var displayCount: Int?
 	
 	public var originalCollection: PHAssetCollection!
 	public var fetchResult: PHFetchResult<PHAsset>!

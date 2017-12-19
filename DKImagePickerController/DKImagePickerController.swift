@@ -111,9 +111,6 @@ open class DKImagePickerController : UINavigationController {
     
     @objc public var inline: Bool = false
     
-    /// Limits the maximum number of objects returned in the fetch result, a value of 0 means no limit.
-    @objc public var fetchLimit = 0
-    
     /// The type of picker interface to be displayed by the controller.
     @objc public var assetType: DKImagePickerControllerAssetType = .allAssets
     
@@ -160,7 +157,7 @@ open class DKImagePickerController : UINavigationController {
     
     @objc public private(set) lazy var groupDataManager: DKImageGroupDataManager = {
         let configuration = DKImageGroupDataManagerConfiguration()
-        configuration.assetFetchOptions = self.createAssetFetchOptions()
+        configuration.assetFetchOptions = self.createDefaultAssetFetchOptions()
         
         return DKImageGroupDataManager(configuration: configuration)
     }()
@@ -249,7 +246,7 @@ open class DKImagePickerController : UINavigationController {
         }
     }
     
-    private func createAssetFetchOptions() -> PHFetchOptions {
+    private func createDefaultAssetFetchOptions() -> PHFetchOptions {
         let createImagePredicate = { () -> NSPredicate in
             let imagePredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
             

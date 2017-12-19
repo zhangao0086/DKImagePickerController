@@ -27,13 +27,8 @@ class DKImageExtensionGallery : DKImageBaseExtension, DKPhotoGalleryDelegate {
         
         var items = [DKPhotoGalleryItem]()
         let group = context.imagePickerController.groupDataManager.fetchGroupWithGroupId(groupId)
-        
-        var totalCount: Int! = group.totalCount
-        if context.imagePickerController.fetchLimit > 0 {
-            totalCount = min(group.totalCount ?? 0, context.imagePickerController.fetchLimit)
-        }
-        
-        for i in 0..<totalCount {
+                
+        for i in 0..<group.totalCount {
             let phAsset = context.imagePickerController.groupDataManager.fetchPHAsset(group, index: i)
             
             let item = DKPhotoGalleryItem(asset: phAsset)
