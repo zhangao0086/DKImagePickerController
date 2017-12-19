@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
   s.subspec 'Resource' do |resource|
     resource.resource = "DKImagePickerController/Resource/DKImagePickerController.bundle"
 
-    resource.source_files = "DKImagePickerController/Resource/DKImageResource.swift"
+    resource.source_files = "DKImagePickerController/Resource/DKImagePickerControllerResource.swift"
   end
 
   s.subspec 'PhotoGallery' do |gallery|
