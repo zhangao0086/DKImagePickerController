@@ -111,6 +111,32 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             pickerController.sourceType = .photo
             
             destination.pickerController = pickerController
+        
+        case "Custom localized strings":
+            DKImagePickerControllerResource.customLocalizationBlock = { title in
+                if title == "picker.select.title" {
+                    return "Test(%@)"
+                } else {
+                    return nil
+                }
+            }
+            
+            let pickerController = DKImagePickerController()
+            
+            destination.pickerController = pickerController
+
+        case "Custom localized images":
+            DKImagePickerControllerResource.customImageBlock = { imageName in
+                if imageName == "camera" {
+                    return DKImagePickerControllerResource.photoGalleryCheckedImage()
+                } else {
+                    return nil
+                }
+            }
+            
+            let pickerController = DKImagePickerController()
+            
+            destination.pickerController = pickerController
             
         default:
             assert(false)

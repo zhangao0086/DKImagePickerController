@@ -19,6 +19,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var assets: [DKAsset]?
     
     deinit {
+        DKImagePickerControllerResource.customLocalizationBlock = nil
+        DKImagePickerControllerResource.customImageBlock = nil
+        
         unregisterExtension(for: .camera)
         unregisterExtension(for: .inlineCamera)
     }
