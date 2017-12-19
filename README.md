@@ -244,6 +244,25 @@ The default supported languages:
 You can also add a hook to return your own localized string:
 
 ```swift
+DKImagePickerControllerResource.customLocalizationBlock = { title in
+    if title == "picker.select.title" {
+        return "Test(%@)"
+    } else {
+        return nil
+    }
+}
+```
+
+or images:
+
+```swift
+DKImagePickerControllerResource.customImageBlock = { imageName in
+    if imageName == "camera" {
+        return DKImagePickerControllerResource.photoGalleryCheckedImage()
+    } else {
+        return nil
+    }
+}
 ```
 
 ## Contributing to this project
