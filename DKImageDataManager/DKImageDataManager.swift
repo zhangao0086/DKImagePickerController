@@ -220,8 +220,8 @@ public class DKImageDataManager {
     private var requestIDs = [DKImageRequestID : PHImageRequestID]()
     private var finishedRequestIDs = Set<DKImageRequestID>()
     private var cancelledRequestIDs = Set<DKImageRequestID>()
-    private var seed: DKImageRequestID = 0
     
+    private var seed: DKImageRequestID = 0
     private func getSeed() -> DKImageRequestID {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }

@@ -52,11 +52,6 @@ fileprivate class DKImageAssetDiskPurger {
 
 /////////////////////////////////////////////////////////////////////////////
 
-@objc
-public enum DKImageAssetExportResult: Int {
-    case complete, cancelled
-}
-
 // The Error that describes the failure can be obtained from the error property of DKAsset.
 @objc
 public enum DKImageAssetExporterError: Int {
@@ -70,7 +65,14 @@ public enum DKImageExportPresent : Int {
     current     // A preset for passing image data as-is to the client.
 }
 
+public typealias DKImageAssetExportRequestID = Int32
+public let DKImageAssetExportInvalidRequestID: DKImageAssetExportRequestID = 0
+
 public let DKImageAssetExporterDomain = "DKImageAssetExporterDomain"
+
+// Result's handler info dictionary keys
+public let DKImageAssetExportResultRequestIDKey = "DKImageExportResultRequestIDKey" // key (DKImageAssetExportRequestID)
+public let DKImageAssetExportResultCancelledKey = "DKImageExportCancelledKey" // key (Bool): result is not available because the request was cancelled
 
 @objc
 protocol DKImageAssetExporterObserver {
@@ -120,8 +122,8 @@ public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
 }
 
 /*
- This exporter is able to export DKAsset (PHAsset) from album (or iCloud) to app's tmp directory
- and it will automatically cleanup when appropriate.
+ An DKImageAssetExporter object exports DKAsset(PHAsset) from album(or iCloud) to app's tmp directory(as default).
+ And it automatically deletes the exported directories when receives the UIApplicationWillTerminate notification.
  */
 @objc
 open class DKImageAssetExporter: DKBaseManager {
@@ -139,9 +141,10 @@ open class DKImageAssetExporter: DKBaseManager {
     
     private let semaphore = DispatchSemaphore(value: 1)
     
+    private var operations = [DKImageAssetExportRequestID : Operation]()
     private weak var currentAVExportSession: AVAssetExportSession?
-    private var requests = [DKAsset]()
-    private var isCancelled = false
+    private var currentAssetsInRequesting = [DKAsset]()
+    private var currentRequestID = DKImageAssetExportInvalidRequestID
     
     public init(configuration: DKImageAssetExporterConfiguration) {
         self.configuration = configuration.copy() as! DKImageAssetExporterConfiguration
@@ -150,17 +153,38 @@ open class DKImageAssetExporter: DKBaseManager {
     }
     
     /// This method starts an asynchronous export operation of a batch of asset.
-    @objc public func exportAssetsAsynchronously(assets: [DKAsset], completion: @escaping ((DKImageAssetExportResult) -> Void)) {
+    @discardableResult
+    @objc public func exportAssetsAsynchronously(assets: [DKAsset], completion: @escaping ((_ info: [AnyHashable : Any]) -> Void)) -> DKImageAssetExportRequestID {
         guard assets.count > 0 else {
-            return completion(.complete)
+            completion([
+                DKImageAssetExportResultRequestIDKey : DKImageAssetExportInvalidRequestID,
+                DKImageAssetExportResultCancelledKey : false
+                ])
+            return DKImageAssetExportInvalidRequestID
         }
         
-        var operationVisitor = [Operation]()
+        let requestID = self.getSeed()
+        
         let operation = BlockOperation {
             self.semaphore.wait()
             
-            self.isCancelled = false
-            let operation = operationVisitor.popLast()!
+            self.currentRequestID = requestID
+            guard let operation = self.operations[requestID] else {
+                for asset in assets {
+                    asset.error = self.makeCancelledError()
+                }
+                
+                self.semaphore.signal()
+                DispatchQueue.main.async {
+                    completion([
+                        DKImageAssetExportResultRequestIDKey : requestID,
+                        DKImageAssetExportResultCancelledKey : true
+                        ])
+                }
+                return
+            }
+            
+            operation.completionBlock = nil
             
             var success = true
             var exportedCount = 0
@@ -174,7 +198,10 @@ open class DKImageAssetExporter: DKBaseManager {
                         self.semaphore.signal()
                         
                         DispatchQueue.main.async {
-                            completion(operation.isCancelled ? .cancelled : .complete)
+                            completion([
+                                DKImageAssetExportResultRequestIDKey : requestID,
+                                DKImageAssetExportResultCancelledKey : operation.isCancelled
+                                ])
                         }
                     }
                 }
@@ -230,24 +257,57 @@ open class DKImageAssetExporter: DKBaseManager {
             }
         }
         
-        operation.completionBlock = {
-            if let operation = operationVisitor.popLast() {
-                assert(operation.isExecuting == false && operation.isCancelled == true, "Not yet executing.")
-                
-                DispatchQueue.main.async {
-                    completion(.cancelled)
+        operation.completionBlock = { [weak operation] in
+            if let operation = operation {
+                if operation.isExecuting == false && operation.isCancelled == true { // Not yet executing.
+                    for asset in assets {
+                        asset.error = self.makeCancelledError()
+                    }
+                    
+                    DispatchQueue.main.async {
+                        completion([
+                            DKImageAssetExportResultRequestIDKey : requestID,
+                            DKImageAssetExportResultCancelledKey : true
+                            ])
+                    }
+                } else {
+                    self.operations[requestID] = nil
                 }
             }
         }
         
-        operationVisitor.append(operation)
+        self.operations[requestID] = operation
         self.exportQueue.addOperation(operation)
+        
+        return requestID
+    }
+    
+    public func cancel(requestID: DKImageAssetExportRequestID) {
+        if let operation = self.operations[requestID] {
+            if operation.isExecuting {
+                self.currentAVExportSession?.cancelExport()
+            }
+            operation.cancel()
+            self.operations[requestID] = nil
+        }
     }
     
     public func cancelAll() {
         self.exportQueue.cancelAllOperations()
         self.currentAVExportSession?.cancelExport()
+        self.operations.removeAll()
         self.cancelAllRequests()
+    }
+    
+    // MARK: - RequestID
+    
+    private var seed: DKImageAssetExportRequestID = 0
+    private func getSeed() -> DKImageAssetExportRequestID {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+        
+        seed += 1
+        return seed
     }
     
     // MARK: - Private
@@ -256,21 +316,20 @@ open class DKImageAssetExporter: DKBaseManager {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
         
-        self.isCancelled = true
-        for asset in self.requests {
+        for asset in self.currentAssetsInRequesting {
             asset.cancelRequests()
         }
-        self.requests.removeAll()
+        self.currentAssetsInRequesting.removeAll()
     }
     
     private func add(asset: DKAsset) {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
         
-        if self.isCancelled {
+        if self.operations[self.currentRequestID] == nil {
             asset.cancelRequests()
         } else {
-            self.requests.append(asset)
+            self.currentAssetsInRequesting.append(asset)
         }
     }
     
@@ -278,7 +337,7 @@ open class DKImageAssetExporter: DKBaseManager {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
         
-        self.requests.removeAll()
+        self.currentAssetsInRequesting.removeAll()
     }
     
     private func makeCancelledError() -> Error {
