@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Seleziona(%@)";
+"permission.camera.title" = "Premettere l'accesso alla fotocamera";
 
-"permissionCamera" = "Premettere l'accesso alla fotocamera";
+"permission.photo.title" = "Permettere l'accesso alla gallery";
 
-"permissionPhoto" = "Permettere l'accesso alla gallery";
+"permission.allow" = "Permettere l'accesso";
 
-"permit" = "Permettere l'accesso";
+"picker.alert.ok" = "OK";
 
-"gotoSettings" = "Vai a「Impostazioni」per permettere l'accesso";
+"picker.select.title" = "Seleziona(%@)";
 
-"ok" = "OK";
+"picker.select.done.title" = "Fatto";
 
-"selectPhotosOrVideos" = "Selezionare foto o video";
+"picker.select.photosOrVideos.error.title" = "Selezionare foto o video";
 
-"selectPhotosOrVideosError" = "Non è possibile selezionare contemporaneamente sia foto che video.";
+"picker.select.photosOrVideos.error.message" = "Non è possibile selezionare contemporaneamente sia foto che video.";
 
-"done" = "Fatto";
+"picker.select.maxLimitReached.error.title" = "Raggiunto il numero massimo di foto";
 
-"maxLimitReached" = "Raggiunto il numero massimo di foto";
-
-"maxLimitReachedMessage" = "Puoi selezionare %@ elementi";
+"picker.select.maxLimitReached.error.message" = "Puoi selezionare %@ elementi";

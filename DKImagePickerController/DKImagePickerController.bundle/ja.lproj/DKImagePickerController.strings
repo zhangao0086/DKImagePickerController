@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "選択(%@)";
+"permission.camera.title" = "カメラへのアクセスを許可してください";
 
-"permissionCamera" = "カメラへのアクセスを許可してください";
+"permission.photo.title" = "写真へのアクセスを許可してください";
 
-"permissionPhoto" = "写真へのアクセスを許可してください";
+"permission.allow" = "許可する";
 
-"permit" = "許可する";
+"picker.alert.ok" = "OK";
 
-"gotoSettings" = "「設定」を開きアクセスを許可する";
+"picker.select.title" = "選択(%@)";
 
-"ok" = "OK";
+"picker.select.done.title" = "完了";
 
-"selectPhotosOrVideos" = "写真またはビデオを選択してください";
+"picker.select.photosOrVideos.error.title" = "写真またはビデオを選択してください";
 
-"selectPhotosOrVideosError" = "同時に、写真とビデオを選択することはできません";
+"picker.select.photosOrVideos.error.message" = "同時に、写真とビデオを選択することはできません";
 
-"done" = "完了";
+"picker.select.maxLimitReached.error.title" = "選択可能枚数に到達しました";
 
-"maxLimitReached" = "選択可能枚数に到達しました";
-
-"maxLimitReachedMessage" = "%@ 枚まで選択することができます";
+"picker.select.maxLimitReached.error.message" = "%@ 枚まで選択することができます";

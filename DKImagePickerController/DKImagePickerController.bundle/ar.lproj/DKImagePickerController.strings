@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "حدد(%@)";
+"permission.camera.title" = "الرجاء السماح بالدخول إلى الكاميرا";
 
-"permissionCamera" = "الرجاء السماح بالدخول إلى الكاميرا";
+"permission.photo.title" = "الرجاء السماح بالدخول إلى الصور";
 
-"permissionPhoto" = "الرجاء السماح بالدخول إلى الصور";
+"permission.allow" = "السماح بالدخول";
 
-"permit" = "السماح بالدخول";
+"picker.alert.ok" = "نعم";
 
-"gotoSettings" = "انتقل إلى 「إعدادات」 للسماح بالدخول";
+"picker.select.title" = "حدد(%@)";
 
-"ok" = "نعم";
+"picker.select.done.title" = "تم";
 
-"selectPhotosOrVideos" = "حدد صور أو مقاطع فيديو";
+"picker.select.photosOrVideos.error.title" = "حدد صور أو مقاطع فيديو";
 
-"selectPhotosOrVideosError" = "لا يمكن تحديد الصور ومقاطع الفيديو في نفس الوقت.";
+"picker.select.photosOrVideos.error.message" = "لا يمكن تحديد الصور ومقاطع الفيديو في نفس الوقت.";
 
-"done" = "تم";
+"picker.select.maxLimitReached.error.title" = "بلغت الصور الحد المسموح به";
 
-"maxLimitReached" = "بلغت الصور الحد المسموح به";
-
-"maxLimitReachedMessage" = "يمكنك تحديد %@ من العناصر";
+"picker.select.maxLimitReached.error.message" = "يمكنك تحديد %@ من العناصر";

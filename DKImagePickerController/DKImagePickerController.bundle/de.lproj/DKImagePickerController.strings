@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Auswählen (%@)";
+"permission.camera.title" = "Bitte gestatte der App den Zugriff zur Kamera";
 
-"permissionCamera" = "Bitte gestatte der App den Zugriff zur Kamera";
+"permission.photo.title" = "Bitte gestatte der App den Zugriff zu den Fotos";
 
-"permissionPhoto" = "Bitte gestatte der App den Zugriff zu den Fotos";
+"permission.allow" = "Zugriff gestatten";
 
-"permit" = "Zugriff gestatten";
+"picker.alert.ok" = "OK";
 
-"gotoSettings" = "Gehen Sie in die「Einstellungen」um den Zugriff zu erlauben";
+"picker.select.title" = "Auswählen (%@)";
 
-"ok" = "OK";
+"picker.select.done.title" = "Fertig";
 
-"selectPhotosOrVideos" = "Wähle Fotos oder Videos aus";
+"picker.select.photosOrVideos.error.title" = "Wähle Fotos oder Videos aus";
 
-"selectPhotosOrVideosError" = "Es ist nicht möglich zur selben Zeit Fotos und Videos auszuwählen";
+"picker.select.photosOrVideos.error.message" = "Es ist nicht möglich zur selben Zeit Fotos und Videos auszuwählen";
 
-"done" = "Fertig";
+"picker.select.maxLimitReached.error.title" = "Maximale Bilderanzahl erreicht";
 
-"maxLimitReached" = "Maximale Bilderanzahl erreicht";
-
-"maxLimitReachedMessage" = "Sie können nur %@ Fotos auswählen";
+"picker.select.maxLimitReached.error.message" = "Sie können nur %@ Fotos auswählen";

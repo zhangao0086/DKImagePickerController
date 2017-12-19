@@ -21,15 +21,15 @@ open class DKPermissionView: UIView {
 		permissionView.addSubview(permissionView.permitButton)
 		
 		if style == .photo {
-			permissionView.titleLabel.text = DKImageResource.localizedStringWithKey("permissionPhoto")
+			permissionView.titleLabel.text = DKImageResource.localizedStringWithKey("permission.photo.title")
 			permissionView.titleLabel.textColor = UIColor.gray
 		} else {
 			permissionView.titleLabel.textColor = UIColor.white
-			permissionView.titleLabel.text = DKImageResource.localizedStringWithKey("permissionCamera")
+			permissionView.titleLabel.text = DKImageResource.localizedStringWithKey("permission.camera.title")
 		}
 		permissionView.titleLabel.sizeToFit()
 		
-		permissionView.permitButton.setTitle(DKImageResource.localizedStringWithKey("permit"), for: .normal)
+		permissionView.permitButton.setTitle(DKImageResource.localizedStringWithKey("permission.allow"), for: .normal)
 		permissionView.permitButton.setTitleColor(UIColor(red: 0, green: 122.0 / 255, blue: 1, alpha: 1), for: .normal)
 		permissionView.permitButton.addTarget(permissionView, action: #selector(DKPermissionView.gotoSettings), for: .touchUpInside)
 		permissionView.permitButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)

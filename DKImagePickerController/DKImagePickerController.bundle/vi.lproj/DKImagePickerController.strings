@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Chọn(%@)";
+"permission.camera.title" = "Vui lòng cho phép truy cập camera";
 
-"permissionCamera" = "Vui lòng cho phép truy cập camera";
+"permission.photo.title" = "Vui lòng cho phép truy cập ảnh";
 
-"permissionPhoto" = "Vui lòng cho phép truy cập ảnh";
+"permission.allow" = "Cho phép truy cập";
 
-"permit" = "Cho phép truy cập";
+"picker.alert.ok" = "Đồng ý";
 
-"gotoSettings" = "Mở 「Cài đặt」 để cho phép truy cập";
+"picker.select.title" = "Chọn(%@)";
 
-"ok" = "Đồng ý";
+"picker.select.done.title" = "Xong";
 
-"selectPhotosOrVideos" = "Chọn ảnh hoặc video";
+"picker.select.photosOrVideos.error.title" = "Chọn ảnh hoặc video";
 
-"selectPhotosOrVideosError" = "Không thể lựa chọn đồng thời cả ảnh và video.";
+"picker.select.photosOrVideos.error.message" = "Không thể lựa chọn đồng thời cả ảnh và video.";
 
-"done" = "Xong";
+"picker.select.maxLimitReached.error.title" = "Số lượng ảnh đã đạt giới hạn";
 
-"maxLimitReached" = "Số lượng ảnh đã đạt giới hạn";
-
-"maxLimitReachedMessage" = "Bạn có thể chọn %@ mục";
+"picker.select.maxLimitReached.error.message" = "Bạn có thể chọn %@ mục";

@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "(%@)منتخب کریں";
+"permission.camera.title" = "براےْ مھربانی کیمرے کی رسائی کی اجازت دیں";
 
-"permissionCamera" = "براےْ مھربانی کیمرے کی رسائی کی اجازت دیں";
+"permission.photo.title" = "براےْ مھربانی تصویروں کی رسائی کی اجازت دیں";
 
-"permissionPhoto" = "براےْ مھربانی تصویروں کی رسائی کی اجازت دیں";
+"permission.allow" = "اجازت دیں";
 
-"permit" = "اجازت دیں";
+"picker.alert.ok" = "ٹھیک ہے";
 
-"gotoSettings" = "اجازت دینے کے لیے 「ترتیبات」 میں جائیں";
+"picker.select.title" = "(%@)منتخب کریں";
 
-"ok" = "ٹھیک ہے";
+"picker.select.done.title" = "مکمل کریں";
 
-"selectPhotosOrVideos" = "تصاویر اور ویڈیوز منتخب کریں";
+"picker.select.photosOrVideos.error.title" = "تصاویر اور ویڈیوز منتخب کریں";
 
-"selectPhotosOrVideosError" = "تصاویر اور ویڈیوز ایک ساتھ منتخب نھیں ہو سکتیں";
+"picker.select.photosOrVideos.error.message" = "تصاویر اور ویڈیوز ایک ساتھ منتخب نھیں ہو سکتیں";
 
-"done" = "مکمل کریں";
+"picker.select.maxLimitReached.error.title" = "تصاویر کی مقررہ تعداد پوری ہوگئی";
 
-"maxLimitReached" = "تصاویر کی مقررہ تعداد پوری ہوگئی";
-
-"maxLimitReachedMessage" = "آپ %@ تصاویر منتخب کر سکتے ہیں";
+"picker.select.maxLimitReached.error.message" = "آپ %@ تصاویر منتخب کر سکتے ہیں";

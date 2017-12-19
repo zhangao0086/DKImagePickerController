@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Seçili(%@)";
+"permission.camera.title" = "Kamera erişimine izin veriniz.";
 
-"permissionCamera" = "Kamera erişimine izin veriniz.";
+"permission.photo.title" = "Fotoğraf erişimine izin veriniz.";
 
-"permissionPhoto" = "Fotoğraf erişimine izin veriniz.";
+"permission.allow" = "Erişim izni veriniz.";
 
-"permit" = "Erişim izni veriniz.";
+"picker.alert.ok" = "Tamam";
 
-"gotoSettings" = "Erişim izni vermek için Ayarlar'a gidiniz.";
+"picker.select.title" = "Seçili(%@)";
 
-"ok" = "Tamam";
+"picker.select.done.title" = "Tamam";
 
-"selectPhotosOrVideos" = "Fotoğraf veya video seçiniz.";
+"picker.select.photosOrVideos.error.title" = "Fotoğraf veya video seçiniz.";
 
-"selectPhotosOrVideosError" = "Aynı anda fotoğraf ve video seçimi yapamazsınız.";
+"picker.select.photosOrVideos.error.message" = "Aynı anda fotoğraf ve video seçimi yapamazsınız.";
 
-"done" = "Tamam";
+"picker.select.maxLimitReached.error.title" = "Maksimum fotoğraf limitine ulaştınız.";
 
-"maxLimitReached" = "Maksimum fotoğraf limitine ulaştınız.";
-
-"maxLimitReachedMessage" = "%@ fotoğraf seçebilirsiniz.";
+"picker.select.maxLimitReached.error.message" = "%@ fotoğraf seçebilirsiniz.";

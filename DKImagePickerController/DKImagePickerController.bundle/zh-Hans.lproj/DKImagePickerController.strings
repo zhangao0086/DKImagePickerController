@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "选择(%@)";
+"permission.camera.title" = "请授权使用相机";
 
-"permissionCamera" = "请授权使用相机";
+"permission.photo.title" = "请授权使用照片";
 
-"permissionPhoto" = "请授权使用照片";
+"permission.allow" = "允许访问";
 
-"permit" = "允许访问";
+"picker.alert.ok" = "确定";
 
-"gotoSettings" = "进入「设置」打开访问权限";
+"picker.select.title" = "选择(%@)";
 
-"ok" = "确定";
+"picker.select.done.title" = "完成";
 
-"selectPhotosOrVideos" = "选择照片或视频";
+"picker.select.photosOrVideos.error.title" = "选择照片或视频";
 
-"selectPhotosOrVideosError" = "不能同时选中照片或视频.";
+"picker.select.photosOrVideos.error.message" = "不能同时选中照片或视频.";
 
-"done" = "完成";
+"picker.select.maxLimitReached.error.title" = "最大数限制";
 
-"maxLimitReached" = "最大数限制";
-
-"maxLimitReachedMessage" = "你能选择%@项";
+"picker.select.maxLimitReached.error.message" = "你能选择%@项";

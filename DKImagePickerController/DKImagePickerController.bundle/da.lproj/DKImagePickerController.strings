@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Tilføj(%@)";
+"permission.camera.title" = "Tillad venligst adgang til kameraet";
 
-"permissionCamera" = "Tillad venligst adgang til kameraet";
+"permission.photo.title" = "Tillad venilgst adgang til fotos";
 
-"permissionPhoto" = "Tillad venilgst adgang til fotos";
+"permission.allow" = "Tillad adgang";
 
-"permit" = "Tillad adgang";
+"picker.alert.ok" = "OK";
 
-"gotoSettings" = "Gå til 「Indstillinger」for at give adgang";
+"picker.select.title" = "Tilføj(%@)";
 
-"ok" = "OK";
+"picker.select.done.title" = "Udfør";
 
-"selectPhotosOrVideos" = "Tilføj fotos eller videoer";
+"picker.select.photosOrVideos.error.title" = "Tilføj fotos eller videoer";
 
-"selectPhotosOrVideosError" = "Det er ikke muligt at tilføje fotos og videoer på samme tid";
+"picker.select.photosOrVideos.error.message" = "Det er ikke muligt at tilføje fotos og videoer på samme tid";
 
-"done" = "Udfør";
+"picker.select.maxLimitReached.error.title" = "Grænsen for antal billeder er nået";
 
-"maxLimitReached" = "Grænsen for antal billeder er nået";
-
-"maxLimitReachedMessage" = "Du kan maksimalt tilføje %@ billeder";
+"picker.select.maxLimitReached.error.message" = "Du kan maksimalt tilføje %@ billeder";

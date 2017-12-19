@@ -8,24 +8,22 @@
 //  Released under an MIT license: http://opensource.org/licenses/MIT
 //
 
-"select" = "Выбрать(%@)";
+"permission.camera.title" = "Пожалуйста, разрешите доступ к камере";
 
-"permissionCamera" = "Пожалуйста, разрешите доступ к камере";
+"permission.photo.title" = "Пожалуйста, разрешите доступ к фото";
 
-"permissionPhoto" = "Пожалуйста, разрешите доступ к фото";
+"permission.allow" = "Предоставить доступ";
 
-"permit" = "Предоставить доступ";
+"picker.alert.ok" = "Ок";
 
-"gotoSettings" = "Перейти в 「Настройки";
+"picker.select.title" = "Выбрать(%@)";
 
-"ok" = "Ок";
+"picker.select.done.title" = "Готово";
 
-"selectPhotosOrVideos" = "Выбрать фото или видео";
+"picker.select.photosOrVideos.error.title" = "Выбрать фото или видео";
 
-"selectPhotosOrVideosError" = "Нельзя выбрать фото и видео одновременно";
+"picker.select.photosOrVideos.error.message" = "Нельзя выбрать фото и видео одновременно";
 
-"done" = "Готово";
+"picker.select.maxLimitReached.error.title" = "Достигнут лимит фото";
 
-"maxLimitReached" = "Достигнут лимит фото";
-
-"maxLimitReachedMessage" = "Вы можете выбрать %@ фото";
+"picker.select.maxLimitReached.error.message" = "Вы можете выбрать %@ фото";
