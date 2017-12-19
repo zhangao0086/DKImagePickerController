@@ -3,24 +3,23 @@ DKImagePickerController
 
  [![Build Status](https://secure.travis-ci.org/zhangao0086/DKImagePickerController.svg)](http://travis-ci.org/zhangao0086/DKImagePickerController) [![Version Status](http://img.shields.io/cocoapods/v/DKImagePickerController.png)][docsLink] [![license MIT](https://img.shields.io/cocoapods/l/DKImagePickerController.svg?style=flat)][mitLink]
 
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
+<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
 ---
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
+<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" /><img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 ---
 
 ## Description
-It's a Facebook style Image Picker Controller by Swift. It uses [DKCamera][DKCamera] instead of `UIImagePickerController` since the latter cannot be Integrated into another container, and it will raise a warning `Snapshotting ... or snapshot after screen updates.` in **iOS 8**.
+`DKImagePickerController` is a highly customizable, pure-Swift library.
 
 ### Features
 * Supports both single and multiple selection.
 * Supports filtering albums and sorting by type.
 * Supports landscape and iPad and orientation switching.
 * Supports iCloud.
-* Supports UIAppearance.
-* Customizable camera.
-* Customizable UI.
-* Customizable UICollectionViewLayout.
+* Supports batch exports `PHAsset` to files.
 * Inline mode.
+* Customizable `UICollectionViewLayout`.
+* Customizable camera/photo gallery/photo editor.
 
 ## Requirements
 * iOS 8.0+
@@ -113,6 +112,52 @@ public var selectedChanged: (() -> Void)?
 
 ```
 
+## Inline
+
+<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
+
+```swift
+let groupDataManagerConfiguration = DKImageGroupDataManagerConfiguration()
+groupDataManagerConfiguration.fetchLimit = 10
+groupDataManagerConfiguration.assetGroupTypes = [.smartAlbumUserLibrary]
+
+let groupDataManager = DKImageGroupDataManager(configuration: groupDataManagerConfiguration)
+
+let pickerController = DKImagePickerController(groupDataManager: groupDataManager)
+pickerController.inline = true
+pickerController.UIDelegate = CustomInlineLayoutUIDelegate(imagePickerController: pickerController)
+pickerController.assetType = .allPhotos
+pickerController.sourceType = .photo
+
+let pickerView = self.pickerController.view!
+pickerView.frame = CGRect(x: 0, y: 170, width: self.view.bounds.width, height: 200)
+self.view.addSubview(pickerView)
+```
+
+## UI customization
+
+<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
+
+For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomUIDelegate).
+
+## Layout customization
+
+<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
+
+For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomLayoutUIDelegate).
+
+### Conforms UIAppearance protocol
+
+<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
+
+You can easily customize the appearance of navigation bar using the appearance proxy.
+```swift
+UINavigationBar.appearance().titleTextAttributes = [
+    NSFontAttributeName : UIFont(name: "Optima-BoldItalic", size: 21)!,
+    NSForegroundColorAttributeName : UIColor.redColor()
+]
+```
+
 ##### Exporting to file
 ```swift
 /**
@@ -129,47 +174,16 @@ public func writeAVToFile(path: String, presetName: String, completeBlock: (succ
 
 ```
 
-#### Camera customization
+## Extensions
+
+#### Camera
 
 You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
 For example, see [CustomCameraUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomCameraUIDelegate).
 
-#### UI customization
+#### Photo Gallery
 
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
-
-For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomUIDelegate).
-
-#### Layout customization
-
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
-
-For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomLayoutUIDelegate).
-
-##### Conforms UIAppearance protocol
-You can easily customize the appearance of navigation bar using the appearance proxy.
-```swift
-UINavigationBar.appearance().titleTextAttributes = [
-    NSFontAttributeName : UIFont(name: "Optima-BoldItalic", size: 21)!,
-    NSForegroundColorAttributeName : UIColor.redColor()
-]
-```
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
-
-#### Inline
-
-<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
-
-```swift
-let pickerController = DKImagePickerController()
-pickerController.inline = true
-pickerController.fetchLimit = 10
-pickerController.UIDelegate = CustomInlineLayoutUIDelegate()
-pickerController.assetType = .allPhotos
-pickerController.sourceType = .photo
-```
-
-Please see my demo project.
+#### Photo Editor
 
 ## How to use in Objective-C
 
@@ -203,14 +217,6 @@ then you can:
 
 ```objective-c
 DKImagePickerController *pickerController = [DKImagePickerController new];
-pickerController.assetType = DKImagePickerControllerAssetTypeAllAssets;
-pickerController.showsCancelButton = NO;
-pickerController.showsEmptyAlbums = YES;
-pickerController.allowMultipleTypes = YES;
-pickerController.defaultSelectedAssets = @[];
-pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
-//  pickerController.assetGroupTypes    // unavailable
-//  pickerController.defaultAssetGroup  // unavailable
 
  [pickerController setDidSelectAssets:^(NSArray * __nonnull assets) {
      NSLog(@"didSelectAssets");
@@ -222,24 +228,7 @@ pickerController.sourceType = DKImagePickerControllerSourceTypeBoth;
 ## Localization
 The default supported languages:
 
-- en.lproj
-- es.lproj
-- da.lproj
-- de.lproj
-- fr.lproj
-- hu.lproj
-- ja.lproj
-- ko.lproj
-- nb-NO.lproj
-- pt_BR.lproj
-- ru.lproj
-- tr.lproj
-- ur.lproj
-- vi.lproj
-- ar.lproj
-- it.lproj
-- zh-Hans.lproj
-- zh-Hant.lproj
+en.lproj, es.lproj, da.lproj, de.lproj, fr.lproj, hu.lproj, ja.lproj, ko.lproj, nb-NO.lproj, pt_BR.lproj, ru.lproj, tr.lproj, ur.lproj, vi.lproj, ar.lproj, it.lproj, zh-Hans.lproj, zh-Hant.lproj
 
 You can also add a hook to return your own localized string:
 
