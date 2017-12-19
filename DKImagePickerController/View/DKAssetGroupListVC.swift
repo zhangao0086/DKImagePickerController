@@ -50,7 +50,7 @@ class DKAssetGroupCell: UITableViewCell {
     var customSelectedBackgroundView: UIView = {
         let selectedBackgroundView = UIView()
 
-        let selectedFlag = UIImageView(image: DKImageResource.blueTickImage())
+        let selectedFlag = UIImageView(image: DKImagePickerControllerResource.blueTickImage())
         selectedFlag.frame = CGRect(x: selectedBackgroundView.bounds.width - selectedFlag.bounds.width - 20,
                                     y: (selectedBackgroundView.bounds.width - selectedFlag.bounds.width) / 2,
                                     width: selectedFlag.bounds.width, height: selectedFlag.bounds.height)
@@ -240,7 +240,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
         cell.tag = tag
 
         if assetGroup.totalCount == 0 {
-            cell.thumbnailImageView.image = DKImageResource.emptyAlbumIcon()
+            cell.thumbnailImageView.image = DKImagePickerControllerResource.emptyAlbumIcon()
         } else {
             self.groupDataManager.fetchGroupThumbnailForGroup(
                 assetGroup.groupId,

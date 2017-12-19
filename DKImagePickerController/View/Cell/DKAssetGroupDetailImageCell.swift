@@ -36,7 +36,7 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     class DKImageCheckView: UIView {
         
         internal lazy var checkImageView: UIImageView = {
-            let imageView = UIImageView(image: DKImageResource.checkedImage())
+            let imageView = UIImageView(image: DKImagePickerControllerResource.checkedImage())
             return imageView
         }()
         

@@ -42,10 +42,10 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
             
             let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
             
-            button.setTitle(String(format: DKImageResource.localizedStringWithKey("picker.select.title"),
+            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.title"),
                                    formattedSelectableCount ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
         } else {
-            button.setTitle(DKImageResource.localizedStringWithKey("picker.select.done.title"), for: .normal)
+            button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"), for: .normal)
         }
         
         button.sizeToFit()
@@ -103,11 +103,11 @@ open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerCont
         
         let formattedMaxSelectableCount = formatter.string(from: NSNumber(value: imagePickerController.maxSelectableCount))
         
-        let alert = UIAlertController(title: DKImageResource.localizedStringWithKey("picker.select.maxLimitReached.error.title"), message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: DKImagePickerControllerResource.localizedStringWithKey("picker.select.maxLimitReached.error.title"), message: nil, preferredStyle: .alert)
         
-        alert.message = String(format: DKImageResource.localizedStringWithKey("picker.select.maxLimitReached.error.message"), formattedMaxSelectableCount ?? imagePickerController.maxSelectableCount)
+        alert.message = String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.maxLimitReached.error.message"), formattedMaxSelectableCount ?? imagePickerController.maxSelectableCount)
         
-        alert.addAction(UIAlertAction(title: DKImageResource.localizedStringWithKey("picker.alert.ok"), style: .cancel) { _ in })
+        alert.addAction(UIAlertAction(title: DKImagePickerControllerResource.localizedStringWithKey("picker.alert.ok"), style: .cancel) { _ in })
         
         imagePickerController.present(alert, animated: true){}
 	}

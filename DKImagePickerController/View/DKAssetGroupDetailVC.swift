@@ -441,10 +441,10 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             , self.imagePickerController.allowMultipleTypes == false && firstSelectedAsset.type != selectedAsset.type {
 
             let alert = UIAlertController(
-                    title: DKImageResource.localizedStringWithKey("picker.select.photosOrVideos.error.title")
-                    , message: DKImageResource.localizedStringWithKey("picker.select.photosOrVideos.error.message")
+                    title: DKImagePickerControllerResource.localizedStringWithKey("picker.select.photosOrVideos.error.title")
+                    , message: DKImagePickerControllerResource.localizedStringWithKey("picker.select.photosOrVideos.error.message")
                     , preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: DKImageResource.localizedStringWithKey("picker.alert.ok"), style: .cancel) { _ in })
+            alert.addAction(UIAlertAction(title: DKImagePickerControllerResource.localizedStringWithKey("picker.alert.ok"), style: .cancel) { _ in })
             self.imagePickerController.present(alert, animated: true){}
 
             return false

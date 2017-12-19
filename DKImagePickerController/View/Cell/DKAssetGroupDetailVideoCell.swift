@@ -56,7 +56,7 @@ class DKAssetGroupDetailVideoCell: DKAssetGroupDetailImageCell {
     fileprivate lazy var videoInfoView: UIView = {
         let videoInfoView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 0))
         
-        let videoImageView = UIImageView(image: DKImageResource.videoCameraIcon())
+        let videoImageView = UIImageView(image: DKImagePickerControllerResource.videoCameraIcon())
         videoInfoView.addSubview(videoImageView)
         videoImageView.center = CGPoint(x: videoImageView.bounds.width / 2 + 7, y: videoInfoView.bounds.height / 2)
         videoImageView.autoresizingMask = [.flexibleBottomMargin, .flexibleTopMargin]

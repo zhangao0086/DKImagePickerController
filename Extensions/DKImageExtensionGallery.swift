@@ -74,8 +74,8 @@ class DKImageExtensionGallery : DKImageBaseExtension, DKPhotoGalleryDelegate {
                 button.addTarget(self, action: #selector(DKImageExtensionGallery.selectAssetFromGallery(button:)), for: .touchUpInside)
                 button.setTitle("", for: .normal)
                 
-                button.setBackgroundImage(DKImageResource.photoGalleryCheckedImage(), for: .selected)
-                button.setBackgroundImage(DKImageResource.photoGalleryUncheckedImage(), for: .normal)
+                button.setBackgroundImage(DKImagePickerControllerResource.photoGalleryCheckedImage(), for: .selected)
+                button.setBackgroundImage(DKImagePickerControllerResource.photoGalleryUncheckedImage(), for: .normal)
                 
                 let item = UIBarButtonItem(customView: button)
                 viewController.navigationItem.rightBarButtonItem = item

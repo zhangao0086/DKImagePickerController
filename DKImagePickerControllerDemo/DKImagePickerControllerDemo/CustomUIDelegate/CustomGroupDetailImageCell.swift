@@ -46,7 +46,7 @@ class CustomGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     }()
     
     fileprivate lazy var checkView: UIImageView = {
-        let checkView = UIImageView(image: DKImageResource.blueTickImage())
+        let checkView = UIImageView(image: DKImagePickerControllerResource.blueTickImage())
         checkView.contentMode = .center
         
         return checkView

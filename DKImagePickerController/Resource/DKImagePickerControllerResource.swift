@@ -1,5 +1,5 @@
 //
-//  DKImageResource.swift
+//  DKImagePickerControllerResource.swift
 //  DKImagePickerController
 //
 //  Created by ZhangAo on 15/8/11.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class DKImageResource: NSObject {
+public class DKImagePickerControllerResource: NSObject {
     
     private static let cache = NSCache<NSString, UIImage>()
     
@@ -51,11 +51,11 @@ public class DKImageResource: NSObject {
 	}
     
     public class func photoGalleryCheckedImage() -> UIImage {
-        return imageForResource("photoGalleryCheckedImage", stretchable: true, cacheable: true)
+        return imageForResource("photoGallery_checked_image", stretchable: true, cacheable: true)
     }
     
     public class func photoGalleryUncheckedImage() -> UIImage {
-        return imageForResource("photoGalleryUncheckedImage", stretchable: true, cacheable: true)
+        return imageForResource("photoGallery_unchecked_image", stretchable: true, cacheable: true)
     }
     
     public class func imageForResource(_ name: String, stretchable: Bool = false, cacheable: Bool = false) -> UIImage {
@@ -95,7 +95,7 @@ public class DKImageResource: NSObject {
 private extension Bundle {
     
     class func imagePickerControllerBundle() -> Bundle {
-        let assetPath = Bundle(for: DKImageResource.self).resourcePath!
+        let assetPath = Bundle(for: DKImagePickerControllerResource.self).resourcePath!
         return Bundle(path: (assetPath as NSString).appendingPathComponent("DKImagePickerController.bundle"))!
     }
     
