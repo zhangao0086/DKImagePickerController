@@ -68,6 +68,12 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
+        case "Swiping to select":
+            let pickerController = DKImagePickerController()
+            pickerController.allowSwipeToSelect = true
+            
+            destination.pickerController = pickerController
+            
         case "Custom Camera":
             let pickerController = DKImagePickerController()
             

@@ -54,9 +54,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			pickerController.modalPresentationStyle = .formSheet
 		}
 		
-        // turn on the swipe selection feature
-        // self.pickerController.allowSwipeToSelect = true
-		
         if pickerController.inline {
             self.showInlinePicker()
         } else {
