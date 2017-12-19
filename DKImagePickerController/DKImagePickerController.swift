@@ -94,7 +94,7 @@ open class DKImagePickerController : UINavigationController {
         return DKImagePickerControllerDefaultUIDelegate(imagePickerController: self)
     }()
     
-    /// Forces deselect of previous selected image
+    /// Forces deselect of previous selected image. (allowSwipeToSelect will be ignored)
     @objc public var singleSelect = false
     
     /// Auto close picker on single select
@@ -106,7 +106,7 @@ open class DKImagePickerController : UINavigationController {
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
     
-    /// allow swipe to select images.
+    /// Allow swipe to select images.
     @objc public var allowSwipeToSelect: Bool = false
     
     @objc public var inline: Bool = false

@@ -86,7 +86,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
         
-        if self.imagePickerController.allowSwipeToSelect {
+        if self.imagePickerController.allowSwipeToSelect && !self.imagePickerController.singleSelect {
             let swipeOutGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.swiping(gesture:)))
             swipeOutGesture.delegate = self
             self.collectionView.panGestureRecognizer.require(toFail: swipeOutGesture)
