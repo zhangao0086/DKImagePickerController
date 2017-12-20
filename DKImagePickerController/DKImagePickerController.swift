@@ -225,10 +225,10 @@ open class DKImagePickerController: UINavigationController {
     @objc open func done() {
         self.cancelCurrentExportRequestIfNeeded()
         
-        let completeBlock = {
+        let completeBlock: ([DKAsset]) -> Void = { assets in
             self.exportStatus = .none
             
-            self.didSelectAssets?(self.selectedAssets)
+            self.didSelectAssets?(assets)
             
             if self.sourceType == .camera {
                 self.needShowInlineCamera = true
@@ -236,20 +236,21 @@ open class DKImagePickerController: UINavigationController {
         }
         
         let exportBlock = {
+            let assets = self.selectedAssets
             if let exporter = self.exporter {
-                self.exportRequestID = exporter.exportAssetsAsynchronously(assets: self.selectedAssets) { [weak self] info in
+                self.exportRequestID = exporter.exportAssetsAsynchronously(assets: assets) { [weak self] info in
                     if let strongSelf = self {
                         let requestID = info[DKImageAssetExportResultRequestIDKey] as! DKImageAssetExportRequestID
                         if strongSelf.exportRequestID == requestID {
                             strongSelf.exportRequestID = DKImageAssetExportInvalidRequestID
-                            completeBlock()
+                            completeBlock(assets)
                         }
                     }
                 }
                 
                 self.exportStatus = .exporting
             } else {
-                completeBlock()
+                completeBlock(assets)
             }
         }
         
