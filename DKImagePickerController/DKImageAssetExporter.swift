@@ -372,11 +372,10 @@ open class DKImageAssetExporter: DKBaseManager {
     }
     
     private func generateTemporaryPath(with asset: DKAsset) -> URL {
-        var directoryName: String!
+        let localIdentifier = asset.localIdentifier.data(using: .utf8)?.base64EncodedString() ?? "\(Date.timeIntervalSinceReferenceDate)"
+        var directoryName = localIdentifier
+        
         if let originalAsset = asset.originalAsset {
-            let localIdentifier = originalAsset.localIdentifier
-            directoryName = localIdentifier.data(using: .utf8)?.base64EncodedString()
-            
             if let modificationDate = originalAsset.modificationDate {
                 directoryName = directoryName + "/" + String(modificationDate.timeIntervalSinceReferenceDate)
             }
@@ -390,8 +389,6 @@ open class DKImageAssetExporter: DKBaseManager {
                 directoryName = directoryName + "/" + self.configuration.videoExportPreset + self.configuration.avOutputFileType
                 #endif
             }
-        } else {
-            directoryName = asset.localIdentifier
         }
         
         let directory = self.configuration.exportDirectory.appendingPathComponent(directoryName)
@@ -427,9 +424,9 @@ open class DKImageAssetExporter: DKBaseManager {
                     DKImageAssetExporter.ioQueue.async {
                         if var imageData = data {
                             if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
-                                asset.fileName = fileURL.lastPathComponent ?? asset.localIdentifier
+                                asset.fileName = fileURL.lastPathComponent ?? "Image"
                             } else {
-                                asset.fileName = asset.localIdentifier
+                                asset.fileName = "Image"
                             }
                             
                             asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
@@ -485,7 +482,7 @@ open class DKImageAssetExporter: DKBaseManager {
                 if let avURLAsset = avAsset as? AVURLAsset {
                     asset.fileName = avURLAsset.url.lastPathComponent
                 } else {
-                    asset.fileName = asset.localIdentifier
+                    asset.fileName = "Video"
                 }
                 
                 asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
