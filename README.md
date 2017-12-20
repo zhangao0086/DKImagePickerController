@@ -158,7 +158,7 @@ UINavigationBar.appearance().titleTextAttributes = [
 ]
 ```
 
-##### Exporting to file
+### Exporting to file
 ```swift
 /**
     Writes the image in the receiver to the file specified by a given path.
@@ -228,7 +228,7 @@ DKImagePickerController *pickerController = [DKImagePickerController new];
 ## Localization
 The default supported languages:
 
-en.lproj, es.lproj, da.lproj, de.lproj, fr.lproj, hu.lproj, ja.lproj, ko.lproj, nb-NO.lproj, pt_BR.lproj, ru.lproj, tr.lproj, ur.lproj, vi.lproj, ar.lproj, it.lproj, zh-Hans.lproj, zh-Hant.lproj
+> en, es, da, de, fr, hu, ja, ko, nb-NO, pt_BR, ru, tr, ur, vi, ar, it, zh-Hans, zh-Hant
 
 You can also add a hook to return your own localized string:
 
