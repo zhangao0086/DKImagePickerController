@@ -88,7 +88,7 @@ public enum DKImagePickerControllerExportStatus: Int {
 }
 
 @objc
-open class DKImagePickerController : UINavigationController {
+open class DKImagePickerController: UINavigationController {
     
     @objc lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
         return DKImagePickerControllerDefaultUIDelegate(imagePickerController: self)

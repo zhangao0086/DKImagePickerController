@@ -9,7 +9,7 @@
 import UIKit
 import DKImagePickerController
 
-open class CustomUIDelegate: DKImagePickerControllerDefaultUIDelegate {
+open class CustomUIDelegate: DKImagePickerControllerBaseUIDelegate {
     
     lazy var footer: UIToolbar = {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))

@@ -1,5 +1,5 @@
 //
-//  DKImagePickerControllerDefaultUIDelegate.swift
+//  DKImagePickerControllerBaseUIDelegate.swift
 //  DKImagePickerController
 //
 //  Created by ZhangAo on 16/3/7.
@@ -9,7 +9,7 @@
 import UIKit
 
 @objc
-open class DKImagePickerControllerDefaultUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
+open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
 	
 	open weak var imagePickerController: DKImagePickerController!
 	
