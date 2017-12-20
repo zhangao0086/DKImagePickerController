@@ -9,7 +9,7 @@
 import Foundation
 import CLImageEditor
 
-class DKImageExtensionPhotoEditor : DKImageBaseExtension, CLImageEditorDelegate {
+class DKImageExtensionPhotoEditor: DKImageBaseExtension, CLImageEditorDelegate {
     
     private weak var imageEditor: UIViewController?
     private var metadata: [AnyHashable : Any]?

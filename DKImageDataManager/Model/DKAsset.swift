@@ -17,7 +17,7 @@ public extension CGSize {
 }
 
 @objc
-public enum DKAssetType : Int {
+public enum DKAssetType: Int {
     
     case photo
     

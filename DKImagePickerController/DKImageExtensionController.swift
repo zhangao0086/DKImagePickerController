@@ -17,7 +17,7 @@ public class DKImageExtensionContext {
 
 ////////////////////////////////////////////////////////////////////////
 
-public enum DKImageExtensionType : Int {
+public enum DKImageExtensionType: Int {
     case gallery, camera, inlineCamera, photoEditor
 }
 
@@ -29,7 +29,7 @@ public protocol DKImageExtensionProtocol {
 }
 
 @objc
-open class DKImageBaseExtension : NSObject, DKImageExtensionProtocol {
+open class DKImageBaseExtension: NSObject, DKImageExtensionProtocol {
     
     public let context: DKImageExtensionContext
     

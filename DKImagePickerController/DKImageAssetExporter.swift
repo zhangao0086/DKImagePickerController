@@ -59,7 +59,7 @@ public enum DKImageAssetExporterError: Int {
 }
 
 @objc
-public enum DKImageExportPresent : Int {
+public enum DKImageExportPresent: Int {
     case
     compatible, // A preset for converting HEIF formatted images to JPEG.
     current     // A preset for passing image data as-is to the client.
@@ -301,13 +301,13 @@ open class DKImageAssetExporter: DKBaseManager {
     
     // MARK: - RequestID
     
-    private var seed: DKImageAssetExportRequestID = 0
+    static private var seed: DKImageAssetExportRequestID = 0
     private func getSeed() -> DKImageAssetExportRequestID {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
         
-        seed += 1
-        return seed
+        DKImageAssetExporter.seed += 1
+        return DKImageAssetExporter.seed
     }
     
     // MARK: - Private

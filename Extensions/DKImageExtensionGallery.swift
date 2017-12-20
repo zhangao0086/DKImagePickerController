@@ -9,7 +9,7 @@
 import Foundation
 import DKPhotoGallery
 
-class DKImageExtensionGallery : DKImageBaseExtension, DKPhotoGalleryDelegate {
+class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
     
     private weak var gallery: DKPhotoGallery?
     private var group: DKAssetGroup!

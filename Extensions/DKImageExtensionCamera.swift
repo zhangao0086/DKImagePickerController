@@ -9,7 +9,7 @@
 import Foundation
 import DKCamera
 
-class DKImageExtensionCamera : DKImageBaseExtension {
+class DKImageExtensionCamera: DKImageBaseExtension {
     
     override class func extensionType() -> DKImageExtensionType {
         return .camera
