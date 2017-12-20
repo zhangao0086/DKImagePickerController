@@ -9,17 +9,68 @@
 import UIKit
 
 @objc
+public protocol DKImagePickerControllerUIDelegate {
+    
+    /**
+     The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
+     */
+    func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController)
+    
+    /**
+     The layout is to provide information about the position and visual state of items in the collection view.
+     */
+    func layoutForImagePickerController(_ imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type
+    
+    /**
+     Called when the user needs to show the cancel button.
+     */
+    func imagePickerController(_ imagePickerController: DKImagePickerController, showsCancelButtonForVC vc: UIViewController)
+    
+    /**
+     Called when the user needs to hide the cancel button.
+     */
+    func imagePickerController(_ imagePickerController: DKImagePickerController, hidesCancelButtonForVC vc: UIViewController)
+    
+    /**
+     Called after the user changes the selection.
+     */
+    func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset])
+    
+    /**
+     Called after the user changes the selection.
+     */
+    func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset])
+    
+    /**
+     Called when the count of the selectedAssets did reach `maxSelectableCount`.
+     */
+    func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController)
+    
+    /**
+     Accessory view below content. default is nil.
+     */
+    func imagePickerControllerFooterView(_ imagePickerController: DKImagePickerController) -> UIView?
+    
+    /**
+     Set the color of the background of the collection view.
+     */
+    func imagePickerControllerCollectionViewBackgroundColor() -> UIColor
+    
+    func imagePickerControllerCollectionImageCell() -> DKAssetGroupDetailBaseCell.Type
+    
+    func imagePickerControllerCollectionCameraCell() -> DKAssetGroupDetailBaseCell.Type
+    
+    func imagePickerControllerCollectionVideoCell() -> DKAssetGroupDetailBaseCell.Type
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@objc
 open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
 	
 	open weak var imagePickerController: DKImagePickerController!
 	
 	open var doneButton: UIButton?
-    
-    public required init(imagePickerController: DKImagePickerController) {
-        self.imagePickerController = imagePickerController
-        
-        super.init()
-    }
 	
 	open func createDoneButtonIfNeeded() -> UIButton {
         if self.doneButton == nil {

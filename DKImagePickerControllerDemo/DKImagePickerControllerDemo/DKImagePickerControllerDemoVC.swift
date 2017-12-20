@@ -92,14 +92,14 @@ class DKImagePickerControllerDemoVC: UITableViewController {
 
         case "Custom UI":
             let pickerController = DKImagePickerController()
-            pickerController.UIDelegate = CustomUIDelegate(imagePickerController: pickerController)
+            pickerController.UIDelegate = CustomUIDelegate()
             pickerController.showsCancelButton = true
             
             destination.pickerController = pickerController
             
         case "Custom Layout":
             let pickerController = DKImagePickerController()
-            pickerController.UIDelegate = CustomLayoutUIDelegate(imagePickerController: pickerController)
+            pickerController.UIDelegate = CustomLayoutUIDelegate()
             
             destination.pickerController = pickerController
             
@@ -112,7 +112,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             let pickerController = DKImagePickerController(groupDataManager: groupDataManager)
             pickerController.inline = true
-            pickerController.UIDelegate = CustomInlineLayoutUIDelegate(imagePickerController: pickerController)
+            pickerController.UIDelegate = CustomInlineLayoutUIDelegate()
             pickerController.assetType = .allPhotos
             pickerController.sourceType = .photo
             

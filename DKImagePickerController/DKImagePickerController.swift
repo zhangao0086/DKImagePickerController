@@ -10,63 +10,6 @@ import UIKit
 import Photos
 import AssetsLibrary
 
-@objc
-public protocol DKImagePickerControllerUIDelegate {
-    
-    init(imagePickerController: DKImagePickerController)
-    
-    /**
-     The picker calls -prepareLayout once at its first layout as the first message to the UIDelegate instance.
-     */
-    func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController)
-    
-    /**
-     The layout is to provide information about the position and visual state of items in the collection view.
-     */
-    func layoutForImagePickerController(_ imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type
-    
-    /**
-     Called when the user needs to show the cancel button.
-     */
-    func imagePickerController(_ imagePickerController: DKImagePickerController, showsCancelButtonForVC vc: UIViewController)
-    
-    /**
-     Called when the user needs to hide the cancel button.
-     */
-    func imagePickerController(_ imagePickerController: DKImagePickerController, hidesCancelButtonForVC vc: UIViewController)
-    
-    /**
-     Called after the user changes the selection.
-     */
-    func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset])
-    
-    /**
-     Called after the user changes the selection.
-     */
-    func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset])
-    
-    /**
-     Called when the count of the selectedAssets did reach `maxSelectableCount`.
-     */
-    func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController)
-    
-    /**
-     Accessory view below content. default is nil.
-     */
-    func imagePickerControllerFooterView(_ imagePickerController: DKImagePickerController) -> UIView?
-    
-    /**
-     Set the color of the background of the collection view.
-     */
-    func imagePickerControllerCollectionViewBackgroundColor() -> UIColor
- 
-    func imagePickerControllerCollectionImageCell() -> DKAssetGroupDetailBaseCell.Type
-    
-    func imagePickerControllerCollectionCameraCell() -> DKAssetGroupDetailBaseCell.Type
-    
-    func imagePickerControllerCollectionVideoCell() -> DKAssetGroupDetailBaseCell.Type
-}
-
 /**
  - AllPhotos: Get all photos assets in the assets group.
  - AllVideos: Get all video assets in the assets group.
@@ -90,9 +33,7 @@ public enum DKImagePickerControllerExportStatus: Int {
 @objc
 open class DKImagePickerController: UINavigationController {
     
-    @objc lazy public var UIDelegate: DKImagePickerControllerUIDelegate = {
-        return DKImagePickerControllerDefaultUIDelegate(imagePickerController: self)
-    }()
+    @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate!
     
     /// Forces deselect of previous selected image. (allowSwipeToSelect will be ignored)
     @objc public var singleSelect = false
@@ -115,13 +56,7 @@ open class DKImagePickerController: UINavigationController {
     @objc public var assetType: DKImagePickerControllerAssetType = .allAssets
     
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
-    @objc public var sourceType: DKImagePickerControllerSourceType = .both {
-        didSet { /// If source type changed in the scenario of sharing instance, view controller should be reinitialized.
-            if (oldValue != sourceType) {
-                self.hasInitialized = false
-            }
-        }
-    }
+    @objc public var sourceType: DKImagePickerControllerSourceType = .both
     
     /// Whether allows to select photos and videos at the same time.
     @objc public var allowMultipleTypes = true
@@ -132,13 +67,7 @@ open class DKImagePickerController: UINavigationController {
     /// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
     @objc public var showsEmptyAlbums = true
     
-    @objc public var showsCancelButton = false {
-        didSet {
-            if let rootVC = self.viewControllers.first {
-                self.updateCancelButtonForVC(rootVC)
-            }
-        }
-    }
+    @objc public var showsCancelButton = false
     
     /// The block is executed when user pressed the cancel button.
     @objc public var didCancel: (() -> Void)?
@@ -148,7 +77,9 @@ open class DKImagePickerController: UINavigationController {
     
     @objc public var selectedChanged: (() -> Void)?
     
-    @objc public var exporter: DKImageAssetExporter? = DKImageAssetExporter.sharedInstance
+    @objc public var exportsWhenCompleted = false
+    
+    @objc public var exporter: DKImageAssetExporter?
     
     @objc public private(set) var exportStatus = DKImagePickerControllerExportStatus.none {
         didSet {
@@ -207,29 +138,40 @@ open class DKImagePickerController: UINavigationController {
         self.groupDataManager.invalidate()
     }
     
-    private var hasInitialized = false
+    private lazy var doSetupOnce: () -> Void = {
+        if self.UIDelegate == nil {
+            self.UIDelegate = DKImagePickerControllerBaseUIDelegate()
+        }
+        
+        self.UIDelegate.imagePickerController = self
+        
+        if self.exportsWhenCompleted && self.exporter == nil {
+            self.exporter = DKImageAssetExporter.sharedInstance
+        }
+        
+        if self.inline || self.sourceType == .camera {
+            self.isNavigationBarHidden = true
+        } else {
+            self.isNavigationBarHidden = false
+        }
+        
+        if self.sourceType != .camera {
+            let rootVC = self.makeRootVC()
+            rootVC.imagePickerController = self
+            
+            self.UIDelegate.prepareLayout(self, vc: rootVC)
+            self.updateCancelButtonForVC(rootVC)
+            self.setViewControllers([rootVC], animated: false)
+        }
+        
+        return {}
+    }()
+    
     private var needShowInlineCamera = true
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !self.hasInitialized {
-            self.hasInitialized = true
-            
-            if self.inline || self.sourceType == .camera {
-                self.isNavigationBarHidden = true
-            } else {
-                self.isNavigationBarHidden = false
-            }
-            
-            if self.sourceType != .camera {
-                let rootVC = self.makeRootVC()
-                rootVC.imagePickerController = self
-                
-                self.UIDelegate.prepareLayout(self, vc: rootVC)
-                self.updateCancelButtonForVC(rootVC)
-                self.setViewControllers([rootVC], animated: false)
-            }
-        }
+        self.doSetupOnce()
         
         if self.needShowInlineCamera && self.sourceType == .camera {
             self.needShowInlineCamera = false
@@ -299,6 +241,7 @@ open class DKImagePickerController: UINavigationController {
                     if let strongSelf = self {
                         let requestID = info[DKImageAssetExportResultRequestIDKey] as! DKImageAssetExportRequestID
                         if strongSelf.exportRequestID == requestID {
+                            strongSelf.exportRequestID = DKImageAssetExportInvalidRequestID
                             completeBlock()
                         }
                     }
