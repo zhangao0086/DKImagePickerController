@@ -150,6 +150,8 @@ open class DKImageAssetExporter: DKBaseManager {
         self.configuration = configuration.copy() as! DKImageAssetExporterConfiguration
         
         super.init()
+        
+        DKImageAssetDiskPurger.sharedInstance.addDirectory(self.configuration.exportDirectory)
     }
     
     /// This method starts an asynchronous export operation of a batch of asset.
@@ -239,7 +241,10 @@ open class DKImageAssetExporter: DKBaseManager {
                 asset.localTemporaryPath = self.generateTemporaryPath(with: asset)
                 asset.error = nil
                 
-                if let localTemporaryPath = asset.localTemporaryPath, FileManager.default.fileExists(atPath: localTemporaryPath.path) {
+                if let localTemporaryPath = asset.localTemporaryPath,
+                    let subpaths = FileManager.default.subpaths(atPath: localTemporaryPath.path), subpaths.count > 0 {
+                    asset.localTemporaryPath = localTemporaryPath.appendingPathComponent(subpaths[0])
+                    asset.fileName = subpaths[0]
                     exportCompletionBlock(asset, nil)
                     continue
                 }
@@ -367,35 +372,35 @@ open class DKImageAssetExporter: DKBaseManager {
     }
     
     private func generateTemporaryPath(with asset: DKAsset) -> URL {
-        var fileName: String!
+        var directoryName: String!
         if let originalAsset = asset.originalAsset {
             let localIdentifier = originalAsset.localIdentifier
-            fileName = localIdentifier.data(using: .utf8)?.base64EncodedString()
+            directoryName = localIdentifier.data(using: .utf8)?.base64EncodedString()
             
             if let modificationDate = originalAsset.modificationDate {
-                fileName = fileName + String(modificationDate.timeIntervalSinceReferenceDate)
+                directoryName = directoryName + "/" + String(modificationDate.timeIntervalSinceReferenceDate)
             }
             
             if asset.type == .photo {
-                fileName = fileName + String(self.configuration.imageExportPreset.rawValue)
+                directoryName = directoryName + "/" + String(self.configuration.imageExportPreset.rawValue)
             } else {
                 #if swift(>=4.0)
-                fileName = fileName + self.configuration.videoExportPreset + self.configuration.avOutputFileType.rawValue
+                directoryName = directoryName + "/" + self.configuration.videoExportPreset + self.configuration.avOutputFileType.rawValue
                 #else
-                fileName = fileName + self.configuration.videoExportPreset + self.configuration.avOutputFileType
+                directoryName = directoryName + "/" + self.configuration.videoExportPreset + self.configuration.avOutputFileType
                 #endif
             }
         } else {
-            fileName = "\(Date().timeIntervalSinceReferenceDate)"
+            directoryName = asset.localIdentifier
         }
         
-        if !FileManager.default.fileExists(atPath: self.configuration.exportDirectory.path) {
-            try? FileManager.default.createDirectory(at: self.configuration.exportDirectory, withIntermediateDirectories: true, attributes: nil)
+        let directory = self.configuration.exportDirectory.appendingPathComponent(directoryName)
+        
+        if !FileManager.default.fileExists(atPath: directory.path) {
+            try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
         }
         
-        DKImageAssetDiskPurger.sharedInstance.addDirectory(self.configuration.exportDirectory)
-        
-        return self.configuration.exportDirectory.appendingPathComponent(fileName)
+        return directory
     }
     
     static let ioQueue = DispatchQueue(label: "DKPhotoImagePreviewVC.ioQueue")
@@ -422,10 +427,12 @@ open class DKImageAssetExporter: DKBaseManager {
                     DKImageAssetExporter.ioQueue.async {
                         if var imageData = data {
                             if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
-                                asset.fileName = fileURL.lastPathComponent
+                                asset.fileName = fileURL.lastPathComponent ?? asset.localIdentifier
                             } else {
                                 asset.fileName = asset.localIdentifier
                             }
+                            
+                            asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
                             
                             if FileManager.default.fileExists(atPath: asset.localTemporaryPath!.path) {
                                 return completion(nil)
@@ -480,6 +487,8 @@ open class DKImageAssetExporter: DKBaseManager {
                 } else {
                     asset.fileName = asset.localIdentifier
                 }
+                
+                asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
                 
                 DKImageAssetExporter.ioQueue.async {
                     let group = DispatchGroup()
