@@ -67,7 +67,6 @@ internal func registerDefaultExtension(extensionClass: DKImageBaseExtension.Type
     DKImageExtensionController.defaultExtensions[type] = extensionClass
 }
 
-
 class DKImageExtensionController {
     
     fileprivate static var defaultExtensions = [DKImageExtensionType : DKImageBaseExtension.Type]()
