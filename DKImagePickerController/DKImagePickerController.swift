@@ -90,13 +90,17 @@ open class DKImagePickerController: UINavigationController {
     /// Indicates the status of the exporter.
     @objc public private(set) var exportStatus = DKImagePickerControllerExportStatus.none {
         willSet {
-            self.willChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
+            if self.exportStatus != newValue {
+                self.willChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
+            }
         }
         
         didSet {
-            self.didChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
-            
-            self.exportStatusChanged?(self.exportStatus)
+            if self.exportStatus != oldValue {
+                self.didChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
+                
+                self.exportStatusChanged?(self.exportStatus)
+            }
         }
     }
     
