@@ -117,6 +117,18 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             pickerController.sourceType = .photo
             
             destination.pickerController = pickerController
+            
+        case "Export automatically":
+            let pickerController = DKImagePickerController()
+            pickerController.exportsWhenCompleted = true
+            
+            destination.pickerController = pickerController
+            
+        case "Export manually":
+            let pickerController = DKImagePickerController()
+            destination.exportManually = true
+            
+            destination.pickerController = pickerController
         
         case "Custom localized strings":
             DKImagePickerControllerResource.customLocalizationBlock = { title in

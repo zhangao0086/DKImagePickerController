@@ -11,9 +11,14 @@ import Photos
 import AVKit
 import DKImagePickerController
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class ViewController: UIViewController,
+    UITableViewDataSource, UITableViewDelegate,
+    UICollectionViewDataSource, UICollectionViewDelegate,
+    DKImageAssetExporterObserver {
 
     var pickerController: DKImagePickerController!
+    
+    var exportManually = false
     
     @IBOutlet var previewView: UICollectionView?
     var assets: [DKAsset]?
@@ -24,9 +29,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         unregisterExtension(for: .camera)
         unregisterExtension(for: .inlineCamera)
+        
+        DKImageAssetExporter.sharedInstance.remove(observer: self)
     }
     
 	func showImagePicker() {
+        if self.exportManually {
+            DKImageAssetExporter.sharedInstance.add(observer: self)
+        }
+        
         if let assets = self.assets {
             pickerController.select(assets: assets)
         }
@@ -34,9 +45,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         pickerController.exportStatusChanged = { status in
             switch status {
             case .exporting:
-                DispatchQueue.global().asyncAfter(deadline: .now() + 0.2, execute: {
-                    self.pickerController.exporter?.cancelAll()
-                })
                 print("exporting")
             case .none:
                 print("none")
@@ -63,6 +71,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.assets = assets
         self.previewView?.reloadData()
+        
+        if pickerController.exportsWhenCompleted {
+            for asset in assets {
+                if let error = asset.error {
+                    print("exporterDidEndExporting with error:\(error.localizedDescription)")
+                } else {
+                    print("exporterDidEndExporting:\(asset.localTemporaryPath!)")
+                }
+            }
+        }
+        
+        if self.exportManually {
+            DKImageAssetExporter.sharedInstance.exportAssetsAsynchronously(assets: assets, completion: nil)
+        }
     }
 	
     func playVideo(_ asset: AVAsset) {
@@ -77,7 +99,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		self.present(player, animated: true, completion: nil)
     }
     
-    // MARK: - UITableViewDataSource, UITableViewDelegate methods
+    // MARK: - UITableViewDataSource, UITableViewDelegate
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -101,7 +123,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		showImagePicker()
 	}
 	
-    // MARK: - UICollectionViewDataSource, UICollectionViewDelegate methods
+    // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.assets?.count ?? 0
@@ -111,13 +133,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let asset = self.assets![indexPath.row]
 		var cell: UICollectionViewCell?
 		var imageView: UIImageView?
+        var maskView: UIView?
 		
         if asset.type == .video {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellVideo", for: indexPath)
 			imageView = cell?.contentView.viewWithTag(1) as? UIImageView
+            maskView = cell?.contentView.viewWithTag(2)
         } else {
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellImage", for: indexPath)
             imageView = cell?.contentView.viewWithTag(1) as? UIImageView
+            maskView = cell?.contentView.viewWithTag(2)
         }
 		
 		if let cell = cell, let imageView = imageView {
@@ -130,6 +155,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 				}
 			})
 		}
+        
+        maskView?.isHidden = !self.exportManually
 		
 		return cell!
     }
@@ -143,7 +170,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		}
     }
     
-    // Inline Mode
+    // MARK: - Inline Mode
     
     func showInlinePicker() {
         let pickerView = self.pickerController.view!
@@ -185,6 +212,54 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         self.present(pickerController, animated: true, completion: nil)
+    }
+    
+    // MARK: - DKImageAssetExporterObserver
+    
+    func exporterWillBeginExporting(exporter: DKImageAssetExporter, asset: DKAsset) {
+        if let index = self.assets?.index(of: asset) {
+            if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
+                if let maskView = cell.contentView.viewWithTag(2) {
+                    maskView.frame = CGRect(x: maskView.frame.minX,
+                                            y: maskView.frame.minY,
+                                            width: maskView.frame.width,
+                                            height: maskView.frame.width)
+                }
+            }
+        }
+        
+        print("exporterWillBeginExporting")
+    }
+    
+    func exporterDidUpdateProgress(exporter: DKImageAssetExporter, asset: DKAsset) {
+        if let index = self.assets?.index(of: asset) {
+            if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
+                if let maskView = cell.contentView.viewWithTag(2) {
+                    maskView.frame = CGRect(x: maskView.frame.minX,
+                                            y: maskView.frame.minY,
+                                            width: maskView.frame.width,
+                                            height: maskView.frame.width * (1 - CGFloat(asset.progress)))
+                }
+            }
+            
+            print("exporterDidUpdateProgress with \(asset.progress)")
+        }
+    }
+    
+    func exporterDidEndExporting(exporter: DKImageAssetExporter, asset: DKAsset) {
+        if let index = self.assets?.index(of: asset) {
+            if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
+                if let maskView = cell.contentView.viewWithTag(2) {
+                    maskView.isHidden = true
+                }
+            }
+            
+            if let error = asset.error {
+                print("exporterDidEndExporting with error:\(error.localizedDescription)")
+            } else {
+                print("exporterDidEndExporting:\(asset.localTemporaryPath!)")
+            }
+        }
     }
 
 }
