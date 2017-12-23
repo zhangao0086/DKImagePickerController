@@ -33,9 +33,10 @@ public enum DKImagePickerControllerExportStatus: Int {
 @objc
 open class DKImagePickerController: UINavigationController {
     
+    /// Use UIDelegate to Customize the picker UI.
     @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate!
     
-    /// Forces deselect of previous selected image. (allowSwipeToSelect will be ignored)
+    /// Forces deselect of previous selected image. allowSwipeToSelect will be ignored.
     @objc public var singleSelect = false
     
     /// Auto close picker on single select
@@ -50,6 +51,7 @@ open class DKImagePickerController: UINavigationController {
     /// Allow swipe to select images.
     @objc public var allowSwipeToSelect: Bool = false
     
+    /// A Bool value indicating whether the inline mode is enabled.
     @objc public var inline: Bool = false
     
     /// The type of picker interface to be displayed by the controller.
@@ -58,15 +60,16 @@ open class DKImagePickerController: UINavigationController {
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
     @objc public var sourceType: DKImagePickerControllerSourceType = .both
     
-    /// Whether allows to select photos and videos at the same time.
+    /// A Bool value indicating whether allows to select photos and videos at the same time.
     @objc public var allowMultipleTypes = true
     
-    /// Determines whether or not the rotation is enabled.
+    /// A Bool value indicating whether to allow the picker auto-rotate the screen.
     @objc public var allowsLandscape = false
     
     /// Set the showsEmptyAlbums to specify whether or not the empty albums is shown in the picker.
     @objc public var showsEmptyAlbums = true
     
+    /// A Bool value indicating whether to allow the picker shows the cancel button.
     @objc public var showsCancelButton = false
     
     /// The block is executed when user pressed the cancel button.
@@ -75,20 +78,32 @@ open class DKImagePickerController: UINavigationController {
     /// The block is executed when user pressed the select button.
     @objc public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
     
+    /// The block is executed when the number of the selected assets is changed.
     @objc public var selectedChanged: (() -> Void)?
     
+    /// A Bool value indicating whether to allow the picker auto-export the seelcted assets to specified directory when done is called.
+    /// picker will creating a default exporter if exportsWhenCompleted is true and the exporter is nil.
     @objc public var exportsWhenCompleted = false
     
     @objc public var exporter: DKImageAssetExporter?
     
+    /// Indicates the status of the exporter.
     @objc public private(set) var exportStatus = DKImagePickerControllerExportStatus.none {
+        willSet {
+            self.willChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
+        }
+        
         didSet {
+            self.didChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
+            
             self.exportStatusChanged?(self.exportStatus)
         }
     }
     
+    /// The block is executed when the exportStatus is changed.
     @objc public var exportStatusChanged: ((DKImagePickerControllerExportStatus) -> Void)?
     
+    /// The object that acts as the data source of the picker.
     @objc public private(set) lazy var groupDataManager: DKImageGroupDataManager = {
         let configuration = DKImageGroupDataManagerConfiguration()
         configuration.assetFetchOptions = self.createDefaultAssetFetchOptions()
