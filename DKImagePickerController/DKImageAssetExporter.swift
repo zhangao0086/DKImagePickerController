@@ -474,7 +474,7 @@ open class DKImageAssetExporter: DKBaseManager {
         var isNotInLocal = false
         
         let options = PHVideoRequestOptions()
-        options.deliveryMode = .highQualityFormat
+        options.deliveryMode = .mediumQualityFormat
         options.progressHandler = { (p, _, _, _) in
             isNotInLocal = true
             progress(p * 0.85)
@@ -488,6 +488,9 @@ open class DKImageAssetExporter: DKBaseManager {
             if let avAsset = avAsset {
                 if let avURLAsset = avAsset as? AVURLAsset {
                     asset.fileName = avURLAsset.url.lastPathComponent
+                } else if let composition = avAsset as? AVComposition,
+                    let sourceURL = composition.tracks(withMediaType: .video).first?.segments.first?.sourceURL {
+                    asset.fileName = sourceURL.lastPathComponent
                 } else {
                     asset.fileName = "Video.mov"
                 }
