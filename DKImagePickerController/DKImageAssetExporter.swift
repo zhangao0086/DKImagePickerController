@@ -43,11 +43,7 @@ public class DKImageAssetDiskPurger {
         
         let manager = FileManager.default
         for directory in self.directories {
-            if let contents = try? manager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) {
-                for URL in contents {
-                    try? manager.removeItem(at: URL)
-                }
-            }
+            try? manager.removeItem(at: directory)
         }
     }
 }
@@ -185,9 +181,8 @@ open class DKImageAssetExporter: DKBaseManager {
                 defer {
                     self.notify(with: #selector(DKImageAssetExporterObserver.exporterDidEndExporting(exporter:asset:)), object: self, objectTwo: asset)
                     
-                    self.operations[requestID] = nil
-                    
                     if exportedCount == assets.count {
+                        self.operations[requestID] = nil
                         self.semaphore.signal()
                         
                         DispatchQueue.main.async {
