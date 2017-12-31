@@ -202,6 +202,91 @@ UINavigationBar.appearance().titleTextAttributes = [
 
 ## Exporting to file
 
+By default, the picker uses a singleton object of `DKImageAssetExporter` to exports `DKAsset` to local files.
+
+```swift
+/*
+ Configuration options for an DKImageAssetExporter.  When a exporter is created,
+ a copy of the configuration object is made - you cannot modify the configuration
+ of a exporter after it has been created.
+ */
+@objc
+public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
+    
+    @objc public var imageExportPreset = DKImageExportPresent.compatible
+    
+    /// videoExportPreset can be used to specify the transcoding quality for videos (via a AVAssetExportPreset* string).
+    @objc public var videoExportPreset = AVAssetExportPresetHighestQuality
+    
+    #if swift(>=4.0)
+    @objc public var avOutputFileType = AVFileType.mov
+    #else
+    @objc public var avOutputFileType = AVFileTypeQuickTimeMovie
+    #endif
+    
+    @objc public var exportDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("DKImageAssetExporter")
+}
+
+/*
+ An DKImageAssetExporter object exports DKAsset(PHAsset) from album(or iCloud) to app's tmp directory(as default).
+ And it automatically deletes the exported directories when receives the UIApplicationWillTerminate notification.
+ */
+@objc
+open class DKImageAssetExporter: DKBaseManager {
+    
+    /// This method starts an asynchronous export operation of a batch of asset.
+    @discardableResult
+    @objc public func exportAssetsAsynchronously(assets: [DKAsset], completion: ((_ info: [AnyHashable : Any]) -> Void)?) -> DKImageAssetExportRequestID
+}
+```
+
+This exporter can automatically convert HEIF to JPEG:
+
+```swift
+@objc
+public enum DKImageExportPresent: Int {
+    case
+    compatible, // A preset for converting HEIF formatted images to JPEG.
+    current     // A preset for passing image data as-is to the client.
+}
+```
+
+You also can observe the export progress of each asset:
+
+```swift
+@objc
+public protocol DKImageAssetExporterObserver {
+    
+    @objc optional func exporterWillBeginExporting(exporter: DKImageAssetExporter, asset: DKAsset)
+    
+    /// The progress can be obtained from the DKAsset.
+    @objc optional func exporterDidUpdateProgress(exporter: DKImageAssetExporter, asset: DKAsset)
+    
+    /// When the asset's error is not nil, it indicates that an error occurred while exporting.
+    @objc optional func exporterDidEndExporting(exporter: DKImageAssetExporter, asset: DKAsset)
+}
+
+extension DKAsset {
+    
+    /// The exported file will be placed in this location.
+    /// All exported files can be automatically cleaned by the DKImageAssetDiskPurger when appropriate.
+    @objc public var localTemporaryPath: URL?
+    
+    @objc public var fileName: String?
+    
+    /// Indicates the file's size in bytes.
+    @objc public var fileSize: UInt
+        
+    /// If you export an asset whose data is not on the local device, and you have enabled downloading with the isNetworkAccessAllowed property, the progress indicating the progress of the download. A value of 0.0 indicates that the download has just started, and a value of 1.0 indicates the download is complete.
+    @objc public var progress: Double
+    
+    /// Describes the error that occurred if the export is failed or cancelled.
+    @objc public var error: Error?
+}
+```
+
+For example, see `Export automatically` and `Export manually`.
+
 ## Extensions
 This picker uses `DKImageExtensionController` manages all extensions, you can register it with a `DKImageBaseExtension` and a specified `DKImageExtensionType` to customize `camera`, `photo gallery` and `photo editor`:
 
