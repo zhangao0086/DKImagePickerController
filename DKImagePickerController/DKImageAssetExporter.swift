@@ -251,7 +251,7 @@ open class DKImageAssetExporter: DKBaseManager {
         
         operation.completionBlock = { [weak operation] in
             if let operation = operation {
-                if operation.isExecuting == false && operation.isCancelled == true { // Not yet executing.
+                if operation.isCancelled { // Not yet executing.
                     for asset in assets {
                         asset.error = self.makeCancelledError()
                         self.notify(with: #selector(DKImageAssetExporterObserver.exporterDidEndExporting(exporter:asset:)), object: self, objectTwo: asset)
@@ -480,11 +480,17 @@ open class DKImageAssetExporter: DKBaseManager {
         asset.fetchAVAsset(options: options) { (avAsset, info) in
             self.currentAssetInRequesting = nil
             
+            #if swift(>=4.0)
+            let mediaTypeVideo = AVMediaType.video
+            #else
+            let mediaTypeVideo = AVMediaTypeVideo
+            #endif
+            
             if let avAsset = avAsset {
                 if let avURLAsset = avAsset as? AVURLAsset {
                     asset.fileName = avURLAsset.url.lastPathComponent
                 } else if let composition = avAsset as? AVComposition,
-                    let sourceURL = composition.tracks(withMediaType: .video).first?.segments.first?.sourceURL {
+                    let sourceURL = composition.tracks(withMediaType: mediaTypeVideo).first?.segments.first?.sourceURL {
                     asset.fileName = sourceURL.lastPathComponent
                 } else {
                     asset.fileName = "Video.mov"
