@@ -10,24 +10,31 @@ import Foundation
 
 public class DKImageExtensionContext {
     
-    public weak var imagePickerController: DKImagePickerController!
-    public var groupDetailVC: DKAssetGroupDetailVC?
+    public internal(set) weak var imagePickerController: DKImagePickerController!
+    public internal(set) var groupDetailVC: DKAssetGroupDetailVC?
     
 }
 
 ////////////////////////////////////////////////////////////////////////
 
 public enum DKImageExtensionType: Int {
-    case gallery, camera, inlineCamera, photoEditor
+    case
+    gallery,
+    camera,
+    inlineCamera,
+    photoEditor
 }
 
 public protocol DKImageExtensionProtocol {
     
+    /// Starts the extension.
     func perform(with extraInfo: [AnyHashable: Any])
     
+    /// Completes the extension.
     func finish()
 }
 
+/// This is the base class for all extensions.
 @objc
 open class DKImageBaseExtension: NSObject, DKImageExtensionProtocol {
     
@@ -50,24 +57,13 @@ open class DKImageBaseExtension: NSObject, DKImageExtensionProtocol {
     }
     
     @objc internal class func registerAsDefaultExtension() {
-        registerDefaultExtension(extensionClass: self, for: self.extensionType())
+        DKImageExtensionController.registerDefaultExtension(extensionClass: self, for: self.extensionType())
     }
     
 }
 
-public func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
-    DKImageExtensionController.extensions[type] = extensionClass
-}
-
-public func unregisterExtension(for type: DKImageExtensionType) {
-    DKImageExtensionController.extensions[type] = nil
-}
-
-internal func registerDefaultExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
-    DKImageExtensionController.defaultExtensions[type] = extensionClass
-}
-
-class DKImageExtensionController {
+/// The class handles the loading of extensions.
+public class DKImageExtensionController {
     
     fileprivate static var defaultExtensions = [DKImageExtensionType : DKImageBaseExtension.Type]()
     fileprivate static var extensions = [DKImageExtensionType: DKImageBaseExtension.Type]()
@@ -131,6 +127,19 @@ class DKImageExtensionController {
         context.imagePickerController = self.imagePickerController
         
         return context
+    }
+    
+    internal class func registerDefaultExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
+        DKImageExtensionController.defaultExtensions[type] = extensionClass
+    }
+    
+    /// Registers an extension for specified type.
+    public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
+        DKImageExtensionController.extensions[type] = extensionClass
+    }
+    
+    public class func unregisterExtension(for type: DKImageExtensionType) {
+        DKImageExtensionController.extensions[type] = nil
     }
     
 }
