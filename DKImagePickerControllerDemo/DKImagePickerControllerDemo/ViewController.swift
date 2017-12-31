@@ -27,8 +27,8 @@ class ViewController: UIViewController,
         DKImagePickerControllerResource.customLocalizationBlock = nil
         DKImagePickerControllerResource.customImageBlock = nil
         
-        unregisterExtension(for: .camera)
-        unregisterExtension(for: .inlineCamera)
+        DKImageExtensionController.unregisterExtension(for: .camera)
+        DKImageExtensionController.unregisterExtension(for: .inlineCamera)
         
         DKImageAssetExporter.sharedInstance.remove(observer: self)
     }

@@ -77,7 +77,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
         case "Custom Camera":
             let pickerController = DKImagePickerController()
             
-            registerExtension(extensionClass: CustomCameraExtension.self, for: .camera)
+            DKImageExtensionController.registerExtension(extensionClass: CustomCameraExtension.self, for: .camera)
             
             destination.pickerController = pickerController
             
@@ -86,7 +86,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             pickerController.sourceType = .camera
             pickerController.modalPresentationStyle = .overCurrentContext
             
-            registerExtension(extensionClass: CustomCameraExtension.self, for: .inlineCamera)
+            DKImageExtensionController.registerExtension(extensionClass: CustomCameraExtension.self, for: .inlineCamera)
             
             destination.pickerController = pickerController
 
