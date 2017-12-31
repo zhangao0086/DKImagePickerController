@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name          = "DKImagePickerController"
-  s.version       = "4.0.0"
-  s.summary       = "Image Picker Controller by Swift3."
+  s.version       = "4.0.0-beta"
+  s.summary       = "DKImagePickerController is a highly customizable, pure-Swift library."
   s.homepage      = "https://github.com/zhangao0086/DKImagePickerController"
   s.license       = { :type => "MIT", :file => "LICENSE" }
   s.author        = { "Bannings" => "zhangao0086@gmail.com" }
@@ -12,8 +12,6 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
 
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
-
-  s.default_subspecs = 'Full'
 
   s.subspec 'Core' do |core|
     core.dependency 'DKImagePickerController/ImageDataManager'
@@ -36,7 +34,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'PhotoGallery' do |gallery|
     gallery.dependency 'DKImagePickerController/Core'
-    gallery.dependency 'DKPhotoGallery', '0.0.1'
+    gallery.dependency 'DKPhotoGallery'
 
     gallery.source_files = "Extensions/DKImageExtensionGallery.swift"
   end
@@ -60,14 +58,6 @@ Pod::Spec.new do |s|
     photoEditor.dependency 'CLImageEditor', '0.2.0'
 
     photoEditor.source_files = "Extensions/DKImageExtensionPhotoEditor.swift"
-  end
-
-  s.subspec 'Full' do |full|
-    full.dependency 'DKImagePickerController/Core'
-    full.dependency 'DKImagePickerController/Camera'
-    full.dependency 'DKImagePickerController/InlineCamera'
-    full.dependency 'DKImagePickerController/PhotoGallery'
-    full.dependency 'DKImagePickerController/PhotoEditor'
   end
 
 end
