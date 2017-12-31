@@ -3,9 +3,9 @@ DKImagePickerController
 
  [![Build Status](https://secure.travis-ci.org/zhangao0086/DKImagePickerController.svg)](http://travis-ci.org/zhangao0086/DKImagePickerController) [![Version Status](http://img.shields.io/cocoapods/v/DKImagePickerController.png)][docsLink] [![license MIT](https://img.shields.io/cocoapods/l/DKImagePickerController.svg?style=flat)][mitLink]
 
-<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot3.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot4.png" />
 ---
-<img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" /><img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" /><img width="50%" height="50%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 ---
 
 ## Description
@@ -35,6 +35,29 @@ DKImagePickerController is available on CocoaPods. Simply add the following line
 pod 'DKImagePickerController'
 ```
 
+#### Subspecs
+There are 7 subspecs available now: 
+
+| Subspec | Description |
+|---|---|
+| Core | Required. |
+| ImageDataManager | Required. The subspec provides data to `DKImagePickerController`. |
+|   Resource | Required. The subspec provides resource management and internationalization. |
+| PhotoGallery | Optional. The subspec provides preview feature for PHAsset. |
+| Camera | Optional. The subspec provides camera feature. |
+| InlineCamera | Optional. The subspec should be pushed by `UINavigationController`, like `UIImagePickerController` with `UIImagePickerControllerSourceType.camera`. |
+| PhotoEditor | Optional. The subspec provides basic image editing features. |
+
+This means you can install only some of the `DKImagePickerController` modules. By default, you get all subspecs.
+
+If you need to use your own photo editor, simply specify subspecs other than `PhotoEditor`:
+
+```ruby
+pod 'DKImagePickerController', :subspecs => ['PhotoGallery', 'Camera', 'InlineCamera']
+```
+
+More information, see [Extensions](#extensions).
+
 ## Getting Started
 #### Initialization and presentation
 ```swift
@@ -50,7 +73,7 @@ self.presentViewController(pickerController, animated: true) {}
 
 ````
 
-#### Configuration
+#### Configurations
 
 ```swift
  /// Use UIDelegate to Customize the picker UI.
@@ -109,15 +132,19 @@ self.presentViewController(pickerController, animated: true) {}
  
  /// Indicates the status of the exporter.
  @objc public private(set) var exportStatus = DKImagePickerControllerExportStatus.none {
-     willSet {
-         self.willChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
-     }
-     
-     didSet {
-         self.didChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
-         
-         self.exportStatusChanged?(self.exportStatus)
-     }
+    willSet {
+        if self.exportStatus != newValue {
+            self.willChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
+        }
+    }
+    
+    didSet {
+        if self.exportStatus != oldValue {
+            self.didChangeValue(forKey: #keyPath(DKImagePickerController.exportStatus))
+            
+            self.exportStatusChanged?(self.exportStatus)
+        }
+    }
  }
  
  /// The block is executed when the exportStatus is changed.
@@ -128,7 +155,7 @@ self.presentViewController(pickerController, animated: true) {}
 
 ```
 
-## Inline
+## Inline Mode
 
 <img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot11.png" />
 
@@ -139,7 +166,7 @@ groupDataManagerConfiguration.assetGroupTypes = [.smartAlbumUserLibrary]
 
 let groupDataManager = DKImageGroupDataManager(configuration: groupDataManagerConfiguration)
 
-let pickerController = DKImagePickerController(groupDataManager: groupDataManager)
+self.pickerController = DKImagePickerController(groupDataManager: groupDataManager)
 pickerController.inline = true
 pickerController.UIDelegate = CustomInlineLayoutUIDelegate(imagePickerController: pickerController)
 pickerController.assetType = .allPhotos
@@ -150,13 +177,13 @@ pickerView.frame = CGRect(x: 0, y: 170, width: self.view.bounds.width, height: 2
 self.view.addSubview(pickerView)
 ```
 
-## UI customization
+## Customizable UI
 
 <img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 
 For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomUIDelegate).
 
-## Layout customization
+## Customizable Layout
 
 <img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
 
@@ -174,7 +201,7 @@ UINavigationBar.appearance().titleTextAttributes = [
 ]
 ```
 
-### Exporting to file
+## Exporting to file
 ```swift
 /**
     Writes the image in the receiver to the file specified by a given path.
@@ -207,7 +234,7 @@ For example, see [CustomCameraUIDelegate](https://github.com/zhangao0086/DKImage
 
 * Adding the following two lines into your `Podfile`:
 
-    ```ruby
+    ```
     pod 'DKImagePickerController'
     use_frameworks!
     ```
