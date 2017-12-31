@@ -48,8 +48,7 @@ There are 7 subspecs available now:
 | InlineCamera | Optional. The subspec should be pushed by `UINavigationController`, like `UIImagePickerController` with `UIImagePickerControllerSourceType.camera`. |
 | PhotoEditor | Optional. The subspec provides basic image editing features. |
 
-This means you can install only some of the `DKImagePickerController` modules. By default, you get all subspecs.
-
+This means you can install only some of the `DKImagePickerController` modules. By default, you get all subspecs.  
 If you need to use your own photo editor, simply specify subspecs other than `PhotoEditor`:
 
 ```ruby
@@ -202,27 +201,24 @@ UINavigationBar.appearance().titleTextAttributes = [
 ```
 
 ## Exporting to file
-```swift
-/**
-    Writes the image in the receiver to the file specified by a given path.
-*/
-public func writeImageToFile(path: String, completeBlock: (success: Bool) -> Void)
-
-/**
-    Writes the AV in the receiver to the file specified by a given path.
-
-    - parameter presetName:    An NSString specifying the name of the preset template for the export. See AVAssetExportPresetXXX.
-*/
-public func writeAVToFile(path: String, presetName: String, completeBlock: (success: Bool) -> Void)
-
-```
 
 ## Extensions
+This picker uses `DKImageExtensionController` manages all extensions.
 
 #### Camera
 
-You can give a class that implements the `DKImagePickerControllerUIDelegate` protocol to customize camera.  
-For example, see [CustomCameraUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomCameraUIDelegate).
+The information provided by `extraInfo`:
+
+```swift
+let didFinishCapturingImage = extraInfo["didFinishCapturingImage"] as? ((UIImage, [AnyHashable : Any]?) -> Void)
+let didCancel = extraInfo["didCancel"] as? (() -> Void)
+```
+
+You can register a subclass that inherits from `DKImageBaseExtension` to `DKImageExtensionController` to customize camera.  
+For example, see [CustomCameraExtension](DKImagePickerControllerDemo/CustomCamera).
+
+#### InlineCamera
+The `extraInfo` is same as `Camera`.
 
 #### Photo Gallery
 
