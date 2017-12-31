@@ -19,7 +19,7 @@ DKImagePickerController
 * Supports batch exports `PHAsset` to files.
 * Inline mode.
 * Customizable `UICollectionViewLayout`.
-* Customizable `camera`/`photo gallery`/`photo editor`.
+* Customizable `camera`, `photo gallery` and `photo editor`.
 
 ## Requirements
 * iOS 8.0+
@@ -203,26 +203,54 @@ UINavigationBar.appearance().titleTextAttributes = [
 ## Exporting to file
 
 ## Extensions
-This picker uses `DKImageExtensionController` manages all extensions.
+This picker uses `DKImageExtensionController` manages all extensions, you can register it with a `DKImageBaseExtension` and a specified `DKImageExtensionType` to customize `camera`, `photo gallery` and `photo editor`:
 
-#### Camera
+```swift
+/// Registers an extension for specified type.
+public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType)
 
-The information provided by `extraInfo`:
+public class func unregisterExtension(for type: DKImageExtensionType)
+```
+
+The `perform` function will be called with a dictionary providing current context information when an extension is triggered:
+
+```swift
+/// Starts the extension.
+func perform(with extraInfo: [AnyHashable: Any])
+
+/// Completes the extension.
+func finish()
+```
+
+The `extraInfo` will provide different information for different `DKImageExtensionType`:
+
+##### Camera
 
 ```swift
 let didFinishCapturingImage = extraInfo["didFinishCapturingImage"] as? ((UIImage, [AnyHashable : Any]?) -> Void)
 let didCancel = extraInfo["didCancel"] as? (() -> Void)
 ```
 
-You can register a subclass that inherits from `DKImageBaseExtension` to `DKImageExtensionController` to customize camera.  
-For example, see [CustomCameraExtension](DKImagePickerControllerDemo/CustomCamera).
+For a custom camera example, see [CustomCameraExtension](DKImagePickerControllerDemo/DKImagePickerControllerDemo/CustomCamera).
 
-#### InlineCamera
+##### InlineCamera
 The `extraInfo` is same as `Camera`.
 
-#### Photo Gallery
+##### Photo Gallery
 
-#### Photo Editor
+```swift
+let groupId = extraInfo["groupId"] as? String
+let presentationIndex = extraInfo["presentationIndex"] as? Int
+let presentingFromImageView = extraInfo["presentingFromImageView"] as? UIImageView
+```
+
+##### Photo Editor
+
+```swift
+let image = extraInfo["image"] as? UIImage
+let didFinishEditing = extraInfo["didFinishEditing"] as? ((UIImage, [AnyHashable : Any]?) -> Void)
+let metadata = extraInfo["metadata"] as? [AnyHashable : Any]
+```
 
 ## How to use in Objective-C
 
