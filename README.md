@@ -14,7 +14,7 @@ DKImagePickerController
 ### Features
 * Supports both single and multiple selection.
 * Supports filtering albums and sorting by type.
-* Supports landscape and iPad and orientation switching.
+* Supports landscape, iPad, and orientation switching.
 * Supports iCloud.
 * Supports batch exports `PHAsset` to files.
 * Inline mode.
@@ -114,16 +114,16 @@ self.presentViewController(pickerController, animated: true) {}
  /// A Bool value indicating whether to allow the picker shows the cancel button.
  @objc public var showsCancelButton = false
  
- /// The block is executed when user pressed the cancel button.
+ /// The block is executed when the user presses the cancel button.
  @objc public var didCancel: (() -> Void)?
  
- /// The block is executed when user pressed the select button.
+ /// The block is executed when the user presses the select button.
  @objc public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
  
- /// The block is executed when the number of the selected assets is changed.
+ /// The block is executed when the number of selected assets is changed.
  @objc public var selectedChanged: (() -> Void)?
  
- /// A Bool value indicating whether to allow the picker auto-export the seelcted assets to specified directory when done is called.
+ /// A Bool value indicating whether to allow the picker to auto-export the selected assets to the specified directory when done is called.
  /// picker will creating a default exporter if exportsWhenCompleted is true and the exporter is nil.
  @objc public var exportsWhenCompleted = false
  
@@ -192,7 +192,7 @@ For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImage
 
 <img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot9.png" />
 
-You can easily customize the appearance of navigation bar using the appearance proxy.
+You can easily customize the appearance of the navigation bar using the appearance proxy.
 ```swift
 UINavigationBar.appearance().titleTextAttributes = [
     NSFontAttributeName : UIFont(name: "Optima-BoldItalic", size: 21)!,
@@ -202,13 +202,13 @@ UINavigationBar.appearance().titleTextAttributes = [
 
 ## Exporting to file
 
-By default, the picker uses a singleton object of `DKImageAssetExporter` to exports `DKAsset` to local files.
+By default, the picker uses a singleton object of `DKImageAssetExporter` to export `DKAsset` to local files.
 
 ```swift
 /*
- Configuration options for an DKImageAssetExporter.  When a exporter is created,
+ Configuration options for a DKImageAssetExporter.  When an exporter is created,
  a copy of the configuration object is made - you cannot modify the configuration
- of a exporter after it has been created.
+ of an exporter after it has been created.
  */
 @objc
 public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
@@ -228,8 +228,8 @@ public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
 }
 
 /*
- An DKImageAssetExporter object exports DKAsset(PHAsset) from album(or iCloud) to app's tmp directory(as default).
- And it automatically deletes the exported directories when receives the UIApplicationWillTerminate notification.
+ A DKImageAssetExporter object exports DKAsset(PHAsset) from album (or iCloud) to the app's tmp directory (by default).
+ It automatically deletes the exported directories when it receives a UIApplicationWillTerminate notification.
  */
 @objc
 open class DKImageAssetExporter: DKBaseManager {
@@ -277,10 +277,10 @@ extension DKAsset {
     /// Indicates the file's size in bytes.
     @objc public var fileSize: UInt
         
-    /// If you export an asset whose data is not on the local device, and you have enabled downloading with the isNetworkAccessAllowed property, the progress indicating the progress of the download. A value of 0.0 indicates that the download has just started, and a value of 1.0 indicates the download is complete.
+    /// If you export an asset whose data is not on the local device, and you have enabled downloading with the isNetworkAccessAllowed property, the progress indicates the progress of the download. A value of 0.0 indicates that the download has just started, and a value of 1.0 indicates the download is complete.
     @objc public var progress: Double
     
-    /// Describes the error that occurred if the export is failed or cancelled.
+    /// Describes the error that occurred if the export has failed or been cancelled.
     @objc public var error: Error?
 }
 ```
@@ -291,7 +291,7 @@ For example, see `Export automatically` and `Export manually`.
 This picker uses `DKImageExtensionController` manages all extensions, you can register it with a `DKImageBaseExtension` and a specified `DKImageExtensionType` to customize `camera`, `photo gallery` and `photo editor`:
 
 ```swift
-/// Registers an extension for specified type.
+/// Registers an extension for the specified type.
 public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType)
 
 public class func unregisterExtension(for type: DKImageExtensionType)
@@ -319,7 +319,7 @@ let didCancel = extraInfo["didCancel"] as? (() -> Void)
 For a custom camera example, see [CustomCameraExtension](DKImagePickerControllerDemo/DKImagePickerControllerDemo/CustomCamera).
 
 ##### InlineCamera
-The `extraInfo` is same as `Camera`.
+The `extraInfo` is the same as for `Camera`.
 
 ##### Photo Gallery
 
@@ -341,13 +341,13 @@ let metadata = extraInfo["metadata"] as? [AnyHashable : Any]
 
 #### If you use [CocoaPods](http://cocoapods.org/)
 
-* Adding the following two lines into your `Podfile`:
+* Add the following two lines into your `Podfile`:
 
     ```
     pod 'DKImagePickerController'
     use_frameworks!
     ```
-* Importing it into your Objective-C file: 
+* Import the library into your Objective-C file: 
 
     ```objective-c
     #import <DKImagePickerController/DKImagePickerController-Swift.h>
@@ -357,8 +357,8 @@ let metadata = extraInfo["metadata"] as? [AnyHashable : Any]
 
 > See also:[Swift and Objective-C in the Same Project](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/MixandMatch.html)
 
-* Drag and drop the [DKCamera][DKCamera] and `DKImageManager` and `DKImagePickerController` to your project
-* Importing it into your Objective-C file: 
+* Drag and drop the [DKCamera][DKCamera], `DKImageManager` and `DKImagePickerController` to your project
+* Import the library into your Objective-C file: 
 
     ```objective-c
     #import "YourProductModuleName-Swift.h"
