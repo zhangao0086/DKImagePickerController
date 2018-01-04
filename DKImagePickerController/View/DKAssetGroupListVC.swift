@@ -150,17 +150,20 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
         }
     }
     
-    private var groupDataManager: DKImageGroupDataManager
+    private var groupDataManager: DKImageGroupDataManager!
     
     init(groupDataManager: DKImageGroupDataManager,
          defaultAssetGroup: PHAssetCollectionSubtype?,
          selectedGroupDidChangeBlock: @escaping (_ groupId: String?) -> ()) {
-        self.groupDataManager = groupDataManager
-        
         super.init(style: .plain)
         
+        self.groupDataManager = groupDataManager
         self.defaultAssetGroup = defaultAssetGroup
         self.selectedGroupDidChangeBlock = selectedGroupDidChangeBlock
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
     required init?(coder aDecoder: NSCoder) {
