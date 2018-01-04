@@ -183,6 +183,10 @@ open class DKImagePickerController: UINavigationController {
             self.setViewControllers([rootVC], animated: false)
         }
         
+        if self.selectedAssetIdentifiers.count > 0 {
+            self.UIDelegate.imagePickerController(self, didSelectAssets: self.selectedAssets)
+        }
+        
         return {}
     }()
     
@@ -514,7 +518,7 @@ open class DKImagePickerController: UINavigationController {
             self.done()
         } else {
             self.triggerSelectedChangedIfNeeded()
-            self.UIDelegate.imagePickerController(self, didSelectAssets: [asset])
+            self.UIDelegate?.imagePickerController(self, didSelectAssets: [asset])
             
             if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
                 rootVC.collectionView?.reloadData()
@@ -543,7 +547,7 @@ open class DKImagePickerController: UINavigationController {
         self.clearSelectedAssetsCache()
         
         self.triggerSelectedChangedIfNeeded()
-        self.UIDelegate.imagePickerController(self, didDeselectAssets: [asset])
+        self.UIDelegate?.imagePickerController(self, didDeselectAssets: [asset])
         
         if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
             rootVC.collectionView?.reloadData()
@@ -558,7 +562,7 @@ open class DKImagePickerController: UINavigationController {
             self.clearSelectedAssetsCache()
             
             self.triggerSelectedChangedIfNeeded()
-            self.UIDelegate.imagePickerController(self, didDeselectAssets: assets)
+            self.UIDelegate?.imagePickerController(self, didDeselectAssets: assets)
             
             
             if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
