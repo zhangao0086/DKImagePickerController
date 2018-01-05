@@ -66,6 +66,11 @@ class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
     
     // MARK: - DKPhotoGalleryDelegate
     
+    private var backItem = UIBarButtonItem(image: DKImagePickerControllerResource.photoGalleryBackArrowImage(),
+                                           style: .plain,
+                                           target: self,
+                                           action: #selector(dismissGallery))
+    
     func photoGallery(_ gallery: DKPhotoGallery, didShow index: Int) {
         if let viewController = gallery.topViewController {
             if viewController.navigationItem.rightBarButtonItem == nil {
@@ -83,6 +88,10 @@ class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
                 
                 let item = UIBarButtonItem(customView: button)
                 viewController.navigationItem.rightBarButtonItem = item
+            }
+            
+            if viewController.navigationItem.leftBarButtonItem != self.backItem {
+                viewController.navigationItem.leftBarButtonItem = self.backItem
             }
             
             self.updateGalleryAssetSelection()

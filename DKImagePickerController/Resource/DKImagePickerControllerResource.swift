@@ -58,6 +58,11 @@ public class DKImagePickerControllerResource: NSObject {
         return imageForResource("photoGallery_unchecked_image", stretchable: true, cacheable: true)
     }
     
+    public class func photoGalleryBackArrowImage() -> UIImage {
+        return imageForResource("photoGallery_back_arrow", stretchable: false, cacheable: false)
+            .withRenderingMode(.alwaysOriginal)
+    }
+    
     public class func imageForResource(_ name: String, stretchable: Bool = false, cacheable: Bool = false) -> UIImage {
         if let image = customImageBlock?(name) {
             return image
