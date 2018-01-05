@@ -395,15 +395,6 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             }
         }
         
-		if let selectedIndex = self.imagePickerController.index(of: asset) {
-			cell.isSelected = true
-			cell.selectedIndex = selectedIndex
-			self.collectionView!.selectItem(at: indexPath, animated: false, scrollPosition: [])
-		} else {
-			cell.isSelected = false
-			self.collectionView!.deselectItem(at: indexPath, animated: false)
-		}
-        
         cell.longPressBlock = { [weak self, weak cell] in
             guard let strongSelf = self, let strongCell = cell else { return }
             
@@ -433,6 +424,19 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         }
         
         return cell
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let assetCell = cell as? DKAssetGroupDetailBaseCell, let asset = assetCell.asset else { return }
+        
+        if let selectedIndex = self.imagePickerController.index(of: asset) {
+            assetCell.isSelected = true
+            assetCell.selectedIndex = selectedIndex
+            self.collectionView!.selectItem(at: indexPath, animated: false, scrollPosition: [])
+        } else {
+            assetCell.isSelected = false
+            self.collectionView!.deselectItem(at: indexPath, animated: false)
+        }
     }
     
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
