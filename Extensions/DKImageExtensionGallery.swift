@@ -77,6 +77,10 @@ class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
                 button.setBackgroundImage(DKImagePickerControllerResource.photoGalleryCheckedImage(), for: .selected)
                 button.setBackgroundImage(DKImagePickerControllerResource.photoGalleryUncheckedImage(), for: .normal)
                 
+                button.bounds = CGRect(x: 0, y: 0,
+                                       width: DKImagePickerControllerResource.photoGalleryCheckedImage().size.width,
+                                       height: DKImagePickerControllerResource.photoGalleryCheckedImage().size.height)
+                
                 let item = UIBarButtonItem(customView: button)
                 viewController.navigationItem.rightBarButtonItem = item
             }
@@ -126,6 +130,10 @@ class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
                                    width: max(button.backgroundImage(for: .normal)!.size.width, labelWidth),
                                    height: button.bounds.height)
         }
+    }
+    
+    @objc open func dismissGallery() {
+        self.gallery?.dismissGallery()
     }
 
 }
