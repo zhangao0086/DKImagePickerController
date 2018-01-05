@@ -39,9 +39,9 @@ open class DKAssetGroupDetailBaseCell: UICollectionViewCell, DKAssetGroupCellIte
     override open var isHighlighted: Bool {
         didSet {
             if self.isHighlighted {
-                UIView.animate(withDuration: 0.2, animations: {
+                UIView.animate(withDuration: 0.2, delay: 0, options: [.allowUserInteraction], animations: {
                     self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-                })
+                }, completion: nil)
             } else {
                 UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 2, options: [.allowUserInteraction, .curveEaseInOut],
                                animations: { 
