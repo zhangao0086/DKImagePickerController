@@ -8,7 +8,21 @@
 
 import Foundation
 
-open class DKBaseManager: NSObject {
+protocol DKBaseManagerObserver {
+    
+    func add(observer object: AnyObject)
+    
+    func remove(observer object: AnyObject)
+    
+    func notify(with selector: Selector, object: AnyObject?)
+    
+    func notify(with selector: Selector, object: AnyObject?, objectTwo: AnyObject?)
+    
+}
+
+//////////////////////////////////////////////////////////////////////
+
+open class DKBaseManager: NSObject, DKBaseManagerObserver {
     
     private let observers = NSHashTable<AnyObject>.weakObjects()
     
@@ -26,13 +40,19 @@ open class DKBaseManager: NSObject {
     
     open func notify(with selector: Selector, object: AnyObject?, objectTwo: AnyObject?) {
         if self.observers.count > 0 {
-            DispatchQueue.main.async(execute: {
+            let block = {
                 for observer in self.observers.allObjects {
                     if observer.responds(to: selector) {
                         _ = observer.perform(selector, with: object, with: objectTwo)
                     }
                 }
-            })
+            }
+            
+            if Thread.isMainThread {
+                block()
+            } else {
+                DispatchQueue.main.async(execute: block)
+            }
         }
     }
     
