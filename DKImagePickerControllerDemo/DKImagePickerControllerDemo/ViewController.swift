@@ -205,6 +205,7 @@ class ViewController: UIViewController,
     
     @objc func showAlbum() {
         let pickerController = DKImagePickerController()
+        pickerController.maxSelectableCount = self.pickerController.maxSelectableCount
         pickerController.select(assets: self.pickerController.selectedAssets)
         pickerController.didSelectAssets = { [unowned self] (assets: [DKAsset]) in
             self.updateAssets(assets: assets)
