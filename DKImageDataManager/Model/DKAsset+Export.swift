@@ -35,14 +35,14 @@ extension DKAsset {
         set { setAssociatedObject(key: &ExportKeys.fileSize, value: newValue) }
     }
         
-    /// If you export an asset whose data is not on the local device, and you have enabled downloading with the isNetworkAccessAllowed property, the progress indicating the progress of the download. A value of 0.0 indicates that the download has just started, and a value of 1.0 indicates the download is complete.
+    /// If you export an asset whose data is not on the local device, and you have enabled downloading with the isNetworkAccessAllowed property, the progress indicates the progress of the download. A value of 0.0 indicates that the download has just started, and a value of 1.0 indicates the download is complete.
     @objc public var progress: Double {
         
         get { return (getAssociatedObject(key: &ExportKeys.progress) as? Double) ?? 0.0 }
         set { setAssociatedObject(key: &ExportKeys.progress, value: newValue) }
     }
     
-    /// Describes the error that occurred if the export is failed or cancelled.
+    /// Describes the error that occurred if the export has failed or been cancelled.
     @objc public var error: Error? {
         
         get { return getAssociatedObject(key: &ExportKeys.error) as? Error }

@@ -60,7 +60,7 @@ open class DKImagePickerController: UINavigationController {
     /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
     @objc public var sourceType: DKImagePickerControllerSourceType = .both
     
-    /// A Bool value indicating whether allows to select photos and videos at the same time.
+    /// A Bool value indicating whether to allow the picker to select photos and videos at the same time.
     @objc public var allowMultipleTypes = true
     
     /// A Bool value indicating whether to allow the picker auto-rotate the screen.
@@ -72,16 +72,16 @@ open class DKImagePickerController: UINavigationController {
     /// A Bool value indicating whether to allow the picker shows the cancel button.
     @objc public var showsCancelButton = false
     
-    /// The block is executed when user pressed the cancel button.
+    /// The block is executed when the user presses the cancel button.
     @objc public var didCancel: (() -> Void)?
     
-    /// The block is executed when user pressed the select button.
+    /// The block is executed when the user presses the select button.
     @objc public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
     
     /// The block is executed when the number of the selected assets is changed.
     @objc public var selectedChanged: (() -> Void)?
     
-    /// A Bool value indicating whether to allow the picker auto-export the seelcted assets to specified directory when done is called.
+    /// A Bool value indicating whether to allow the picker to auto-export the selected assets to the specified directory when done is called.
     /// picker will creating a default exporter if exportsWhenCompleted is true and the exporter is nil.
     @objc public var exportsWhenCompleted = false
     

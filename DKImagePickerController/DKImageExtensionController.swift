@@ -133,7 +133,7 @@ public class DKImageExtensionController {
         DKImageExtensionController.defaultExtensions[type] = extensionClass
     }
     
-    /// Registers an extension for specified type.
+    /// Registers an extension for the specified type.
     public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
         DKImageExtensionController.extensions[type] = extensionClass
     }

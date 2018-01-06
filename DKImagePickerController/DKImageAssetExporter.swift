@@ -85,9 +85,9 @@ public protocol DKImageAssetExporterObserver {
 }
 
 /*
- Configuration options for an DKImageAssetExporter.  When a exporter is created,
+ Configuration options for a DKImageAssetExporter.  When an exporter is created,
  a copy of the configuration object is made - you cannot modify the configuration
- of a exporter after it has been created.
+ of an exporter after it has been created.
  */
 @objc
 public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
@@ -121,8 +121,8 @@ public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
 }
 
 /*
- An DKImageAssetExporter object exports DKAsset(PHAsset) from album(or iCloud) to app's tmp directory(as default).
- And it automatically deletes the exported directories when receives the UIApplicationWillTerminate notification.
+ A DKImageAssetExporter object exports DKAsset(PHAsset) from album (or iCloud) to the app's tmp directory(by default).
+ It automatically deletes the exported directories when it receives a UIApplicationWillTerminate notification.
  */
 @objc
 open class DKImageAssetExporter: DKBaseManager {

@@ -20,7 +20,7 @@ protocol DKImageGroupDataManagerObserver {
 }
 
 /*
- Configuration options for an DKImageGroupDataManager.  When a manager is created,
+ Configuration options for a DKImageGroupDataManager. When a manager is created,
  a copy of the configuration object is made - you cannot modify the configuration
  of a manager after it has been created.
  */
