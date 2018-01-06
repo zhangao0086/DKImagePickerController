@@ -30,8 +30,21 @@ public enum DKImagePickerControllerExportStatus: Int {
     case none, exporting
 }
 
+////////////////////////////////////////////////////////////////////////
+
 @objc
-open class DKImagePickerController: UINavigationController {
+internal protocol DKImagePickerControllerObserver {
+    
+    @objc optional func imagePickerControllerDidSelect(assets: [DKAsset])
+    
+    @objc optional func imagePickerControllerDidDeselect(assets: [DKAsset])
+    
+}
+
+////////////////////////////////////////////////////////////////////////
+
+@objc
+open class DKImagePickerController: UINavigationController, DKBaseManagerObserver {
     
     /// Use UIDelegate to Customize the picker UI.
     @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate!
@@ -122,6 +135,8 @@ open class DKImagePickerController: UINavigationController {
         return DKImageExtensionController(imagePickerController: self)
     }()
     
+    internal var proxyObserver = DKBaseManager()
+    
     public convenience init() {
         let rootVC = UIViewController()
         
@@ -211,12 +226,19 @@ open class DKImagePickerController: UINavigationController {
     }
     
     @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool = true, completion: (() -> Swift.Void)? = nil) {
+        var targetVC: UIViewController = self
         if self.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.present(viewControllerToPresent,
-                                                                        animated: flag,
-                                                                        completion: completion)
-        } else {
+            targetVC = UIApplication.shared.keyWindow!.rootViewController!
+        }
+        
+        while let presentedViewController = targetVC.presentedViewController {
+            targetVC = presentedViewController
+        }
+        
+        if targetVC == self {
             super.present(viewControllerToPresent, animated: flag, completion: completion)
+        } else {
+            targetVC.present(viewControllerToPresent, animated: flag, completion: completion)
         }
     }
     
@@ -503,43 +525,42 @@ open class DKImagePickerController: UINavigationController {
     
     // MARK: - Selection
         
-    @objc open func select(asset: DKAsset, updateGroupDetailVC: Bool = true) {
+    @objc open func select(asset: DKAsset) {
+        self.select(assets: [asset])
+    }
+    
+    @objc open func select(assets: [DKAsset]) {
         if self.singleSelect {
             self.deselectAll()
         }
         
-        if self.assets[asset.localIdentifier] != nil { return }
-        
-        self.selectedAssetIdentifiers.append(asset.localIdentifier)
-        self.assets[asset.localIdentifier] = asset
-        self.clearSelectedAssetsCache()
-        
-        if self.sourceType == .camera || (self.singleSelect && self.autoCloseOnSingleSelect) {
-            self.done()
-        } else {
-            self.triggerSelectedChangedIfNeeded()
-            self.UIDelegate?.imagePickerController(self, didSelectAssets: [asset])
-            
-            if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-                rootVC.collectionView?.reloadData()
-            }
-        }
-    }
-    
-    @objc open func select(assets: [DKAsset], updateGroupDetailVC: Bool = true) {
-        var needsUpdateGroupDetailVC = false
+        var insertedAssets = [DKAsset]()
         
         for asset in assets {
-            self.select(asset: asset, updateGroupDetailVC: false)
-            needsUpdateGroupDetailVC = true
+            if self.assets[asset.localIdentifier] != nil { continue }
+            if !self.canSelect(asset: asset) { break }
+            
+            self.selectedAssetIdentifiers.append(asset.localIdentifier)
+            self.assets[asset.localIdentifier] = asset
+            
+            insertedAssets.append(asset)
         }
         
-        if needsUpdateGroupDetailVC, updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-            rootVC.collectionView?.reloadData()
+        if insertedAssets.count > 0 {
+            self.clearSelectedAssetsCache()
+            
+            if self.sourceType == .camera || (self.singleSelect && self.autoCloseOnSingleSelect) {
+                self.done()
+            } else {
+                self.triggerSelectedChangedIfNeeded()
+                self.UIDelegate?.imagePickerController(self, didSelectAssets: insertedAssets)
+            }
+            
+            self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidSelect(assets:)), object: insertedAssets as AnyObject)
         }
     }
     
-    @objc open func deselect(asset: DKAsset, updateGroupDetailVC: Bool = true) {
+    @objc open func deselect(asset: DKAsset) {
         if self.assets[asset.localIdentifier] == nil { return }
         
         self.selectedAssetIdentifiers.remove(at: self.selectedAssetIdentifiers.index(of: asset.localIdentifier)!)
@@ -547,14 +568,14 @@ open class DKImagePickerController: UINavigationController {
         self.clearSelectedAssetsCache()
         
         self.triggerSelectedChangedIfNeeded()
-        self.UIDelegate?.imagePickerController(self, didDeselectAssets: [asset])
         
-        if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-            rootVC.collectionView?.reloadData()
-        }
+        let deselectAssets = [asset]
+        self.UIDelegate?.imagePickerController(self, didDeselectAssets: deselectAssets)
+        
+        self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidDeselect(assets:)), object: deselectAssets as AnyObject)
     }
     
-    @objc open func deselectAll(updateGroupDetailVC: Bool = true) {
+    @objc open func deselectAll() {
         if self.selectedAssetIdentifiers.count > 0 {
             let assets = self.selectedAssets
             self.selectedAssetIdentifiers.removeAll()
@@ -564,19 +585,16 @@ open class DKImagePickerController: UINavigationController {
             self.triggerSelectedChangedIfNeeded()
             self.UIDelegate?.imagePickerController(self, didDeselectAssets: assets)
             
-            
-            if updateGroupDetailVC, let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-                rootVC.collectionView?.reloadData()
-            }
+            self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidDeselect(assets:)), object: assets as AnyObject)
         }
     }
     
     @objc open func setSelectedAssets(assets: [DKAsset]) {
         if assets.count > 0 {
-            self.deselectAll(updateGroupDetailVC: false)
-            self.select(assets: assets, updateGroupDetailVC: true)
+            self.deselectAll()
+            self.select(assets: assets)
         } else {
-            self.deselectAll(updateGroupDetailVC: true)
+            self.deselectAll()
         }
     }
     
@@ -610,8 +628,56 @@ open class DKImagePickerController: UINavigationController {
         }
     }
     
+    public func canSelect(asset: DKAsset, showAlert: Bool = true) -> Bool {
+        if let firstSelectedAsset = self.selectedAssets.first,
+            self.allowMultipleTypes == false && firstSelectedAsset.type != asset.type {
+            
+            if showAlert {
+                let alert = UIAlertController(title: DKImagePickerControllerResource.localizedStringWithKey("picker.select.photosOrVideos.error.title"),
+                                              message: DKImagePickerControllerResource.localizedStringWithKey("picker.select.photosOrVideos.error.message"),
+                                              preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: DKImagePickerControllerResource.localizedStringWithKey("picker.alert.ok"),
+                                              style: .cancel))
+                
+                self.present(alert, animated: true){}
+            }
+            
+            return false
+        }
+        
+        if self.maxSelectableCount > 0 {
+            let shouldSelect = self.selectedAssetIdentifiers.count < self.maxSelectableCount
+            if !shouldSelect && showAlert {
+                self.UIDelegate.imagePickerControllerDidReachMaxLimit(self)
+            }
+            
+            return shouldSelect
+        } else {
+            return true
+        }
+    }
+    
     private func clearSelectedAssetsCache() {
         self.internalSelectedAssetsCache = nil
+    }
+    
+    // MARK: - DKBaseManagerObserver
+    
+    internal func add(observer object: AnyObject) {
+        self.proxyObserver.add(observer: object)
+    }
+    
+    internal func remove(observer object: AnyObject) {
+        self.proxyObserver.remove(observer: object)
+    }
+    
+    internal func notify(with selector: Selector, object: AnyObject?) {
+        self.proxyObserver.notify(with: selector, object: object)
+    }
+    
+    internal func notify(with selector: Selector, object: AnyObject?, objectTwo: AnyObject?) {
+        self.proxyObserver.notify(with: selector, object: object, objectTwo: objectTwo)
     }
     
     // MARK: - Orientation

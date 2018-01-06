@@ -109,7 +109,7 @@ class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
             if button.isSelected {
                 self.context.imagePickerController.deselect(asset: asset)
             } else {
-                self.context.imagePickerController.select(asset: asset, updateGroupDetailVC: true)
+                self.context.imagePickerController.select(asset: asset)
             }
             
             self.updateGalleryAssetSelection()
