@@ -15,10 +15,6 @@
 		9CAD36A32003667D003E21C6 /* DKAsset+Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD36822003667D003E21C6 /* DKAsset+Fetch.swift */; };
 		9CAD36A42003667D003E21C6 /* DKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD36832003667D003E21C6 /* DKAsset.swift */; };
 		9CAD36A52003667D003E21C6 /* DKAssetGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD36842003667D003E21C6 /* DKAssetGroup.swift */; };
-		9CAD36A62003667D003E21C6 /* DKImageExtensionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD36862003667D003E21C6 /* DKImageExtensionCamera.swift */; };
-		9CAD36A72003667D003E21C6 /* DKImageExtensionGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD36872003667D003E21C6 /* DKImageExtensionGallery.swift */; };
-		9CAD36A82003667D003E21C6 /* DKImageExtensionInlineCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD36882003667D003E21C6 /* DKImageExtensionInlineCamera.swift */; };
-		9CAD36A92003667D003E21C6 /* DKImageExtensionPhotoEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD36892003667D003E21C6 /* DKImageExtensionPhotoEditor.swift */; };
 		9CAD36AA2003667D003E21C6 /* DKImageAssetExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD368B2003667D003E21C6 /* DKImageAssetExporter.swift */; };
 		9CAD36AB2003667D003E21C6 /* DKImageExtensionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD368C2003667D003E21C6 /* DKImageExtensionController.swift */; };
 		9CAD36AC2003667D003E21C6 /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD368D2003667D003E21C6 /* DKImagePickerController.swift */; };
@@ -49,10 +45,6 @@
 		9CAD36822003667D003E21C6 /* DKAsset+Fetch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DKAsset+Fetch.swift"; sourceTree = "<group>"; };
 		9CAD36832003667D003E21C6 /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
 		9CAD36842003667D003E21C6 /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
-		9CAD36862003667D003E21C6 /* DKImageExtensionCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionCamera.swift; sourceTree = "<group>"; };
-		9CAD36872003667D003E21C6 /* DKImageExtensionGallery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionGallery.swift; sourceTree = "<group>"; };
-		9CAD36882003667D003E21C6 /* DKImageExtensionInlineCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionInlineCamera.swift; sourceTree = "<group>"; };
-		9CAD36892003667D003E21C6 /* DKImageExtensionPhotoEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionPhotoEditor.swift; sourceTree = "<group>"; };
 		9CAD368B2003667D003E21C6 /* DKImageAssetExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageAssetExporter.swift; sourceTree = "<group>"; };
 		9CAD368C2003667D003E21C6 /* DKImageExtensionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionController.swift; sourceTree = "<group>"; };
 		9CAD368D2003667D003E21C6 /* DKImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerController.swift; sourceTree = "<group>"; };
@@ -144,10 +136,6 @@
 		9CAD36852003667D003E21C6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				9CAD36862003667D003E21C6 /* DKImageExtensionCamera.swift */,
-				9CAD36872003667D003E21C6 /* DKImageExtensionGallery.swift */,
-				9CAD36882003667D003E21C6 /* DKImageExtensionInlineCamera.swift */,
-				9CAD36892003667D003E21C6 /* DKImageExtensionPhotoEditor.swift */,
 			);
 			path = Extensions;
 			sourceTree = SOURCE_ROOT;
@@ -295,18 +283,14 @@
 				9CAD36A52003667D003E21C6 /* DKAssetGroup.swift in Sources */,
 				9CAD36AD2003667D003E21C6 /* DKImagePickerControllerBaseUIDelegate.swift in Sources */,
 				9CAD36A32003667D003E21C6 /* DKAsset+Fetch.swift in Sources */,
-				9CAD36A92003667D003E21C6 /* DKImageExtensionPhotoEditor.swift in Sources */,
 				9CAD36A22003667D003E21C6 /* DKAsset+Export.swift in Sources */,
 				9CAD36B42003667D003E21C6 /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				9CAD36B82003667D003E21C6 /* DKAssetGroupGridLayout.swift in Sources */,
 				9CAD36A42003667D003E21C6 /* DKAsset.swift in Sources */,
 				9CAD36AC2003667D003E21C6 /* DKImagePickerController.swift in Sources */,
-				9CAD36A62003667D003E21C6 /* DKImageExtensionCamera.swift in Sources */,
 				9CAD36B72003667D003E21C6 /* DKAssetGroupDetailVC.swift in Sources */,
 				9CAD36B12003667D003E21C6 /* DKImagePickerControllerResource.swift in Sources */,
-				9CAD36A82003667D003E21C6 /* DKImageExtensionInlineCamera.swift in Sources */,
 				9CAD36B52003667D003E21C6 /* DKAssetGroupDetailImageCell.swift in Sources */,
-				9CAD36A72003667D003E21C6 /* DKImageExtensionGallery.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
