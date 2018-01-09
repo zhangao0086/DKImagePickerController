@@ -1,7 +1,13 @@
 language: swift
+podfile: Example/Podfile
 
 osx_image: xcode9
 xcode_sdk: iphonesimulator11.0
 
+before_install:
+  - rvm use system
+  - sudo gem install cocoapods -v '1.3.1'
+  - pod repo update
+
 script:
-- xcodebuild clean build test -project DKImagePickerControllerDemo.xcodeproj -scheme DKImagePickerControllerDemo -destination "platform=iOS Simulator,name=iPhone 7"
+- xcodebuild clean build test -workspace Example/DKImagePickerControllerDemo.xcworkspace -scheme DKImagePickerControllerDemo -destination "platform=iOS Simulator,name=iPhone 7"

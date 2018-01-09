@@ -1,0 +1,15 @@
+platform :ios, '8.0'
+use_frameworks!
+
+target 'DKImagePickerControllerDemo' do
+
+  pod 'DKImagePickerController', :path => '../'
+
+  # Pods for DKImagePickerControllerDemo
+
+  target 'DKImagePickerControllerDemoTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

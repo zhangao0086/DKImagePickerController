@@ -1,30 +1,63 @@
 Pod::Spec.new do |s|
   s.name          = "DKImagePickerController"
-  s.version       = "3.8.1"
-  s.summary       = "Image Picker Controller by Swift4."
+  s.version       = "4.0.0-beta2"
+  s.summary       = "DKImagePickerController is a highly customizable, pure-Swift library."
   s.homepage      = "https://github.com/zhangao0086/DKImagePickerController"
   s.license       = { :type => "MIT", :file => "LICENSE" }
   s.author        = { "Bannings" => "zhangao0086@gmail.com" }
   s.platform      = :ios, "8.0"
   s.source        = { :git => "https://github.com/zhangao0086/DKImagePickerController.git", 
                      :tag => s.version.to_s }
-  s.source_files  = "DKImagePickerController/**/*.{h,swift}"
-
-  s.resource      = "DKImagePickerController/DKImagePickerController.bundle"
-  s.frameworks    = "Foundation", "UIKit", "Photos"
+  
   s.requires_arc  = true
 
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 
-  s.subspec 'Camera' do |camera|
+  s.subspec 'Core' do |core|
+    core.dependency 'DKImagePickerController/ImageDataManager'
+    core.dependency 'DKImagePickerController/Resource'
 
-    camera.ios.source_files = "DKCamera/DKCamera.swift", "DKCamera/DKCameraResource.swift"
-    camera.resource = "DKCamera/DKCameraResource.bundle"
+    core.frameworks    = "Foundation", "UIKit", "Photos"
+
+    core.source_files = "Sources/DKImagePickerController/*.{h,swift}", "Sources/DKImagePickerController/View/**/*.swift"
   end
 
-  s.subspec 'ImageManager' do |image|
+  s.subspec 'ImageDataManager' do |image|
+    image.source_files = "Sources/DKImageDataManager/**/*.swift"
+  end
 
-    image.ios.source_files = "DKImageManager/**/*.swift"
+  s.subspec 'Resource' do |resource|
+    resource.resource = "Sources/DKImagePickerController/Resource/DKImagePickerController.bundle"
+
+    resource.source_files = "Sources/DKImagePickerController/Resource/DKImagePickerControllerResource.swift"
+  end
+
+  s.subspec 'PhotoGallery' do |gallery|
+    gallery.dependency 'DKImagePickerController/Core'
+    gallery.dependency 'DKPhotoGallery'
+
+    gallery.source_files = "Sources/Extensions/DKImageExtensionGallery.swift"
+  end
+
+  s.subspec 'Camera' do |camera|
+    camera.dependency 'DKImagePickerController/Core'
+    camera.dependency 'DKCamera', '1.5.1'
+
+    camera.source_files = "Sources/Extensions/DKImageExtensionCamera.swift"
+  end
+
+  s.subspec 'InlineCamera' do |inlineCamera|
+    inlineCamera.dependency 'DKImagePickerController/Core'
+    inlineCamera.dependency 'DKCamera', '1.5.1'
+
+    inlineCamera.source_files = "Sources/Extensions/DKImageExtensionInlineCamera.swift"
+  end
+
+  s.subspec 'PhotoEditor' do |photoEditor|
+    photoEditor.dependency 'DKImagePickerController/Core'
+    photoEditor.dependency 'CLImageEditor', '0.2.0'
+
+    photoEditor.source_files = "Sources/Extensions/DKImageExtensionPhotoEditor.swift"
   end
 
 end
