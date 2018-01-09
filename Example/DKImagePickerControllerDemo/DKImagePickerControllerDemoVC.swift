@@ -92,6 +92,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
 
         case "Custom UI":
             let pickerController = DKImagePickerController()
+            pickerController.sourceType = .photo
             pickerController.UIDelegate = CustomUIDelegate()
             pickerController.showsCancelButton = true
             
