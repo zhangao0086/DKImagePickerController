@@ -125,7 +125,7 @@ public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
  It automatically deletes the exported directories when it receives a UIApplicationWillTerminate notification.
  */
 @objc
-open class DKImageAssetExporter: DKBaseManager {
+open class DKImageAssetExporter: DKImageBaseManager {
     
     static public let sharedInstance = DKImageAssetExporter(configuration: DKImageAssetExporterConfiguration())
 

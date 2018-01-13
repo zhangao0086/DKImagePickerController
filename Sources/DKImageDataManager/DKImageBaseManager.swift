@@ -1,5 +1,5 @@
 //
-//  DKBaseManager.swift
+//  DKImageBaseManager.swift
 //  DKImagePickerController
 //
 //  Created by ZhangAo on 17/11/2017.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol DKBaseManagerObserver {
+protocol DKImageBaseManagerObserver {
     
     func add(observer object: AnyObject)
     
@@ -22,7 +22,7 @@ protocol DKBaseManagerObserver {
 
 //////////////////////////////////////////////////////////////////////
 
-open class DKBaseManager: NSObject, DKBaseManagerObserver {
+open class DKImageBaseManager: NSObject, DKImageBaseManagerObserver {
     
     private let observers = NSHashTable<AnyObject>.weakObjects()
     

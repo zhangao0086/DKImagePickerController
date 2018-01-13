@@ -61,7 +61,7 @@ public class DKImageGroupDataManagerConfiguration: NSObject, NSCopying {
  Create and manage a collection of DKAssetGroup.
  */
 @objc
-open class DKImageGroupDataManager: DKBaseManager, PHPhotoLibraryChangeObserver {
+open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObserver {
 
     public var groupIds: [String]?
     private var groups: [String : DKAssetGroup]?

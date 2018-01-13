@@ -44,7 +44,7 @@ internal protocol DKImagePickerControllerObserver {
 ////////////////////////////////////////////////////////////////////////
 
 @objc
-open class DKImagePickerController: UINavigationController, DKBaseManagerObserver {
+open class DKImagePickerController: UINavigationController, DKImageBaseManagerObserver {
     
     /// Use UIDelegate to Customize the picker UI.
     @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate!
@@ -135,7 +135,7 @@ open class DKImagePickerController: UINavigationController, DKBaseManagerObserve
         return DKImageExtensionController(imagePickerController: self)
     }()
     
-    internal var proxyObserver = DKBaseManager()
+    internal var proxyObserver = DKImageBaseManager()
     
     public convenience init() {
         let rootVC = UIViewController()
@@ -662,7 +662,7 @@ open class DKImagePickerController: UINavigationController, DKBaseManagerObserve
         self.internalSelectedAssetsCache = nil
     }
     
-    // MARK: - DKBaseManagerObserver
+    // MARK: - DKImageBaseManagerObserver
     
     internal func add(observer object: AnyObject) {
         self.proxyObserver.add(observer: object)
