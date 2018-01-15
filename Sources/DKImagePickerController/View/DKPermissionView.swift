@@ -62,7 +62,8 @@ open class DKPermissionView: UIView {
 	
 }
 
-public class DKPermissionViewColors {
+@objc
+public class DKPermissionViewColors: NSObject {
     let backgroundColor: UIColor
     let titlePhotoColor: UIColor
     let titleCameraColor: UIColor
