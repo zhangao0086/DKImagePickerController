@@ -9,25 +9,41 @@
 import Foundation
 import DKPhotoGallery
 
-class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
+open class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
     
-    private weak var gallery: DKPhotoGallery?
-    private var group: DKAssetGroup!
+    open weak var gallery: DKPhotoGallery?
+    open var group: DKAssetGroup!
     
     override class func extensionType() -> DKImageExtensionType {
         return .gallery
     }
         
-    override func perform(with extraInfo: [AnyHashable: Any]) {
+    override open func perform(with extraInfo: [AnyHashable: Any]) {
         guard let groupDetailVC = self.context.groupDetailVC
             , let groupId = extraInfo["groupId"] as? String else { return }
+        
+        let group = context.imagePickerController.groupDataManager.fetchGroupWithGroupId(groupId)
+        
+        if let gallery = self.createGallery(with: extraInfo, group: group) {
+            self.gallery = gallery
+            self.group = group
+            
+            if context.imagePickerController.inline {
+                UIApplication.shared.keyWindow!.rootViewController!.present(photoGallery: gallery)
+            } else {
+                groupDetailVC.present(photoGallery: gallery)
+            }
+        }
+    }
+    
+    open func createGallery(with extraInfo: [AnyHashable: Any], group: DKAssetGroup) -> DKPhotoGallery? {
+        guard let groupDetailVC = self.context.groupDetailVC else { return nil }
         
         let presentationIndex = extraInfo["presentationIndex"] as? Int
         let presentingFromImageView = extraInfo["presentingFromImageView"] as? UIImageView
         
         var items = [DKPhotoGalleryItem]()
-        let group = context.imagePickerController.groupDataManager.fetchGroupWithGroupId(groupId)
-                
+        
         for i in 0..<group.totalCount {
             let phAsset = context.imagePickerController.groupDataManager.fetchPHAsset(group, index: i)
             
@@ -54,24 +70,17 @@ class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
             return groupDetailVC.thumbnailImageView(for: cellIndexPath)
         }
         
-        self.gallery = gallery
-        self.group = group
-        
-        if context.imagePickerController.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.present(photoGallery: gallery)
-        } else {
-            groupDetailVC.present(photoGallery: gallery)
-        }
+        return gallery
     }
     
     // MARK: - DKPhotoGalleryDelegate
     
-    private var backItem = UIBarButtonItem(image: DKImagePickerControllerResource.photoGalleryBackArrowImage(),
+    open var backItem = UIBarButtonItem(image: DKImagePickerControllerResource.photoGalleryBackArrowImage(),
                                            style: .plain,
                                            target: self,
                                            action: #selector(dismissGallery))
     
-    func photoGallery(_ gallery: DKPhotoGallery, didShow index: Int) {
+    open func photoGallery(_ gallery: DKPhotoGallery, didShow index: Int) {
         if let viewController = gallery.topViewController {
             if viewController.navigationItem.rightBarButtonItem == nil {
                 let button = UIButton(type: .custom)
@@ -98,9 +107,7 @@ class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate {
         }
     }
     
-    // MARK: - Private
-    
-    @objc func selectAssetFromGallery(button: UIButton) {
+    @objc open func selectAssetFromGallery(button: UIButton) {
         if let gallery = self.gallery {
             let currentIndex = gallery.currentIndex()
             let asset = self.context.imagePickerController.groupDataManager.fetchAsset(self.group,

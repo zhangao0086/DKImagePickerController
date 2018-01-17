@@ -66,7 +66,7 @@ open class DKImageBaseExtension: NSObject, DKImageExtensionProtocol {
 public class DKImageExtensionController {
     
     fileprivate static var defaultExtensions = [DKImageExtensionType : DKImageBaseExtension.Type]()
-    fileprivate static var extensions = [DKImageExtensionType: DKImageBaseExtension.Type]()
+    fileprivate static var extensions = [DKImageExtensionType : DKImageBaseExtension.Type]()
     
     private var cache = [DKImageExtensionType : DKImageBaseExtension]()
     
@@ -121,6 +121,15 @@ public class DKImageExtensionController {
         return (DKImageExtensionController.extensions[extensionType] ?? DKImageExtensionController.defaultExtensions[extensionType]) != nil
     }
     
+    /// Registers an extension for the specified type.
+    public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
+        DKImageExtensionController.extensions[type] = extensionClass
+    }
+    
+    public class func unregisterExtension(for type: DKImageExtensionType) {
+        DKImageExtensionController.extensions[type] = nil
+    }
+    
     private func createContext() -> DKImageExtensionContext {
         let context = DKImageExtensionContext()
         context.groupDetailVC = self.imagePickerController.topViewController as? DKAssetGroupDetailVC
@@ -132,14 +141,5 @@ public class DKImageExtensionController {
     internal class func registerDefaultExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
         DKImageExtensionController.defaultExtensions[type] = extensionClass
     }
-    
-    /// Registers an extension for the specified type.
-    public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
-        DKImageExtensionController.extensions[type] = extensionClass
-    }
-    
-    public class func unregisterExtension(for type: DKImageExtensionType) {
-        DKImageExtensionController.extensions[type] = nil
-    }
-    
+
 }

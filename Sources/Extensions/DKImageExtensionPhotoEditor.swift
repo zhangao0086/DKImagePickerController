@@ -9,17 +9,17 @@
 import Foundation
 import CLImageEditor
 
-class DKImageExtensionPhotoEditor: DKImageBaseExtension, CLImageEditorDelegate {
+open class DKImageExtensionPhotoEditor: DKImageBaseExtension, CLImageEditorDelegate {
     
-    private weak var imageEditor: UIViewController?
-    private var metadata: [AnyHashable : Any]?
-    private var didFinishEditing: ((UIImage, [AnyHashable : Any]?) -> Void)?
+    open  weak var imageEditor: UIViewController?
+    open  var metadata: [AnyHashable : Any]?
+    open  var didFinishEditing: ((UIImage, [AnyHashable : Any]?) -> Void)?
     
     override class func extensionType() -> DKImageExtensionType {
         return .photoEditor
     }
         
-    override func perform(with extraInfo: [AnyHashable: Any]) {
+    override open func perform(with extraInfo: [AnyHashable: Any]) {
         guard let image = extraInfo["image"] as? UIImage
             , let didFinishEditing = extraInfo["didFinishEditing"] as? ((UIImage, [AnyHashable : Any]?) -> Void) else { return }
         
@@ -41,13 +41,13 @@ class DKImageExtensionPhotoEditor: DKImageBaseExtension, CLImageEditorDelegate {
         (imagePickerController?.presentedViewController ?? imagePickerController)?.present(imageEditor, animated: true, completion: nil)
     }
 
-    override func finish() {
+    override open func finish() {
         self.imageEditor?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - CLImageEditorDelegate
     
-    public func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
+    open func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
         if let didFinishEditing = self.didFinishEditing {
             self.metadata?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
             

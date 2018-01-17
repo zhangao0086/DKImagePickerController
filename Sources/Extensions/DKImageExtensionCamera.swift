@@ -9,13 +9,13 @@
 import Foundation
 import DKCamera
 
-class DKImageExtensionCamera: DKImageBaseExtension {
+open class DKImageExtensionCamera: DKImageBaseExtension {
     
     override class func extensionType() -> DKImageExtensionType {
         return .camera
     }
         
-    override func perform(with extraInfo: [AnyHashable: Any]) {
+    override open func perform(with extraInfo: [AnyHashable: Any]) {
         guard let didFinishCapturingImage = extraInfo["didFinishCapturingImage"] as? ((UIImage, [AnyHashable : Any]?) -> Void)
             , let didCancel = extraInfo["didCancel"] as? (() -> Void) else { return }
         
@@ -28,13 +28,11 @@ class DKImageExtensionCamera: DKImageBaseExtension {
         self.context.imagePickerController.present(camera)
     }
 
-    override func finish() {
+    override open func finish() {
         self.context.imagePickerController.dismiss(animated: true)
     }
-
-    // MARK: - Private
     
-    private func checkCameraPermission(_ camera: DKCamera) {
+    open func checkCameraPermission(_ camera: DKCamera) {
         func cameraDenied() {
             DispatchQueue.main.async {
                 let permissionView = DKPermissionView.permissionView(.camera)
