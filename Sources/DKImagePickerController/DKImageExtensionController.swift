@@ -17,6 +17,7 @@ public class DKImageExtensionContext {
 
 ////////////////////////////////////////////////////////////////////////
 
+@objc
 public enum DKImageExtensionType: Int {
     case
     gallery,
@@ -123,11 +124,11 @@ public class DKImageExtensionController: NSObject {
     }
     
     /// Registers an extension for the specified type.
-    public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
+    @objc public class func registerExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
         DKImageExtensionController.extensions[type] = extensionClass
     }
     
-    public class func unregisterExtension(for type: DKImageExtensionType) {
+    @objc public class func unregisterExtension(for type: DKImageExtensionType) {
         DKImageExtensionController.extensions[type] = nil
     }
     
