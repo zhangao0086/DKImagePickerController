@@ -63,7 +63,8 @@ open class DKImageBaseExtension: NSObject, DKImageExtensionProtocol {
 }
 
 /// The class handles the loading of extensions.
-public class DKImageExtensionController {
+@objc
+public class DKImageExtensionController: NSObject {
     
     fileprivate static var defaultExtensions = [DKImageExtensionType : DKImageBaseExtension.Type]()
     fileprivate static var extensions = [DKImageExtensionType : DKImageBaseExtension.Type]()
