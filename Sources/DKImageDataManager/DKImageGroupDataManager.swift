@@ -37,7 +37,7 @@ public class DKImageGroupDataManagerConfiguration: NSObject, NSCopying {
     /// Options that specify a filter predicate and sort order for the fetched assets, or nil to use default options.
     @objc public var assetFetchOptions: PHFetchOptions?
     
-    /// Only the number of data is displayed on the UI. 0 means no limit.
+    /// Limits the maximum number of objects displayed on the UI, a value of 0 means no limit.  Defaults to 0.
     @objc public var fetchLimit = 0
     
     public required override init() {

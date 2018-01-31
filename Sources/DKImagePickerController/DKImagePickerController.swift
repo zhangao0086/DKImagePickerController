@@ -85,6 +85,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// A Bool value indicating whether to allow the picker shows the cancel button.
     @objc public var showsCancelButton = false
     
+    /// Limits the maximum number of objects displayed on the UI, a value of 0 means no limit.  Defaults to 0.
+    @objc public var fetchLimit = 0
+    
     /// The block is executed when the user presses the cancel button.
     @objc public var didCancel: (() -> Void)?
     
@@ -124,6 +127,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     @objc public private(set) lazy var groupDataManager: DKImageGroupDataManager = {
         let configuration = DKImageGroupDataManagerConfiguration()
         configuration.assetFetchOptions = self.createDefaultAssetFetchOptions()
+        configuration.fetchLimit = self.fetchLimit
         
         return DKImageGroupDataManager(configuration: configuration)
     }()
