@@ -154,7 +154,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         self.groupDataManager = groupDataManager
     }
     
-    private override init(rootViewController: UIViewController) {
+    public override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
         
         self.preferredContentSize = CGSize(width: 680, height: 600)
@@ -162,7 +162,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         rootViewController.navigationItem.hidesBackButton = true
     }
     
-    private override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
@@ -248,9 +248,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     @objc open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         if self.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: nil)
+            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: completion)
         } else {
-            super.dismiss(animated: true, completion: nil)
+            super.dismiss(animated: true, completion: completion)
         }
     }
     
