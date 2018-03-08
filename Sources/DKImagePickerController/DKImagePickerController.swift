@@ -632,7 +632,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
-    public func canSelect(asset: DKAsset, showAlert: Bool = true) -> Bool {
+    @objc open func canSelect(asset: DKAsset, showAlert: Bool = true) -> Bool {
         if let firstSelectedAsset = self.selectedAssets.first,
             self.allowMultipleTypes == false && firstSelectedAsset.type != asset.type {
             
@@ -700,7 +700,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     // MARK: - Gallery
     
-    public func showGallery(with presentationIndex: Int?,
+    open func showGallery(with presentationIndex: Int?,
                             presentingFromImageView: UIImageView?,
                             groupId: String) {
         var extraInfo: [AnyHashable : Any] = [
