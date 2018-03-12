@@ -47,7 +47,11 @@ internal protocol DKImagePickerControllerObserver {
 open class DKImagePickerController: UINavigationController, DKImageBaseManagerObserver {
     
     /// Use UIDelegate to Customize the picker UI.
-    @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate!
+    @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate! {
+        willSet {
+            newValue?.imagePickerController = self
+        }
+    }
     
     /// Forces deselect of previous selected image. allowSwipeToSelect will be ignored.
     @objc public var singleSelect = false
@@ -180,8 +184,6 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         if self.UIDelegate == nil {
             self.UIDelegate = DKImagePickerControllerBaseUIDelegate()
         }
-        
-        self.UIDelegate.imagePickerController = self
         
         if self.exportsWhenCompleted && self.exporter == nil {
             self.exporter = DKImageAssetExporter.sharedInstance
