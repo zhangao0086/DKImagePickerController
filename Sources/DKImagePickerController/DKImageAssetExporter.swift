@@ -127,7 +127,7 @@ public class DKImageAssetExporterConfiguration: NSObject, NSCopying {
 @objc
 open class DKImageAssetExporter: DKImageBaseManager {
     
-    static public let sharedInstance = DKImageAssetExporter(configuration: DKImageAssetExporterConfiguration())
+    @objc static public let sharedInstance = DKImageAssetExporter(configuration: DKImageAssetExporterConfiguration())
 
     private let configuration: DKImageAssetExporterConfiguration
     
@@ -144,7 +144,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
     private weak var currentAVExportSession: AVAssetExportSession?
     private var currentAssetInRequesting: DKAsset?
     
-    public init(configuration: DKImageAssetExporterConfiguration) {
+    @objc public init(configuration: DKImageAssetExporterConfiguration) {
         self.configuration = configuration.copy() as! DKImageAssetExporterConfiguration
         
         super.init()
@@ -275,7 +275,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
         return requestID
     }
     
-    public func cancel(requestID: DKImageAssetExportRequestID) {
+    @objc public func cancel(requestID: DKImageAssetExportRequestID) {
         if let operation = self.operations[requestID] {
             if operation.isExecuting {
                 self.currentAVExportSession?.cancelExport()
@@ -285,7 +285,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
         }
     }
     
-    public func cancelAll() {
+    @objc public func cancelAll() {
         self.operations.removeAll()
         self.exportQueue.cancelAllOperations()
         self.currentAssetInRequesting?.cancelRequests()
