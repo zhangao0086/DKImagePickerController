@@ -425,7 +425,13 @@ open class DKImageAssetExporter: DKImageBaseManager {
                             }
                             
                             if  self.configuration.imageExportPreset == .compatible && self.isHEIC(with: imageData) {
-                                imageData = self.imageToJPEG(with: imageData) ?? imageData
+                                if let jpgData = self.imageToJPEG(with: imageData) {
+                                    imageData = jpgData
+                                    
+                                    if asset.fileName!.uppercased().hasSuffix(".HEIC") {
+                                        asset.fileName = asset.fileName!.dropLast(4) + "jpg"
+                                    }
+                                }
                             }
                             
                             do {
