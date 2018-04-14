@@ -12,7 +12,13 @@ public extension CGSize {
 	
 	public func toPixel() -> CGSize {
 		let scale = UIScreen.main.scale
-		return CGSize(width: self.width * scale, height: self.height * scale)
+        
+        let screenHeight = max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+        if UIDevice.current.userInterfaceIdiom == .phone && screenHeight == 812.0 { // iPhoneX.
+            return CGSize(width: min(279, self.width * scale), height: min(279, self.height * scale))
+        } else {
+            return CGSize(width: self.width * scale, height: self.height * scale)
+        }
 	}
 }
 
