@@ -24,6 +24,8 @@ class DKAssetGroupDetailCameraCell: DKAssetGroupDetailBaseCell {
         self.contentView.addSubview(cameraImageView)
         
         self.contentView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
+        self.contentView.accessibilityIdentifier = "DKImageCameraAccessibilityIdentifier"
+        self.contentView.isAccessibilityElement = true
     }
     
     required init?(coder aDecoder: NSCoder) {

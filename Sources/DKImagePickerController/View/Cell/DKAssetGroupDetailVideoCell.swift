@@ -18,6 +18,8 @@ class DKAssetGroupDetailVideoCell: DKAssetGroupDetailImageCell {
         super.init(frame: frame)
         
         self.contentView.addSubview(videoInfoView)
+        self.contentView.accessibilityIdentifier = "DKVideoAssetAccessibilityIdentifier"
+        self.contentView.isAccessibilityElement = true
     }
     
     required init?(coder aDecoder: NSCoder) {

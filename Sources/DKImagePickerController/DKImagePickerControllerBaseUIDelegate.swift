@@ -50,6 +50,11 @@ public protocol DKImagePickerControllerUIDelegate {
      Accessory view below content. default is nil.
      */
     func imagePickerControllerFooterView(_ imagePickerController: DKImagePickerController) -> UIView?
+
+    /**
+     Accessory view above content. default is nil.
+     */
+    func imagePickerControllerHeaderView(_ imagePickerController: DKImagePickerController) -> UIView?
     
     /**
      Set the color of the background of the collection view.
@@ -166,6 +171,10 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
 	open func imagePickerControllerFooterView(_ imagePickerController: DKImagePickerController) -> UIView? {
 		return nil
 	}
+  
+  open func imagePickerControllerHeaderView(_ imagePickerController: DKImagePickerController) -> UIView? {
+    return nil
+  }
     
     open func imagePickerControllerCollectionViewBackgroundColor() -> UIColor {
         return UIColor.white

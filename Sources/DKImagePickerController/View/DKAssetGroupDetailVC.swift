@@ -52,9 +52,10 @@ open class DKAssetGroupDetailVC: UIViewController,
     public var selectedGroupId: String?
     internal var collectionView: UICollectionView!
     internal weak var imagePickerController: DKImagePickerController!
-	private var groupListVC: DKAssetGroupListVC!
+    private var groupListVC: DKAssetGroupListVC!
     private var hidesCamera: Bool = false
-	private var footerView: UIView?
+    private var footerView: UIView?
+    private var headerView: UIView?
     private var currentViewSize: CGSize!
     private var registeredCellIdentifiers = Set<String>()
     private var thumbnailSize = CGSize.zero
@@ -76,6 +77,11 @@ open class DKAssetGroupDetailVC: UIViewController,
 		if let footerView = self.footerView {
 			self.view.addSubview(footerView)
 		}
+      
+    self.headerView = self.imagePickerController.UIDelegate.imagePickerControllerHeaderView(self.imagePickerController)
+    if let headerView = self.headerView {
+      self.view.addSubview(headerView)
+    }
 		
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
@@ -109,19 +115,53 @@ open class DKAssetGroupDetailVC: UIViewController,
 	override open func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		
-		if let footerView = self.footerView {
-			footerView.frame = CGRect(x: 0, y: self.view.bounds.height - footerView.bounds.height, width: self.view.bounds.width, height: footerView.bounds.height)
-			self.collectionView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height - footerView.bounds.height)
-			
-		} else {
-			self.collectionView.frame = self.view.bounds
-		}
-	}
+    configureAccessoryViews()
+  }
+  
+  func configureAccessoryViews() {
+    var footerViewFrame = CGRect.zero
+    var headerViewFrame = CGRect.zero
+    if let footerView = self.footerView {
+      footerViewFrame = CGRect(x: 0,
+                               y: self.view.bounds.height - footerView.bounds.height,
+                               width: self.view.bounds.width,
+                               height: footerView.bounds.height)
+      footerView.frame = footerViewFrame
+    }
+    if let headerView = self.headerView  {
+      if #available(iOS 11.0, *) {
+        headerViewFrame = CGRect(x: 0,
+                                 y: self.view.safeAreaInsets.top,
+                                 width: self.view.bounds.width,
+                                 height: headerView.bounds.height)
+      } else {
+        headerViewFrame = CGRect(x: 0,
+                                 y: 0,
+                                 width: self.view.bounds.width,
+                                 height: headerView.bounds.height)
+      }
+      headerView.frame = headerViewFrame
+    }
+    
+    if #available(iOS 11.0, *) {
+      // Handling Safe Areas for iOS 11
+      self.collectionView.frame = CGRect(x: 0,
+                                         y: self.view.safeAreaInsets.top + headerViewFrame.height,
+                                         width: self.view.bounds.width,
+                                         height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height - self.view.safeAreaInsets.top)
+    } else {
+      self.collectionView.frame = CGRect(x: 0,
+                                         y: headerViewFrame.height,
+                                         width: self.view.bounds.width,
+                                         height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height)
+    }
+  }
 	
 	internal func checkPhotoPermission() {
 		func photoDenied() {
-			self.view.addSubview(DKPermissionView.permissionView(.photo))
-			self.view.backgroundColor = UIColor.black
+            let permissionColors = self.imagePickerController.permissionViewColors
+            self.view.addSubview(DKPermissionView.permissionView(.photo, withColors: permissionColors))
+            self.view.backgroundColor = permissionColors.backgroundColor
 			self.collectionView?.isHidden = true
 		}
         
