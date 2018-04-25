@@ -27,6 +27,8 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
         self.checkView.checkLabel.font = UIFont.boldSystemFont(ofSize: 14)
         self.checkView.checkLabel.textColor = UIColor.white
         self.contentView.addSubview(self.checkView)
+        self.contentView.accessibilityIdentifier = "DKImageAssetAccessibilityIdentifier"
+        self.contentView.isAccessibilityElement = true
     }
     
     required init?(coder aDecoder: NSCoder) {

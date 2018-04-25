@@ -100,6 +100,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     /// The block is executed when the number of the selected assets is changed.
     @objc public var selectedChanged: (() -> Void)?
+
+    /// Colors applied to the permission view when access needs to be granted by the user
+    @objc public var permissionViewColors = DKPermissionViewColors()
     
     /// A Bool value indicating whether to allow the picker to auto-export the selected assets to the specified directory when done is called.
     /// picker will creating a default exporter if exportsWhenCompleted is true and the exporter is nil.
