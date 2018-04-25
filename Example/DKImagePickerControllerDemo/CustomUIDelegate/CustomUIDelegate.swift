@@ -22,6 +22,13 @@ open class CustomUIDelegate: DKImagePickerControllerBaseUIDelegate {
         
         return toolbar
     }()
+  
+    lazy var header: UIToolbar = {
+      let header = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 220))
+      header.barTintColor = UIColor.yellow
+      self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
+      return header
+    }()
     
     override open func createDoneButtonIfNeeded() -> UIButton {
         if self.doneButton == nil {
@@ -52,8 +59,12 @@ open class CustomUIDelegate: DKImagePickerControllerBaseUIDelegate {
         vc.navigationItem.rightBarButtonItem = nil
     }
     
+    override open func imagePickerControllerHeaderView(_ imagePickerController: DKImagePickerController) -> UIView? {
+        return self.header
+    }
+  
     override open func imagePickerControllerFooterView(_ imagePickerController: DKImagePickerController) -> UIView? {
-        return self.footer
+      return self.footer
     }
     
     override open func updateDoneButtonTitle(_ button: UIButton) {
