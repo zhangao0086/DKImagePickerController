@@ -6,7 +6,7 @@ xcode_sdk: iphonesimulator11.0
 
 before_install:
   - rvm use system
-  - sudo gem uninstall cocoapods
+  - brew install ruby
   - sudo gem install cocoapods -v '1.5.0'
   - pod repo update
 
