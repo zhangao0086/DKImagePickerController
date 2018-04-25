@@ -18,7 +18,7 @@ private extension UICollectionView {
         if hidesCamera {
             return allLayoutAttributes.map { $0.indexPath }
         } else {
-            return allLayoutAttributes.flatMap { $0.indexPath.item == 0 ? nil : IndexPath(item: $0.indexPath.item - 1, section: $0.indexPath.section) }
+            return allLayoutAttributes.compactMap { $0.indexPath.item == 0 ? nil : IndexPath(item: $0.indexPath.item - 1, section: $0.indexPath.section) }
         }
     }
     

@@ -37,13 +37,19 @@ class CustomGroupDetailImageCell: DKAssetGroupDetailBaseCell {
         }
     }
 
-    internal lazy override var thumbnailImageView: UIImageView = {
+    internal lazy var _thumbnailImageView: UIImageView = {
         let thumbnailImageView = UIImageView()
         thumbnailImageView.contentMode = .scaleAspectFill
         thumbnailImageView.clipsToBounds = true
         
         return thumbnailImageView
     }()
+    
+    override var thumbnailImageView: UIImageView {
+        get {
+            return _thumbnailImageView
+        }
+    }
     
     fileprivate lazy var checkView: UIImageView = {
         let checkView = UIImageView(image: DKImagePickerControllerResource.blueTickImage())
