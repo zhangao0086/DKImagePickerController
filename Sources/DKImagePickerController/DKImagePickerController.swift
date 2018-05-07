@@ -657,7 +657,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         
         if self.maxSelectableCount > 0 {
             let shouldSelect = self.selectedAssetIdentifiers.count < self.maxSelectableCount
-            if !shouldSelect && showAlert {
+            if !shouldSelect && showAlert && !self.UIDelegate.isMaxLimitAlertDisplayed {
                 self.UIDelegate.imagePickerControllerDidReachMaxLimit(self)
             }
             

@@ -151,6 +151,10 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
     open func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset]) {
         self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
     }
+    
+    open var isMaxLimitAlertDisplayed: Bool {
+        return imagePickerController.visibleViewController?.isKind(of: UIAlertController.self) ?? false
+    }
 	
 	open func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController) {
         let formatter = NumberFormatter()
