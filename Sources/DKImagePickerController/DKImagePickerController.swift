@@ -96,6 +96,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     @objc public var didCancel: (() -> Void)?
     
     /// The block is executed when the user presses the select button.
+    @objc public var willSelectAssets: (() -> Void)?
+    
+    /// The block is executed when the user presses the select button.
     @objc public var didSelectAssets: ((_ assets: [DKAsset]) -> Void)?
     
     /// The block is executed when the number of the selected assets is changed.
@@ -278,6 +281,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     private var exportRequestID = DKImageAssetExportInvalidRequestID
     @objc open func done() {
         self.cancelCurrentExportRequestIfNeeded()
+        
+        self.willSelectAssets?()
         
         let completeBlock: ([DKAsset]) -> Void = { assets in
             self.exportStatus = .none
