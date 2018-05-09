@@ -16,9 +16,9 @@ public class DKAssetGroup: NSObject {
     public var totalCount: Int {
         get {
             if let displayCount = displayCount, displayCount > 0 {
-                return min(displayCount, fetchResult.count)
+                return min(displayCount, assets.count)
             } else {
-                return fetchResult.count
+                return assets.count
             }
         }
     }
@@ -26,5 +26,7 @@ public class DKAssetGroup: NSObject {
     var displayCount: Int?
 	
 	public var originalCollection: PHAssetCollection!
-	public var fetchResult: PHFetchResult<PHAsset>!
+  public var fetchResult: PHFetchResult<PHAsset>!
+  var assets: [PHAsset]!
+
 }

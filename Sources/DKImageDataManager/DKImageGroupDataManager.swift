@@ -33,6 +33,8 @@ public class DKImageGroupDataManagerConfiguration: NSObject, NSCopying {
         .smartAlbumFavorites,
         .albumRegular
     ]
+  
+    @objc public var orientationsAllowed: DKImagePickerControllerAssetOrientation = .all
     
     /// Options that specify a filter predicate and sort order for the fetched assets, or nil to use default options.
     @objc public var assetFetchOptions: PHFetchOptions?
@@ -188,6 +190,19 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
 	}
 	
 	open func updateGroup(_ group: DKAssetGroup, fetchResult: PHFetchResult<PHAsset>) {
+        var indexes: [Int] = []
+        fetchResult.enumerateObjects ({ (asset, index, _) in
+            if self.configuration.orientationsAllowed == .landscape {
+                if asset.pixelWidth > asset.pixelHeight {
+                    indexes.append(index)
+                }
+            } else if self.configuration.orientationsAllowed == .portrait {
+                if asset.pixelHeight > asset.pixelWidth {
+                    indexes.append(index)
+                }
+            }
+        })
+        group.assets = fetchResult.objects(at: IndexSet(indexes))
         group.fetchResult = fetchResult
         group.displayCount = self.configuration.fetchLimit
 	}
