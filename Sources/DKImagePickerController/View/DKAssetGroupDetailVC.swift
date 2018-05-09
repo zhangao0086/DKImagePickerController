@@ -198,7 +198,9 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
     
 	open func updateTitleView() {
-		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
+        guard let selectedGroupId = self.selectedGroupId else { return }
+        
+		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
 		self.title = group.groupName
 		
 		let groupsCount = self.imagePickerController.groupDataManager.groupIds?.count ?? 0
@@ -214,6 +216,8 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
     
     func fetchAsset(for index: Int) -> DKAsset? {
+        guard let selectedGroupId = self.selectedGroupId else { return nil }
+        
         var assetIndex = index
         
         if !self.hidesCamera && index == 0 {
@@ -221,7 +225,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         }
         assetIndex = (index - (self.hidesCamera ? 0 : 1))
         
-        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
+        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
         return self.imagePickerController.groupDataManager.fetchAsset(group, index: assetIndex)
     }
     
@@ -505,7 +509,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
 
     func updateCachedAssets() {
-        guard enableCaching() else { return }
+        guard enableCaching(), let selectedGroupId = self.selectedGroupId else { return }
         
         // Update only if the view is visible.
         guard isViewLoaded && view.window != nil && self.selectedGroupId != nil else { return }
@@ -517,7 +521,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
         guard delta > view.bounds.height / 3 else { return }
         
-        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(self.selectedGroupId!)
+        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
         
         // Compute the assets to start caching and to stop caching.
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)

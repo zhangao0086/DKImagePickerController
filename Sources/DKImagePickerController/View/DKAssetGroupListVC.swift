@@ -188,16 +188,16 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
             
             strongSelf.groups = groups
             strongSelf.selectedGroup = strongSelf.defaultAssetGroupOfAppropriate()
-            if let selectedGroup = strongSelf.selectedGroup, let row =  groups.index(of: selectedGroup) {
+            if let selectedGroup = strongSelf.selectedGroup, let displayGroups = strongSelf.displayGroups, let row = displayGroups.index(of: selectedGroup) {
                 strongSelf.tableView.selectRow(at: IndexPath(row: row, section: 0), animated: false, scrollPosition: .none)
+                strongSelf.selectedGroupDidChangeBlock?(strongSelf.selectedGroup)
             }
-            
-            strongSelf.selectedGroupDidChangeBlock?(strongSelf.selectedGroup)
         }
     }
 
     fileprivate func defaultAssetGroupOfAppropriate() -> String? {
         guard let groups = self.displayGroups else { return nil }
+        
         if let defaultAssetGroup = self.defaultAssetGroup {
             for groupId in groups {
                 let group = self.groupDataManager.fetchGroupWithGroupId(groupId)
@@ -210,16 +210,17 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
     }
     
     private func filterEmptyGroupIfNeeded() -> [String]? {
-        var displayGroups = self.groups
+        var displayGroups = [String]()
         if !self.showsEmptyAlbums {
             if let groups = self.groups {
                 for groupId in groups {
                     if self.groupDataManager.fetchGroupWithGroupId(groupId).totalCount > 0 {
-                        displayGroups?.append(groupId)
+                        displayGroups.append(groupId)
                     }
                 }
             }
         }
+        
         return displayGroups
     }
 
