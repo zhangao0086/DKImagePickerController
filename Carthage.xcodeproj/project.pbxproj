@@ -48,7 +48,7 @@
 		9CA4AC642004D280008AFD7D /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
 		9CA4AC662004D280008AFD7D /* DKImageAssetExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageAssetExporter.swift; sourceTree = "<group>"; };
 		9CA4AC672004D280008AFD7D /* DKImageExtensionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionController.swift; sourceTree = "<group>"; };
-		9CA4AC682004D280008AFD7D /* DKImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerController.swift; sourceTree = "<group>"; };
+		9CA4AC682004D280008AFD7D /* DKImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerController.swift; sourceTree = "<group>"; tabWidth = 4; };
 		9CA4AC692004D280008AFD7D /* DKImagePickerControllerBaseUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerBaseUIDelegate.swift; sourceTree = "<group>"; };
 		9CA4AC6A2004D280008AFD7D /* DKPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPopoverViewController.swift; sourceTree = "<group>"; };
 		9CA4AC6B2004D280008AFD7D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };

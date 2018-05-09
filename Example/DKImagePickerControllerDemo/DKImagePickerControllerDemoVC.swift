@@ -24,7 +24,19 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             let pickerController = DKImagePickerController()
             
             destination.pickerController = pickerController
-            
+          
+        case "Pick All Portrait":
+          let pickerController = DKImagePickerController()
+          
+          pickerController.orientationsAllowed = .portrait
+          destination.pickerController = pickerController
+          
+        case "Pick All Landscape":
+          let pickerController = DKImagePickerController()
+          
+          pickerController.orientationsAllowed = .landscape
+          destination.pickerController = pickerController
+          
         case "Pick Photos Only":
             let pickerController = DKImagePickerController()
             pickerController.assetType = .allPhotos
