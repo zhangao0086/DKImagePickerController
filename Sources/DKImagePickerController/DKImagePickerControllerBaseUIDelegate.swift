@@ -72,12 +72,12 @@ public protocol DKImagePickerControllerUIDelegate {
 
 @objc
 open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControllerUIDelegate {
-	
-	open weak var imagePickerController: DKImagePickerController!
-	
-	open var doneButton: UIButton?
-	
-	open func createDoneButtonIfNeeded() -> UIButton {
+    
+    open weak var imagePickerController: DKImagePickerController!
+    
+    open var doneButton: UIButton?
+    
+    open func createDoneButtonIfNeeded() -> UIButton {
         if self.doneButton == nil {
             let button = UIButton(type: UIButtonType.custom)
             button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.imagePickerController.navigationBar.tintColor, for: .normal)
@@ -85,9 +85,9 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
             self.doneButton = button
             self.updateDoneButtonTitle(button)
         }
-		
-		return self.doneButton!
-	}
+        
+        return self.doneButton!
+    }
     
     open func updateDoneButtonTitle(_ button: UIButton) {
         if self.imagePickerController.selectedAssetIdentifiers.count > 0 {
@@ -121,33 +121,33 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
             }
         }
     }
-	
-	// Delegate methods...
-	
-	open func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController) {
-		vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.createDoneButtonIfNeeded())
-	}
-        	
-	open func layoutForImagePickerController(_ imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type {
-		return DKAssetGroupGridLayout.self
-	}
-	
-	open func imagePickerController(_ imagePickerController: DKImagePickerController,
-	                                  showsCancelButtonForVC vc: UIViewController) {
-		vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-		                                                      target: imagePickerController,
-		                                                      action: #selector(imagePickerController.dismiss as () -> Void))
-	}
-	
-	open func imagePickerController(_ imagePickerController: DKImagePickerController,
-	                                  hidesCancelButtonForVC vc: UIViewController) {
-		vc.navigationItem.leftBarButtonItem = nil
-	}
+    
+    // Delegate methods...
+    
+    open func prepareLayout(_ imagePickerController: DKImagePickerController, vc: UIViewController) {
+        vc.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.createDoneButtonIfNeeded())
+    }
+    
+    open func layoutForImagePickerController(_ imagePickerController: DKImagePickerController) -> UICollectionViewLayout.Type {
+        return DKAssetGroupGridLayout.self
+    }
+    
+    open func imagePickerController(_ imagePickerController: DKImagePickerController,
+                                    showsCancelButtonForVC vc: UIViewController) {
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                              target: imagePickerController,
+                                                              action: #selector(imagePickerController.dismiss as () -> Void))
+    }
+    
+    open func imagePickerController(_ imagePickerController: DKImagePickerController,
+                                    hidesCancelButtonForVC vc: UIViewController) {
+        vc.navigationItem.leftBarButtonItem = nil
+    }
     
     open func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
         self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
     }
-	    
+    
     open func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset]) {
         self.updateDoneButtonTitle(self.createDoneButtonIfNeeded())
     }
@@ -155,8 +155,8 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
     open var isMaxLimitAlertDisplayed: Bool {
         return imagePickerController.visibleViewController?.isKind(of: UIAlertController.self) ?? false
     }
-	
-	open func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController) {
+    
+    open func imagePickerControllerDidReachMaxLimit(_ imagePickerController: DKImagePickerController) {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.locale = Locale(identifier: Locale.current.identifier)
@@ -195,6 +195,6 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
     open func imagePickerControllerCollectionVideoCell() -> DKAssetGroupDetailBaseCell.Type {
         return DKAssetGroupDetailVideoCell.self
     }
-		
+    
 }
 
