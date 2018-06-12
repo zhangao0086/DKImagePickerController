@@ -24,7 +24,7 @@ open class DKPopoverViewController: UIViewController {
     
     open class func dismissPopoverViewController() {
         let window = UIApplication.shared.keyWindow!
-
+        
         for vc in window.rootViewController!.childViewControllers {
             if vc is DKPopoverViewController {
                 (vc as! DKPopoverViewController).dismiss()
@@ -37,7 +37,7 @@ open class DKPopoverViewController: UIViewController {
         var contentView: UIView! {
             didSet {
                 contentView.layer.cornerRadius = 5
-				contentView.clipsToBounds = true
+                contentView.clipsToBounds = true
                 contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 self.addSubview(contentView)
             }
@@ -52,7 +52,7 @@ open class DKPopoverViewController: UIViewController {
             
             self.commonInit()
         }
-
+        
         required init?(coder aDecoder: NSCoder) {
             super.init(coder: aDecoder)
             
@@ -84,12 +84,12 @@ open class DKPopoverViewController: UIViewController {
             arrowPath.addLine(to: CGPoint(x: arrowWidth, y: arrowHeight))
             arrowPath.addLine(to: CGPoint(x: 0, y: arrowHeight))
             arrowPath.closeSubpath()
-
+            
             context?.addPath(arrowPath)
             
             context?.setFillColor(UIColor.white.cgColor)
             context?.drawPath(using: CGPathDrawingMode.fill)
-
+            
             let arrowImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             
@@ -100,6 +100,10 @@ open class DKPopoverViewController: UIViewController {
     var contentViewController: UIViewController!
     var fromView: UIView!
     private let popoverView = DKPopoverView()
+    
+    // MARK: - Observers
+    
+    private var preferredContentSizeObserver: NSKeyValueObservation?
     
     override open func loadView() {
         super.loadView()
@@ -116,27 +120,29 @@ open class DKPopoverViewController: UIViewController {
         
         self.view.addSubview(popoverView)
     }
-
-	@available(iOS, deprecated: 8.0)
+    
+    @available(iOS, deprecated: 8.0)
     override open func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-		super.didRotate(from: fromInterfaceOrientation)
-		
+        super.didRotate(from: fromInterfaceOrientation)
+        
         UIView.animate(withDuration: 0.2, animations: {
             self.popoverView.frame = self.calculatePopoverViewFrame()
         })
     }
     
     func showInView(_ view: UIView) {
-		view.addSubview(self.view)
-		
-		self.popoverView.contentView = self.contentViewController.view
+        view.addSubview(self.view)
+        
+        self.popoverView.contentView = self.contentViewController.view
         self.popoverView.frame = self.calculatePopoverViewFrame()
         
-        self.contentViewController!.addObserver(self,
-                                                forKeyPath: "preferredContentSize",
-                                                options: .new,
-                                                context: nil)
-		
+        
+        preferredContentSizeObserver = self.contentViewController.observe(\.preferredContentSize, options: .new, changeHandler: { [weak self] (vc, changes) in
+            if let newValue = changes.newValue {
+                self?.animatePopoverViewAfterChange()
+            }
+        })
+        
         self.popoverView.transform = self.popoverView.transform.translatedBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaledBy(x: 0.1, y: 0.1)
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.3, options: .allowUserInteraction, animations: {
             self.popoverView.transform = CGAffineTransform.identity
@@ -145,7 +151,7 @@ open class DKPopoverViewController: UIViewController {
     }
     
     @objc func dismiss() {
-        self.contentViewController.removeObserver(self, forKeyPath: "preferredContentSize")
+        self.preferredContentSizeObserver?.invalidate()
         
         UIView.animate(withDuration: 0.2, animations: {
             self.popoverView.transform = self.popoverView.transform.translatedBy(x: 0, y: -(self.popoverView.bounds.height / 2)).scaledBy(x: 0.01, y: 0.01)
@@ -153,39 +159,38 @@ open class DKPopoverViewController: UIViewController {
         }, completion: { result in
             self.view.removeFromSuperview()
             self.removeFromParentViewController()
-        }) 
+        })
     }
-	
-	func calculatePopoverViewFrame() -> CGRect {
-		let popoverY = self.fromView.convert(self.fromView.frame.origin, to: self.view).y + self.fromView.bounds.height
-
-        let preferredContentSize = self.contentViewController.preferredContentSize
-		var popoverWidth = preferredContentSize.width
-		if popoverWidth == UIViewNoIntrinsicMetric {
-			if UI_USER_INTERFACE_IDIOM() == .pad {
-				popoverWidth = self.view.bounds.width * 0.6
-			} else {
-				popoverWidth = self.view.bounds.width
-			}
-		}
-		
-		let popoverHeight = min(preferredContentSize.height + self.popoverView.arrowHeight, view.bounds.height - popoverY - 40)
-		
-		return CGRect(
-			x: (self.view.bounds.width - popoverWidth) / 2,
-			y: popoverY,
-			width: popoverWidth,
-			height: popoverHeight
-		)
-	}
     
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "preferredContentSize" {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.popoverView.frame = self.calculatePopoverViewFrame()
-            })
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+    func calculatePopoverViewFrame() -> CGRect {
+        let popoverY = self.fromView.convert(self.fromView.frame.origin, to: self.view).y + self.fromView.bounds.height
+        
+        let preferredContentSize = self.contentViewController.preferredContentSize
+        var popoverWidth = preferredContentSize.width
+        if popoverWidth == UIViewNoIntrinsicMetric {
+            if UI_USER_INTERFACE_IDIOM() == .pad {
+                popoverWidth = self.view.bounds.width * 0.6
+            } else {
+                popoverWidth = self.view.bounds.width
+            }
         }
+        
+        let popoverHeight = min(preferredContentSize.height + self.popoverView.arrowHeight, view.bounds.height - popoverY - 40)
+        
+        return CGRect(
+            x: (self.view.bounds.width - popoverWidth) / 2,
+            y: popoverY,
+            width: popoverWidth,
+            height: popoverHeight
+        )
     }
+    
+    // MARK: - Animation
+    
+    private func animatePopoverViewAfterChange() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.popoverView.frame = self.calculatePopoverViewFrame()
+        })
+    }
+    
 }
