@@ -1,7 +1,7 @@
 language: swift
 podfile: Example/Podfile
 
-osx_image: xcode9
+osx_image: xcode9.3
 xcode_sdk: iphonesimulator11.0
 
 before_install:
