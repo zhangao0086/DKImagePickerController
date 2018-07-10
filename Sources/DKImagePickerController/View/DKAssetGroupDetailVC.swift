@@ -594,9 +594,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
     
     func imagePickerControllerDidDeselect(assets: [DKAsset]) {
-        if assets.count > 1 {
-            self.collectionView.reloadData()
-        } else {
+        self.collectionView.performBatchUpdates({
             for indexPathForVisible in self.collectionView.indexPathsForVisibleItems {
                 if let cell = (self.collectionView.cellForItem(at: indexPathForVisible) as? DKAssetGroupDetailBaseCell),
                     let asset = cell.asset, cell.isSelected {
@@ -607,7 +605,7 @@ open class DKAssetGroupDetailVC: UIViewController,
                     }
                 }
             }
-        }
+        }, completion: nil)
     }
     
 	// MARK: - DKImageGroupDataManagerObserver
