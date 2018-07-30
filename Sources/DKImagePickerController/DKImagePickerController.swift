@@ -146,6 +146,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         return DKImageExtensionController(imagePickerController: self)
     }()
     
+    internal weak var groupDetailVC: DKAssetGroupDetailVC?
     internal var proxyObserver = DKImageBaseManager()
     
     public convenience init() {
@@ -205,6 +206,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             self.UIDelegate.prepareLayout(self, vc: rootVC)
             self.updateCancelButtonForVC(rootVC)
             self.setViewControllers([rootVC], animated: false)
+            self.groupDetailVC = rootVC
         }
         
         if self.selectedAssetIdentifiers.count > 0 {
@@ -617,6 +619,10 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     @objc func contains(asset: DKAsset) -> Bool {
         return self.assets[asset.localIdentifier] != nil
+    }
+  
+    open func scrollToLastTappedAsset() {
+        groupDetailVC?.scrollToLastTappedAsset()
     }
     
     private var internalSelectedAssetsCache: [DKAsset]?

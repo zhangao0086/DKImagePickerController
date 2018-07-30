@@ -63,6 +63,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     private var currentViewSize: CGSize!
     private var registeredCellIdentifiers = Set<String>()
     private var thumbnailSize = CGSize.zero
+    private var lastTappedAssetIndexPath: IndexPath?
     
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -255,6 +256,12 @@ open class DKAssetGroupDetailVC: UIViewController,
             return index
         } else {
             return index + 1
+        }
+    }
+  
+    public func scrollToLastTappedAsset() {
+        if let indexPath = lastTappedAssetIndexPath {
+            scrollIndexPathToVisible(indexPath)
         }
     }
     
@@ -481,11 +488,13 @@ open class DKAssetGroupDetailVC: UIViewController,
                 self.imagePickerController.presentCamera()
             }
         } else {
+            lastTappedAssetIndexPath = indexPath
             self.selectAsset(atIndex: indexPath)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        lastTappedAssetIndexPath = indexPath
         self.deselectAsset(atIndex: indexPath)
     }
     
