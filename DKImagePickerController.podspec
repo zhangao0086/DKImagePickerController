@@ -10,8 +10,7 @@ Pod::Spec.new do |s|
                      :tag => s.version.to_s }
   
   s.requires_arc  = true
-
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
+  s.swift_version = '4.2'
 
   s.subspec 'Core' do |core|
     core.dependency 'DKImagePickerController/ImageDataManager'
