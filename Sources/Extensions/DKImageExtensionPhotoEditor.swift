@@ -7,7 +7,10 @@
 //
 
 import Foundation
+
+#if canImport(CLImageEditor)
 import CLImageEditor
+#endif
 
 open class DKImageExtensionPhotoEditor: DKImageBaseExtension, CLImageEditorDelegate {
     
