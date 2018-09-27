@@ -34,7 +34,6 @@
 		9CEFAFF2215A0DAB00FCF894 /* DKAssetGroupDetailImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFBF215A0DAB00FCF894 /* DKAssetGroupDetailImageCell.swift */; };
 		9CEFAFF3215A0DAB00FCF894 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFC0215A0DAB00FCF894 /* DKAssetGroupListVC.swift */; };
 		9CEFAFF6215A0DAB00FCF894 /* DKImagePickerControllerResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFD9215A0DAB00FCF894 /* DKImagePickerControllerResource.swift */; };
-		9CEFAFF7215A0DAB00FCF894 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9CEFAFDA215A0DAB00FCF894 /* Info.plist */; };
 		9CEFAFF9215A0DC500FCF894 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 9CEFAFF8215A0DC500FCF894 /* Resources */; };
 /* End PBXBuildFile section */
 
@@ -289,7 +288,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CEFAFF9215A0DC500FCF894 /* Resources in Resources */,
-				9CEFAFF7215A0DAB00FCF894 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
