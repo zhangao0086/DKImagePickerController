@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C2C2A37215C793700A1005A /* DKCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C2C2A36215C793700A1005A /* DKCamera.framework */; };
 		9CAD36752003661E003E21C6 /* DKImagePickerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CAD36732003661E003E21C6 /* DKImagePickerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CEFAFDB215A0DAB00FCF894 /* DKImageExtensionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA3215A0DAB00FCF894 /* DKImageExtensionCamera.swift */; };
 		9CEFAFDC215A0DAB00FCF894 /* DKImageExtensionGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA4215A0DAB00FCF894 /* DKImageExtensionGallery.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C2C2A36215C793700A1005A /* DKCamera.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DKCamera.framework; path = Carthage/Build/iOS/DKCamera.framework; sourceTree = "<group>"; };
 		9CAD36702003661E003E21C6 /* DKImagePickerController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DKImagePickerController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CAD36732003661E003E21C6 /* DKImagePickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DKImagePickerController.h; sourceTree = "<group>"; };
 		9CAD36742003661E003E21C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -76,12 +78,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C2C2A37215C793700A1005A /* DKCamera.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C2C2A35215C793700A1005A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9C2C2A36215C793700A1005A /* DKCamera.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9CA4AC9C2004D2EE008AFD7D /* DKImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +108,7 @@
 				9CEFAFA1215A0DAB00FCF894 /* Sources */,
 				9CA4AC9C2004D2EE008AFD7D /* DKImagePickerController */,
 				9CAD36712003661E003E21C6 /* Products */,
+				9C2C2A35215C793700A1005A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -453,6 +465,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/DKImagePickerController/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
@@ -475,6 +491,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/DKImagePickerController/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
