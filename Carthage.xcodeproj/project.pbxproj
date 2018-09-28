@@ -11,6 +11,8 @@
 		9C2C2BEE215C81C200A1005A /* DKPhotoGallery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C2C2BED215C81C200A1005A /* DKPhotoGallery.framework */; };
 		9C723C13215DC7280012377B /* CropViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C723C12215DC7280012377B /* CropViewController.framework */; };
 		9C723C15215DC73D0012377B /* DKImageExtensionPhotoCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C723C14215DC73D0012377B /* DKImageExtensionPhotoCropper.swift */; };
+		9C90BFFC215E0CC800314C91 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C90BFFB215E0CC800314C91 /* DKImagePickerController.bundle */; };
+		9C90C018215E0CE200314C91 /* DKImagePickerControllerResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */; };
 		9CAD36752003661E003E21C6 /* DKImagePickerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CAD36732003661E003E21C6 /* DKImagePickerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CEFAFDB215A0DAB00FCF894 /* DKImageExtensionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA3215A0DAB00FCF894 /* DKImageExtensionCamera.swift */; };
 		9CEFAFDC215A0DAB00FCF894 /* DKImageExtensionGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA4215A0DAB00FCF894 /* DKImageExtensionGallery.swift */; };
@@ -36,8 +38,6 @@
 		9CEFAFF1215A0DAB00FCF894 /* DKAssetGroupDetailBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFBE215A0DAB00FCF894 /* DKAssetGroupDetailBaseCell.swift */; };
 		9CEFAFF2215A0DAB00FCF894 /* DKAssetGroupDetailImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFBF215A0DAB00FCF894 /* DKAssetGroupDetailImageCell.swift */; };
 		9CEFAFF3215A0DAB00FCF894 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFC0215A0DAB00FCF894 /* DKAssetGroupListVC.swift */; };
-		9CEFAFF6215A0DAB00FCF894 /* DKImagePickerControllerResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFD9215A0DAB00FCF894 /* DKImagePickerControllerResource.swift */; };
-		9CEFAFF9215A0DC500FCF894 /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 9CEFAFF8215A0DC500FCF894 /* Resources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +45,8 @@
 		9C2C2BED215C81C200A1005A /* DKPhotoGallery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DKPhotoGallery.framework; path = Carthage/Build/iOS/DKPhotoGallery.framework; sourceTree = "<group>"; };
 		9C723C12215DC7280012377B /* CropViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CropViewController.framework; path = Carthage/Build/iOS/CropViewController.framework; sourceTree = "<group>"; };
 		9C723C14215DC73D0012377B /* DKImageExtensionPhotoCropper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionPhotoCropper.swift; sourceTree = "<group>"; };
+		9C90BFFB215E0CC800314C91 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKImagePickerController.bundle; sourceTree = "<group>"; };
+		9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerResource.swift; sourceTree = "<group>"; };
 		9CAD36702003661E003E21C6 /* DKImagePickerController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DKImagePickerController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CAD36732003661E003E21C6 /* DKImagePickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DKImagePickerController.h; sourceTree = "<group>"; };
 		9CAD36742003661E003E21C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -72,8 +74,6 @@
 		9CEFAFBE215A0DAB00FCF894 /* DKAssetGroupDetailBaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailBaseCell.swift; sourceTree = "<group>"; };
 		9CEFAFBF215A0DAB00FCF894 /* DKAssetGroupDetailImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailImageCell.swift; sourceTree = "<group>"; };
 		9CEFAFC0215A0DAB00FCF894 /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
-		9CEFAFD9215A0DAB00FCF894 /* DKImagePickerControllerResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerResource.swift; sourceTree = "<group>"; };
-		9CEFAFF8215A0DC500FCF894 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,11 +100,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9C90BFFD215E0CE200314C91 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		9CA4AC9C2004D2EE008AFD7D /* DKImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
 				9CAD36732003661E003E21C6 /* DKImagePickerController.h */,
 				9CAD36742003661E003E21C6 /* Info.plist */,
+				9C90BFFB215E0CC800314C91 /* DKImagePickerController.bundle */,
 			);
 			name = DKImagePickerController;
 			sourceTree = "<group>";
@@ -178,8 +187,8 @@
 				9CEFAFB3215A0DAB00FCF894 /* DKImagePickerController.swift */,
 				9CEFAFB4215A0DAB00FCF894 /* DKImagePickerControllerBaseUIDelegate.swift */,
 				9CEFAFB5215A0DAB00FCF894 /* DKPopoverViewController.swift */,
+				9C90BFFD215E0CE200314C91 /* Resource */,
 				9CEFAFB6215A0DAB00FCF894 /* View */,
-				9CEFAFC1215A0DAB00FCF894 /* Resource */,
 			);
 			path = DKImagePickerController;
 			sourceTree = "<group>";
@@ -206,15 +215,6 @@
 				9CEFAFBF215A0DAB00FCF894 /* DKAssetGroupDetailImageCell.swift */,
 			);
 			path = Cell;
-			sourceTree = "<group>";
-		};
-		9CEFAFC1215A0DAB00FCF894 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				9CEFAFF8215A0DC500FCF894 /* Resources */,
-				9CEFAFD9215A0DAB00FCF894 /* DKImagePickerControllerResource.swift */,
-			);
-			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,7 +305,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CEFAFF9215A0DC500FCF894 /* Resources in Resources */,
+				9C90BFFC215E0CC800314C91 /* DKImagePickerController.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,7 +340,7 @@
 				9CEFAFF1215A0DAB00FCF894 /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				9CEFAFE4215A0DAB00FCF894 /* DKAsset+Fetch.swift in Sources */,
 				9CEFAFDC215A0DAB00FCF894 /* DKImageExtensionGallery.swift in Sources */,
-				9CEFAFF6215A0DAB00FCF894 /* DKImagePickerControllerResource.swift in Sources */,
+				9C90C018215E0CE200314C91 /* DKImagePickerControllerResource.swift in Sources */,
 				9CEFAFEF215A0DAB00FCF894 /* DKAssetGroupDetailVideoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
