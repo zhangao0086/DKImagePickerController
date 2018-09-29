@@ -13,7 +13,7 @@
 		9C723C15215DC73D0012377B /* DKImageExtensionPhotoCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C723C14215DC73D0012377B /* DKImageExtensionPhotoCropper.swift */; };
 		9C90C018215E0CE200314C91 /* DKImagePickerControllerResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */; };
 		9C90C079215F6B3300314C91 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C073215F69A400314C91 /* DKImagePickerController.bundle */; };
-		9C90C0C1215F6EF700314C91 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0C0215F6EF600314C91 /* Images.xcassets */; };
+		9C90C0D5215F863300314C91 /* Assets.car in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0D3215F85E800314C91 /* Assets.car */; };
 		9CAD36752003661E003E21C6 /* DKImagePickerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CAD36732003661E003E21C6 /* DKImagePickerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CEFAFDB215A0DAB00FCF894 /* DKImageExtensionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA3215A0DAB00FCF894 /* DKImageExtensionCamera.swift */; };
 		9CEFAFDC215A0DAB00FCF894 /* DKImageExtensionGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA4215A0DAB00FCF894 /* DKImageExtensionGallery.swift */; };
@@ -41,6 +41,19 @@
 		9CEFAFF3215A0DAB00FCF894 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFC0215A0DAB00FCF894 /* DKAssetGroupListVC.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		9C90C0D1215F827B00314C91 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "file.*";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# builtin-copyPlist\necho 123\n";
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXContainerItemProxy section */
 		9C90C0C2215F72C900314C91 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -59,7 +72,7 @@
 		9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerResource.swift; sourceTree = "<group>"; };
 		9C90C073215F69A400314C91 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKImagePickerController.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C90C075215F69A400314C91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9C90C0C0215F6EF600314C91 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = file; path = Images.xcassets; sourceTree = "<group>"; };
+		9C90C0D3215F85E800314C91 /* Assets.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = Assets.car; sourceTree = "<group>"; };
 		9CAD36702003661E003E21C6 /* DKImagePickerController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DKImagePickerController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CAD36732003661E003E21C6 /* DKImagePickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DKImagePickerController.h; sourceTree = "<group>"; };
 		9CAD36742003661E003E21C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -131,7 +144,7 @@
 		9C90C074215F69A400314C91 /* DKImagePickerControllerBundle */ = {
 			isa = PBXGroup;
 			children = (
-				9C90C0C0215F6EF600314C91 /* Images.xcassets */,
+				9C90C0D3215F85E800314C91 /* Assets.car */,
 				9C90C075215F69A400314C91 /* Info.plist */,
 			);
 			path = DKImagePickerControllerBundle;
@@ -268,8 +281,10 @@
 				9C90C06F215F69A400314C91 /* Sources */,
 				9C90C070215F69A400314C91 /* Frameworks */,
 				9C90C071215F69A400314C91 /* Resources */,
+				9C90C0D2215F82C200314C91 /* ShellScript */,
 			);
 			buildRules = (
+				9C90C0D1215F827B00314C91 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -358,7 +373,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C90C0C1215F6EF700314C91 /* Images.xcassets in Resources */,
+				9C90C0D5215F863300314C91 /* Assets.car in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +386,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9C90C0D2215F82C200314C91 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd DKImagePickerControllerBundle\npath=$(readlink Images.xcassets)\necho $(pwd)\nxcrun actool $path --compile . --platform iphoneos --minimum-deployment-target 8.0\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9C90C06F215F69A400314C91 /* Sources */ = {
