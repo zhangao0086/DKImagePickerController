@@ -41,6 +41,16 @@
 		9CEFAFF3215A0DAB00FCF894 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFC0215A0DAB00FCF894 /* DKAssetGroupListVC.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9C90C0C2215F72C900314C91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9CAD36672003661E003E21C6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9C90C072215F69A400314C91;
+			remoteInfo = DKImagePickerControllerBundle;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		9C2C2A36215C793700A1005A /* DKCamera.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DKCamera.framework; path = Carthage/Build/iOS/DKCamera.framework; sourceTree = "<group>"; };
 		9C2C2BED215C81C200A1005A /* DKPhotoGallery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DKPhotoGallery.framework; path = Carthage/Build/iOS/DKPhotoGallery.framework; sourceTree = "<group>"; };
@@ -280,6 +290,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9C90C0C3215F72C900314C91 /* PBXTargetDependency */,
 			);
 			name = DKImagePickerController;
 			productName = DKImagePickerController;
@@ -403,6 +414,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9C90C0C3215F72C900314C91 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9C90C072215F69A400314C91 /* DKImagePickerControllerBundle */;
+			targetProxy = 9C90C0C2215F72C900314C91 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9C90C077215F69A400314C91 /* Debug */ = {
