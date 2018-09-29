@@ -11,8 +11,9 @@
 		9C2C2BEE215C81C200A1005A /* DKPhotoGallery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C2C2BED215C81C200A1005A /* DKPhotoGallery.framework */; };
 		9C723C13215DC7280012377B /* CropViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C723C12215DC7280012377B /* CropViewController.framework */; };
 		9C723C15215DC73D0012377B /* DKImageExtensionPhotoCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C723C14215DC73D0012377B /* DKImageExtensionPhotoCropper.swift */; };
-		9C90BFFC215E0CC800314C91 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C90BFFB215E0CC800314C91 /* DKImagePickerController.bundle */; };
 		9C90C018215E0CE200314C91 /* DKImagePickerControllerResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */; };
+		9C90C079215F6B3300314C91 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C073215F69A400314C91 /* DKImagePickerController.bundle */; };
+		9C90C0C1215F6EF700314C91 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0C0215F6EF600314C91 /* Images.xcassets */; };
 		9CAD36752003661E003E21C6 /* DKImagePickerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CAD36732003661E003E21C6 /* DKImagePickerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CEFAFDB215A0DAB00FCF894 /* DKImageExtensionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA3215A0DAB00FCF894 /* DKImageExtensionCamera.swift */; };
 		9CEFAFDC215A0DAB00FCF894 /* DKImageExtensionGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA4215A0DAB00FCF894 /* DKImageExtensionGallery.swift */; };
@@ -45,8 +46,10 @@
 		9C2C2BED215C81C200A1005A /* DKPhotoGallery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DKPhotoGallery.framework; path = Carthage/Build/iOS/DKPhotoGallery.framework; sourceTree = "<group>"; };
 		9C723C12215DC7280012377B /* CropViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CropViewController.framework; path = Carthage/Build/iOS/CropViewController.framework; sourceTree = "<group>"; };
 		9C723C14215DC73D0012377B /* DKImageExtensionPhotoCropper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageExtensionPhotoCropper.swift; sourceTree = "<group>"; };
-		9C90BFFB215E0CC800314C91 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKImagePickerController.bundle; sourceTree = "<group>"; };
 		9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerResource.swift; sourceTree = "<group>"; };
+		9C90C073215F69A400314C91 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKImagePickerController.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C90C075215F69A400314C91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9C90C0C0215F6EF600314C91 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = file; path = Images.xcassets; sourceTree = "<group>"; };
 		9CAD36702003661E003E21C6 /* DKImagePickerController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DKImagePickerController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CAD36732003661E003E21C6 /* DKImagePickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DKImagePickerController.h; sourceTree = "<group>"; };
 		9CAD36742003661E003E21C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -77,6 +80,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9C90C070215F69A400314C91 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9CAD366C2003661E003E21C6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -108,12 +118,20 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		9C90C074215F69A400314C91 /* DKImagePickerControllerBundle */ = {
+			isa = PBXGroup;
+			children = (
+				9C90C0C0215F6EF600314C91 /* Images.xcassets */,
+				9C90C075215F69A400314C91 /* Info.plist */,
+			);
+			path = DKImagePickerControllerBundle;
+			sourceTree = "<group>";
+		};
 		9CA4AC9C2004D2EE008AFD7D /* DKImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
 				9CAD36732003661E003E21C6 /* DKImagePickerController.h */,
 				9CAD36742003661E003E21C6 /* Info.plist */,
-				9C90BFFB215E0CC800314C91 /* DKImagePickerController.bundle */,
 			);
 			name = DKImagePickerController;
 			sourceTree = "<group>";
@@ -123,6 +141,7 @@
 			children = (
 				9CEFAFA1215A0DAB00FCF894 /* Sources */,
 				9CA4AC9C2004D2EE008AFD7D /* DKImagePickerController */,
+				9C90C074215F69A400314C91 /* DKImagePickerControllerBundle */,
 				9CAD36712003661E003E21C6 /* Products */,
 				9C2C2A35215C793700A1005A /* Frameworks */,
 			);
@@ -132,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				9CAD36702003661E003E21C6 /* DKImagePickerController.framework */,
+				9C90C073215F69A400314C91 /* DKImagePickerController.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -231,6 +251,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		9C90C072215F69A400314C91 /* DKImagePickerControllerBundle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9C90C076215F69A400314C91 /* Build configuration list for PBXNativeTarget "DKImagePickerControllerBundle" */;
+			buildPhases = (
+				9C90C06F215F69A400314C91 /* Sources */,
+				9C90C070215F69A400314C91 /* Frameworks */,
+				9C90C071215F69A400314C91 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DKImagePickerControllerBundle;
+			productName = DKImagePickerControllerBundle;
+			productReference = 9C90C073215F69A400314C91 /* DKImagePickerController.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		9CAD366F2003661E003E21C6 /* DKImagePickerController */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9CAD36782003661E003E21C6 /* Build configuration list for PBXNativeTarget "DKImagePickerController" */;
@@ -258,6 +295,10 @@
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = ZhangAo;
 				TargetAttributes = {
+					9C90C072215F69A400314C91 = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
+					};
 					9CAD366F2003661E003E21C6 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
@@ -296,22 +337,38 @@
 			projectRoot = "";
 			targets = (
 				9CAD366F2003661E003E21C6 /* DKImagePickerController */,
+				9C90C072215F69A400314C91 /* DKImagePickerControllerBundle */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9C90C071215F69A400314C91 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C90C0C1215F6EF700314C91 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9CAD366E2003661E003E21C6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C90BFFC215E0CC800314C91 /* DKImagePickerController.bundle in Resources */,
+				9C90C079215F6B3300314C91 /* DKImagePickerController.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9C90C06F215F69A400314C91 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9CAD366B2003661E003E21C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -348,6 +405,55 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		9C90C077215F69A400314C91 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = NO;
+				DEVELOPMENT_TEAM = 3ZW883499S;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = DKImagePickerControllerBundle/Info.plist;
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangao0086.DKImagePickerControllerBundle;
+				PRODUCT_NAME = DKImagePickerController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		9C90C078215F69A400314C91 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = NO;
+				DEVELOPMENT_TEAM = 3ZW883499S;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = DKImagePickerControllerBundle/Info.plist;
+				INSTALL_PATH = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangao0086.DKImagePickerControllerBundle;
+				PRODUCT_NAME = DKImagePickerController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		9CAD36762003661E003E21C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -527,6 +633,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9C90C076215F69A400314C91 /* Build configuration list for PBXNativeTarget "DKImagePickerControllerBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9C90C077215F69A400314C91 /* Debug */,
+				9C90C078215F69A400314C91 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9CAD366A2003661E003E21C6 /* Build configuration list for PBXProject "Carthage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
