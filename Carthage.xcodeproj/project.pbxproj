@@ -14,6 +14,26 @@
 		9C90C018215E0CE200314C91 /* DKImagePickerControllerResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C90C015215E0CE200314C91 /* DKImagePickerControllerResource.swift */; };
 		9C90C079215F6B3300314C91 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C073215F69A400314C91 /* DKImagePickerController.bundle */; };
 		9C90C0D5215F863300314C91 /* Assets.car in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0D3215F85E800314C91 /* Assets.car */; };
+		9C90C0EB215F895300314C91 /* ur.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0D6215F895100314C91 /* ur.lproj */; };
+		9C90C0EC215F895300314C91 /* nl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0D7215F895100314C91 /* nl.lproj */; };
+		9C90C0ED215F895300314C91 /* it.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0D8215F895200314C91 /* it.lproj */; };
+		9C90C0EE215F895300314C91 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0D9215F895200314C91 /* zh-Hans.lproj */; };
+		9C90C0F0215F895300314C91 /* da.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0DB215F895200314C91 /* da.lproj */; };
+		9C90C0F1215F895300314C91 /* ru.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0DC215F895200314C91 /* ru.lproj */; };
+		9C90C0F2215F895300314C91 /* vi.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0DD215F895200314C91 /* vi.lproj */; };
+		9C90C0F3215F895300314C91 /* nb-NO.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0DE215F895200314C91 /* nb-NO.lproj */; };
+		9C90C0F4215F895300314C91 /* ar.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0DF215F895200314C91 /* ar.lproj */; };
+		9C90C0F5215F895300314C91 /* fr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E0215F895200314C91 /* fr.lproj */; };
+		9C90C0F6215F895300314C91 /* zh-Hant.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E1215F895200314C91 /* zh-Hant.lproj */; };
+		9C90C0F7215F895300314C91 /* de.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E2215F895200314C91 /* de.lproj */; };
+		9C90C0F8215F895300314C91 /* tr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E3215F895200314C91 /* tr.lproj */; };
+		9C90C0F9215F895300314C91 /* pt_BR.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E4215F895200314C91 /* pt_BR.lproj */; };
+		9C90C0FA215F895300314C91 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E5215F895200314C91 /* ko.lproj */; };
+		9C90C0FB215F895300314C91 /* es.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E6215F895200314C91 /* es.lproj */; };
+		9C90C0FC215F895300314C91 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E7215F895300314C91 /* ja.lproj */; };
+		9C90C0FD215F895300314C91 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E8215F895300314C91 /* en.lproj */; };
+		9C90C0FE215F895300314C91 /* Base.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0E9215F895300314C91 /* Base.lproj */; };
+		9C90C0FF215F895300314C91 /* hu.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 9C90C0EA215F895300314C91 /* hu.lproj */; };
 		9CAD36752003661E003E21C6 /* DKImagePickerController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CAD36732003661E003E21C6 /* DKImagePickerController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9CEFAFDB215A0DAB00FCF894 /* DKImageExtensionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA3215A0DAB00FCF894 /* DKImageExtensionCamera.swift */; };
 		9CEFAFDC215A0DAB00FCF894 /* DKImageExtensionGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEFAFA4215A0DAB00FCF894 /* DKImageExtensionGallery.swift */; };
@@ -73,6 +93,26 @@
 		9C90C073215F69A400314C91 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKImagePickerController.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C90C075215F69A400314C91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C90C0D3215F85E800314C91 /* Assets.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = Assets.car; sourceTree = "<group>"; };
+		9C90C0D6215F895100314C91 /* ur.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ur.lproj; path = Sources/DKImagePickerController/Resource/Resources/ur.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0D7215F895100314C91 /* nl.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nl.lproj; path = Sources/DKImagePickerController/Resource/Resources/nl.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0D8215F895200314C91 /* it.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = it.lproj; path = Sources/DKImagePickerController/Resource/Resources/it.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0D9215F895200314C91 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "zh-Hans.lproj"; path = "Sources/DKImagePickerController/Resource/Resources/zh-Hans.lproj"; sourceTree = SOURCE_ROOT; };
+		9C90C0DB215F895200314C91 /* da.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = da.lproj; path = Sources/DKImagePickerController/Resource/Resources/da.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0DC215F895200314C91 /* ru.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ru.lproj; path = Sources/DKImagePickerController/Resource/Resources/ru.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0DD215F895200314C91 /* vi.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vi.lproj; path = Sources/DKImagePickerController/Resource/Resources/vi.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0DE215F895200314C91 /* nb-NO.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "nb-NO.lproj"; path = "Sources/DKImagePickerController/Resource/Resources/nb-NO.lproj"; sourceTree = SOURCE_ROOT; };
+		9C90C0DF215F895200314C91 /* ar.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ar.lproj; path = Sources/DKImagePickerController/Resource/Resources/ar.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E0215F895200314C91 /* fr.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fr.lproj; path = Sources/DKImagePickerController/Resource/Resources/fr.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E1215F895200314C91 /* zh-Hant.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "zh-Hant.lproj"; path = "Sources/DKImagePickerController/Resource/Resources/zh-Hant.lproj"; sourceTree = SOURCE_ROOT; };
+		9C90C0E2215F895200314C91 /* de.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = de.lproj; path = Sources/DKImagePickerController/Resource/Resources/de.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E3215F895200314C91 /* tr.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tr.lproj; path = Sources/DKImagePickerController/Resource/Resources/tr.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E4215F895200314C91 /* pt_BR.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = pt_BR.lproj; path = Sources/DKImagePickerController/Resource/Resources/pt_BR.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E5215F895200314C91 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ko.lproj; path = Sources/DKImagePickerController/Resource/Resources/ko.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E6215F895200314C91 /* es.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = es.lproj; path = Sources/DKImagePickerController/Resource/Resources/es.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E7215F895300314C91 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ja.lproj; path = Sources/DKImagePickerController/Resource/Resources/ja.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E8215F895300314C91 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en.lproj; path = Sources/DKImagePickerController/Resource/Resources/en.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0E9215F895300314C91 /* Base.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Base.lproj; path = Sources/DKImagePickerController/Resource/Resources/Base.lproj; sourceTree = SOURCE_ROOT; };
+		9C90C0EA215F895300314C91 /* hu.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = hu.lproj; path = Sources/DKImagePickerController/Resource/Resources/hu.lproj; sourceTree = SOURCE_ROOT; };
 		9CAD36702003661E003E21C6 /* DKImagePickerController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DKImagePickerController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CAD36732003661E003E21C6 /* DKImagePickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DKImagePickerController.h; sourceTree = "<group>"; };
 		9CAD36742003661E003E21C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -144,6 +184,26 @@
 		9C90C074215F69A400314C91 /* DKImagePickerControllerBundle */ = {
 			isa = PBXGroup;
 			children = (
+				9C90C0DF215F895200314C91 /* ar.lproj */,
+				9C90C0E9215F895300314C91 /* Base.lproj */,
+				9C90C0DB215F895200314C91 /* da.lproj */,
+				9C90C0E2215F895200314C91 /* de.lproj */,
+				9C90C0E8215F895300314C91 /* en.lproj */,
+				9C90C0E6215F895200314C91 /* es.lproj */,
+				9C90C0E0215F895200314C91 /* fr.lproj */,
+				9C90C0EA215F895300314C91 /* hu.lproj */,
+				9C90C0D8215F895200314C91 /* it.lproj */,
+				9C90C0E7215F895300314C91 /* ja.lproj */,
+				9C90C0E5215F895200314C91 /* ko.lproj */,
+				9C90C0DE215F895200314C91 /* nb-NO.lproj */,
+				9C90C0D7215F895100314C91 /* nl.lproj */,
+				9C90C0E4215F895200314C91 /* pt_BR.lproj */,
+				9C90C0DC215F895200314C91 /* ru.lproj */,
+				9C90C0E3215F895200314C91 /* tr.lproj */,
+				9C90C0D6215F895100314C91 /* ur.lproj */,
+				9C90C0DD215F895200314C91 /* vi.lproj */,
+				9C90C0D9215F895200314C91 /* zh-Hans.lproj */,
+				9C90C0E1215F895200314C91 /* zh-Hant.lproj */,
 				9C90C0D3215F85E800314C91 /* Assets.car */,
 				9C90C075215F69A400314C91 /* Info.plist */,
 			);
@@ -278,10 +338,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9C90C076215F69A400314C91 /* Build configuration list for PBXNativeTarget "DKImagePickerControllerBundle" */;
 			buildPhases = (
+				9C90C0D2215F82C200314C91 /* ShellScript */,
 				9C90C06F215F69A400314C91 /* Sources */,
 				9C90C070215F69A400314C91 /* Frameworks */,
 				9C90C071215F69A400314C91 /* Resources */,
-				9C90C0D2215F82C200314C91 /* ShellScript */,
 			);
 			buildRules = (
 				9C90C0D1215F827B00314C91 /* PBXBuildRule */,
@@ -373,7 +433,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C90C0F7215F895300314C91 /* de.lproj in Resources */,
+				9C90C0FE215F895300314C91 /* Base.lproj in Resources */,
+				9C90C0EB215F895300314C91 /* ur.lproj in Resources */,
+				9C90C0F5215F895300314C91 /* fr.lproj in Resources */,
+				9C90C0EC215F895300314C91 /* nl.lproj in Resources */,
+				9C90C0ED215F895300314C91 /* it.lproj in Resources */,
+				9C90C0FF215F895300314C91 /* hu.lproj in Resources */,
+				9C90C0FA215F895300314C91 /* ko.lproj in Resources */,
+				9C90C0FB215F895300314C91 /* es.lproj in Resources */,
+				9C90C0FD215F895300314C91 /* en.lproj in Resources */,
+				9C90C0F6215F895300314C91 /* zh-Hant.lproj in Resources */,
+				9C90C0F9215F895300314C91 /* pt_BR.lproj in Resources */,
+				9C90C0F3215F895300314C91 /* nb-NO.lproj in Resources */,
+				9C90C0FC215F895300314C91 /* ja.lproj in Resources */,
+				9C90C0F1215F895300314C91 /* ru.lproj in Resources */,
+				9C90C0EE215F895300314C91 /* zh-Hans.lproj in Resources */,
 				9C90C0D5215F863300314C91 /* Assets.car in Resources */,
+				9C90C0F2215F895300314C91 /* vi.lproj in Resources */,
+				9C90C0F0215F895300314C91 /* da.lproj in Resources */,
+				9C90C0F8215F895300314C91 /* tr.lproj in Resources */,
+				9C90C0F4215F895300314C91 /* ar.lproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +483,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd DKImagePickerControllerBundle\npath=$(readlink Images.xcassets)\necho $(pwd)\nxcrun actool $path --compile . --platform iphoneos --minimum-deployment-target 8.0\n";
+			shellScript = "cd DKImagePickerControllerBundle\npath=$(readlink Images.xcassets)\necho $(pwd)\nxcrun actool $path --compile . --platform iphoneos --minimum-deployment-target 8.0\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
