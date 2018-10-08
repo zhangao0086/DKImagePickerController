@@ -58,7 +58,7 @@ pod 'DKImagePickerController', :subspecs => ['PhotoGallery', 'Camera', 'InlineCa
 
 More information, see [Extensions](#extensions).
 
-#### Carthage
+### Carthage
 
 ```
 github "zhangao0086/DKImagePickerController"
