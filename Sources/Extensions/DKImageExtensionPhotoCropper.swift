@@ -1,19 +1,19 @@
 //
-//  DKImageExtensionPhotoEditor.swift
+//  DKImageExtensionPhotoCropper.swift
 //  DKImagePickerController
 //
-//  Created by ZhangAo on 16/12/2017.
+//  Created by ZhangAo on 28/9/2018.
 //  Copyright © 2017 ZhangAo. All rights reserved.
 //
 
 import UIKit
 import Foundation
 
-#if canImport(CLImageEditor)
-import CLImageEditor
+#if canImport(TOCropViewController)
+import TOCropViewController
 #endif
 
-open class DKImageExtensionPhotoEditor: DKImageBaseExtension, CLImageEditorDelegate {
+open class DKImageExtensionPhotoCropper: DKImageBaseExtension, TOCropViewControllerDelegate {
     
     open  weak var imageEditor: UIViewController?
     open  var metadata: [AnyHashable : Any]?
@@ -30,28 +30,22 @@ open class DKImageExtensionPhotoEditor: DKImageBaseExtension, CLImageEditorDeleg
         self.metadata = extraInfo["metadata"] as? [AnyHashable : Any]
         self.didFinishEditing = didFinishEditing
         
-        let imageEditor = CLImageEditor(image: image, delegate: self)!
-        if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLToneCurveTool", recursive: false) {
-            tool.available = false
-        }
+        let imageCropper = TOCropViewController(image: image)
+        imageCropper.delegate = self
         
-        if let tool = imageEditor.toolInfo.subToolInfo(withToolName: "CLStickerTool", recursive: false) {
-            tool.available = false
-        }
-        
-        self.imageEditor = imageEditor
+        self.imageEditor = imageCropper
         
         let imagePickerController = self.context.imagePickerController
-        (imagePickerController?.presentedViewController ?? imagePickerController)?.present(imageEditor, animated: true, completion: nil)
+        (imagePickerController?.presentedViewController ?? imagePickerController)?.present(imageCropper, animated: true, completion: nil)
     }
 
     override open func finish() {
         self.imageEditor?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    // MARK: - CLImageEditorDelegate
+    // MARK: - TOCropViewControllerDelegate
     
-    open func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
+    open func cropViewController(_ cropViewController: TOCropViewController, didCropToImage image: UIImage, rect cropRect: CGRect, angle: Int) {
         if let didFinishEditing = self.didFinishEditing {
             self.metadata?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
             

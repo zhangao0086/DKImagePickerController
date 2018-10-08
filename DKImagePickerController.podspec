@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "DKImagePickerController"
-  s.version       = "4.0.0"
+  s.version       = "4.0.3"
   s.summary       = "DKImagePickerController is a highly customizable, pure-Swift library."
   s.homepage      = "https://github.com/zhangao0086/DKImagePickerController"
   s.license       = { :type => "MIT", :file => "LICENSE" }
@@ -10,8 +10,7 @@ Pod::Spec.new do |s|
                      :tag => s.version.to_s }
   
   s.requires_arc  = true
-
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
+  s.swift_version = '4.2'
 
   s.subspec 'Core' do |core|
     core.dependency 'DKImagePickerController/ImageDataManager'
@@ -27,7 +26,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Resource' do |resource|
-    resource.resource = "Sources/DKImagePickerController/Resource/DKImagePickerController.bundle"
+    resource.resource_bundle = { "DKImagePickerController" => "Sources/DKImagePickerController/Resource/Resources/*" }
 
     resource.source_files = "Sources/DKImagePickerController/Resource/DKImagePickerControllerResource.swift"
   end

@@ -12,6 +12,12 @@ import Photos
 
 class DKImagePickerControllerDemoVC: UITableViewController {
     
+    fileprivate func imageOnlyAssetFetchOptions() -> PHFetchOptions {
+        let assetFetchOptions = PHFetchOptions()
+        assetFetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+        return assetFetchOptions
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
         
@@ -108,13 +114,16 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             let groupDataManagerConfiguration = DKImageGroupDataManagerConfiguration()
             groupDataManagerConfiguration.fetchLimit = 10
             groupDataManagerConfiguration.assetGroupTypes = [.smartAlbumUserLibrary]
+            // To specify photos only, we'd typically use pickerController.assetType = .allPhotos.
+            // Because we're specifying a custom DKImageGroupDataManager, that doesn't work,
+            // and we have to specify it using assetFetchOptions.
+            groupDataManagerConfiguration.assetFetchOptions = imageOnlyAssetFetchOptions()
             
             let groupDataManager = DKImageGroupDataManager(configuration: groupDataManagerConfiguration)
             
             let pickerController = DKImagePickerController(groupDataManager: groupDataManager)
             pickerController.inline = true
             pickerController.UIDelegate = CustomInlineLayoutUIDelegate()
-            pickerController.assetType = .allPhotos
             pickerController.sourceType = .photo
             
             destination.pickerController = pickerController
