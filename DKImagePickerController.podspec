@@ -12,6 +12,13 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
   s.swift_version = '4.2'
 
+  s.prepare_command = <<-CMD
+    cd DKImagePickerControllerBundle
+    path=$(readlink Images.xcassets)
+    echo $(pwd)
+    xcrun actool $path --compile . --platform iphoneos --minimum-deployment-target 8.0
+  CMD
+
   s.subspec 'Core' do |core|
     core.dependency 'DKImagePickerController/ImageDataManager'
     core.dependency 'DKImagePickerController/Resource'
@@ -26,7 +33,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Resource' do |resource|
-    resource.resource_bundle = { "DKImagePickerController" => "Sources/DKImagePickerController/Resource/Resources/*" }
+    # resource.resource_bundle = { "DKImagePickerController" => "Sources/DKImagePickerController/Resource/Resources/*" }
 
     resource.source_files = "Sources/DKImagePickerController/Resource/DKImagePickerControllerResource.swift"
   end
