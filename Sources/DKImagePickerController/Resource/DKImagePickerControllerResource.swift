@@ -15,7 +15,7 @@ public class DKImagePickerControllerResource: NSObject {
     // MARK: - Internationalization
     
     /// Add a hook for custom localization.
-    public static var customLocalizationBlock: ((_ title: String) -> String?)?
+    @objc public static var customLocalizationBlock: ((_ title: String) -> String?)?
     
     public class func localizedStringWithKey(_ key: String, value: String? = nil) -> String {
         return customLocalizationBlock?(key) ?? NSLocalizedString(key,
@@ -27,7 +27,7 @@ public class DKImagePickerControllerResource: NSObject {
     
     // MARK: - Images
     
-    public static var customImageBlock: ((_ imageName: String) -> UIImage?)?
+    @objc public static var customImageBlock: ((_ imageName: String) -> UIImage?)?
 	
     public class func checkedImage() -> UIImage {
         return imageForResource("checked_background", stretchable: true, cacheable: true)
