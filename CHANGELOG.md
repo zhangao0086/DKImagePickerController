@@ -1,5 +1,11 @@
 # Change Log
 
+## [4.0.3](https://github.com/zhangao0086/DKImagePickerController/tree/4.0.3) (2017-09-24)
+
+- Carthage.
+
+- Swift 4.2 & Xcode 10.
+
 ## [3.8.0](https://github.com/zhangao0086/DKImagePickerController/tree/3.8.0) (2017-09-24)
 
 [Full Changelog](https://github.com/zhangao0086/DKImagePickerController/compare/3.6.1...3.8.0)
