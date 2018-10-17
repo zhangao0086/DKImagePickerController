@@ -110,7 +110,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         if let currentViewSize = self.currentViewSize, currentViewSize.equalTo(self.view.bounds.size) {
             return
         } else {
-            currentViewSize = self.view.bounds.size
+            self.currentViewSize = self.view.bounds.size
         }
         
         self.collectionView?.collectionViewLayout.invalidateLayout()
@@ -280,6 +280,16 @@ open class DKAssetGroupDetailVC: UIViewController,
     private var fromIndexPath: IndexPath? = nil
     private var swipingIndexPathes = Set<Int>()
     private var swipingToSelect = true
+    private var swipingLastLocation = CGPoint.zero
+    private var autoScrollingRate: CGFloat = 1.0
+    private var autoScrollingDirection: UISwipeGestureRecognizer.Direction = .down
+    private lazy var autoScrollingLink: CADisplayLink = {
+        let link = CADisplayLink(target: self, selector: #selector(autoScrolling))
+        link.isPaused = true
+        link.add(to: RunLoop.main, forMode: .default)
+        link.frameInterval = 1
+        return link
+    }()
     
     // use the swiping gesture to select the currently swiping cell.
     @objc private func swiping(gesture: UIPanGestureRecognizer) {
@@ -295,42 +305,103 @@ open class DKAssetGroupDetailVC: UIViewController,
                 self.swipingToSelect = !cell.isSelected
             }
         case .changed:
-            if let toIndexPath = self.collectionView.indexPathForItem(at: location)
-                , let fromIndexPath = self.fromIndexPath {
-                let begin = min(fromIndexPath.row, toIndexPath.row)
-                let end = max(fromIndexPath.row, toIndexPath.row)
-                
-                var currentSwipingIndexPathes = Set<Int>()
-                for i in begin...end {
-                    currentSwipingIndexPathes.insert(i)
-                    self.swipingIndexPathes.remove(i)
-                    
-                    if self.swipingToSelect {
-                        self.selectAsset(atIndex: IndexPath(row: i, section: 0))
-                    } else {
-                        self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
-                    }
-                }
-                
-                for i in self.swipingIndexPathes {
-                    if self.swipingToSelect {
-                        self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
-                    } else {
-                        self.selectAsset(atIndex: IndexPath(row: i, section: 0))
-                    }
-                }
-                self.swipingIndexPathes = currentSwipingIndexPathes
-            }
+            self.onSwipingChanged(location: location)
+            self.startAutoScrollingIfNeeded(location: location)
         case .ended:
-            self.swipingIndexPathes.removeAll()
-            self.fromIndexPath = nil
+            fallthrough
         case .cancelled:
-            self.swipingIndexPathes.removeAll()
-            self.fromIndexPath = nil
+            fallthrough
         case .failed:
             self.swipingIndexPathes.removeAll()
             self.fromIndexPath = nil
+            self.endAutoScrolling()
         }
+    }
+    
+    private func onSwipingChanged(location: CGPoint) {
+        self.swipingLastLocation = location
+        
+        if let toIndexPath = self.collectionView.indexPathForItem(at: location)
+            , let fromIndexPath = self.fromIndexPath {
+            let begin = min(fromIndexPath.row, toIndexPath.row)
+            let end = max(fromIndexPath.row, toIndexPath.row)
+            
+            var currentSwipingIndexPathes = Set<Int>()
+            for i in begin...end {
+                currentSwipingIndexPathes.insert(i)
+                self.swipingIndexPathes.remove(i)
+                
+                if self.swipingToSelect {
+                    self.selectAsset(atIndex: IndexPath(row: i, section: 0))
+                } else {
+                    self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
+                }
+            }
+            
+            for i in self.swipingIndexPathes {
+                if self.swipingToSelect {
+                    self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
+                } else {
+                    self.selectAsset(atIndex: IndexPath(row: i, section: 0))
+                }
+            }
+            self.swipingIndexPathes = currentSwipingIndexPathes
+        }
+    }
+    
+    private func startAutoScrollingIfNeeded(location: CGPoint) {
+        let minLocationY = self.collectionView.contentOffset.y
+        let maxLocationY = self.collectionView.bounds.height + self.collectionView.contentOffset.y
+
+        debugPrint("minLocationY:\(minLocationY) maxLocationY:\(maxLocationY) current:\(location.y)")
+        
+        let locationY = min(max(location.y, minLocationY), maxLocationY)
+        
+        self.autoScrollingDirection = locationY - minLocationY > (maxLocationY - minLocationY) / 2 ? .down : .up
+        var diff: CGFloat = 0
+        switch self.autoScrollingDirection {
+        case .down:
+            diff = maxLocationY - locationY
+        case .up:
+            diff = locationY - minLocationY
+        default:
+            debugPrint("Known direction.")
+        }
+        
+        let threshold = self.thumbnailSize.height / UIScreen.main.scale
+        if diff < threshold {
+            self.autoScrollingRate = threshold / max(diff, threshold / 10)
+            self.startAutoScrolling()
+        } else {
+            self.endAutoScrolling()
+        }
+    }
+    
+    private func startAutoScrolling() {
+        if self.autoScrollingLink.isPaused {
+            self.autoScrollingLink.isPaused = false
+        }
+    }
+    
+    private func endAutoScrolling() {
+        if !self.autoScrollingLink.isPaused {
+            self.autoScrollingLink.isPaused = true
+        }
+    }
+    
+    @objc private func autoScrolling() {
+        let offsetY = CGFloat(self.autoScrollingDirection == .down ? self.autoScrollingRate : -self.autoScrollingRate)
+        
+        var targetContentOffset = self.collectionView.contentOffset
+        targetContentOffset.y += offsetY
+        
+        targetContentOffset.y = min(max(targetContentOffset.y, self.collectionView.contentInset.top),
+                                    self.collectionView.contentSize.height - self.collectionView.bounds.height)
+        
+        self.collectionView.contentOffset = targetContentOffset
+        
+        self.onSwipingChanged(location: CGPoint(x: self.swipingLastLocation.x,
+                                                y: self.swipingLastLocation.y + offsetY))
     }
     
     // MARK: - UIGestureRecognizerDelegate
