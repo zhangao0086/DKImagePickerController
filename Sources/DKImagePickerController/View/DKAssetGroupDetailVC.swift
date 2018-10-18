@@ -33,7 +33,9 @@ private extension UICollectionView {
 // Show all images in the asset group
 open class DKAssetGroupDetailVC: UIViewController,
     UIGestureRecognizerDelegate,
-    UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver, DKImagePickerControllerObserver {
+    UICollectionViewDelegate, UICollectionViewDataSource,
+    DKImageGroupDataManagerObserver, DKImagePickerControllerObserver,
+    DKImagePickerControllerAware {
     	
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
@@ -54,8 +56,8 @@ open class DKAssetGroupDetailVC: UIViewController,
     }()
 		
     public var selectedGroupId: String?
+    public weak var imagePickerController: DKImagePickerController!
     internal var collectionView: UICollectionView!
-    internal weak var imagePickerController: DKImagePickerController!
     private var groupListVC: DKAssetGroupListVC!
     private var hidesCamera: Bool = false
     private var footerView: UIView?

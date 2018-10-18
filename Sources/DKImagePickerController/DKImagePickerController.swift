@@ -33,6 +33,15 @@ public enum DKImagePickerControllerExportStatus: Int {
 ////////////////////////////////////////////////////////////////////////
 
 @objc
+public protocol DKImagePickerControllerAware {
+    weak var imagePickerController: DKImagePickerController! { get set }
+    
+    func reload()
+}
+
+////////////////////////////////////////////////////////////////////////
+
+@objc
 internal protocol DKImagePickerControllerObserver {
     
     @objc optional func imagePickerControllerDidSelect(assets: [DKAsset])
@@ -148,6 +157,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     internal var proxyObserver = DKImageBaseManager()
     
+    private weak var rootVC: (UIViewController & DKImagePickerControllerAware)?
+    
     public convenience init() {
         let rootVC = UIViewController()
         
@@ -201,6 +212,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         if self.sourceType != .camera {
             let rootVC = self.makeRootVC()
             rootVC.imagePickerController = self
+            self.rootVC = rootVC
             
             self.UIDelegate.prepareLayout(self, vc: rootVC)
             self.updateCancelButtonForVC(rootVC)
@@ -226,7 +238,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
-    @objc open func makeRootVC() -> DKAssetGroupDetailVC {
+    @objc open func makeRootVC() -> UIViewController & DKImagePickerControllerAware {
       return DKAssetGroupDetailVC()
     }
     
