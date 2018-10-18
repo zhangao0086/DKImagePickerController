@@ -36,7 +36,7 @@ DKImagePickerController is available on CocoaPods. Simply add the following line
 pod 'DKImagePickerController'
 
 # For Swift 4
-pod 'DKImagePickerController', '4.0.0'
+pod 'DKImagePickerController', :git => 'https://github.com/zhangao0086/DKImagePickerController.git', :branch => 'Swift4'
 ```
 
 #### Subspecs
