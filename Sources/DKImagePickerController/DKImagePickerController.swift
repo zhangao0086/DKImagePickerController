@@ -332,6 +332,13 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
+    @objc open func reload(with dataManager: DKImageGroupDataManager) {
+        self.groupDataManager = dataManager
+        if let rootVC = self.rootVC {
+            rootVC.reload()
+        }
+    }
+    
     private func cancelCurrentExportRequestIfNeeded() {
         if self.exportRequestID != DKImageAssetExportInvalidRequestID {
             self.exporter?.cancel(requestID: self.exportRequestID)

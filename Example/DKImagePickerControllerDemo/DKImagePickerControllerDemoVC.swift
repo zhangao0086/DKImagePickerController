@@ -165,6 +165,11 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             let pickerController = DKImagePickerController()
             
             destination.pickerController = pickerController
+        case "Reload":
+            let pickerController = DKImagePickerController()
+            pickerController.UIDelegate = ReloadUIDelegate()
+            
+            destination.pickerController = pickerController
             
         default:
             assert(false)
