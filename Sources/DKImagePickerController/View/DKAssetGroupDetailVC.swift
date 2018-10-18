@@ -84,10 +84,10 @@ open class DKAssetGroupDetailVC: UIViewController,
 			self.view.addSubview(footerView)
 		}
       
-    self.headerView = self.imagePickerController.UIDelegate.imagePickerControllerHeaderView(self.imagePickerController)
-    if let headerView = self.headerView {
-      self.view.addSubview(headerView)
-    }
+        self.headerView = self.imagePickerController.UIDelegate.imagePickerControllerHeaderView(self.imagePickerController)
+        if let headerView = self.headerView {
+            self.view.addSubview(headerView)
+        }
 		
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
@@ -163,7 +163,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
   }
 	
-	internal func checkPhotoPermission() {
+    func checkPhotoPermission() {
 		func photoDenied() {
             let permissionColors = self.imagePickerController.permissionViewColors
             self.view.addSubview(DKPermissionView.permissionView(.photo, withColors: permissionColors))
