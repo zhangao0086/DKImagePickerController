@@ -34,21 +34,21 @@ Pod::Spec.new do |s|
 
   s.subspec 'PhotoGallery' do |gallery|
     gallery.dependency 'DKImagePickerController/Core'
-    gallery.dependency 'DKPhotoGallery'
+    gallery.dependency 'DKPhotoGallery', '0.0.7'
 
     gallery.source_files = "Sources/Extensions/DKImageExtensionGallery.swift"
   end
 
   s.subspec 'Camera' do |camera|
     camera.dependency 'DKImagePickerController/Core'
-    camera.dependency 'DKCamera'
+    camera.dependency 'DKCamera', '1.6.0'
 
     camera.source_files = "Sources/Extensions/DKImageExtensionCamera.swift"
   end
 
   s.subspec 'InlineCamera' do |inlineCamera|
     inlineCamera.dependency 'DKImagePickerController/Core'
-    inlineCamera.dependency 'DKCamera'
+    inlineCamera.dependency 'DKCamera', '1.6.0'
 
     inlineCamera.source_files = "Sources/Extensions/DKImageExtensionInlineCamera.swift"
   end
