@@ -111,7 +111,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     @objc public var selectedChanged: (() -> Void)?
 
     /// Colors applied to the permission view when access needs to be granted by the user
-    @objc public var permissionViewColors = DKPermissionViewColors()
+    @objc public lazy var permissionViewColors = DKPermissionViewColors()
     
     /// A Bool value indicating whether to allow the picker to auto-export the selected assets to the specified directory when done is called.
     /// picker will creating a default exporter if exportsWhenCompleted is true and the exporter is nil.
@@ -155,7 +155,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         return DKImageExtensionController(imagePickerController: self)
     }()
     
-    internal var proxyObserver = DKImageBaseManager()
+    internal lazy var proxyObserver = DKImageBaseManager()
     
     private weak var rootVC: (UIViewController & DKImagePickerControllerAware)?
     
