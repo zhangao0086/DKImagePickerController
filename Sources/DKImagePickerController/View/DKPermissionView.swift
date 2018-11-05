@@ -77,11 +77,6 @@ public class DKPermissionViewColors: NSObject {
         titlePhotoColor = photoTitle
         titleCameraColor = cameraTitle
         permitButtonColor = button
-        
-        print("init")
     }
     
-    deinit {
-        print("deinit")
-    }
 }
