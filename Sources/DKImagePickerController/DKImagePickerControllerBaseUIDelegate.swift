@@ -90,19 +90,25 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
     }
     
     open func updateDoneButtonTitle(_ button: UIButton) {
-        if self.imagePickerController.selectedAssetIdentifiers.count > 0 {
-            
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            formatter.locale = Locale(identifier: Locale.current.identifier)
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: Locale.current.identifier)
+        if self.imagePickerController.selectedAssetIdentifiers.count > 0  && !self.imagePickerController.allowSelectAll {
             
             let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
             
             button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.title"),
                                    formattedSelectableCount ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+        } else if self.imagePickerController.allowSelectAll {
+            let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
+            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.all.title"),
+                                   formattedSelectableCount ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.selectAllPics), for: UIControl.Event.touchUpInside)
         } else {
             button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"), for: .normal)
+            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.selectAllPics), for: UIControl.Event.touchUpInside)
         }
+
         
         button.sizeToFit()
         

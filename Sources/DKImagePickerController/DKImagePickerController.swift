@@ -68,6 +68,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// Allow swipe to select images.
     @objc public var allowSwipeToSelect: Bool = false
     
+    /// Allow select all
+    @objc public var allowSelectAll: Bool = false
+    
     /// A Bool value indicating whether the inline mode is enabled.
     @objc public var inline: Bool = false
     
@@ -566,6 +569,22 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             }
             
             self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidSelect(assets:)), object: insertedAssets as AnyObject)
+        }
+    }
+    
+    @objc open func selectAllPics() {
+        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
+            var assets = [DKAsset]()
+            (0..<rootVC.collectionView.numberOfItems(inSection: 0)).indices.forEach { rowIndex in
+                if let cell:UICollectionViewCell = rootVC.collectionView.cellForItem(at: IndexPath(row: rowIndex, section: 0)) {
+                    let dkcell = cell as! DKAssetGroupDetailBaseCell
+                    if let dkasset = dkcell.asset {
+                        rootVC.selectAsset(atIndex: IndexPath(row: rowIndex, section: 0))
+                        assets.append(dkcell.asset!)
+                    }
+                }}
+            
+            rootVC.collectionView.reloadData()
         }
     }
     
