@@ -45,7 +45,7 @@ open class DKPermissionView: UIView {
 	}
 	
 	open override func didMoveToWindow() {
-		super.didMoveToWindow()
+        super.didMoveToWindow()
 		
 		self.center = self.superview!.center
 	}
