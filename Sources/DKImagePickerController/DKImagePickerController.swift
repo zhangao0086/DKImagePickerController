@@ -111,7 +111,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     @objc public var selectedChanged: (() -> Void)?
 
     /// Colors applied to the permission view when access needs to be granted by the user
-    @objc public lazy var permissionViewColors = DKPermissionViewColors()
+    @objc public var permissionViewColors = DKPermissionViewColors()
     
     /// A Bool value indicating whether to allow the picker to auto-export the selected assets to the specified directory when done is called.
     /// picker will creating a default exporter if exportsWhenCompleted is true and the exporter is nil.
@@ -155,37 +155,16 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         return DKImageExtensionController(imagePickerController: self)
     }()
     
-    internal lazy var proxyObserver = DKImageBaseManager()
+    internal var proxyObserver = DKImageBaseManager()
     
     private weak var rootVC: (UIViewController & DKImagePickerControllerAware)?
     
-    public convenience init() {
-        let rootVC = UIViewController()
+    public convenience init(groupDataManager: DKImageGroupDataManager? = nil) {
+        self.init(nibName: nil, bundle: nil)
         
-        self.init(rootViewController: rootVC)
-    }
-    
-    public convenience init(groupDataManager: DKImageGroupDataManager) {
-        let rootVC = UIViewController()
-        self.init(rootViewController: rootVC)
-        
-        self.groupDataManager = groupDataManager
-    }
-    
-    public override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        
-        self.preferredContentSize = CGSize(width: 680, height: 600)
-        
-        rootViewController.navigationItem.hidesBackButton = true
-    }
-    
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        if let groupDataManager = groupDataManager {
+            self.groupDataManager = groupDataManager            
+        }
     }
     
     deinit {
@@ -222,6 +201,12 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         if self.selectedAssetIdentifiers.count > 0 {
             self.UIDelegate.imagePickerController(self, didSelectAssets: self.selectedAssets)
         }
+        
+        if self.preferredContentSize.equalTo(CGSize.zero) {
+            self.preferredContentSize = CGSize(width: 680, height: 600)
+        }
+        
+        self.rootVC?.navigationItem.hidesBackButton = true
         
         return {}
     }()

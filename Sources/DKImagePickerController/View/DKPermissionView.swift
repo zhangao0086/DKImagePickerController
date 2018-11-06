@@ -73,10 +73,10 @@ public class DKPermissionViewColors: NSObject {
                 forPhotoTitle photoTitle: UIColor = UIColor.gray,
                 forCameraTitle cameraTitle: UIColor = UIColor.white,
                 forButton button: UIColor = UIColor(red: 0, green: 122.0 / 255, blue: 1, alpha: 1)) {
-        backgroundColor = background
-        titlePhotoColor = photoTitle
-        titleCameraColor = cameraTitle
-        permitButtonColor = button
+        self.backgroundColor = background
+        self.titlePhotoColor = photoTitle
+        self.titleCameraColor = cameraTitle
+        self.permitButtonColor = button
     }
     
 }
