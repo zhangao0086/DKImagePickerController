@@ -33,6 +33,15 @@ public enum DKImagePickerControllerExportStatus: Int {
 ////////////////////////////////////////////////////////////////////////
 
 @objc
+public protocol DKImagePickerControllerAware {
+    weak var imagePickerController: DKImagePickerController! { get set }
+    
+    func reload()
+}
+
+////////////////////////////////////////////////////////////////////////
+
+@objc
 internal protocol DKImagePickerControllerObserver {
     
     @objc optional func imagePickerControllerDidSelect(assets: [DKAsset])
@@ -148,6 +157,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     internal var proxyObserver = DKImageBaseManager()
     
+    private weak var rootVC: (UIViewController & DKImagePickerControllerAware)?
+    
     public convenience init() {
         let rootVC = UIViewController()
         
@@ -201,6 +212,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         if self.sourceType != .camera {
             let rootVC = self.makeRootVC()
             rootVC.imagePickerController = self
+            self.rootVC = rootVC
             
             self.UIDelegate.prepareLayout(self, vc: rootVC)
             self.updateCancelButtonForVC(rootVC)
@@ -226,7 +238,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
-    @objc open func makeRootVC() -> DKAssetGroupDetailVC {
+    @objc open func makeRootVC() -> UIViewController & DKImagePickerControllerAware {
       return DKAssetGroupDetailVC()
     }
     
@@ -234,7 +246,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         self.showCamera(isInline: false)
     }
     
-    @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool = true, completion: (() -> Swift.Void)? = nil) {
+    @objc open override func present(_ viewControllerToPresent: UIViewController,
+                                     animated flag: Bool = true,
+                                     completion: (() -> Swift.Void)? = nil) {
         var targetVC: UIViewController = self
         if self.inline {
             targetVC = UIApplication.shared.keyWindow!.rootViewController!
@@ -253,7 +267,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     @objc open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         if self.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: completion)
+            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true,
+                                                                        completion: completion)
         } else {
             super.dismiss(animated: true, completion: completion)
         }
@@ -317,6 +332,13 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
+    @objc open func reload(with dataManager: DKImageGroupDataManager) {
+        self.groupDataManager = dataManager
+        if let rootVC = self.rootVC {
+            rootVC.reload()
+        }
+    }
+    
     private func cancelCurrentExportRequestIfNeeded() {
         if self.exportRequestID != DKImageAssetExportInvalidRequestID {
             self.exporter?.cancel(requestID: self.exportRequestID)
@@ -334,13 +356,15 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     private func createDefaultAssetFetchOptions() -> PHFetchOptions {
         let createImagePredicate = { () -> NSPredicate in
-            let imagePredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+            let imagePredicate = NSPredicate(format: "mediaType == %d",
+                                             PHAssetMediaType.image.rawValue)
             
             return imagePredicate
         }
         
         let createVideoPredicate = { () -> NSPredicate in
-            let videoPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+            let videoPredicate = NSPredicate(format: "mediaType == %d",
+                                             PHAssetMediaType.video.rawValue)
             
             return videoPredicate
         }
@@ -348,7 +372,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         var predicate: NSPredicate?
         switch self.assetType {
         case .allAssets:
-            predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [createImagePredicate(), createVideoPredicate()])
+            predicate = NSCompoundPredicate(orPredicateWithSubpredicates:
+                [createImagePredicate(), createVideoPredicate()]
+            )
         case .allPhotos:
             predicate = createImagePredicate()
         case .allVideos:
@@ -405,7 +431,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             }) { (success, error) in
                 DispatchQueue.main.async(execute: {
                     if success {
-                        if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newVideoIdentifier], options: nil).firstObject {
+                        if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newVideoIdentifier],
+                                                              options: nil).firstObject {
                             if self.sourceType != .camera || self.viewControllers.count == 0 {
                                 self.dismissCamera()
                             }
@@ -444,7 +471,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     // MARK: - Save Image
     
-    @objc open func saveImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    @objc open func saveImage(_ image: UIImage,
+                              _ metadata: [AnyHashable : Any]?,
+                              _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         if let metadata = metadata {
             let imageData = image.jpegData(compressionQuality: 1)!
             
@@ -479,7 +508,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
-    @objc open func saveImageDataToAlbumForiOS8(_ imageData: Data, _ metadata: Dictionary<AnyHashable, Any>?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    @objc open func saveImageDataToAlbumForiOS8(_ imageData: Data,
+                                                _ metadata: Dictionary<AnyHashable, Any>?,
+                                                _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         let library = ALAssetsLibrary()
         library.writeImageData(toSavedPhotosAlbum: imageData, metadata: metadata, completionBlock: { (newURL, error) in
             if let _ = error {
