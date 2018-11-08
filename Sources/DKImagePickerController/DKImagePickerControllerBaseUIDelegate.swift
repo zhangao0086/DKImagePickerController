@@ -81,7 +81,12 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
         if self.doneButton == nil {
             let button = UIButton(type: UIButton.ButtonType.custom)
             button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.imagePickerController.navigationBar.tintColor, for: .normal)
-            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
+            if !self.imagePickerController.allowSelectAll {
+                button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
+            } else {
+                button.setTitle( DKImagePickerControllerResource.localizedStringWithKey("picker.select.all.title"), for: .normal)
+                button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.handleSelectAll), for: UIControl.Event.touchUpInside)
+            }
             self.doneButton = button
             self.updateDoneButtonTitle(button)
         }
@@ -90,28 +95,36 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
     }
     
     open func updateDoneButtonTitle(_ button: UIButton) {
+        if self.imagePickerController.selectedAssetIdentifiers.count > 0  && !self.imagePickerController.allowSelectAll {
+            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.title"),
+                                   selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+        } else if self.imagePickerController.allowSelectAll {
+            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.all.title"),
+                                   selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+        } else {
+            button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"), for: .normal)
+        }
+        
+        button.sizeToFit()
+        handleBarButtonBug(button: button)
+    }
+    
+    @objc
+    open func updateSelectAllButtonTitle() {
+        self.doneButton!.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"),
+                                         selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+        self.doneButton!.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
+    }
+    
+    private func selectedAssetsCount() -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.locale = Locale(identifier: Locale.current.identifier)
-        if self.imagePickerController.selectedAssetIdentifiers.count > 0  && !self.imagePickerController.allowSelectAll {
-            
-            let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
-            
-            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.title"),
-                                   formattedSelectableCount ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
-        } else if self.imagePickerController.allowSelectAll {
-            let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
-            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.all.title"),
-                                   formattedSelectableCount ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
-            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.selectAllPics), for: UIControl.Event.touchUpInside)
-        } else {
-            button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"), for: .normal)
-            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.selectAllPics), for: UIControl.Event.touchUpInside)
-        }
-
-        
-        button.sizeToFit()
-        
+        let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
+        return formattedSelectableCount!
+    }
+    
+    private func handleBarButtonBug(button: UIButton) {
         if #available(iOS 11.0, *) { // Handle iOS 11 BarButtonItems bug
             if button.constraints.count == 0 {
                 button.widthAnchor.constraint(equalToConstant: button.bounds.width).isActive = true

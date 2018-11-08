@@ -572,20 +572,21 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
-    @objc open func selectAllPics() {
-        if let rootVC = self.viewControllers.first as? DKAssetGroupDetailVC {
-            var assets = [DKAsset]()
-            (0..<rootVC.collectionView.numberOfItems(inSection: 0)).indices.forEach { rowIndex in
-                if let cell:UICollectionViewCell = rootVC.collectionView.cellForItem(at: IndexPath(row: rowIndex, section: 0)) {
-                    let dkcell = cell as! DKAssetGroupDetailBaseCell
-                    if let dkasset = dkcell.asset {
-                        rootVC.selectAsset(atIndex: IndexPath(row: rowIndex, section: 0))
-                        assets.append(dkcell.asset!)
-                    }
-                }}
+    @objc open func handleSelectAll() {
+        if let groupDetailVC = self.viewControllers.first as? DKAssetGroupDetailVC, let selectedGroupId = groupDetailVC.selectedGroupId {
+            let group = self.groupDataManager.fetchGroup(with: selectedGroupId)
             
-            rootVC.collectionView.reloadData()
+            var assets: [DKAsset] = []
+            for index in 0 ..< group.totalCount {
+                let asset = self.groupDataManager.fetchAsset(group, index: index)
+                assets.append(asset)
+            }
+            
+            if assets.count > 0 {
+                self.select(assets: assets)
+            }
         }
+        self.UIDelegate.updateSelectAllButtonTitle()
     }
     
     @objc open func deselect(asset: DKAsset) {
