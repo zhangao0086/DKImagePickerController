@@ -114,6 +114,8 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
         self.doneButton!.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"),
                                          selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
         self.doneButton!.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
+        self.doneButton!.sizeToFit()
+        handleBarButtonBug(button: self.doneButton!)
     }
     
     private func selectedAssetsCount() -> String {

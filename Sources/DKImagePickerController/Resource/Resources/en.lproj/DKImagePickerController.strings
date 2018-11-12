@@ -18,7 +18,7 @@
 
 "picker.select.title" = "Select(%@)";
 
-"picker.select.done.title" = "Done";
+"picker.select.done.title" = "Done(%@)";
 
 "picker.select.all.title" = "Select All";
 
