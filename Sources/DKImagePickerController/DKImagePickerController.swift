@@ -586,6 +586,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
                 self.select(assets: assets)
             }
         }
+        self.UIDelegate.doneButton!.removeTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.handleSelectAll), for: UIControl.Event.touchUpInside)
+        self.UIDelegate.doneButton!.addTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
         self.UIDelegate.updateSelectAllButtonTitle()
     }
     
