@@ -321,6 +321,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
+    /// Reload this picker with a new DKImageGroupDataManager.
     @objc open func reload(with dataManager: DKImageGroupDataManager) {
         self.groupDataManager = dataManager
         if let rootVC = self.rootVC {
