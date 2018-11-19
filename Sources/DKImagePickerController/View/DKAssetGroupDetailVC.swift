@@ -33,7 +33,9 @@ private extension UICollectionView {
 // Show all images in the asset group
 open class DKAssetGroupDetailVC: UIViewController,
     UIGestureRecognizerDelegate,
-    UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver, DKImagePickerControllerObserver {
+    UICollectionViewDelegate, UICollectionViewDataSource,
+    DKImageGroupDataManagerObserver, DKImagePickerControllerObserver,
+    DKImagePickerControllerAware {
     	
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
@@ -54,8 +56,8 @@ open class DKAssetGroupDetailVC: UIViewController,
     }()
 		
     public var selectedGroupId: String?
+    public weak var imagePickerController: DKImagePickerController!
     internal var collectionView: UICollectionView!
-    internal weak var imagePickerController: DKImagePickerController!
     private var groupListVC: DKAssetGroupListVC!
     private var hidesCamera: Bool = false
     private var footerView: UIView?
@@ -82,10 +84,10 @@ open class DKAssetGroupDetailVC: UIViewController,
 			self.view.addSubview(footerView)
 		}
       
-    self.headerView = self.imagePickerController.UIDelegate.imagePickerControllerHeaderView(self.imagePickerController)
-    if let headerView = self.headerView {
-      self.view.addSubview(headerView)
-    }
+        self.headerView = self.imagePickerController.UIDelegate.imagePickerControllerHeaderView(self.imagePickerController)
+        if let headerView = self.headerView {
+            self.view.addSubview(headerView)
+        }
 		
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
@@ -110,7 +112,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         if let currentViewSize = self.currentViewSize, currentViewSize.equalTo(self.view.bounds.size) {
             return
         } else {
-            currentViewSize = self.view.bounds.size
+            self.currentViewSize = self.view.bounds.size
         }
         
         self.collectionView?.collectionViewLayout.invalidateLayout()
@@ -119,49 +121,62 @@ open class DKAssetGroupDetailVC: UIViewController,
 	override open func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		
-    configureAccessoryViews()
-  }
-  
-  func configureAccessoryViews() {
-    var footerViewFrame = CGRect.zero
-    var headerViewFrame = CGRect.zero
-    if let footerView = self.footerView {
-      footerViewFrame = CGRect(x: 0,
-                               y: self.view.bounds.height - footerView.bounds.height,
-                               width: self.view.bounds.width,
-                               height: footerView.bounds.height)
-      footerView.frame = footerViewFrame
-    }
-    if let headerView = self.headerView  {
-      if #available(iOS 11.0, *) {
-        headerViewFrame = CGRect(x: 0,
-                                 y: self.view.safeAreaInsets.top,
-                                 width: self.view.bounds.width,
-                                 height: headerView.bounds.height)
-      } else {
-        headerViewFrame = CGRect(x: 0,
-                                 y: 0,
-                                 width: self.view.bounds.width,
-                                 height: headerView.bounds.height)
-      }
-      headerView.frame = headerViewFrame
+        self.configureAccessoryViews()
     }
     
-    if #available(iOS 11.0, *) {
-      // Handling Safe Areas for iOS 11
-      self.collectionView.frame = CGRect(x: 0,
-                                         y: self.view.safeAreaInsets.top + headerViewFrame.height,
-                                         width: self.view.bounds.width,
-                                         height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height - self.view.safeAreaInsets.top)
-    } else {
-      self.collectionView.frame = CGRect(x: 0,
-                                         y: headerViewFrame.height,
-                                         width: self.view.bounds.width,
-                                         height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height)
+    open func reload() {
+        self.resetCachedAssets()
+        
+        self.imagePickerController.groupDataManager.add(observer: self)
+        self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
+                                              defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
+                                              selectedGroupDidChangeBlock: { [unowned self] (groupId) in
+                                                self.selectAssetGroup(groupId)
+        })
+        self.groupListVC.showsEmptyAlbums = self.imagePickerController.showsEmptyAlbums
+        self.groupListVC.loadGroups()
     }
-  }
+    
+    func configureAccessoryViews() {
+        var footerViewFrame = CGRect.zero
+        var headerViewFrame = CGRect.zero
+        if let footerView = self.footerView {
+            footerViewFrame = CGRect(x: 0,
+                                     y: self.view.bounds.height - footerView.bounds.height,
+                                     width: self.view.bounds.width,
+                                     height: footerView.bounds.height)
+            footerView.frame = footerViewFrame
+        }
+        if let headerView = self.headerView  {
+            if #available(iOS 11.0, *) {
+                headerViewFrame = CGRect(x: 0,
+                                         y: self.view.safeAreaInsets.top,
+                                         width: self.view.bounds.width,
+                                         height: headerView.bounds.height)
+            } else {
+                headerViewFrame = CGRect(x: 0,
+                                         y: 0,
+                                         width: self.view.bounds.width,
+                                         height: headerView.bounds.height)
+            }
+            headerView.frame = headerViewFrame
+        }
+        
+        if #available(iOS 11.0, *) {
+            // Handling Safe Areas for iOS 11
+            self.collectionView.frame = CGRect(x: 0,
+                                               y: self.view.safeAreaInsets.top + headerViewFrame.height,
+                                               width: self.view.bounds.width,
+                                               height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height - self.view.safeAreaInsets.top)
+        } else {
+            self.collectionView.frame = CGRect(x: 0,
+                                               y: headerViewFrame.height,
+                                               width: self.view.bounds.width,
+                                               height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height)
+        }
+    }
 	
-	internal func checkPhotoPermission() {
+    func checkPhotoPermission() {
 		func photoDenied() {
             let permissionColors = self.imagePickerController.permissionViewColors
             self.view.addSubview(DKPermissionView.permissionView(.photo, withColors: permissionColors))
@@ -169,38 +184,21 @@ open class DKAssetGroupDetailVC: UIViewController,
 			self.collectionView?.isHidden = true
 		}
         
-        func setup() {
-            self.resetCachedAssets()
-            self.imagePickerController.groupDataManager.add(observer: self)
-            self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
-                                                  defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
-                                                  selectedGroupDidChangeBlock: { [unowned self] (groupId) in
-                                                    self.selectAssetGroup(groupId)
-            })
-            self.groupListVC.showsEmptyAlbums = self.imagePickerController.showsEmptyAlbums
-            self.groupListVC.loadGroups()
-        }
-        
 		DKImageDataManager.checkPhotoPermission { granted in
-			granted ? setup() : photoDenied()
+			granted ? self.reload() : photoDenied()
 		}
 	}
 	
     func selectAssetGroup(_ groupId: String?) {
-        if self.selectedGroupId == groupId {
-            self.updateTitleView()
-            return
-        }
-        
         self.selectedGroupId = groupId
-		self.updateTitleView()
-		self.collectionView!.reloadData()
+        self.updateTitleView()
+        self.collectionView!.reloadData()
     }
     
 	open func updateTitleView() {
         guard let selectedGroupId = self.selectedGroupId else { return }
         
-		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
+        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
 		self.title = group.groupName
 		
 		let groupsCount = self.imagePickerController.groupDataManager.groupIds?.count ?? 0
@@ -225,7 +223,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         }
         assetIndex = (index - (self.hidesCamera ? 0 : 1))
         
-        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
+        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
         return self.imagePickerController.groupDataManager.fetchAsset(group, index: assetIndex)
     }
     
@@ -251,11 +249,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
     
     public func adjustAssetIndex(_ index: Int) -> Int {
-        if self.hidesCamera {
-            return index
-        } else {
-            return index + 1
-        }
+        return self.hidesCamera ? index : index + 1
     }
     
     public func scrollIndexPathToVisible(_ indexPath: IndexPath) {
@@ -284,6 +278,16 @@ open class DKAssetGroupDetailVC: UIViewController,
     private var fromIndexPath: IndexPath? = nil
     private var swipingIndexPathes = Set<Int>()
     private var swipingToSelect = true
+    private var swipingLastLocation = CGPoint.zero
+    private var autoScrollingRate: CGFloat = 1.0
+    private var autoScrollingDirection: UISwipeGestureRecognizer.Direction = .down
+    private lazy var autoScrollingLink: CADisplayLink = {
+        let link = CADisplayLink(target: self, selector: #selector(autoScrolling))
+        link.isPaused = true
+        link.add(to: RunLoop.main, forMode: .default)
+        link.frameInterval = 1
+        return link
+    }()
     
     // use the swiping gesture to select the currently swiping cell.
     @objc private func swiping(gesture: UIPanGestureRecognizer) {
@@ -299,42 +303,103 @@ open class DKAssetGroupDetailVC: UIViewController,
                 self.swipingToSelect = !cell.isSelected
             }
         case .changed:
-            if let toIndexPath = self.collectionView.indexPathForItem(at: location)
-                , let fromIndexPath = self.fromIndexPath {
-                let begin = min(fromIndexPath.row, toIndexPath.row)
-                let end = max(fromIndexPath.row, toIndexPath.row)
-                
-                var currentSwipingIndexPathes = Set<Int>()
-                for i in begin...end {
-                    currentSwipingIndexPathes.insert(i)
-                    self.swipingIndexPathes.remove(i)
-                    
-                    if self.swipingToSelect {
-                        self.selectAsset(atIndex: IndexPath(row: i, section: 0))
-                    } else {
-                        self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
-                    }
-                }
-                
-                for i in self.swipingIndexPathes {
-                    if self.swipingToSelect {
-                        self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
-                    } else {
-                        self.selectAsset(atIndex: IndexPath(row: i, section: 0))
-                    }
-                }
-                self.swipingIndexPathes = currentSwipingIndexPathes
-            }
+            self.onSwipingChanged(location: location)
+            self.startAutoScrollingIfNeeded(location: location)
         case .ended:
-            self.swipingIndexPathes.removeAll()
-            self.fromIndexPath = nil
+            fallthrough
         case .cancelled:
-            self.swipingIndexPathes.removeAll()
-            self.fromIndexPath = nil
+            fallthrough
         case .failed:
             self.swipingIndexPathes.removeAll()
             self.fromIndexPath = nil
+            self.endAutoScrolling()
         }
+    }
+    
+    private func onSwipingChanged(location: CGPoint) {
+        self.swipingLastLocation = location
+        
+        if let toIndexPath = self.collectionView.indexPathForItem(at: location)
+            , let fromIndexPath = self.fromIndexPath {
+            let begin = min(fromIndexPath.row, toIndexPath.row)
+            let end = max(fromIndexPath.row, toIndexPath.row)
+            
+            var currentSwipingIndexPathes = Set<Int>()
+            for i in begin...end {
+                currentSwipingIndexPathes.insert(i)
+                self.swipingIndexPathes.remove(i)
+                
+                if self.swipingToSelect {
+                    self.selectAsset(atIndex: IndexPath(row: i, section: 0))
+                } else {
+                    self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
+                }
+            }
+            
+            for i in self.swipingIndexPathes {
+                if self.swipingToSelect {
+                    self.deselectAsset(atIndex: IndexPath(row: i, section: 0))
+                } else {
+                    self.selectAsset(atIndex: IndexPath(row: i, section: 0))
+                }
+            }
+            self.swipingIndexPathes = currentSwipingIndexPathes
+        }
+    }
+    
+    private func startAutoScrollingIfNeeded(location: CGPoint) {
+        let minLocationY = self.collectionView.contentOffset.y
+        let maxLocationY = self.collectionView.bounds.height + self.collectionView.contentOffset.y
+
+        debugPrint("minLocationY:\(minLocationY) maxLocationY:\(maxLocationY) current:\(location.y)")
+        
+        let locationY = min(max(location.y, minLocationY), maxLocationY)
+        
+        self.autoScrollingDirection = locationY - minLocationY > (maxLocationY - minLocationY) / 2 ? .down : .up
+        var diff: CGFloat = 0
+        switch self.autoScrollingDirection {
+        case .down:
+            diff = maxLocationY - locationY
+        case .up:
+            diff = locationY - minLocationY
+        default:
+            debugPrint("Known direction.")
+        }
+        
+        let threshold = self.thumbnailSize.height / UIScreen.main.scale
+        if diff < threshold {
+            self.autoScrollingRate = threshold / max(diff, threshold / 10)
+            self.startAutoScrolling()
+        } else {
+            self.endAutoScrolling()
+        }
+    }
+    
+    private func startAutoScrolling() {
+        if self.autoScrollingLink.isPaused {
+            self.autoScrollingLink.isPaused = false
+        }
+    }
+    
+    private func endAutoScrolling() {
+        if !self.autoScrollingLink.isPaused {
+            self.autoScrollingLink.isPaused = true
+        }
+    }
+    
+    @objc private func autoScrolling() {
+        let offsetY = CGFloat(self.autoScrollingDirection == .down ? self.autoScrollingRate : -self.autoScrollingRate)
+        
+        var targetContentOffset = self.collectionView.contentOffset
+        targetContentOffset.y += offsetY
+        
+        targetContentOffset.y = min(max(targetContentOffset.y, self.collectionView.contentInset.top),
+                                    self.collectionView.contentSize.height - self.collectionView.bounds.height)
+        
+        self.collectionView.contentOffset = targetContentOffset
+        
+        self.onSwipingChanged(location: CGPoint(x: self.swipingLastLocation.x,
+                                                y: self.swipingLastLocation.y + offsetY))
     }
     
     // MARK: - UIGestureRecognizerDelegate
@@ -434,7 +499,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		guard let selectedGroupId = self.selectedGroupId else { return 0 }
 		
-		let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
+        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
         return group.totalCount + (self.hidesCamera ? 0 : 1)
     }
     
@@ -521,7 +586,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
         guard delta > view.bounds.height / 3 else { return }
         
-        let group = self.imagePickerController.groupDataManager.fetchGroupWithGroupId(selectedGroupId)
+        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
         
         // Compute the assets to start caching and to stop caching.
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)

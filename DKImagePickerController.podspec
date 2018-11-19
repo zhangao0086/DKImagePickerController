@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "DKImagePickerController"
-  s.version       = "4.0.3"
+  s.version       = "4.1.0"
   s.summary       = "DKImagePickerController is a highly customizable, pure-Swift library."
   s.homepage      = "https://github.com/zhangao0086/DKImagePickerController"
   s.license       = { :type => "MIT", :file => "LICENSE" }
@@ -54,9 +54,9 @@ Pod::Spec.new do |s|
 
   s.subspec 'PhotoEditor' do |photoEditor|
     photoEditor.dependency 'DKImagePickerController/Core'
-    photoEditor.dependency 'CLImageEditor', '0.2.0'
+    photoEditor.dependency 'TOCropViewController', '~> 2.3'
 
-    photoEditor.source_files = "Sources/Extensions/DKImageExtensionPhotoEditor.swift"
+    photoEditor.source_files = "Sources/Extensions/DKImageExtensionPhotoCropper.swift"
   end
 
 end

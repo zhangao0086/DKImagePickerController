@@ -1,5 +1,15 @@
 # Change Log
 
+## [4.1.0](https://github.com/zhangao0086/DKImagePickerController/tree/4.1.0) (2018-11-19)
+
+- Can reload with a new configuration.
+
+- Added support for GPS metadata.
+
+- Replace CLImageEditor with TOCropViewController.
+
+- Fixed memory leaks.
+
 ## [4.0.3](https://github.com/zhangao0086/DKImagePickerController/tree/4.0.3) (2017-09-24)
 
 - Carthage.
