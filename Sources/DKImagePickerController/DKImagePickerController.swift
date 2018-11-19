@@ -71,6 +71,10 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// The maximum count of assets which the user will be able to select, a value of 0 means no limit.
     @objc public var maxSelectableCount = 0
     
+    /// Photos will be tagged with the location where they are taken.
+    /// If true, your Info.plist should include the "Privacy - Location XXX" tag.
+    open var containsGPSInMetadata = false
+    
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
     
@@ -394,7 +398,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
                 if strongSelf.extensionController.isExtensionTypeAvailable(.photoEditor) {
                     var extraInfo: [AnyHashable : Any] = [
                         "image" : image,
-                        "didFinishEditing" : didFinishEditing,
+                        "didFinishEditing" : didFinishEditing
                         ]
                     
                     if let metadata = metadata {
@@ -433,7 +437,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         self.extensionController.perform(extensionType: isInline ? .inlineCamera : .camera, with: [
             "didFinishCapturingImage" : didFinishCapturingImage,
             "didFinishCapturingVideo" : didFinishCapturingVideo,
-            "didCancel" : didCancel
+            "didCancel" : didCancel,
+            "containsGPSInMetadata" : self.containsGPSInMetadata
             ])
     }
     

@@ -61,6 +61,12 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
+        case "With GPS":
+            let pickerController = DKImagePickerController()
+            pickerController.containsGPSInMetadata = true
+            
+            destination.pickerController = pickerController
+            
         case "Allows Landscape":
             let pickerController = DKImagePickerController()
             pickerController.allowsLandscape = true
