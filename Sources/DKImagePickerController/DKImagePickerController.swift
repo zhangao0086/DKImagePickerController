@@ -87,7 +87,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// The type of picker interface to be displayed by the controller.
     @objc public var assetType: DKImagePickerControllerAssetType = .allAssets
     
-    /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
+    /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes to be ignored.
     @objc public var sourceType: DKImagePickerControllerSourceType = .both
     
     /// A Bool value indicating whether to allow the picker to select photos and videos at the same time.
