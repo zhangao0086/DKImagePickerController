@@ -206,18 +206,13 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
     }
     
     private func filterEmptyGroupIfNeeded() -> [String]? {
-        var displayGroups = self.groups ?? []
-        if !self.showsEmptyAlbums {
-            if let groups = self.groups {
-                for groupId in groups {
-                    if self.groupDataManager.fetchGroup(with: groupId).totalCount > 0 {
-                        displayGroups.append(groupId)
-                    }
-                }
-            }
+        if self.showsEmptyAlbums {
+            return self.groups
+        } else {
+            return self.groups?.filter({ (groupId) -> Bool in
+                return self.groupDataManager.fetchGroup(with: groupId).totalCount > 0
+            }) ?? []
         }
-        
-        return displayGroups
     }
 
     // MARK: - UITableViewDelegate, UITableViewDataSource methods
