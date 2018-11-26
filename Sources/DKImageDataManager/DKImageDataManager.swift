@@ -92,7 +92,7 @@ public class DKImageDataManager {
                                                             let requestCloudOptions = requestOptions.copy() as! PHImageRequestOptions
                                                             requestCloudOptions.isNetworkAccessAllowed = true
                                                             
-                                                            self.fetchImage(for: asset, size: size, options: options, contentMode: contentMode, oldRequestID: requestID, completeBlock: completeBlock)
+                                                            self.fetchImage(for: asset, size: size, options: requestCloudOptions, contentMode: contentMode, oldRequestID: requestID, completeBlock: completeBlock)
                                                         } else {
                                                             completeBlock(image, info)
                                                         }
