@@ -566,8 +566,6 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             } else {
                 self.triggerSelectedChangedIfNeeded()
                 self.UIDelegate?.imagePickerController(self, didSelectAssets: insertedAssets)
-                self.UIDelegate.doneButton!.removeTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.handleSelectAll), for: UIControl.Event.touchUpInside)
-                self.UIDelegate.doneButton!.addTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
             }
             
             self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidSelect(assets:)), object: insertedAssets as AnyObject)
@@ -588,9 +586,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
                 self.select(assets: assets)
             }
         }
-        self.UIDelegate.doneButton!.removeTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.handleSelectAll), for: UIControl.Event.touchUpInside)
-        self.UIDelegate.doneButton!.addTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
-        self.UIDelegate.updateSelectAllButtonTitle()
+        self.UIDelegate.updateDoneButtonTitle(self.UIDelegate.doneButton!)
     }
     
     @objc open func deselect(asset: DKAsset) {
@@ -604,8 +600,6 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         
         let deselectAssets = [asset]
         self.UIDelegate?.imagePickerController(self, didDeselectAssets: deselectAssets)
-        self.UIDelegate.doneButton!.removeTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.handleSelectAll), for: UIControl.Event.touchUpInside)
-        self.UIDelegate.doneButton!.addTarget(self.UIDelegate.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
         
         self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidDeselect(assets:)), object: deselectAssets as AnyObject)
     }

@@ -81,11 +81,6 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
         if self.doneButton == nil {
             let button = UIButton(type: UIButton.ButtonType.custom)
             button.setTitleColor(UINavigationBar.appearance().tintColor ?? self.imagePickerController.navigationBar.tintColor, for: .normal)
-            if !self.imagePickerController.allowSelectAll {
-                button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: UIControl.Event.touchUpInside)
-            } else {
-                button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.handleSelectAll), for: UIControl.Event.touchUpInside)
-            }
             self.updateDoneButtonTitle(button)
             self.doneButton = button
         }
@@ -94,40 +89,30 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
     }
     
     open func updateDoneButtonTitle(_ button: UIButton) {
-        if self.imagePickerController.selectedAssetIdentifiers.count > 0  && !self.imagePickerController.allowSelectAll {
-            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.title"),
-                                   selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
-        } else if (button.currentTitle == nil || button.currentTitle == "") && self.imagePickerController.allowSelectAll {
-            button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.all.title"), for: .normal)
-        } else if self.imagePickerController.selectedAssetIdentifiers.count > 0 && self.imagePickerController.allowSelectAll {
-            button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title") + "(%@)",
-                                             selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+        button.removeTarget(nil, action: nil, for: .allEvents)
+        if self.imagePickerController.allowSelectAll {
+            if self.imagePickerController.selectedAssetIdentifiers.count == 0 {
+                button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.all.title"), for: .normal)
+                button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.handleSelectAll), for: .touchUpInside)
+            } else {
+                button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title") + "(%@)",
+                                        selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+                button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: .touchUpInside)
+            }
+        } else {
+            button.addTarget(self.imagePickerController, action: #selector(DKImagePickerController.done), for: .touchUpInside)
+            if self.imagePickerController.selectedAssetIdentifiers.count > 0 {
+                button.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.title"),
+                                        selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
+            } else {
+                button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"), for: .normal)
+            }
         }
-        else {
-            button.setTitle(DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title"), for: .normal)
-        }
-        
         button.sizeToFit()
         handleBarButtonBug(button: button)
     }
     
-    @objc
-    open func updateSelectAllButtonTitle() {
-        self.doneButton!.setTitle(String(format: DKImagePickerControllerResource.localizedStringWithKey("picker.select.done.title") + "(%@)",
-                                         selectedAssetsCount() ?? self.imagePickerController.selectedAssetIdentifiers.count), for: .normal)
-        self.doneButton!.sizeToFit()
-        handleBarButtonBug(button: self.doneButton!)
-    }
-    
-    private func selectedAssetsCount() -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: Locale.current.identifier)
-        let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
-        return formattedSelectableCount!
-    }
-    
-    private func handleBarButtonBug(button: UIButton) {
+    open func handleBarButtonBug(button: UIButton) {
         if #available(iOS 11.0, *) { // Handle iOS 11 BarButtonItems bug
             if button.constraints.count == 0 {
                 button.widthAnchor.constraint(equalToConstant: button.bounds.width).isActive = true
@@ -142,6 +127,14 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
                 }
             }
         }
+    }
+    
+    private func selectedAssetsCount() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: Locale.current.identifier)
+        let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
+        return formattedSelectableCount!
     }
     
     // Delegate methods...
