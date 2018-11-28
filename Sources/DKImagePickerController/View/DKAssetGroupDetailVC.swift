@@ -33,7 +33,9 @@ private extension UICollectionView {
 // Show all images in the asset group
 open class DKAssetGroupDetailVC: UIViewController,
     UIGestureRecognizerDelegate,
-    UICollectionViewDelegate, UICollectionViewDataSource, DKImageGroupDataManagerObserver, DKImagePickerControllerObserver {
+    UICollectionViewDelegate, UICollectionViewDataSource,
+    DKImageGroupDataManagerObserver, DKImagePickerControllerObserver,
+    DKImagePickerControllerAware {
     	
     public lazy var selectGroupButton: UIButton = {
         let button = UIButton()
@@ -54,8 +56,8 @@ open class DKAssetGroupDetailVC: UIViewController,
     }()
 		
     public var selectedGroupId: String?
+    public weak var imagePickerController: DKImagePickerController!
     internal var collectionView: UICollectionView!
-    internal weak var imagePickerController: DKImagePickerController!
     private var groupListVC: DKAssetGroupListVC!
     private var hidesCamera: Bool = false
     private var footerView: UIView?
@@ -82,10 +84,10 @@ open class DKAssetGroupDetailVC: UIViewController,
 			self.view.addSubview(footerView)
 		}
       
-    self.headerView = self.imagePickerController.UIDelegate.imagePickerControllerHeaderView(self.imagePickerController)
-    if let headerView = self.headerView {
-      self.view.addSubview(headerView)
-    }
+        self.headerView = self.imagePickerController.UIDelegate.imagePickerControllerHeaderView(self.imagePickerController)
+        if let headerView = self.headerView {
+            self.view.addSubview(headerView)
+        }
 		
 		self.hidesCamera = self.imagePickerController.sourceType == .photo
 		self.checkPhotoPermission()
@@ -119,49 +121,62 @@ open class DKAssetGroupDetailVC: UIViewController,
 	override open func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		
-    configureAccessoryViews()
-  }
-  
-  func configureAccessoryViews() {
-    var footerViewFrame = CGRect.zero
-    var headerViewFrame = CGRect.zero
-    if let footerView = self.footerView {
-      footerViewFrame = CGRect(x: 0,
-                               y: self.view.bounds.height - footerView.bounds.height,
-                               width: self.view.bounds.width,
-                               height: footerView.bounds.height)
-      footerView.frame = footerViewFrame
-    }
-    if let headerView = self.headerView  {
-      if #available(iOS 11.0, *) {
-        headerViewFrame = CGRect(x: 0,
-                                 y: self.view.safeAreaInsets.top,
-                                 width: self.view.bounds.width,
-                                 height: headerView.bounds.height)
-      } else {
-        headerViewFrame = CGRect(x: 0,
-                                 y: 0,
-                                 width: self.view.bounds.width,
-                                 height: headerView.bounds.height)
-      }
-      headerView.frame = headerViewFrame
+        self.configureAccessoryViews()
     }
     
-    if #available(iOS 11.0, *) {
-      // Handling Safe Areas for iOS 11
-      self.collectionView.frame = CGRect(x: 0,
-                                         y: self.view.safeAreaInsets.top + headerViewFrame.height,
-                                         width: self.view.bounds.width,
-                                         height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height - self.view.safeAreaInsets.top)
-    } else {
-      self.collectionView.frame = CGRect(x: 0,
-                                         y: headerViewFrame.height,
-                                         width: self.view.bounds.width,
-                                         height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height)
+    open func reload() {
+        self.resetCachedAssets()
+        
+        self.imagePickerController.groupDataManager.add(observer: self)
+        self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
+                                              defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
+                                              selectedGroupDidChangeBlock: { [unowned self] (groupId) in
+                                                self.selectAssetGroup(groupId)
+        })
+        self.groupListVC.showsEmptyAlbums = self.imagePickerController.showsEmptyAlbums
+        self.groupListVC.loadGroups()
     }
-  }
+    
+    func configureAccessoryViews() {
+        var footerViewFrame = CGRect.zero
+        var headerViewFrame = CGRect.zero
+        if let footerView = self.footerView {
+            footerViewFrame = CGRect(x: 0,
+                                     y: self.view.bounds.height - footerView.bounds.height,
+                                     width: self.view.bounds.width,
+                                     height: footerView.bounds.height)
+            footerView.frame = footerViewFrame
+        }
+        if let headerView = self.headerView  {
+            if #available(iOS 11.0, *) {
+                headerViewFrame = CGRect(x: 0,
+                                         y: self.view.safeAreaInsets.top,
+                                         width: self.view.bounds.width,
+                                         height: headerView.bounds.height)
+            } else {
+                headerViewFrame = CGRect(x: 0,
+                                         y: 0,
+                                         width: self.view.bounds.width,
+                                         height: headerView.bounds.height)
+            }
+            headerView.frame = headerViewFrame
+        }
+        
+        if #available(iOS 11.0, *) {
+            // Handling Safe Areas for iOS 11
+            self.collectionView.frame = CGRect(x: 0,
+                                               y: self.view.safeAreaInsets.top + headerViewFrame.height,
+                                               width: self.view.bounds.width,
+                                               height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height - self.view.safeAreaInsets.top)
+        } else {
+            self.collectionView.frame = CGRect(x: 0,
+                                               y: headerViewFrame.height,
+                                               width: self.view.bounds.width,
+                                               height: self.view.bounds.height - footerViewFrame.height - headerViewFrame.height)
+        }
+    }
 	
-	internal func checkPhotoPermission() {
+    func checkPhotoPermission() {
 		func photoDenied() {
             let permissionColors = self.imagePickerController.permissionViewColors
             self.view.addSubview(DKPermissionView.permissionView(.photo, withColors: permissionColors))
@@ -169,32 +184,15 @@ open class DKAssetGroupDetailVC: UIViewController,
 			self.collectionView?.isHidden = true
 		}
         
-        func setup() {
-            self.resetCachedAssets()
-            self.imagePickerController.groupDataManager.add(observer: self)
-            self.groupListVC = DKAssetGroupListVC(groupDataManager: self.imagePickerController.groupDataManager,
-                                                  defaultAssetGroup: self.imagePickerController.defaultAssetGroup,
-                                                  selectedGroupDidChangeBlock: { [unowned self] (groupId) in
-                                                    self.selectAssetGroup(groupId)
-            })
-            self.groupListVC.showsEmptyAlbums = self.imagePickerController.showsEmptyAlbums
-            self.groupListVC.loadGroups()
-        }
-        
 		DKImageDataManager.checkPhotoPermission { granted in
-			granted ? setup() : photoDenied()
+			granted ? self.reload() : photoDenied()
 		}
 	}
 	
     func selectAssetGroup(_ groupId: String?) {
-        if self.selectedGroupId == groupId {
-            self.updateTitleView()
-            return
-        }
-        
         self.selectedGroupId = groupId
-		self.updateTitleView()
-		self.collectionView!.reloadData()
+        self.updateTitleView()
+        self.collectionView!.reloadData()
     }
     
 	open func updateTitleView() {
