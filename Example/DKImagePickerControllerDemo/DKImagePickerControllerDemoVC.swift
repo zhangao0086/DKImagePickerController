@@ -61,6 +61,12 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
+        case "With GPS":
+            let pickerController = DKImagePickerController()
+            pickerController.containsGPSInMetadata = true
+            
+            destination.pickerController = pickerController
+            
         case "Allows Landscape":
             let pickerController = DKImagePickerController()
             pickerController.allowsLandscape = true
@@ -170,6 +176,11 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             }
             
             let pickerController = DKImagePickerController()
+            
+            destination.pickerController = pickerController
+        case "Reload":
+            let pickerController = DKImagePickerController()
+            pickerController.UIDelegate = ReloadUIDelegate()
             
             destination.pickerController = pickerController
             

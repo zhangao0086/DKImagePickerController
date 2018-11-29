@@ -33,6 +33,15 @@ public enum DKImagePickerControllerExportStatus: Int {
 ////////////////////////////////////////////////////////////////////////
 
 @objc
+public protocol DKImagePickerControllerAware {
+    weak var imagePickerController: DKImagePickerController! { get set }
+    
+    func reload()
+}
+
+////////////////////////////////////////////////////////////////////////
+
+@objc
 internal protocol DKImagePickerControllerObserver {
     
     @objc optional func imagePickerControllerDidSelect(assets: [DKAsset])
@@ -62,6 +71,10 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// The maximum count of assets which the user will be able to select, a value of 0 means no limit.
     @objc public var maxSelectableCount = 0
     
+    /// Photos will be tagged with the location where they are taken.
+    /// If true, your Info.plist should include the "Privacy - Location XXX" tag.
+    open var containsGPSInMetadata = false
+    
     /// Set the defaultAssetGroup to specify which album is the default asset group.
     public var defaultAssetGroup: PHAssetCollectionSubtype?
     
@@ -77,7 +90,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// The type of picker interface to be displayed by the controller.
     @objc public var assetType: DKImagePickerControllerAssetType = .allAssets
     
-    /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
+    /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes to be ignored.
     @objc public var sourceType: DKImagePickerControllerSourceType = .both
     
     /// A Bool value indicating whether to allow the picker to select photos and videos at the same time.
@@ -151,33 +164,14 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     internal var proxyObserver = DKImageBaseManager()
     
-    public convenience init() {
-        let rootVC = UIViewController()
-        
-        self.init(rootViewController: rootVC)
-    }
+    private weak var rootVC: (UIViewController & DKImagePickerControllerAware)?
     
-    public convenience init(groupDataManager: DKImageGroupDataManager) {
-        let rootVC = UIViewController()
-        self.init(rootViewController: rootVC)
+    public convenience init(groupDataManager: DKImageGroupDataManager? = nil) {
+        self.init(nibName: nil, bundle: nil)
         
-        self.groupDataManager = groupDataManager
-    }
-    
-    public override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        
-        self.preferredContentSize = CGSize(width: 680, height: 600)
-        
-        rootViewController.navigationItem.hidesBackButton = true
-    }
-    
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        if let groupDataManager = groupDataManager {
+            self.groupDataManager = groupDataManager            
+        }
     }
     
     deinit {
@@ -204,6 +198,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         if self.sourceType != .camera {
             let rootVC = self.makeRootVC()
             rootVC.imagePickerController = self
+            self.rootVC = rootVC
             
             self.UIDelegate.prepareLayout(self, vc: rootVC)
             self.updateCancelButtonForVC(rootVC)
@@ -213,6 +208,12 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         if self.selectedAssetIdentifiers.count > 0 {
             self.UIDelegate.imagePickerController(self, didSelectAssets: self.selectedAssets)
         }
+        
+        if self.preferredContentSize.equalTo(CGSize.zero) {
+            self.preferredContentSize = CGSize(width: 680, height: 600)
+        }
+        
+        self.rootVC?.navigationItem.hidesBackButton = true
         
         return {}
     }()
@@ -229,7 +230,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
-    @objc open func makeRootVC() -> DKAssetGroupDetailVC {
+    @objc open func makeRootVC() -> UIViewController & DKImagePickerControllerAware {
       return DKAssetGroupDetailVC()
     }
     
@@ -237,7 +238,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         self.showCamera(isInline: false)
     }
     
-    @objc open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool = true, completion: (() -> Swift.Void)? = nil) {
+    @objc open override func present(_ viewControllerToPresent: UIViewController,
+                                     animated flag: Bool = true,
+                                     completion: (() -> Swift.Void)? = nil) {
         var targetVC: UIViewController = self
         if self.inline {
             targetVC = UIApplication.shared.keyWindow!.rootViewController!
@@ -256,7 +259,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     @objc open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         if self.inline {
-            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true, completion: completion)
+            UIApplication.shared.keyWindow!.rootViewController!.dismiss(animated: true,
+                                                                        completion: completion)
         } else {
             super.dismiss(animated: true, completion: completion)
         }
@@ -320,6 +324,14 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
+    /// Reload this picker with a new DKImageGroupDataManager.
+    @objc open func reload(with dataManager: DKImageGroupDataManager) {
+        self.groupDataManager = dataManager
+        if let rootVC = self.rootVC {
+            rootVC.reload()
+        }
+    }
+    
     private func cancelCurrentExportRequestIfNeeded() {
         if self.exportRequestID != DKImageAssetExportInvalidRequestID {
             self.exporter?.cancel(requestID: self.exportRequestID)
@@ -337,13 +349,15 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     private func createDefaultAssetFetchOptions() -> PHFetchOptions {
         let createImagePredicate = { () -> NSPredicate in
-            let imagePredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+            let imagePredicate = NSPredicate(format: "mediaType == %d",
+                                             PHAssetMediaType.image.rawValue)
             
             return imagePredicate
         }
         
         let createVideoPredicate = { () -> NSPredicate in
-            let videoPredicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+            let videoPredicate = NSPredicate(format: "mediaType == %d",
+                                             PHAssetMediaType.video.rawValue)
             
             return videoPredicate
         }
@@ -351,7 +365,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         var predicate: NSPredicate?
         switch self.assetType {
         case .allAssets:
-            predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [createImagePredicate(), createVideoPredicate()])
+            predicate = NSCompoundPredicate(orPredicateWithSubpredicates:
+                [createImagePredicate(), createVideoPredicate()]
+            )
         case .allPhotos:
             predicate = createImagePredicate()
         case .allVideos:
@@ -386,7 +402,7 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
                 if strongSelf.extensionController.isExtensionTypeAvailable(.photoEditor) {
                     var extraInfo: [AnyHashable : Any] = [
                         "image" : image,
-                        "didFinishEditing" : didFinishEditing,
+                        "didFinishEditing" : didFinishEditing
                         ]
                     
                     if let metadata = metadata {
@@ -408,7 +424,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             }) { (success, error) in
                 DispatchQueue.main.async(execute: {
                     if success {
-                        if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newVideoIdentifier], options: nil).firstObject {
+                        if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newVideoIdentifier],
+                                                              options: nil).firstObject {
                             if self.sourceType != .camera || self.viewControllers.count == 0 {
                                 self.dismissCamera()
                             }
@@ -424,7 +441,8 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         self.extensionController.perform(extensionType: isInline ? .inlineCamera : .camera, with: [
             "didFinishCapturingImage" : didFinishCapturingImage,
             "didFinishCapturingVideo" : didFinishCapturingVideo,
-            "didCancel" : didCancel
+            "didCancel" : didCancel,
+            "containsGPSInMetadata" : self.containsGPSInMetadata
             ])
     }
     
@@ -447,7 +465,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     // MARK: - Save Image
     
-    @objc open func saveImage(_ image: UIImage, _ metadata: [AnyHashable : Any]?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    @objc open func saveImage(_ image: UIImage,
+                              _ metadata: [AnyHashable : Any]?,
+                              _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         if let metadata = metadata {
             let imageData = image.jpegData(compressionQuality: 1)!
             
@@ -482,7 +502,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         }
     }
     
-    @objc open func saveImageDataToAlbumForiOS8(_ imageData: Data, _ metadata: Dictionary<AnyHashable, Any>?, _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
+    @objc open func saveImageDataToAlbumForiOS8(_ imageData: Data,
+                                                _ metadata: Dictionary<AnyHashable, Any>?,
+                                                _ completeBlock: @escaping ((_ asset: DKAsset) -> Void)) {
         let library = ALAssetsLibrary()
         library.writeImageData(toSavedPhotosAlbum: imageData, metadata: metadata, completionBlock: { (newURL, error) in
             if let _ = error {

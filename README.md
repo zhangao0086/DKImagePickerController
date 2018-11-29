@@ -36,6 +36,11 @@ DKImagePickerController is available on CocoaPods. Simply add the following line
 pod 'DKImagePickerController'
 ```
 
+#### For Swift 4.1
+```
+pod 'DKImagePickerController', :git => 'https://github.com/zhangao0086/DKImagePickerController.git', :branch => 'Swift4'
+```
+
 #### Subspecs
 There are 7 subspecs available now: 
 
@@ -95,6 +100,10 @@ self.presentViewController(pickerController, animated: true) {}
  
  /// The maximum count of assets which the user will be able to select, a value of 0 means no limit.
  @objc public var maxSelectableCount = 0
+ 
+ /// Photos will be tagged with the location where they are taken.
+ /// If true, your Info.plist should include the "Privacy - Location XXX" tag.
+ open var containsGPSInMetadata = false
  
  /// Set the defaultAssetGroup to specify which album is the default asset group.
  public var defaultAssetGroup: PHAssetCollectionSubtype?

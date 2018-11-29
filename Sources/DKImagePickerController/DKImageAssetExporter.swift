@@ -313,7 +313,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
     
     private func isHEIC(with imageData: Data) -> Bool {
         if imageData.count >= 12, let firstByte = imageData.first, firstByte == 0 {
-            let subdata = imageData.subdata(in: Range(4..<12))
+            let subdata = imageData.subdata(in: 4..<12)
             let str = String(data: subdata, encoding: .ascii)
             return str == "ftypheic" || str == "ftypheix" || str == "ftyphevc" || str == "ftyphevx"
         } else {

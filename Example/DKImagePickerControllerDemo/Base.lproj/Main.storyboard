@@ -204,6 +204,26 @@
                                             <segue destination="vXZ-lx-hvc" kind="show" identifier="Hides Camera" id="6H7-5r-do0"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="Ojk-oF-J9O" style="IBUITableViewCellStyleDefault" id="evW-l2-TrS">
+                                        <rect key="frame" x="0.0" y="471" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="evW-l2-TrS" id="veP-SQ-lKH">
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="With GPS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ojk-oF-J9O">
+                                                    <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="vXZ-lx-hvc" kind="show" identifier="With GPS" id="Crf-0C-7jJ"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="Export" footerTitle="" id="M6A-Gn-PQe">
@@ -410,6 +430,26 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="vXZ-lx-hvc" kind="show" identifier="Custom localized images" id="0f7-T4-ni9"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="eWb-Cw-wyW" style="IBUITableViewCellStyleDefault" id="oUc-5i-8sL">
+                                        <rect key="frame" x="0.0" y="1082" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oUc-5i-8sL" id="cAL-xq-Ljk">
+                                            <rect key="frame" x="0.0" y="0.0" width="349" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Reload" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eWb-Cw-wyW">
+                                                    <rect key="frame" x="15" y="0.0" width="325" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="vXZ-lx-hvc" kind="show" identifier="Reload" id="epF-In-fcO"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
