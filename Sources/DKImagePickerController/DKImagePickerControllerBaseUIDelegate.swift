@@ -112,7 +112,7 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
         handleBarButtonBug(button: button)
     }
     
-    open func handleBarButtonBug(button: UIButton) {
+    private func handleBarButtonBug(button: UIButton) {
         if #available(iOS 11.0, *) { // Handle iOS 11 BarButtonItems bug
             if button.constraints.count == 0 {
                 button.widthAnchor.constraint(equalToConstant: button.bounds.width).isActive = true
