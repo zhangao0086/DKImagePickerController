@@ -129,12 +129,12 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
         }
     }
     
-    private func selectedAssetsCount() -> String {
+    private func selectedAssetsCount() -> String? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.locale = Locale(identifier: Locale.current.identifier)
         let formattedSelectableCount = formatter.string(from: NSNumber(value: self.imagePickerController.selectedAssetIdentifiers.count))
-        return formattedSelectableCount!
+        return formattedSelectableCount
     }
     
     // Delegate methods...
