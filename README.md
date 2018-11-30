@@ -111,6 +111,9 @@ self.presentViewController(pickerController, animated: true) {}
  /// Allow swipe to select images.
  @objc public var allowSwipeToSelect: Bool = false
  
+ /// Allow select all
+ @objc public var allowSelectAll: Bool = false
+ 
  /// A Bool value indicating whether the inline mode is enabled.
  @objc public var inline: Bool = false
  
