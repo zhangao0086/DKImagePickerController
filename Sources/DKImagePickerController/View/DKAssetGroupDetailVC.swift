@@ -659,6 +659,9 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
     
     func imagePickerControllerDidDeselect(assets: [DKAsset]) {
+	// Prevent CV bug which could crash in performBatchUpdates
+        self.collectionView.numberOfItems(inSection: 0)
+	    
         self.collectionView.performBatchUpdates({
             for indexPathForVisible in self.collectionView.indexPathsForVisibleItems {
                 if let cell = (self.collectionView.cellForItem(at: indexPathForVisible) as? DKAssetGroupDetailBaseCell),
