@@ -22,7 +22,10 @@ open class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate
         guard let groupDetailVC = self.context.groupDetailVC
             , let groupId = extraInfo["groupId"] as? String else { return }
         
-        let group = context.imagePickerController.groupDataManager.fetchGroup(with: groupId)
+        guard let group = context.imagePickerController.groupDataManager.fetchGroup(with: groupId) else {
+            assertionFailure("Expect group")
+            return
+        }
         
         if let gallery = self.createGallery(with: extraInfo, group: group) {
             self.gallery = gallery
