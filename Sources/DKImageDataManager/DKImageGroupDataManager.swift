@@ -118,12 +118,20 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
         }
     }
 	
-	open func fetchGroup(with groupId: String) -> DKAssetGroup {
-		return self.groups![groupId]!
+	open func fetchGroup(with groupId: String) -> DKAssetGroup? {
+		return self.groups?[groupId]
 	}
 	
-	open func fetchGroupThumbnail(with groupId: String, size: CGSize, options: PHImageRequestOptions, completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) {
-        let group = self.fetchGroup(with: groupId)
+	open func fetchGroupThumbnail(with groupId: String,
+                                  size: CGSize,
+                                  options: PHImageRequestOptions,
+                                  completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void)
+    {
+        guard let group = self.fetchGroup(with: groupId) else {
+            assertionFailure("Expect group")
+            completeBlock(nil, nil)
+            return
+        }
 		if group.totalCount == 0 {
 			completeBlock(nil, nil)
 			return

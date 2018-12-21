@@ -196,7 +196,8 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
         
         if let defaultAssetGroup = self.defaultAssetGroup {
             for groupId in groups {
-                let group = self.groupDataManager.fetchGroup(with: groupId)
+                guard let group = self.groupDataManager.fetchGroup(with: groupId) else { continue }
+                
                 if defaultAssetGroup == group.originalCollection.assetCollectionSubtype {
                     return groupId
                 }
@@ -210,7 +211,11 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
             return self.groups
         } else {
             return self.groups?.filter({ (groupId) -> Bool in
-                return self.groupDataManager.fetchGroup(with: groupId).totalCount > 0
+                guard let group = self.groupDataManager.fetchGroup(with: groupId) else {
+                    assertionFailure("Expect group")
+                    return false
+                }
+                return group.totalCount > 0
             }) ?? []
         }
     }
@@ -228,7 +233,10 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
                 return UITableViewCell()
         }
 
-        let assetGroup = self.groupDataManager.fetchGroup(with: groups[indexPath.row])
+        guard let assetGroup = self.groupDataManager.fetchGroup(with: groups[indexPath.row]) else {
+            assertionFailure("Expect group")
+            return UITableViewCell()
+        }
         cell.groupNameLabel.text = assetGroup.groupName
 
         let tag = indexPath.row + 1
