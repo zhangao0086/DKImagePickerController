@@ -596,7 +596,10 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     
     @objc open func handleSelectAll() {
         if let groupDetailVC = self.viewControllers.first as? DKAssetGroupDetailVC, let selectedGroupId = groupDetailVC.selectedGroupId {
-            let group = self.groupDataManager.fetchGroup(with: selectedGroupId)
+            guard let group = self.groupDataManager.fetchGroup(with: selectedGroupId) else {
+                assertionFailure("Expect group")
+                return
+            }
             
             var assets: [DKAsset] = []
             for index in 0 ..< group.totalCount {
