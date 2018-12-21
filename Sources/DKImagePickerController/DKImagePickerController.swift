@@ -81,6 +81,9 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// Allow swipe to select images.
     @objc public var allowSwipeToSelect: Bool = false
     
+    /// Allow select all
+    @objc public var allowSelectAll: Bool = false
+    
     /// A Bool value indicating whether the inline mode is enabled.
     @objc public var inline: Bool = false
     
@@ -589,6 +592,23 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             
             self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidSelect(assets:)), object: insertedAssets as AnyObject)
         }
+    }
+    
+    @objc open func handleSelectAll() {
+        if let groupDetailVC = self.viewControllers.first as? DKAssetGroupDetailVC, let selectedGroupId = groupDetailVC.selectedGroupId {
+            let group = self.groupDataManager.fetchGroup(with: selectedGroupId)
+            
+            var assets: [DKAsset] = []
+            for index in 0 ..< group.totalCount {
+                let asset = self.groupDataManager.fetchAsset(group, index: index)
+                assets.append(asset)
+            }
+            
+            if assets.count > 0 {
+                self.select(assets: assets)
+            }
+        }
+        self.UIDelegate.updateDoneButtonTitle(self.UIDelegate.doneButton!)
     }
     
     @objc open func deselect(asset: DKAsset) {
