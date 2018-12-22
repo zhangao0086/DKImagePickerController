@@ -147,7 +147,7 @@ public class DKImageExtensionController: NSObject {
     private func fetchExtensionClass(_ extensionType: DKImageExtensionType) -> DKImageBaseExtension.Type? {
         if let extensionClass = DKImageExtensionController.extensions[extensionType] ??
             DKImageExtensionController.defaultExtensions[extensionType] {
-            return extensionClass is DKImageExtensionNone ? nil : extensionClass
+            return extensionClass is DKImageExtensionNone.Type ? nil : extensionClass
         } else {
             return nil
         }
