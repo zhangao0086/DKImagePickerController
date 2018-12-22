@@ -104,7 +104,7 @@ public class DKImageExtensionController: NSObject {
     public func perform(extensionType: DKImageExtensionType, with extraInfo: [AnyHashable : Any]) {
         DKImageExtensionController.checkDefaultExtensions
         
-        if let extensionClass = (DKImageExtensionController.extensions[extensionType] ?? DKImageExtensionController.defaultExtensions[extensionType]) {
+        if let extensionClass = self.fetchExtensionClass(extensionType) {
             var e = self.cache[extensionType]
             if e == nil {
                 e = extensionClass.init(context: self.createContext())
@@ -124,8 +124,7 @@ public class DKImageExtensionController: NSObject {
     }
     
     public func isExtensionTypeAvailable(_ extensionType: DKImageExtensionType) -> Bool {
-        let extensionClass = DKImageExtensionController.extensions[extensionType] ?? DKImageExtensionController.defaultExtensions[extensionType]
-        return extensionClass != nil && !(extensionClass! is DKImageExtensionNone)
+        return self.fetchExtensionClass(extensionType) != nil
     }
     
     /// Registers an extension for the specified type.
@@ -143,6 +142,15 @@ public class DKImageExtensionController: NSObject {
         context.imagePickerController = self.imagePickerController
         
         return context
+    }
+    
+    private func fetchExtensionClass(_ extensionType: DKImageExtensionType) -> DKImageBaseExtension.Type? {
+        if let extensionClass = DKImageExtensionController.extensions[extensionType] ??
+            DKImageExtensionController.defaultExtensions[extensionType] {
+            return extensionClass is DKImageExtensionNone ? nil : extensionClass
+        } else {
+            return nil
+        }
     }
     
     internal class func registerDefaultExtension(extensionClass: DKImageBaseExtension.Type, for type: DKImageExtensionType) {
