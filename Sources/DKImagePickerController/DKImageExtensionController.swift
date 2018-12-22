@@ -63,6 +63,10 @@ open class DKImageBaseExtension: NSObject, DKImageExtensionProtocol {
     
 }
 
+/// A placeholder object used to represent no any action for the certain ExtensionType.
+@objc
+open class DKImageExtensionNone: DKImageBaseExtension {}
+
 /// The class handles the loading of extensions.
 @objc
 public class DKImageExtensionController: NSObject {
@@ -120,7 +124,8 @@ public class DKImageExtensionController: NSObject {
     }
     
     public func isExtensionTypeAvailable(_ extensionType: DKImageExtensionType) -> Bool {
-        return (DKImageExtensionController.extensions[extensionType] ?? DKImageExtensionController.defaultExtensions[extensionType]) != nil
+        let extensionClass = DKImageExtensionController.extensions[extensionType] ?? DKImageExtensionController.defaultExtensions[extensionType]
+        return extensionClass != nil && !(extensionClass! is DKImageExtensionNone)
     }
     
     /// Registers an extension for the specified type.
