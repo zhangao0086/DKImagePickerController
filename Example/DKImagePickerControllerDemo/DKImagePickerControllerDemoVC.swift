@@ -26,7 +26,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
         
         switch segue.identifier! {
             
-        case "Pick All":
+        case "Pick Any":
             let pickerController = DKImagePickerController()
             
             destination.pickerController = pickerController
@@ -43,7 +43,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
-        case "Pick All(Only Photos Or Videos)":
+        case "Pick Any (Only Photos Or Videos)":
             let pickerController = DKImagePickerController()
             pickerController.allowMultipleTypes = false
             
@@ -84,6 +84,11 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             let pickerController = DKImagePickerController()
             pickerController.allowSwipeToSelect = true
             
+            destination.pickerController = pickerController
+            
+        case "Select All":
+            let pickerController = DKImagePickerController()
+            pickerController.allowSelectAll = true
             destination.pickerController = pickerController
             
         case "Custom Camera":

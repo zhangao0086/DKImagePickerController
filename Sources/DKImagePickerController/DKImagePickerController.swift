@@ -81,13 +81,16 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     /// Allow swipe to select images.
     @objc public var allowSwipeToSelect: Bool = false
     
+    /// Allow select all
+    @objc public var allowSelectAll: Bool = false
+    
     /// A Bool value indicating whether the inline mode is enabled.
     @objc public var inline: Bool = false
     
     /// The type of picker interface to be displayed by the controller.
     @objc public var assetType: DKImagePickerControllerAssetType = .allAssets
     
-    /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes & defaultSelectedAssets to be ignored.
+    /// If sourceType is Camera will cause the assetType & maxSelectableCount & allowMultipleTypes to be ignored.
     @objc public var sourceType: DKImagePickerControllerSourceType = .both
     
     /// A Bool value indicating whether to allow the picker to select photos and videos at the same time.
@@ -589,6 +592,26 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             
             self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidSelect(assets:)), object: insertedAssets as AnyObject)
         }
+    }
+    
+    @objc open func handleSelectAll() {
+        if let groupDetailVC = self.viewControllers.first as? DKAssetGroupDetailVC, let selectedGroupId = groupDetailVC.selectedGroupId {
+            guard let group = self.groupDataManager.fetchGroup(with: selectedGroupId) else {
+                assertionFailure("Expect group")
+                return
+            }
+            
+            var assets: [DKAsset] = []
+            for index in 0 ..< group.totalCount {
+                let asset = self.groupDataManager.fetchAsset(group, index: index)
+                assets.append(asset)
+            }
+            
+            if assets.count > 0 {
+                self.select(assets: assets)
+            }
+        }
+        self.UIDelegate.updateDoneButtonTitle(self.UIDelegate.doneButton!)
     }
     
     @objc open func deselect(asset: DKAsset) {

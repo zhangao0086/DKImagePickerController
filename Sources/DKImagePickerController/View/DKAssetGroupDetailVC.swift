@@ -198,7 +198,10 @@ open class DKAssetGroupDetailVC: UIViewController,
 	open func updateTitleView() {
         guard let selectedGroupId = self.selectedGroupId else { return }
         
-        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
+        guard let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId) else {
+            assertionFailure("Expect group")
+            return
+        }
 		self.title = group.groupName
 		
 		let groupsCount = self.imagePickerController.groupDataManager.groupIds?.count ?? 0
@@ -223,7 +226,10 @@ open class DKAssetGroupDetailVC: UIViewController,
         }
         assetIndex = (index - (self.hidesCamera ? 0 : 1))
         
-        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
+        guard let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId) else {
+            assertionFailure("Expect group")
+            return nil
+        }
         return self.imagePickerController.groupDataManager.fetchAsset(group, index: assetIndex)
     }
     
@@ -499,7 +505,10 @@ open class DKAssetGroupDetailVC: UIViewController,
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		guard let selectedGroupId = self.selectedGroupId else { return 0 }
 		
-        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
+        guard let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId) else {
+            assertionFailure("Expect group")
+            return 0
+        }
         return group.totalCount + (self.hidesCamera ? 0 : 1)
     }
     
@@ -586,7 +595,10 @@ open class DKAssetGroupDetailVC: UIViewController,
         let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
         guard delta > view.bounds.height / 3 else { return }
         
-        let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId)
+        guard let group = self.imagePickerController.groupDataManager.fetchGroup(with: selectedGroupId) else {
+            assertionFailure("Expect group")
+            return
+        }
         
         // Compute the assets to start caching and to stop caching.
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)
@@ -659,6 +671,9 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
     
     func imagePickerControllerDidDeselect(assets: [DKAsset]) {
+	// Prevent CV bug which could crash in performBatchUpdates
+        self.collectionView.numberOfItems(inSection: 0)
+	    
         self.collectionView.performBatchUpdates({
             for indexPathForVisible in self.collectionView.indexPathsForVisibleItems {
                 if let cell = (self.collectionView.cellForItem(at: indexPathForVisible) as? DKAssetGroupDetailBaseCell),
