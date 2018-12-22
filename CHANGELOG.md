@@ -1,5 +1,19 @@
 # Change Log
 
+## [4.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/4.1.1) (2018-12-22)
+
+- Allow "Select All".
+
+- Fixed #552.
+
+- Fixed #554.
+
+- Fixed a crash caused by performBatchUpdates.
+
+- Updated the version of used TOCropViewController to ~> 2.4.
+
+- The ability to hide cropping feature.
+
 ## [4.1.0](https://github.com/zhangao0086/DKImagePickerController/tree/4.1.0) (2018-11-19)
 
 - Can reload with a new configuration.
