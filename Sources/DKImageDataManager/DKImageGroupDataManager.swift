@@ -70,8 +70,8 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
     private let configuration: DKImageGroupDataManagerConfiguration
     
     public init(configuration: DKImageGroupDataManagerConfiguration) {
-        self.configuration = configuration.copy() as! DKImageGroupDataManagerConfiguration
-        
+        self.configuration = configuration.copy() as! DKImageGroupDataManagerConfiguration 
+
         super.init()
     }
     
@@ -137,18 +137,25 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
 			return
 		}
 		
-		let latestAsset = DKAsset(originalAsset:group.fetchResult.lastObject!)
+        guard let lastResult = group.fetchResult.lastObject else {
+            assertionFailure("Expect latestAsset")
+            completeBlock(nil, nil)
+            return
+        }
+
+        let latestAsset = DKAsset(originalAsset: lastResult)
         latestAsset.fetchImage(with: size, options: options, completeBlock: completeBlock)
 	}
 	
 	open func fetchAsset(_ group: DKAssetGroup, index: Int) -> DKAsset {
-        let phAsset = self.fetchPHAsset(group, index: index)
-        var asset = self.assets[phAsset.localIdentifier]
-        if asset == nil {
-            asset = DKAsset(originalAsset:phAsset)
-            self.assets[phAsset.localIdentifier] = asset
+        let phAsset = fetchPHAsset(group, index: index)
+        if let asset = assets[phAsset.localIdentifier] {
+            return asset
         }
-		return asset!
+
+        let asset = DKAsset(originalAsset:phAsset)
+        assets[phAsset.localIdentifier] = asset
+        return asset
 	}
     
     open func fetchPHAsset(_ group: DKAssetGroup, index: Int) -> PHAsset {
@@ -208,14 +215,20 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
         for group in groups {
 			if let changeDetails = changeInstance.changeDetails(for: group.originalCollection) {
 				if changeDetails.objectWasDeleted {
-					self.groups![group.groupId] = nil
-                    self.notify(with: #selector(DKImageGroupDataManagerObserver.groupDidRemove(groupId:)), object: group.groupId as AnyObject?)
+					self.groups?[group.groupId] = nil
+                    notify(with: #selector(DKImageGroupDataManagerObserver.groupDidRemove(groupId:)),
+                           object: group.groupId as AnyObject?)
 					continue
 				}
 				
 				if let objectAfterChanges = changeDetails.objectAfterChanges {
-					self.updateGroup(self.groups![group.groupId]!, collection: objectAfterChanges)
-                    self.notify(with: #selector(DKImageGroupDataManagerObserver.groupDidUpdate(groupId:)), object: group.groupId as AnyObject?)
+                    if let groupId = group.groupId, let groups = self.groups, let group = groups[groupId] {
+                        updateGroup(group, collection: objectAfterChanges)
+                    } else {
+                        assertionFailure("Expect group with id:\(group.groupId)")
+                    }
+                    notify(with: #selector(DKImageGroupDataManagerObserver.groupDidUpdate(groupId:)),
+                           object: group.groupId as AnyObject?)
 				}
 			}
 			
@@ -238,15 +251,17 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
         let assetGroupTypes = self.configuration.assetGroupTypes
         var insertedGroupIds: [String] = []
         
-        self.fetchGroups(assetGroupTypes: assetGroupTypes, block: { (collection) in
-            if (self.groups![collection.localIdentifier] == nil) {
-                let assetGroup = self.makeDKAssetGroup(with: collection)
-                self.groups![assetGroup.groupId] = assetGroup
-                self.groupIds!.append(assetGroup.groupId)
+        self.fetchGroups(assetGroupTypes: assetGroupTypes) { [weak self] collection in
+            if let groups = self?.groups,
+                groups[collection.localIdentifier] == nil,
+                let assetGroup = self?.makeDKAssetGroup(with: collection)
+            {
+                self?.groups?[assetGroup.groupId] = assetGroup
+                self?.groupIds?.append(assetGroup.groupId)
                 
                 insertedGroupIds.append(assetGroup.groupId)
             }
-        })
+        }
         
         if (insertedGroupIds.count > 0) {
             self.notify(with: #selector(DKImageGroupDataManagerObserver.groupsDidInsert(groupIds:)), object: insertedGroupIds as AnyObject)
