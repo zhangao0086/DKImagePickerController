@@ -229,7 +229,7 @@ public class DKImageDataManager {
                         return
                     }
 
-                    guard let requestCloudOptions = requestOptions.copy() as? PHImageRequestOptions else {
+                    guard let requestCloudOptions = requestOptions.copy() as? PHVideoRequestOptions else {
                         assertionFailure("Expect PHImageRequestOptions")
                         completeBlock(nil, nil)
                         return
