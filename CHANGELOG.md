@@ -1,5 +1,9 @@
 # Change Log
 
+## [4.1.2](https://github.com/zhangao0086/DKImagePickerController/tree/4.1.2) (2018-12-23)
+
+- Fixed an issue that caused the callback did not invoke.
+
 ## [4.1.1](https://github.com/zhangao0086/DKImagePickerController/tree/4.1.1) (2018-12-22)
 
 - Allow "Select All".
