@@ -603,7 +603,10 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             
             var assets: [DKAsset] = []
             for index in 0 ..< group.totalCount {
-                let asset = self.groupDataManager.fetchAsset(group, index: index)
+                guard let asset = self.groupDataManager.fetchAsset(group, index: index) else {
+                    assertionFailure("Expect asset")
+                    continue
+                }
                 assets.append(asset)
             }
             
