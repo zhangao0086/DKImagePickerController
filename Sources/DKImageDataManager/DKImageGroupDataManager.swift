@@ -137,7 +137,7 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
 			return
 		}
 		
-        guard let lastResult = group.fetchResult.lastObject else {
+        guard let lastResult = group.fetchResult?.lastObject else {
             assertionFailure("Expect latestAsset")
             completeBlock(nil, nil)
             return
@@ -147,29 +147,43 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
         latestAsset.fetchImage(with: size, options: options, completeBlock: completeBlock)
 	}
 	
-	open func fetchAsset(_ group: DKAssetGroup, index: Int) -> DKAsset {
-        let phAsset = fetchPHAsset(group, index: index)
+	open func fetchAsset(_ group: DKAssetGroup, index: Int) -> DKAsset? {
+        guard let phAsset = fetchPHAsset(group, index: index) else {
+            assertionFailure("Expect phAsset")
+            return nil
+        }
+
         if let asset = assets[phAsset.localIdentifier] {
             return asset
         }
 
-        let asset = DKAsset(originalAsset:phAsset)
+        let asset = DKAsset(originalAsset: phAsset)
         assets[phAsset.localIdentifier] = asset
         return asset
 	}
     
-    open func fetchPHAsset(_ group: DKAssetGroup, index: Int) -> PHAsset {
-        return group.fetchResult[group.fetchResult.count - 1 - index]
+    open func fetchPHAsset(_ group: DKAssetGroup, index: Int) -> PHAsset? {
+        guard let fetchResult = group.fetchResult else {
+            assertionFailure("Expect fetchResult")
+            return nil
+        }
+        let idx = fetchResult.count - 1 - index
+        guard idx >= 0 && fetchResult.count > idx else {
+            assertionFailure("idx out of range:\(idx) fetchResult count:\(fetchResult.count)")
+            return nil
+        }
+        return fetchResult[idx]
     }
     
     open func makeDKAssetGroup(with collection: PHAssetCollection) -> DKAssetGroup {
-        let assetGroup = DKAssetGroup()
-        assetGroup.groupId = collection.localIdentifier
+        let assetGroup = DKAssetGroup(groupId: collection.localIdentifier ?? "")
+
         self.updateGroup(assetGroup, collection: collection)
-        
-        let fetchResult = PHAsset.fetchAssets(in: collection, options: self.configuration.assetFetchOptions)
+
+        let fetchResult = PHAsset.fetchAssets(in: collection,
+                                              options: self.configuration.assetFetchOptions)
         self.updateGroup(assetGroup, fetchResult: fetchResult)
-        
+
         return assetGroup
     }
     
@@ -196,24 +210,26 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
             completeBlock(groupIds, nil)
         }
     }
-	
-	open func updateGroup(_ group: DKAssetGroup, collection: PHAssetCollection) {
-		group.groupName = collection.localizedTitle
-		group.originalCollection = collection
-	}
-	
-	open func updateGroup(_ group: DKAssetGroup, fetchResult: PHFetchResult<PHAsset>) {
+
+    open func updateGroup(_ group: DKAssetGroup, collection: PHAssetCollection) {
+        group.groupName = collection.localizedTitle
+        group.originalCollection = collection
+    }
+
+    open func updateGroup(_ group: DKAssetGroup, fetchResult: PHFetchResult<PHAsset>) {
         group.fetchResult = fetchResult
         group.displayCount = self.configuration.fetchLimit
-	}
-    
+    }
+
 	// MARK: - PHPhotoLibraryChangeObserver methods
 	
 	open func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let groups = self.groups?.values else { return  }
         
         for group in groups {
-			if let changeDetails = changeInstance.changeDetails(for: group.originalCollection) {
+			if let originalCollection = group.originalCollection,
+                let changeDetails = changeInstance.changeDetails(for: originalCollection)
+            {
 				if changeDetails.objectWasDeleted {
 					self.groups?[group.groupId] = nil
                     notify(with: #selector(DKImageGroupDataManagerObserver.groupDidRemove(groupId:)),
@@ -222,7 +238,7 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
 				}
 				
 				if let objectAfterChanges = changeDetails.objectAfterChanges {
-                    if let groupId = group.groupId, let groups = self.groups, let group = groups[groupId] {
+                    if let groups = self.groups, let group = groups[group.groupId] {
                         updateGroup(group, collection: objectAfterChanges)
                     } else {
                         assertionFailure("Expect group with id:\(group.groupId)")
@@ -232,19 +248,24 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
 				}
 			}
 			
-			if let changeDetails = changeInstance.changeDetails(for: group.fetchResult) {
+			if let fetchResult = group.fetchResult, let changeDetails = changeInstance.changeDetails(for: fetchResult) {
                 let removedAssets = changeDetails.removedObjects.map{ DKAsset(originalAsset: $0) }
 				if removedAssets.count > 0 {
-                    self.notify(with: #selector(DKImageGroupDataManagerObserver.group(groupId:didRemoveAssets:)), object: group.groupId as AnyObject?, objectTwo: removedAssets as AnyObject?)
+                    self.notify(with: #selector(DKImageGroupDataManagerObserver.group(groupId:didRemoveAssets:)),
+                                object: group.groupId as AnyObject?,
+                                objectTwo: removedAssets as AnyObject?)
 				}
 				self.updateGroup(group, fetchResult: changeDetails.fetchResultAfterChanges)
 				
                 let insertedAssets = changeDetails.insertedObjects.map{ DKAsset(originalAsset: $0) }
 				if insertedAssets.count > 0  {
-                    self.notify(with: #selector(DKImageGroupDataManagerObserver.group(groupId:didInsertAssets:)), object: group.groupId as AnyObject?, objectTwo: insertedAssets as AnyObject?)
+                    self.notify(with: #selector(DKImageGroupDataManagerObserver.group(groupId:didInsertAssets:)),
+                                object: group.groupId as AnyObject?,
+                                objectTwo: insertedAssets as AnyObject?)
 				}
                 
-                self.notify(with: #selector(DKImageGroupDataManagerObserver.groupDidUpdateComplete(groupId:)), object: group.groupId as AnyObject?)
+                self.notify(with: #selector(DKImageGroupDataManagerObserver.groupDidUpdateComplete(groupId:)),
+                            object: group.groupId as AnyObject?)
             }
         }
         
@@ -264,7 +285,8 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
         }
         
         if (insertedGroupIds.count > 0) {
-            self.notify(with: #selector(DKImageGroupDataManagerObserver.groupsDidInsert(groupIds:)), object: insertedGroupIds as AnyObject)
+            self.notify(with: #selector(DKImageGroupDataManagerObserver.groupsDidInsert(groupIds:)),
+                        object: insertedGroupIds as AnyObject)
         }
     }
 }
