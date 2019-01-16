@@ -230,7 +230,7 @@ open class DKAssetGroupDetailVC: UIViewController,
 		self.title = group.groupName
 		
 		let groupsCount = imagePickerController.groupDataManager.groupIds?.count ?? 0
-		self.selectGroupButton.setTitle(group.groupName + (groupsCount > 1 ? "  \u{25be}" : "" ), for: .normal)
+		self.selectGroupButton.setTitle(group.groupName ?? "" + (groupsCount > 1 ? "  \u{25be}" : "" ), for: .normal)
 		self.selectGroupButton.sizeToFit()
 		self.selectGroupButton.isEnabled = groupsCount > 1
 		
@@ -680,19 +680,20 @@ open class DKAssetGroupDetailVC: UIViewController,
         
         // Compute the assets to start caching and to stop caching.
         let (addedRects, removedRects) = self.differencesBetweenRects(self.previousPreheatRect, preheatRect)
+
         let addedAssets = addedRects
             .flatMap { rect in collectionView.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
+            .flatMap { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
         let removedAssets = removedRects
             .flatMap { rect in collectionView.indexPathsForElements(in: rect, self.hidesCamera) }
-            .map { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
-        
+            .flatMap { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
+
         // Update the assets the PHCachingImageManager is caching.
         getImageDataManager().startCachingAssets(for: addedAssets,
-                                             targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
+                                                 targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
         getImageDataManager().stopCachingAssets(for: removedAssets,
-                                            targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
-        
+                                                targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil)
+
         // Store the preheat rect to compare against in the future.
         self.previousPreheatRect = preheatRect
     }
