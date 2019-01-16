@@ -10,9 +10,9 @@ import Photos
 
 /// A representation of a Photos asset grouping, such as a moment, user-created album, or smart album.
 public class DKAssetGroup: NSObject {
-	public let groupId: String
+    public let groupId: String
 
-	public var groupName: String?
+    public var groupName: String?
 
     public var originalCollection: PHAssetCollection?
     public var fetchResult: PHFetchResult<PHAsset>?
