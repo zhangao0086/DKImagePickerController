@@ -213,7 +213,6 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
     }
 
     open func updateGroup(_ group: DKAssetGroup, collection: PHAssetCollection) {
-        collection.assetCollectionType
         group.groupName = collection.localizedTitle
         group.originalCollection = collection
     }
