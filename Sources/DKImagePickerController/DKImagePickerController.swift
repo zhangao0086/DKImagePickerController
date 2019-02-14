@@ -618,6 +618,12 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
     }
     
     @objc open func deselect(asset: DKAsset) {
+        removeSelection(asset: asset)
+        
+        self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidDeselect(assets:)), object: [asset] as AnyObject)
+    }
+    
+    @objc open func removeSelection(asset: DKAsset) {
         if self.assets[asset.localIdentifier] == nil { return }
         
         self.selectedAssetIdentifiers.remove(at: self.selectedAssetIdentifiers.index(of: asset.localIdentifier)!)
@@ -628,8 +634,6 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
         
         let deselectAssets = [asset]
         self.UIDelegate?.imagePickerController(self, didDeselectAssets: deselectAssets)
-        
-        self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidDeselect(assets:)), object: deselectAssets as AnyObject)
     }
     
     @objc open func deselectAll() {

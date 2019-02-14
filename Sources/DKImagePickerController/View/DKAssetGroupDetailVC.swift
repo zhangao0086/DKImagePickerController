@@ -793,7 +793,7 @@ open class DKAssetGroupDetailVC: UIViewController,
 
         for removedAsset in assets {
             if imagePickerController.contains(asset: removedAsset) {
-                imagePickerController.deselect(asset: removedAsset)
+                imagePickerController.removeSelection(asset: removedAsset)
             }
         }
 	}
