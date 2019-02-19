@@ -198,7 +198,7 @@ class DKAssetGroupListVC: UITableViewController, DKImageGroupDataManagerObserver
             for groupId in groups {
                 guard let group = self.groupDataManager.fetchGroup(with: groupId) else { continue }
                 
-                if defaultAssetGroup == group.originalCollection.assetCollectionSubtype {
+                if defaultAssetGroup == group.originalCollection?.assetCollectionSubtype {
                     return groupId
                 }
             }
