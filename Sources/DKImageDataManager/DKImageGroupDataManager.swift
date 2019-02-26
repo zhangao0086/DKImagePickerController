@@ -107,7 +107,9 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
                 let assetGroup = strongSelf.makeDKAssetGroup(with: collection)
                 groups[assetGroup.groupId] = assetGroup
                 groupIds.append(assetGroup.groupId)
-                if !groupIds.isEmpty {
+                
+                // Filter the reloads to avoid frequetly reloadData() calling in collectionView
+                if !groupIds.isEmpty && collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                     strongSelf.updatePartial(groups: groups, groupIds: groupIds, completeBlock: completeBlock)
                 }
             })
@@ -205,7 +207,6 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
     open func updatePartial(groups: [String : DKAssetGroup], groupIds: [String], completeBlock: @escaping (_ groups: [String]?, _ error: NSError?) -> Void) {
         self.groups = groups
         self.groupIds = groupIds
-        
         DispatchQueue.main.async {
             completeBlock(groupIds, nil)
         }
