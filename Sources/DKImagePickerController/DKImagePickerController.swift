@@ -53,7 +53,10 @@ internal protocol DKImagePickerControllerObserver {
 ////////////////////////////////////////////////////////////////////////
 
 @objc
-open class DKImagePickerController: UINavigationController, DKImageBaseManagerObserver {
+open class DKUINavigationController: UINavigationController {}
+
+@objc
+open class DKImagePickerController: DKUINavigationController, DKImageBaseManagerObserver {
     
     /// Use UIDelegate to Customize the picker UI.
     @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate! {

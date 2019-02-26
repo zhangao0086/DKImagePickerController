@@ -14,6 +14,8 @@
 
 "permission.allow" = "Allow Access";
 
+"picker.albums" = "Albums";
+
 "picker.alert.ok" = "OK";
 
 "picker.select.title" = "Select(%@)";
