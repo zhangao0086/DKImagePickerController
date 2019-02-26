@@ -53,7 +53,10 @@ internal protocol DKImagePickerControllerObserver {
 ////////////////////////////////////////////////////////////////////////
 
 @objc
-open class DKImagePickerController: UINavigationController, DKImageBaseManagerObserver {
+open class DKUINavigationController: UINavigationController {}
+
+@objc
+open class DKImagePickerController: DKUINavigationController, DKImageBaseManagerObserver {
     
     /// Use UIDelegate to Customize the picker UI.
     @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate! {
@@ -603,7 +606,10 @@ open class DKImagePickerController: UINavigationController, DKImageBaseManagerOb
             
             var assets: [DKAsset] = []
             for index in 0 ..< group.totalCount {
-                let asset = self.groupDataManager.fetchAsset(group, index: index)
+                guard let asset = self.groupDataManager.fetchAsset(group, index: index) else {
+                    assertionFailure("Expect asset")
+                    continue
+                }
                 assets.append(asset)
             }
             

@@ -13,7 +13,7 @@ import Foundation
 import TOCropViewController
 #endif
 
-open class DKImageExtensionPhotoCropper: DKImageBaseExtension, TOCropViewControllerDelegate {
+open class DKImageExtensionPhotoCropper: DKImageBaseExtension {
     
     open  weak var imageEditor: UIViewController?
     open  var metadata: [AnyHashable : Any]?
@@ -31,7 +31,18 @@ open class DKImageExtensionPhotoCropper: DKImageBaseExtension, TOCropViewControl
         self.didFinishEditing = didFinishEditing
         
         let imageCropper = TOCropViewController(image: image)
-        imageCropper.delegate = self
+        imageCropper.onDidCropToRect = { [weak self] image, _, _ in
+            guard let strongSelf = self else { return }
+            
+            if let didFinishEditing = strongSelf.didFinishEditing {
+                strongSelf.metadata?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
+                
+                didFinishEditing(image, strongSelf.metadata)
+                
+                strongSelf.didFinishEditing = nil
+                strongSelf.metadata = nil
+            }
+        }
         
         self.imageEditor = imageCropper
         
@@ -41,19 +52,6 @@ open class DKImageExtensionPhotoCropper: DKImageBaseExtension, TOCropViewControl
 
     override open func finish() {
         self.imageEditor?.presentingViewController?.dismiss(animated: true, completion: nil)
-    }
-    
-    // MARK: - TOCropViewControllerDelegate
-    
-    open func cropViewController(_ cropViewController: TOCropViewController, didCropToImage image: UIImage, rect cropRect: CGRect, angle: Int) {
-        if let didFinishEditing = self.didFinishEditing {
-            self.metadata?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
-            
-            didFinishEditing(image, self.metadata)
-            
-            self.didFinishEditing = nil
-            self.metadata = nil
-        }
     }
     
 }

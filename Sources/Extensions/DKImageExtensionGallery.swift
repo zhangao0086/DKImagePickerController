@@ -48,7 +48,10 @@ open class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate
         var items = [DKPhotoGalleryItem]()
         
         for i in 0..<group.totalCount {
-            let phAsset = context.imagePickerController.groupDataManager.fetchPHAsset(group, index: i)
+            guard let phAsset = context.imagePickerController.groupDataManager.fetchPHAsset(group, index: i) else {
+                assertionFailure("Expect phAsset")
+                continue
+            }
             
             let item = DKPhotoGalleryItem(asset: phAsset)
             
@@ -113,16 +116,17 @@ open class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate
     @objc open func selectAssetFromGallery(button: UIButton) {
         if let gallery = self.gallery {
             let currentIndex = gallery.currentIndex()
-            let asset = self.context.imagePickerController.groupDataManager.fetchAsset(self.group,
-                                                                                       index: currentIndex)
-            
-            if button.isSelected {
-                self.context.imagePickerController.deselect(asset: asset)
-            } else {
-                self.context.imagePickerController.select(asset: asset)
+            if let asset = self.context.imagePickerController.groupDataManager.fetchAsset(self.group,
+                                                                                          index: currentIndex)
+            {
+                if button.isSelected {
+                    self.context.imagePickerController.deselect(asset: asset)
+                } else {
+                    self.context.imagePickerController.select(asset: asset)
+                }
+
+                self.updateGalleryAssetSelection()
             }
-            
-            self.updateGalleryAssetSelection()
         }
     }
     
@@ -130,24 +134,25 @@ open class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate
         if let gallery = self.gallery, let button = gallery.topViewController?.navigationItem.rightBarButtonItem?.customView as? UIButton {
             let currentIndex = gallery.currentIndex()
             
-            let asset = self.context.imagePickerController.groupDataManager.fetchAsset(self.group,
-                                                                                       index: currentIndex)
-            
-            var labelWidth: CGFloat = 0.0
-            if let selectedIndex = self.context.imagePickerController.index(of: asset) {
-                let title = "\(selectedIndex + 1)"
-                button.setTitle(title, for: .selected)
-                button.isSelected = true
-                
-                labelWidth = button.titleLabel!.sizeThatFits(CGSize(width: 100, height: 50)).width + 10
-            } else {
-                button.isSelected = false
-                button.sizeToFit()
+            if let asset = self.context.imagePickerController.groupDataManager.fetchAsset(self.group,
+                                                                                          index: currentIndex)
+            {
+                var labelWidth: CGFloat = 0.0
+                if let selectedIndex = self.context.imagePickerController.index(of: asset) {
+                    let title = "\(selectedIndex + 1)"
+                    button.setTitle(title, for: .selected)
+                    button.isSelected = true
+
+                    labelWidth = button.titleLabel!.sizeThatFits(CGSize(width: 100, height: 50)).width + 10
+                } else {
+                    button.isSelected = false
+                    button.sizeToFit()
+                }
+
+                button.bounds = CGRect(x: 0, y: 0,
+                                       width: max(button.backgroundImage(for: .normal)!.size.width, labelWidth),
+                                       height: button.bounds.height)
             }
-            
-            button.bounds = CGRect(x: 0, y: 0,
-                                   width: max(button.backgroundImage(for: .normal)!.size.width, labelWidth),
-                                   height: button.bounds.height)
         }
     }
     
