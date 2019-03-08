@@ -571,7 +571,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
 
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		guard let selectedGroupId = self.selectedGroupId else { return 0 }
+		guard let selectedGroupId = self.selectedGroupId else { return self.hidesCamera ? 0 : 1 }
 
         guard let group = imagePickerController?.groupDataManager.fetchGroup(with: selectedGroupId) else {
             assertionFailure("Expect group")
