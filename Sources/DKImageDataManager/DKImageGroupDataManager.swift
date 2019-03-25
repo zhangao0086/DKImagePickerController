@@ -34,6 +34,9 @@ public class DKImageGroupDataManagerConfiguration: NSObject, NSCopying {
         .albumRegular
     ]
     
+    /// A predicate that specifies which properties to select results by and that also specifies any constraints on selection.
+    public var groupFetchPredicate: NSPredicate? = nil
+    
     /// Options that specify a filter predicate and sort order for the fetched assets, or nil to use default options.
     @objc public var assetFetchOptions: PHFetchOptions?
     
@@ -49,6 +52,7 @@ public class DKImageGroupDataManagerConfiguration: NSObject, NSCopying {
         copy.assetGroupTypes = self.assetGroupTypes
         copy.assetFetchOptions = self.assetFetchOptions
         copy.fetchLimit = self.fetchLimit
+        copy.groupFetchPredicate = self.groupFetchPredicate
         
         return copy
     }
@@ -103,15 +107,17 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
             var groups: [String : DKAssetGroup] = [:]
             var groupIds: [String] = []
             
-            strongSelf.fetchGroups(assetGroupTypes: assetGroupTypes, block: { (collection) in
-                let assetGroup = strongSelf.makeDKAssetGroup(with: collection)
-                groups[assetGroup.groupId] = assetGroup
-                groupIds.append(assetGroup.groupId)
-                
-                // Filter the reloads to avoid frequetly reloadData() calling in collectionView
-                if !groupIds.isEmpty && collection.assetCollectionSubtype == .smartAlbumUserLibrary {
-                    strongSelf.updatePartial(groups: groups, groupIds: groupIds, completeBlock: completeBlock)
-                }
+            strongSelf.fetchGroups(assetGroupTypes: assetGroupTypes,
+                                   groupFetchPredicate: self?.configuration.groupFetchPredicate,
+                                   block: { (collection) in
+                                    let assetGroup = strongSelf.makeDKAssetGroup(with: collection)
+                                    groups[assetGroup.groupId] = assetGroup
+                                    groupIds.append(assetGroup.groupId)
+                                    
+                                    // Filter the reloads to avoid frequetly reloadData() calling in collectionView
+                                    if !groupIds.isEmpty && collection.assetCollectionSubtype == .smartAlbumUserLibrary {
+                                        strongSelf.updatePartial(groups: groups, groupIds: groupIds, completeBlock: completeBlock)
+                                    }
             })
             PHPhotoLibrary.shared().register(strongSelf)
             if !groupIds.isEmpty {
@@ -193,18 +199,28 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
         return subtype.rawValue < PHAssetCollectionSubtype.smartAlbumGeneric.rawValue ? .album : .smartAlbum
     }
     
-    open func fetchGroups(assetGroupTypes: [PHAssetCollectionSubtype], block: @escaping (PHAssetCollection) -> Void) {
+    open func fetchGroups(assetGroupTypes: [PHAssetCollectionSubtype],
+                          groupFetchPredicate: NSPredicate? = nil,
+                          block: @escaping (PHAssetCollection) -> Void) {
         for (_, groupType) in assetGroupTypes.enumerated() {
             let fetchResult = PHAssetCollection.fetchAssetCollections(with: self.collectionType(for: groupType),
                                                                       subtype: groupType,
                                                                       options: nil)
             fetchResult.enumerateObjects({ (collection, index, stop) in
-                block(collection)
+                if let groupFetchPredicate = groupFetchPredicate {
+                    if groupFetchPredicate.evaluate(with: collection) {
+                        block(collection)
+                    }
+                } else {
+                    block(collection)
+                }
             })
         }
     }
     
-    open func updatePartial(groups: [String : DKAssetGroup], groupIds: [String], completeBlock: @escaping (_ groups: [String]?, _ error: NSError?) -> Void) {
+    open func updatePartial(groups: [String : DKAssetGroup],
+                            groupIds: [String],
+                            completeBlock: @escaping (_ groups: [String]?, _ error: NSError?) -> Void) {
         self.groups = groups
         self.groupIds = groupIds
         DispatchQueue.main.async {
@@ -273,7 +289,7 @@ open class DKImageGroupDataManager: DKImageBaseManager, PHPhotoLibraryChangeObse
         let assetGroupTypes = self.configuration.assetGroupTypes
         var insertedGroupIds: [String] = []
         
-        self.fetchGroups(assetGroupTypes: assetGroupTypes) { [weak self] collection in
+        self.fetchGroups(assetGroupTypes: assetGroupTypes, groupFetchPredicate: self.configuration.groupFetchPredicate) { [weak self] collection in
             if let groups = self?.groups,
                 groups[collection.localIdentifier] == nil,
                 let assetGroup = self?.makeDKAssetGroup(with: collection)
