@@ -571,7 +571,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource methods
 
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		guard let selectedGroupId = self.selectedGroupId else { return 0 }
+		guard let selectedGroupId = self.selectedGroupId else { return self.hidesCamera ? 0 : 1 }
 
         guard let group = imagePickerController?.groupDataManager.fetchGroup(with: selectedGroupId) else {
             assertionFailure("Expect group")
@@ -686,10 +686,10 @@ open class DKAssetGroupDetailVC: UIViewController,
 
         let addedAssets = addedRects
             .flatMap { rect in collectionView.indexPathsForElements(in: rect, self.hidesCamera) }
-            .flatMap { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
+            .compactMap { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
         let removedAssets = removedRects
             .flatMap { rect in collectionView.indexPathsForElements(in: rect, self.hidesCamera) }
-            .flatMap { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
+            .compactMap { indexPath in imagePickerController.groupDataManager.fetchPHAsset(group, index: indexPath.item) }
 
         // Update the assets the PHCachingImageManager is caching.
         getImageDataManager().startCachingAssets(for: addedAssets,
