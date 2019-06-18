@@ -348,11 +348,9 @@ open class DKAssetGroupDetailVC: UIViewController,
         case .changed:
             self.onSwipingChanged(location: location)
             self.startAutoScrollingIfNeeded(location: location)
-        case .ended:
+        case .ended, .cancelled, .failed:
             fallthrough
-        case .cancelled:
-            fallthrough
-        case .failed:
+        @unknown default:
             self.swipingIndexPathes.removeAll()
             self.fromIndexPath = nil
             self.endAutoScrolling()
@@ -399,7 +397,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         let minLocationY = collectionView.contentOffset.y
         let maxLocationY = collectionView.bounds.height + collectionView.contentOffset.y
 
-        debugPrint("minLocationY:\(minLocationY) maxLocationY:\(maxLocationY) current:\(location.y)")
+//        debugPrint("minLocationY:\(minLocationY) maxLocationY:\(maxLocationY) current:\(location.y)")
 
         let locationY = min(max(location.y, minLocationY), maxLocationY)
 
