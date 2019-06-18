@@ -629,7 +629,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     @objc open func removeSelection(asset: DKAsset) {
         if self.assets[asset.localIdentifier] == nil { return }
         
-        self.selectedAssetIdentifiers.remove(at: self.selectedAssetIdentifiers.index(of: asset.localIdentifier)!)
+        self.selectedAssetIdentifiers.remove(at: self.selectedAssetIdentifiers.firstIndex(of: asset.localIdentifier)!)
         self.assets[asset.localIdentifier] = nil
         self.clearSelectedAssetsCache()
         
@@ -664,7 +664,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     
     open func index(of asset: DKAsset) -> Int? {
         if self.contains(asset: asset) {
-            return self.selectedAssetIdentifiers.index(of: asset.localIdentifier)
+            return self.selectedAssetIdentifiers.firstIndex(of: asset.localIdentifier)
         } else {
             return nil
         }

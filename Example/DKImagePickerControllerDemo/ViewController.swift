@@ -218,7 +218,7 @@ class ViewController: UIViewController,
     // MARK: - DKImageAssetExporterObserver
     
     func exporterWillBeginExporting(exporter: DKImageAssetExporter, asset: DKAsset) {
-        if let index = self.assets?.index(of: asset) {
+        if let index = self.assets?.firstIndex(of: asset) {
             if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
                 if let maskView = cell.contentView.viewWithTag(2) {
                     maskView.frame = CGRect(x: maskView.frame.minX,
@@ -233,7 +233,7 @@ class ViewController: UIViewController,
     }
     
     func exporterDidUpdateProgress(exporter: DKImageAssetExporter, asset: DKAsset) {
-        if let index = self.assets?.index(of: asset) {
+        if let index = self.assets?.firstIndex(of: asset) {
             if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
                 if let maskView = cell.contentView.viewWithTag(2) {
                     maskView.frame = CGRect(x: maskView.frame.minX,
@@ -248,7 +248,7 @@ class ViewController: UIViewController,
     }
     
     func exporterDidEndExporting(exporter: DKImageAssetExporter, asset: DKAsset) {
-        if let index = self.assets?.index(of: asset) {
+        if let index = self.assets?.firstIndex(of: asset) {
             if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
                 if let maskView = cell.contentView.viewWithTag(2) {
                     maskView.isHidden = true
