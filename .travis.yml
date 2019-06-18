@@ -2,7 +2,7 @@ language: swift
 podfile: Example/Podfile
 
 osx_image: xcode10.2.1
-xcode_sdk: iphonesimulator11.0
+xcode_sdk: iphonesimulator12.2
 
 before_install:
   - rvm use system
