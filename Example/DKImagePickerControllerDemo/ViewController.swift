@@ -34,6 +34,7 @@ class ViewController: UIViewController,
     }
     
 	func showImagePicker() {
+        pickerController.UIDelegate = AssetClickHandler()
         if self.exportManually {
             DKImageAssetExporter.sharedInstance.add(observer: self)
         }
@@ -265,3 +266,17 @@ class ViewController: UIViewController,
 
 }
 
+// MARK: - DKImagePickerControllerBaseUIDelegate
+class AssetClickHandler: DKImagePickerControllerBaseUIDelegate {
+    override func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
+        //tap to select asset
+        //use this place for asset selection customisation
+        print("didClickAsset for selection")
+    }
+    
+    override func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset]) {
+        //tap to deselect asset
+        //use this place for asset deselection customisation
+        print("didClickAsset for deselection")
+    }
+}
