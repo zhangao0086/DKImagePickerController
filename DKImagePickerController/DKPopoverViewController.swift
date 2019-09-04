@@ -19,13 +19,13 @@ open class DKPopoverViewController: UIViewController {
         popoverViewController.fromView = fromView
         
         popoverViewController.showInView(window)
-        window.rootViewController!.addChildViewController(popoverViewController)
+        window.rootViewController!.addChild(popoverViewController)
     }
     
     open class func dismissPopoverViewController() {
         let window = UIApplication.shared.keyWindow!
 
-        for vc in window.rootViewController!.childViewControllers {
+        for vc in window.rootViewController!.children {
             if vc is DKPopoverViewController {
                 (vc as! DKPopoverViewController).dismiss()
             }
@@ -152,7 +152,7 @@ open class DKPopoverViewController: UIViewController {
             self.view.backgroundColor = UIColor.clear
         }, completion: { result in
             self.view.removeFromSuperview()
-            self.removeFromParentViewController()
+            self.removeFromParent()
         }) 
     }
 	
@@ -161,7 +161,7 @@ open class DKPopoverViewController: UIViewController {
 
         let preferredContentSize = self.contentViewController.preferredContentSize
 		var popoverWidth = preferredContentSize.width
-		if popoverWidth == UIViewNoIntrinsicMetric {
+		if popoverWidth == UIView.noIntrinsicMetric {
 			if UI_USER_INTERFACE_IDIOM() == .pad {
 				popoverWidth = self.view.bounds.width * 0.6
 			} else {

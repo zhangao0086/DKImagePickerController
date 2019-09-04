@@ -50,13 +50,18 @@ open class DKPermissionView: UIView {
 	}
 	
 	@objc open func gotoSettings() {
-		if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+		if let appSettings = URL(string: UIApplication.openSettingsURLString) {
             if #available(iOS 10.0, *) {
-                UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
+                UIApplication.shared.open(appSettings, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             } else {
                 UIApplication.shared.openURL(appSettings)
             }
 		}
 	}
 	
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

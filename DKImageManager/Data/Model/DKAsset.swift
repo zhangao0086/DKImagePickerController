@@ -220,7 +220,7 @@ public extension DKAsset {
                 })
             })
         } else {
-            try! UIImageJPEGRepresentation(self.image!, 1)!.write(to: URL(fileURLWithPath: path))
+            try! self.image!.jpegData(compressionQuality: 1)!.write(to: URL(fileURLWithPath: path))
             completeBlock(true)
         }
     }
