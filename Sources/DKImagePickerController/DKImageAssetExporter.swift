@@ -413,7 +413,14 @@ open class DKImageAssetExporter: DKImageBaseManager {
                         
                         if var imageData = data {
                             if #available(iOS 9, *) {
-                                if let resource = PHAssetResource.assetResources(for: originalAsset).first {
+                                var resource: PHAssetResource? = nil
+                                for assetResource in PHAssetResource.assetResources(for: originalAsset) {
+                                    if assetResource.type == .photo {
+                                        resource = assetResource
+                                        break
+                                    }
+                                }
+                                if let resource = resource {
                                     asset.fileName = resource.originalFilename
                                 }
                             }
