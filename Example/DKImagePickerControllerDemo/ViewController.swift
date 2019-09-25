@@ -34,7 +34,6 @@ class ViewController: UIViewController,
     }
     
 	func showImagePicker() {
-        pickerController.UIDelegate = AssetClickHandler()
         if self.exportManually {
             DKImageAssetExporter.sharedInstance.add(observer: self)
         }
@@ -59,6 +58,10 @@ class ViewController: UIViewController,
 		if UI_USER_INTERFACE_IDIOM() == .pad {
 			pickerController.modalPresentationStyle = .formSheet
 		}
+        
+        if pickerController.UIDelegate == nil {
+            pickerController.UIDelegate = AssetClickHandler()
+        }
 		
         if pickerController.inline {
             self.showInlinePicker()
@@ -267,6 +270,7 @@ class ViewController: UIViewController,
 }
 
 // MARK: - DKImagePickerControllerBaseUIDelegate
+
 class AssetClickHandler: DKImagePickerControllerBaseUIDelegate {
     override func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
         //tap to select asset
