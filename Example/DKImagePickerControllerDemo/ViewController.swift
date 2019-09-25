@@ -64,7 +64,7 @@ class ViewController: UIViewController,
         } else {
             self.present(pickerController, animated: true) {}
         }
-	}
+    }
     
     func updateAssets(assets: [DKAsset]) {
         print("didSelectAssets")

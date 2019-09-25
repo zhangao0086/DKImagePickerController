@@ -56,7 +56,7 @@ internal protocol DKImagePickerControllerObserver {
 open class DKUINavigationController: UINavigationController {}
 
 @objc
-open class DKImagePickerController: DKUINavigationController, DKImageBaseManagerObserver {
+open class DKImagePickerController: DKUINavigationController, DKImageBaseManagerObserver, UIAdaptivePresentationControllerDelegate {
     
     /// Use UIDelegate to Customize the picker UI.
     @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate! {
@@ -227,6 +227,10 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         
         self.doSetupOnce()
         
+        if #available(iOS 13.0, *), self.presentingViewController != nil, self.presentationController?.delegate == nil {
+            self.presentationController?.delegate = self
+        }
+        
         if self.needShowInlineCamera && self.sourceType == .camera {
             self.needShowInlineCamera = false
             self.showCamera(isInline: true)
@@ -384,14 +388,17 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     }
     
     private var metadataFromCamera: [AnyHashable : Any]?
+    private func didCancelCamera() {
+        if self.sourceType == .camera {
+            self.dismissCamera(isInline: true)
+            self.dismiss()
+        } else {
+            self.dismissCamera()
+        }
+    }
     private func showCamera(isInline: Bool) {
         let didCancel = { [unowned self] () in
-            if self.sourceType == .camera {
-                self.dismissCamera(isInline: true)
-                self.dismiss()
-            } else {
-                self.dismissCamera()
-            }
+            self.didCancelCamera()
         }
         
         let didFinishCapturingImage = { [weak self] (image: UIImage, metadata: [AnyHashable : Any]?) in
@@ -755,6 +762,16 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
             return super.supportedInterfaceOrientations
         } else {
             return UIInterfaceOrientationMask.portrait
+        }
+    }
+    
+    // MARK: - UIAdaptivePresentationControllerDelegate
+    
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        if self.sourceType == .camera {
+            self.didCancelCamera()
+        } else {
+            self.dismiss()
         }
     }
     

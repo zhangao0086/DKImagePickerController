@@ -41,6 +41,15 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "9C35CBFE19DBB00700557269"
+            BuildableName = "DKImagePickerControllerDemo.app"
+            BlueprintName = "DKImagePickerControllerDemo"
+            ReferencedContainer = "container:DKImagePickerControllerDemo.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -53,17 +62,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9C35CBFE19DBB00700557269"
-            BuildableName = "DKImagePickerControllerDemo.app"
-            BlueprintName = "DKImagePickerControllerDemo"
-            ReferencedContainer = "container:DKImagePickerControllerDemo.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

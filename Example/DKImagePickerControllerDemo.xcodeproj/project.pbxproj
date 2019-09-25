@@ -306,6 +306,7 @@
 					};
 					9CF72B101B8F073400238B9A = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 1100;
 						TestTargetID = 9C35CBFE19DBB00700557269;
 					};
 				};
@@ -663,7 +664,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DKImagePickerControllerDemo.app/DKImagePickerControllerDemo";
 			};
 			name = Debug;
@@ -682,7 +683,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DKImagePickerControllerDemo.app/DKImagePickerControllerDemo";
 			};
 			name = Release;
