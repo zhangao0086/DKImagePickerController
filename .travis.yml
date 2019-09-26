@@ -5,7 +5,7 @@ matrix:
   include:
     - osx_image: xcode11
       xcode_sdk: iphonesimulator12.2
-      env: DESTINATION="platform=iOS Simulator,name=iPhone 7"
+      env: DESTINATION="platform=iOS Simulator,name=iPhone X"
     
     - osx_image: xcode11
       xcode_sdk: iphonesimulator13.0
