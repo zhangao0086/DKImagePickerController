@@ -227,7 +227,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         
         self.doSetupOnce()
         
-        if #available(iOS 13.0, *), self.presentingViewController != nil, self.presentationController?.delegate == nil {
+        if #available(iOS 13, *), self.presentingViewController != nil, self.presentationController?.delegate == nil {
             self.presentationController?.delegate = self
         }
         
@@ -391,7 +391,9 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     private func didCancelCamera() {
         if self.sourceType == .camera {
             self.dismissCamera(isInline: true)
-            self.dismiss()
+            if self.presentingViewController?.presentedViewController == self && self.viewControllers.count == 0 {
+                self.dismiss()
+            }
         } else {
             self.dismissCamera()
         }

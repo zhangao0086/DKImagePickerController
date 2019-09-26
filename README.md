@@ -9,22 +9,23 @@ DKImagePickerController
 ---
 
 ## Description
-`DKImagePickerController` is a highly customizable, pure-Swift library.
+`DKImagePickerController` is a highly customizable, Pure-Swift library.
 
 ### Features
 * Supports both single and multiple selection.
 * Supports filtering albums and sorting by type.
 * Supports landscape, iPad, and orientation switching.
-* Supports iCloud.
-* Supports batch exports `PHAsset` to files.
-* Inline mode.
+* iCloud Support.
+* Supports batch exports `PHAsset` to lcoal files.
+* Inline mode Support.
 * Customizable `UICollectionViewLayout`.
 * Customizable `camera`, `photo gallery` and `photo editor`.
+* Dark Mode Support
 
 ## Requirements
 * iOS 8.0+
 * ARC
-* Swift 3.2 & 4.2
+* Swift 4 & 5
 
 ## Installation
 ### CocoaPods
@@ -84,11 +85,11 @@ pickerController.didSelectAssets = { (assets: [DKAsset]) in
 
 self.presentViewController(pickerController, animated: true) {}
 
-````
+​````
 
 #### Configurations
 
-```swift
+​```swift
  /// Use UIDelegate to Customize the picker UI.
  @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate!
  
