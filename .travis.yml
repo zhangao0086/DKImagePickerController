@@ -18,4 +18,4 @@ before_install:
   - pod repo update
 
 script:
-  - xcodebuild clean build test -workspace Example/DKImagePickerControllerDemo.xcworkspace -scheme DKImagePickerControllerDemo -destination "$DESTINATION"
+  - xcodebuild clean build test -workspace Example/DKImagePickerControllerDemo.xcworkspace -scheme DKImagePickerControllerDemo -destination $DESTINATION
