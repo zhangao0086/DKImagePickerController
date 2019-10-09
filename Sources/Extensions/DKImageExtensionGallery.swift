@@ -81,7 +81,7 @@ open class DKImageExtensionGallery: DKImageBaseExtension, DKPhotoGalleryDelegate
     
     // MARK: - DKPhotoGalleryDelegate
     
-    open var backItem = UIBarButtonItem(image: DKImagePickerControllerResource.photoGalleryBackArrowImage(),
+    open lazy var backItem = UIBarButtonItem(image: DKImagePickerControllerResource.photoGalleryBackArrowImage(),
                                            style: .plain,
                                            target: self,
                                            action: #selector(dismissGallery))
