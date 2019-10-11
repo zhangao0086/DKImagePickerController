@@ -387,26 +387,20 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         return assetFetchOptions
     }
     
-    private var metadataFromCamera: [AnyHashable : Any]?
-    private func didCancelCamera() {
-        if self.sourceType == .camera {
-            self.dismissCamera(isInline: true)
-            if self.presentingViewController?.presentedViewController == self && self.viewControllers.count == 0 {
-                self.dismiss()
-            }
-        } else {
-            self.dismissCamera()
-        }
-    }
     private func showCamera(isInline: Bool) {
         let didCancel = { [unowned self] () in
-            self.didCancelCamera()
+            if self.sourceType == .camera {
+                self.dismissCamera(isInline: true)
+                if self.presentingViewController?.presentedViewController == self && self.viewControllers.count == 0 {
+                    self.dismiss()
+                }
+            } else {
+                self.dismissCamera()
+            }
         }
         
         let didFinishCapturingImage = { [weak self] (image: UIImage, metadata: [AnyHashable : Any]?) in
             if let strongSelf = self {
-                strongSelf.metadataFromCamera = metadata
-                
                 let didFinishEditing: ((UIImage, [AnyHashable : Any]?) -> Void) = { (image, metadata) in
                     self?.processImageFromCamera(image, metadata)
                 }
@@ -769,12 +763,8 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     
     // MARK: - UIAdaptivePresentationControllerDelegate
     
-    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        if self.sourceType == .camera {
-            self.didCancelCamera()
-        } else {
-            self.dismiss()
-        }
+    public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return false
     }
     
     // MARK: - Gallery
