@@ -389,13 +389,9 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     
     private func showCamera(isInline: Bool) {
         let didCancel = { [unowned self] () in
-            if self.sourceType == .camera {
-                self.dismissCamera(isInline: true)
-                if self.presentingViewController?.presentedViewController == self && self.viewControllers.count == 0 {
-                    self.dismiss()
-                }
-            } else {
-                self.dismissCamera()
+            self.dismissCamera(isInline: isInline)
+            if self.sourceType == .camera && !isInline {
+                self.dismiss()
             }
         }
         
