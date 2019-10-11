@@ -56,7 +56,7 @@ internal protocol DKImagePickerControllerObserver {
 open class DKUINavigationController: UINavigationController {}
 
 @objc
-open class DKImagePickerController: DKUINavigationController, DKImageBaseManagerObserver {
+open class DKImagePickerController: DKUINavigationController, DKImageBaseManagerObserver, UIAdaptivePresentationControllerDelegate {
     
     /// Use UIDelegate to Customize the picker UI.
     @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate! {
@@ -227,6 +227,10 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         
         self.doSetupOnce()
         
+        if #available(iOS 13, *), self.presentingViewController != nil, self.presentationController?.delegate == nil {
+            self.presentationController?.delegate = self
+        }
+        
         if self.needShowInlineCamera && self.sourceType == .camera {
             self.needShowInlineCamera = false
             self.showCamera(isInline: true)
@@ -383,7 +387,6 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         return assetFetchOptions
     }
     
-    private var metadataFromCamera: [AnyHashable : Any]?
     private func showCamera(isInline: Bool) {
         let didCancel = { [unowned self] () in
             self.dismissCamera(isInline: isInline)
@@ -394,8 +397,6 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         
         let didFinishCapturingImage = { [weak self] (image: UIImage, metadata: [AnyHashable : Any]?) in
             if let strongSelf = self {
-                strongSelf.metadataFromCamera = metadata
-                
                 let didFinishEditing: ((UIImage, [AnyHashable : Any]?) -> Void) = { (image, metadata) in
                     self?.processImageFromCamera(image, metadata)
                 }
@@ -619,9 +620,15 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     }
     
     @objc open func deselect(asset: DKAsset) {
+        removeSelection(asset: asset)
+        
+        self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidDeselect(assets:)), object: [asset] as AnyObject)
+    }
+    
+    @objc open func removeSelection(asset: DKAsset) {
         if self.assets[asset.localIdentifier] == nil { return }
         
-        self.selectedAssetIdentifiers.remove(at: self.selectedAssetIdentifiers.index(of: asset.localIdentifier)!)
+        self.selectedAssetIdentifiers.remove(at: self.selectedAssetIdentifiers.firstIndex(of: asset.localIdentifier)!)
         self.assets[asset.localIdentifier] = nil
         self.clearSelectedAssetsCache()
         
@@ -629,8 +636,6 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         
         let deselectAssets = [asset]
         self.UIDelegate?.imagePickerController(self, didDeselectAssets: deselectAssets)
-        
-        self.notify(with: #selector(DKImagePickerControllerObserver.imagePickerControllerDidDeselect(assets:)), object: deselectAssets as AnyObject)
     }
     
     @objc open func deselectAll() {
@@ -658,7 +663,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     
     open func index(of asset: DKAsset) -> Int? {
         if self.contains(asset: asset) {
-            return self.selectedAssetIdentifiers.index(of: asset.localIdentifier)
+            return self.selectedAssetIdentifiers.firstIndex(of: asset.localIdentifier)
         } else {
             return nil
         }
@@ -750,6 +755,12 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         } else {
             return UIInterfaceOrientationMask.portrait
         }
+    }
+    
+    // MARK: - UIAdaptivePresentationControllerDelegate
+    
+    public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return false
     }
     
     // MARK: - Gallery

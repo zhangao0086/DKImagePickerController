@@ -392,7 +392,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
             try fileManager.removeItem(at: auxiliaryDirectory)
         }
         
-        if let _ = asset.originalAsset {
+        if let originalAsset = asset.originalAsset {
             autoreleasepool {
                 let options = PHImageRequestOptions()
                 options.version = .current
@@ -412,13 +412,29 @@ open class DKImageAssetExporter: DKImageBaseManager {
                         }
                         
                         if var imageData = data {
-                            if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
-                                asset.fileName = fileURL.lastPathComponent ?? "Image"
-                            } else {
-                                asset.fileName = "Image.jpg"
+                            if #available(iOS 9, *) {
+                                var resource: PHAssetResource? = nil
+                                for assetResource in PHAssetResource.assetResources(for: originalAsset) {
+                                    if assetResource.type == .photo {
+                                        resource = assetResource
+                                        break
+                                    }
+                                }
+                                if let resource = resource {
+                                    asset.fileName = resource.originalFilename
+                                }
                             }
                             
-                            asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
+                            if asset.fileName == nil {
+                                if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
+                                    asset.fileName = fileURL.lastPathComponent ?? "Image"
+                                } else {
+                                    asset.fileName = "Image.jpg"
+                                }
+                            }
+                            let fileName = asset.fileName!
+                            
+                            asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(fileName)
                             
                             if FileManager.default.fileExists(atPath: asset.localTemporaryPath!.path) {
                                 return completion(nil)
@@ -428,8 +444,8 @@ open class DKImageAssetExporter: DKImageBaseManager {
                                 if let jpgData = self.imageToJPEG(with: imageData) {
                                     imageData = jpgData
                                     
-                                    if asset.fileName!.uppercased().hasSuffix(".HEIC") {
-                                        asset.fileName = asset.fileName!.dropLast(4) + "jpg"
+                                    if fileName.uppercased().hasSuffix(".HEIC") {
+                                        asset.fileName = fileName.dropLast(4) + "jpg"
                                     }
                                 }
                             }

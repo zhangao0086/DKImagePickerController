@@ -47,7 +47,8 @@ open class DKImageExtensionPhotoCropper: DKImageBaseExtension {
         self.imageEditor = imageCropper
         
         let imagePickerController = self.context.imagePickerController
-        (imagePickerController?.presentedViewController ?? imagePickerController)?.present(imageCropper, animated: true, completion: nil)
+        let presentedViewController = imagePickerController?.presentedViewController ?? imagePickerController
+        presentedViewController?.present(imageCropper, animated: true, completion: nil)
     }
 
     override open func finish() {
