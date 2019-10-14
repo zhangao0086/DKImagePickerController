@@ -17,7 +17,7 @@ public class DKImageAssetDiskPurger {
     private var directories = Set<URL>()
     
     private init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(removeFiles), name: .UIApplicationWillTerminate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(removeFiles), name: UIApplication.willTerminateNotification, object: nil)
     }
     
     deinit {
@@ -313,7 +313,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
     
     private func isHEIC(with imageData: Data) -> Bool {
         if imageData.count >= 12, let firstByte = imageData.first, firstByte == 0 {
-            let subdata = imageData.subdata(in: Range(4..<12))
+            let subdata = imageData.subdata(in: 4..<12)
             let str = String(data: subdata, encoding: .ascii)
             return str == "ftypheic" || str == "ftypheix" || str == "ftyphevc" || str == "ftyphevx"
         } else {
@@ -325,7 +325,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
         if #available(iOS 10.0, *), let ciImage = CIImage(data: imageData), let colorSpace = ciImage.colorSpace {
             return CIContext().jpegRepresentation(of: ciImage, colorSpace: colorSpace, options:[:])
         } else if let image = UIImage(data: imageData) {
-            return UIImageJPEGRepresentation(image, 0.9)
+            return image.jpegData(compressionQuality: 0.9)
         } else {
             return nil
         }
@@ -392,7 +392,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
             try fileManager.removeItem(at: auxiliaryDirectory)
         }
         
-        if let _ = asset.originalAsset {
+        if let originalAsset = asset.originalAsset {
             autoreleasepool {
                 let options = PHImageRequestOptions()
                 options.version = .current
@@ -412,13 +412,29 @@ open class DKImageAssetExporter: DKImageBaseManager {
                         }
                         
                         if var imageData = data {
-                            if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
-                                asset.fileName = fileURL.lastPathComponent ?? "Image"
-                            } else {
-                                asset.fileName = "Image.jpg"
+                            if #available(iOS 9, *) {
+                                var resource: PHAssetResource? = nil
+                                for assetResource in PHAssetResource.assetResources(for: originalAsset) {
+                                    if assetResource.type == .photo {
+                                        resource = assetResource
+                                        break
+                                    }
+                                }
+                                if let resource = resource {
+                                    asset.fileName = resource.originalFilename
+                                }
                             }
                             
-                            asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
+                            if asset.fileName == nil {
+                                if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
+                                    asset.fileName = fileURL.lastPathComponent ?? "Image"
+                                } else {
+                                    asset.fileName = "Image.jpg"
+                                }
+                            }
+                            let fileName = asset.fileName!
+                            
+                            asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(fileName)
                             
                             if FileManager.default.fileExists(atPath: asset.localTemporaryPath!.path) {
                                 return completion(nil)
@@ -428,8 +444,8 @@ open class DKImageAssetExporter: DKImageBaseManager {
                                 if let jpgData = self.imageToJPEG(with: imageData) {
                                     imageData = jpgData
                                     
-                                    if asset.fileName!.uppercased().hasSuffix(".HEIC") {
-                                        asset.fileName = asset.fileName!.dropLast(4) + "jpg"
+                                    if fileName.uppercased().hasSuffix(".HEIC") {
+                                        asset.fileName = fileName.dropLast(4) + "jpg"
                                     }
                                 }
                             }
@@ -462,7 +478,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
                 }
                 
                 do {
-                    try write(data: UIImageJPEGRepresentation(asset.image!, 0.9)!, to: asset.localTemporaryPath!)
+                    try write(data: asset.image!.jpegData(compressionQuality: 0.9)!, to: asset.localTemporaryPath!)
                     completion(nil)
                 } catch {
                     completion(error)

@@ -9,30 +9,37 @@ DKImagePickerController
 ---
 
 ## Description
-`DKImagePickerController` is a highly customizable, pure-Swift library.
+`DKImagePickerController` is a highly customizable, Pure-Swift library.
 
 ### Features
 * Supports both single and multiple selection.
 * Supports filtering albums and sorting by type.
 * Supports landscape, iPad, and orientation switching.
-* Supports iCloud.
-* Supports batch exports `PHAsset` to files.
-* Inline mode.
+* iCloud Support.
+* Supports batch exports `PHAsset` to lcoal files.
+* Inline mode Support.
 * Customizable `UICollectionViewLayout`.
 * Customizable `camera`, `photo gallery` and `photo editor`.
+* Dark Mode Support
 
 ## Requirements
 * iOS 8.0+
 * ARC
-* Swift 3.2 & 4
+* Swift 4 & 5
 
 ## Installation
+### CocoaPods
 #### iOS 8 and newer
 DKImagePickerController is available on CocoaPods. Simply add the following line to your podfile:
 
-```ruby
+```
 # For latest release in cocoapods
 pod 'DKImagePickerController'
+```
+
+#### For Swift 4.1
+```
+pod 'DKImagePickerController', :git => 'https://github.com/zhangao0086/DKImagePickerController.git', :branch => 'Swift4'
 ```
 
 #### Subspecs
@@ -57,6 +64,14 @@ pod 'DKImagePickerController', :subspecs => ['PhotoGallery', 'Camera', 'InlineCa
 
 More information, see [Extensions](#extensions).
 
+### Carthage
+
+```
+github "zhangao0086/DKImagePickerController"
+```
+
+If you use Carthage to build your dependencies, make sure you have added `CropViewController.framework`, `DKCamera.framework`, `DKImagePickerController.framework`, `DKPhotoGallery.framework` and `SDWebImage.framework` to the _"Linked Frameworks and Libraries"_ section of your target, and have included them in your Carthage framework copying build phase.
+
 ## Getting Started
 #### Initialization and presentation
 ```swift
@@ -70,11 +85,11 @@ pickerController.didSelectAssets = { (assets: [DKAsset]) in
 
 self.presentViewController(pickerController, animated: true) {}
 
-````
+​````
 
 #### Configurations
 
-```swift
+​```swift
  /// Use UIDelegate to Customize the picker UI.
  @objc public var UIDelegate: DKImagePickerControllerBaseUIDelegate!
  
@@ -87,11 +102,18 @@ self.presentViewController(pickerController, animated: true) {}
  /// The maximum count of assets which the user will be able to select, a value of 0 means no limit.
  @objc public var maxSelectableCount = 0
  
+ /// Photos will be tagged with the location where they are taken.
+ /// If true, your Info.plist should include the "Privacy - Location XXX" tag.
+ open var containsGPSInMetadata = false
+ 
  /// Set the defaultAssetGroup to specify which album is the default asset group.
  public var defaultAssetGroup: PHAssetCollectionSubtype?
  
  /// Allow swipe to select images.
  @objc public var allowSwipeToSelect: Bool = false
+ 
+ /// Allow select all
+ @objc public var allowSelectAll: Bool = false
  
  /// A Bool value indicating whether the inline mode is enabled.
  @objc public var inline: Bool = false
@@ -180,13 +202,13 @@ self.view.addSubview(pickerView)
 
 <img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot6.png" />
 
-For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomUIDelegate).
+For example, see [CustomUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/Example/DKImagePickerControllerDemo/CustomUIDelegate).
 
 ## Customizable Layout
 
 <img width="30%" height="30%" src="https://raw.githubusercontent.com/zhangao0086/DKImagePickerController/develop/Screenshot10.png" />
 
-For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/DKImagePickerControllerDemo/CustomLayoutUIDelegate).
+For example, see [CustomLayoutUIDelegate](https://github.com/zhangao0086/DKImagePickerController/tree/develop/Example/DKImagePickerControllerDemo/CustomLayoutUIDelegate).
 
 ### Conforms UIAppearance protocol
 
@@ -316,7 +338,7 @@ let didFinishCapturingImage = extraInfo["didFinishCapturingImage"] as? ((UIImage
 let didCancel = extraInfo["didCancel"] as? (() -> Void)
 ```
 
-For a custom camera example, see [CustomCameraExtension](DKImagePickerControllerDemo/DKImagePickerControllerDemo/CustomCamera).
+For a custom camera example, see [CustomCameraExtension](https://github.com/zhangao0086/DKImagePickerController/tree/develop/Example/DKImagePickerControllerDemo/CustomCamera).
 
 ##### InlineCamera
 The `extraInfo` is the same as for `Camera`.

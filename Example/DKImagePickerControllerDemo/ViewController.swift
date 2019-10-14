@@ -58,13 +58,17 @@ class ViewController: UIViewController,
 		if UI_USER_INTERFACE_IDIOM() == .pad {
 			pickerController.modalPresentationStyle = .formSheet
 		}
+        
+        if pickerController.UIDelegate == nil {
+            pickerController.UIDelegate = AssetClickHandler()
+        }
 		
         if pickerController.inline {
             self.showInlinePicker()
         } else {
             self.present(pickerController, animated: true) {}
         }
-	}
+    }
     
     func updateAssets(assets: [DKAsset]) {
         print("didSelectAssets")
@@ -219,7 +223,7 @@ class ViewController: UIViewController,
     // MARK: - DKImageAssetExporterObserver
     
     func exporterWillBeginExporting(exporter: DKImageAssetExporter, asset: DKAsset) {
-        if let index = self.assets?.index(of: asset) {
+        if let index = self.assets?.firstIndex(of: asset) {
             if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
                 if let maskView = cell.contentView.viewWithTag(2) {
                     maskView.frame = CGRect(x: maskView.frame.minX,
@@ -234,7 +238,7 @@ class ViewController: UIViewController,
     }
     
     func exporterDidUpdateProgress(exporter: DKImageAssetExporter, asset: DKAsset) {
-        if let index = self.assets?.index(of: asset) {
+        if let index = self.assets?.firstIndex(of: asset) {
             if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
                 if let maskView = cell.contentView.viewWithTag(2) {
                     maskView.frame = CGRect(x: maskView.frame.minX,
@@ -249,7 +253,7 @@ class ViewController: UIViewController,
     }
     
     func exporterDidEndExporting(exporter: DKImageAssetExporter, asset: DKAsset) {
-        if let index = self.assets?.index(of: asset) {
+        if let index = self.assets?.firstIndex(of: asset) {
             if let cell = self.previewView?.cellForItem(at: IndexPath(item: index, section: 0)) {
                 if let maskView = cell.contentView.viewWithTag(2) {
                     maskView.isHidden = true
@@ -266,3 +270,18 @@ class ViewController: UIViewController,
 
 }
 
+// MARK: - DKImagePickerControllerBaseUIDelegate
+
+class AssetClickHandler: DKImagePickerControllerBaseUIDelegate {
+    override func imagePickerController(_ imagePickerController: DKImagePickerController, didSelectAssets: [DKAsset]) {
+        //tap to select asset
+        //use this place for asset selection customisation
+        print("didClickAsset for selection")
+    }
+    
+    override func imagePickerController(_ imagePickerController: DKImagePickerController, didDeselectAssets: [DKAsset]) {
+        //tap to deselect asset
+        //use this place for asset deselection customisation
+        print("didClickAsset for deselection")
+    }
+}

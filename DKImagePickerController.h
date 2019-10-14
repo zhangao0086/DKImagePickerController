@@ -15,5 +15,3 @@ FOUNDATION_EXPORT double DKImagePickerControllerVersionNumber;
 FOUNDATION_EXPORT const unsigned char DKImagePickerControllerVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <DKImagePickerController/PublicHeader.h>
-
-

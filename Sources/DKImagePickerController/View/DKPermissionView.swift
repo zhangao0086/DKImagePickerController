@@ -45,13 +45,13 @@ open class DKPermissionView: UIView {
 	}
 	
 	open override func didMoveToWindow() {
-		super.didMoveToWindow()
+        super.didMoveToWindow()
 		
 		self.center = self.superview!.center
 	}
 	
 	@objc open func gotoSettings() {
-        if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
             } else {
@@ -73,9 +73,10 @@ public class DKPermissionViewColors: NSObject {
                 forPhotoTitle photoTitle: UIColor = UIColor.gray,
                 forCameraTitle cameraTitle: UIColor = UIColor.white,
                 forButton button: UIColor = UIColor(red: 0, green: 122.0 / 255, blue: 1, alpha: 1)) {
-        backgroundColor = background
-        titlePhotoColor = photoTitle
-        titleCameraColor = cameraTitle
-        permitButtonColor = button
+        self.backgroundColor = background
+        self.titlePhotoColor = photoTitle
+        self.titleCameraColor = cameraTitle
+        self.permitButtonColor = button
     }
+    
 }

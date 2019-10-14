@@ -12,6 +12,12 @@ import Photos
 
 class DKImagePickerControllerDemoVC: UITableViewController {
     
+    fileprivate func imageOnlyAssetFetchOptions() -> PHFetchOptions {
+        let assetFetchOptions = PHFetchOptions()
+        assetFetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+        return assetFetchOptions
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
         
@@ -20,7 +26,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
         
         switch segue.identifier! {
             
-        case "Pick All":
+        case "Pick Any":
             let pickerController = DKImagePickerController()
             
             destination.pickerController = pickerController
@@ -37,7 +43,7 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             
             destination.pickerController = pickerController
             
-        case "Pick All(Only Photos Or Videos)":
+        case "Pick Any (Only Photos Or Videos)":
             let pickerController = DKImagePickerController()
             pickerController.allowMultipleTypes = false
             
@@ -52,6 +58,12 @@ class DKImagePickerControllerDemoVC: UITableViewController {
         case "Hides Camera":
             let pickerController = DKImagePickerController()
             pickerController.sourceType = .photo
+            
+            destination.pickerController = pickerController
+            
+        case "With GPS":
+            let pickerController = DKImagePickerController()
+            pickerController.containsGPSInMetadata = true
             
             destination.pickerController = pickerController
             
@@ -72,6 +84,11 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             let pickerController = DKImagePickerController()
             pickerController.allowSwipeToSelect = true
             
+            destination.pickerController = pickerController
+            
+        case "Select All":
+            let pickerController = DKImagePickerController()
+            pickerController.allowSelectAll = true
             destination.pickerController = pickerController
             
         case "Custom Camera":
@@ -108,13 +125,16 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             let groupDataManagerConfiguration = DKImageGroupDataManagerConfiguration()
             groupDataManagerConfiguration.fetchLimit = 10
             groupDataManagerConfiguration.assetGroupTypes = [.smartAlbumUserLibrary]
+            // To specify photos only, we'd typically use pickerController.assetType = .allPhotos.
+            // Because we're specifying a custom DKImageGroupDataManager, that doesn't work,
+            // and we have to specify it using assetFetchOptions.
+            groupDataManagerConfiguration.assetFetchOptions = imageOnlyAssetFetchOptions()
             
             let groupDataManager = DKImageGroupDataManager(configuration: groupDataManagerConfiguration)
             
             let pickerController = DKImagePickerController(groupDataManager: groupDataManager)
             pickerController.inline = true
             pickerController.UIDelegate = CustomInlineLayoutUIDelegate()
-            pickerController.assetType = .allPhotos
             pickerController.sourceType = .photo
             
             destination.pickerController = pickerController
@@ -154,6 +174,11 @@ class DKImagePickerControllerDemoVC: UITableViewController {
             }
             
             let pickerController = DKImagePickerController()
+            
+            destination.pickerController = pickerController
+        case "Reload":
+            let pickerController = DKImagePickerController()
+            pickerController.UIDelegate = ReloadUIDelegate()
             
             destination.pickerController = pickerController
             

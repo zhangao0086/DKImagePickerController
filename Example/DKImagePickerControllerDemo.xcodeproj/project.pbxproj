@@ -27,6 +27,7 @@
 		9CA897E61FE59584007E7C25 /* CustomInlineCameraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA897E51FE59584007E7C25 /* CustomInlineCameraExtension.swift */; };
 		9CD130051C144ED800AB5E2B /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CD130041C144ED800AB5E2B /* Photos.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9CDC7BF71FE59233008867C8 /* CustomCameraExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDC7BF61FE59233008867C8 /* CustomCameraExtension.swift */; };
+		9CE8A91E21786E7000E06D08 /* ReloadUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE8A91D21786E7000E06D08 /* ReloadUIDelegate.swift */; };
 		9CF72B161B8F073400238B9A /* DKImagePickerControllerDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF72B151B8F073400238B9A /* DKImagePickerControllerDemoTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		9CA897E51FE59584007E7C25 /* CustomInlineCameraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInlineCameraExtension.swift; sourceTree = "<group>"; };
 		9CD130041C144ED800AB5E2B /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		9CDC7BF61FE59233008867C8 /* CustomCameraExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCameraExtension.swift; sourceTree = "<group>"; };
+		9CE8A91D21786E7000E06D08 /* ReloadUIDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadUIDelegate.swift; sourceTree = "<group>"; };
 		9CF72B111B8F073400238B9A /* DKImagePickerControllerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DKImagePickerControllerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CF72B141B8F073400238B9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CF72B151B8F073400238B9A /* DKImagePickerControllerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerDemoTests.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				9C6E94B81F5E65800014B700 /* CustomInlineLayoutUIDelegate */,
 				9C6E94BB1F5E65800014B700 /* CustomLayoutUIDelegate */,
 				9C6E94BE1F5E65800014B700 /* CustomUIDelegate */,
+				9CE8A91C21786E5600E06D08 /* ReloadUIDelegate */,
 				9C6E94C21F5E65810014B700 /* DKImagePickerControllerDemoVC.swift */,
 				9C6E94C51F5E65810014B700 /* ViewController.swift */,
 				9C6E94C31F5E65810014B700 /* Images.xcassets */,
@@ -203,6 +206,14 @@
 				9CA897E51FE59584007E7C25 /* CustomInlineCameraExtension.swift */,
 			);
 			path = CustomCamera;
+			sourceTree = "<group>";
+		};
+		9CE8A91C21786E5600E06D08 /* ReloadUIDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				9CE8A91D21786E7000E06D08 /* ReloadUIDelegate.swift */,
+			);
+			path = ReloadUIDelegate;
 			sourceTree = "<group>";
 		};
 		9CF72B121B8F073400238B9A /* DKImagePickerControllerDemoTests */ = {
@@ -285,7 +296,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = ZhangAo;
 				TargetAttributes = {
 					9C35CBFE19DBB00700557269 = {
@@ -295,13 +306,14 @@
 					};
 					9CF72B101B8F073400238B9A = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 1100;
 						TestTargetID = 9C35CBFE19DBB00700557269;
 					};
 				};
 			};
 			buildConfigurationList = 9C35CBFA19DBB00700557269 /* Build configuration list for PBXProject "DKImagePickerControllerDemo" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -384,26 +396,28 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-DKImagePickerControllerDemo/Pods-DKImagePickerControllerDemo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/CLImageEditor/CLImageEditor.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-DKImagePickerControllerDemo/Pods-DKImagePickerControllerDemo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CropViewController/CropViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/DKCamera/DKCamera.framework",
 				"${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework",
 				"${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImageFLPlugin/SDWebImageFLPlugin.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CLImageEditor.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CropViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKCamera.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKImagePickerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKPhotoGallery.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageFLPlugin.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DKImagePickerControllerDemo/Pods-DKImagePickerControllerDemo-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DKImagePickerControllerDemo/Pods-DKImagePickerControllerDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -424,6 +438,7 @@
 				9C6E94D21F5E65810014B700 /* CustomLayoutUIDelegate.swift in Sources */,
 				9C6E94D61F5E65810014B700 /* DKImagePickerControllerDemoVC.swift in Sources */,
 				9C6E94D31F5E65810014B700 /* CustomGroupDetailCameraCell.swift in Sources */,
+				9CE8A91E21786E7000E06D08 /* ReloadUIDelegate.swift in Sources */,
 				9C6E94CF1F5E65810014B700 /* CustomInlineFlowLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -495,12 +510,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -549,12 +566,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -589,7 +608,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 85M74MVK78;
@@ -600,7 +619,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				REEXPORTED_FRAMEWORK_NAMES = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -611,7 +630,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 85M74MVK78;
@@ -622,7 +641,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				REEXPORTED_FRAMEWORK_NAMES = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -644,7 +663,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DKImagePickerControllerDemo.app/DKImagePickerControllerDemo";
 			};
 			name = Debug;
@@ -663,7 +682,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zhangao.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DKImagePickerControllerDemo.app/DKImagePickerControllerDemo";
 			};
 			name = Release;
