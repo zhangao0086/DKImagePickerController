@@ -1,5 +1,12 @@
 # Change Log
 
+## [4.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/4.2.0) (2019-10-14)
+
+- Dark Mode Support
+- Add scroll:to:indexPath:
+- Fixed #553 #620
+- Fixed #597
+
 ## [4.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/4.1.3) (2019-02-26)
 
 - Avoiding force unwrapping.
