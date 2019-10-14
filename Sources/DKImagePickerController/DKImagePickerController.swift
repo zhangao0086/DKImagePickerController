@@ -158,6 +158,8 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         return DKImageGroupDataManager(configuration: configuration)
     }()
     
+    private var isInlineCamera: Bool { return self.sourceType == .camera }
+    
     public private(set) var selectedAssetIdentifiers = [String]() // DKAsset.localIdentifier
     private var assets = [String : DKAsset]() // DKAsset.localIdentifier : DKAsset
     
@@ -192,13 +194,13 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
             self.exporter = DKImageAssetExporter.sharedInstance
         }
         
-        if self.inline || self.sourceType == .camera {
+        if self.inline || self.isInlineCamera {
             self.isNavigationBarHidden = true
         } else {
             self.isNavigationBarHidden = false
         }
         
-        if self.sourceType != .camera {
+        if !self.isInlineCamera {
             let rootVC = self.makeRootVC()
             rootVC.imagePickerController = self
             self.rootVC = rootVC
@@ -231,9 +233,9 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
             self.presentationController?.delegate = self
         }
         
-        if self.needShowInlineCamera && self.sourceType == .camera {
+        if self.needShowInlineCamera && self.isInlineCamera {
             self.needShowInlineCamera = false
-            self.showCamera(isInline: true)
+            self.showCamera()
         }
     }
     
@@ -242,7 +244,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     }
     
     @objc open func presentCamera() {
-        self.showCamera(isInline: false)
+        self.showCamera()
     }
     
     @objc open override func present(_ viewControllerToPresent: UIViewController,
@@ -273,8 +275,8 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         }
     }
     
-    @objc open func dismissCamera(isInline: Bool = false) {
-        self.extensionController.finish(extensionType: isInline ? .inlineCamera : .camera)
+    @objc open func dismissCamera() {
+        self.extensionController.finish(extensionType: self.isInlineCamera ? .inlineCamera : .camera)
     }
     
     @objc open func dismiss() {
@@ -283,7 +285,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         self.presentingViewController?.dismiss(animated: true, completion: {
             self.didCancel?()
             
-            if self.sourceType == .camera {
+            if self.isInlineCamera {
                 self.needShowInlineCamera = true
             }
         })
@@ -298,7 +300,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
             
             self.didSelectAssets?(assets)
             
-            if self.sourceType == .camera {
+            if self.isInlineCamera {
                 self.needShowInlineCamera = true
             }
         }
@@ -387,12 +389,16 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         return assetFetchOptions
     }
     
-    private func showCamera(isInline: Bool) {
+    private func didCancelCamera() {
+        self.dismissCamera()
+        if self.isInlineCamera {
+            self.dismiss()
+        }
+    }
+    
+    private func showCamera() {
         let didCancel = { [unowned self] () in
-            self.dismissCamera(isInline: isInline)
-            if self.sourceType == .camera && !isInline {
-                self.dismiss()
-            }
+            self.didCancelCamera()
         }
         
         let didFinishCapturingImage = { [weak self] (image: UIImage, metadata: [AnyHashable : Any]?) in
@@ -428,7 +434,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
                     if success {
                         if let newAsset = PHAsset.fetchAssets(withLocalIdentifiers: [newVideoIdentifier],
                                                               options: nil).firstObject {
-                            if self.sourceType != .camera || self.viewControllers.count == 0 {
+                            if !self.isInlineCamera || self.viewControllers.count == 0 {
                                 self.dismissCamera()
                             }
                             self.select(asset: DKAsset(originalAsset: newAsset))
@@ -440,7 +446,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
             }
         }
         
-        self.extensionController.perform(extensionType: isInline ? .inlineCamera : .camera, with: [
+        self.extensionController.perform(extensionType: isInlineCamera ? .inlineCamera : .camera, with: [
             "didFinishCapturingImage" : didFinishCapturingImage,
             "didFinishCapturingVideo" : didFinishCapturingVideo,
             "didCancel" : didCancel,
@@ -458,7 +464,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     
     internal func processImageFromCamera(_ image: UIImage, _ metadata: [AnyHashable : Any]?) {
         self.saveImage(image, metadata) { asset in
-            if self.sourceType != .camera {
+            if !self.isInlineCamera {
                 self.dismissCamera()
             }
             self.select(asset: asset)
@@ -585,7 +591,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         if insertedAssets.count > 0 {
             self.clearSelectedAssetsCache()
             
-            if self.sourceType == .camera || (self.singleSelect && self.autoCloseOnSingleSelect) {
+            if self.isInlineCamera || (self.singleSelect && self.autoCloseOnSingleSelect) {
                 self.done()
             } else {
                 self.triggerSelectedChangedIfNeeded()
@@ -746,7 +752,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     // MARK: - Orientation
     
     @objc open override var shouldAutorotate : Bool {
-        return self.allowsLandscape && self.sourceType != .camera ? true : false
+        return self.allowsLandscape && !self.isInlineCamera ? true : false
     }
     
     @objc open override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
@@ -759,8 +765,17 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     
     // MARK: - UIAdaptivePresentationControllerDelegate
     
+    @available(iOS 13.0, *)
     public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        return false
+        return self.isModalInPresentation
+    }
+    
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        if self.isInlineCamera {
+            self.didCancelCamera()
+        } else {
+            self.dismiss()
+        }
     }
     
     // MARK: - Gallery
