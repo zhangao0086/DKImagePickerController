@@ -51,7 +51,8 @@ open class DKAssetGroupDetailVC: UIViewController,
     private var currentViewSize: CGSize?
     private var registeredCellIdentifiers = Set<String>()
     private var thumbnailSize = CGSize.zero
-
+    private var lastTappedAssetIndexPath: IndexPath?
+    
     override open func viewDidLoad() {
         super.viewDidLoad()
 
@@ -295,6 +296,12 @@ open class DKAssetGroupDetailVC: UIViewController,
         return self.hidesCamera ? index : index + 1
     }
 
+    public func scrollToLastTappedAsset() {
+        if let indexPath = lastTappedAssetIndexPath {
+            scrollIndexPathToVisible(indexPath)
+        }
+    }
+    
     public func scrollIndexPathToVisible(_ indexPath: IndexPath) {
         if let cellFrame = collectionView?.collectionViewLayout.layoutAttributesForItem(at: indexPath)?.frame {
             collectionView?.scrollRectToVisible(cellFrame, animated: false)
@@ -625,11 +632,13 @@ open class DKAssetGroupDetailVC: UIViewController,
                 imagePickerController?.presentCamera()
             }
         } else {
+            lastTappedAssetIndexPath = indexPath
             self.selectAsset(atIndex: indexPath)
         }
     }
 
     public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        lastTappedAssetIndexPath = indexPath
         self.deselectAsset(atIndex: indexPath)
     }
 

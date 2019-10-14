@@ -188,6 +188,7 @@ class ViewController: UIViewController,
         self.view.addSubview(doneButton)
         self.pickerController.selectedChanged = { [unowned self] in
             self.updateDoneButtonTitle(doneButton)
+            self.pickerController.scrollToLastTappedAsset()
         }
         self.updateDoneButtonTitle(doneButton)
         
