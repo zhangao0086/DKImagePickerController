@@ -31,7 +31,7 @@ open class DKImageExtensionPhotoCropper: DKImageBaseExtension {
         self.didFinishEditing = didFinishEditing
         
         let imageCropper = CropViewController(image: sourceImage)
-        imageCropper.onDidCropToRect = { [weak self] image, _, angle in
+        imageCropper.onDidCropToRect = { [weak self] image, _, _ in
             guard let strongSelf = self else { return }
             
             if let didFinishEditing = strongSelf.didFinishEditing {
