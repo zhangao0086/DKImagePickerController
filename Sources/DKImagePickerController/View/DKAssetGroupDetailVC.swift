@@ -135,6 +135,8 @@ open class DKAssetGroupDetailVC: UIViewController,
         groupListVC.showsEmptyAlbums = imagePickerController.showsEmptyAlbums
         groupListVC.loadGroups()
         self.groupListVC = groupListVC
+        
+        self.collectionView?.reloadData()
     }
 
     func configureAccessoryViews() {
