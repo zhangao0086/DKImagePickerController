@@ -45,6 +45,7 @@ open class DKImageExtensionPhotoCropper: DKImageBaseExtension {
                 strongSelf.metadata = nil
             }
         }
+        imageCropper.modalPresentationStyle = .fullScreen
         
         self.imageEditor = imageCropper
         
