@@ -117,9 +117,9 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
             let button = UIButton()
 
             #if swift(>=4.0)
-            let globalTitleColor = UINavigationBar.appearance(for: button.traitCollection)
+            let globalTitleColor = UINavigationBar.appearance()
                 .titleTextAttributes?[NSAttributedString.Key.foregroundColor] as? UIColor
-            let globalTitleFont = UINavigationBar.appearance(for: button.traitCollection)
+            let globalTitleFont = UINavigationBar.appearance()
                 .titleTextAttributes?[NSAttributedString.Key.font] as? UIFont
             #else
             let globalTitleColor = UINavigationBar.appearance()
