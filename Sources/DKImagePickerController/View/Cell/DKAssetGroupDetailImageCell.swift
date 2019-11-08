@@ -8,9 +8,10 @@
 
 import UIKit
 
-class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
+@objcMembers
+public class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     
-    class override func cellReuseIdentifier() -> String {
+    public class override func cellReuseIdentifier() -> String {
         return "DKImageAssetIdentifier"
     }
     
@@ -69,12 +70,12 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
         
     } /* DKImageCheckView */
     
-    override var thumbnailImage: UIImage? {
+    override public var thumbnailImage: UIImage? {
         didSet {
             self.thumbnailImageView.image = self.thumbnailImage
         }
     }
-    override var selectedIndex: Int {
+    override public var selectedIndex: Int {
         didSet {
             self.checkView.checkLabel.text =  "\(self.selectedIndex + 1)"
         }
@@ -88,7 +89,7 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
         return thumbnailImageView
     }()
     
-    override var thumbnailImageView: UIImageView {
+    override public var thumbnailImageView: UIImageView {
         get {
             return _thumbnailImageView
         }
@@ -96,7 +97,7 @@ class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
     
     fileprivate let checkView = DKImageCheckView()
     
-    override var isSelected: Bool {
+    override public var isSelected: Bool {
         didSet {
             self.checkView.isHidden = !super.isSelected
         }
