@@ -36,7 +36,7 @@ public class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    class DKImageCheckView: UIView {
+    open class DKImageCheckView: UIView {
         
         internal lazy var checkImageView: UIImageView = {
             let imageView = UIImageView(image: DKImagePickerControllerResource.checkedImage())
@@ -57,11 +57,11 @@ public class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
             self.addSubview(self.checkLabel)
         }
         
-        required init?(coder aDecoder: NSCoder) {
+        required public init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        override func layoutSubviews() {
+        override open func layoutSubviews() {
             super.layoutSubviews()
             
             self.checkImageView.frame = self.bounds
@@ -95,7 +95,7 @@ public class DKAssetGroupDetailImageCell: DKAssetGroupDetailBaseCell {
         }
     }
     
-    fileprivate let checkView = DKImageCheckView()
+    public let checkView = DKImageCheckView()
     
     override public var isSelected: Bool {
         didSet {
