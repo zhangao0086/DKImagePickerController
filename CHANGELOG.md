@@ -1,5 +1,11 @@
 # Change Log
 
+## [4.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/4.2.1) (2019-11-08)
+
+- Fixed #632
+- Fixed #629
+- Fixed #630
+
 ## [4.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/4.2.0) (2019-10-14)
 
 - Dark Mode Support
