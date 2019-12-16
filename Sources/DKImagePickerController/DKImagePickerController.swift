@@ -167,7 +167,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     public private(set) var selectedAssetIdentifiers = [String]() // DKAsset.localIdentifier
     private var assets = [String : DKAsset]() // DKAsset.localIdentifier : DKAsset
     
-    private lazy var extensionController: DKImageExtensionController! = {
+    public lazy var extensionController: DKImageExtensionController! = {
         return DKImageExtensionController(imagePickerController: self)
     }()
     
