@@ -19,8 +19,11 @@ open class DKImageExtensionInlineCamera: DKImageBaseExtension {
         guard let didFinishCapturingImage = extraInfo["didFinishCapturingImage"] as? ((UIImage, [AnyHashable : Any]?) -> Void)
             , let didCancel = extraInfo["didCancel"] as? (() -> Void) else { return }
         
+        let containsGPSInMetadata = extraInfo["containsGPSInMetadata"] as? Bool ?? false
+        
         let camera = DKCamera()
         camera.didFinishCapturingImage = didFinishCapturingImage
+        camera.containsGPSInMetadata = containsGPSInMetadata
         camera.didCancel = didCancel
         
         self.checkCameraPermission(camera)
