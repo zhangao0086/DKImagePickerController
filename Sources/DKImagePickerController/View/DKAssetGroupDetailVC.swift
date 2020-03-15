@@ -457,7 +457,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         targetContentOffset.y += offsetY
 
         targetContentOffset.y = min(max(targetContentOffset.y, collectionView.contentInset.top),
-                                    collectionView.contentSize.height - collectionView.bounds.height)
+                                    max(collectionView.contentSize.height - collectionView.bounds.height, 0))
 
         collectionView.contentOffset = targetContentOffset
         
