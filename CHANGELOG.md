@@ -1,5 +1,9 @@
 # Change Log
 
+## [4.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/4.3.0) (2020-04-27)
+
+- Drop support for iOS 8
+
 ## [4.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/4.2.1) (2019-11-08)
 
 - Fixed #632

@@ -23,7 +23,7 @@ DKImagePickerController
 * Dark Mode Support
 
 ## Requirements
-* iOS 8.0+
+* iOS 9.0+ (Drop support for iOS 8 in 4.3.0 or above)
 * ARC
 * Swift 4 & 5
 
