@@ -29,7 +29,7 @@ DKImagePickerController
 
 ## Installation
 ### CocoaPods
-#### iOS 8 and newer
+#### iOS 9 and newer
 DKImagePickerController is available on CocoaPods. Simply add the following line to your podfile:
 
 ```
@@ -42,7 +42,14 @@ pod 'DKImagePickerController'
 pod 'DKImagePickerController', :git => 'https://github.com/zhangao0086/DKImagePickerController.git', :branch => 'Swift4'
 ```
 
+#### For iOS 8
+
+```
+pod 'DKImagePickerController', :git => 'https://github.com/zhangao0086/DKImagePickerController.git', :branch => 'iOS8'
+```
+
 #### Subspecs
+
 There are 7 subspecs available now: 
 
 | Subspec | Description |
