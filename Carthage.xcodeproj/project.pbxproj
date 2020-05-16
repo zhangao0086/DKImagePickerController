@@ -67,6 +67,8 @@
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "file.*";
 			fileType = pattern.proxy;
+			inputFiles = (
+			);
 			isEditable = 1;
 			outputFiles = (
 			);
@@ -515,7 +517,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DKImagePickerControllerBundle/Info.plist;
 				INSTALL_PATH = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -540,7 +542,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DKImagePickerControllerBundle/Info.plist;
 				INSTALL_PATH = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhangao0086.DKImagePickerControllerBundle;
@@ -682,7 +684,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Vendors/CLImageEditor/CLImageEditor/**";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MODULEMAP_FILE = "";
@@ -714,7 +716,7 @@
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Vendors/CLImageEditor/CLImageEditor/**";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				MODULEMAP_FILE = "";
