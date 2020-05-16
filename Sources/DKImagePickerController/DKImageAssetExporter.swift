@@ -85,7 +85,7 @@ public protocol DKImageAssetExporterObserver {
 }
 
 /*
- Configuration options for a DKImageAssetExporter.  When an exporter is created,
+ Configuration options for a DKImageAssetExporter. When an exporter is created,
  a copy of the configuration object is made - you cannot modify the configuration
  of an exporter after it has been created.
  */
@@ -392,7 +392,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
             try fileManager.removeItem(at: auxiliaryDirectory)
         }
         
-        if let _ = asset.originalAsset {
+        if let originalAsset = asset.originalAsset {
             autoreleasepool {
                 let options = PHImageRequestOptions()
                 options.version = .current
@@ -412,26 +412,41 @@ open class DKImageAssetExporter: DKImageBaseManager {
                         }
                         
                         if var imageData = data {
-                            if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
-                                asset.fileName = fileURL.lastPathComponent ?? "Image"
-                            } else {
-                                asset.fileName = "Image.jpg"
+                            if #available(iOS 9, *) {
+                                var resource: PHAssetResource? = nil
+                                for assetResource in PHAssetResource.assetResources(for: originalAsset) {
+                                    if assetResource.type == .photo {
+                                        resource = assetResource
+                                        break
+                                    }
+                                }
+                                if let resource = resource {
+                                    asset.fileName = resource.originalFilename
+                                }
+                            }
+                            
+                            if asset.fileName == nil {
+                                if let info = info, let fileURL = info["PHImageFileURLKey"] as? NSURL {
+                                    asset.fileName = fileURL.lastPathComponent ?? "Image"
+                                } else {
+                                    asset.fileName = "Image.jpg"
+                                }
+                            }
+                                                                                    
+                            if self.configuration.imageExportPreset == .compatible && self.isHEIC(with: imageData) {
+                                if let fileName = asset.fileName, let jpgData = self.imageToJPEG(with: imageData) {
+                                    imageData = jpgData
+                                    
+                                    if fileName.uppercased().hasSuffix(".HEIC") {
+                                        asset.fileName = fileName.dropLast(4) + "jpg"
+                                    }
+                                }
                             }
                             
                             asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
                             
                             if FileManager.default.fileExists(atPath: asset.localTemporaryPath!.path) {
                                 return completion(nil)
-                            }
-                            
-                            if  self.configuration.imageExportPreset == .compatible && self.isHEIC(with: imageData) {
-                                if let jpgData = self.imageToJPEG(with: imageData) {
-                                    imageData = jpgData
-                                    
-                                    if asset.fileName!.uppercased().hasSuffix(".HEIC") {
-                                        asset.fileName = asset.fileName!.dropLast(4) + "jpg"
-                                    }
-                                }
                             }
                             
                             do {

@@ -59,7 +59,12 @@ public class DKImageDataManager {
                            options: PHImageRequestOptions? = nil,
                            contentMode: PHImageContentMode = .aspectFill,
                            completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
-        return self.fetchImage(for: asset, size: size, options: options, contentMode: contentMode, oldRequestID: nil, completeBlock: completeBlock)
+        return self.fetchImage(for: asset,
+                               size: size,
+                               options: options,
+                               contentMode: contentMode,
+                               oldRequestID: nil,
+                               completeBlock: completeBlock)
     }
     
     @discardableResult
@@ -68,11 +73,9 @@ public class DKImageDataManager {
                             options: PHImageRequestOptions?,
                             contentMode: PHImageContentMode,
                             oldRequestID: DKImageRequestID?,
-                            completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void)
-        -> DKImageRequestID
-    {
+                            completeBlock: @escaping (_ image: UIImage?, _ info: [AnyHashable: Any]?) -> Void) -> DKImageRequestID {
         let requestID = oldRequestID ?? self.getSeed()
-
+        
         guard let originalAsset = asset.originalAsset else {
             assertionFailure("Expect originalAsset")
             completeBlock(nil, nil)
@@ -87,31 +90,30 @@ public class DKImageDataManager {
             options: requestOptions,
             resultHandler: { image, info in
                 self.update(requestID: requestID, with: info)
-
+                
                 if let info = info, let isCancelled = info[PHImageCancelledKey] as? NSNumber, isCancelled.boolValue {
                     completeBlock(image, info)
                     return
                 }
-
+                
                 if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?,
                     image == nil,
                     isInCloud.boolValue,
-                    !requestOptions.isNetworkAccessAllowed
-                {
+                    !requestOptions.isNetworkAccessAllowed {
                     if self.cancelledRequestIDs.contains(requestID) {
                         self.cancelledRequestIDs.remove(requestID)
                         completeBlock(nil, [PHImageCancelledKey : NSNumber(value: 1)])
                         return
                     }
-
+                    
                     guard let requestCloudOptions = requestOptions.copy() as? PHImageRequestOptions else {
                         assertionFailure("Expect PHImageRequestOptions")
                         completeBlock(nil, nil)
                         return
                     }
-
+                    
                     requestCloudOptions.isNetworkAccessAllowed = true
-
+                    
                     self.fetchImage(for: asset,
                                     size: size,
                                     options: requestCloudOptions,

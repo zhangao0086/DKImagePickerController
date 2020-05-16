@@ -1,14 +1,21 @@
 language: swift
 podfile: Example/Podfile
 
-osx_image: xcode10
-xcode_sdk: iphonesimulator11.0
+matrix:
+  include:
+    - osx_image: xcode11
+      xcode_sdk: iphonesimulator12.2
+      env: DESTINATION="platform=iOS Simulator,name=iPhone 11"
+    
+    - osx_image: xcode11
+      xcode_sdk: iphonesimulator13.0
+      env: DESTINATION="platform=iOS Simulator,name=iPhone 11"
 
 before_install:
   - rvm use system
   - brew install ruby
-  - sudo gem install cocoapods -v '1.5.0'
+  - sudo gem install cocoapods -v '1.8.4'
   - pod repo update
 
 script:
-- xcodebuild clean build test -workspace Example/DKImagePickerControllerDemo.xcworkspace -scheme DKImagePickerControllerDemo -destination "platform=iOS Simulator,name=iPhone 7"
+  - xcodebuild clean build test -workspace Example/DKImagePickerControllerDemo.xcworkspace -scheme DKImagePickerControllerDemo -destination "$DESTINATION"

@@ -1,5 +1,22 @@
 # Change Log
 
+## [4.3.0](https://github.com/zhangao0086/DKImagePickerController/tree/4.3.0) (2020-04-27)
+
+- Drop support for iOS 8
+
+## [4.2.1](https://github.com/zhangao0086/DKImagePickerController/tree/4.2.1) (2019-11-08)
+
+- Fixed #632
+- Fixed #629
+- Fixed #630
+
+## [4.2.0](https://github.com/zhangao0086/DKImagePickerController/tree/4.2.0) (2019-10-14)
+
+- Dark Mode Support
+- Add scroll:to:indexPath:
+- Fixed #553 #620
+- Fixed #597
+
 ## [4.1.3](https://github.com/zhangao0086/DKImagePickerController/tree/4.1.3) (2019-02-26)
 
 - Avoiding force unwrapping.

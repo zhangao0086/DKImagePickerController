@@ -28,6 +28,7 @@ open class DKImageExtensionCamera: DKImageBaseExtension {
         
         self.checkCameraPermission(camera)
 
+        camera.modalPresentationStyle = .fullScreen
         self.context.imagePickerController.present(camera)
     }
 

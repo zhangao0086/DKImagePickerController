@@ -9,8 +9,8 @@
 import UIKit
 import Foundation
 
-#if canImport(TOCropViewController)
-import TOCropViewController
+#if canImport(CropViewController)
+import CropViewController
 #endif
 
 open class DKImageExtensionPhotoCropper: DKImageBaseExtension {
@@ -24,30 +24,34 @@ open class DKImageExtensionPhotoCropper: DKImageBaseExtension {
     }
         
     override open func perform(with extraInfo: [AnyHashable: Any]) {
-        guard let image = extraInfo["image"] as? UIImage
+        guard let sourceImage = extraInfo["image"] as? UIImage
             , let didFinishEditing = extraInfo["didFinishEditing"] as? ((UIImage, [AnyHashable : Any]?) -> Void) else { return }
         
         self.metadata = extraInfo["metadata"] as? [AnyHashable : Any]
         self.didFinishEditing = didFinishEditing
         
-        let imageCropper = TOCropViewController(image: image)
+        let imageCropper = CropViewController(image: sourceImage)
         imageCropper.onDidCropToRect = { [weak self] image, _, _ in
             guard let strongSelf = self else { return }
             
             if let didFinishEditing = strongSelf.didFinishEditing {
-                strongSelf.metadata?[kCGImagePropertyOrientation as AnyHashable] = NSNumber(integerLiteral: 0)
-                
+                if sourceImage != image {
+                    strongSelf.metadata?[kCGImagePropertyOrientation] = NSNumber(integerLiteral: 1)
+                }
+                                
                 didFinishEditing(image, strongSelf.metadata)
                 
                 strongSelf.didFinishEditing = nil
                 strongSelf.metadata = nil
             }
         }
+        imageCropper.modalPresentationStyle = .fullScreen
         
         self.imageEditor = imageCropper
         
         let imagePickerController = self.context.imagePickerController
-        (imagePickerController?.presentedViewController ?? imagePickerController)?.present(imageCropper, animated: true, completion: nil)
+        let presentedViewController = imagePickerController?.presentedViewController ?? imagePickerController
+        presentedViewController?.present(imageCropper, animated: true, completion: nil)
     }
 
     override open func finish() {
