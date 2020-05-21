@@ -172,7 +172,6 @@ open class DKImageAssetExporter: DKImageBaseManager {
             
             operation.completionBlock = nil
             
-            var success = true
             var exportedCount = 0
             
             let exportCompletionBlock: (DKAsset, Error?) -> Void = { asset, error in
@@ -195,7 +194,6 @@ open class DKImageAssetExporter: DKImageBaseManager {
                 }
                 
                 if let error = error as NSError? {
-                    success = false
                     asset.error = error
                     
                     asset.localTemporaryPath = nil
@@ -204,7 +202,6 @@ open class DKImageAssetExporter: DKImageBaseManager {
                         let attributes = try FileManager.default.attributesOfItem(atPath: asset.localTemporaryPath!.path)
                         asset.fileSize = (attributes[FileAttributeKey.size] as! NSNumber).uintValue
                     } catch let error as NSError {
-                        success = false
                         asset.error = error
                         
                         asset.localTemporaryPath = nil
