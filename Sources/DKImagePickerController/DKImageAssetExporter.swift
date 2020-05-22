@@ -408,7 +408,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
                 
                 let semaphore = DispatchSemaphore(value: 0)
                 
-                asset.fetchImageData(options: options, completeBlock: { (data, info) in
+                asset.fetchImageData(options: options, compressionQuality: configuration.compressionQuality) { (data, info) in
                     self.currentAssetInRequesting = nil
                     semaphore.signal()
                     
@@ -471,7 +471,7 @@ open class DKImageAssetExporter: DKImageBaseManager {
                             }
                         }
                     }
-                })
+                }
                 self.currentAssetInRequesting = asset
                 
                 semaphore.wait()
