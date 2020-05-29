@@ -629,14 +629,9 @@ open class DKAssetGroupDetailVC: UIViewController,
     }
 
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let cell: DKAssetGroupDetailBaseCell
-        if self.isCameraCell(indexPath: indexPath) {
-            cell = self.dequeueReusableCameraCell(for: indexPath)
-        } else {
-            cell = self.dequeueReusableCell(for: indexPath)
-        }
+        let assetCell: DKAssetGroupDetailBaseCell? = cell as? DKAssetGroupDetailBaseCell
 
-        cell.asset?.cancelRequests()
+        assetCell?.asset?.cancelRequests()
     }
 
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
