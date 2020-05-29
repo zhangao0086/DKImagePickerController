@@ -81,7 +81,7 @@ public extension DKAsset {
      Fetch an image data with the original size.
      */
     @objc func fetchImageData(options: PHImageRequestOptions? = nil,
-                              compressionQuality: CGFloat,
+                              compressionQuality: CGFloat = 0.9,
                               completeBlock: @escaping (_ imageData: Data?, _ info: [AnyHashable: Any]?) -> Void) {
         if self.originalAsset != nil {
             self.add(requestID: getImageDataManager().fetchImageData(for: self,
