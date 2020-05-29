@@ -625,6 +625,12 @@ open class DKAssetGroupDetailVC: UIViewController,
         }
     }
 
+    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let assetCell: DKAssetGroupDetailBaseCell? = cell as? DKAssetGroupDetailBaseCell
+
+        assetCell?.asset?.cancelRequests()
+    }
+
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         guard let imagePickerController = self.imagePickerController else {
             assertionFailure("Expect imagePickerController")
