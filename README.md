@@ -1,3 +1,6 @@
+> ### GitAds
+> [<img src="https://images.gitads.io/DKImagePickerController" alt=“GitAds”/>](https://tracking.gitads.io/?repo=DKImagePickerController)
+
 DKImagePickerController
 =======================
 
