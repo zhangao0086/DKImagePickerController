@@ -515,7 +515,7 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
         PHPhotoLibrary.shared().performChanges({
             let assetRequest = PHAssetCreationRequest.forAsset()
             assetRequest.addResource(with: .photo, data: imageDataWithMetadata, options: nil)
-            newImageIdentifier = assetRequest.placeholderForCreatedAsset.localIdentifier ?? ""
+            newImageIdentifier = assetRequest.placeholderForCreatedAsset?.localIdentifier ?? ""
         }) { (success, error) in
             DispatchQueue.main.async(execute: {
                 if newImageIdentifier.isEmpty, let img =  UIImage(data: imageDataWithMetadata) {
