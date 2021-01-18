@@ -6,6 +6,7 @@
 //  Copyright © 2015年 ZhangAo. All rights reserved.
 //
 
+import UIKit
 import Photos
 
 public typealias DKImageRequestID = Int32
