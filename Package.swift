@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/zhangao0086/DKCamera", .branch("develop")),
-        .package(url: "https://github.com/zrn-ns/DKPhotoGallery", .branch("develop")),
+        .package(url: "https://github.com/zrn-ns/DKPhotoGallery", .branch("feature/support_swiftpm")),
         .package(url: "https://github.com/TimOliver/TOCropViewController", from: "2.6.0"),
     ],
     targets: [
