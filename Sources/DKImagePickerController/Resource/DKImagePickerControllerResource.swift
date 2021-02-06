@@ -99,8 +99,12 @@ public class DKImagePickerControllerResource: NSObject {
 private extension Bundle {
     
     class func imagePickerControllerBundle() -> Bundle {
-        let assetPath = Bundle(for: DKImagePickerControllerResource.self).resourcePath!
-        return Bundle(path: (assetPath as NSString).appendingPathComponent("DKImagePickerController.bundle"))!
+        #if SWIFT_PACKAGE
+            return Bundle.module
+        #else
+            let assetPath = Bundle(for: DKImagePickerControllerResource.self).resourcePath!
+            return Bundle(path: (assetPath as NSString).appendingPathComponent("DKImagePickerController.bundle"))!
+        #endif
     }
     
 }
