@@ -577,11 +577,14 @@ open class DKAssetGroupDetailVC: UIViewController,
                 cell.thumbnailImage = image
             }
         }
-        
-        cell.longPressBlock = { [weak self, weak cell] in
-            guard let strongSelf = self, let strongCell = cell else { return }
-            
-            strongSelf.showGallery(from: strongCell)
+
+        if let imagePickerController = imagePickerController,
+            imagePickerController.UIDelegate.needsToShowPreviewOnLongPress() {
+
+            cell.longPressBlock = { [weak self, weak cell] in
+                guard let strongSelf = self, let strongCell = cell else { return }
+                strongSelf.showGallery(from: strongCell)
+            }
         }
     }
 
