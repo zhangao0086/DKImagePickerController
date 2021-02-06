@@ -447,6 +447,9 @@ open class DKImageAssetExporter: DKImageBaseManager {
                                         asset.fileName = fileName.dropLast(4) + "jpg"
                                     }
                                 }
+                            } else if self.configuration.compressionQuality < 1,
+                                let compressedData = self.imageToJPEG(with: imageData) { // Try to compress image
+                                imageData = compressedData
                             }
                             
                             asset.localTemporaryPath = asset.localTemporaryPath?.appendingPathComponent(asset.fileName!)
