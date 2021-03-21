@@ -110,7 +110,9 @@ open class DKImageExtensionController: NSObject {
             
             e?.perform(with: extraInfo)
         } else {
-            debugPrint("No DKImageExtension founed.")
+            // If the .camera extension is not found, then register it first using:
+            // DKImageExtensionController.registerExtension(extensionClass: DKImageExtensionCamera.self, for: .camera)
+            debugPrint("No DKImageExtension found: \(extensionType)")
         }
     }
     
