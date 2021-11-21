@@ -75,7 +75,7 @@ public class DKImagePickerControllerResource: NSObject {
         }
         
         let bundle = Bundle.imagePickerControllerBundle()
-        var image = UIImage(named: name, in: bundle, compatibleWith: nil) ?? UIImage()
+        var image = UIImage(named: name) ?? UIImage()
         
         if stretchable {
             image = self.stretchImgFromMiddle(image)
