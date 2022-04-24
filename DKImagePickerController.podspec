@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name          = "DKImagePickerController"
-  s.version       = "4.3.2"
+  s.version       = "4.3.4"
   s.summary       = "DKImagePickerController is a highly customizable, pure-Swift library."
-  s.homepage      = "https://github.com/zhangao0086/DKImagePickerController"
+  s.homepage      = "https://github.com/zrn-ns/DKImagePickerController"
   s.license       = { :type => "MIT", :file => "LICENSE" }
   s.author        = { "Bannings" => "zhangao0086@gmail.com" }
   s.platform      = :ios, "9.0"
-  s.source        = { :git => "https://github.com/zhangao0086/DKImagePickerController.git", 
+  s.source        = { :git => "https://github.com/zrn-ns/DKImagePickerController.git", 
                      :tag => s.version.to_s }
   
   s.requires_arc  = true
