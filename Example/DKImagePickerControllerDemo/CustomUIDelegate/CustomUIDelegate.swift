@@ -87,7 +87,7 @@ open class CustomUIDelegate: DKImagePickerControllerBaseUIDelegate {
         return CustomGroupDetailCameraCell.self
     }
 
-    open override func needsToShowImageDetailOnLongPress() -> Bool {
+    open override func needsToShowPreviewOnLongPress() -> Bool {
         false
     }
 }

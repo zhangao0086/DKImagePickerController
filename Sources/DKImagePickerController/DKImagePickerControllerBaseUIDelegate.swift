@@ -268,7 +268,7 @@ open class DKImagePickerControllerBaseUIDelegate: NSObject, DKImagePickerControl
         return DKAssetGroupCell.self
     }
 
-    open func needsToShowImageDetailOnLongPress() -> Bool {
+    open func needsToShowPreviewOnLongPress() -> Bool {
         return true
     }
 

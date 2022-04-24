@@ -1,5 +1,9 @@
 # Change Log
 
+## [4.3.2](https://github.com/zhangao0086/DKImagePickerController/tree/4.3.2) (2020-06-03)
+
+- Adds compression quality parameter to export configuration.
+
 ## [4.3.1](https://github.com/zhangao0086/DKImagePickerController/tree/4.3.1) (2020-05-16)
 
 - Fixed an issue that caused Carthage was broken.
