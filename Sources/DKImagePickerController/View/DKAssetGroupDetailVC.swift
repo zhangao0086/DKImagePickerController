@@ -341,7 +341,7 @@ open class DKAssetGroupDetailVC: UIViewController,
         let link = CADisplayLink(target: self, selector: #selector(autoScrolling))
         link.isPaused = true
         link.add(to: RunLoop.main, forMode: .default)
-        link.frameInterval = 1
+        link.preferredFramesPerSecond = 1
         return link
     }()
 
