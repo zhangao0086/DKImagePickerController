@@ -1,0 +1,52 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DKCamera",
+        "repositoryURL": "https://github.com/zhangao0086/DKCamera",
+        "state": {
+          "branch": "master",
+          "revision": "5c691d11014b910aff69f960475d70e65d9dcc96",
+          "version": null
+        }
+      },
+      {
+        "package": "DKPhotoGallery",
+        "repositoryURL": "https://github.com/zhangao0086/DKPhotoGallery",
+        "state": {
+          "branch": "master",
+          "revision": "311c1bc7a94f1538f82773a79c84374b12a2ef3d",
+          "version": null
+        }
+      },
+      {
+        "package": "SDWebImage",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImage",
+        "state": {
+          "branch": null,
+          "revision": "3e48cb68d8e668d146dc59c73fb98cb628616236",
+          "version": "5.13.2"
+        }
+      },
+      {
+        "package": "SwiftyGif",
+        "repositoryURL": "https://github.com/kirualex/SwiftyGif.git",
+        "state": {
+          "branch": null,
+          "revision": "db0c122b671bc9760385e0355be00eede3b7bb44",
+          "version": "5.4.3"
+        }
+      },
+      {
+        "package": "TOCropViewController",
+        "repositoryURL": "https://github.com/TimOliver/TOCropViewController",
+        "state": {
+          "branch": null,
+          "revision": "dad97167bf1be16aeecd109130900995dd01c515",
+          "version": "2.6.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
