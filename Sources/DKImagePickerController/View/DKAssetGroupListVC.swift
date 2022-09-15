@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 ZhangAo. All rights reserved.
 //
 
+import UIKit
 import Photos
 
 let DKImageGroupCellIdentifier = "DKImageGroupCellIdentifier"

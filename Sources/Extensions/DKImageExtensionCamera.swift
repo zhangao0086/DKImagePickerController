@@ -6,7 +6,7 @@
 //  Copyright © 2017 ZhangAo. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import DKCamera
 
 open class DKImageExtensionCamera: DKImageBaseExtension {
