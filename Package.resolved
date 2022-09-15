@@ -5,17 +5,17 @@
         "package": "DKCamera",
         "repositoryURL": "https://github.com/zhangao0086/DKCamera",
         "state": {
-          "branch": "develop",
-          "revision": "4674cecf2600461007ad801ddc799f85e25a430e",
+          "branch": "master",
+          "revision": "5c691d11014b910aff69f960475d70e65d9dcc96",
           "version": null
         }
       },
       {
         "package": "DKPhotoGallery",
-        "repositoryURL": "https://github.com/zrn-ns/DKPhotoGallery",
+        "repositoryURL": "https://github.com/zhangao0086/DKPhotoGallery",
         "state": {
-          "branch": "feature/support_swiftpm",
-          "revision": "d7d51be75a4a5d47d435d3ebf4f61aed62906e1a",
+          "branch": "master",
+          "revision": "311c1bc7a94f1538f82773a79c84374b12a2ef3d",
           "version": null
         }
       },
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage",
         "state": {
           "branch": null,
-          "revision": "564d238f8814c4a82502336fd80b28a9d321ff47",
-          "version": "5.10.2"
+          "revision": "3e48cb68d8e668d146dc59c73fb98cb628616236",
+          "version": "5.13.2"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/kirualex/SwiftyGif.git",
         "state": {
           "branch": null,
-          "revision": "420d12cba8338b03993f73a72c1f6b70d5273cf2",
-          "version": "5.3.0"
+          "revision": "db0c122b671bc9760385e0355be00eede3b7bb44",
+          "version": "5.4.3"
         }
       },
       {
