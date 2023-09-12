@@ -50,7 +50,7 @@ open class DKAssetGroupDetailVC: UIViewController,
     private var headerView: UIView?
     private var currentViewSize: CGSize?
     private var registeredCellIdentifiers = Set<String>()
-    private var thumbnailSize = CGSize.zero
+    public var thumbnailSize = CGSize.zero
     private var lastIndexPath: IndexPath?
     
     override open func viewDidLoad() {
