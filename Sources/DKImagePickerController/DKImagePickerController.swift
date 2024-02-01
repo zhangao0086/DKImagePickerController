@@ -134,6 +134,9 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     
     @objc public var exporter: DKImageAssetExporter?
     
+    /// Select view request thumbnail size
+    @objc public var thumbnailSize: CGSize = CGSizeZero
+    
     /// Indicates the status of the exporter.
     @objc public private(set) var exportStatus = DKImagePickerControllerExportStatus.none {
         willSet {
@@ -245,7 +248,9 @@ open class DKImagePickerController: DKUINavigationController, DKImageBaseManager
     }
     
     @objc open func makeRootVC() -> UIViewController & DKImagePickerControllerAware {
-      return DKAssetGroupDetailVC()
+        let groupVC = DKAssetGroupDetailVC()
+        groupVC.thumbnailSize = thumbnailSize
+        return groupVC
     }
     
     @objc open func presentCamera() {
